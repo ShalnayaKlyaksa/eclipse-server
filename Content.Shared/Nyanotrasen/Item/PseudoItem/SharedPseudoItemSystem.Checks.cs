@@ -21,18 +21,15 @@ public partial class SharedPseudoItemSystem
         if (!Resolve(itemEnt, ref itemEnt.Comp) || !Resolve(storageEnt, ref storageEnt.Comp))
             return false;
 
-        if (!TryComp<MetaDataComponent>(itemEnt, out var metadata))
-            return false;
-
-        var hadItem = TryComp<ItemComponent>(itemEnt, out var item);
-        item ??= EnsureComp<ItemComponent>(itemEnt);
+        var hadItem = TryComp(itemEnt.Owner, out ItemComponent? item);
+        item ??= EnsureComp<ItemComponent>(itemEnt.Owner);
         _item.SetShape(itemEnt, itemEnt.Comp.Shape, item);
         _item.SetSize(itemEnt, itemEnt.Comp.Size, item);
         _item.SetStoredOffset(itemEnt, itemEnt.Comp.StoredOffset, item);
 
         var canInsert = _storage.CanInsert(storageEnt, itemEnt, out _, storageEnt.Comp, item, ignoreStacks: true);
         if (!hadItem)
-            RemComp<ItemComponent>(itemEnt);
+            RemComp<ItemComponent>(itemEnt.Owner);
 
         return canInsert;
     }

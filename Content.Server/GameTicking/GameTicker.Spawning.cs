@@ -211,7 +211,8 @@ namespace Content.Server.GameTicking
                 }
 
                 character = HumanoidCharacterProfile.RandomWithSpecies(speciesId);
-                character.Appearance = HumanoidCharacterAppearance.EnsureValid(character.Appearance, character.Species, character.Sex);
+                var sponsorPrototypes = _sponsors != null && _sponsors.TryGetServerPrototypes(player.UserId, out var prototypes) ? prototypes.ToArray() : [];
+                character.Appearance = HumanoidCharacterAppearance.EnsureValid(character.Appearance, character.Species, character.Sex, sponsorPrototypes);
             }
 
             // We raise this event to allow other systems to handle spawning this player themselves. (e.g. late-join wizard, etc)

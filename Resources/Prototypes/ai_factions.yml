@@ -78,6 +78,19 @@
   - Xenoborg
 
 - type: npcFaction
+  id: InteQ
+  hostile:
+  - NanoTrasen
+  - SimpleHostile
+  - Xeno
+  - PetsNT
+  - Zombie
+  - Dragon
+  - AllHostile
+  - Wizard
+  - Xenoborg
+
+- type: npcFaction
   id: Xeno
   hostile:
   - NanoTrasen

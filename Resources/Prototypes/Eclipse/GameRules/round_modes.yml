@@ -1,0 +1,345 @@
+- type: entityTable
+  id: EclipseCalmFaunaGameRulesTable
+  table: !type:AllSelector
+    children:
+    - !type:NestedSelector
+      tableId: CalmPestEventsTable
+
+- type: entityTable
+  id: EclipseModerateGameRulesTable
+  table: !type:AllSelector
+    children:
+    - !type:NestedSelector
+      tableId: BasicCalmEventsTable
+    - !type:NestedSelector
+      tableId: BasicAntagEventsTable
+    - !type:NestedSelector
+      tableId: CargoGiftsTable
+    - !type:NestedSelector
+      tableId: CalmPestEventsTable
+    - !type:NestedSelector
+      tableId: SpicyPestEventsTable
+
+- type: entity
+  id: EclipseCalmStationEventScheduler
+  parent: BaseGameRule
+  components:
+  - type: BasicStationEventScheduler
+    minimumTimeUntilFirstEvent: 900
+    maximumSpanUntilFirstEvent: 300
+    minMaxEventTiming:
+      min: 1200
+      max: 2100
+    scheduledGameRules: !type:NestedSelector
+      tableId: EclipseCalmFaunaGameRulesTable
+
+- type: entity
+  id: EclipseExtendedLevelTwoStationEventScheduler
+  parent: BaseGameRule
+  components:
+  - type: BasicStationEventScheduler
+    minimumTimeUntilFirstEvent: 480
+    maximumSpanUntilFirstEvent: 120
+    minMaxEventTiming:
+      min: 480
+      max: 840
+    scheduledGameRules: !type:NestedSelector
+      tableId: EclipseModerateGameRulesTable
+
+- type: entity
+  id: EclipseExtendedLevelThreeStationEventScheduler
+  parent: BaseGameRule
+  components:
+  - type: BasicStationEventScheduler
+    minimumTimeUntilFirstEvent: 420
+    maximumSpanUntilFirstEvent: 60
+    minMaxEventTiming:
+      min: 360
+      max: 600
+    scheduledGameRules: !type:NestedSelector
+      tableId: BasicGameRulesTable
+
+- type: entity
+  id: EclipseSurvivalStationEventScheduler
+  parent: BaseGameRule
+  components:
+  - type: BasicStationEventScheduler
+    minimumTimeUntilFirstEvent: 360
+    maximumSpanUntilFirstEvent: 60
+    minMaxEventTiming:
+      min: 240
+      max: 420
+    scheduledGameRules: !type:NestedSelector
+      tableId: BasicGameRulesTable
+
+- type: entity
+  id: EclipseApocalypseStationEventScheduler
+  parent: BaseGameRule
+  components:
+  - type: BasicStationEventScheduler
+    minimumTimeUntilFirstEvent: 600
+    maximumSpanUntilFirstEvent: 0
+    minMaxEventTiming:
+      min: 300
+      max: 300
+    scheduledGameRules: !type:NestedSelector
+      tableId: BasicGameRulesTable
+
+- type: entity
+  parent: BaseGameRule
+  id: EclipseExtendedDifficultyOneDynamicRule
+  components:
+  - type: GameRule
+    minPlayers: 1
+  - type: DynamicRule
+    budgetPerSecond: 0.04
+    startingBudgetMin: 90
+    startingBudgetMax: 150
+    minRuleInterval: 1080
+    maxRuleInterval: 1800
+    table: !type:AllSelector
+      children:
+      - !type:GroupSelector
+        conditions:
+        - !type:RoundDurationCondition
+          max: 1
+        children:
+        - id: Traitor
+          weight: 85
+          conditions:
+          - !type:HasBudgetCondition
+          - !type:MaxRuleOccurenceCondition
+      - !type:GroupSelector
+        conditions:
+        - !type:RoundDurationCondition
+          max: 1
+        children:
+        - id: Thief
+          prob: 0.5
+          conditions:
+          - !type:HasBudgetCondition
+          - !type:MaxRuleOccurenceCondition
+      - !type:GroupSelector
+        conditions:
+        - !type:RoundDurationCondition
+          min: 1800
+        children:
+        - id: SleeperAgents
+          weight: 65
+          conditions:
+          - !type:HasBudgetCondition
+          - !type:MaxRuleOccurenceCondition
+        - id: ParadoxCloneSpawn
+          weight: 35
+          conditions:
+          - !type:HasBudgetCondition
+          - !type:MaxRuleOccurenceCondition
+            max: 2
+
+- type: entity
+  parent: BaseGameRule
+  id: EclipseExtendedDifficultyTwoDynamicRule
+  components:
+  - type: GameRule
+    minPlayers: 1
+  - type: DynamicRule
+    budgetPerSecond: 0.07
+    startingBudgetMin: 150
+    startingBudgetMax: 250
+    minRuleInterval: 840
+    maxRuleInterval: 1440
+    table: !type:AllSelector
+      children:
+      - !type:GroupSelector
+        conditions:
+        - !type:RoundDurationCondition
+          max: 1
+        children:
+        - id: Traitor
+          weight: 60
+          conditions:
+          - !type:HasBudgetCondition
+          - !type:MaxRuleOccurenceCondition
+      - !type:GroupSelector
+        conditions:
+        - !type:RoundDurationCondition
+          max: 1
+        children:
+        - id: Thief
+          prob: 0.6
+          conditions:
+          - !type:HasBudgetCondition
+          - !type:MaxRuleOccurenceCondition
+      - !type:GroupSelector
+        conditions:
+        - !type:RoundDurationCondition
+          min: 1800
+        children:
+        - id: SleeperAgents
+          weight: 25
+          conditions:
+          - !type:HasBudgetCondition
+          - !type:MaxRuleOccurenceCondition
+        - id: NinjaSpawn
+          weight: 20
+          conditions:
+          - !type:HasBudgetCondition
+          - !type:MaxRuleOccurenceCondition
+        - id: ParadoxCloneSpawn
+          weight: 20
+          conditions:
+          - !type:HasBudgetCondition
+          - !type:MaxRuleOccurenceCondition
+            max: 2
+        - id: DragonSpawn
+          weight: 15
+          conditions:
+          - !type:HasBudgetCondition
+          - !type:MaxRuleOccurenceCondition
+        - id: ZombieOutbreak
+          weight: 10
+          conditions:
+          - !type:HasBudgetCondition
+          - !type:MaxRuleOccurenceCondition
+        - id: NightmareSpawn
+          weight: 15
+          conditions:
+          - !type:HasBudgetCondition
+          - !type:MaxRuleOccurenceCondition
+
+- type: entity
+  parent: BaseGameRule
+  id: EclipseSurvivalDynamicRule
+  components:
+  - type: GameRule
+    minPlayers: 0
+  - type: DynamicRule
+    budgetPerSecond: 0.11
+    startingBudgetMin: 320
+    startingBudgetMax: 460
+    minRuleInterval: 600
+    maxRuleInterval: 1080
+    table: !type:NestedSelector
+      tableId: DynamicRuleSurvivalSelectionTable
+
+- type: entityTable
+  id: DynamicRuleSurvivalSelectionTable
+  table: !type:AllSelector
+    children:
+    - !type:GroupSelector
+      conditions:
+      - !type:RoundDurationCondition
+        max: 1
+      children:
+      - id: Traitor
+        weight: 50
+        conditions:
+        - !type:HasBudgetCondition
+        - !type:MaxRuleOccurenceCondition
+      - id: Nukeops
+        weight: 25
+        conditions:
+        - !type:HasBudgetCondition
+        - !type:MaxRuleOccurenceCondition
+        - !type:PlayerCountCondition
+          min: 20
+      - id: Revolutionary
+        weight: 5
+        conditions:
+        - !type:HasBudgetCondition
+        - !type:MaxRuleOccurenceCondition
+        - !type:PlayerCountCondition
+          min: 20
+    - !type:GroupSelector
+      conditions:
+      - !type:RoundDurationCondition
+        max: 1
+      children:
+      - id: Thief
+        prob: 0.7
+        conditions:
+        - !type:HasBudgetCondition
+        - !type:MaxRuleOccurenceCondition
+    - !type:GroupSelector
+      conditions:
+      - !type:RoundDurationCondition
+        min: 1200
+      children:
+      - id: SleeperAgents
+        weight: 15
+        conditions:
+        - !type:HasBudgetCondition
+        - !type:MaxRuleOccurenceCondition
+      - id: DragonSpawn
+        weight: 15
+        conditions:
+        - !type:HasBudgetCondition
+        - !type:MaxRuleOccurenceCondition
+      - id: NinjaSpawn
+        weight: 20
+        conditions:
+        - !type:HasBudgetCondition
+        - !type:MaxRuleOccurenceCondition
+      - id: ParadoxCloneSpawn
+        weight: 20
+        conditions:
+        - !type:HasBudgetCondition
+        - !type:MaxRuleOccurenceCondition
+          max: 2
+      - id: ZombieOutbreak
+        weight: 10
+        conditions:
+        - !type:HasBudgetCondition
+        - !type:MaxRuleOccurenceCondition
+      - id: LoneOpsSpawn
+        weight: 10
+        conditions:
+        - !type:HasBudgetCondition
+        - !type:MaxRuleOccurenceCondition
+      - id: WizardSpawn
+        weight: 10
+        conditions:
+        - !type:HasBudgetCondition
+        - !type:MaxRuleOccurenceCondition
+      - id: NightmareSpawn
+        weight: 15
+        conditions:
+        - !type:HasBudgetCondition
+        - !type:MaxRuleOccurenceCondition
+
+- type: entity
+  parent: BaseGameRule
+  id: EclipseApocalypseDynamicRule
+  components:
+  - type: GameRule
+    minPlayers: 1
+  - type: DynamicRule
+    budgetPerSecond: 0.15
+    startingBudgetMin: 450
+    startingBudgetMax: 650
+    minRuleInterval: 480
+    maxRuleInterval: 720
+    table: !type:NestedSelector
+      tableId: DynamicRuleSurvivalSelectionTable
+
+- type: entity
+  id: EclipseExtendedScenario
+  parent: BaseGameRule
+  components:
+  - type: EclipseScenarioRule
+    difficultyOneRules:
+    - EclipseExtendedDifficultyOneDynamicRule
+    - EclipseCalmStationEventScheduler
+    difficultyTwoRules:
+    - EclipseExtendedDifficultyTwoDynamicRule
+    - EclipseExtendedLevelTwoStationEventScheduler
+    difficultyThreeRules:
+    - DynamicRule
+    - EclipseExtendedLevelThreeStationEventScheduler
+
+- type: entity
+  id: EclipseApocalypseWarningRule
+  parent: BaseGameRule
+  components:
+  - type: EclipseApocalypseRule
+    announcementDelay: 0

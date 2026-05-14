@@ -7,7 +7,7 @@
   showInVote: true
   description: calm-description
   rules:
-    - EridaCalmStationEventScheduler
+    - EclipseCalmStationEventScheduler
     - BasicRoundstartVariation
 
 - type: gamePreset
@@ -18,8 +18,8 @@
   showInVote: true
   description: survival-description
   rules:
-    - EridaSurvivalDynamicRule
-    - EridaSurvivalStationEventScheduler
+    - EclipseSurvivalDynamicRule
+    - EclipseSurvivalStationEventScheduler
     - BasicRoundstartVariation
 
 - type: gamePreset
@@ -90,7 +90,7 @@
   showInVote: true
   description: extended-description
   rules:
-  - EridaExtendedScenario
+  - EclipseExtendedScenario
   - BasicRoundstartVariation
 
 - type: gamePreset
@@ -141,9 +141,9 @@
   showInVote: false
   description: apocalypse-description
   rules:
-    - EridaApocalypseDynamicRule
-    - EridaApocalypseStationEventScheduler
-    - EridaApocalypseWarningRule
+    - EclipseApocalypseDynamicRule
+    - EclipseApocalypseStationEventScheduler
+    - EclipseApocalypseWarningRule
     - BasicRoundstartVariation
 
 - type: gamePreset

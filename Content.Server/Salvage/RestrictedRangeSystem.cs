@@ -1,18 +1,14 @@
 using System.Numerics;
 using Content.Shared.Movement.Components;
-using Content.Shared.Physics;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Salvage;
 using Robust.Shared.Map;
-using Robust.Shared.Physics.Collision.Shapes;
-using Robust.Shared.Physics.Components;
-using Robust.Shared.Physics.Systems;
 
 namespace Content.Server.Salvage;
 
 public sealed class RestrictedRangeSystem : SharedRestrictedRangeSystem
 {
-    [Dependency] private readonly FixtureSystem _fixtures = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private readonly SharedTransformSystem _xform = default!;
 
     public override void Initialize()
     {
@@ -28,18 +24,42 @@ public sealed class RestrictedRangeSystem : SharedRestrictedRangeSystem
     public EntityUid CreateBoundary(EntityCoordinates coordinates, float range)
     {
         var boundaryUid = Spawn(null, coordinates);
-        var boundaryPhysics = AddComp<PhysicsComponent>(boundaryUid);
-        var cShape = new ChainShape();
-        // Don't need it to be a perfect circle, just need it to be loosely accurate.
-        cShape.CreateLoop(Vector2.Zero, range + 0.25f, false, count: 4);
-        _fixtures.TryCreateFixture(
-            boundaryUid,
-            cShape,
-            "boundary",
-            collisionLayer: (int) (CollisionGroup.HighImpassable | CollisionGroup.Impassable | CollisionGroup.LowImpassable),
-            body: boundaryPhysics);
-        _physics.WakeBody(boundaryUid, body: boundaryPhysics);
         AddComp<BoundaryComponent>(boundaryUid);
         return boundaryUid;
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        var rangeQuery = EntityQueryEnumerator<RestrictedRangeComponent>();
+
+        while (rangeQuery.MoveNext(out var rangeUid, out var range))
+        {
+            if (range.BoundaryEntity == EntityUid.Invalid ||
+                Deleted(range.BoundaryEntity) ||
+                !TryComp<BoundaryComponent>(range.BoundaryEntity, out var boundary))
+            {
+                continue;
+            }
+
+            var center = _xform.GetWorldPosition(range.BoundaryEntity);
+            var targetRadius = MathF.Max(0f, range.Range - boundary.Offset);
+            var mobQuery = EntityQueryEnumerator<MobStateComponent, TransformComponent>();
+
+            while (mobQuery.MoveNext(out var mobUid, out _, out var mobXform))
+            {
+                if (mobUid == rangeUid || mobXform.MapUid != rangeUid)
+                    continue;
+
+                var offset = _xform.GetWorldPosition(mobXform) - center;
+                var distance = offset.Length();
+
+                if (distance <= range.Range || distance <= 0f)
+                    continue;
+
+                _xform.SetWorldPosition((mobUid, mobXform), center + offset.Normalized() * targetRadius);
+            }
+        }
     }
 }

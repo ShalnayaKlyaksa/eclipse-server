@@ -2186,7 +2186,7 @@
 # LEGS | НОГИ
 
 - type: marking
-  id: PawSocks
+  id: AnthropomorphPawSocks
   bodyPart: RFoot
   # speciesRestriction: [Anthropomorph, Reptilian]
   sprites:

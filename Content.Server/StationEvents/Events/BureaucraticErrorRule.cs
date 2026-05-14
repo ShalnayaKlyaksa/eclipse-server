@@ -33,7 +33,7 @@ public sealed class BureaucraticErrorRule : StationEventSystem<BureaucraticError
         // Lower chance than the /tg/ equivalent of this event.
         if (RobustRandom.Prob(0.25f))
         {
-            // Erida start
+            // Eclipse start
             var jobNumber = RobustRandom.Next(1, 3);
 
             for (var i = 1; i != jobNumber; i++)
@@ -41,7 +41,7 @@ public sealed class BureaucraticErrorRule : StationEventSystem<BureaucraticError
                 var chosenJob = RobustRandom.PickAndTake(jobList);
                 _stationJobs.MakeJobUnlimited(chosenStation.Value, chosenJob);
             }
-            // Erida end
+            // Eclipse end
         }
         else
         {

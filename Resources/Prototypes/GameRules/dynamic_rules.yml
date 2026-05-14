@@ -1,9 +1,9 @@
-﻿- type: entity
+- type: entity
   parent: BaseGameRule
   id: DynamicRule
   components:
   - type: GameRule
-    # Erida Extended reuses this rule as a nested difficulty option,
+    # Eclipse Extended reuses this rule as a nested difficulty option,
     # so it needs to stay startable on low population too.
     minPlayers: 1
   - type: DynamicRule
@@ -63,7 +63,7 @@
       - !type:GroupSelector
         conditions:
         - !type:RoundDurationCondition
-          min: 2400 # minimum 40 minutes Erida edit
+          min: 2400 # minimum 40 minutes Eclipse edit
         children:
         - id: SleeperAgents
           weight: 15
@@ -71,21 +71,21 @@
           - !type:HasBudgetCondition
           - !type:MaxRuleOccurenceCondition
           - !type:RoundDurationCondition
-            min: 2400 # minimum 40 minutes Erida edit
+            min: 2400 # minimum 40 minutes Eclipse edit
         - id: DragonSpawn
           weight: 15
           conditions:
           - !type:HasBudgetCondition
           - !type:MaxRuleOccurenceCondition
           - !type:RoundDurationCondition
-            min: 4800 # 80 minutes Erida edit
+            min: 4800 # 80 minutes Eclipse edit
         - id: NinjaSpawn
           weight: 20
           conditions:
           - !type:HasBudgetCondition
           - !type:MaxRuleOccurenceCondition
           - !type:RoundDurationCondition
-            min: 2400 # minimum 40 minutes Erida edit
+            min: 2400 # minimum 40 minutes Eclipse edit
         - id: ParadoxCloneSpawn
           weight: 25
           conditions:
@@ -111,4 +111,4 @@
           - !type:PlayerCountCondition
             min: 20
           - !type:RoundDurationCondition
-            min: 4800 # 80 minutes Erida edit
+            min: 4800 # 80 minutes Eclipse edit

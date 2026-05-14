@@ -517,12 +517,12 @@
   parent: BaseGameRule
   components:
   - type: BasicStationEventScheduler
-  # Erida start
+  # Eclipse start
     minimumTimeUntilFirstEvent: 300 # 5 min
     minMaxEventTiming:
       min: 450 # 7.5 min
       max: 750 # 12.5 mis
-  # Erida end
+  # Eclipse end
     scheduledGameRules: !type:NestedSelector
       tableId: BasicGameRulesTable
 
@@ -563,11 +563,11 @@
   components:
   - type: RoundstartStationVariationRule
     rules:
-    # - id: BasicPoweredLightVariationPass Erida eidt
-    # - id: BasicTrashVariationPass # Erida edit
+    # - id: BasicPoweredLightVariationPass Eclipse eidt
+    # - id: BasicTrashVariationPass # Eclipse edit
     - id: SolidWallRustingVariationPass
     - id: ReinforcedWallRustingVariationPass
-    # Erida start
+    # Eclipse start
     # - id: CutWireVariationPass
     # - id: BasicPuddleMessVariationPass
     #   prob: 0.99
@@ -575,7 +575,7 @@
     # - id: BloodbathPuddleMessVariationPass
     #   prob: 0.01
     #   orGroup: puddleMess
-    # Erida end
+    # Eclipse end
     - id: SmugglerStashVariationPass
       prob: 0.90
     - id: SolarPanelDamageVariationPass
