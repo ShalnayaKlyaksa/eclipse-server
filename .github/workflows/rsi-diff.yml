@@ -7,8 +7,10 @@ on:
 
 permissions:
   contents: read
-  issues: write
   pull-requests: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   diff:
@@ -39,36 +41,14 @@ jobs:
           headname: ${{ github.event.pull_request.head.repo.full_name }}
           headsha: ${{ github.event.pull_request.head.sha }}
 
-      - name: Potentially find comment
-        uses: peter-evans/find-comment@v1
-        id: fc
-        with:
-          issue-number: ${{ github.event.number }}
-          comment-author: 'github-actions[bot]'
-          body-includes: RSI Diff Bot
+      - name: Write diff summary
+        env:
+          BODY: ${{ steps.diff.outputs.summary-details }}
+        run: |
+          set -euo pipefail
 
-      - name: Create comment if it doesn't exist
-        if: steps.fc.outputs.comment-id == ''
-        uses: peter-evans/create-or-update-comment@v1
-        with:
-          issue-number: ${{ github.event.number }}
-          body: |
-            ${{ steps.diff.outputs.summary-details }}
-
-      - name: Update comment if it exists
-        if: steps.fc.outputs.comment-id != ''
-        uses: peter-evans/create-or-update-comment@v1
-        with:
-          comment-id: ${{ steps.fc.outputs.comment-id }}
-          edit-mode: replace
-          body: |
-            ${{ steps.diff.outputs.summary-details }}
-
-      - name: Update comment to read that it has been edited
-        if: steps.fc.outputs.comment-id != ''
-        uses: peter-evans/create-or-update-comment@v1
-        with:
-          comment-id: ${{ steps.fc.outputs.comment-id }}
-          edit-mode: append
-          body: |
-            Edit: diff updated after ${{ github.event.pull_request.head.sha }}
+          {
+            echo '## RSI Diff'
+            echo
+            printf '%s\n' "$BODY"
+          } >> "$GITHUB_STEP_SUMMARY"
