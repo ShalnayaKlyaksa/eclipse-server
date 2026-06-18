@@ -36,7 +36,6 @@
     - Medical
     - CivilianServices
     roundstartTechs:
-    - MachineParts
     - Powercells
     - EngineeringTools
     - Lightning
