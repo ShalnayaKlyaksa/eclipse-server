@@ -25,10 +25,24 @@
   - type: ResearchServer
   - type: TechnologyDatabase
     supportedDisciplines:
+     # Backmen-Edit-START
     - Industrial
     - Arsenal
+    - Security
+    - Cargo
+    - Shaft
     - Experimental
+    - Robotics
+    - Medical
     - CivilianServices
+    roundstartTechs:
+    - MachineParts
+    - Powercells
+    - EngineeringTools
+    - Lightning
+    - NonlethalAmmunition
+    - ComprehensiveResearchDevelopmentSystem
+    # Backmen-Edit-ENDer
   - type: ApcPowerReceiver
     powerLoad: 200
   - type: ExtensionCableReceiver
