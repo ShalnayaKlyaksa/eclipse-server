@@ -166,7 +166,7 @@ public sealed class EclipseEngineConnectService
     private void RelaunchEngine(string requiredVersion, string host, ushort port)
     {
         var args = BuildLaunchArguments(host, port);
-        _engineApi.LaunchInstalledEngine(requiredVersion, args);
+        _engineApi.LaunchInstalledEngine(requiredVersion, _engineApi.GetLauncherContentRoot(), args);
         _gameController.Shutdown("Eclipse engine handoff");
     }
 
