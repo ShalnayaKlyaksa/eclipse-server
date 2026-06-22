@@ -1,5 +1,5 @@
 [build]
-engine_version = "v0.0.2-eclipse"
+engine_version = "277.0.0"
 fork_id = "eclipse"
 
 [game]

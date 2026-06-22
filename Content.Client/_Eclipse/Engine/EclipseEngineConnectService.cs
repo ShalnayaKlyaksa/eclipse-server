@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Net.Http;
+using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Client._Eclipse.Engine.UI;
@@ -37,8 +39,19 @@ public sealed class EclipseEngineConnectService
     /// </summary>
     public async Task<bool> TryConnectAsync(string host, ushort port, Action connect)
     {
-        var requiredVersion = await ResolveRequiredVersionAsync(host, port);
-        _sawmill.Info("Required engine version for {Host}:{Port} is {Version}", host, port, requiredVersion);
+        if (!await IsEclipseServerAsync(host, port))
+        {
+            connect();
+            return true;
+        }
+
+        var requiredVersion = ContentEclipseEngineBootstrap.RequiredVersion;
+        _sawmill.Info(
+            "Eclipse server {Host}:{Port} requires engine {Version}; running from installed engine: {Installed}",
+            host,
+            port,
+            requiredVersion,
+            ContentEclipseEngineBootstrap.IsRunningFromInstalledEngine(requiredVersion));
 
         if (ContentEclipseEngineBootstrap.IsRunningFromInstalledEngine(requiredVersion))
         {
@@ -131,19 +144,23 @@ public sealed class EclipseEngineConnectService
         return !string.IsNullOrEmpty(host);
     }
 
-    private async Task<string> ResolveRequiredVersionAsync(string host, int port)
+    private static async Task<bool> IsEclipseServerAsync(string host, int port)
     {
         try
         {
-            var version = await ContentEclipseEngineBootstrap.FetchServerEngineVersionAsync(host, port);
-            return ContentEclipseEngineBootstrap.NormalizeReleaseVersion(version);
-        }
-        catch (Exception ex)
-        {
-            _sawmill.Warning("Failed to query /info for engine version: {Error}", ex.Message);
-        }
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("EclipseEngineBootstrap/1.0");
+            client.Timeout = TimeSpan.FromSeconds(15);
 
-        return ContentEclipseEngineBootstrap.DefaultEngineVersion;
+            var json = await client.GetFromJsonAsync<JsonObject>($"http://{host}:{port}/info");
+            var forkId = json?["build"]?["fork_id"]?.GetValue<string>();
+            return string.Equals(forkId, "eclipse", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(forkId, "custom", StringComparison.OrdinalIgnoreCase);
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     private async Task DownloadEngineAsync(string requiredVersion)
