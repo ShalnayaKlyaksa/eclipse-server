@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Client._Eclipse.Engine.UI;
@@ -40,27 +37,28 @@ public sealed class EclipseEngineConnectService
     /// </summary>
     public async Task<bool> TryConnectAsync(string host, ushort port, Action connect)
     {
-        if (!await IsEclipseServerAsync(host, port))
+        if (!EclipseEngineApiBridge.IsAvailable)
         {
+            _sawmill.Warning("Eclipse engine bootstrap API is missing from Robust.Client; connecting on stock engine");
             connect();
             return true;
         }
 
-        var requiredVersion = ContentEclipseEngineBootstrap.RequiredVersion;
+        var requiredVersion = ContentEclipseEngineVersion.RequiredVersion;
         _sawmill.Info(
             "Eclipse server {Host}:{Port} requires engine {Version}; running from installed engine: {Installed}",
             host,
             port,
             requiredVersion,
-            ContentEclipseEngineBootstrap.IsRunningFromInstalledEngine(requiredVersion));
+            EclipseEngineApiBridge.IsRunningFromInstalledEngine(requiredVersion));
 
-        if (ContentEclipseEngineBootstrap.IsRunningFromInstalledEngine(requiredVersion))
+        if (EclipseEngineApiBridge.IsRunningFromInstalledEngine(requiredVersion))
         {
             connect();
             return true;
         }
 
-        if (ContentEclipseEngineBootstrap.GetInstalledEngineVersion(requiredVersion) != null)
+        if (EclipseEngineApiBridge.GetInstalledEngineVersion(requiredVersion) != null)
         {
             RelaunchEngine(requiredVersion, host, port);
             return false;
@@ -145,25 +143,6 @@ public sealed class EclipseEngineConnectService
         return !string.IsNullOrEmpty(host);
     }
 
-    private static async Task<bool> IsEclipseServerAsync(string host, int port)
-    {
-        try
-        {
-            using var client = new HttpClient();
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("EclipseEngineBootstrap/1.0");
-            client.Timeout = TimeSpan.FromSeconds(15);
-
-            var json = await client.GetFromJsonAsync<JsonObject>($"http://{host}:{port}/info");
-            var forkId = json?["build"]?["fork_id"]?.GetValue<string>();
-            return string.Equals(forkId, "eclipse", StringComparison.OrdinalIgnoreCase)
-                || string.Equals(forkId, "custom", StringComparison.OrdinalIgnoreCase);
-        }
-        catch
-        {
-            return false;
-        }
-    }
-
     private async Task DownloadEngineAsync(string requiredVersion)
     {
         _dialog = new EclipseEngineDownloadDialog();
@@ -176,15 +155,15 @@ public sealed class EclipseEngineConnectService
             _userInterfaceManager.DeferAction(() => _dialog?.UpdateProgress(status));
         };
 
-        await ContentEclipseEngineBootstrap.InstallEngineAsync(requiredVersion, onProgress, cancel);
+        await EclipseEngineApiBridge.InstallEngineAsync(requiredVersion, onProgress, cancel);
     }
 
     private void RelaunchEngine(string requiredVersion, string host, ushort port)
     {
         var args = BuildLaunchArguments(host, port);
-        ContentEclipseEngineBootstrap.LaunchInstalledEngine(
+        EclipseEngineApiBridge.LaunchInstalledEngine(
             requiredVersion,
-            ContentEclipseEngineBootstrap.GetLauncherContentRoot(),
+            EclipseEngineApiBridge.GetLauncherContentRoot(),
             args);
         _gameController.Shutdown("Eclipse engine handoff");
     }
