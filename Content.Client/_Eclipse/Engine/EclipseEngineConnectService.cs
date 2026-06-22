@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Content.Client._Eclipse.Engine.UI;
 using Robust.Client;
-using Robust.Client.Eclipse;
 using Robust.Client.UserInterface;
 using Robust.Shared.IoC;
 using Robust.Shared.Localization;
@@ -20,7 +19,6 @@ public sealed class EclipseEngineConnectService
 {
     private static readonly Regex IPv6Regex = new(@"\[(.*:.*:.*)](?::(\d+))?");
 
-    [Dependency] private readonly IEclipseEngineApi _engineApi = default!;
     [Dependency] private readonly IGameController _gameController = default!;
     [Dependency] private readonly IUserInterfaceManager _userInterfaceManager = default!;
     [Dependency] private readonly ILogManager _logManager = default!;
@@ -42,13 +40,13 @@ public sealed class EclipseEngineConnectService
         var requiredVersion = await ResolveRequiredVersionAsync(host, port);
         _sawmill.Info("Required engine version for {Host}:{Port} is {Version}", host, port, requiredVersion);
 
-        if (_engineApi.IsRunningFromInstalledEngine(requiredVersion))
+        if (ContentEclipseEngineBootstrap.IsRunningFromInstalledEngine(requiredVersion))
         {
             connect();
             return true;
         }
 
-        if (_engineApi.GetInstalledEngineVersion(requiredVersion) != null)
+        if (ContentEclipseEngineBootstrap.GetInstalledEngineVersion(requiredVersion) != null)
         {
             RelaunchEngine(requiredVersion, host, port);
             return false;
@@ -137,15 +135,15 @@ public sealed class EclipseEngineConnectService
     {
         try
         {
-            var version = await _engineApi.FetchServerEngineVersionAsync(host, port);
-            return _engineApi.NormalizeReleaseVersion(version);
+            var version = await ContentEclipseEngineBootstrap.FetchServerEngineVersionAsync(host, port);
+            return ContentEclipseEngineBootstrap.NormalizeReleaseVersion(version);
         }
         catch (Exception ex)
         {
             _sawmill.Warning("Failed to query /info for engine version: {Error}", ex.Message);
         }
 
-        return _engineApi.DefaultEngineVersion;
+        return ContentEclipseEngineBootstrap.DefaultEngineVersion;
     }
 
     private async Task DownloadEngineAsync(string requiredVersion)
@@ -155,18 +153,21 @@ public sealed class EclipseEngineConnectService
         _dialog.OpenCentered();
 
         var cancel = _dialog.BeginOperation();
-        Action<EclipseEngineDownloadStatus> onProgress = status =>
+        Action<EclipseEngineDownloadProgress> onProgress = status =>
         {
             _userInterfaceManager.DeferAction(() => _dialog?.UpdateProgress(status));
         };
 
-        await _engineApi.InstallEngineAsync(requiredVersion, onProgress, cancel);
+        await ContentEclipseEngineBootstrap.InstallEngineAsync(requiredVersion, onProgress, cancel);
     }
 
     private void RelaunchEngine(string requiredVersion, string host, ushort port)
     {
         var args = BuildLaunchArguments(host, port);
-        _engineApi.LaunchInstalledEngine(requiredVersion, _engineApi.GetLauncherContentRoot(), args);
+        ContentEclipseEngineBootstrap.LaunchInstalledEngine(
+            requiredVersion,
+            ContentEclipseEngineBootstrap.GetLauncherContentRoot(),
+            args);
         _gameController.Shutdown("Eclipse engine handoff");
     }
 

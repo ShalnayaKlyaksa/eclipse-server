@@ -6,6 +6,7 @@
   name: calm-title
   showInVote: true
   description: calm-description
+  minPlayers: 0
   rules:
     - EclipseCalmStationEventScheduler
     - BasicRoundstartVariation

@@ -1,3 +1,12 @@
 [build]
 engine_version = "v0.0.2-eclipse"
 fork_id = "eclipse"
+
+[game]
+defaultpreset = "calm"
+
+[infolinks]
+discord = "https://discord.gg/zF8nQVy7Jf"
+website = "https://eclipse-station.online"
+wiki = "https://wiki.eclipse-station.online"
+github = "https://github.com/ShalnayaKlyaksa/eclipse-server"
