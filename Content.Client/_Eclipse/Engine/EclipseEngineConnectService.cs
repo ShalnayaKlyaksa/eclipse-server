@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Client._Eclipse.Engine.UI;
@@ -18,6 +18,8 @@ namespace Content.Client._Eclipse.Engine;
 /// </summary>
 public sealed class EclipseEngineConnectService
 {
+    private static readonly Regex IPv6Regex = new(@"\[(.*:.*:.*)](?::(\d+))?");
+
     [Dependency] private readonly IEclipseEngineApi _engineApi = default!;
     [Dependency] private readonly IGameController _gameController = default!;
     [Dependency] private readonly IUserInterfaceManager _userInterfaceManager = default!;
@@ -79,11 +81,56 @@ public sealed class EclipseEngineConnectService
 
     public Task<bool> TryConnectLaunchStateAsync(IGameController gameController, Action connect)
     {
-        var endpoint = gameController.LaunchState.ConnectEndpoint;
-        if (endpoint == null)
+        var address = gameController.LaunchState.ConnectAddress;
+        if (string.IsNullOrWhiteSpace(address))
             return Task.FromResult(true);
 
-        return TryConnectAsync(endpoint.Host, (ushort) endpoint.Port, connect);
+        if (!TryParseConnectAddress(address, out var host, out var port))
+        {
+            _sawmill.Warning("Could not parse launch connect address: {Address}", address);
+            return Task.FromResult(true);
+        }
+
+        return TryConnectAsync(host, port, connect);
+    }
+
+    private static bool TryParseConnectAddress(string address, out string host, out ushort port)
+    {
+        host = string.Empty;
+        port = 1212;
+
+        var work = address.Trim();
+        var schemeIndex = work.IndexOf("://", StringComparison.Ordinal);
+        if (schemeIndex >= 0)
+            work = work[(schemeIndex + 3)..];
+
+        var slashIndex = work.IndexOf('/');
+        if (slashIndex >= 0)
+            work = work[..slashIndex];
+
+        var match6 = IPv6Regex.Match(work);
+        if (match6 != Match.Empty)
+        {
+            host = match6.Groups[1].Value;
+            if (match6.Groups[2].Success && !ushort.TryParse(match6.Groups[2].Value, out port))
+                return false;
+
+            return !string.IsNullOrEmpty(host);
+        }
+
+        var split = work.Split(':');
+        if (split.Length > 2)
+            return false;
+
+        host = work;
+        if (split.Length == 2)
+        {
+            host = split[0];
+            if (!ushort.TryParse(split[1], out port))
+                return false;
+        }
+
+        return !string.IsNullOrEmpty(host);
     }
 
     private async Task<string> ResolveRequiredVersionAsync(string host, int port)
@@ -91,8 +138,7 @@ public sealed class EclipseEngineConnectService
         try
         {
             var version = await _engineApi.FetchServerEngineVersionAsync(host, port);
-            if (!string.IsNullOrWhiteSpace(version))
-                return version;
+            return _engineApi.NormalizeReleaseVersion(version);
         }
         catch (Exception ex)
         {
@@ -109,12 +155,12 @@ public sealed class EclipseEngineConnectService
         _dialog.OpenCentered();
 
         var cancel = _dialog.BeginOperation();
-        var progress = new Progress<EclipseEngineDownloadStatus>(status =>
+        Action<EclipseEngineDownloadStatus> onProgress = status =>
         {
             _userInterfaceManager.DeferAction(() => _dialog?.UpdateProgress(status));
-        });
+        };
 
-        await _engineApi.InstallEngineAsync(requiredVersion, progress, cancel);
+        await _engineApi.InstallEngineAsync(requiredVersion, onProgress, cancel);
     }
 
     private void RelaunchEngine(string requiredVersion, string host, ushort port)

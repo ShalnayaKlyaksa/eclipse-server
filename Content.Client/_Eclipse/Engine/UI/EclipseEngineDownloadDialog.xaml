@@ -6,7 +6,7 @@
                   VerticalExpand="True"
                   MinWidth="420"
                   Margin="12">
-        <Label Name="TitleLabel"
+        <Label Name="HeadingLabel"
                Text="{Loc 'eclipse-engine-download-title'}"
                StyleClasses="LabelHeading"
                Align="Center"
