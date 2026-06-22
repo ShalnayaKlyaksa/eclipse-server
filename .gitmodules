@@ -1,6 +1,4 @@
 [submodule "RobustToolbox"]
-	path = RobustToolbox
-	url = https://github.com/space-wizards/RobustToolbox.git
-	branch = master
-[submodule "obustoolbox"]
-	url = https://github.com/halnayalyaksa/clipse_lient.git
+    path = RobustToolbox
+    url = https://github.com/ShalnayaKlyaksa/Eclipse_Client.git
+    branch = master
