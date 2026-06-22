@@ -1,4 +1,6 @@
 using System;
+using System.Threading.Tasks;
+using Content.Client._Eclipse.Engine;
 using Robust.Client;
 using Robust.Client.UserInterface;
 using Robust.Shared.Configuration;
@@ -21,6 +23,7 @@ namespace Content.Client.Launcher
         [Dependency] private readonly IConfigurationManager _cfg = default!;
         [Dependency] private readonly IClipboardManager _clipboard = default!;
         [Dependency] private readonly ILogManager _logManager = default!;
+        [Dependency] private readonly EclipseEngineConnectService _eclipseEngineConnect = default!;
 
         private LauncherConnectingGui? _control;
         private ISawmill _sawmill = default!;
@@ -71,6 +74,14 @@ namespace Content.Client.Launcher
             _clientNetManager.ClientConnectStateChanged += OnConnectStateChanged;
 
             CurrentPage = Page.Connecting;
+
+            if (_gameController.LaunchState.ConnectEndpoint != null)
+                _ = ConnectWithEngineGateAsync();
+        }
+
+        private async Task ConnectWithEngineGateAsync()
+        {
+            await _eclipseEngineConnect.TryConnectLaunchStateAsync(_gameController, DoRetryConnect);
         }
 
         protected override void Shutdown()
@@ -102,6 +113,12 @@ namespace Content.Client.Launcher
         public void RetryConnect()
         {
             if (_gameController.LaunchState.ConnectEndpoint != null)
+                _ = ConnectWithEngineGateAsync();
+        }
+
+        private void DoRetryConnect()
+        {
+            if (_gameController.LaunchState.ConnectEndpoint != null)
             {
                 _baseClient.ConnectToServer(_gameController.LaunchState.ConnectEndpoint);
                 CurrentPage = Page.Connecting;
@@ -117,15 +134,14 @@ namespace Content.Client.Launcher
                     _gameController.Redial(_gameController.LaunchState.Ss14Address);
                     return true;
                 }
-                else
-                {
-                    _sawmill.Info($"Redial not possible, no Ss14Address");
-                }
+
+                _sawmill.Info($"Redial not possible, no Ss14Address");
             }
             catch (Exception ex)
             {
                 _sawmill.Error($"Redial exception: {ex}");
             }
+
             return false;
         }
 

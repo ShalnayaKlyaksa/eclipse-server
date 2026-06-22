@@ -1,0 +1,39 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls">
+    <BoxContainer Orientation="Vertical"
+                  HorizontalExpand="True"
+                  VerticalExpand="True"
+                  MinWidth="420"
+                  Margin="12">
+        <Label Name="TitleLabel"
+               Text="{Loc 'eclipse-engine-download-title'}"
+               StyleClasses="LabelHeading"
+               Align="Center"
+               Margin="0 0 0 8" />
+        <Label Name="PhaseLabel"
+               Align="Center"
+               StyleClasses="LabelSubText"
+               Margin="0 0 0 12" />
+        <ProgressBar Name="DownloadProgress"
+                     MinValue="0"
+                     MaxValue="1"
+                     Value="0"
+                     Margin="0 0 0 8" />
+        <Label Name="BytesLabel"
+               Align="Center"
+               StyleClasses="LabelSubText" />
+        <Label Name="SpeedLabel"
+               Align="Center"
+               StyleClasses="LabelSubText" />
+        <Label Name="EtaLabel"
+               Align="Center"
+               StyleClasses="LabelSubText"
+               Margin="0 0 0 8" />
+        <controls:HighDivider />
+        <Button Name="CancelButton"
+                Text="{Loc 'eclipse-engine-download-cancel'}"
+                HorizontalAlignment="Center"
+                Margin="0 8 0 0" />
+    </BoxContainer>
+</DefaultWindow>

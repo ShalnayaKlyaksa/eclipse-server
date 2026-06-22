@@ -1,6 +1,7 @@
 using Content.Client.Administration.Managers;
 using Content.Client.Changelog;
 using Content.Client.Chat.Managers;
+using Content.Client._Eclipse.Engine;
 using Content.Client.Corvax.ExportSprites;
 using Content.Client.DebugMon;
 using Content.Client.Corvax.TTS;
@@ -83,6 +84,7 @@ namespace Content.Client.Entry
         [Dependency] private readonly IEntitySystemManager _entitySystemManager = default!;
         [Dependency] private readonly ClientsidePlaytimeTrackingManager _clientsidePlaytimeManager = default!;
         [Dependency] private readonly ClientFeedbackManager _feedbackManager = null!;
+        [Dependency] private readonly EclipseEngineConnectService _eclipseEngineConnect = default!;
 
         public override void PreInit()
         {
@@ -179,6 +181,7 @@ namespace Content.Client.Entry
             _documentParsingManager.Initialize();
             _titleWindowManager.Initialize();
             _feedbackManager.Initialize();
+            _eclipseEngineConnect.Initialize();
 
             _baseClient.RunLevelChanged += (_, args) =>
             {

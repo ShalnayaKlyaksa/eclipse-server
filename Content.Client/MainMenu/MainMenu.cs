@@ -1,6 +1,9 @@
+using System;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Content.Client.MainMenu.UI;
 using Content.Client.UserInterface.Systems.EscapeMenu;
+using Content.Client._Eclipse.Engine;
 using Robust.Client;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
@@ -26,6 +29,7 @@ namespace Content.Client.MainMenu
         [Dependency] private readonly IResourceCache _resourceCache = default!;
         [Dependency] private readonly IUserInterfaceManager _userInterfaceManager = default!;
         [Dependency] private readonly ILogManager _logManager = default!;
+        [Dependency] private readonly EclipseEngineConnectService _eclipseEngineConnect = default!;
 
         private ISawmill _sawmill = default!;
 
@@ -116,9 +120,28 @@ namespace Content.Client.MainMenu
             try
             {
                 ParseAddress(address, out var ip, out var port);
-                _client.ConnectToServer(ip, port);
+                _ = ConnectWithEngineGateAsync(ip, port);
             }
             catch (ArgumentException e)
+            {
+                _userInterfaceManager.Popup($"Unable to connect: {e.Message}", "Connection error.");
+                _sawmill.Warning(e.ToString());
+                _netManager.ConnectFailed -= _onConnectFailed;
+                _setConnectingState(false);
+            }
+        }
+
+        private async Task ConnectWithEngineGateAsync(string ip, ushort port)
+        {
+            try
+            {
+                if (!await _eclipseEngineConnect.TryConnectAsync(ip, port, () => _client.ConnectToServer(ip, port)))
+                {
+                    _netManager.ConnectFailed -= _onConnectFailed;
+                    _setConnectingState(false);
+                }
+            }
+            catch (Exception e)
             {
                 _userInterfaceManager.Popup($"Unable to connect: {e.Message}", "Connection error.");
                 _sawmill.Warning(e.ToString());

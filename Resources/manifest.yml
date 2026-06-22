@@ -1,5 +1,6 @@
 defaultWindowTitle: Eclipse Station
 windowIconSet: /Textures/Logo/eclipse-icon
 splashLogo: /Textures/Logo/eclipse-icon.png
+autoConnect: false
 
 # PJB PLEASE

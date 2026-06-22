@@ -1,0 +1,146 @@
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
+using Content.Client._Eclipse.Engine.UI;
+using Robust.Client;
+using Robust.Client.Eclipse;
+using Robust.Client.UserInterface;
+using Robust.Shared.IoC;
+using Robust.Shared.Localization;
+using Robust.Shared.Log;
+
+namespace Content.Client._Eclipse.Engine;
+
+/// <summary>
+/// Checks the Eclipse engine version before connecting and downloads / relaunches when needed.
+/// </summary>
+public sealed class EclipseEngineConnectService
+{
+    [Dependency] private readonly IEclipseEngineApi _engineApi = default!;
+    [Dependency] private readonly IGameController _gameController = default!;
+    [Dependency] private readonly IUserInterfaceManager _userInterfaceManager = default!;
+    [Dependency] private readonly ILogManager _logManager = default!;
+
+    private ISawmill _sawmill = default!;
+    private EclipseEngineDownloadDialog? _dialog;
+
+    public void Initialize()
+    {
+        _sawmill = _logManager.GetSawmill("eclipse.engine");
+    }
+
+    /// <summary>
+    /// Returns <see langword="true"/> if the caller should proceed with <paramref name="connect"/>.
+    /// Returns <see langword="false"/> if the client is shutting down or handing off to a new engine process.
+    /// </summary>
+    public async Task<bool> TryConnectAsync(string host, ushort port, Action connect)
+    {
+        var requiredVersion = await ResolveRequiredVersionAsync(host, port);
+        _sawmill.Info("Required engine version for {Host}:{Port} is {Version}", host, port, requiredVersion);
+
+        if (_engineApi.IsRunningFromInstalledEngine(requiredVersion))
+        {
+            connect();
+            return true;
+        }
+
+        if (_engineApi.GetInstalledEngineVersion(requiredVersion) != null)
+        {
+            RelaunchEngine(requiredVersion, host, port);
+            return false;
+        }
+
+        try
+        {
+            await DownloadEngineAsync(requiredVersion);
+            RelaunchEngine(requiredVersion, host, port);
+            return false;
+        }
+        catch (OperationCanceledException)
+        {
+            _sawmill.Info("Engine download cancelled by user");
+            return false;
+        }
+        catch (Exception ex)
+        {
+            _sawmill.Error("Engine download failed: {Error}", ex.Message);
+            _userInterfaceManager.Popup(
+                Loc.GetString("eclipse-engine-download-failed", ("reason", ex.Message)),
+                Loc.GetString("eclipse-engine-download-window-title"));
+            return false;
+        }
+        finally
+        {
+            CloseDialog();
+        }
+    }
+
+    public Task<bool> TryConnectLaunchStateAsync(IGameController gameController, Action connect)
+    {
+        var endpoint = gameController.LaunchState.ConnectEndpoint;
+        if (endpoint == null)
+            return Task.FromResult(true);
+
+        return TryConnectAsync(endpoint.Host, (ushort) endpoint.Port, connect);
+    }
+
+    private async Task<string> ResolveRequiredVersionAsync(string host, int port)
+    {
+        try
+        {
+            var version = await _engineApi.FetchServerEngineVersionAsync(host, port);
+            if (!string.IsNullOrWhiteSpace(version))
+                return version;
+        }
+        catch (Exception ex)
+        {
+            _sawmill.Warning("Failed to query /info for engine version: {Error}", ex.Message);
+        }
+
+        return _engineApi.DefaultEngineVersion;
+    }
+
+    private async Task DownloadEngineAsync(string requiredVersion)
+    {
+        _dialog = new EclipseEngineDownloadDialog();
+        _userInterfaceManager.WindowRoot.AddChild(_dialog);
+        _dialog.OpenCentered();
+
+        var cancel = _dialog.BeginOperation();
+        var progress = new Progress<EclipseEngineDownloadStatus>(status =>
+        {
+            _userInterfaceManager.DeferAction(() => _dialog?.UpdateProgress(status));
+        });
+
+        await _engineApi.InstallEngineAsync(requiredVersion, progress, cancel);
+    }
+
+    private void RelaunchEngine(string requiredVersion, string host, ushort port)
+    {
+        var args = BuildLaunchArguments(host, port);
+        _engineApi.LaunchInstalledEngine(requiredVersion, args);
+        _gameController.Shutdown("Eclipse engine handoff");
+    }
+
+    private static IEnumerable<string> BuildLaunchArguments(string host, ushort port)
+    {
+        yield return "--connect";
+        yield return "--launcher";
+        yield return "--connect-address";
+        yield return $"{host}:{port}";
+        yield return "--ss14-address";
+        yield return $"ss14://{host}:{port}/";
+    }
+
+    private void CloseDialog()
+    {
+        if (_dialog == null)
+            return;
+
+        _dialog.Close();
+        _dialog.Dispose();
+        _dialog = null;
+    }
+}
