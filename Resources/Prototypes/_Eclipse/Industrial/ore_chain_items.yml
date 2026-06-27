@@ -1,0 +1,499 @@
+# Sieved ores, metal dusts, and additional crushed ores for the ore processing chain.
+
+# --- Sieved ores ---
+- type: entity
+  parent: IndustrialMaterialBase
+  id: SievedIronOre
+  name: sieved iron ore
+  components:
+  - type: Stack
+    stackType: SievedIronOre
+  - type: Sprite
+    state: iron
+
+- type: entity
+  parent: SievedIronOre
+  id: SievedIronOre1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: SievedCopperOre
+  name: sieved copper ore
+  components:
+  - type: Stack
+    stackType: SievedCopperOre
+  - type: Sprite
+    state: iron
+
+- type: entity
+  parent: SievedCopperOre
+  id: SievedCopperOre1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: SievedQuartz
+  name: sieved quartz
+  components:
+  - type: Stack
+    stackType: SievedQuartz
+  - type: Sprite
+    sprite: Objects/Materials/ore.rsi
+    state: spacequartz
+  - type: Item
+    sprite: Objects/Materials/ore.rsi
+    heldPrefix: spacequartz
+
+- type: entity
+  parent: SievedQuartz
+  id: SievedQuartz1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: SievedGoldOre
+  name: sieved gold ore
+  components:
+  - type: Stack
+    stackType: SievedGoldOre
+  - type: Sprite
+    sprite: Objects/Materials/ore.rsi
+    state: gold
+  - type: Item
+    sprite: Objects/Materials/ore.rsi
+    heldPrefix: gold
+
+- type: entity
+  parent: SievedGoldOre
+  id: SievedGoldOre1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: SievedSilverOre
+  name: sieved silver ore
+  components:
+  - type: Stack
+    stackType: SievedSilverOre
+  - type: Sprite
+    sprite: Objects/Materials/ore.rsi
+    state: silver
+  - type: Item
+    sprite: Objects/Materials/ore.rsi
+    heldPrefix: silver
+
+- type: entity
+  parent: SievedSilverOre
+  id: SievedSilverOre1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: SievedPlasmaOre
+  name: sieved plasma ore
+  components:
+  - type: Stack
+    stackType: SievedPlasmaOre
+  - type: Sprite
+    sprite: Objects/Materials/ore.rsi
+    state: plasma
+  - type: Item
+    sprite: Objects/Materials/ore.rsi
+    heldPrefix: plasma
+
+- type: entity
+  parent: SievedPlasmaOre
+  id: SievedPlasmaOre1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: SievedUraniumOre
+  name: sieved uranium ore
+  components:
+  - type: Stack
+    stackType: SievedUraniumOre
+  - type: Sprite
+    sprite: Objects/Materials/ore.rsi
+    state: uranium
+  - type: Item
+    sprite: Objects/Materials/ore.rsi
+    heldPrefix: uranium
+
+- type: entity
+  parent: SievedUraniumOre
+  id: SievedUraniumOre1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+# --- Additional crushed ores ---
+- type: entity
+  parent: IndustrialMaterialBase
+  id: CrushedGoldOre
+  name: crushed gold ore
+  components:
+  - type: Stack
+    stackType: CrushedGoldOre
+  - type: Sprite
+    sprite: Objects/Materials/ore.rsi
+    state: gold
+  - type: Item
+    sprite: Objects/Materials/ore.rsi
+    heldPrefix: gold
+
+- type: entity
+  parent: CrushedGoldOre
+  id: CrushedGoldOre1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: CrushedSilverOre
+  name: crushed silver ore
+  components:
+  - type: Stack
+    stackType: CrushedSilverOre
+  - type: Sprite
+    sprite: Objects/Materials/ore.rsi
+    state: silver
+  - type: Item
+    sprite: Objects/Materials/ore.rsi
+    heldPrefix: silver
+
+- type: entity
+  parent: CrushedSilverOre
+  id: CrushedSilverOre1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: CrushedPlasmaOre
+  name: crushed plasma ore
+  components:
+  - type: Stack
+    stackType: CrushedPlasmaOre
+  - type: Sprite
+    sprite: Objects/Materials/ore.rsi
+    state: plasma
+  - type: Item
+    sprite: Objects/Materials/ore.rsi
+    heldPrefix: plasma
+
+- type: entity
+  parent: CrushedPlasmaOre
+  id: CrushedPlasmaOre1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: CrushedUraniumOre
+  name: crushed uranium ore
+  components:
+  - type: Stack
+    stackType: CrushedUraniumOre
+  - type: Sprite
+    sprite: Objects/Materials/ore.rsi
+    state: uranium
+  - type: Item
+    sprite: Objects/Materials/ore.rsi
+    heldPrefix: uranium
+
+- type: entity
+  parent: CrushedUraniumOre
+  id: CrushedUraniumOre1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+# --- Metal dusts ---
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IronDust
+  name: iron dust
+  components:
+  - type: Stack
+    stackType: IronDust
+  - type: Sprite
+    state: iron
+
+- type: entity
+  parent: IronDust
+  id: IronDust1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: CopperDust
+  name: copper dust
+  components:
+  - type: Stack
+    stackType: CopperDust
+  - type: Sprite
+    state: brass
+
+- type: entity
+  parent: CopperDust
+  id: CopperDust1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: QuartzDust
+  name: quartz dust
+  components:
+  - type: Stack
+    stackType: QuartzDust
+  - type: Sprite
+    sprite: Objects/Materials/ore.rsi
+    state: spacequartz
+  - type: Item
+    sprite: Objects/Materials/ore.rsi
+    heldPrefix: spacequartz
+
+- type: entity
+  parent: QuartzDust
+  id: QuartzDust1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: GoldDust
+  name: gold dust
+  components:
+  - type: Stack
+    stackType: GoldDust
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+    state: gold
+
+- type: entity
+  parent: GoldDust
+  id: GoldDust1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: SilverDust
+  name: silver dust
+  components:
+  - type: Stack
+    stackType: SilverDust
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+    state: silver
+
+- type: entity
+  parent: SilverDust
+  id: SilverDust1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: PlasmaDust
+  name: plasma dust
+  components:
+  - type: Stack
+    stackType: PlasmaDust
+  - type: Sprite
+    sprite: Objects/Materials/Sheets/other.rsi
+    state: plasma
+
+- type: entity
+  parent: PlasmaDust
+  id: PlasmaDust1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: UraniumDust
+  name: uranium dust
+  components:
+  - type: Stack
+    stackType: UraniumDust
+  - type: Sprite
+    sprite: Objects/Materials/Sheets/other.rsi
+    state: uranium
+
+- type: entity
+  parent: UraniumDust
+  id: UraniumDust1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+# --- Stacks ---
+- type: stack
+  parent: BaseMediumStack
+  id: SievedIronOre
+  name: stack-sieved-iron-ore
+  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: iron }
+  spawn: SievedIronOre1
+
+- type: stack
+  parent: BaseMediumStack
+  id: SievedCopperOre
+  name: stack-sieved-copper-ore
+  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: iron }
+  spawn: SievedCopperOre1
+
+- type: stack
+  parent: BaseMediumStack
+  id: SievedQuartz
+  name: stack-sieved-quartz
+  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: spacequartz }
+  spawn: SievedQuartz1
+
+- type: stack
+  parent: BaseMediumStack
+  id: SievedGoldOre
+  name: stack-sieved-gold-ore
+  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: gold }
+  spawn: SievedGoldOre1
+
+- type: stack
+  parent: BaseMediumStack
+  id: SievedSilverOre
+  name: stack-sieved-silver-ore
+  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: silver }
+  spawn: SievedSilverOre1
+
+- type: stack
+  parent: BaseMediumStack
+  id: SievedPlasmaOre
+  name: stack-sieved-plasma-ore
+  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: plasma }
+  spawn: SievedPlasmaOre1
+
+- type: stack
+  parent: BaseMediumStack
+  id: SievedUraniumOre
+  name: stack-sieved-uranium-ore
+  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: uranium }
+  spawn: SievedUraniumOre1
+
+- type: stack
+  parent: BaseMediumStack
+  id: CrushedGoldOre
+  name: stack-crushed-gold-ore
+  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: gold }
+  spawn: CrushedGoldOre1
+
+- type: stack
+  parent: BaseMediumStack
+  id: CrushedSilverOre
+  name: stack-crushed-silver-ore
+  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: silver }
+  spawn: CrushedSilverOre1
+
+- type: stack
+  parent: BaseMediumStack
+  id: CrushedPlasmaOre
+  name: stack-crushed-plasma-ore
+  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: plasma }
+  spawn: CrushedPlasmaOre1
+
+- type: stack
+  parent: BaseMediumStack
+  id: CrushedUraniumOre
+  name: stack-crushed-uranium-ore
+  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: uranium }
+  spawn: CrushedUraniumOre1
+
+- type: stack
+  parent: BaseMediumStack
+  id: IronDust
+  name: stack-iron-dust
+  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: iron }
+  spawn: IronDust1
+
+- type: stack
+  parent: BaseMediumStack
+  id: CopperDust
+  name: stack-copper-dust
+  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: brass }
+  spawn: CopperDust1
+
+- type: stack
+  parent: BaseMediumStack
+  id: QuartzDust
+  name: stack-quartz-dust
+  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: spacequartz }
+  spawn: QuartzDust1
+
+- type: stack
+  parent: BaseMediumStack
+  id: GoldDust
+  name: stack-gold-dust
+  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: gold }
+  spawn: GoldDust1
+
+- type: stack
+  parent: BaseMediumStack
+  id: SilverDust
+  name: stack-silver-dust
+  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: silver }
+  spawn: SilverDust1
+
+- type: stack
+  parent: BaseMediumStack
+  id: PlasmaDust
+  name: stack-plasma-dust
+  icon: { sprite: /Textures/Objects/Materials/Sheets/other.rsi, state: plasma }
+  spawn: PlasmaDust1
+
+- type: stack
+  parent: BaseMediumStack
+  id: UraniumDust
+  name: stack-uranium-dust
+  icon: { sprite: /Textures/Objects/Materials/Sheets/other.rsi, state: uranium }
+  spawn: UraniumDust1

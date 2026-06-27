@@ -9,4 +9,5 @@ public enum IndustrialProcessorState : byte
     Working,
     Blocked,
     Unpowered,
+    Unheated,
 }

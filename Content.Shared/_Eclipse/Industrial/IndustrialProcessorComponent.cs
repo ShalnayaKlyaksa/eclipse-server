@@ -59,16 +59,16 @@ public sealed partial class IndustrialProcessorComponent : Component
     public bool AutoStart = true;
 
     [DataField, AutoNetworkedField]
-    public PortMode NorthPort = PortMode.Disabled;
+    public FacePortState NorthFacePort = FacePortState.Disabled;
 
     [DataField, AutoNetworkedField]
-    public PortMode SouthPort = PortMode.Disabled;
+    public FacePortState SouthFacePort = FacePortState.Disabled;
 
     [DataField, AutoNetworkedField]
-    public PortMode EastPort = PortMode.Disabled;
+    public FacePortState EastFacePort = FacePortState.Disabled;
 
     [DataField, AutoNetworkedField]
-    public PortMode WestPort = PortMode.Disabled;
+    public FacePortState WestFacePort = FacePortState.Disabled;
 
     /// <summary>
     /// TODO: Add optional SolutionContainerId for washer water/reagent consumption.
@@ -76,47 +76,82 @@ public sealed partial class IndustrialProcessorComponent : Component
     [DataField]
     public string? SolutionContainerId;
 
-    public PortMode GetPortMode(Direction direction)
+    public FacePortState GetFacePort(Direction direction)
     {
         return direction switch
         {
-            Direction.North => NorthPort,
-            Direction.South => SouthPort,
-            Direction.East => EastPort,
-            Direction.West => WestPort,
-            _ => PortMode.Disabled,
+            Direction.North => NorthFacePort,
+            Direction.South => SouthFacePort,
+            Direction.East => EastFacePort,
+            Direction.West => WestFacePort,
+            _ => FacePortState.Disabled,
         };
     }
 
-    public void SetPortMode(Direction direction, PortMode mode)
+    public void SetFacePort(Direction direction, FacePortState state)
     {
         switch (direction)
         {
             case Direction.North:
-                NorthPort = mode;
+                NorthFacePort = state;
                 break;
             case Direction.South:
-                SouthPort = mode;
+                SouthFacePort = state;
                 break;
             case Direction.East:
-                EastPort = mode;
+                EastFacePort = state;
                 break;
             case Direction.West:
-                WestPort = mode;
+                WestFacePort = state;
                 break;
         }
     }
 
-    public PortMode CyclePortMode(Direction direction)
+    public PortMode GetItemPortMode(Direction direction)
     {
-        var next = GetPortMode(direction) switch
+        return GetFacePort(direction) switch
         {
-            PortMode.Disabled => PortMode.Input,
-            PortMode.Input => PortMode.Output,
+            FacePortState.ItemInput => PortMode.Input,
+            FacePortState.ItemOutput => PortMode.Output,
             _ => PortMode.Disabled,
         };
+    }
 
-        SetPortMode(direction, next);
+    public LiquidPortMode GetLiquidPortMode(Direction direction)
+    {
+        return GetFacePort(direction) switch
+        {
+            FacePortState.LiquidInput => LiquidPortMode.Input,
+            FacePortState.LiquidOutput => LiquidPortMode.Output,
+            _ => LiquidPortMode.Disabled,
+        };
+    }
+
+    public FacePortState CycleFacePort(Direction direction)
+    {
+        var next = GetFacePort(direction) switch
+        {
+            FacePortState.Disabled => FacePortState.ItemInput,
+            FacePortState.ItemInput => FacePortState.ItemOutput,
+            FacePortState.ItemOutput => FacePortState.LiquidInput,
+            FacePortState.LiquidInput => FacePortState.LiquidOutput,
+            FacePortState.LiquidOutput => FacePortState.HeatInput,
+            _ => FacePortState.Disabled,
+        };
+
+        SetFacePort(direction, next);
         return next;
+    }
+
+    public void ClearItemOutputsExcept(Direction except)
+    {
+        foreach (var direction in SharedIndustrialProcessorSystem.CardinalDirections)
+        {
+            if (direction == except)
+                continue;
+
+            if (GetFacePort(direction) == FacePortState.ItemOutput)
+                SetFacePort(direction, FacePortState.Disabled);
+        }
     }
 }

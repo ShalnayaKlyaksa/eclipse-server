@@ -1,0 +1,170 @@
+# Industrial workbench, machine chassis, upgrade modules, and fabrication components.
+
+- type: entity
+  parent: BaseStructure
+  id: IndustrialWorkbench
+  name: industrial workbench
+  description: A two-tile fabrication station for expensive industrial components and upgrade modules.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+    noRot: false
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,1.45,0.45"
+        density: 120
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: Sprite
+  # TODO: Dedicated workbench sprite.
+    sprite: Structures/Machines/autolathe.rsi
+    state: icon
+  - type: Icon
+    sprite: Structures/Machines/autolathe.rsi
+    state: icon
+  - type: IndustrialWorkbench
+  - type: Storage
+    grid:
+    - 0,0,10,4
+    maxItemSize: Huge
+    openOnActivate: false
+  - type: UserInterface
+    interfaces:
+      enum.IndustrialWorkbenchUiKey.Craft:
+        type: IndustrialWorkbenchBoundUserInterface
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
+  - type: ActivatableUI
+    key: enum.IndustrialWorkbenchUiKey.Craft
+    requireActiveHand: false
+  - type: Anchorable
+  - type: Pullable
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Metallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: BaseMachine
+  id: IndustrialMachineChassis
+  name: industrial machine chassis
+  description: An empty industrial machine frame. Install an upgrade module to complete assembly.
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Sprite
+    sprite: Structures/Machines/ore_processor.rsi
+    state: icon
+  - type: Icon
+    sprite: Structures/Machines/ore_processor.rsi
+    state: icon
+  - type: IndustrialMachineChassis
+  - type: Anchorable
+  - type: Pullable
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.6,-0.6,0.6,0.6"
+        density: 150
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: BaseIndustrialUpgradeModule
+  description: Installed on an industrial machine chassis to assemble a finished processor.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/stock_parts.rsi
+    state: micro_mani
+  - type: Item
+    size: Normal
+  - type: IndustrialUpgradeModule
+
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleCrusher
+  name: crusher upgrade module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Crusher
+    tier: Basic
+    resultMachine: BasicIndustrialCrusher
+
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleThermalCentrifuge
+  name: thermal centrifuge upgrade module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: ThermalCentrifuge
+    tier: Basic
+    resultMachine: BasicIndustrialThermalCentrifuge
+
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleSmelter
+  name: smelter upgrade module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Smelter
+    tier: Basic
+    resultMachine: BasicIndustrialSmelter
+
+- type: entity
+  parent: BaseItem
+  id: IndustrialMechanicalCore
+  name: industrial mechanical core
+  description: Precision-machined drive assembly for industrial equipment.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/stock_parts.rsi
+    state: manipulator
+  - type: Item
+    size: Normal
+
+- type: entity
+  parent: BaseItem
+  id: IndustrialHeatConduitAssembly
+  name: heat conduit assembly
+  description: Insulated thermal routing assembly for high-temperature industrial machines.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/stock_parts.rsi
+    state: capacitor
+  - type: Item
+    size: Normal
+
+- type: entity
+  parent: BaseItem
+  id: IndustrialCircuitCore
+  name: industrial circuit core
+  description: Heavy-duty control core for automated industrial processors.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/stock_parts.rsi
+    state: scanning_module
+  - type: Item
+    size: Normal

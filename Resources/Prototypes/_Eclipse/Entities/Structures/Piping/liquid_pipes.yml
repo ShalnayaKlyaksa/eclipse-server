@@ -1,0 +1,81 @@
+# Industrial liquid pipes — separate from atmos and item piping.
+# TODO: Replace placeholder sprites with dedicated liquid pipe RSI per tier.
+
+- type: entity
+  abstract: true
+  parent: BaseStructure
+  id: BaseLiquidPipe
+  name: liquid pipe
+  description: Transports fluids between industrial machines.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Fixtures
+  - type: InteractionOutline
+  - type: Anchorable
+    tool: IndustrialPipeDetaching
+    flags: Unanchorable
+    delay: 0.5
+  - type: IndustrialPipingOccupant
+  - type: LiquidPipe
+  - type: Sprite
+    sprite: Structures/Piping/Atmospherics/pipe.rsi
+    drawdepth: Objects
+    state: pipeStraight
+    color: "#4488FFAA"
+  - type: Icon
+    sprite: Structures/Piping/Atmospherics/pipe.rsi
+    state: storageStraight
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Metallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: StaticPrice
+    price: 25
+
+- type: entity
+  parent: BaseLiquidPipe
+  id: BasicLiquidPipe
+  name: basic liquid pipe
+  description: Transports fluids between industrial machines. Has low throughput.
+  components:
+  - type: LiquidPipe
+    tier: Basic
+
+- type: entity
+  parent: BaseLiquidPipe
+  id: IndustrialLiquidPipe
+  name: industrial liquid pipe
+  description: Quickly transports fluids between industrial machines.
+  components:
+  - type: LiquidPipe
+    tier: Industrial
+  - type: Sprite
+    state: pipeHalf
+
+- type: entity
+  parent: BaseLiquidPipe
+  id: PerfectLiquidPipe
+  name: perfect liquid pipe
+  description: High-speed liquid pipe for advanced production lines.
+  components:
+  - type: LiquidPipe
+    tier: Perfect
+  - type: Sprite
+    state: pipeFourway

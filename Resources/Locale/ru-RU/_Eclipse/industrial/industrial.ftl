@@ -1,3 +1,15 @@
+ent-BasicIndustrialThermalCentrifuge = базовая термическая центрифуга
+
+    .desc = Отделяет измельчённую руду в просеянную с помощью тепла. Нагрейте огнём или нагревателями.
+
+ent-IndustrialThermalCentrifuge = термическая центрифуга
+
+    .desc = Отделяет измельчённую руду в просеянную с помощью тепла. Нагрейте огнём или нагревателями.
+
+ent-PerfectIndustrialThermalCentrifuge = совершенная термическая центрифуга
+
+    .desc = Отделяет измельчённую руду в просеянную с помощью тепла. Нагрейте огнём или нагревателями.
+
 ent-BasicIndustrialCrusher = базовая дробилка
 
     .desc = Измельчает сырую руду в дроблёную породу для дальнейшей переработки.
@@ -64,17 +76,20 @@ ent-IndustrialSmelter = промышленная плавильня
 
 
 
-ent-BasicItemPipe = базовая предметная труба
+ent-LpItemPipe = предметная труба LP
+    .desc = Труба низкой производительности. Соединяется как кабель.
 
-    .desc = Перемещает предметы между промышленными машинами. Имеет низкую пропускную способность.
+ent-MpItemPipe = предметная труба MP
+    .desc = Труба средней производительности. Соединяется как кабель.
 
-ent-IndustrialItemPipe = промышленная предметная труба
+ent-HpItemPipe = предметная труба HP
+    .desc = Труба высокой производительности. Соединяется как кабель.
 
-    .desc = Быстро перемещает предметы между промышленными машинами.
+industrial-item-pipe-tier-lp = LP
 
-ent-PerfectItemPipe = совершенная предметная труба
+industrial-item-pipe-tier-mp = MP
 
-    .desc = Высокоскоростная предметная труба для развитых производственных линий.
+industrial-item-pipe-tier-hp = HP
 
 
 
@@ -148,9 +163,9 @@ perfect-industrial-smelter-name = совершенная плавильня
 
 
 
-basic-item-pipe-name = базовая предметная труба
+basic-item-pipe-name = предметная труба LP
 
-basic-item-pipe-desc = Перемещает предметы между промышленными машинами. Имеет низкую пропускную способность.
+basic-item-pipe-desc = Труба низкой производительности. Соединяется как кабель.
 
 
 
@@ -183,6 +198,8 @@ industrial-processor-working = Идёт переработка.
 industrial-processor-blocked = Линия заблокирована.
 
 industrial-processor-unpowered = Нет питания.
+
+industrial-processor-unheated = Недостаточно тепла.
 
 industrial-processor-progress = Прогресс: {$percent}%
 
@@ -254,6 +271,8 @@ industrial-pipe-examine-throughput = Пропускная способность
 
 industrial-pipe-examine-network = Сеть: {$pipes} труб, эффективный тир {$tier}
 
+industrial-pipe-examine-layer = Слой: {$layer}
+
 
 
 industrial-manual-insert-success = Материал загружен во входной буфер.
@@ -269,6 +288,142 @@ industrial-machine-tier-basic = базовый
 industrial-machine-tier-industrial = промышленный
 
 industrial-machine-tier-perfect = совершенный
+
+
+
+# Режимы портов (предметы + жидкости)
+
+industrial-face-port-disabled = отключён
+
+industrial-face-port-item-input = предметный вход
+
+industrial-face-port-item-output = предметный выход
+
+industrial-face-port-liquid-input = жидкостный вход
+
+industrial-face-port-liquid-output = жидкостный выход
+
+industrial-face-port-heat-input = тепловой вход
+
+industrial-face-port-switched = Порт ({$direction}): {$mode}
+
+
+
+industrial-direction-north = Север
+
+industrial-direction-south = Юг
+
+industrial-direction-east = Восток
+
+industrial-direction-west = Запад
+
+
+
+industrial-examine-face-port-north = Север: {$mode}
+
+industrial-examine-face-port-south = Юг: {$mode}
+
+industrial-examine-face-port-east = Восток: {$mode}
+
+industrial-examine-face-port-west = Запад: {$mode}
+
+
+
+# GUI процессора
+
+industrial-processor-ui-title = Промышленный процессор
+
+industrial-processor-ui-tier = Тир
+
+industrial-processor-ui-state = Статус
+
+industrial-processor-ui-recipe = Активный рецепт
+
+industrial-processor-ui-power = Питание
+
+industrial-processor-ui-no-recipe = Нет
+
+industrial-processor-ui-powered = Подключено
+
+industrial-processor-ui-unpowered = Нет питания
+
+industrial-processor-ui-heated = Нагрет
+
+industrial-processor-ui-cold = Холодный
+
+industrial-processor-ui-processing-slot = Обработка
+
+industrial-processor-ui-processing-empty = Простой
+
+industrial-processor-ui-input-slots = Входной буфер
+
+industrial-processor-ui-output-slots = Выходной буфер
+
+industrial-processor-ui-ports = Конфигурация портов
+
+
+
+# Ключ настройки портов
+
+ent-IndustrialPortWrench = промышленный ключ
+
+    .desc = Настраивает порты промышленных машин, собирает рабочие столы из столешниц и снимает предметные трубы. Возьмите в руку, чтобы увидеть индикаторы портов.
+
+
+
+tool-quality-industrial-port-configuring-name = настройка промышленных портов
+
+tool-quality-industrial-port-configuring-tool-name = промышленный ключ
+
+tool-quality-industrial-pipe-detaching-name = снятие предметных труб
+
+tool-quality-industrial-pipe-detaching-tool-name = промышленный ключ
+
+
+
+industrial-item-pipe-examine-detach = Снимите трубу промышленным ключом.
+
+industrial-item-pipe-detached = Предметная труба снята.
+
+ent-BasicLiquidPipe = базовая жидкостная труба
+
+    .desc = Перемещает жидкости между промышленными машинами. Низкая пропускная способность.
+
+ent-IndustrialLiquidPipe = промышленная жидкостная труба
+
+    .desc = Быстро перемещает жидкости между промышленными машинами.
+
+ent-PerfectLiquidPipe = совершенная жидкостная труба
+
+    .desc = Высокоскоростная жидкостная труба для развитых производственных линий.
+
+
+
+industrial-liquid-pipe-examine-tier = Тир трубы: {$tier}
+
+industrial-liquid-pipe-examine-throughput = Пропускная способность: {$throughput}/с
+
+industrial-liquid-pipe-examine-disconnected = Не подключена к жидкостной сети.
+
+industrial-liquid-pipe-examine-network = Жидкостная сеть #{$id}: {$pipes} труб
+
+
+
+industrial-item-pipe-overlap-blocked = Соединения предметной трубы перекрываются на этом слое.
+
+industrial-piping-tile-occupied = На этой клетке уже есть промышленная труба.
+
+industrial-liquid-pipe-detached = Жидкостная труба снята.
+
+industrial-item-pipe-examine-layer = Слой: {$layer}
+
+industrial-item-pipe-layer-primary = основной
+
+industrial-item-pipe-layer-secondary = вторичный
+
+industrial-item-pipe-layer-tertiary = третичный
+
+industrial-item-pipe-layer-switched = Слой трубы: {$layer}.
 
 
 
@@ -318,4 +473,110 @@ stack-metal-dust = металлическая пыль
 
 stack-industrial-scrap = промышленный лом
 
+ent-IndustrialKey = промышленный ключ
+
+    .desc = Настраивает порты промышленных машин, собирает рабочие столы из столешниц и снимает предметные трубы. Возьмите в руку, чтобы увидеть индикаторы портов.
+
+ent-IndustrialHeatBuffer = теплообменный буфер
+
+    .desc = Накапливает тепло от протекающей плазмы и передаёт его соседним промышленным машинам.
+
+industrial-heat-buffer-examine-active = Плазма течёт — тепло передаётся подключённым машинам.
+
+industrial-heat-buffer-examine-idle = Поток плазмы не обнаружен. Подключите плазменные трубы ко входу и выходу.
+
+industrial-workbench-assembled = Рабочий стол собран.
+
+industrial-workbench-need-two-tables = Поставьте две столешницы вплотную и используйте промышленный ключ.
+
+industrial-workbench-missing-materials = Недостаточно материалов для этого рецепта.
+
+industrial-workbench-fabricating = Изготовление...
+
+industrial-workbench-fabricated = Изготовление завершено.
+
+industrial-workbench-open-storage = Открыть хранилище
+industrial-workbench-storage-failed = Не удалось открыть хранилище.
+industrial-workbench-category-components = Компоненты
+industrial-workbench-category-modules = Модули улучшения
+industrial-workbench-craft-duration = Время создания: { $seconds } с
+industrial-workbench-ingredient-line = { $have }/{ $need } { $name }
+
+industrial-chassis-upgraded = Машина собрана: {$machine}.
+
+ent-IndustrialWorkbench = рабочий стол
+
+    .desc = Двухтайловый стол для дорогих промышленных компонентов и модулей улучшения.
+
+ent-IndustrialMachineChassis = корпус промышленной машины
+
+    .desc = Пустой корпус механизма. Установите модуль улучшения для завершения сборки.
+
+ent-IndustrialUpgradeModuleCrusher = модуль улучшения в дробитель
+
+    .desc = Устанавливается на корпус для сборки базового промышленного дробителя.
+
+ent-IndustrialUpgradeModuleThermalCentrifuge = модуль улучшения в термическую центрифугу
+
+    .desc = Устанавливается на корпус для сборки базовой термической центрифуги.
+
+ent-IndustrialUpgradeModuleSmelter = модуль улучшения в плавильню
+
+    .desc = Устанавливается на корпус для сборки базовой промышленной плавильни.
+
+ent-IndustrialMechanicalCore = промышленное механическое ядро
+
+ent-IndustrialHeatConduitAssembly = теплообменный узел
+
+ent-IndustrialCircuitCore = промышленное схемное ядро
+
+industrial-fabrication-mechanical-core = Изготовить механическое ядро
+
+industrial-fabrication-heat-conduit = Изготовить теплообменный узел
+
+industrial-fabrication-circuit-core = Изготовить схемное ядро
+
+industrial-fabrication-machine-chassis = Изготовить корпус машины
+
+industrial-fabrication-upgrade-crusher = Изготовить модуль улучшения в дробитель
+
+industrial-fabrication-upgrade-thermal-centrifuge = Изготовить модуль улучшения в термическую центрифугу
+
+industrial-fabrication-upgrade-smelter = Изготовить модуль улучшения в плавильню
+
+stack-sieved-iron-ore = просеянная железная руда
+
+stack-sieved-copper-ore = просеянная медная руда
+
+stack-sieved-quartz = просеянный кварц
+
+stack-sieved-gold-ore = просеянная золотая руда
+
+stack-sieved-silver-ore = просеянная серебряная руда
+
+stack-sieved-plasma-ore = просеянная плазменная руда
+
+stack-sieved-uranium-ore = просеянная урановая руда
+
+stack-iron-dust = железная пыль
+
+stack-copper-dust = медная пыль
+
+stack-quartz-dust = кварцевая пыль
+
+stack-gold-dust = золотая пыль
+
+stack-silver-dust = серебряная пыль
+
+stack-plasma-dust = плазменная пыль
+
+stack-uranium-dust = урановая пыль
+
+stack-crushed-gold-ore = дроблёная золотая руда
+
+stack-crushed-silver-ore = дроблёная серебряная руда
+
+stack-crushed-plasma-ore = дроблёная плазменная руда
+
+stack-crushed-uranium-ore = дроблёная урановая руда
 

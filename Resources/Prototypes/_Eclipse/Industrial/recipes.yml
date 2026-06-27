@@ -1,58 +1,47 @@
-# Industrial ore processing recipes.
-# Uses existing SS14 ore IDs: SteelOre (iron), SpaceQuartz (quartz).
+# Ore processing chain:
+# Ore -> Crusher -> Crushed ore
+# Crushed ore -> Thermal Centrifuge -> Sieved ore
+# Sieved ore -> Crusher -> Dust
+# Dust -> Smelter -> Ingot/Sheet
 
-# Iron chain
+# --- Iron ---
 - type: industrialRecipe
-  id: CrushIronOre
+  id: CrushSteelOre
   processor: Crusher
   time: 4.5
   inputs:
     SteelOre: 1
   outputs:
     CrushedIronOre: 1
-    StoneDust: 1
 
 - type: industrialRecipe
-  id: RoughCentrifugeCrushedIronOre
-  processor: RoughCentrifuge
+  id: ThermalCentrifugeCrushedIronOre
+  processor: ThermalCentrifuge
   time: 6
   inputs:
     CrushedIronOre: 1
   outputs:
-    IronConcentrate: 1
-    WasteRock: 1
+    SievedIronOre: 1
 
 - type: industrialRecipe
-  id: WashIronConcentrate
-  processor: OreWasher
-  time: 5
+  id: CrushSievedIronOre
+  processor: Crusher
+  time: 4
   inputs:
-    IronConcentrate: 1
+    SievedIronOre: 1
   outputs:
-    CleanIronConcentrate: 1
-    DirtySludge: 1
+    IronDust: 1
 
 - type: industrialRecipe
-  id: PrecisionCentrifugeCleanIronConcentrate
-  processor: PrecisionCentrifuge
-  time: 7
-  inputs:
-    CleanIronConcentrate: 1
-  outputs:
-    IronMetallurgicFraction: 1
-    MineralResidue: 1
-
-- type: industrialRecipe
-  id: SmeltIronFraction
+  id: SmeltIronDust
   processor: Smelter
   time: 8
   inputs:
-    IronMetallurgicFraction: 1
+    IronDust: 1
   outputs:
-    IndustrialSteelBillet: 1
-    MetalDust: 1
+    SheetSteel1: 1
 
-# Copper chain
+# --- Copper ---
 - type: industrialRecipe
   id: CrushCopperOre
   processor: Crusher
@@ -61,49 +50,35 @@
     CopperOre: 1
   outputs:
     CrushedCopperOre: 1
-    StoneDust: 1
 
 - type: industrialRecipe
-  id: RoughCentrifugeCrushedCopperOre
-  processor: RoughCentrifuge
+  id: ThermalCentrifugeCrushedCopperOre
+  processor: ThermalCentrifuge
   time: 6
   inputs:
     CrushedCopperOre: 1
   outputs:
-    CopperConcentrate: 1
-    WasteRock: 1
+    SievedCopperOre: 1
 
 - type: industrialRecipe
-  id: WashCopperConcentrate
-  processor: OreWasher
-  time: 5
+  id: CrushSievedCopperOre
+  processor: Crusher
+  time: 4
   inputs:
-    CopperConcentrate: 1
+    SievedCopperOre: 1
   outputs:
-    CleanCopperConcentrate: 1
-    DirtySludge: 1
+    CopperDust: 1
 
 - type: industrialRecipe
-  id: PrecisionCentrifugeCleanCopperConcentrate
-  processor: PrecisionCentrifuge
-  time: 7
-  inputs:
-    CleanCopperConcentrate: 1
-  outputs:
-    CopperMetallurgicFraction: 1
-    MineralResidue: 1
-
-- type: industrialRecipe
-  id: SmeltCopperFraction
+  id: SmeltCopperDust
   processor: Smelter
   time: 8
   inputs:
-    CopperMetallurgicFraction: 1
+    CopperDust: 1
   outputs:
-    IndustrialCopperBillet: 1
-    MetalDust: 1
+    SheetBrass1: 1
 
-# Quartz / glass chain
+# --- Quartz / glass ---
 - type: industrialRecipe
   id: CrushQuartzOre
   processor: Crusher
@@ -112,44 +87,178 @@
     SpaceQuartz: 1
   outputs:
     CrushedQuartz: 1
-    StoneDust: 1
 
 - type: industrialRecipe
-  id: RoughCentrifugeCrushedQuartz
-  processor: RoughCentrifuge
+  id: ThermalCentrifugeCrushedQuartz
+  processor: ThermalCentrifuge
   time: 6
   inputs:
     CrushedQuartz: 1
   outputs:
-    QuartzConcentrate: 1
-    WasteRock: 1
+    SievedQuartz: 1
 
 - type: industrialRecipe
-  id: WashQuartzConcentrate
-  processor: OreWasher
-  time: 5
+  id: CrushSievedQuartz
+  processor: Crusher
+  time: 4
   inputs:
-    QuartzConcentrate: 1
+    SievedQuartz: 1
   outputs:
-    CleanQuartzConcentrate: 1
-    DirtySludge: 1
+    QuartzDust: 1
 
 - type: industrialRecipe
-  id: PrecisionCentrifugeCleanQuartzConcentrate
-  processor: PrecisionCentrifuge
-  time: 7
-  inputs:
-    CleanQuartzConcentrate: 1
-  outputs:
-    QuartzGlassFraction: 1
-    MineralResidue: 1
-
-- type: industrialRecipe
-  id: SmeltQuartzGlassFraction
+  id: SmeltQuartzDust
   processor: Smelter
   time: 8
   inputs:
-    QuartzGlassFraction: 1
+    QuartzDust: 1
   outputs:
-    IndustrialGlassBatch: 1
-    IndustrialScrap: 1
+    SheetGlass1: 1
+
+# --- Gold ---
+- type: industrialRecipe
+  id: CrushGoldOre
+  processor: Crusher
+  time: 4.5
+  inputs:
+    GoldOre: 1
+  outputs:
+    CrushedGoldOre: 1
+
+- type: industrialRecipe
+  id: ThermalCentrifugeCrushedGoldOre
+  processor: ThermalCentrifuge
+  time: 6
+  inputs:
+    CrushedGoldOre: 1
+  outputs:
+    SievedGoldOre: 1
+
+- type: industrialRecipe
+  id: CrushSievedGoldOre
+  processor: Crusher
+  time: 4
+  inputs:
+    SievedGoldOre: 1
+  outputs:
+    GoldDust: 1
+
+- type: industrialRecipe
+  id: SmeltGoldDust
+  processor: Smelter
+  time: 8
+  inputs:
+    GoldDust: 1
+  outputs:
+    IngotGold1: 1
+
+# --- Silver ---
+- type: industrialRecipe
+  id: CrushSilverOre
+  processor: Crusher
+  time: 4.5
+  inputs:
+    SilverOre: 1
+  outputs:
+    CrushedSilverOre: 1
+
+- type: industrialRecipe
+  id: ThermalCentrifugeCrushedSilverOre
+  processor: ThermalCentrifuge
+  time: 6
+  inputs:
+    CrushedSilverOre: 1
+  outputs:
+    SievedSilverOre: 1
+
+- type: industrialRecipe
+  id: CrushSievedSilverOre
+  processor: Crusher
+  time: 4
+  inputs:
+    SievedSilverOre: 1
+  outputs:
+    SilverDust: 1
+
+- type: industrialRecipe
+  id: SmeltSilverDust
+  processor: Smelter
+  time: 8
+  inputs:
+    SilverDust: 1
+  outputs:
+    IngotSilver1: 1
+
+# --- Plasma ---
+- type: industrialRecipe
+  id: CrushPlasmaOre
+  processor: Crusher
+  time: 4.5
+  inputs:
+    PlasmaOre: 1
+  outputs:
+    CrushedPlasmaOre: 1
+
+- type: industrialRecipe
+  id: ThermalCentrifugeCrushedPlasmaOre
+  processor: ThermalCentrifuge
+  time: 6
+  inputs:
+    CrushedPlasmaOre: 1
+  outputs:
+    SievedPlasmaOre: 1
+
+- type: industrialRecipe
+  id: CrushSievedPlasmaOre
+  processor: Crusher
+  time: 4
+  inputs:
+    SievedPlasmaOre: 1
+  outputs:
+    PlasmaDust: 1
+
+- type: industrialRecipe
+  id: SmeltPlasmaDust
+  processor: Smelter
+  time: 8
+  inputs:
+    PlasmaDust: 1
+  outputs:
+    SheetPlasma1: 1
+
+# --- Uranium ---
+- type: industrialRecipe
+  id: CrushUraniumOre
+  processor: Crusher
+  time: 4.5
+  inputs:
+    UraniumOre: 1
+  outputs:
+    CrushedUraniumOre: 1
+
+- type: industrialRecipe
+  id: ThermalCentrifugeCrushedUraniumOre
+  processor: ThermalCentrifuge
+  time: 6
+  inputs:
+    CrushedUraniumOre: 1
+  outputs:
+    SievedUraniumOre: 1
+
+- type: industrialRecipe
+  id: CrushSievedUraniumOre
+  processor: Crusher
+  time: 4
+  inputs:
+    SievedUraniumOre: 1
+  outputs:
+    UraniumDust: 1
+
+- type: industrialRecipe
+  id: SmeltUraniumDust
+  processor: Smelter
+  time: 8
+  inputs:
+    UraniumDust: 1
+  outputs:
+    SheetUranium1: 1

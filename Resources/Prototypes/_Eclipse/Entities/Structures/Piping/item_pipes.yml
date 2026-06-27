@@ -1,12 +1,12 @@
-# Industrial item pipes — separate from atmos piping.
-# TODO: Replace placeholder sprites with dedicated item pipe RSI per tier.
+# Item pipes — cable-style auto-connect (16 directional sprites per tier).
+# All tiers currently share the LP sprite set.
 
 - type: entity
   abstract: true
   parent: BaseStructure
-  id: BaseItemPipe
+  id: WireItemPipeBase
   name: item pipe
-  description: Moves items between industrial machines.
+  description: Moves items between industrial machines. Auto-connects on all sides like a cable.
   placement:
     mode: SnapgridCenter
   components:
@@ -16,16 +16,47 @@
   - type: Physics
     bodyType: Static
     canCollide: false
+  - type: Fixtures
+  - type: InteractionOutline
+  - type: IndustrialPipingOccupant
   - type: Anchorable
-  - type: ItemPipe
+    tool: IndustrialPipeDetaching
+    flags: Unanchorable
+    delay: 0.5
+  - type: ItemPipeWireConnect
+  - type: ItemPipeWireVisualizer
+    statePrefix: lp
+  - type: ItemPipeLayers
+    numberOfPipeLayers: 3
+    spriteRsiPaths:
+      Primary: _Eclipse/Structures/Piping/item_lp_pipe.rsi
+      Secondary: _Eclipse/Structures/Piping/item_lp_pipe.rsi
+      Tertiary: _Eclipse/Structures/Piping/item_lp_pipe.rsi
+    alternativePrototypes: {}
+  - type: ItemPipeRestrictOverlap
+  - type: Appearance
   - type: Sprite
-    # TODO: Replace with dedicated _Eclipse/Structures/Piping/item_pipe.rsi
-    sprite: Structures/Piping/Atmospherics/pipe.rsi
-    drawdepth: ThinPipe
-    state: pipeStraight
+    sprite: _Eclipse/Structures/Piping/item_lp_pipe.rsi
+    state: lp0
+    drawdepth: Objects
+    layers:
+    - state: lp0
+      map: ["enum.ItemPipeVisualLayers.Hub"]
+    - state: lp1
+      map: ["enum.ItemPipeVisualLayers.North"]
+      visible: false
+    - state: lp2
+      map: ["enum.ItemPipeVisualLayers.West"]
+      visible: false
+    - state: lp3
+      map: ["enum.ItemPipeVisualLayers.South"]
+      visible: false
+    - state: lp4
+      map: ["enum.ItemPipeVisualLayers.East"]
+      visible: false
   - type: Icon
-    sprite: Structures/Piping/Atmospherics/pipe.rsi
-    state: storageStraight
+    sprite: _Eclipse/Structures/Piping/item_lp_pipe.rsi
+    state: lp0
   - type: Damageable
     damageContainer: StructuralInorganic
     damageModifierSet: Metallic
@@ -44,38 +75,31 @@
     price: 20
 
 - type: entity
-  parent: BaseItemPipe
-  id: BasicItemPipe
-  name: basic item pipe
-  description: Moves items between industrial machines. Has low throughput.
+  parent: WireItemPipeBase
+  id: LpItemPipe
+  name: LP item pipe
+  suffix: LP
+  description: Low performance item pipe. Low throughput.
   components:
   - type: ItemPipe
     tier: Basic
 
 - type: entity
-  parent: BaseItemPipe
-  id: IndustrialItemPipe
-  name: industrial item pipe
-  description: Quickly moves items between industrial machines.
+  parent: WireItemPipeBase
+  id: MpItemPipe
+  name: MP item pipe
+  suffix: MP
+  description: Medium performance item pipe. Moderate throughput.
   components:
   - type: ItemPipe
     tier: Industrial
-  - type: Sprite
-    # TODO: distinct industrial tier sprite
-    state: pipeHalf
-  - type: Icon
-    state: storageHalf
 
 - type: entity
-  parent: BaseItemPipe
-  id: PerfectItemPipe
-  name: perfect item pipe
-  description: High-speed item pipe for advanced production lines.
+  parent: WireItemPipeBase
+  id: HpItemPipe
+  name: HP item pipe
+  suffix: HP
+  description: High performance item pipe. High throughput.
   components:
   - type: ItemPipe
     tier: Perfect
-  - type: Sprite
-    # TODO: distinct perfect tier sprite
-    state: pipeFourway
-  - type: Icon
-    state: storageFourway
