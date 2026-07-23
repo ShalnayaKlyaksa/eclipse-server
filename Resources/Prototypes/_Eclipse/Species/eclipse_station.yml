@@ -32,7 +32,7 @@
   id: Kobold
   name: species-name-kobold
   roundStart: true
-  prototype: MobKobold
+  prototype: MobEclipseKobold
   defaultSkinTone: "#4c8b45"
   dollPrototype: AppearanceKobold
   skinColoration: EclipseKoboldScales

@@ -141,7 +141,7 @@
   components:
   - type: Sprite
     sprite: Objects/Misc/stock_parts.rsi
-    state: manipulator
+    state: micro_mani
   - type: Item
     size: Normal
 
@@ -165,6 +165,6 @@
   components:
   - type: Sprite
     sprite: Objects/Misc/stock_parts.rsi
-    state: scanning_module
+    state: scan_module
   - type: Item
     size: Normal

@@ -263,7 +263,7 @@
   - type: Stack
     stackType: CopperDust
   - type: Sprite
-    state: brass
+    state: copper
 
 - type: entity
   parent: CopperDust
@@ -460,7 +460,7 @@
   parent: BaseMediumStack
   id: CopperDust
   name: stack-copper-dust
-  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: brass }
+  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: copper }
   spawn: CopperDust1
 
 - type: stack

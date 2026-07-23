@@ -5,7 +5,7 @@
   description: A roll of sterile gauze. Its durability sets how much bleeding it can stop — each 1% spent in the health screen closes 0.01 L/min. Wind it around a wound in the health screen.
   components:
   - type: Sprite
-    sprite: Objects/Specific/Medical/gauze.rsi
+    sprite: Objects/Specific/Medical/medical.rsi
     state: gauze
   - type: Item
     heldPrefix: gauze
@@ -33,9 +33,10 @@
   name: combat tourniquet
   components:
   - type: Sprite
-    sprite: Objects/Specific/Medical/tourniquet.rsi
-    state: icon
+    sprite: Objects/Specific/Medical/medical.rsi
+    state: tourniquet
   - type: Item
+    heldPrefix: tourniquet
     size: Tiny
   - type: AdvancedTreatment
     treatment: Tourniquet
@@ -48,8 +49,8 @@
   name: trauma splint
   components:
   - type: Sprite
-    sprite: Objects/Specific/Medical/brutepack.rsi
-    state: icon
+    sprite: Objects/Specific/Medical/medical.rsi
+    state: cast
   - type: Item
     size: Small
   - type: AdvancedTreatment
@@ -63,9 +64,10 @@
   name: hemostatic powder
   components:
   - type: Sprite
-    sprite: Objects/Specific/Medical/ointment.rsi
-    state: icon
+    sprite: Objects/Specific/Medical/medical.rsi
+    state: ointment
   - type: Item
+    heldPrefix: ointment
     size: Tiny
   - type: AdvancedTreatment
     treatment: Hemostatic
@@ -78,9 +80,10 @@
   name: suture kit
   components:
   - type: Sprite
-    sprite: Objects/Specific/Medical/brutepack.rsi
-    state: icon
+    sprite: Objects/Specific/Medical/medical.rsi
+    state: medicated-suture
   - type: Item
+    heldPrefix: medicated-suture
     size: Small
   - type: AdvancedTreatment
     treatment: Suture
@@ -93,9 +96,10 @@
   name: forceps
   components:
   - type: Sprite
-    sprite: Objects/Specific/Medical/brutepack.rsi
-    state: icon
+    sprite: Objects/Specific/Medical/medical.rsi
+    state: brutepack
   - type: Item
+    heldPrefix: brutepack
     size: Small
   - type: AdvancedTreatment
     treatment: ForeignBodyRemoval

@@ -55,7 +55,7 @@
 
 - type: entity
   parent: [ AppearanceKobold, MobReptilian ]
-  id: MobKobold
+  id: MobEclipseKobold
   name: Urist McKobold
   components:
   - type: Fixtures
