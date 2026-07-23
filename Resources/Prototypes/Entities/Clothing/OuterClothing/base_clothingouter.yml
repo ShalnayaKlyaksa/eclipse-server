@@ -3,6 +3,9 @@
   parent: Clothing
   id: ClothingOuterBase
   components:
+  - type: BodyArmorRating
+    protection: 2
+    class: Clothing
   - type: Clothing
     slots:
     - outerClothing

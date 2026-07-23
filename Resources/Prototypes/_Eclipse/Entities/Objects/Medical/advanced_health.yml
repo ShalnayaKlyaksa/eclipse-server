@@ -1,0 +1,107 @@
+- type: entity
+  parent: BaseItem
+  id: AdvancedBandage
+  name: bandage roll
+  description: A roll of sterile gauze. Its durability sets how much bleeding it can stop — each 1% spent in the health screen closes 0.01 L/min. Wind it around a wound in the health screen.
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Medical/gauze.rsi
+    state: gauze
+  - type: Item
+    heldPrefix: gauze
+    size: Small
+  - type: AdvancedBandageRoll
+    durability: 100
+    maxDurability: 100
+  - type: AdvancedTreatment
+    treatment: Bandage
+    effectiveness: 1
+    delay: 3
+
+- type: entity
+  parent: AdvancedBandage
+  id: AdvancedPressureBandage
+  components:
+  - type: AdvancedTreatment
+    treatment: PressureBandage
+    effectiveness: 1
+    delay: 4
+
+- type: entity
+  parent: BaseItem
+  id: AdvancedTourniquet
+  name: combat tourniquet
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Medical/tourniquet.rsi
+    state: icon
+  - type: Item
+    size: Tiny
+  - type: AdvancedTreatment
+    treatment: Tourniquet
+    effectiveness: 1
+    delay: 2
+
+- type: entity
+  parent: BaseItem
+  id: AdvancedSplint
+  name: trauma splint
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Medical/brutepack.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: AdvancedTreatment
+    treatment: Splint
+    effectiveness: 1
+    delay: 5
+
+- type: entity
+  parent: BaseItem
+  id: AdvancedHemostaticPowder
+  name: hemostatic powder
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Medical/ointment.rsi
+    state: icon
+  - type: Item
+    size: Tiny
+  - type: AdvancedTreatment
+    treatment: Hemostatic
+    effectiveness: 1
+    delay: 2
+
+- type: entity
+  parent: BaseItem
+  id: AdvancedSutureKit
+  name: suture kit
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Medical/brutepack.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: AdvancedTreatment
+    treatment: Suture
+    effectiveness: 1
+    delay: 6
+
+- type: entity
+  parent: BaseItem
+  id: AdvancedForcepsPack
+  name: forceps
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Medical/brutepack.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: AdvancedTreatment
+    treatment: ForeignBodyRemoval
+    effectiveness: 1
+    delay: 7
+
+- type: entity
+  parent: HandheldHealthAnalyzer
+  id: BasicMedScanner

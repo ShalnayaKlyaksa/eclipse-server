@@ -39,8 +39,11 @@ public sealed class RoundEndSummaryUIController : UIController,
         if (_window?.RoundId == message.RoundId)
             return;
 
+        var shiftStats = EntityManager.System<Content.Client.Eclipse.Progression.EclipseRoundEndStatsSystem>()
+            .GetStats(message.RoundId);
+
         _window = new RoundEndSummaryWindow(message.GamemodeTitle, message.RoundEndText,
-            message.RoundDuration, message.RoundId, message.AllPlayersEndInfo, EntityManager);
+            message.RoundDuration, message.RoundId, message.AllPlayersEndInfo, EntityManager, shiftStats);
     }
 
     public void OnSystemLoaded(ClientGameTicker system)

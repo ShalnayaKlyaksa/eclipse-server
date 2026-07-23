@@ -4,20 +4,22 @@
          xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
          xmlns:ui="clr-namespace:Content.Client.Lobby.UI"
          xmlns:profile="clr-namespace:Content.Client.Lobby.UI.ProfileEditorControls"
-         HorizontalExpand="True">
+         HorizontalExpand="True"
+         VerticalExpand="True"
+         SeparationOverride="12">
         <!-- Left side -->
-        <BoxContainer Orientation="Vertical" Margin="10 10 10 10" HorizontalExpand="True" MaxWidth="680">
+        <BoxContainer Name="EditorPanel" Orientation="Vertical" Margin="10 10 10 10" HorizontalExpand="True" VerticalExpand="True">
             <!-- Middle container -->
-            <BoxContainer Orientation="Horizontal" SeparationOverride="10" HorizontalExpand="True">
+            <BoxContainer Name="HeaderPanel" Orientation="Horizontal" SeparationOverride="10" HorizontalExpand="True">
                 <!-- Name box-->
-                <BoxContainer Orientation="Vertical">
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True">
                     <ui:HighlightedContainer>
                         <BoxContainer Orientation="Vertical">
                             <ui:HighlightedContainer>
                                 <BoxContainer Orientation="Vertical">
-                                    <BoxContainer Orientation="Horizontal" VerticalExpand="True">
+                                    <BoxContainer Name="NameRow" Orientation="Horizontal" VerticalExpand="True" HorizontalExpand="True">
                                         <Label Text="{Loc 'humanoid-profile-editor-name-label'}" />
-                                        <LineEdit Name="NameEdit" MinSize="270 0" VerticalAlignment="Center" Margin="5 0 0 0" />
+                                        <LineEdit Name="NameEdit" MinSize="160 0" HorizontalExpand="True" VerticalAlignment="Center" Margin="5 0 0 0" />
                                         <Button Name="NameRandomize" Text="{Loc 'humanoid-profile-editor-name-random-button'}" />
                                     </BoxContainer>
                                     <Button Name="RandomizeEverythingButton" HorizontalAlignment="Center"
@@ -32,7 +34,7 @@
                     </ui:HighlightedContainer>
                 </BoxContainer>
                 <!-- Import/Export -->
-                <BoxContainer Orientation="Vertical" MinSize="60 0" HorizontalExpand="True" HorizontalAlignment="Right">
+                <BoxContainer Name="ProfileActions" Orientation="Vertical" MinSize="60 0" HorizontalAlignment="Right">
                     <ui:HighlightedContainer Name="ProfileHighlight">
                         <BoxContainer Orientation="Vertical">
                             <Button Name="SaveButton" Text="{Loc 'humanoid-profile-editor-save-button'}"/>
@@ -136,15 +138,15 @@
                         <BoxContainer Name="TraitsList" Orientation="Vertical" />
                     </ScrollContainer>
                 </BoxContainer>
-                <BoxContainer Name="MarkingsTab" Orientation="Vertical" Margin="10" MaxWidth="640">
+                <BoxContainer Name="MarkingsTab" Orientation="Vertical" Margin="10" HorizontalExpand="True" VerticalExpand="True">
                     <!-- Markings -->
                     <humanoid:MarkingPicker Name="Markings" HorizontalExpand="True" VerticalExpand="True" />
                 </BoxContainer>
             </TabContainer>
         </BoxContainer>
         <!-- Right side -->
-        <BoxContainer Orientation="Vertical" VerticalExpand="True" VerticalAlignment="Center" MinWidth="160">
-            <profile:ProfilePreviewSpriteView Name="SpriteView" Scale="8 8" Margin="4" MinSize="128 128" SizeFlagsStretchRatio="1" />
+        <BoxContainer Name="PreviewPanel" Orientation="Vertical" VerticalExpand="True" VerticalAlignment="Center" MinWidth="128">
+            <profile:ProfilePreviewSpriteView Name="SpriteView" Scale="6 6" Margin="4" MinSize="112 112" SizeFlagsStretchRatio="1" />
             <BoxContainer Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5">
                 <Button Name="SpriteRotateLeft" Text="◀" StyleClasses="OpenRight" />
                 <cc:VSeparator Margin="2 0 3 0" />

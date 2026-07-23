@@ -69,13 +69,21 @@ public sealed class MarkingManager
         ProtoId<MarkingsGroupPrototype> group,
         Sex sex)
     {
+        return MarkingsByLayerAndSpeciesGroupAndSex(layer, null, group, sex);
+    }
+
+    public IReadOnlyDictionary<string, MarkingPrototype> MarkingsByLayerAndSpeciesGroupAndSex(HumanoidVisualLayers layer,
+        ProtoId<SpeciesPrototype>? species,
+        ProtoId<MarkingsGroupPrototype> group,
+        Sex sex)
+    {
         var groupProto = _prototype.Index(group);
         var whitelisted = groupProto.Limits.GetValueOrDefault(layer)?.OnlyGroupWhitelisted ?? groupProto.OnlyGroupWhitelisted;
         var res = new Dictionary<string, MarkingPrototype>();
 
         foreach (var (key, marking) in MarkingsByLayer(layer))
         {
-            if (!CanBeApplied(groupProto, sex, marking, whitelisted))
+            if (!CanBeApplied(species, groupProto, sex, marking, whitelisted))
                 continue;
 
             res.Add(key, marking);
@@ -110,13 +118,18 @@ public sealed class MarkingManager
     /// <returns>True if a marking with the prototype could be applied</returns>
     public bool CanBeApplied(ProtoId<MarkingsGroupPrototype> group, Sex sex, MarkingPrototype prototype)
     {
+        return CanBeApplied(null, group, sex, prototype);
+    }
+
+    public bool CanBeApplied(ProtoId<SpeciesPrototype>? species, ProtoId<MarkingsGroupPrototype> group, Sex sex, MarkingPrototype prototype)
+    {
         var groupProto = _prototype.Index(group);
         var whitelisted = groupProto.Limits.GetValueOrDefault(prototype.BodyPart)?.OnlyGroupWhitelisted ?? groupProto.OnlyGroupWhitelisted;
 
-        return CanBeApplied(groupProto, sex, prototype, whitelisted);
+        return CanBeApplied(species, groupProto, sex, prototype, whitelisted);
     }
 
-    private bool CanBeApplied(MarkingsGroupPrototype group, Sex sex, MarkingPrototype prototype, bool whitelisted)
+    private bool CanBeApplied(ProtoId<SpeciesPrototype>? species, MarkingsGroupPrototype group, Sex sex, MarkingPrototype prototype, bool whitelisted)
     {
         if (prototype.GroupWhitelist == null)
         {
@@ -128,6 +141,10 @@ public sealed class MarkingManager
             if (!prototype.GroupWhitelist.Contains(group))
                 return false;
         }
+
+        if (prototype.SpeciesRestriction is { } speciesRestriction &&
+            (species is null || !speciesRestriction.Contains(species.Value)))
+            return false;
 
         return prototype.SexRestriction == null || prototype.SexRestriction == sex;
     }
@@ -160,11 +177,19 @@ public sealed class MarkingManager
     /// </summary>
     public void EnsureValidGroupAndSex(Dictionary<HumanoidVisualLayers, List<Marking>> markingSets, ProtoId<MarkingsGroupPrototype> group, Sex sex)
     {
+        EnsureValidSpeciesGroupAndSex(markingSets, null, group, sex);
+    }
+
+    public void EnsureValidSpeciesGroupAndSex(Dictionary<HumanoidVisualLayers, List<Marking>> markingSets,
+        ProtoId<SpeciesPrototype>? species,
+        ProtoId<MarkingsGroupPrototype> group,
+        Sex sex)
+    {
         foreach (var markings in markingSets.Values)
         {
             for (var i = markings.Count - 1; i >= 0; i--)
             {
-                if (!TryGetMarking(markings[i], out var marking) || !CanBeApplied(group, sex, marking))
+                if (!TryGetMarking(markings[i], out var marking) || !CanBeApplied(species, group, sex, marking))
                     markings.RemoveAt(i);
             }
         }

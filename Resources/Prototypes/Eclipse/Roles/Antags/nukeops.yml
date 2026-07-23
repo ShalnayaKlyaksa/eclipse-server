@@ -13,7 +13,7 @@
   storage:
     back:
     - WeaponPistolAshLegionCommissar
-    - PinpointerSyndicateNuclear
+    - AshLegionActivationKeyTrackerCartridge
     - DeathAcidifierImplanterAshLegion
 
 # Nuclear Operative Gear
@@ -61,7 +61,7 @@
     - Cautery
     - CombatKnife
     - WeaponPistolAshLegionCommissar
-    - PinpointerSyndicateNuclear
+    - AshLegionActivationKeyTrackerCartridge
     - HandheldHealthAnalyzer
     - CombatMedipen
     - DeathAcidifierImplanterAshLegion
@@ -86,6 +86,6 @@
   storage:
     back:
     - WeaponPistolAshLegionCommissar
-    - PinpointerSyndicateNuclear
+    - AshLegionActivationKeyTrackerCartridge
     - DeathAcidifierImplanterAshLegion
     - AshHackingDevice

@@ -1,6 +1,7 @@
 - type: marking
   id: Malstrem
   bodyPart: Eyes
+  groupWhitelist: [ DisabledCustomization ]
   coloring:
     default:
       type:
@@ -13,6 +14,7 @@
 - type: marking
   id: Beholder
   bodyPart: Eyes
+  groupWhitelist: [ DisabledCustomization ]
   coloring:
     default:
       type:
@@ -25,6 +27,7 @@
 - type: marking
   id: Terminator
   bodyPart: Eyes
+  groupWhitelist: [ DisabledCustomization ]
   coloring:
     default:
       type:
@@ -37,6 +40,7 @@
 - type: marking
   id: Iron_jaw
   bodyPart: Eyes
+  groupWhitelist: [ DisabledCustomization ]
   coloring:
     default:
       type:

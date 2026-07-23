@@ -14,6 +14,8 @@ public sealed partial class MainMenuControl : Control
     public const string StyleIdentifierMainMenu = "mainMenu";
     public const string StyleIdentifierMainMenuVBox = "mainMenuVBox";
     public const string StyleIdentifierLogoText = "mainMenuLogoText";
+    public const string StyleIdentifierLogoTitle = "mainMenuLogoTitle";
+    public const string StyleIdentifierLogoSub = "mainMenuLogoSub";
     public const string StyleIdentifierPrimary = "mainMenuPrimary";
     public const string StyleIdentifierNav = "mainMenuNav";
     public const string StyleIdentifierFooter = "mainMenuFooter";

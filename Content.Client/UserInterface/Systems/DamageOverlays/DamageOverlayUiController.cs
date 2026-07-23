@@ -1,3 +1,4 @@
+using Content.Shared._Eclipse.AdvancedHealth;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
@@ -38,6 +39,13 @@ public sealed class DamageOverlayUiController : UIController
     private void OnPlayerAttach(LocalPlayerAttachedEvent args)
     {
         ClearOverlay();
+        if (EntityManager.TryGetComponent<AdvancedHealthComponent>(args.Entity, out var advancedHealth))
+        {
+            UpdateFromAdvancedHealth(advancedHealth);
+            _overlayManager.AddOverlay(_overlay);
+            return;
+        }
+
         if (!EntityManager.TryGetComponent<MobStateComponent>(args.Entity, out var mobState))
             return;
         if (mobState.CurrentState != MobState.Dead)
@@ -55,6 +63,12 @@ public sealed class DamageOverlayUiController : UIController
     {
         if (args.Target != _playerManager.LocalEntity)
             return;
+
+        if (EntityManager.TryGetComponent<AdvancedHealthComponent>(args.Target, out var advancedHealth))
+        {
+            UpdateFromAdvancedHealth(advancedHealth);
+            return;
+        }
 
         UpdateOverlays(args.Target, args.Component);
     }
@@ -75,9 +89,57 @@ public sealed class DamageOverlayUiController : UIController
         _overlay.OxygenLevel = 0f;
     }
 
+    /// <summary>Steady dead overlay (no per-frame pulsing) for an actual corpse.</summary>
+    public void SetSteadyDeadOverlay()
+    {
+        _overlay.State = MobState.Dead;
+        _overlay.DeadLevel = 1f;
+        _overlay.CritLevel = 0f;
+        _overlay.PainLevel = 0f;
+        _overlay.OxygenLevel = 0f;
+    }
+
+    /// <summary>Damage overlay driven by advanced-health vitals instead of vanilla damage thresholds.</summary>
+    public void UpdateFromAdvancedHealth(AdvancedHealthComponent health)
+    {
+        if (health.IsHeartStopped && health.TimeSinceHeartStopped > 30f)
+        {
+            _overlay.State = MobState.Dead;
+            _overlay.DeadLevel = Math.Clamp(health.TimeSinceHeartStopped / health.HeartStoppedDeathTime, 0.3f, 1f);
+            _overlay.PainLevel = 0f;
+            _overlay.OxygenLevel = 0f;
+            _overlay.CritLevel = 0f;
+            return;
+        }
+
+        _overlay.State = health.IsUnconscious ? MobState.Critical : MobState.Alive;
+        _overlay.DeadLevel = 0f;
+
+        _overlay.PainLevel = health.HasPain && health.Pain >= 5f
+            ? Math.Clamp(health.Pain / 100f, 0.05f, 1f)
+            : 0f;
+
+        _overlay.OxygenLevel = health.NeedsOxygen
+            ? Math.Clamp(1f - health.Oxygenation / 100f, 0f, 1f)
+            : 0f;
+
+        if (health.IsUnconscious)
+            _overlay.CritLevel = Math.Clamp(1f - health.Consciousness / 20f, 0.5f, 1f);
+        else if (health.Shock >= 50f)
+            _overlay.CritLevel = Math.Clamp((health.Shock - 50f) / 50f, 0f, 0.65f);
+        else
+            _overlay.CritLevel = 0f;
+    }
+
     //TODO: Jezi: adjust oxygen and hp overlays to use appropriate systems once bodysim is implemented
     private void UpdateOverlays(EntityUid entity, MobStateComponent? mobState, DamageableComponent? damageable = null, MobThresholdsComponent? thresholds = null)
     {
+        if (EntityManager.TryGetComponent<AdvancedHealthComponent>(entity, out var advancedHealth))
+        {
+            UpdateFromAdvancedHealth(advancedHealth);
+            return;
+        }
+
         if (mobState == null && !EntityManager.TryGetComponent(entity, out mobState) ||
             thresholds == null && !EntityManager.TryGetComponent(entity, out thresholds) ||
             damageable == null && !EntityManager.TryGetComponent(entity, out  damageable))

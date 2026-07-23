@@ -1,0 +1,82 @@
+# Account achievements shown on the lobby "Аккаунт" tab.
+# Progress is computed on the client from playtime trackers and account level, so no server backend is needed.
+#
+# kind:
+#   Playtime     — total playtime, goal in hours
+#   Level        — account level, goal is the level
+#   RolePlaytime — playtime in `tracker`, goal in hours
+#   RoleVariety  — number of distinct roles played 1+ hour, goal is the count
+
+- type: eclipseAchievement
+  id: EclipseAchFirstShift
+  order: 0
+  name: Первая смена
+  description: Отыграйте свой первый час на станции.
+  kind: Playtime
+  goal: 1
+  icon: /Textures/Interface/VerbIcons/clock.svg.192dpi.png
+
+- type: eclipseAchievement
+  id: EclipseAchVeteran
+  order: 1
+  name: Ветеран станции
+  description: Наберите 50 часов общего игрового времени.
+  kind: Playtime
+  goal: 50
+  icon: /Textures/Interface/examine-star.png
+
+- type: eclipseAchievement
+  id: EclipseAchVanguard
+  order: 2
+  name: Старожил
+  description: Наберите 250 часов общего игрового времени.
+  kind: Playtime
+  goal: 250
+  icon: /Textures/Eclipse/MainMenu/icons/nav-roadmap.png
+
+- type: eclipseAchievement
+  id: EclipseAchRank10
+  order: 3
+  name: Признание
+  description: Достигните 10 уровня аккаунта.
+  kind: Level
+  goal: 10
+  icon: /Textures/Eclipse/MainMenu/merit.png
+
+- type: eclipseAchievement
+  id: EclipseAchRank40
+  order: 4
+  name: Куратор
+  description: Достигните 40 уровня аккаунта.
+  kind: Level
+  goal: 40
+  icon: /Textures/Eclipse/MainMenu/shard.png
+
+- type: eclipseAchievement
+  id: EclipseAchVersatile
+  order: 5
+  name: Мастер на все руки
+  description: Отыграйте не менее часа в пяти разных ролях.
+  kind: RoleVariety
+  goal: 5
+  icon: /Textures/Interface/VerbIcons/group.svg.192dpi.png
+
+- type: eclipseAchievement
+  id: EclipseAchEngineer
+  order: 6
+  name: Золотые руки
+  description: Отыграйте 10 часов инженером.
+  kind: RolePlaytime
+  tracker: JobStationEngineer
+  goal: 10
+  icon: /Textures/Interface/VerbIcons/settings.svg.192dpi.png
+
+- type: eclipseAchievement
+  id: EclipseAchMedic
+  order: 7
+  name: Клятва Гиппократа
+  description: Отыграйте 10 часов врачом.
+  kind: RolePlaytime
+  tracker: JobMedicalDoctor
+  goal: 10
+  icon: /Textures/Interface/VerbIcons/examine.svg.192dpi.png

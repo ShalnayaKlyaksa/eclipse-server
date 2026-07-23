@@ -95,3 +95,29 @@
   - type: Pinpointer
     component: ProtoCoreActivationKey
     targetName: activation key
+
+- type: entity
+  id: ActivationKeyTrackerCartridge
+  parent: BasePDACartridge
+  name: activation key tracker cartridge
+  description: A single-use cartridge containing an application that tracks the proto core activation key.
+  components:
+  - type: Sprite
+    state: cart-nav
+  - type: Icon
+    sprite: Objects/Devices/cartridge.rsi
+    state: cart-nav
+  - type: Cartridge
+    programName: activation-key-tracker-program-name
+    icon:
+      sprite: _Eclipse/Objects/Devices/proto_core_activation_key.rsi
+      state: icon
+  - type: UIFragment
+    ui: !type:ActivationKeyTrackerUi
+  - type: ActivationKeyTrackerCartridge
+  - type: OneTimeCartridge
+
+- type: entity
+  id: AshLegionActivationKeyTrackerCartridge
+  parent: [ActivationKeyTrackerCartridge, BaseAshLegionContraband]
+  suffix: Ash Legion

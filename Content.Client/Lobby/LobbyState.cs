@@ -1,6 +1,7 @@
 using Content.Client.Audio;
 using Content.Client.Administration.Managers;
 using System.Linq;
+using Content.Client.Eclipse.Economy;
 using Content.Client.GameTicking.Managers;
 using Content.Client.LateJoin;
 using Content.Client.Lobby.UI;
@@ -11,6 +12,7 @@ using Content.Client.Voting;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
+using Content.Shared.Eclipse.Achievements;
 using Content.Shared.Eclipse.Progression;
 using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Prototypes;
@@ -22,6 +24,7 @@ using Robust.Client.Player;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -50,12 +53,35 @@ namespace Content.Client.Lobby
 
         private ClientGameTicker _gameTicker = default!;
         private ContentAudioSystem _contentAudioSystem = default!;
+        private EclipseCurrencyClientSystem _currency = default!;
         private float _accountRefreshTimer;
-        private ResPath? _autoLobbyBackground;
+
+        // Lobby wallpaper slideshow. The folder is read once, shuffled, then cycled in order so every
+        // wallpaper is shown before any repeats (a plain random pick can show the same one twice in a row).
+        private ResPath[] _lobbyBackgrounds = Array.Empty<ResPath>();
+        private int _lobbyBackgroundIndex;
+        private float _lobbyBackgroundTimer;
+        // Above zero while a cross-fade is running; counts up to LobbyBackgroundFadeSeconds.
+        private float _lobbyBackgroundFade;
+        private bool _lobbyBackgroundFading;
+
+        // Uniform lobby zoom: the lobby is authored at this virtual resolution and the whole screen
+        // (panels, fonts, icons) is scaled as one to keep it constant on any window size.
+        private const float LobbyDesignWidth = 1680f;
+        private const float LobbyDesignHeight = 945f;
+        // Keep the floor low so the design resolution is never squeezed below the design (which would
+        // reintroduce overlap on small windows); the UI just gets smaller instead.
+        private const float LobbyMinScale = 0.1f;
+        private float _originalUiScale;
+        private float _baseUiScale = 1f;
+        private bool _lobbyScaleApplied;
 
         private static readonly ResPath AutoLobbyBackgroundDirectory = new("/Textures/Eclipse/MainMenu/LobbyBackgrounds");
         private static readonly ResPath FallbackLobbyBackground = new("/Textures/Eclipse/MainMenu/eclipse_lobby_background.png");
         private static readonly string[] LobbyBackgroundExtensions = new[] {"png", "jpg", "jpeg", "webp"};
+        // How long a wallpaper stays fully visible, and how long the cross-fade to the next one takes.
+        private const float LobbyBackgroundHoldSeconds = 20f;
+        private const float LobbyBackgroundFadeSeconds = 2.5f;
 
         protected override Type? LinkedScreenType { get; } = typeof(LobbyGui);
         public LobbyGui? Lobby;
@@ -71,6 +97,13 @@ namespace Content.Client.Lobby
 
             _gameTicker = _entityManager.System<ClientGameTicker>();
             _contentAudioSystem = _entityManager.System<ContentAudioSystem>();
+            _currency = _entityManager.System<EclipseCurrencyClientSystem>();
+
+            // Remember the player's real UI scale so it can be restored when leaving the lobby, and the
+            // native effective scale ("how it looked before") which is the ceiling we never exceed.
+            _originalUiScale = _cfg.GetCVar(CVars.DisplayUIScale);
+            _baseUiScale = Lobby.UIScale > 0f ? Lobby.UIScale : 1f;
+            _lobbyScaleApplied = false;
             _contentAudioSystem.LobbySoundtrackChanged += UpdateLobbySoundtrackInfo;
 
             Lobby.Chat.Main = true;
@@ -94,11 +127,13 @@ namespace Content.Client.Lobby
             UpdateLobbyUi();
 
             Lobby.CharacterPreview.CharacterSetupButton.OnPressed += OnSetupPressed;
+            Lobby.AccountCustomizeButton.OnPressed += OnSetupPressed;
             Lobby.ReadyButton.OnPressed += OnReadyPressed;
             Lobby.ReadyButton.OnToggled += OnReadyToggled;
             _adminManager.AdminStatusUpdated += UpdateAdminControls;
             _preferencesManager.OnServerDataLoaded += RefreshAccountCard;
             _jobRequirements.Updated += RefreshAccountCard;
+            _currency.BalanceChanged += RefreshAccountCard;
             UpdateAdminControls();
             RefreshAccountCard();
 
@@ -120,11 +155,20 @@ namespace Content.Client.Lobby
             _voteManager.ClearPopupContainer();
 
             Lobby!.CharacterPreview.CharacterSetupButton.OnPressed -= OnSetupPressed;
+            Lobby!.AccountCustomizeButton.OnPressed -= OnSetupPressed;
             Lobby!.ReadyButton.OnPressed -= OnReadyPressed;
             Lobby!.ReadyButton.OnToggled -= OnReadyToggled;
             _adminManager.AdminStatusUpdated -= UpdateAdminControls;
             _preferencesManager.OnServerDataLoaded -= RefreshAccountCard;
             _jobRequirements.Updated -= RefreshAccountCard;
+            _currency.BalanceChanged -= RefreshAccountCard;
+
+            // Restore the player's real UI scale for in-game / other screens.
+            if (_lobbyScaleApplied)
+            {
+                _cfg.SetCVar(CVars.DisplayUIScale, _originalUiScale);
+                _lobbyScaleApplied = false;
+            }
 
             Lobby = null;
         }
@@ -158,6 +202,10 @@ namespace Content.Client.Lobby
 
         public override void FrameUpdate(FrameEventArgs e)
         {
+            ApplyLobbyScale();
+            // Before the early returns below, so the slideshow keeps running once the round has started.
+            UpdateLobbyBackgroundFade(e.DeltaSeconds);
+
             _accountRefreshTimer += e.DeltaSeconds;
             if (_accountRefreshTimer >= 1f)
             {
@@ -208,6 +256,44 @@ namespace Content.Client.Lobby
             Lobby!.StartTime.Text = text;
         }
 
+        /// <summary>
+        /// Keeps the lobby at its native ("how it looked before") size when the window is big enough, and
+        /// only scales the whole screen *down* (never up) when the window is too small to fit the design,
+        /// so nothing overlaps. Driven through the display UI-scale CVar, applied by the engine to the root.
+        /// </summary>
+        private void ApplyLobbyScale()
+        {
+            if (Lobby == null)
+                return;
+
+            // PixelSize is the real (physical) window size regardless of the current scale.
+            var pixelSize = Lobby.PixelSize;
+            if (pixelSize.X <= 0 || pixelSize.Y <= 0)
+                return;
+
+            // Scale at which the design resolution exactly fits the window.
+            var fitScale = MathF.Min(pixelSize.X / LobbyDesignWidth, pixelSize.Y / LobbyDesignHeight);
+
+            // Window is big enough for the native look: leave the UI scale completely untouched.
+            if (fitScale >= _baseUiScale - 0.005f)
+            {
+                if (_lobbyScaleApplied)
+                {
+                    _cfg.SetCVar(CVars.DisplayUIScale, _originalUiScale);
+                    _lobbyScaleApplied = false;
+                }
+                return;
+            }
+
+            // Too small: shrink the whole screen uniformly so the design still fits.
+            var desired = MathF.Max(fitScale, LobbyMinScale);
+            if (MathF.Abs(_cfg.GetCVar(CVars.DisplayUIScale) - desired) <= 0.005f)
+                return;
+
+            _cfg.SetCVar(CVars.DisplayUIScale, desired);
+            _lobbyScaleApplied = true;
+        }
+
         private void LobbyStatusUpdated()
         {
             UpdateLobbyBackground();
@@ -238,8 +324,20 @@ namespace Content.Client.Lobby
             var roleName = GetPreferredRoleName(_preferencesManager.Preferences?.SelectedCharacter);
             var totalExperience = GetAccountExperience();
             var progress = EclipseProgression.CalculateProgress(totalExperience);
-            var merits = totalExperience / 2;
-            var shards = totalExperience / 250;
+
+            // Prefer the authoritative, spendable balance from the server; fall back to the legacy
+            // XP-derived value until the server has sent one.
+            int merits, shards;
+            if (_currency.HasBalance)
+            {
+                merits = _currency.Merits;
+                shards = _currency.Shards;
+            }
+            else
+            {
+                merits = EclipseProgression.CalculateMerits(totalExperience);
+                shards = EclipseProgression.CalculateShards(totalExperience);
+            }
 
             Lobby.SetAccountInfo(
                 accountName,
@@ -249,6 +347,68 @@ namespace Content.Client.Lobby
                 progress.NextLevelExperience,
                 merits,
                 shards);
+
+            Lobby.SetAccountPageData(new LobbyGui.AccountPageData(
+                accountName,
+                EclipseProgression.GetRankName(progress.Level),
+                progress.Level,
+                progress.CurrentExperience,
+                progress.NextLevelExperience,
+                merits,
+                shards,
+                _jobRequirements.FetchOverallPlaytime(),
+                GetTopRoles(),
+                BuildAchievements(progress.Level)));
+        }
+
+        /// <summary>
+        /// The most played roles, for the account page. Roles with no recorded time are skipped.
+        /// </summary>
+        private List<(string Role, TimeSpan Time)> GetTopRoles()
+        {
+            return _jobRequirements.FetchPlaytimeByRoles()
+                .Where(role => role.Value > TimeSpan.Zero)
+                .OrderByDescending(role => role.Value)
+                .Take(5)
+                .Select(role => (Loc.GetString(role.Key), role.Value))
+                .ToList();
+        }
+
+        /// <summary>
+        /// Evaluates every achievement prototype against the player's playtime and level. Everything is derived
+        /// client-side, so achievements need no server support.
+        /// </summary>
+        private List<LobbyGui.AccountAchievement> BuildAchievements(int level)
+        {
+            var totalHours = (float) _jobRequirements.FetchOverallPlaytime().TotalHours;
+            var rolesOverAnHour = _jobRequirements.FetchPlaytimeByRoles()
+                .Count(role => role.Value >= TimeSpan.FromHours(1));
+
+            var result = new List<LobbyGui.AccountAchievement>();
+
+            foreach (var proto in _protoMan.EnumeratePrototypes<EclipseAchievementPrototype>()
+                         .OrderBy(a => a.Order)
+                         .ThenBy(a => a.ID, StringComparer.Ordinal))
+            {
+                var current = proto.Kind switch
+                {
+                    EclipseAchievementKind.Playtime => totalHours,
+                    EclipseAchievementKind.Level => level,
+                    EclipseAchievementKind.RolePlaytime =>
+                        (float) _jobRequirements.FetchPlaytimeTracker(proto.Tracker).TotalHours,
+                    EclipseAchievementKind.RoleVariety => rolesOverAnHour,
+                    _ => 0f,
+                };
+
+                result.Add(new LobbyGui.AccountAchievement(
+                    proto.Name,
+                    proto.Description,
+                    proto.Icon,
+                    current,
+                    proto.Goal));
+            }
+
+            return result;
         }
 
         private string GetPreferredRoleName(HumanoidCharacterProfile? profile)
@@ -274,12 +434,9 @@ namespace Content.Client.Lobby
         {
             var overallPlaytime = _jobRequirements.FetchOverallPlaytime();
             var minutes = Math.Max(overallPlaytime.TotalMinutes, _playtimeTracking.PlaytimeMinutesToday);
-            var playtimeExperience = Math.Max(0, (int) Math.Floor(minutes * 6));
-            var bonusExperience = Math.Max(0, (int) Math.Floor(
-                _jobRequirements.FetchPlaytimeTracker(EclipseProgression.BonusExperienceTracker).TotalMinutes *
-                EclipseProgression.BonusExperiencePerMinute));
+            var bonusMinutes = _jobRequirements.FetchPlaytimeTracker(EclipseProgression.BonusExperienceTracker).TotalMinutes;
 
-            return playtimeExperience + bonusExperience;
+            return EclipseProgression.CalculateTotalExperience(minutes, bonusMinutes);
         }
 
         private void UpdateLobbyUi()
@@ -360,15 +517,12 @@ namespace Content.Client.Lobby
 
         private void UpdateLobbyBackground()
         {
-            _autoLobbyBackground ??= PickAutoLobbyBackground();
-            if (_autoLobbyBackground is { } autoBackground &&
-                _resourceCache.TryGetResource<TextureResource>(autoBackground, out var autoTexture))
-            {
-                Lobby!.Background.Texture = autoTexture;
-                Lobby.LobbyBackground.SetMarkup(Loc.GetString("lobby-state-background-text",
-                    ("backgroundTitle", autoBackground.FilenameWithoutExtension),
-                    ("backgroundArtist", Loc.GetString("lobby-state-background-unknown-artist"))));
+            if (_lobbyBackgrounds.Length == 0)
+                _lobbyBackgrounds = LoadLobbyBackgrounds();
 
+            if (_lobbyBackgrounds.Length > 0 &&
+                TryApplyLobbyBackground(_lobbyBackgrounds[_lobbyBackgroundIndex], Lobby!.Background))
+            {
                 return;
             }
 
@@ -394,15 +548,81 @@ namespace Content.Client.Lobby
                 ("backgroundArtist", Loc.GetString("lobby-state-background-unknown-artist"))));
         }
 
-        private ResPath? PickAutoLobbyBackground()
+        /// <summary>
+        /// Every wallpaper in the backgrounds folder, in a random order. Drop files in or remove them to change
+        /// the slideshow; nothing here is hardcoded to a specific image.
+        /// </summary>
+        private ResPath[] LoadLobbyBackgrounds()
         {
             var backgrounds = _resourceCache.ContentFindFiles(AutoLobbyBackgroundDirectory)
                 .Where(path => LobbyBackgroundExtensions.Contains(path.Extension))
                 .ToArray();
 
-            return backgrounds.Length == 0
-                ? null
-                : _random.Pick(backgrounds);
+            _random.Shuffle(backgrounds);
+            return backgrounds;
+        }
+
+        private bool TryApplyLobbyBackground(ResPath path, TextureRect target)
+        {
+            if (!_resourceCache.TryGetResource<TextureResource>(path, out var texture))
+                return false;
+
+            target.Texture = texture;
+            Lobby!.LobbyBackground.SetMarkup(Loc.GetString("lobby-state-background-text",
+                ("backgroundTitle", path.FilenameWithoutExtension),
+                ("backgroundArtist", Loc.GetString("lobby-state-background-unknown-artist"))));
+
+            return true;
+        }
+
+        /// <summary>
+        /// Advances the wallpaper slideshow: holds the current image, then cross-fades the next one in over it.
+        /// </summary>
+        private void UpdateLobbyBackgroundFade(float deltaSeconds)
+        {
+            // Nothing to cross-fade to with a single wallpaper.
+            if (Lobby is null || _lobbyBackgrounds.Length < 2)
+                return;
+
+            if (!_lobbyBackgroundFading)
+            {
+                _lobbyBackgroundTimer += deltaSeconds;
+                if (_lobbyBackgroundTimer < LobbyBackgroundHoldSeconds)
+                    return;
+
+                var next = (_lobbyBackgroundIndex + 1) % _lobbyBackgrounds.Length;
+                if (!TryApplyLobbyBackground(_lobbyBackgrounds[next], Lobby.BackgroundNext))
+                {
+                    // Unreadable file: skip past it rather than retrying it every frame.
+                    _lobbyBackgroundIndex = next;
+                    _lobbyBackgroundTimer = 0f;
+                    return;
+                }
+
+                _lobbyBackgroundIndex = next;
+                _lobbyBackgroundTimer = 0f;
+                _lobbyBackgroundFade = 0f;
+                _lobbyBackgroundFading = true;
+                Lobby.BackgroundNext.Visible = true;
+                Lobby.BackgroundNext.Modulate = Color.White.WithAlpha(0f);
+                return;
+            }
+
+            _lobbyBackgroundFade += deltaSeconds;
+            var progress = Math.Clamp(_lobbyBackgroundFade / LobbyBackgroundFadeSeconds, 0f, 1f);
+            // Smoothstep, so the fade eases in and out instead of starting and stopping abruptly.
+            var alpha = progress * progress * (3f - 2f * progress);
+            Lobby.BackgroundNext.Modulate = Color.White.WithAlpha(alpha);
+
+            if (progress < 1f)
+                return;
+
+            // Fade finished: the top layer becomes the base one and goes back to being transparent.
+            Lobby.Background.Texture = Lobby.BackgroundNext.Texture;
+            Lobby.BackgroundNext.Visible = false;
+            Lobby.BackgroundNext.Modulate = Color.White.WithAlpha(0f);
+            _lobbyBackgroundFading = false;
+            _lobbyBackgroundFade = 0f;
         }
 
         private void SetReady(bool newReady)

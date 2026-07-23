@@ -142,6 +142,7 @@
       - NotekeeperCartridge
       - NanoTaskCartridge
       - AstroNavCartridge
+      - AshLegionActivationKeyTrackerCartridge
 
 - type: entity
   parent: AshLegionBasePDA
@@ -164,6 +165,7 @@
         - NanoTaskCartridge
         - AstroNavCartridge
         - MedTekCartridge
+        - AshLegionActivationKeyTrackerCartridge
 
 - type: entity
   parent: AshLegionBasePDA

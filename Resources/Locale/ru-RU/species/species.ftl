@@ -11,6 +11,16 @@ species-name-skeleton = Скелет
 species-name-vox = Вокс
 species-name-gingerbread = вкуснейшая выпечка
 species-name-vulpkanin = Вульпканин
+species-name-imperial = Имперец
+species-name-molei = Молей
+species-name-lavrite = Лаврит
+species-name-kobold = Кобольд
+species-name-saurian = Сауриан
+species-name-therian = Териант
+species-name-arkane = Аркан
+species-name-avian = Авиан
+species-name-elir = Элир
+species-name-slimefolk = Слаймолюд
 
 ## Misc species things
 

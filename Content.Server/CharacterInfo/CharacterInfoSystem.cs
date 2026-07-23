@@ -36,6 +36,7 @@ public sealed class CharacterInfoSystem : EntitySystem
     [Dependency] private readonly RoleSystem _roles = default!;
     [Dependency] private readonly SharedContainerSystem _containers = default!;
     [Dependency] private readonly SharedObjectivesSystem _objectives = default!;
+    [Dependency] private readonly Eclipse.Progression.EclipseShiftStatsSystem _shiftStats = default!;
 
     private const string DefaultIcon = "/Textures/Interface/VerbIcons/examine.svg.192dpi.png";
     private const string EscapeIcon = "/Textures/Interface/VerbIcons/eject.svg.192dpi.png";
@@ -43,16 +44,14 @@ public sealed class CharacterInfoSystem : EntitySystem
     private const string SecurityIcon = "/Textures/Interface/VerbIcons/lock.svg.192dpi.png";
     private const string EngineeringIcon = "/Textures/Interface/VerbIcons/settings.svg.192dpi.png";
     private const string MedicalIcon = "/Textures/Interface/VerbIcons/rejuvenate.svg.192dpi.png";
-    private const int PersonalTasksVersion = 2;
+    private const int PersonalTasksVersion = 3;
 
     private static readonly Dictionary<string, PersonalTaskTemplate[]> DepartmentTasks = new()
     {
         ["Command"] =
         [
-            new("Сохранить диск авторизации", "К концу смены эвакуируйтесь на СИУ живым с активом командования: {item}.", SecurityIcon, "NukeDisk", "диск ядерной авторизации"),
             new("Вернуть капитанскую саблю", "К концу смены эвакуируйтесь на СИУ живым с личным активом капитана: {item}.", SecurityIcon, "CaptainSabre", "капитанская сабля"),
             new("Защитить блюспейс-телепорт", "К концу смены эвакуируйтесь на СИУ живым с ценным устройством командования: {item}.", EngineeringIcon, "HandTeleporter", "ручной телепорт"),
-            new("Сохранить ядерный пинпоинтер", "К концу смены эвакуируйтесь на СИУ живым с устройством поиска диска: {item}.", EngineeringIcon, "PinpointerNuclear", "ядерный пинпоинтер"),
             new("Эвакуировать командный канал", "К концу смены эвакуируйтесь на СИУ живым с ключом связи командования: {item}.", SecurityIcon, "EncryptionKeyCommand", "командный ключ шифрования"),
         ],
         ["Security"] =
@@ -314,6 +313,8 @@ public sealed class CharacterInfoSystem : EntitySystem
                 var bonusTime = TimeSpan.FromMinutes((double) task.ExperienceReward / EclipseProgression.BonusExperiencePerMinute);
                 _playTime.AddTimeToTracker(session, EclipseProgression.BonusExperienceTracker, bonusTime);
             }
+
+            _shiftStats.RecordTaskReward(session, task.Title, task.ExperienceReward, task.CreditsReward);
 
             _chat.DispatchServerMessage(
                 session,

@@ -169,6 +169,9 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
         if (PreviewPanel == null)
             return;
 
+        // The account page shows the same character as its own doll, so it is refreshed alongside the sidebar one.
+        var lobby = (_stateManager.CurrentState as LobbyState)?.Lobby;
+
         // Get selected character, load it, then set it
         var character = _preferencesManager.Preferences?.SelectedCharacter;
 
@@ -176,11 +179,17 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
         {
             PreviewPanel.ProfilePreviewSpriteView.ClearPreview();
             PreviewPanel.SetSummaryText(string.Empty);
+
+            lobby?.AccountPreviewSprite.ClearPreview();
+            lobby?.SetAccountCharacter(string.Empty, 0, false);
             return;
         }
 
         PreviewPanel.ProfilePreviewSpriteView.LoadPreview(humanoid);
         PreviewPanel.SetCharacterInfo(humanoid.Name, humanoid.Age);
+
+        lobby?.AccountPreviewSprite.LoadPreview(humanoid);
+        lobby?.SetAccountCharacter(humanoid.Name, humanoid.Age, true);
     }
 
     private void RefreshProfileEditor()

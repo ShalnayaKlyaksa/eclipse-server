@@ -75,7 +75,9 @@ public sealed partial class OrganMarkingPicker : Control
         foreach (var layer in _layers)
         {
             var allMarkings =
-                _markingsModel.EnforceGroupAndSexRestrictions ? _marking.MarkingsByLayerAndGroupAndSex(layer, _group, organProfileData.Sex) : _marking.MarkingsByLayer(layer);
+                _markingsModel.EnforceGroupAndSexRestrictions
+                    ? _marking.MarkingsByLayerAndSpeciesGroupAndSex(layer, _markingsModel.Species, _group, organProfileData.Sex)
+                    : _marking.MarkingsByLayer(layer);
 
             // Corvax-Sponsors-Start
             /*if (_sponsorsManager != null)

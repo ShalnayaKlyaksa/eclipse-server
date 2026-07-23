@@ -162,7 +162,7 @@ public sealed partial class HumanoidCharacterAppearance : IEquatable<HumanoidCha
                 var actualMarkings = appearance.Markings.GetValueOrDefault(organ)?.ShallowClone() ?? [];
 
                 markingManager.EnsureValidColors(actualMarkings);
-                markingManager.EnsureValidGroupAndSex(actualMarkings, organData.Value.Group, sex);
+                markingManager.EnsureValidSpeciesGroupAndSex(actualMarkings, species, organData.Value.Group, sex);
                 markingManager.EnsureValidLayers(actualMarkings, organData.Value.Layers);
                 markingManager.EnsureValidLimits(actualMarkings, organData.Value.Group, organData.Value.Layers, skinColor, eyeColor);
 

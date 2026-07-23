@@ -1,4 +1,5 @@
 using Content.Shared.Alert;
+using Content.Shared._Eclipse.AdvancedHealth;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Events;
 using Content.Shared.Chemistry.Components;
@@ -168,6 +169,11 @@ public abstract class SharedBloodstreamSystem : EntitySystem
 
     private void OnDamageChanged(Entity<BloodstreamComponent> ent, ref DamageChangedEvent args)
     {
+        // Localized wounds own bleeding for opt-in advanced-health mobs.
+        // The original bloodstream damage path remains unchanged for every other entity.
+        if (HasComp<AdvancedHealthComponent>(ent))
+            return;
+
         // The incoming state from the server raises a DamageChangedEvent as well.
         // But the changes to the bloodstream have also been dirtied,
         // so we prevent applying them twice.

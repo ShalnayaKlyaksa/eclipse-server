@@ -1,10 +1,13 @@
 using Content.Client.Alerts;
+using Content.Client._Eclipse.AdvancedHealth;
 using Content.Client.Gameplay;
 using Content.Client.UserInterface.Systems.Alerts.Widgets;
 using Content.Client.UserInterface.Systems.Gameplay;
 using Content.Shared.Alert;
+using Content.Shared._Eclipse.AdvancedHealth;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
+using Robust.Shared.GameObjects;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Shared.Prototypes;
@@ -18,6 +21,7 @@ public sealed class AlertsUIController : UIController, IOnStateEntered<GameplayS
     [UISystemDependency] private readonly ClientAlertsSystem? _alertsSystem = default;
 
     private AlertsUI? UI => UIManager.GetActiveUIWidgetOrNull<AlertsUI>();
+    private AdvancedHealthStatusWindow? _advancedHealthWindow;
 
     public override void Initialize()
     {
@@ -30,6 +34,9 @@ public sealed class AlertsUIController : UIController, IOnStateEntered<GameplayS
 
     private void OnScreenUnload()
     {
+        _advancedHealthWindow?.Close();
+        _advancedHealthWindow = null;
+
         var widget = UI;
         if (widget != null)
             widget.AlertPressed -= OnAlertPressed;
@@ -46,6 +53,21 @@ public sealed class AlertsUIController : UIController, IOnStateEntered<GameplayS
 
     private void OnAlertPressed(object? sender, ProtoId<AlertPrototype> e)
     {
+        // Notify other client systems (e.g. the tutorial) that an alert was pressed, before any
+        // type-specific handling that might consume the click locally.
+        EntityManager.EventBus.RaiseEvent(EventSource.Local, new AlertHudPressedEvent(e));
+
+        if (e.ToString() is "HumanHealth" or "HumanCrit" or "HumanDead" &&
+            _player.LocalEntity is { } player &&
+            EntityManager.HasComponent<AdvancedHealthComponent>(player))
+        {
+            if (_advancedHealthWindow is not { IsOpen: true })
+                _advancedHealthWindow = new AdvancedHealthStatusWindow(player);
+
+            _advancedHealthWindow.Open();
+            return;
+        }
+
         _alertsSystem?.AlertClicked(e);
     }
 

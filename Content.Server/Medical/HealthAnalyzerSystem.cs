@@ -1,5 +1,7 @@
 using Content.Server.Medical.Components;
 using Content.Shared.Body.Components;
+using System.Linq;
+using Content.Shared._Eclipse.AdvancedHealth;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage.Components;
 using Content.Shared.DoAfter;
@@ -111,6 +113,10 @@ public sealed class HealthAnalyzerSystem : EntitySystem
             _audio.PlayPvs(uid.Comp.ScanningEndSound, uid);
 
         OpenUserInterface(args.User, uid);
+        // Signal a deliberate (re)scan so the advanced-health menu re-opens even if it was manually
+        // dismissed while the scanner stayed active on the same patient.
+        if (_uiSystem.HasUi(uid.Owner, HealthAnalyzerUiKey.Key))
+            _uiSystem.ServerSendUiMessage(uid.Owner, HealthAnalyzerUiKey.Key, new HealthAnalyzerScanStartedMessage());
         BeginAnalyzingEntity(uid, args.Target.Value);
         args.Handled = true;
     }
@@ -248,7 +254,7 @@ public sealed class HealthAnalyzerSystem : EntitySystem
         if (TryComp<UnrevivableComponent>(entity, out var unrevivableComp) && unrevivableComp.Analyzable)
             unrevivable = true;
 
-        return new HealthAnalyzerUiState(
+        var state = new HealthAnalyzerUiState(
             GetNetEntity(entity),
             bodyTemperature,
             bloodAmount,
@@ -256,5 +262,34 @@ public sealed class HealthAnalyzerSystem : EntitySystem
             bleeding,
             unrevivable
         );
+
+        if (TryComp<AdvancedHealthComponent>(entity, out var advanced))
+        {
+            // AdvancedBloodVolume is set first so the client still recognises an advanced patient
+            // (and opens the neurochip menu) even if body-part serialization somehow fails.
+            state.AdvancedBloodVolume = advanced.BloodVolume / Math.Max(1, advanced.MaxBloodVolume);
+            state.Oxygenation = advanced.Oxygenation;
+            state.Pain = advanced.Pain;
+            state.Shock = advanced.Shock;
+            state.TraumaLoad = advanced.TraumaLoad;
+            state.AdvancedBodyFluid = advanced.BodyFluid;
+            state.AdvancedBloodType = advanced.BloodType;
+            state.AdvancedFluidColor = advanced.FluidColor;
+            state.AdvancedOxygenCarryingCapacity = advanced.OxygenCarryingCapacity;
+
+            try
+            {
+                state.AdvancedBodyParts = advanced.BodyParts.Values
+                    .OrderBy(x => x.Slot)
+                    .Select(part => part.ToUiState())
+                    .ToArray();
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Failed to build advanced-health scan for {ToPrettyString(entity)}: {e}");
+            }
+        }
+
+        return state;
     }
 }

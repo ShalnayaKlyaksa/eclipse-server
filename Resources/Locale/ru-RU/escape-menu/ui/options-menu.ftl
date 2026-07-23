@@ -165,6 +165,7 @@ ui-options-function-activate-item-in-world = Использовать предм
 ui-options-function-alt-activate-item-in-world = Альтернативно использовать предмет в мире
 ui-options-function-drop = Положить предмет
 ui-options-function-examine-entity = Осмотреть
+ui-options-function-advanced-health-aim-target = Прицел по части тела (удержание)
 ui-options-function-swap-hands = Поменять руки
 ui-options-function-swap-hands-reverse = Swap hands (other direction)
 ui-options-function-move-stored-item = Переместить хранящийся объект

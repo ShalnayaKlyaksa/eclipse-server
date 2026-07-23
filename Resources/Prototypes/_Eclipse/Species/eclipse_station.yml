@@ -1,0 +1,92 @@
+- type: species
+  id: Imperial
+  name: species-name-imperial
+  roundStart: true
+  prototype: MobImperial
+  dollPrototype: AppearanceImperial
+  skinColoration: HumanToned
+
+- type: species
+  id: Molei
+  name: species-name-molei
+  roundStart: true
+  prototype: MobMolei
+  defaultSkinTone: "#d8d2c8"
+  dollPrototype: AppearanceMolei
+  skinColoration: EclipseMoleiFur
+  maleFirstNames: NamesMothFirstMale
+  femaleFirstNames: NamesMothFirstFemale
+  maleLastNames: NamesMothLast
+  femaleLastNames: NamesMothLast
+
+- type: species
+  id: Lavrite
+  name: species-name-lavrite
+  roundStart: true
+  prototype: MobLavrite
+  defaultSkinTone: "#8a4b3f"
+  dollPrototype: AppearanceLavrite
+  skinColoration: EclipseLavriteSkin
+
+- type: species
+  id: Kobold
+  name: species-name-kobold
+  roundStart: true
+  prototype: MobKobold
+  defaultSkinTone: "#4c8b45"
+  dollPrototype: AppearanceKobold
+  skinColoration: EclipseKoboldScales
+
+- type: species
+  id: Saurian
+  name: species-name-saurian
+  roundStart: true
+  prototype: MobSaurian
+  defaultSkinTone: "#667b3a"
+  dollPrototype: AppearanceSaurian
+  skinColoration: EclipseSaurianScales
+
+- type: species
+  id: Therian
+  name: species-name-therian
+  roundStart: true
+  prototype: MobTherian
+  defaultSkinTone: "#b8794e"
+  dollPrototype: AppearanceTherian
+  skinColoration: EclipseTherianFur
+
+- type: species
+  id: Arkane
+  name: species-name-arkane
+  roundStart: true
+  prototype: MobArkane
+  defaultSkinTone: "#6b5f9e"
+  dollPrototype: AppearanceArkane
+  skinColoration: EclipseArkaneSkin
+
+- type: species
+  id: Avian
+  name: species-name-avian
+  roundStart: true
+  prototype: MobAvian
+  defaultSkinTone: "#d29c5b"
+  dollPrototype: AppearanceAvian
+  skinColoration: EclipseAvianFeathers
+
+- type: species
+  id: Elir
+  name: species-name-elir
+  roundStart: true
+  prototype: MobElir
+  defaultSkinTone: "#b8dbe3"
+  dollPrototype: AppearanceElir
+  skinColoration: EclipseElirSkin
+
+- type: species
+  id: Slimefolk
+  name: species-name-slimefolk
+  roundStart: true
+  prototype: MobSlimefolk
+  defaultSkinTone: "#7cced8"
+  dollPrototype: AppearanceSlimefolk
+  skinColoration: EclipseSlimeBody

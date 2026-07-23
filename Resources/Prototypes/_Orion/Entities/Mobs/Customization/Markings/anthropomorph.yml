@@ -513,7 +513,8 @@
 - type: marking
   id: AnthropomorphHeadBug
   bodyPart: Eyes
-  # speciesRestriction: [Anthropomorph]
+  groupWhitelist: [ DisabledCustomization ]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_snouts.rsi
     state: snout_bug
@@ -523,7 +524,8 @@
 - type: marking
   id: AnthropomorphHeadHaydeeMedical
   bodyPart: Eyes
-  # speciesRestriction: [Anthropomorph]
+  groupWhitelist: [ DisabledCustomization ]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_snouts.rsi
     state: snout_extra_haydeemedical
@@ -531,7 +533,8 @@
 - type: marking
   id: AnthropomorphHeadMagus
   bodyPart: Eyes
-  # speciesRestriction: [Anthropomorph]
+  groupWhitelist: [ DisabledCustomization ]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_snouts.rsi
     state: snout_extra_magus
@@ -539,7 +542,8 @@
 - type: marking
   id: AnthropomorphHeadGuilmon
   bodyPart: Eyes
-  # speciesRestriction: [Anthropomorph, Reptilian]
+  groupWhitelist: [ DisabledCustomization ]
+  speciesRestriction: [Anthropomorph, Reptilian]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_snouts.rsi
     state: snout_guilmon
@@ -547,7 +551,8 @@
 - type: marking
   id: AnthropomorphHeadSkullbird
   bodyPart: Eyes
-  # speciesRestriction: [Anthropomorph]
+  groupWhitelist: [ DisabledCustomization ]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_snouts.rsi
     state: snout_skullbird
@@ -555,7 +560,8 @@
 - type: marking
   id: AnthropomorphHeadSloog
   bodyPart: Eyes
-  # speciesRestriction: [Anthropomorph]
+  groupWhitelist: [ DisabledCustomization ]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_snouts.rsi
     state: snout_sloog
@@ -563,7 +569,8 @@
 - type: marking
   id: AnthropomorphHeadSkullDog
   bodyPart: Eyes
-  # speciesRestriction: [Anthropomorph]
+  groupWhitelist: [ DisabledCustomization ]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_snouts.rsi
     state: snout_extra_skulldog
@@ -571,7 +578,7 @@
 - type: marking
   id: AnthropomorphHeadSkullDogAlt
   bodyPart: Eyes
-  # speciesRestriction: [Anthropomorph]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_snouts.rsi
     state: snout_extra_skulldogALT
@@ -581,7 +588,7 @@
 - type: marking
   id: AnthropomorphHeadSideDragonLong
   bodyPart: HeadTop
-  # speciesRestriction: [Anthropomorph, Reptilian]
+  speciesRestriction: [Anthropomorph, Reptilian]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: horns_dragonlong
@@ -589,7 +596,7 @@
 - type: marking
   id: AnthropomorphHeadSideGuilmon
   bodyPart: HeadTop
-  # speciesRestriction: [Anthropomorph, Reptilian]
+  speciesRestriction: [Anthropomorph, Reptilian]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: horns_guilmon
@@ -597,7 +604,7 @@
 - type: marking
   id: AnthropomorphHeadSideGoatHorns
   bodyPart: HeadTop
-  # speciesRestriction: [Anthropomorph]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_goathorns
@@ -605,7 +612,7 @@
 - type: marking
   id: AnthropomorphHeadSideHornRound
   bodyPart: HeadTop
-  # speciesRestriction: [Anthropomorph]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_horn1
@@ -615,7 +622,7 @@
 - type: marking
   id: AnthropomorphHeadSideAvali
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph, Reptilian]
+  speciesRestriction: [Anthropomorph, Reptilian]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_avali
@@ -625,7 +632,7 @@
 - type: marking
   id: AnthropomorphHeadSideAxolotl
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph, Reptilian]
+  speciesRestriction: [Anthropomorph, Reptilian]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_axolotl
@@ -633,7 +640,7 @@
 - type: marking
   id: AnthropomorphHeadSideBat
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_bat
@@ -641,7 +648,7 @@
 - type: marking
   id: AnthropomorphHeadSideBear
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph, Felinid, Human]
+  speciesRestriction: [Anthropomorph, Tajaran, Human]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_bear
@@ -649,7 +656,7 @@
 - type: marking
   id: AnthropomorphHeadSideVulp
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph, Felinid, Human]
+  speciesRestriction: [Anthropomorph, Tajaran, Human]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_vulp
@@ -659,7 +666,7 @@
 - type: marking
   id: AnthropomorphHeadSideBigWolf
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph, Felinid, Human]
+  speciesRestriction: [Anthropomorph, Tajaran, Human]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_bigwolf
@@ -669,7 +676,7 @@
 - type: marking
   id: AnthropomorphHeadSideEBunny
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph, Felinid, Human]
+  speciesRestriction: [Anthropomorph, Tajaran, Human]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_bunny
@@ -677,7 +684,7 @@
 - type: marking
   id: AnthropomorphHeadSideBunny
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph, Felinid, Human]
+  speciesRestriction: [Anthropomorph, Tajaran, Human]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_bunny_ADJ
@@ -687,7 +694,7 @@
 - type: marking
   id: AnthropomorphHeadSideBunnyRound
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph, Felinid, Human]
+  speciesRestriction: [Anthropomorph, Tajaran, Human]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_bunny2
@@ -695,7 +702,7 @@
 - type: marking
   id: AnthropomorphHeadSideBunnyAlt
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph, Felinid, Human]
+  speciesRestriction: [Anthropomorph, Tajaran, Human]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_bunnyalt
@@ -703,7 +710,7 @@
 - type: marking
   id: AnthropomorphHeadSideCatBig
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph, Felinid, Human]
+  speciesRestriction: [Anthropomorph, Tajaran, Human]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_catbig
@@ -713,7 +720,7 @@
 - type: marking
   id: AnthropomorphHeadSideCatNormal
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph, Felinid, Human]
+  speciesRestriction: [Anthropomorph, Tajaran, Human]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_catnormal
@@ -721,7 +728,7 @@
 - type: marking
   id: AnthropomorphHeadSideChemlight
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_chemlight
@@ -733,7 +740,7 @@
 - type: marking
   id: AnthropomorphHeadSideCow
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph, Felinid, Human]
+  speciesRestriction: [Anthropomorph, Tajaran, Human]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_cow
@@ -741,7 +748,7 @@
 - type: marking
   id: AnthropomorphHeadSideDeer
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph, Felinid, Human]
+  speciesRestriction: [Anthropomorph, Tajaran, Human]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_deer
@@ -749,7 +756,7 @@
 - type: marking
   id: AnthropomorphHeadSideEasternDragon
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph, Reptilian]
+  speciesRestriction: [Anthropomorph, Reptilian]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_easternd
@@ -761,7 +768,7 @@
 - type: marking
   id: AnthropomorphHeadSideEevee
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_eevee
@@ -769,7 +776,7 @@
 - type: marking
   id: AnthropomorphHeadSideElephant
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_elephant
@@ -777,7 +784,7 @@
 - type: marking
   id: AnthropomorphHeadSideElf
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph, Felinid, Dwarf, Human]
+  speciesRestriction: [Anthropomorph, Tajaran, Dwarf, Human]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_elf
@@ -785,7 +792,7 @@
 - type: marking
   id: AnthropomorphHeadSideFennec
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph, Felinid, Human]
+  speciesRestriction: [Anthropomorph, Tajaran, Human]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_fennec
@@ -793,7 +800,7 @@
 - type: marking
   id: AnthropomorphHeadSideFish
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph, Felinid, Human, Reptilian]
+  speciesRestriction: [Anthropomorph, Tajaran, Human, Reptilian]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_fish
@@ -801,7 +808,7 @@
 - type: marking
   id: AnthropomorphHeadSideFoldedBack
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph, Felinid, Human]
+  speciesRestriction: [Anthropomorph, Tajaran, Human]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_foldedback
@@ -809,7 +816,7 @@
 - type: marking
   id: AnthropomorphHeadSideFox
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph, Felinid, Human]
+  speciesRestriction: [Anthropomorph, Tajaran, Human]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_fox
@@ -819,7 +826,7 @@
 - type: marking
   id: AnthropomorphHeadSideGoat
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_goat
@@ -827,7 +834,7 @@
 - type: marking
   id: AnthropomorphHeadSideGret
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_gret
@@ -835,7 +842,8 @@
 - type: marking
   id: AnthropomorphHeadSideHawk
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph]
+  groupWhitelist: [ DisabledCustomization ]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_hawk
@@ -843,7 +851,7 @@
 - type: marking
   id: AnthropomorphHeadSideJackal
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph, Felinid, Human]
+  speciesRestriction: [Anthropomorph, Tajaran, Human]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_jackal
@@ -851,7 +859,7 @@
 - type: marking
   id: AnthropomorphHeadSideJellyfish
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_jellyfish
@@ -859,7 +867,7 @@
 - type: marking
   id: AnthropomorphHeadSideKangaroo
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_kangaroo
@@ -867,7 +875,7 @@
 - type: marking
   id: AnthropomorphHeadSideMoth
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_moth
@@ -875,7 +883,7 @@
 - type: marking
   id: AnthropomorphHeadSideMouse
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph, Felinid, Human]
+  speciesRestriction: [Anthropomorph, Tajaran, Human]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_mouse
@@ -883,7 +891,7 @@
 - type: marking
   id: AnthropomorphHeadSideMurid
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_murid
@@ -891,7 +899,7 @@
 - type: marking
   id: AnthropomorphHeadSideNoodleDragon
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph, Reptilian]
+  speciesRestriction: [Anthropomorph, Reptilian]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_noodledragon
@@ -901,7 +909,7 @@
 - type: marking
   id: AnthropomorphHeadSideOtie
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_otie
@@ -909,7 +917,7 @@
 - type: marking
   id: AnthropomorphHeadSidePede
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_pede
@@ -917,7 +925,7 @@
 - type: marking
   id: AnthropomorphHeadSidePlumeant
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_plumeant
@@ -925,7 +933,7 @@
 - type: marking
   id: AnthropomorphHeadSidePointy
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_pointy
@@ -933,7 +941,7 @@
 - type: marking
   id: AnthropomorphHeadSidePossum
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_possum
@@ -941,7 +949,7 @@
 - type: marking
   id: AnthropomorphHeadSideRabbitLong
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph, Felinid, Human]
+  speciesRestriction: [Anthropomorph, Tajaran, Human]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_rabbit
@@ -949,7 +957,7 @@
 - type: marking
   id: AnthropomorphHeadSideRabbitAlt
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph, Felinid, Human]
+  speciesRestriction: [Anthropomorph, Tajaran, Human]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_rabbitalt
@@ -961,7 +969,7 @@
 - type: marking
   id: AnthropomorphHeadSideRenamon
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_renamon
@@ -971,7 +979,7 @@
 - type: marking
   id: AnthropomorphHeadSideRoundant
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_roundant
@@ -979,7 +987,7 @@
 - type: marking
   id: AnthropomorphHeadSideSergal
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_sergal
@@ -997,7 +1005,7 @@
 - type: marking
   id: AnthropomorphHeadSideThinant
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_thinant
@@ -1005,7 +1013,7 @@
 - type: marking
   id: AnthropomorphHeadSideWolf
   bodyPart: HeadSide
-  # speciesRestriction: [Anthropomorph, Felinid, Human]
+  speciesRestriction: [Anthropomorph, Tajaran, Human]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_wolf
@@ -1111,6 +1119,7 @@
 - type: marking
   id: AnthropomorphTailInsect
   bodyPart: Tail
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph, Felinid, Arachnid]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_tails.rsi
@@ -1123,6 +1132,7 @@
 - type: marking
   id: AnthropomorphTailInsectJalo
   bodyPart: Tail
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph, Felinid]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_tails.rsi
@@ -1267,6 +1277,7 @@
 - type: marking
   id: AnthropomorphTailHawk
   bodyPart: Tail
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph, Felinid, Harpy]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_tails.rsi
@@ -1293,6 +1304,7 @@
 - type: marking
   id: AnthropomorphTailInsected
   bodyPart: Tail
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_tails.rsi
@@ -1442,6 +1454,7 @@
 - type: marking
   id: AnthropomorphTailShortHawk
   bodyPart: Tail
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph, Felinid, Harpy]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_tails.rsi
@@ -1545,6 +1558,7 @@
 - type: marking
   id: AnthropomorphChestAbsarms
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1553,6 +1567,7 @@
 - type: marking
   id: AnthropomorphChestAbsbelly
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1561,6 +1576,7 @@
 - type: marking
   id: AnthropomorphChestBat
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1571,6 +1587,7 @@
 - type: marking
   id: AnthropomorphChestBee
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1579,6 +1596,7 @@
 - type: marking
   id: AnthropomorphChestBovine
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1587,6 +1605,7 @@
 - type: marking
   id: AnthropomorphChestChemlight
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1597,6 +1616,7 @@
 - type: marking
   id: AnthropomorphChestCorgi
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1605,6 +1625,7 @@
 - type: marking
   id: AnthropomorphChestCorvid
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1613,6 +1634,7 @@
 - type: marking
   id: AnthropomorphChestDalmation
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1621,6 +1643,7 @@
 - type: marking
   id: AnthropomorphChestDeer
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1629,6 +1652,7 @@
 - type: marking
   id: AnthropomorphChestDog
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1639,6 +1663,7 @@
 - type: marking
   id: AnthropomorphChestEasternDragon
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph, Reptilian]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1647,6 +1672,7 @@
 - type: marking
   id: AnthropomorphChestEevee
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1655,6 +1681,7 @@
 - type: marking
   id: AnthropomorphChestTemplate
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1663,6 +1690,7 @@
 - type: marking
   id: AnthropomorphChestFennec
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1671,6 +1699,7 @@
 - type: marking
   id: AnthropomorphChestFloof
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1679,6 +1708,7 @@
 - type: marking
   id: AnthropomorphChestFox
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1687,6 +1717,7 @@
 - type: marking
   id: AnthropomorphChestGlossV1
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph, Reptilian, Dwarf, Human]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1695,6 +1726,7 @@
 - type: marking
   id: AnthropomorphChestGlossV2
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph, Reptilian, Dwarf, Human]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1703,6 +1735,7 @@
 - type: marking
   id: AnthropomorphChestHawk
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1711,6 +1744,7 @@
 - type: marking
   id: AnthropomorphChestHusky
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1719,6 +1753,7 @@
 - type: marking
   id: AnthropomorphChestHyena
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1729,6 +1764,7 @@
 - type: marking
   id: AnthropomorphChestLightTiger
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1737,6 +1773,7 @@
 - type: marking
   id: AnthropomorphChestMoth
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1745,6 +1782,7 @@
 - type: marking
   id: AnthropomorphChestNoodleDragon
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph, Reptilian]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1753,6 +1791,7 @@
 - type: marking
   id: AnthropomorphChestNoodleDragonDots
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph, Reptilian]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1763,6 +1802,7 @@
 - type: marking
   id: AnthropomorphChestDots
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1771,6 +1811,7 @@
 - type: marking
   id: AnthropomorphChestOrca
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1779,6 +1820,7 @@
 - type: marking
   id: AnthropomorphChestOtie
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1789,6 +1831,7 @@
 - type: marking
   id: AnthropomorphChestOtter
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1797,6 +1840,7 @@
 - type: marking
   id: AnthropomorphChestPanter
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1805,6 +1849,7 @@
 - type: marking
   id: AnthropomorphChestPigeon
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1813,6 +1858,7 @@
 - type: marking
   id: AnthropomorphChestPossum
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1821,6 +1867,7 @@
 - type: marking
   id: AnthropomorphChestRaccoonAlt
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1829,6 +1876,7 @@
 - type: marking
   id: AnthropomorphChestRaccoon
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1837,6 +1885,7 @@
 - type: marking
   id: AnthropomorphChestRedPanda
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1845,6 +1894,7 @@
 - type: marking
   id: AnthropomorphChestSabresune
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph, Dwarf, Human]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1853,6 +1903,7 @@
 - type: marking
   id: AnthropomorphChestSergal
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1861,6 +1912,7 @@
 - type: marking
   id: AnthropomorphChestShark
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1869,6 +1921,7 @@
 - type: marking
   id: AnthropomorphChestShepherd
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1879,6 +1932,7 @@
 - type: marking
   id: AnthropomorphChestShrike
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1887,6 +1941,7 @@
 - type: marking
   id: AnthropomorphChestSkunk
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1895,6 +1950,7 @@
 - type: marking
   id: AnthropomorphChestSloog
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1905,6 +1961,7 @@
 - type: marking
   id: AnthropomorphChestTajaran
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1913,6 +1970,7 @@
 - type: marking
   id: AnthropomorphChestTiger
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1923,6 +1981,7 @@
 - type: marking
   id: AnthropomorphChestVulp
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1931,6 +1990,7 @@
 - type: marking
   id: AnthropomorphChestWolf
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_markings.rsi
@@ -1941,6 +2001,7 @@
 - type: marking
   id: AnthropomorphChestSynthLizardLight
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph, Reptilian]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/synthliz_body_markings.rsi
@@ -1951,6 +2012,7 @@
 - type: marking
   id: AnthropomorphChestSynthLizardCutes
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph, Reptilian]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/synthliz_body_markings.rsi
@@ -1959,6 +2021,7 @@
 - type: marking
   id: AnthropomorphChestSynthLizardPecs
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph, Reptilian]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/synthliz_body_markings.rsi
@@ -1967,6 +2030,7 @@
 - type: marking
   id: AnthropomorphChestSynthLizardSplates
   bodyPart: Chest
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph, Reptilian]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/synthliz_body_markings.rsi
@@ -1977,7 +2041,8 @@
 - type: marking
   id: AnthropomorphNeckOverlayInsectFluffFlat
   bodyPart: HeadTop
-  # speciesRestriction: [Anthropomorph]
+  groupWhitelist: [ DisabledCustomization ]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/neck_fluff.rsi
     state: insect_fluff_flat
@@ -1987,7 +2052,7 @@
 - type: marking
   id: AnthropomorphNeckOverlayHyenaFluff
   bodyPart: HeadTop
-  # speciesRestriction: [Anthropomorph]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/neck_fluff.rsi
     state: insect_fluff_hyena
@@ -1997,7 +2062,7 @@
 - type: marking
   id: AnthropomorphNeckOverlayHyenaStripesFluff
   bodyPart: HeadTop
-  # speciesRestriction: [Anthropomorph]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/neck_fluff.rsi
     state: insect_fluff_hyena
@@ -2009,7 +2074,7 @@
 - type: marking
   id: AnthropomorphNeckOverlayRenamonFluff
   bodyPart: HeadTop
-  # speciesRestriction: [Anthropomorph]
+  speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/neck_fluff.rsi
     state: insect_fluff_renamon
@@ -2017,6 +2082,7 @@
 - type: marking
   id: AnthropomorphNeckOverlayInsectFluffSoft
   bodyPart: HeadTop
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/neck_fluff.rsi
@@ -2044,6 +2110,7 @@
 - type: marking
   id: AnthropomorphChestOverlayBeetle
   bodyPart: HeadTop
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/wings.rsi
@@ -2060,6 +2127,7 @@
 - type: marking
   id: AnthropomorphChestOverlayDelta
   bodyPart: HeadTop
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/wings.rsi
@@ -2068,6 +2136,7 @@
 - type: marking
   id: AnthropomorphChestOverlayDragonAlt
   bodyPart: HeadTop
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph, Reptilian]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/wings.rsi
@@ -2084,6 +2153,7 @@
 - type: marking
   id: AnthropomorphChestOverlayInsect
   bodyPart: HeadTop
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/wings.rsi
@@ -2092,6 +2162,7 @@
 - type: marking
   id: AnthropomorphChestOverlayMiniBat
   bodyPart: HeadTop
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/wings.rsi
@@ -2100,6 +2171,7 @@
 - type: marking
   id: AnthropomorphChestOverlayMiniFeather
   bodyPart: HeadTop
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/wings.rsi
@@ -2108,6 +2180,7 @@
 - type: marking
   id: AnthropomorphChestOverlayStraight
   bodyPart: HeadTop
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/wings.rsi
@@ -2116,6 +2189,7 @@
 - type: marking
   id: AnthropomorphChestOverlaySwept
   bodyPart: HeadTop
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/wings.rsi
@@ -2124,6 +2198,7 @@
 - type: marking
   id: AnthropomorphChestOverlayTinyBat
   bodyPart: HeadTop
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/wings.rsi
@@ -2132,6 +2207,7 @@
 - type: marking
   id: AnthropomorphChestOverlayTinyFeather
   bodyPart: HeadTop
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/wings.rsi
@@ -2140,6 +2216,7 @@
 - type: marking
   id: AnthropomorphChestOverlayVariable
   bodyPart: HeadTop
+  groupWhitelist: [ DisabledCustomization ]
   # speciesRestriction: [Anthropomorph]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/wings.rsi

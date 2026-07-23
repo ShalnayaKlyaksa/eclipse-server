@@ -1,5 +1,6 @@
 <BoxContainer
     xmlns="https://spacestation14.io"
+    xmlns:ui="clr-namespace:Content.Client.HealthAnalyzer.UI"
     VerticalExpand="True"
     Orientation="Vertical">
     <Label
@@ -23,6 +24,21 @@
         </BoxContainer>
 
         <PanelContainer StyleClasses="LowDivider" />
+
+        <BoxContainer Name="AdvancedHealthContainer" Visible="False" Orientation="Horizontal" Margin="0 5">
+            <ui:AdvancedHealthBodyDollControl Name="AdvancedBodyDoll" />
+            <BoxContainer Orientation="Vertical" Margin="8 0 0 0">
+                <Label Text="{Loc advanced-health-scanner-title}" StyleClasses="LabelHeading" />
+                <Label Name="AdvancedBloodLabel" />
+                <Label Name="AdvancedOxygenLabel" />
+                <Label Name="AdvancedPainLabel" />
+                <Label Name="AdvancedShockLabel" />
+                <Label Name="AdvancedTraumaLabel" />
+                <Label Name="AdvancedBleedingLabel" MaxWidth="180" />
+            </BoxContainer>
+        </BoxContainer>
+
+        <PanelContainer Name="AdvancedHealthDivider" Visible="False" StyleClasses="LowDivider" />
 
         <GridContainer Margin="0 5 0 0" Columns="2">
             <Label Text="{Loc 'health-analyzer-window-entity-status-text'}" />

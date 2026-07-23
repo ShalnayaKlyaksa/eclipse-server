@@ -1,0 +1,942 @@
+# Arkane racial features, ported from the Shadowkin markings in space-erida-14 (_Backmen).
+# The sprites already shipped in this build under _Eclipse/Mobs/Customization/Shadowkin, they just had no
+# marking prototypes, so Arkanes had no racial features at all.
+#
+# Arkanes build on the human body, so these live in the Human marking group; speciesRestriction then narrows
+# them to Arkanes so ordinary humans never see them.
+
+- type: marking
+  id: BodyShadowkinArrow
+  bodyPart: LLeg
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_overlay.rsi
+      state: body_arrow
+
+- type: marking
+  id: BodyShadowkinBlackHole
+  bodyPart: LLeg
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_overlay.rsi
+      state: body_blackhole
+
+- type: marking
+  id: BodyShadowkinBrace
+  bodyPart: LLeg
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_overlay.rsi
+      state: body_brace
+
+- type: marking
+  id: BodyShadowkinBrawly
+  bodyPart: LLeg
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_overlay.rsi
+      state: body_brawly
+
+- type: marking
+  id: BodyShadowkinHeart
+  bodyPart: LLeg
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_overlay.rsi
+      state: body_heart
+
+- type: marking
+  id: BodyShadowkinInk
+  bodyPart: LLeg
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_overlay.rsi
+      state: body_ink
+
+- type: marking
+  id: BodyShadowkinInk2
+  bodyPart: LLeg
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_overlay.rsi
+      state: body_ink2
+
+- type: marking
+  id: BodyShadowkinInk3
+  bodyPart: LLeg
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_overlay.rsi
+      state: body_ink3
+
+- type: marking
+  id: BodyShadowkinInk4
+  bodyPart: LLeg
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_overlay.rsi
+      state: body_ink4
+
+- type: marking
+  id: BodyShadowkinInk5
+  bodyPart: LLeg
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_overlay.rsi
+      state: body_ink5
+
+- type: marking
+  id: BodyShadowkinInk6
+  bodyPart: LLeg
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_overlay.rsi
+      state: body_ink6
+
+- type: marking
+  id: BodyShadowkinInkAnim
+  bodyPart: LLeg
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_overlay.rsi
+      state: body_ink_anim
+
+- type: marking
+  id: BodyShadowkinLines
+  bodyPart: LLeg
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_overlay.rsi
+      state: body_lines
+
+- type: marking
+  id: BodyShadowkinNeck
+  bodyPart: LLeg
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_overlay.rsi
+      state: body_neck
+
+- type: marking
+  id: BodyShadowkinShield
+  bodyPart: LLeg
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_overlay.rsi
+      state: body_shield
+
+- type: marking
+  id: BodyShadowkinVacuum
+  bodyPart: LLeg
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_overlay.rsi
+      state: body_vacuum
+
+- type: marking
+  id: BodyShadowkinGauzeShoulder
+  bodyPart: LLeg
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_overlay.rsi
+      state: gauze_shoulder_shadowkin
+
+- type: marking
+  id: BodyShadowkinGauzeLowArmR
+  bodyPart: LLeg
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_overlay.rsi
+      state: gauze_lowerarm_r_shadowkin
+
+- type: marking
+  id: BodyShadowkinGauzeUpArmL
+  bodyPart: LLeg
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_overlay.rsi
+      state: gauze_upperarm_l_shadowkin
+
+- type: marking
+  id: BodyShadowkinGauzeUpArmR
+  bodyPart: LLeg
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_overlay.rsi
+      state: gauze_upperarm_r_shadowkin
+
+- type: marking
+  id: BodyShadowkinGauzeUpLegL
+  bodyPart: LLeg
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_overlay.rsi
+      state: gauze_upperleg_l_shadowkin
+
+- type: marking
+  id: BodyShadowkinGauzeUpLegR
+  bodyPart: LLeg
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_overlay.rsi
+      state: gauze_upperleg_r_shadowkin
+
+- type: marking
+  id: EarsShadowkin
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/ears.rsi
+      state: shadowkin
+
+- type: marking
+  id: EarsShadowkinStriped
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/ears.rsi
+      state: shadowkin
+    - sprite: _Backmen/Mobs/Customization/ears.rsi
+      state: shadowkin_stripes
+
+- type: marking
+  id: EarsShadowkinStripes
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/ears.rsi
+      state: shadowkin
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: striped_secondary
+
+- type: marking
+  id: EarsShadowkinElegant
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/ears.rsi
+      state: shadowkin
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: elegant_secondary
+
+- type: marking
+  id: EarsShadowkinMotley
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/ears.rsi
+      state: shadowkin
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: motley_secondary
+
+- type: marking
+  id: EarsShadowkinShady
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: shady
+
+- type: marking
+  id: EarsShadowkinPiercingAll
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/ears.rsi
+      state: shadowkin
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: piercing_all
+
+- type: marking
+  id: EarsShadowkinPiercingLeft
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/ears.rsi
+      state: shadowkin
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: piercing_left
+
+- type: marking
+  id: EarsShadowkinPiercingRight
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/ears.rsi
+      state: shadowkin
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: piercing_right
+
+- type: marking
+  id: EarsShadowkinRingedAll
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/ears.rsi
+      state: shadowkin
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: ringed_all_secondary
+
+- type: marking
+  id: EarsShadowkinRingedLeft
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/ears.rsi
+      state: shadowkin
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: ringed_left_secondary
+
+- type: marking
+  id: EarsShadowkinRingedRight
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/ears.rsi
+      state: shadowkin
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: ringed_right_secondary
+
+- type: marking
+  id: EarsShadowkinGauzedAll
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/ears.rsi
+      state: shadowkin
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: gauze_ear_all_default
+
+- type: marking
+  id: EarsShadowkinGauzedLeft
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/ears.rsi
+      state: shadowkin
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: gauze_ear_l_default
+
+- type: marking
+  id: EarsShadowkinGauzedRight
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/ears.rsi
+      state: shadowkin
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: gauze_ear_r_default
+
+- type: marking
+  id: EarsShadowkinFluffy
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: fluffy_default
+
+- type: marking
+  id: EarsShadowkinFluffyButterfly
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: fluffy_default
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: fluffy_butterfly
+
+- type: marking
+  id: EarsShadowkinFluffyCowling
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: fluffy_default
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: fluffy_cowling
+
+- type: marking
+  id: EarsShadowkinFluffyCrow
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: fluffy_default
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: fluffy_crow
+
+- type: marking
+  id: EarsShadowkinFluffyMotley
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: fluffy_default
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: fluffy_motley
+
+- type: marking
+  id: EarsShadowkinFluffySpidy
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: fluffy_default
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: fluffy_spidy
+
+- type: marking
+  id: EarsShadowkinFluffyRingedAll
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: fluffy_default
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: fluffy_ringed_all
+
+- type: marking
+  id: EarsShadowkinFluffyRingedLeft
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: fluffy_default
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: fluffy_ringed_left
+
+- type: marking
+  id: EarsShadowkinFluffyRingedRight
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: fluffy_default
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: fluffy_ringed_right
+
+- type: marking
+  id: EarsShadowkinSaggy
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: saggy_default
+
+- type: marking
+  id: EarsShadowkinSaggyBrawly
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: saggy_default
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: saggy_brawly
+
+- type: marking
+  id: EarsShadowkinSaggyZebra
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: saggy_default
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: saggy_zebra
+
+- type: marking
+  id: EarsShadowkinSaggyGradient
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: saggy_default
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: saggy_gradient
+
+- type: marking
+  id: EarsShadowkinSaggyGauzedAll
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: saggy_default
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: saggy_gauze_all
+
+- type: marking
+  id: EarsShadowkinSaggyGauzedLeft
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: saggy_default
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: saggy_gauze_l
+
+- type: marking
+  id: EarsShadowkinSaggyGauzedRight
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: saggy_default
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: saggy_gauze_r
+
+- type: marking
+  id: EarsShadowkinShort
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: short_default
+
+- type: marking
+  id: EarsShadowkinShortButterfly
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: short_default
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: short_butterfly
+
+- type: marking
+  id: EarsShadowkinShortRingedAll
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: short_default
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: short_ringed_all
+
+- type: marking
+  id: EarsShadowkinShortRingedLeft
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: short_default
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: short_ringed_left
+
+- type: marking
+  id: EarsShadowkinShortRingedRight
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: short_default
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: short_ringed_right
+
+- type: marking
+  id: EarsShadowkinBull
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: bull_default
+
+- type: marking
+  id: EarsShadowkinBullSmooth
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: bull_default
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: bull_smooth
+
+- type: marking
+  id: EarsShadowkinAqua
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: aqua_default
+
+- type: marking
+  id: EarsShadowkinAquaIncolor
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: aqua_default
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x32.rsi
+      state: aqua_incolor
+
+- type: marking
+  id: EarsShadowkinAlpha
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x64.rsi
+      state: alpha_default
+
+- type: marking
+  id: EarsShadowkinAlphaStripy
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x64.rsi
+      state: alpha_default
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x64.rsi
+      state: alpha_stripy
+
+- type: marking
+  id: EarsShadowkinAlphaTorch
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x64.rsi
+      state: alpha_default
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x64.rsi
+      state: alpha_torch
+
+- type: marking
+  id: EarsShadowkinAlphaTraced
+  bodyPart: HeadTop
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x64.rsi
+      state: alpha_default
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_ears_32x64.rsi
+      state: alpha_traced
+
+- type: marking
+  id: TailShadowkin
+  bodyPart: Tail
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/tails64x32.rsi
+      state: shadowkin
+
+- type: marking
+  id: TailShadowkinBig
+  bodyPart: Tail
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/tails64x32.rsi
+      state: shadowkin_big
+
+- type: marking
+  id: TailShadowkinBigFluff
+  bodyPart: Tail
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/tails64x32.rsi
+      state: shadowkin_big_fluff
+
+- type: marking
+  id: TailShadowkinShorter
+  bodyPart: Tail
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/tails32x32.rsi
+      state: shadowkin_shorter
+
+- type: marking
+  id: TailShadowkinMedium
+  bodyPart: Tail
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/tails32x32.rsi
+      state: shadowkin_medium
+
+- type: marking
+  id: TailShadowkinDragon
+  bodyPart: Tail
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/tails64x32.rsi
+      state: shadowkin
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: default_dragon
+
+- type: marking
+  id: TailShadowkinStriped
+  bodyPart: Tail
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/tails64x32.rsi
+      state: shadowkin
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: default_striped
+
+- type: marking
+  id: TailShadowkinBigSkeleton
+  bodyPart: Tail
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/tails64x32.rsi
+      state: shadowkin_big
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: big_skeleton
+
+- type: marking
+  id: TailShadowkinBigOrbit
+  bodyPart: Tail
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/tails64x32.rsi
+      state: shadowkin_big
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: big_orbit
+
+- type: marking
+  id: TailShadowkinBigStriped
+  bodyPart: Tail
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/tails64x32.rsi
+      state: shadowkin_big
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: big_striped
+
+- type: marking
+  id: TailShadowkinBigTwoColored
+  bodyPart: Tail
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/tails64x32.rsi
+      state: shadowkin_big
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: big_twocolored
+
+- type: marking
+  id: TailShadowkinBigFluffArrowy
+  bodyPart: Tail
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/tails64x32.rsi
+      state: shadowkin_big_fluff
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: bigfluff_arrowy
+
+- type: marking
+  id: TailShadowkinBigFluffSpirals
+  bodyPart: Tail
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/tails64x32.rsi
+      state: shadowkin_big_fluff
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: bigfluff_spirals
+
+- type: marking
+  id: TailShadowkinShorterBrush
+  bodyPart: Tail
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/tails32x32.rsi
+      state: shadowkin_shorter
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_32x32.rsi
+      state: shorter_brush
+
+- type: marking
+  id: TailShadowkinMediumTwoColored
+  bodyPart: Tail
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Backmen/Mobs/Customization/tails32x32.rsi
+      state: shadowkin_medium
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_32x32.rsi
+      state: medium_twocolored
+
+- type: marking
+  id: TailShadowkinSnail
+  bodyPart: Tail
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: tail_snail
+
+- type: marking
+  id: TailShadowkinSnailGradient
+  bodyPart: Tail
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: tail_snail
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: snail_gradient
+
+- type: marking
+  id: TailShadowkinSnailSpotty
+  bodyPart: Tail
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: tail_snail
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: snail_spotty
+
+- type: marking
+  id: TailShadowkinSnailStriped
+  bodyPart: Tail
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: tail_snail
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: snail_striped
+
+- type: marking
+  id: TailShadowkinFluffy
+  bodyPart: Tail
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: tail_fluffy
+
+- type: marking
+  id: TailShadowkinFluffyStainy
+  bodyPart: Tail
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: tail_fluffy
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: fluffy_stainy
+
+- type: marking
+  id: TailShadowkinHook
+  bodyPart: Tail
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: tail_hook
+
+- type: marking
+  id: TailShadowkinHookLines
+  bodyPart: Tail
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: tail_hook
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: hook_lines
+
+- type: marking
+  id: TailShadowkinHookSnake
+  bodyPart: Tail
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: tail_hook
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: hook_snake
+
+- type: marking
+  id: TailShadowkinHookSpirals
+  bodyPart: Tail
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: tail_hook
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: hook_spirals
+
+- type: marking
+  id: TailShadowkinHookTraced
+  bodyPart: Tail
+  groupWhitelist: [Human]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: tail_hook
+    - sprite: _Eclipse/Mobs/Customization/Shadowkin/shadowkin_tails_64x32.rsi
+      state: hook_traced

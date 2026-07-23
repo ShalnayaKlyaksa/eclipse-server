@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Shared.Body;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
+using Content.Shared.Humanoid.Prototypes;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
@@ -16,6 +17,20 @@ public sealed class MarkingsViewModel
     [Dependency] private readonly IPrototypeManager _prototype = default!;
 
     private bool _enforceLimits = true;
+    private ProtoId<SpeciesPrototype>? _species;
+
+    public ProtoId<SpeciesPrototype>? Species
+    {
+        get => _species;
+        set
+        {
+            if (_species == value)
+                return;
+
+            _species = value;
+            EnforcementsChanged?.Invoke();
+        }
+    }
 
     /// <summary>
     /// Whether the markings view model will enforce limitations on how many markings an organ can have
@@ -268,7 +283,7 @@ public sealed class MarkingsViewModel
         if (!_prototype.TryIndex(organData.Group, out var groupPrototype))
             return false;
 
-        if (EnforceGroupAndSexRestrictions && !_marking.CanBeApplied(organData.Group, profileData.Sex, markingProto))
+        if (EnforceGroupAndSexRestrictions && !_marking.CanBeApplied(Species, organData.Group, profileData.Sex, markingProto))
             return false;
 
         _markings[organ] = _markings.GetValueOrDefault(organ) ?? [];
@@ -404,7 +419,7 @@ public sealed class MarkingsViewModel
             var actualMarkings = _markings.GetValueOrDefault(organ)?.ShallowClone() ?? [];
 
             _marking.EnsureValidColors(actualMarkings);
-            _marking.EnsureValidGroupAndSex(actualMarkings, organData.Group, organProfileData.Sex);
+            _marking.EnsureValidSpeciesGroupAndSex(actualMarkings, Species, organData.Group, organProfileData.Sex);
             _marking.EnsureValidLayers(actualMarkings, organData.Layers);
             _marking.EnsureValidLimits(actualMarkings, organData.Group, organData.Layers, organProfileData.SkinColor, organProfileData.EyeColor);
 

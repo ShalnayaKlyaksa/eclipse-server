@@ -20,7 +20,7 @@ public sealed partial class LayerMarkingPicker : BoxContainer
     private readonly HumanoidVisualLayers _layer;
     private readonly MarkingsViewModel _markingsModel;
     private List<ISearchableControl> _searchable = new();
-    private const int ColumnWidth = 300;
+    private const int ColumnWidth = 360;
 
     public LayerMarkingPicker(MarkingsViewModel markingsModel, ProtoId<OrganCategoryPrototype> organ, HumanoidVisualLayers layer, IReadOnlyDictionary<string, MarkingPrototype> allMarkings)
     {
@@ -108,6 +108,7 @@ public sealed partial class LayerMarkingPicker : BoxContainer
     {
         base.Resized();
 
-        Items.Columns = Math.Max(1, (int)(Width / ColumnWidth));
+        var availableWidth = SelectionItems.Width > 0f ? SelectionItems.Width : Width;
+        Items.Columns = Math.Max(1, (int)(availableWidth / ColumnWidth));
     }
 }

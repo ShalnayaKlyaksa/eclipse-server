@@ -1,0 +1,480 @@
+# Transfusable blood & fluid packs for the AdvancedHealth system.
+
+- type: entity
+  parent: BaseHealingItem
+  id: EclipseBloodProductBase
+  abstract: true
+  name: blood pack
+  description: A pack of whole blood for transfusion. Verify the blood type before use.
+  components:
+  - type: Sprite
+    state: bloodpack
+  - type: Item
+    heldPrefix: bloodpack
+  - type: BloodProduct
+    productType: WholeBlood
+    volume: 500
+    bodyFluid: Blood
+
+# --- Whole blood, all eight ABO/Rh types ---
+
+- type: entity
+  parent: EclipseBloodProductBase
+  id: EclipseBloodPackONeg
+  suffix: O-
+  components:
+  - type: BloodProduct
+    productType: WholeBlood
+    bloodGroup: O
+    rhPositive: false
+    bloodType: "O-"
+
+- type: entity
+  parent: EclipseBloodProductBase
+  id: EclipseBloodPackOPos
+  suffix: O+
+  components:
+  - type: BloodProduct
+    productType: WholeBlood
+    bloodGroup: O
+    rhPositive: true
+    bloodType: "O+"
+
+- type: entity
+  parent: EclipseBloodProductBase
+  id: EclipseBloodPackANeg
+  suffix: A-
+  components:
+  - type: BloodProduct
+    productType: WholeBlood
+    bloodGroup: A
+    rhPositive: false
+    bloodType: "A-"
+
+- type: entity
+  parent: EclipseBloodProductBase
+  id: EclipseBloodPackAPos
+  suffix: A+
+  components:
+  - type: BloodProduct
+    productType: WholeBlood
+    bloodGroup: A
+    rhPositive: true
+    bloodType: "A+"
+
+- type: entity
+  parent: EclipseBloodProductBase
+  id: EclipseBloodPackBNeg
+  suffix: B-
+  components:
+  - type: BloodProduct
+    productType: WholeBlood
+    bloodGroup: B
+    rhPositive: false
+    bloodType: "B-"
+
+- type: entity
+  parent: EclipseBloodProductBase
+  id: EclipseBloodPackBPos
+  suffix: B+
+  components:
+  - type: BloodProduct
+    productType: WholeBlood
+    bloodGroup: B
+    rhPositive: true
+    bloodType: "B+"
+
+- type: entity
+  parent: EclipseBloodProductBase
+  id: EclipseBloodPackABNeg
+  suffix: AB-
+  components:
+  - type: BloodProduct
+    productType: WholeBlood
+    bloodGroup: AB
+    rhPositive: false
+    bloodType: "AB-"
+
+- type: entity
+  parent: EclipseBloodProductBase
+  id: EclipseBloodPackABPos
+  suffix: AB+
+  components:
+  - type: BloodProduct
+    productType: WholeBlood
+    bloodGroup: AB
+    rhPositive: true
+    bloodType: "AB+"
+
+# --- Universal crystalloids (volume only, no oxygen carriers) ---
+
+- type: entity
+  parent: EclipseBloodProductBase
+  id: EclipseRingersPack
+  name: Ringer's lactate
+  description: A universal crystalloid. Restores blood volume and pressure, but carries no oxygen and dilutes the blood.
+  components:
+  - type: Sprite
+    state: bloodpack
+    color: "#7fd0e0ff"
+  - type: BloodProduct
+    productType: Ringers
+    volume: 600
+
+- type: entity
+  parent: EclipseBloodProductBase
+  id: EclipseSalinePack
+  name: saline solution
+  description: 0.9% sodium chloride. Restores blood volume and pressure, but carries no oxygen and dilutes the blood.
+  components:
+  - type: Sprite
+    state: bloodpack
+    color: "#cfe8ffff"
+  - type: BloodProduct
+    productType: Saline
+    volume: 550
+
+# --- Eclipse Station species fluids ---
+
+- type: entity
+  parent: EclipseBloodProductBase
+  id: EclipseHemolymphPackMA
+  suffix: M-A
+  components:
+  - type: Sprite
+    color: "#a7bdc8ff"
+  - type: BloodProduct
+    bodyFluid: Hemolymph
+    bloodType: "M-A"
+    fluidColor: "#a7bdc8"
+
+- type: entity
+  parent: EclipseHemolymphPackMA
+  id: EclipseHemolymphPackMB
+  suffix: M-B
+  components:
+  - type: BloodProduct
+    bodyFluid: Hemolymph
+    bloodType: "M-B"
+    fluidColor: "#a7bdc8"
+
+- type: entity
+  parent: EclipseHemolymphPackMA
+  id: EclipseHemolymphPackMO
+  suffix: M-O
+  components:
+  - type: BloodProduct
+    bodyFluid: Hemolymph
+    bloodType: "M-O"
+    fluidColor: "#a7bdc8"
+
+- type: entity
+  parent: EclipseBloodProductBase
+  id: EclipseDenseBloodPackDI
+  suffix: D-I
+  components:
+  - type: Sprite
+    color: "#650000ff"
+  - type: BloodProduct
+    bodyFluid: DenseBlood
+    bloodType: "D-I"
+    fluidColor: "#650000"
+
+- type: entity
+  parent: EclipseDenseBloodPackDI
+  id: EclipseDenseBloodPackDII
+  suffix: D-II
+  components:
+  - type: BloodProduct
+    bodyFluid: DenseBlood
+    bloodType: "D-II"
+    fluidColor: "#650000"
+
+- type: entity
+  parent: EclipseDenseBloodPackDI
+  id: EclipseDenseBloodPackDIII
+  suffix: D-III
+  components:
+  - type: BloodProduct
+    bodyFluid: DenseBlood
+    bloodType: "D-III"
+    fluidColor: "#650000"
+
+- type: entity
+  parent: EclipseBloodProductBase
+  id: EclipseThermobloodPackAsh
+  suffix: L-Ash
+  components:
+  - type: Sprite
+    color: "#340000ff"
+  - type: BloodProduct
+    bodyFluid: Thermoblood
+    bloodType: "L-Ash"
+    fluidColor: "#340000"
+
+- type: entity
+  parent: EclipseThermobloodPackAsh
+  id: EclipseThermobloodPackEmber
+  suffix: L-Ember
+  components:
+  - type: BloodProduct
+    bodyFluid: Thermoblood
+    bloodType: "L-Ember"
+    fluidColor: "#641d00"
+
+- type: entity
+  parent: EclipseThermobloodPackAsh
+  id: EclipseThermobloodPackSlag
+  suffix: L-Slag
+  components:
+  - type: BloodProduct
+    bodyFluid: Thermoblood
+    bloodType: "L-Slag"
+    fluidColor: "#2a0d0d"
+
+- type: entity
+  parent: EclipseBloodProductBase
+  id: EclipseReptileBloodPackKA
+  suffix: K-A
+  components:
+  - type: Sprite
+    color: "#174f20ff"
+  - type: BloodProduct
+    bodyFluid: ReptileBlood
+    bloodType: "K-A"
+    fluidColor: "#174f20"
+
+- type: entity
+  parent: EclipseReptileBloodPackKA
+  id: EclipseReptileBloodPackKB
+  suffix: K-B
+  components:
+  - type: BloodProduct
+    bodyFluid: ReptileBlood
+    bloodType: "K-B"
+    fluidColor: "#174f20"
+
+- type: entity
+  parent: EclipseReptileBloodPackKA
+  id: EclipseReptileBloodPackKO
+  suffix: K-O
+  components:
+  - type: BloodProduct
+    bodyFluid: ReptileBlood
+    bloodType: "K-O"
+    fluidColor: "#174f20"
+
+- type: entity
+  parent: EclipseReptileBloodPackKA
+  id: EclipseReptileBloodPackSA
+  suffix: S-A
+  components:
+  - type: BloodProduct
+    bodyFluid: ReptileBlood
+    bloodType: "S-A"
+    fluidColor: "#3f5f21"
+
+- type: entity
+  parent: EclipseReptileBloodPackKA
+  id: EclipseReptileBloodPackSB
+  suffix: S-B
+  components:
+  - type: BloodProduct
+    bodyFluid: ReptileBlood
+    bloodType: "S-B"
+    fluidColor: "#3f5f21"
+
+- type: entity
+  parent: EclipseReptileBloodPackKA
+  id: EclipseReptileBloodPackSO
+  suffix: S-O
+  components:
+  - type: BloodProduct
+    bodyFluid: ReptileBlood
+    bloodType: "S-O"
+    fluidColor: "#3f5f21"
+
+- type: entity
+  parent: EclipseBloodProductBase
+  id: EclipseTherianBloodPackTA
+  suffix: T-A
+  components:
+  - type: Sprite
+    color: "#d05a18ff"
+  - type: BloodProduct
+    bodyFluid: Blood
+    bloodType: "T-A"
+    fluidColor: "#d05a18"
+
+- type: entity
+  parent: EclipseTherianBloodPackTA
+  id: EclipseTherianBloodPackTB
+  suffix: T-B
+  components:
+  - type: BloodProduct
+    bodyFluid: Blood
+    bloodType: "T-B"
+    fluidColor: "#d05a18"
+
+- type: entity
+  parent: EclipseTherianBloodPackTA
+  id: EclipseTherianBloodPackTO
+  suffix: T-O
+  components:
+  - type: BloodProduct
+    bodyFluid: Blood
+    bloodType: "T-O"
+    fluidColor: "#d05a18"
+
+- type: entity
+  parent: EclipseBloodProductBase
+  id: EclipseIchorPackSpark
+  suffix: A-Spark
+  components:
+  - type: Sprite
+    color: "#4b174fff"
+  - type: BloodProduct
+    bodyFluid: Ichor
+    bloodType: "A-Spark"
+    fluidColor: "#4b174f"
+
+- type: entity
+  parent: EclipseIchorPackSpark
+  id: EclipseIchorPackAsh
+  suffix: A-Ash
+  components:
+  - type: BloodProduct
+    bodyFluid: Ichor
+    bloodType: "A-Ash"
+    fluidColor: "#2a0d0d"
+
+- type: entity
+  parent: EclipseIchorPackSpark
+  id: EclipseIchorPackVoid
+  suffix: A-Void
+  components:
+  - type: BloodProduct
+    bodyFluid: Ichor
+    bloodType: "A-Void"
+    fluidColor: "#1c1028"
+
+- type: entity
+  parent: EclipseBloodProductBase
+  id: EclipseLightBloodPackVA
+  suffix: V-A
+  components:
+  - type: Sprite
+    color: "#d88418ff"
+  - type: BloodProduct
+    bodyFluid: LightBlood
+    bloodType: "V-A"
+    fluidColor: "#d88418"
+
+- type: entity
+  parent: EclipseLightBloodPackVA
+  id: EclipseLightBloodPackVB
+  suffix: V-B
+  components:
+  - type: BloodProduct
+    bodyFluid: LightBlood
+    bloodType: "V-B"
+    fluidColor: "#d88418"
+
+- type: entity
+  parent: EclipseLightBloodPackVA
+  id: EclipseLightBloodPackVO
+  suffix: V-O
+  components:
+  - type: BloodProduct
+    bodyFluid: LightBlood
+    bloodType: "V-O"
+    fluidColor: "#d88418"
+
+- type: entity
+  parent: EclipseBloodProductBase
+  id: EclipseRefinedBloodPackLight
+  suffix: E-Light
+  components:
+  - type: Sprite
+    color: "#c9a7a7ff"
+  - type: BloodProduct
+    bodyFluid: RefinedBlood
+    bloodType: "E-Light"
+    fluidColor: "#c9a7a7"
+
+- type: entity
+  parent: EclipseRefinedBloodPackLight
+  id: EclipseRefinedBloodPackShade
+  suffix: E-Shade
+  components:
+  - type: BloodProduct
+    bodyFluid: RefinedBlood
+    bloodType: "E-Shade"
+    fluidColor: "#958080"
+
+- type: entity
+  parent: EclipseRefinedBloodPackLight
+  id: EclipseRefinedBloodPackLineage
+  suffix: E-Lineage
+  components:
+  - type: BloodProduct
+    bodyFluid: RefinedBlood
+    bloodType: "E-Lineage"
+    fluidColor: "#c9a7a7"
+
+- type: entity
+  parent: EclipseBloodProductBase
+  id: EclipsePlasmaPackNeutral
+  suffix: P-Neutral
+  components:
+  - type: Sprite
+    color: "#70d5ffff"
+  - type: BloodProduct
+    bodyFluid: Plasma
+    bloodType: "P-Neutral"
+    fluidColor: "#70d5ff"
+    oxygenCarryFactor: 0.65
+
+- type: entity
+  parent: EclipsePlasmaPackNeutral
+  id: EclipsePlasmaPackCryo
+  suffix: P-Cryo
+  components:
+  - type: BloodProduct
+    bodyFluid: Plasma
+    bloodType: "P-Cryo"
+    fluidColor: "#9ee8ff"
+    oxygenCarryFactor: 1
+
+- type: entity
+  parent: EclipsePlasmaPackNeutral
+  id: EclipsePlasmaPackElectro
+  suffix: P-Electro
+  components:
+  - type: BloodProduct
+    bodyFluid: Plasma
+    bloodType: "P-Electro"
+    fluidColor: "#e7b72d"
+    oxygenCarryFactor: 1
+
+- type: entity
+  parent: EclipsePlasmaPackNeutral
+  id: EclipsePlasmaPackAcid
+  suffix: P-Acid
+  components:
+  - type: BloodProduct
+    bodyFluid: Plasma
+    bloodType: "P-Acid"
+    fluidColor: "#4fbf4f"
+    oxygenCarryFactor: 1
+
+- type: entity
+  parent: EclipsePlasmaPackNeutral
+  id: EclipsePlasmaPackNeuro
+  suffix: P-Neuro
+  components:
+  - type: BloodProduct
+    bodyFluid: Plasma
+    bloodType: "P-Neuro"
+    fluidColor: "#a35dce"
+    oxygenCarryFactor: 1

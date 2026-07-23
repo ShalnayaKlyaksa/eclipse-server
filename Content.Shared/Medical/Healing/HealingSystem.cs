@@ -1,3 +1,4 @@
+using Content.Shared._Eclipse.AdvancedHealth;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
@@ -45,6 +46,9 @@ public sealed class HealingSystem : EntitySystem
     {
 
         if (args.Handled || args.Cancelled)
+            return;
+
+        if (HasComp<AdvancedHealthComponent>(target))
             return;
 
         if (!TryComp(args.Used, out HealingComponent? healing))
@@ -177,6 +181,9 @@ public sealed class HealingSystem : EntitySystem
     private bool TryHeal(Entity<HealingComponent> healing, Entity<DamageableComponent?> target, EntityUid user)
     {
         if (!Resolve(target, ref target.Comp, false))
+            return false;
+
+        if (HasComp<AdvancedHealthComponent>(target))
             return false;
 
         if (healing.Comp.DamageContainers is not null &&

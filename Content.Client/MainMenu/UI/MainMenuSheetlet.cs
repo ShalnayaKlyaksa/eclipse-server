@@ -27,6 +27,12 @@ public sealed class MainMenuSheetlet : Sheetlet<NanotrasenStylesheet>
             E<Label>().Identifier(MainMenuControl.StyleIdentifierLogoText)
                 .Font(sheet.BaseFont.GetFont(22, FontKind.Bold))
                 .FontColor(Color.FromHex("#F4A817")),
+            E<Label>().Identifier(MainMenuControl.StyleIdentifierLogoTitle)
+                .Font(sheet.BaseFont.GetFont(25, FontKind.Bold))
+                .FontColor(Color.FromHex("#F4A817")),
+            E<Label>().Identifier(MainMenuControl.StyleIdentifierLogoSub)
+                .Font(sheet.BaseFont.GetFont(14, FontKind.Bold))
+                .FontColor(Color.FromHex("#C6A25A")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierNavTitle)
                 .Font(sheet.BaseFont.GetFont(14, FontKind.Bold))
                 .FontColor(Color.FromHex("#F2F2F2")),

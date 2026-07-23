@@ -1,5 +1,6 @@
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using Content.Shared.Humanoid.Prototypes;
 
 namespace Content.Shared.Humanoid.Markings
 {
@@ -19,6 +20,9 @@ namespace Content.Shared.Humanoid.Markings
 
         [DataField("sexRestriction")]
         public Sex? SexRestriction { get; private set; }
+
+        [DataField("speciesRestriction")]
+        public List<ProtoId<SpeciesPrototype>>? SpeciesRestriction { get; private set; }
 
         // Corvax-Sponsors-Start
         [DataField("sponsorOnly")]

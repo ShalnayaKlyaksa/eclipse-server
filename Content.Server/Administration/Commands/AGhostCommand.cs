@@ -72,7 +72,7 @@ public sealed class AGhostCommand : LocalizedCommands
 
         var mindSystem = _entities.System<SharedMindSystem>();
         var metaDataSystem = _entities.System<MetaDataSystem>();
-        var ghostSystem = _entities.System<SharedGhostSystem>();
+        var ghostSystem = _entities.System<GhostSystem>();
         var transformSystem = _entities.System<TransformSystem>();
         var gameTicker = _entities.System<GameTicker>();
 
@@ -99,6 +99,7 @@ public sealed class AGhostCommand : LocalizedCommands
             : gameTicker.GetObserverSpawnPoint();
         var ghost = _entities.SpawnEntity(GameTicker.AdminObserverPrototypeName, coordinates);
         transformSystem.AttachToGridOrMap(ghost, _entities.GetComponent<TransformComponent>(ghost));
+        ghostSystem.SetGhostSprite(ghost, mindId, mind.CurrentEntity);
 
         if (canReturn)
         {

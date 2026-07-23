@@ -7,10 +7,20 @@
     xmlns:vote="clr-namespace:Content.Client.Voting.UI"
     xmlns:lobbyUi="clr-namespace:Content.Client.Lobby.UI"
     xmlns:info="clr-namespace:Content.Client.Info"
+    xmlns:profile="clr-namespace:Content.Client.Lobby.UI.ProfileEditorControls"
     xmlns:widgets="clr-namespace:Content.Client.UserInterface.Systems.Chat.Widgets">
     <TextureRect Access="Public"
                  Name="Background"
                  TexturePath="/Textures/Eclipse/MainMenu/eclipse_lobby_background.png"
+                 Stretch="KeepAspectCovered"
+                 VerticalExpand="True"
+                 HorizontalExpand="True" />
+
+    <!-- Second background layer, drawn over Background and faded in from transparent to cross-fade
+         between wallpapers. Once a fade completes its texture is moved down to Background. -->
+    <TextureRect Access="Public"
+                 Name="BackgroundNext"
+                 Visible="False"
                  Stretch="KeepAspectCovered"
                  VerticalExpand="True"
                  HorizontalExpand="True" />
@@ -33,207 +43,285 @@
                                   BorderColor="#A85E124D"
                                   BorderThickness="0 0 1 0" />
             </PanelContainer.PanelOverride>
-            <BoxContainer Orientation="Vertical"
+            <BoxContainer Name="SidebarColumn"
+                          Orientation="Vertical"
                           HorizontalExpand="True"
                           VerticalExpand="True"
                           Margin="32 30 24 32"
                           SeparationOverride="0">
-                <BoxContainer Orientation="Horizontal"
+                <BoxContainer Name="SidebarHeader"
+                              Orientation="Horizontal"
                               SetHeight="80"
-                              SeparationOverride="14">
-                    <TextureRect TexturePath="/Textures/Logo/eclipse-icon.png"
+                              RectClipContent="True"
+                              SeparationOverride="12">
+                    <TextureRect Name="SidebarLogoIcon"
+                                 TexturePath="/Textures/Logo/eclipse-icon.png"
                                  SetSize="64 64"
                                  Stretch="KeepAspectCentered"
                                  VerticalAlignment="Center" />
-                    <Label Text="ECLIPSE&#x0a;STATION"
-                           StyleIdentifier="mainMenuLogoText"
-                           VAlign="Center" />
+                    <!-- Thin gold accent rule between the mark and the wordmark. -->
+                    <PanelContainer SetWidth="2"
+                                    MinHeight="46"
+                                    VerticalAlignment="Center">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#A85E1288" />
+                        </PanelContainer.PanelOverride>
+                    </PanelContainer>
+                    <BoxContainer Orientation="Vertical"
+                                  VerticalAlignment="Center"
+                                  SeparationOverride="0">
+                        <Label Text="ECLIPSE"
+                               StyleIdentifier="mainMenuLogoTitle" />
+                        <Label Text="STATION"
+                               StyleIdentifier="mainMenuLogoSub" />
+                    </BoxContainer>
                 </BoxContainer>
 
-                <Control MinHeight="60" />
+                <Control Name="SidebarHeaderGap"
+                         SetHeight="60" />
 
-                <Button Name="PlaySectionButton"
-                        Access="Public"
-                        HorizontalExpand="True"
-                        MinHeight="86"
-                        StyleIdentifier="mainMenuPrimary">
-                    <BoxContainer Orientation="Horizontal"
+                <!-- The nav list is the only part of the sidebar that may lose space: a ScrollContainer measures as
+                     zero, so the BoxContainer hands the character panel and the exit button their heights first and
+                     gives the leftover here. ApplySidebarLayout shrinks the buttons long before this has to scroll. -->
+                <ScrollContainer Name="NavScroll"
+                                 VerticalExpand="True"
+                                 HorizontalExpand="True"
+                                 HScrollEnabled="False">
+                    <BoxContainer Name="NavColumn"
+                                  Orientation="Vertical"
                                   HorizontalExpand="True"
-                                  VerticalExpand="True"
-                                  Margin="4 0 4 0"
-                                  SeparationOverride="8">
-                        <TextureRect Name="PlaySectionIcon"
-                                     Access="Public"
-                                     TexturePath="/Textures/Eclipse/MainMenu/icons/nav-play.png"
-                                     SetSize="34 34"
-                                     Stretch="KeepAspectCentered"
-                                     ModulateSelfOverride="#E6A11A"
-                                     VerticalAlignment="Center" />
-                        <BoxContainer Orientation="Vertical"
-                                      HorizontalExpand="True"
-                                      VerticalAlignment="Center"
-                                      SeparationOverride="6">
-                            <Label Name="PlaySectionTitle"
-                                   Access="Public"
-                                   Text="&#x0418;&#x0413;&#x0420;&#x0410;&#x0422;&#x042C;"
-                                   StyleIdentifier="mainMenuNavTitle"
-                                   ClipText="True" />
-                            <Label Name="PlaySectionSubtitle"
-                                   Access="Public"
-                                   Text="&#x041B;&#x043E;&#x0431;&#x0431;&#x0438; &#x0441;&#x0435;&#x0440;&#x0432;&#x0435;&#x0440;&#x0430;"
-                                   StyleIdentifier="mainMenuNavSubtitle"
-                                   ClipText="True" />
-                        </BoxContainer>
+                                  SeparationOverride="0">
+
+                        <Button Name="PlaySectionButton"
+                                Access="Public"
+                                HorizontalExpand="True"
+                                MinHeight="86"
+                                StyleIdentifier="mainMenuPrimary">
+                            <BoxContainer Orientation="Horizontal"
+                                          HorizontalExpand="True"
+                                          VerticalExpand="True"
+                                          Margin="4 0 4 0"
+                                          SeparationOverride="8">
+                                <TextureRect Name="PlaySectionIcon"
+                                             Access="Public"
+                                             TexturePath="/Textures/Eclipse/MainMenu/icons/nav-play.png"
+                                             SetSize="34 34"
+                                             Stretch="KeepAspectCentered"
+                                             ModulateSelfOverride="#E6A11A"
+                                             VerticalAlignment="Center" />
+                                <BoxContainer Orientation="Vertical"
+                                              HorizontalExpand="True"
+                                              VerticalAlignment="Center"
+                                              SeparationOverride="6">
+                                    <Label Name="PlaySectionTitle"
+                                           Access="Public"
+                                           Text="&#x0418;&#x0413;&#x0420;&#x0410;&#x0422;&#x042C;"
+                                           StyleIdentifier="mainMenuNavTitle"
+                                           ClipText="True" />
+                                    <Label Name="PlaySectionSubtitle"
+                                           Access="Public"
+                                           Text="&#x041B;&#x043E;&#x0431;&#x0431;&#x0438; &#x0441;&#x0435;&#x0440;&#x0432;&#x0435;&#x0440;&#x0430;"
+                                           StyleIdentifier="mainMenuNavSubtitle"
+                                           ClipText="True" />
+                                </BoxContainer>
+                            </BoxContainer>
+                        </Button>
+
+                        <Control Name="NavGap1"
+                                 SetHeight="14" />
+
+                        <Button Name="StoreSectionButton"
+                                Access="Public"
+                                HorizontalExpand="True"
+                                MinHeight="76"
+                                StyleIdentifier="mainMenuNav">
+                            <BoxContainer Orientation="Horizontal"
+                                          HorizontalExpand="True"
+                                          VerticalExpand="True"
+                                          Margin="4 0 4 0"
+                                          SeparationOverride="8">
+                                <TextureRect Name="StoreSectionIcon"
+                                             Access="Public"
+                                             TexturePath="/Textures/Eclipse/MainMenu/icons/nav-store.png"
+                                             SetSize="34 34"
+                                             Stretch="KeepAspectCentered"
+                                             ModulateSelfOverride="#A6A6A6"
+                                             VerticalAlignment="Center" />
+                                <BoxContainer Orientation="Vertical"
+                                              HorizontalExpand="True"
+                                              VerticalAlignment="Center"
+                                              SeparationOverride="5">
+                                    <Label Name="StoreSectionTitle"
+                                           Access="Public"
+                                           Text="&#x041C;&#x0410;&#x0413;&#x0410;&#x0417;&#x0418;&#x041D;"
+                                           StyleIdentifier="mainMenuNavTitle"
+                                           ClipText="True" />
+                                    <Label Name="StoreSectionSubtitle"
+                                           Access="Public"
+                                           Text="&#x0412;&#x0438;&#x0442;&#x0440;&#x0438;&#x043D;&#x044B;"
+                                           StyleIdentifier="mainMenuNavSubtitle"
+                                           ClipText="True" />
+                                </BoxContainer>
+                            </BoxContainer>
+                        </Button>
+
+                        <Control Name="NavGap2"
+                                 SetHeight="14" />
+
+                        <Button Name="AccountSectionButton"
+                                Access="Public"
+                                HorizontalExpand="True"
+                                MinHeight="76"
+                                StyleIdentifier="mainMenuNav">
+                            <BoxContainer Orientation="Horizontal"
+                                          HorizontalExpand="True"
+                                          VerticalExpand="True"
+                                          Margin="4 0 4 0"
+                                          SeparationOverride="8">
+                                <TextureRect Name="AccountSectionIcon"
+                                             Access="Public"
+                                             TexturePath="/Textures/Eclipse/MainMenu/icons/nav-account.png"
+                                             SetSize="34 34"
+                                             Stretch="KeepAspectCentered"
+                                             ModulateSelfOverride="#A6A6A6"
+                                             VerticalAlignment="Center" />
+                                <BoxContainer Orientation="Vertical"
+                                              HorizontalExpand="True"
+                                              VerticalAlignment="Center"
+                                              SeparationOverride="5">
+                                    <Label Name="AccountSectionTitle"
+                                           Access="Public"
+                                           Text="&#x0410;&#x041A;&#x041A;&#x0410;&#x0423;&#x041D;&#x0422;"
+                                           StyleIdentifier="mainMenuNavTitle"
+                                           ClipText="True" />
+                                    <Label Name="AccountSectionSubtitle"
+                                           Access="Public"
+                                           Text="&#x041F;&#x0440;&#x043E;&#x0444;&#x0438;&#x043B;&#x044C; &#x0438;&#x0433;&#x0440;&#x043E;&#x043A;&#x0430;"
+                                           StyleIdentifier="mainMenuNavSubtitle"
+                                           ClipText="True" />
+                                </BoxContainer>
+                            </BoxContainer>
+                        </Button>
+
+                        <Control Name="NavGap3"
+                                 SetHeight="14" />
+
+                        <Button Name="SettingsSectionButton"
+                                Access="Public"
+                                HorizontalExpand="True"
+                                MinHeight="76"
+                                StyleIdentifier="mainMenuNav">
+                            <BoxContainer Orientation="Horizontal"
+                                          HorizontalExpand="True"
+                                          VerticalExpand="True"
+                                          Margin="4 0 4 0"
+                                          SeparationOverride="8">
+                                <TextureRect Name="SettingsSectionIcon"
+                                             Access="Public"
+                                             TexturePath="/Textures/Interface/VerbIcons/settings.svg.192dpi.png"
+                                             SetSize="34 34"
+                                             Stretch="KeepAspectCentered"
+                                             ModulateSelfOverride="#A6A6A6"
+                                             VerticalAlignment="Center" />
+                                <BoxContainer Orientation="Vertical"
+                                              HorizontalExpand="True"
+                                              VerticalAlignment="Center"
+                                              SeparationOverride="5">
+                                    <Label Name="SettingsSectionTitle"
+                                           Access="Public"
+                                           Text="&#x041D;&#x0410;&#x0421;&#x0422;&#x0420;&#x041E;&#x0419;&#x041A;&#x0418;"
+                                           StyleIdentifier="mainMenuNavTitle"
+                                           ClipText="True" />
+                                    <Label Name="SettingsSectionSubtitle"
+                                           Access="Public"
+                                           Text="&#x0418;&#x043D;&#x0442;&#x0435;&#x0440;&#x0444;&#x0435;&#x0439;&#x0441;"
+                                           StyleIdentifier="mainMenuNavSubtitle"
+                                           ClipText="True" />
+                                </BoxContainer>
+                            </BoxContainer>
+                        </Button>
+
+                        <Control Name="NavGap4"
+                                 SetHeight="14" />
+
+                        <Button Name="RoadmapSectionButton"
+                                Access="Public"
+                                HorizontalExpand="True"
+                                MinHeight="76"
+                                StyleIdentifier="mainMenuNav">
+                            <BoxContainer Orientation="Horizontal"
+                                          HorizontalExpand="True"
+                                          VerticalExpand="True"
+                                          Margin="4 0 4 0"
+                                          SeparationOverride="8">
+                                <TextureRect Name="RoadmapSectionIcon"
+                                             Access="Public"
+                                             TexturePath="/Textures/Eclipse/MainMenu/icons/nav-roadmap.png"
+                                             SetSize="34 34"
+                                             Stretch="KeepAspectCentered"
+                                             ModulateSelfOverride="#A6A6A6"
+                                             VerticalAlignment="Center" />
+                                <BoxContainer Orientation="Vertical"
+                                              HorizontalExpand="True"
+                                              VerticalAlignment="Center"
+                                              SeparationOverride="5">
+                                    <Label Name="RoadmapSectionTitle"
+                                           Access="Public"
+                                           Text="ПЛАНЫ"
+                                           StyleIdentifier="mainMenuNavTitle"
+                                           ClipText="True" />
+                                    <Label Name="RoadmapSectionSubtitle"
+                                           Access="Public"
+                                           Text="Дорожная карта"
+                                           StyleIdentifier="mainMenuNavSubtitle"
+                                           ClipText="True" />
+                                </BoxContainer>
+                            </BoxContainer>
+                        </Button>
+
+                        <Control Name="NavGap5"
+                                 SetHeight="14" />
+
+                        <Button Name="TutorialSectionButton"
+                                Access="Public"
+                                HorizontalExpand="True"
+                                MinHeight="76"
+                                StyleIdentifier="mainMenuNav">
+                            <BoxContainer Orientation="Horizontal"
+                                          HorizontalExpand="True"
+                                          VerticalExpand="True"
+                                          Margin="4 0 4 0"
+                                          SeparationOverride="8">
+                                <TextureRect Name="TutorialSectionIcon"
+                                             Access="Public"
+                                             TexturePath="/Textures/Interface/VerbIcons/examine.svg.192dpi.png"
+                                             SetSize="34 34"
+                                             Stretch="KeepAspectCentered"
+                                             ModulateSelfOverride="#A6A6A6"
+                                             VerticalAlignment="Center" />
+                                <BoxContainer Orientation="Vertical"
+                                              HorizontalExpand="True"
+                                              VerticalAlignment="Center"
+                                              SeparationOverride="5">
+                                    <Label Name="TutorialSectionTitle"
+                                           Access="Public"
+                                           Text="ОБУЧЕНИЕ"
+                                           StyleIdentifier="mainMenuNavTitle"
+                                           ClipText="True" />
+                                    <Label Name="TutorialSectionSubtitle"
+                                           Access="Public"
+                                           Text="Уроки и туториалы"
+                                           StyleIdentifier="mainMenuNavSubtitle"
+                                           ClipText="True" />
+                                </BoxContainer>
+                            </BoxContainer>
+                        </Button>
+
                     </BoxContainer>
-                </Button>
+                </ScrollContainer>
 
-                <Control MinHeight="14" />
-
-                <Button Name="StoreSectionButton"
-                        Access="Public"
-                        HorizontalExpand="True"
-                        MinHeight="76"
-                        StyleIdentifier="mainMenuNav">
-                    <BoxContainer Orientation="Horizontal"
-                                  HorizontalExpand="True"
-                                  VerticalExpand="True"
-                                  Margin="4 0 4 0"
-                                  SeparationOverride="8">
-                        <TextureRect Name="StoreSectionIcon"
-                                     Access="Public"
-                                     TexturePath="/Textures/Eclipse/MainMenu/icons/nav-store.png"
-                                     SetSize="34 34"
-                                     Stretch="KeepAspectCentered"
-                                     ModulateSelfOverride="#A6A6A6"
-                                     VerticalAlignment="Center" />
-                        <BoxContainer Orientation="Vertical"
-                                      HorizontalExpand="True"
-                                      VerticalAlignment="Center"
-                                      SeparationOverride="5">
-                            <Label Name="StoreSectionTitle"
-                                   Access="Public"
-                                   Text="&#x041C;&#x0410;&#x0413;&#x0410;&#x0417;&#x0418;&#x041D;"
-                                   StyleIdentifier="mainMenuNavTitle"
-                                   ClipText="True" />
-                            <Label Name="StoreSectionSubtitle"
-                                   Access="Public"
-                                   Text="&#x0412;&#x0438;&#x0442;&#x0440;&#x0438;&#x043D;&#x044B;"
-                                   StyleIdentifier="mainMenuNavSubtitle"
-                                   ClipText="True" />
-                        </BoxContainer>
-                    </BoxContainer>
-                </Button>
-
-                <Control MinHeight="14" />
-
-                <Button Name="AccountSectionButton"
-                        Access="Public"
-                        HorizontalExpand="True"
-                        MinHeight="76"
-                        StyleIdentifier="mainMenuNav">
-                    <BoxContainer Orientation="Horizontal"
-                                  HorizontalExpand="True"
-                                  VerticalExpand="True"
-                                  Margin="4 0 4 0"
-                                  SeparationOverride="8">
-                        <TextureRect Name="AccountSectionIcon"
-                                     Access="Public"
-                                     TexturePath="/Textures/Eclipse/MainMenu/icons/nav-account.png"
-                                     SetSize="34 34"
-                                     Stretch="KeepAspectCentered"
-                                     ModulateSelfOverride="#A6A6A6"
-                                     VerticalAlignment="Center" />
-                        <BoxContainer Orientation="Vertical"
-                                      HorizontalExpand="True"
-                                      VerticalAlignment="Center"
-                                      SeparationOverride="5">
-                            <Label Name="AccountSectionTitle"
-                                   Access="Public"
-                                   Text="&#x0410;&#x041A;&#x041A;&#x0410;&#x0423;&#x041D;&#x0422;"
-                                   StyleIdentifier="mainMenuNavTitle"
-                                   ClipText="True" />
-                            <Label Name="AccountSectionSubtitle"
-                                   Access="Public"
-                                   Text="&#x041F;&#x0440;&#x043E;&#x0444;&#x0438;&#x043B;&#x044C; &#x0438;&#x0433;&#x0440;&#x043E;&#x043A;&#x0430;"
-                                   StyleIdentifier="mainMenuNavSubtitle"
-                                   ClipText="True" />
-                        </BoxContainer>
-                    </BoxContainer>
-                </Button>
-
-                <Control MinHeight="14" />
-
-                <Button Name="SettingsSectionButton"
-                        Access="Public"
-                        HorizontalExpand="True"
-                        MinHeight="76"
-                        StyleIdentifier="mainMenuNav">
-                    <BoxContainer Orientation="Horizontal"
-                                  HorizontalExpand="True"
-                                  VerticalExpand="True"
-                                  Margin="4 0 4 0"
-                                  SeparationOverride="8">
-                        <TextureRect Name="SettingsSectionIcon"
-                                     Access="Public"
-                                     TexturePath="/Textures/Interface/VerbIcons/settings.svg.192dpi.png"
-                                     SetSize="34 34"
-                                     Stretch="KeepAspectCentered"
-                                     ModulateSelfOverride="#A6A6A6"
-                                     VerticalAlignment="Center" />
-                        <BoxContainer Orientation="Vertical"
-                                      HorizontalExpand="True"
-                                      VerticalAlignment="Center"
-                                      SeparationOverride="5">
-                            <Label Name="SettingsSectionTitle"
-                                   Access="Public"
-                                   Text="&#x041D;&#x0410;&#x0421;&#x0422;&#x0420;&#x041E;&#x0419;&#x041A;&#x0418;"
-                                   StyleIdentifier="mainMenuNavTitle"
-                                   ClipText="True" />
-                            <Label Name="SettingsSectionSubtitle"
-                                   Access="Public"
-                                   Text="&#x0418;&#x043D;&#x0442;&#x0435;&#x0440;&#x0444;&#x0435;&#x0439;&#x0441;"
-                                   StyleIdentifier="mainMenuNavSubtitle"
-                                   ClipText="True" />
-                        </BoxContainer>
-                    </BoxContainer>
-                </Button>
-
-                <Button Name="RoadmapSectionButton"
-                        Access="Public"
-                        HorizontalExpand="True"
-                        MinHeight="76"
-                        StyleIdentifier="mainMenuNav">
-                    <BoxContainer Orientation="Horizontal"
-                                  HorizontalExpand="True"
-                                  VerticalExpand="True"
-                                  Margin="4 0 4 0"
-                                  SeparationOverride="8">
-                        <TextureRect Name="RoadmapSectionIcon"
-                                     Access="Public"
-                                     TexturePath="/Textures/Eclipse/MainMenu/icons/nav-roadmap.png"
-                                     SetSize="34 34"
-                                     Stretch="KeepAspectCentered"
-                                     ModulateSelfOverride="#A6A6A6"
-                                     VerticalAlignment="Center" />
-                        <BoxContainer Orientation="Vertical"
-                                      HorizontalExpand="True"
-                                      VerticalAlignment="Center"
-                                      SeparationOverride="5">
-                            <Label Name="RoadmapSectionTitle"
-                                   Access="Public"
-                                   Text="ПЛАНЫ"
-                                   StyleIdentifier="mainMenuNavTitle"
-                                   ClipText="True" />
-                            <Label Name="RoadmapSectionSubtitle"
-                                   Access="Public"
-                                   Text="Дорожная карта"
-                                   StyleIdentifier="mainMenuNavSubtitle"
-                                   ClipText="True" />
-                        </BoxContainer>
-                    </BoxContainer>
-                </Button>
-
-                <Control VerticalExpand="True" />
+                <Control Name="SiteGapTop"
+                         SetHeight="12" />
 
                 <Button Name="SiteButton"
                         Access="Public"
@@ -270,14 +358,16 @@
                     </BoxContainer>
                 </Button>
 
-                <Control MinHeight="12" />
+                <Control Name="SiteGap"
+                         SetHeight="12" />
 
                 <lobbyUi:LobbyCharacterPreviewPanel Name="CharacterPreview"
                                                     Access="Public"
                                                     HorizontalExpand="True"
                                                     SetHeight="278" />
 
-                <Control MinHeight="12" />
+                <Control Name="PreviewGap"
+                         SetHeight="12" />
 
                 <Button Name="LeaveButton"
                         Access="Public"
@@ -339,7 +429,8 @@
                                  Margin="6 6 6 6" />
                 </PanelContainer>
 
-                <BoxContainer Orientation="Vertical"
+                <BoxContainer Name="AccountNameBlock"
+                              Orientation="Vertical"
                               SetWidth="148"
                               VerticalAlignment="Center"
                               SeparationOverride="2">
@@ -361,7 +452,8 @@
                     </PanelContainer.PanelOverride>
                 </PanelContainer>
 
-                <BoxContainer Orientation="Horizontal"
+                <BoxContainer Name="AccountRankBlock"
+                              Orientation="Horizontal"
                               SetWidth="190"
                               VerticalAlignment="Center"
                               SeparationOverride="8">
@@ -413,7 +505,8 @@
                     </PanelContainer.PanelOverride>
                 </PanelContainer>
 
-                <BoxContainer Orientation="Vertical"
+                <BoxContainer Name="AccountCurrencyBlock"
+                              Orientation="Vertical"
                               SetWidth="132"
                               VerticalAlignment="Center"
                               SeparationOverride="5">
@@ -489,25 +582,18 @@
                           VerticalExpand="True"
                           Margin="16 15 16 15"
                           SeparationOverride="11">
-                <BoxContainer Orientation="Horizontal">
+                <BoxContainer Orientation="Horizontal"
+                              SeparationOverride="8">
                     <Label Text="&#x041D;&#x041E;&#x0412;&#x041E;&#x0421;&#x0422;&#x0418;"
                            StyleIdentifier="mainMenuHeaderGold"
-                           HorizontalExpand="True" />
-                    <Button Name="NewsAdminButton"
-                            Access="Public"
-                            Visible="False"
-                            ReservesSpace="False"
-                            MinHeight="26"
-                            StyleIdentifier="mainMenuSecondary">
-                        <Label Text="&#x2699;"
-                               StyleIdentifier="mainMenuGoldSmall"
-                               Align="Center"
-                               VAlign="Center" />
-                    </Button>
-                    <Label Text="&#x0412;&#x0441;&#x0435; &#x043D;&#x043E;&#x0432;&#x043E;&#x0441;&#x0442;&#x0438; &#x2192;"
-                           StyleIdentifier="mainMenuGoldSmall"
-                           VAlign="Center"
-                           ClipText="True" />
+                           HorizontalExpand="True"
+                           VAlign="Center" />
+                    <!-- One dot per news entry, current one highlighted; populated in code. -->
+                    <BoxContainer Name="NewsDots"
+                                  Access="Public"
+                                  Orientation="Horizontal"
+                                  VerticalAlignment="Center"
+                                  SeparationOverride="5" />
                 </BoxContainer>
                 <PanelContainer MinHeight="1">
                     <PanelContainer.PanelOverride>
@@ -515,113 +601,66 @@
                     </PanelContainer.PanelOverride>
                 </PanelContainer>
 
-                <BoxContainer Orientation="Horizontal"
-                              HorizontalExpand="True"
-                              SeparationOverride="12">
-                    <PanelContainer SetSize="52 52">
-                        <PanelContainer.PanelOverride>
-                            <gfx:StyleBoxFlat BackgroundColor="#08101ACC"
-                                              BorderColor="#3B78A666"
-                                              BorderThickness="1" />
-                        </PanelContainer.PanelOverride>
-                        <TextureRect Name="NewsImage1"
-                                     Access="Public"
-                                     TexturePath="/Textures/Eclipse/MainMenu/news/news-tech.png"
-                                     Stretch="KeepAspectCovered"
-                                     VerticalExpand="True"
-                                     HorizontalExpand="True" />
-                    </PanelContainer>
-                    <BoxContainer Orientation="Vertical"
+                <!-- The whole card is a button: clicking it opens the full article. Its contents cross-fade
+                     between entries; NewsCardBody carries the fade alpha so the button chrome stays solid. -->
+                <Button Name="NewsCard"
+                        Access="Public"
+                        HorizontalExpand="True"
+                        VerticalExpand="True"
+                        StyleIdentifier="mainMenuNav">
+                    <BoxContainer Name="NewsCardBody"
+                                  Access="Public"
+                                  Orientation="Vertical"
                                   HorizontalExpand="True"
-                                  SeparationOverride="4">
-                        <Label Name="NewsDate1"
-                               Access="Public"
-                               Text="18.05.2024"
-                               StyleIdentifier="mainMenuSubtle" />
-                        <Label Name="NewsTitle1"
+                                  VerticalExpand="True"
+                                  Margin="10 10 10 8"
+                                  SeparationOverride="7">
+                        <PanelContainer SetHeight="132"
+                                        HorizontalExpand="True"
+                                        RectClipContent="True">
+                            <PanelContainer.PanelOverride>
+                                <gfx:StyleBoxFlat BackgroundColor="#08060333"
+                                                  BorderColor="#A85E1255"
+                                                  BorderThickness="1" />
+                            </PanelContainer.PanelOverride>
+                            <TextureRect Name="NewsImage"
+                                         Access="Public"
+                                         TexturePath="/Textures/Eclipse/MainMenu/news/news-tech.png"
+                                         Stretch="KeepAspectCovered"
+                                         VerticalExpand="True"
+                                         HorizontalExpand="True" />
+                        </PanelContainer>
+                        <BoxContainer Orientation="Horizontal"
+                                      HorizontalExpand="True"
+                                      SeparationOverride="8">
+                            <!-- Badge ("Важное!" / "Новость дня" / "Экстренное") is inserted here in code. -->
+                            <BoxContainer Name="NewsBadgeSlot"
+                                          Access="Public"
+                                          Orientation="Horizontal"
+                                          VerticalAlignment="Center" />
+                            <Label Name="NewsDate"
+                                   Access="Public"
+                                   Text="18.05.2024"
+                                   StyleIdentifier="mainMenuTinySubtle"
+                                   HorizontalExpand="True"
+                                   VerticalAlignment="Center" />
+                        </BoxContainer>
+                        <Label Name="NewsTitle"
                                Access="Public"
                                Text="&#x0422;&#x0435;&#x0445;&#x043D;&#x0438;&#x0447;&#x0435;&#x0441;&#x043A;&#x0438;&#x0435; &#x0440;&#x0430;&#x0431;&#x043E;&#x0442;&#x044B;"
-                               StyleIdentifier="mainMenuGoldSmall"
+                               StyleIdentifier="mainMenuHeaderGold"
                                ClipText="True" />
-                        <Label Name="NewsText1"
+                        <Label Name="NewsText"
                                Access="Public"
                                Text="&#x0417;&#x0430;&#x0432;&#x0442;&#x0440;&#x0430; &#x0441; 09:00 &#x0434;&#x043E; 12:00 &#x043F;&#x043E; &#x041C;&#x0421;&#x041A; &#x0441;&#x0435;&#x0440;&#x0432;&#x0435;&#x0440; &#x0431;&#x0443;&#x0434;&#x0435;&#x0442; &#x043D;&#x0435;&#x0434;&#x043E;&#x0441;&#x0442;&#x0443;&#x043F;&#x0435;&#x043D;."
                                StyleIdentifier="mainMenuSubtle"
+                               VerticalExpand="True"
                                ClipText="True" />
-                    </BoxContainer>
-                </BoxContainer>
-
-                <BoxContainer Orientation="Horizontal"
-                              HorizontalExpand="True"
-                              SeparationOverride="12">
-                    <PanelContainer SetSize="52 52">
-                        <PanelContainer.PanelOverride>
-                            <gfx:StyleBoxFlat BackgroundColor="#0E0B20CC"
-                                              BorderColor="#8050B866"
-                                              BorderThickness="1" />
-                        </PanelContainer.PanelOverride>
-                        <TextureRect Name="NewsImage2"
-                                     Access="Public"
-                                     TexturePath="/Textures/Eclipse/MainMenu/news/news-update.png"
-                                     Stretch="KeepAspectCovered"
-                                     VerticalExpand="True"
-                                     HorizontalExpand="True" />
-                    </PanelContainer>
-                    <BoxContainer Orientation="Vertical"
-                                  HorizontalExpand="True"
-                                  SeparationOverride="4">
-                        <Label Name="NewsDate2"
-                               Access="Public"
-                               Text="12.05.2024"
-                               StyleIdentifier="mainMenuSubtle" />
-                        <Label Name="NewsTitle2"
-                               Access="Public"
-                               Text="&#x041E;&#x0431;&#x043D;&#x043E;&#x0432;&#x043B;&#x0435;&#x043D;&#x0438;&#x0435; 1.6.3"
+                        <Label Text="&#x0427;&#x0438;&#x0442;&#x0430;&#x0442;&#x044C; &#x043F;&#x043E;&#x043B;&#x043D;&#x043E;&#x0441;&#x0442;&#x044C;&#x044E; &#x2192;"
                                StyleIdentifier="mainMenuGoldSmall"
-                               ClipText="True" />
-                        <Label Name="NewsText2"
-                               Access="Public"
-                               Text="&#x041D;&#x043E;&#x0432;&#x044B;&#x0435; &#x0441;&#x043E;&#x0431;&#x044B;&#x0442;&#x0438;&#x044F; &#x0438; &#x043F;&#x0435;&#x0440;&#x0435;&#x0440;&#x0430;&#x0431;&#x043E;&#x0442;&#x043A;&#x0430; &#x0431;&#x0430;&#x043B;&#x0430;&#x043D;&#x0441;&#x0430; &#x0443;&#x043B;&#x0443;&#x0447;&#x0448;&#x0430;&#x044E;&#x0442; &#x0438;&#x0433;&#x0440;&#x043E;&#x0432;&#x043E;&#x0439; &#x043E;&#x043F;&#x044B;&#x0442;."
-                               StyleIdentifier="mainMenuSubtle"
-                               ClipText="True" />
+                               HorizontalAlignment="Right" />
                     </BoxContainer>
-                </BoxContainer>
-
-                <BoxContainer Orientation="Horizontal"
-                              HorizontalExpand="True"
-                              SeparationOverride="12">
-                    <PanelContainer SetSize="52 52">
-                        <PanelContainer.PanelOverride>
-                            <gfx:StyleBoxFlat BackgroundColor="#05080CCC"
-                                              BorderColor="#A85E1266"
-                                              BorderThickness="1" />
-                        </PanelContainer.PanelOverride>
-                        <TextureRect Name="NewsImage3"
-                                     Access="Public"
-                                     TexturePath="/Textures/Eclipse/MainMenu/news/news-event.png"
-                                     Stretch="KeepAspectCovered"
-                                     VerticalExpand="True"
-                                     HorizontalExpand="True" />
-                    </PanelContainer>
-                    <BoxContainer Orientation="Vertical"
-                                  HorizontalExpand="True"
-                                  SeparationOverride="4">
-                        <Label Name="NewsDate3"
-                               Access="Public"
-                               Text="07.05.2024"
-                               StyleIdentifier="mainMenuSubtle" />
-                        <Label Name="NewsTitle3"
-                               Access="Public"
-                               Text="&#x0412;&#x0435;&#x0441;&#x0435;&#x043D;&#x043D;&#x0438;&#x0439; &#x0438;&#x0432;&#x0435;&#x043D;&#x0442;"
-                               StyleIdentifier="mainMenuGoldSmall"
-                               ClipText="True" />
-                        <Label Name="NewsText3"
-                               Access="Public"
-                               Text="&#x0423;&#x0447;&#x0430;&#x0441;&#x0442;&#x0432;&#x0443;&#x0439;&#x0442;&#x0435; &#x0432; &#x0438;&#x0432;&#x0435;&#x043D;&#x0442;&#x0435; &#x0438; &#x043F;&#x043E;&#x043B;&#x0443;&#x0447;&#x0430;&#x0439;&#x0442;&#x0435; &#x043D;&#x0430;&#x0433;&#x0440;&#x0430;&#x0434;&#x044B;."
-                               StyleIdentifier="mainMenuSubtle"
-                               ClipText="True" />
-                    </BoxContainer>
-                </BoxContainer>
+                </Button>
             </BoxContainer>
         </PanelContainer>
 
@@ -641,38 +680,51 @@
                        VAlign="Center"
                        ClipText="True" />
             </Button>
-            <PanelContainer HorizontalExpand="True"
-                            MinHeight="70">
-                <PanelContainer.PanelOverride>
-                    <eclipse:EclipseStyleBoxRounded BackgroundColor="#070300F2"
-                                                    BorderColor="#A85E126A"
-                                                    BorderThickness="1"
-                                                    Radius="8" />
-                </PanelContainer.PanelOverride>
+            <!-- Clicking this opens ServerListPanel below it. The label is kept at the small gold size so
+                 "СЕРВЕРЫ ECLIPSE" fits next to the votes button instead of being clipped. -->
+            <Button Name="ServerSelectButton"
+                    Access="Public"
+                    HorizontalExpand="True"
+                    MinHeight="70"
+                    StyleIdentifier="mainMenuSecondary">
                 <BoxContainer Orientation="Horizontal"
                               HorizontalExpand="True"
                               VerticalExpand="True"
-                              Margin="16 0 12 0"
+                              Margin="12 0 10 0"
                               SeparationOverride="10">
-                    <Label Text="&#x2630;"
-                           StyleIdentifier="mainMenuServerIcon"
-                           SetWidth="34"
-                           Align="Center"
-                           VAlign="Center" />
+                    <PanelContainer SetSize="30 30"
+                                    VerticalAlignment="Center">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#1A0900CC"
+                                              BorderColor="#F0A51377"
+                                              BorderThickness="1" />
+                        </PanelContainer.PanelOverride>
+                        <Label Text="&#x2630;"
+                               StyleIdentifier="mainMenuServerIcon"
+                               Align="Center"
+                               VAlign="Center" />
+                    </PanelContainer>
                     <BoxContainer Orientation="Vertical"
                                   HorizontalExpand="True"
                                   VerticalAlignment="Center"
-                                  SeparationOverride="4">
-                        <Label Text="&#x0421;&#x0415;&#x0420;&#x0412;&#x0415;&#x0420;&#x042B; ECLIPSE"
-                               StyleIdentifier="mainMenuText"
+                                  SeparationOverride="3">
+                        <!-- Short label on purpose: the full "СЕРВЕРЫ ECLIPSE" does not fit next to the votes
+                             button on narrow windows and was being clipped. -->
+                        <Label Text="&#x0421;&#x0415;&#x0420;&#x0412;&#x0415;&#x0420;&#x042B;"
+                               StyleIdentifier="mainMenuGoldSmall"
                                ClipText="True" />
                         <Label Name="ServerName"
                                Access="Public"
                                StyleIdentifier="mainMenuTinySubtle"
                                ClipText="True" />
                     </BoxContainer>
+                    <Label Name="ServerSelectArrow"
+                           Access="Public"
+                           Text="&#x25BE;"
+                           StyleIdentifier="mainMenuGoldSmall"
+                           VerticalAlignment="Center" />
                 </BoxContainer>
-            </PanelContainer>
+            </Button>
         </BoxContainer>
 
         <PanelContainer Name="RightSide"
@@ -732,42 +784,118 @@
                     </Button>
                 </BoxContainer>
 
-                <BoxContainer Orientation="Horizontal"
-                              SeparationOverride="8">
-                    <Label Text="&#x2299;"
-                           StyleIdentifier="mainMenuStatusIcon"
-                           VAlign="Center" />
-                    <Label Text="&#x0421;&#x0415;&#x0420;&#x0412;&#x0415;&#x0420;&#x041D;&#x0410;&#x042F; &#x0418;&#x041D;&#x0424;&#x041E;&#x0420;&#x041C;&#x0410;&#x0426;&#x0418;&#x042F;"
-                           StyleIdentifier="mainMenuText"
+                <!-- LOBBY tab: server info + chat. The three views below share the space under the tab row;
+                     SetRightTabActive toggles which one is visible. -->
+                <BoxContainer Name="LobbyTabView"
+                              Access="Public"
+                              Orientation="Vertical"
+                              HorizontalExpand="True"
+                              VerticalExpand="True"
+                              SeparationOverride="10">
+                    <BoxContainer Orientation="Horizontal"
+                                  SeparationOverride="8">
+                        <Label Text="&#x2299;"
+                               StyleIdentifier="mainMenuStatusIcon"
+                               VAlign="Center" />
+                        <Label Text="&#x0421;&#x0415;&#x0420;&#x0412;&#x0415;&#x0420;&#x041D;&#x0410;&#x042F; &#x0418;&#x041D;&#x0424;&#x041E;&#x0420;&#x041C;&#x0410;&#x0426;&#x0418;&#x042F;"
+                               StyleIdentifier="mainMenuText"
+                               ClipText="True" />
+                    </BoxContainer>
+                    <info:ServerInfo Name="ServerInfo"
+                                     Access="Public"
+                                     MinSize="0 30"
+                                     VerticalExpand="False"
+                                     HorizontalExpand="True" />
+                    <Label Name="StationTime"
+                           Access="Public"
+                           HorizontalExpand="True"
+                           StyleIdentifier="mainMenuWarning"
                            ClipText="True" />
+                    <RichTextLabel Name="PlaytimeComment"
+                                   Access="Public"
+                                   Visible="False"
+                                   HorizontalExpand="True" />
+
+                    <PanelContainer MinHeight="1">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#A85E123F" />
+                        </PanelContainer.PanelOverride>
+                    </PanelContainer>
+
+                    <widgets:ChatBox Name="Chat"
+                                     Access="Public"
+                                     VerticalExpand="True"
+                                     HorizontalExpand="True"
+                                     MinSize="0 0"
+                                     MinHeight="260" />
                 </BoxContainer>
-                <info:ServerInfo Name="ServerInfo"
-                                 Access="Public"
-                                 MinSize="0 30"
-                                 VerticalExpand="False"
-                                 HorizontalExpand="True" />
-                <Label Name="StationTime"
-                       Access="Public"
-                       HorizontalExpand="True"
-                       StyleIdentifier="mainMenuWarning"
-                       ClipText="True" />
-                <RichTextLabel Name="PlaytimeComment"
-                               Access="Public"
-                               Visible="False"
-                               HorizontalExpand="True" />
 
-                <PanelContainer MinHeight="1">
-                    <PanelContainer.PanelOverride>
-                        <gfx:StyleBoxFlat BackgroundColor="#A85E123F" />
-                    </PanelContainer.PanelOverride>
-                </PanelContainer>
+                <!-- MANIFEST tab: crew manifest, populated in code from the server EUI state. -->
+                <BoxContainer Name="ManifestTabView"
+                              Access="Public"
+                              Orientation="Vertical"
+                              HorizontalExpand="True"
+                              VerticalExpand="True"
+                              Visible="False"
+                              SeparationOverride="8">
+                    <BoxContainer Orientation="Horizontal"
+                                  SeparationOverride="8">
+                        <Label Text="&#x2630;"
+                               StyleIdentifier="mainMenuStatusIcon"
+                               VAlign="Center" />
+                        <Label Text="&#x041C;&#x0410;&#x041D;&#x0418;&#x0424;&#x0415;&#x0421;&#x0422; &#x042D;&#x041A;&#x0418;&#x041F;&#x0410;&#x0416;&#x0410;"
+                               StyleIdentifier="mainMenuText"
+                               ClipText="True" />
+                    </BoxContainer>
+                    <PanelContainer MinHeight="1">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#A85E123F" />
+                        </PanelContainer.PanelOverride>
+                    </PanelContainer>
+                    <Label Name="ManifestStatus"
+                           Access="Public"
+                           Text="&#x0417;&#x0430;&#x0433;&#x0440;&#x0443;&#x0437;&#x043A;&#x0430;&#x2026;"
+                           StyleIdentifier="mainMenuSubtle"
+                           HorizontalExpand="True"
+                           ClipText="True" />
+                    <ScrollContainer HorizontalExpand="True"
+                                     VerticalExpand="True"
+                                     HScrollEnabled="False">
+                        <BoxContainer Name="ManifestContainer"
+                                      Access="Public"
+                                      Orientation="Vertical"
+                                      HorizontalExpand="True" />
+                    </ScrollContainer>
+                </BoxContainer>
 
-                <widgets:ChatBox Name="Chat"
-                                 Access="Public"
-                                 VerticalExpand="True"
-                                 HorizontalExpand="True"
-                                 MinSize="0 0"
-                                 MinHeight="260" />
+                <!-- ADMINS tab: for a player, an embedded ahelp chat (filled in code); admins get the old window. -->
+                <BoxContainer Name="AdminsTabView"
+                              Access="Public"
+                              Orientation="Vertical"
+                              HorizontalExpand="True"
+                              VerticalExpand="True"
+                              Visible="False"
+                              SeparationOverride="8">
+                    <BoxContainer Orientation="Horizontal"
+                                  SeparationOverride="8">
+                        <Label Text="&#x260E;"
+                               StyleIdentifier="mainMenuStatusIcon"
+                               VAlign="Center" />
+                        <Label Text="&#x0421;&#x0412;&#x042F;&#x0417;&#x042C; &#x0421; &#x0410;&#x0414;&#x041C;&#x0418;&#x041D;&#x0418;&#x0421;&#x0422;&#x0420;&#x0410;&#x0426;&#x0418;&#x0415;&#x0419;"
+                               StyleIdentifier="mainMenuText"
+                               ClipText="True" />
+                    </BoxContainer>
+                    <PanelContainer MinHeight="1">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#A85E123F" />
+                        </PanelContainer.PanelOverride>
+                    </PanelContainer>
+                    <BoxContainer Name="AdminsChatContainer"
+                                  Access="Public"
+                                  Orientation="Vertical"
+                                  HorizontalExpand="True"
+                                  VerticalExpand="True" />
+                </BoxContainer>
             </BoxContainer>
         </PanelContainer>
 
@@ -775,7 +903,8 @@
                       Orientation="Horizontal"
                       SetSize="390 75"
                       SeparationOverride="10">
-            <Button SetWidth="170"
+            <Button Name="RulesButton"
+                    SetWidth="170"
                     MinHeight="75"
                     StyleIdentifier="mainMenuSecondary">
                 <BoxContainer Orientation="Horizontal"
@@ -1118,18 +1247,29 @@
 
                         <BoxContainer Orientation="Vertical"
                                       HorizontalExpand="True"
-                                      SeparationOverride="0">
-                            <PanelContainer MinHeight="2"
-                                            HorizontalExpand="True">
-                                <PanelContainer.PanelOverride>
-                                    <gfx:StyleBoxFlat BackgroundColor="#A85E1264" />
-                                </PanelContainer.PanelOverride>
-                            </PanelContainer>
-                            <GridContainer Name="RoadmapProgressDots"
-                                           Access="Public"
-                                           Columns="4"
-                                           HorizontalExpand="True"
-                                           HSeparationOverride="0" />
+                                      SeparationOverride="7">
+                            <BoxContainer Orientation="Horizontal"
+                                          HorizontalExpand="True"
+                                          SeparationOverride="8">
+                                <Label Name="RoadmapProgressLabel"
+                                       Access="Public"
+                                       Text="&#x0412;&#x044B;&#x043F;&#x043E;&#x043B;&#x043D;&#x0435;&#x043D;&#x043E;"
+                                       StyleIdentifier="mainMenuSubtle"
+                                       HorizontalExpand="True"
+                                       VAlign="Center" />
+                                <Label Name="RoadmapProgressPercent"
+                                       Access="Public"
+                                       Text="0%"
+                                       StyleIdentifier="mainMenuGoldSmall"
+                                       VAlign="Center" />
+                            </BoxContainer>
+                            <ProgressBar Name="RoadmapProgressBar"
+                                         Access="Public"
+                                         MinValue="0"
+                                         MaxValue="1"
+                                         Value="0"
+                                         SetHeight="6"
+                                         HorizontalExpand="True" />
                         </BoxContainer>
 
                         <BoxContainer Name="RoadmapEntries"
@@ -1140,18 +1280,356 @@
                     </BoxContainer>
                 </ScrollContainer>
 
-                <Button Name="SectionOptionsButton"
-                        Access="Public"
-                        Visible="False"
-                        SetWidth="240"
-                        MinHeight="52"
-                        StyleIdentifier="mainMenuSecondary">
-                    <Label Text="&#x041E;&#x0442;&#x043A;&#x0440;&#x044B;&#x0442;&#x044C; &#x043E;&#x043A;&#x043D;&#x043E; &#x043D;&#x0430;&#x0441;&#x0442;&#x0440;&#x043E;&#x0435;&#x043A;"
-                           StyleIdentifier="mainMenuSecondaryTitle"
-                           Align="Center"
-                           VAlign="Center"
-                           ClipText="True" />
-                </Button>
+                <!-- Site imitation, laid out like a news portal: masthead, a row of rubrics, then the
+                     article column with a "latest news" rail beside it. Everything is built in code from
+                     eclipseSitePage / eclipseNews prototypes. -->
+                <BoxContainer Name="SiteContent"
+                              Access="Public"
+                              Visible="False"
+                              Orientation="Vertical"
+                              HorizontalExpand="True"
+                              VerticalExpand="True"
+                              SeparationOverride="10">
+                    <!-- Masthead -->
+                    <PanelContainer HorizontalExpand="True">
+                        <PanelContainer.PanelOverride>
+                            <eclipse:EclipseStyleBoxRounded BackgroundColor="#0A0400F8"
+                                                            BorderColor="#A85E1280"
+                                                            BorderThickness="1"
+                                                            Radius="8" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Horizontal"
+                                      HorizontalExpand="True"
+                                      Margin="16 10 16 10"
+                                      SeparationOverride="12">
+                            <TextureRect TexturePath="/Textures/Logo/eclipse-icon.png"
+                                         SetSize="30 30"
+                                         Stretch="KeepAspectCentered"
+                                         VerticalAlignment="Center" />
+                            <Label Text="ECLIPSE STATION"
+                                   StyleIdentifier="mainMenuLogoSub"
+                                   VAlign="Center" />
+                            <Control HorizontalExpand="True" />
+                            <Label Name="SiteDateLabel"
+                                   Access="Public"
+                                   StyleIdentifier="mainMenuTinySubtle"
+                                   VAlign="Center" />
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <!-- Rubric row -->
+                    <BoxContainer Name="SitePageButtons"
+                                  Access="Public"
+                                  Orientation="Horizontal"
+                                  HorizontalExpand="True"
+                                  SeparationOverride="6" />
+
+                    <BoxContainer Orientation="Horizontal"
+                                  HorizontalExpand="True"
+                                  VerticalExpand="True"
+                                  SeparationOverride="12">
+                        <!-- Article / page column -->
+                        <PanelContainer HorizontalExpand="True"
+                                        VerticalExpand="True"
+                                        RectClipContent="True">
+                            <PanelContainer.PanelOverride>
+                                <eclipse:EclipseStyleBoxRounded BackgroundColor="#070300F4"
+                                                                BorderColor="#A85E1280"
+                                                                BorderThickness="1"
+                                                                Radius="8" />
+                            </PanelContainer.PanelOverride>
+                            <ScrollContainer HorizontalExpand="True"
+                                             VerticalExpand="True"
+                                             HScrollEnabled="False"
+                                             Margin="18 14 18 14">
+                                <BoxContainer Name="SitePageBody"
+                                              Access="Public"
+                                              Orientation="Vertical"
+                                              HorizontalExpand="True"
+                                              SeparationOverride="10" />
+                            </ScrollContainer>
+                        </PanelContainer>
+
+                        <!-- Latest news rail -->
+                        <PanelContainer SetWidth="290"
+                                        VerticalExpand="True"
+                                        RectClipContent="True">
+                            <PanelContainer.PanelOverride>
+                                <eclipse:EclipseStyleBoxRounded BackgroundColor="#070300F4"
+                                                                BorderColor="#A85E1280"
+                                                                BorderThickness="1"
+                                                                Radius="8" />
+                            </PanelContainer.PanelOverride>
+                            <BoxContainer Orientation="Vertical"
+                                          HorizontalExpand="True"
+                                          VerticalExpand="True"
+                                          Margin="12 12 12 12"
+                                          SeparationOverride="8">
+                                <Label Text="&#x041F;&#x041E;&#x0421;&#x041B;&#x0415;&#x0414;&#x041D;&#x0418;&#x0415; &#x041D;&#x041E;&#x0412;&#x041E;&#x0421;&#x0422;&#x0418;"
+                                       StyleIdentifier="mainMenuCompactHeaderGold"
+                                       ClipText="True" />
+                                <PanelContainer MinHeight="2">
+                                    <PanelContainer.PanelOverride>
+                                        <gfx:StyleBoxFlat BackgroundColor="#E0452F" />
+                                    </PanelContainer.PanelOverride>
+                                </PanelContainer>
+                                <ScrollContainer HorizontalExpand="True"
+                                                 VerticalExpand="True"
+                                                 HScrollEnabled="False">
+                                    <BoxContainer Name="SiteLatestNews"
+                                                  Access="Public"
+                                                  Orientation="Vertical"
+                                                  HorizontalExpand="True"
+                                                  SeparationOverride="0" />
+                                </ScrollContainer>
+                                <Button Name="SiteExternalButton"
+                                        Access="Public"
+                                        HorizontalExpand="True"
+                                        MinHeight="34"
+                                        StyleIdentifier="mainMenuSecondary">
+                                    <Label Text="&#x041E;&#x0442;&#x043A;&#x0440;&#x044B;&#x0442;&#x044C; &#x0432; &#x0431;&#x0440;&#x0430;&#x0443;&#x0437;&#x0435;&#x0440;&#x0435;"
+                                           StyleIdentifier="mainMenuSecondaryTitle"
+                                           Align="Center"
+                                           VAlign="Center"
+                                           ClipText="True" />
+                                </Button>
+                            </BoxContainer>
+                        </PanelContainer>
+                    </BoxContainer>
+                </BoxContainer>
+
+                <!-- Account page: character doll on the left, progression / stats / achievements on the right.
+                     The stat cards, role list and achievement grid are built in code. -->
+                <BoxContainer Name="AccountContent"
+                              Access="Public"
+                              Visible="False"
+                              Orientation="Horizontal"
+                              HorizontalExpand="True"
+                              VerticalExpand="True"
+                              SeparationOverride="16">
+                    <PanelContainer SetWidth="300"
+                                    VerticalExpand="True">
+                        <PanelContainer.PanelOverride>
+                            <eclipse:EclipseStyleBoxRounded BackgroundColor="#070300F4"
+                                                            BorderColor="#A85E1280"
+                                                            BorderThickness="1"
+                                                            Radius="8" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Vertical"
+                                      HorizontalExpand="True"
+                                      VerticalExpand="True"
+                                      Margin="14 12 14 12"
+                                      SeparationOverride="10">
+                            <Label Text="&#x041F;&#x0415;&#x0420;&#x0421;&#x041E;&#x041D;&#x0410;&#x0416;"
+                                   StyleIdentifier="mainMenuHeaderGold"
+                                   ClipText="True" />
+                            <PanelContainer MinHeight="1">
+                                <PanelContainer.PanelOverride>
+                                    <gfx:StyleBoxFlat BackgroundColor="#A85E123F" />
+                                </PanelContainer.PanelOverride>
+                            </PanelContainer>
+
+                            <PanelContainer HorizontalExpand="True"
+                                            VerticalExpand="True"
+                                            RectClipContent="True">
+                                <PanelContainer.PanelOverride>
+                                    <gfx:StyleBoxFlat BackgroundColor="#050200A8"
+                                                      BorderColor="#2C221A66"
+                                                      BorderThickness="1" />
+                                </PanelContainer.PanelOverride>
+                                <BoxContainer Orientation="Horizontal"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center">
+                                    <profile:ProfilePreviewSpriteView Name="AccountPreviewSprite"
+                                                                      Access="Public"
+                                                                      OverrideDirection="South"
+                                                                      Scale="5 5"
+                                                                      MaxSize="240 240"
+                                                                      Stretch="Fill" />
+                                </BoxContainer>
+                            </PanelContainer>
+
+                            <Label Name="AccountCharacterName"
+                                   Access="Public"
+                                   StyleIdentifier="mainMenuText"
+                                   Align="Center"
+                                   ClipText="True" />
+                            <Label Name="AccountCharacterAge"
+                                   Access="Public"
+                                   StyleIdentifier="mainMenuTinySubtle"
+                                   Align="Center"
+                                   ClipText="True" />
+                            <Button Name="AccountCustomizeButton"
+                                    Access="Public"
+                                    HorizontalExpand="True"
+                                    MinHeight="42"
+                                    StyleIdentifier="mainMenuPrimary">
+                                <Label Text="&#x041A;&#x0430;&#x0441;&#x0442;&#x043E;&#x043C;&#x0438;&#x0437;&#x0430;&#x0446;&#x0438;&#x044F;"
+                                       StyleIdentifier="mainMenuSecondaryTitle"
+                                       Align="Center"
+                                       VAlign="Center"
+                                       ClipText="True" />
+                            </Button>
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <BoxContainer Orientation="Vertical"
+                                  HorizontalExpand="True"
+                                  VerticalExpand="True"
+                                  SeparationOverride="14">
+                        <!-- Account level / rank -->
+                        <PanelContainer HorizontalExpand="True">
+                            <PanelContainer.PanelOverride>
+                                <eclipse:EclipseStyleBoxRounded BackgroundColor="#070300F4"
+                                                                BorderColor="#A85E1280"
+                                                                BorderThickness="1"
+                                                                Radius="8" />
+                            </PanelContainer.PanelOverride>
+                            <BoxContainer Orientation="Vertical"
+                                          HorizontalExpand="True"
+                                          Margin="16 12 16 12"
+                                          SeparationOverride="7">
+                                <BoxContainer Orientation="Horizontal"
+                                              HorizontalExpand="True"
+                                              SeparationOverride="10">
+                                    <BoxContainer Orientation="Vertical"
+                                                  HorizontalExpand="True"
+                                                  SeparationOverride="3">
+                                        <Label Name="AccountPageName"
+                                               Access="Public"
+                                               StyleIdentifier="mainMenuHeaderGold"
+                                               ClipText="True" />
+                                        <Label Name="AccountPageRank"
+                                               Access="Public"
+                                               StyleIdentifier="mainMenuSubtle"
+                                               ClipText="True" />
+                                    </BoxContainer>
+                                    <Label Name="AccountPageLevel"
+                                           Access="Public"
+                                           StyleIdentifier="mainMenuScore"
+                                           VAlign="Center" />
+                                </BoxContainer>
+                                <ProgressBar Name="AccountPageXpBar"
+                                             Access="Public"
+                                             MinValue="0"
+                                             MaxValue="1"
+                                             Value="0"
+                                             SetHeight="8"
+                                             HorizontalExpand="True" />
+                                <Label Name="AccountPageXpText"
+                                       Access="Public"
+                                       StyleIdentifier="mainMenuTinySubtle"
+                                       ClipText="True" />
+                            </BoxContainer>
+                        </PanelContainer>
+
+                        <!-- Stat cards, built in code -->
+                        <BoxContainer Name="AccountStats"
+                                      Access="Public"
+                                      Orientation="Horizontal"
+                                      HorizontalExpand="True"
+                                      SeparationOverride="12" />
+
+                        <BoxContainer Orientation="Horizontal"
+                                      HorizontalExpand="True"
+                                      SeparationOverride="8">
+                            <Label Text="&#x041B;&#x042E;&#x0411;&#x0418;&#x041C;&#x042B;&#x0415; &#x0420;&#x041E;&#x041B;&#x0418;"
+                                   StyleIdentifier="mainMenuCompactHeaderGold"
+                                   HorizontalExpand="True"
+                                   VAlign="Center" />
+                        </BoxContainer>
+                        <BoxContainer Name="AccountTopRoles"
+                                      Access="Public"
+                                      Orientation="Vertical"
+                                      HorizontalExpand="True"
+                                      SeparationOverride="6" />
+
+                        <BoxContainer Orientation="Horizontal"
+                                      HorizontalExpand="True"
+                                      SeparationOverride="8">
+                            <Label Text="&#x0414;&#x041E;&#x0421;&#x0422;&#x0418;&#x0416;&#x0415;&#x041D;&#x0418;&#x042F;"
+                                   StyleIdentifier="mainMenuCompactHeaderGold"
+                                   HorizontalExpand="True"
+                                   VAlign="Center" />
+                            <Label Name="AccountAchievementsCount"
+                                   Access="Public"
+                                   StyleIdentifier="mainMenuGoldSmall"
+                                   VAlign="Center" />
+                        </BoxContainer>
+                        <ScrollContainer HorizontalExpand="True"
+                                         VerticalExpand="True"
+                                         HScrollEnabled="False">
+                            <GridContainer Name="AccountAchievements"
+                                           Access="Public"
+                                           Columns="2"
+                                           HorizontalExpand="True"
+                                           HSeparationOverride="10"
+                                           VSeparationOverride="10" />
+                        </ScrollContainer>
+                    </BoxContainer>
+                </BoxContainer>
+
+                <!-- Full-screen settings: a column of section buttons on the left, the selected options tab on
+                     the right. The tabs themselves are the stock Content.Client.Options ones, reused as-is. -->
+                <BoxContainer Name="SettingsContent"
+                              Access="Public"
+                              Visible="False"
+                              Orientation="Horizontal"
+                              HorizontalExpand="True"
+                              VerticalExpand="True"
+                              SeparationOverride="16">
+                    <PanelContainer SetWidth="252"
+                                    VerticalExpand="True">
+                        <PanelContainer.PanelOverride>
+                            <eclipse:EclipseStyleBoxRounded BackgroundColor="#070300F4"
+                                                            BorderColor="#A85E1280"
+                                                            BorderThickness="1"
+                                                            Radius="8" />
+                        </PanelContainer.PanelOverride>
+                        <ScrollContainer HorizontalExpand="True"
+                                         VerticalExpand="True"
+                                         HScrollEnabled="False"
+                                         Margin="10 10 10 10">
+                            <BoxContainer Name="SettingsTabButtons"
+                                          Access="Public"
+                                          Orientation="Vertical"
+                                          HorizontalExpand="True"
+                                          SeparationOverride="6" />
+                        </ScrollContainer>
+                    </PanelContainer>
+
+                    <PanelContainer HorizontalExpand="True"
+                                    VerticalExpand="True"
+                                    RectClipContent="True">
+                        <PanelContainer.PanelOverride>
+                            <eclipse:EclipseStyleBoxRounded BackgroundColor="#070300F4"
+                                                            BorderColor="#A85E1280"
+                                                            BorderThickness="1"
+                                                            Radius="8" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Vertical"
+                                      HorizontalExpand="True"
+                                      VerticalExpand="True"
+                                      Margin="14 12 14 12"
+                                      SeparationOverride="10">
+                            <Label Name="SettingsTabTitle"
+                                   Access="Public"
+                                   Text="&#x041E;&#x0431;&#x0449;&#x0438;&#x0435;"
+                                   StyleIdentifier="mainMenuHeaderGold"
+                                   ClipText="True" />
+                            <PanelContainer MinHeight="1">
+                                <PanelContainer.PanelOverride>
+                                    <gfx:StyleBoxFlat BackgroundColor="#A85E123F" />
+                                </PanelContainer.PanelOverride>
+                            </PanelContainer>
+                            <BoxContainer Name="SettingsTabContent"
+                                          Access="Public"
+                                          Orientation="Vertical"
+                                          HorizontalExpand="True"
+                                          VerticalExpand="True" />
+                        </BoxContainer>
+                    </PanelContainer>
+                </BoxContainer>
 
                 <Control Name="SectionFiller"
                          Access="Public"
@@ -1202,5 +1680,24 @@
         <RichTextLabel Name="LobbyBackground"
                        Access="Public"
                        Visible="False" />
+        <!-- Server picker dropdown, positioned under ServerSelectButton in ApplyEclipseLayout. -->
+        <PanelContainer Name="ServerListPanel"
+                        Access="Public"
+                        Visible="False"
+                        RectClipContent="True">
+            <PanelContainer.PanelOverride>
+                <eclipse:EclipseStyleBoxRounded BackgroundColor="#0A0400FA"
+                                                BorderColor="#F0A51399"
+                                                BorderThickness="1"
+                                                Radius="8" />
+            </PanelContainer.PanelOverride>
+            <BoxContainer Name="ServerListContainer"
+                          Access="Public"
+                          Orientation="Vertical"
+                          HorizontalExpand="True"
+                          Margin="10 10 10 10"
+                          SeparationOverride="6" />
+        </PanelContainer>
+
     </LayoutContainer>
 </lobbyUi:LobbyGui>

@@ -2,6 +2,7 @@
 - type: marking
   id: LizardHeadGuilmon
   bodyPart: Eyes
+  groupWhitelist: [ DisabledCustomization ]
 #  speciesRestriction: [ Reptilian, Anthropomorph ] # Erida-Edit | Anthropomorph
   sprites:
   - sprite: _Orion/Mobs/Customization/snouts.rsi

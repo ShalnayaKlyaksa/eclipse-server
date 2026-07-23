@@ -1,0 +1,82 @@
+# Per-species colour palettes for the Eclipse races.
+#
+# The concept doc requires every race to have its own set of allowed skin/fur/scale/feather colours.
+# Previously they all used "Hues", which let a player make a Lavrite bright pink or an Arkane green.
+# Each strategy below clamps the HSV/HSL ranges to the palette described for that race.
+#
+# Hue is 0..1 (0 = red, 0.33 = green, 0.66 = blue). If min > max the range wraps past 1.0, which is
+# how the warm red..orange band for Lavrites is expressed.
+
+# Молеи — мех: белый, кремовый, серый, коричневый, чёрный, пепельный, бледно-розовый, тёмно-фиолетовый.
+# Any hue is allowed but kept desaturated, which is what makes it read as fur rather than paint.
+- type: skinColoration
+  id: EclipseMoleiFur
+  strategy: !type:ClampedHslColoration
+    saturation: [0, 0.42]
+    lightness: [0.08, 0.95]
+
+# Лавриты — угольно-чёрный, тёмно-серый, тёмно-коричневый, бордовый, медный, красно-коричневый, пепельный.
+# Warm red..orange band only, and kept dark so they read as heat-resistant hide.
+- type: skinColoration
+  id: EclipseLavriteSkin
+  strategy: !type:ClampedHsvColoration
+    hue: [0.93, 0.12]
+    saturation: [0, 0.65]
+    value: [0.08, 0.55]
+
+# Кобольды — чешуя: песочный, коричневый, красный, кирпичный, оранжевый, болотный, тёмно-зелёный,
+# серый, синий, чёрный. Wide hue range, mid brightness.
+- type: skinColoration
+  id: EclipseKoboldScales
+  strategy: !type:ClampedHsvColoration
+    saturation: [0, 0.75]
+    value: [0.12, 0.72]
+
+# Сауриане — зелёный, оливковый, болотный, песочный, коричневый, серый, чёрный, красно-коричневый,
+# тёмно-синий, белый. Slightly wider than Kobolds so white and near-black both fit.
+- type: skinColoration
+  id: EclipseSaurianScales
+  strategy: !type:ClampedHsvColoration
+    saturation: [0, 0.7]
+    value: [0.1, 0.85]
+
+# Терианты — шерсть: белый, чёрный, серый, коричневый, рыжий, кремовый, песочный, тёмно-синий, пепельный.
+- type: skinColoration
+  id: EclipseTherianFur
+  strategy: !type:ClampedHslColoration
+    saturation: [0, 0.62]
+    lightness: [0.07, 0.95]
+
+# Арканы — тёмно-синий, фиолетовый, серо-фиолетовый, холодный бежевый, тёмно-серый, сине-чёрный,
+# бледно-голубой, бледно-лиловый. Cold half of the wheel only; low saturation covers the greys.
+- type: skinColoration
+  id: EclipseArkaneSkin
+  strategy: !type:ClampedHsvColoration
+    hue: [0.52, 0.88]
+    saturation: [0, 0.62]
+    value: [0.12, 0.88]
+
+# Авианы — перья: белый, чёрный, серый, коричневый, рыжий, песочный, тёмно-синий, зелёный, красный,
+# жёлтый, фиолетовый. Birds are allowed to be bright, so this is the widest palette.
+- type: skinColoration
+  id: EclipseAvianFeathers
+  strategy: !type:ClampedHsvColoration
+    saturation: [0, 0.8]
+    value: [0.12, 0.95]
+
+# Элиры — бледно-голубой, бирюзовый, серо-синий, лиловый, розово-серый, тёмно-синий, жемчужный,
+# почти белый. Cold and pale: teal through blue and violet into the pink-greys.
+- type: skinColoration
+  id: EclipseElirSkin
+  strategy: !type:ClampedHsvColoration
+    hue: [0.42, 0.95]
+    saturation: [0, 0.5]
+    value: [0.25, 1.0]
+
+# Слаймолюды — гель: голубой, синий, бирюзовый, зелёный, салатовый, фиолетовый, розовый, красный,
+# оранжевый, янтарный, серый, почти чёрный. Any hue, but never muddy — it has to look like gel.
+- type: skinColoration
+  id: EclipseSlimeBody
+  strategy: !type:ClampedHsvColoration
+    saturation: [0, 0.85]
+    value: [0.2, 0.95]
