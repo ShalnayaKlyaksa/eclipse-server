@@ -41,7 +41,7 @@
     - id: DoorRemoteCustom
     - id: MedalCase
     - id: ProtoCoreActivationKey
-    - id: PinpointerProtoCoreActivationKey
+    - id: ActivationKeyTrackerCartridge
     - id: PlushieNuke
       prob: 0.1
     - id: RubberStampCaptain

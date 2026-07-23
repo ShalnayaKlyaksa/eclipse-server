@@ -179,7 +179,12 @@ public sealed class CartridgeLoaderSystem : SharedCartridgeLoaderSystem
 
         // For anyone stumbling onto this: Do not do this or I will cut you.
         var prototypeId = Prototype(cartridgeUid)?.ID;
-        return prototypeId != null && InstallProgram(loaderUid, prototypeId, loader: loader);
+        var installed = prototypeId != null && InstallProgram(loaderUid, prototypeId, loader: loader);
+
+        if (installed && HasComp<OneTimeCartridgeComponent>(cartridgeUid))
+            QueueDel(cartridgeUid);
+
+        return installed;
     }
 
     /// <summary>

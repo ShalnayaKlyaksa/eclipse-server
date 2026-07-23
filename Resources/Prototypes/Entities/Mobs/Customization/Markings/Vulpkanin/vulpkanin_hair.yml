@@ -75,7 +75,7 @@
   id: VulpHairHawk
   bodyPart: Hair
   canBeDisplaced: false
-  groupWhitelist: [ Vulpkanin ]
+  groupWhitelist: [ DisabledCustomization ]
   sprites:
     - sprite: Mobs/Customization/Vulpkanin/hair.rsi
       state: hawk

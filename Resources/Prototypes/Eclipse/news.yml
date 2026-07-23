@@ -1,0 +1,85 @@
+# In-world news feed, shown on the site imitation and advertised on the lobby's main screen.
+# Edit here — the feed is read-only in game.
+#
+# badge:    Important ("Важное!") | DayNews ("Новость дня") | Emergency ("Экстренное") | None
+# featured: true  — the headline is advertised on the lobby main screen (keep this for loud/fresh ones)
+#           false — the entry only lives in the feed on the site
+# order:    lower is newer / shown first
+
+- type: eclipseNews
+  id: EclipseNewsBlackoutSector7
+  order: 0
+  date: 18.05.2567
+  title: Отключение питания в седьмом секторе
+  badge: Emergency
+  featured: true
+  source: Оперативный штаб станции
+  summary: Инженерные бригады восстанавливают подачу энергии. Сектор временно закрыт.
+  text: >-
+    Ночью в седьмом секторе произошёл каскадный сброс нагрузки: три распределительных узла ушли в аварию
+    почти одновременно. Автоматика изолировала участок, жертв нет, но сектор остаётся обесточенным.
+    Инженерные бригады работают на месте, ориентировочный срок восстановления — двенадцать часов.
+    До восстановления питания проход в сектор закрыт для всех, кроме аварийных служб.
+  texture: /Textures/Eclipse/MainMenu/news/news-tech.png
+
+- type: eclipseNews
+  id: EclipseNewsSupplyConvoy
+  order: 1
+  date: 17.05.2567
+  title: Конвой снабжения прибыл с опережением графика
+  badge: DayNews
+  featured: true
+  source: Отдел логистики
+  summary: Станция получила плановые поставки и партию медикаментов сверх нормы.
+  text: >-
+    Грузовой конвой пришвартовался на восемь часов раньше расписания. Помимо планового снабжения на борт
+    поднято дополнительное количество медикаментов и запасных частей для систем жизнеобеспечения.
+    Отдел логистики просит экипаж не занимать грузовые коридоры в ближайшие сутки: разгрузка идёт
+    в непрерывном режиме.
+  texture: /Textures/Eclipse/MainMenu/news/news-update.png
+
+- type: eclipseNews
+  id: EclipseNewsQuarantineLifted
+  order: 2
+  date: 16.05.2567
+  title: Карантин в медицинском отсеке снят
+  badge: Important
+  featured: true
+  source: Медицинская служба
+  summary: Вспышка локализована, все заражённые прошли курс лечения.
+  text: >-
+    Медицинская служба сообщает о снятии карантинного режима. Все выявленные случаи заражения
+    пролечены, повторных обращений за последние сутки не зафиксировано.
+    Экипажу рекомендуется по-прежнему соблюдать санитарные нормы и обращаться в медотсек
+    при первых признаках недомогания.
+  texture: /Textures/Eclipse/MainMenu/news/news-event.png
+
+- type: eclipseNews
+  id: EclipseNewsBotanyHarvest
+  order: 3
+  date: 15.05.2567
+  title: Ботаники собрали рекордный урожай
+  badge: None
+  featured: false
+  source: Служба гидропоники
+  summary: Отдел гидропоники отчитался о рекордных показателях за квартал.
+  text: >-
+    Гидропоника закрыла квартал с лучшими показателями за всё время работы станции.
+    Излишки переданы на камбуз и в бар, часть семенного фонда отправлена в хранилище.
+    Отдел напоминает, что вынос образцов за пределы отсека без разрешения запрещён.
+  texture: /Textures/Eclipse/MainMenu/news/news-event.png
+
+- type: eclipseNews
+  id: EclipseNewsDockingRules
+  order: 4
+  date: 14.05.2567
+  title: Обновлён регламент стыковки
+  badge: None
+  featured: false
+  source: Служба безопасности
+  summary: Изменены правила приёма частных судов на внешних причалах.
+  text: >-
+    С этого дня частные суда принимаются только на внешние причалы и только по предварительной заявке.
+    Экипажам напоминают о необходимости декларировать груз до стыковки.
+    Нарушение регламента влечёт задержание судна до выяснения обстоятельств.
+  texture: /Textures/Eclipse/MainMenu/news/news-tech.png

@@ -205,6 +205,22 @@ public sealed class AHelpUIController: UIController, IOnSystemChanged<BwoinkSyst
         UIHelper?.Open(userId, _discordRelayActive);
     }
 
+    /// <summary>
+    /// Returns a chat panel a non-admin player can host inline (used by the lobby's admins tab), or null for
+    /// admins, who use the full bwoink window instead. Call <see cref="ReleaseEmbeddedPlayerChat"/> when done.
+    /// </summary>
+    public Control? GetEmbeddedPlayerChat()
+    {
+        EnsureUIHelper();
+        return UIHelper is UserAHelpUIHandler user ? user.GetEmbeddablePanel(_discordRelayActive) : null;
+    }
+
+    public void ReleaseEmbeddedPlayerChat()
+    {
+        if (UIHelper is UserAHelpUIHandler user)
+            user.ReleaseEmbedded();
+    }
+
     public void ToggleWindow()
     {
         EnsureUIHelper();
@@ -498,14 +514,50 @@ public sealed class UserAHelpUIHandler : IAHelpUIHandler
         _ownerId = owner;
     }
     public bool IsAdmin => false;
-    public bool IsOpen => _window is { Disposed: false, IsOpen: true };
+    public bool IsOpen => _window is { Disposed: false, IsOpen: true } || (_embedded && _chatPanel is { Disposed: false });
     private DefaultWindow? _window;
     private BwoinkPanel? _chatPanel;
     private bool _discordRelayActive;
+    // When true the chat panel lives inside another control (the lobby's admins tab) instead of a popup window.
+    private bool _embedded;
+
+    /// <summary>
+    /// Returns the chat panel for hosting inside another control (the lobby). In this mode incoming messages
+    /// fill the panel in place instead of popping the window open.
+    /// </summary>
+    public Control GetEmbeddablePanel(bool relayActive)
+    {
+        _embedded = true;
+        EnsurePanel(relayActive);
+        _chatPanel!.Orphan();
+        return _chatPanel;
+    }
+
+    /// <summary>
+    /// Detaches the embedded panel so ahelp falls back to its normal window (e.g. when the lobby closes).
+    /// The panel is dropped; the server keeps the message history.
+    /// </summary>
+    public void ReleaseEmbedded()
+    {
+        if (!_embedded)
+            return;
+
+        _embedded = false;
+        _chatPanel?.Orphan();
+        _chatPanel = null;
+    }
 
     public void Receive(SharedBwoinkSystem.BwoinkTextMessage message)
     {
         DebugTools.Assert(message.UserId == _ownerId);
+
+        if (_embedded)
+        {
+            EnsurePanel(_discordRelayActive);
+            _chatPanel!.ReceiveLine(message);
+            return;
+        }
+
         EnsureInit(_discordRelayActive);
         _chatPanel!.ReceiveLine(message);
         _window!.OpenCentered();
@@ -555,17 +607,39 @@ public sealed class UserAHelpUIHandler : IAHelpUIHandler
 
     public void Open(NetUserId channelId, bool relayActive)
     {
+        if (_embedded)
+        {
+            EnsurePanel(relayActive);
+            return;
+        }
+
         EnsureInit(relayActive);
         _window!.OpenCentered();
+    }
+
+    /// <summary>
+    /// Creates the chat panel (and its intro line) if needed, without a window. Shared by the windowed and
+    /// embedded paths.
+    /// </summary>
+    private void EnsurePanel(bool relayActive)
+    {
+        if (_chatPanel is { Disposed: false })
+            return;
+
+        _chatPanel = new BwoinkPanel(text => SendMessageAction?.Invoke(_ownerId, text, true, false));
+        _chatPanel.InputTextChanged += text => InputTextChanged?.Invoke(_ownerId, text);
+        _chatPanel.RelayedToDiscordLabel.Visible = relayActive;
+
+        var introText = Loc.GetString("bwoink-system-introductory-message");
+        _chatPanel.ReceiveLine(new SharedBwoinkSystem.BwoinkTextMessage(_ownerId, SharedBwoinkSystem.SystemUserId, introText));
     }
 
     private void EnsureInit(bool relayActive)
     {
         if (_window is { Disposed: false })
             return;
-        _chatPanel = new BwoinkPanel(text => SendMessageAction?.Invoke(_ownerId, text, true, false));
-        _chatPanel.InputTextChanged += text => InputTextChanged?.Invoke(_ownerId, text);
-        _chatPanel.RelayedToDiscordLabel.Visible = relayActive;
+
+        EnsurePanel(relayActive);
         _window = new DefaultWindow()
         {
             TitleClass="windowTitleAlert",
@@ -575,11 +649,7 @@ public sealed class UserAHelpUIHandler : IAHelpUIHandler
         };
         _window.OnClose += () => { OnClose?.Invoke(); };
         _window.OnOpen += () => { OnOpen?.Invoke(); };
-        _window.Contents.AddChild(_chatPanel);
-
-        var introText = Loc.GetString("bwoink-system-introductory-message");
-        var introMessage = new SharedBwoinkSystem.BwoinkTextMessage( _ownerId, SharedBwoinkSystem.SystemUserId, introText);
-        Receive(introMessage);
+        _window.Contents.AddChild(_chatPanel!);
     }
 
     public void Dispose()

@@ -8,6 +8,20 @@ public static class EclipseProgression
     public const int BonusExperiencePerMinute = 1;
     public const int MaxLevel = 100;
 
+    // --- Balance knobs (tune these) ---------------------------------------------------------
+    // Passive experience granted per minute of playtime. Kept purely additive so lowering task
+    // weight never retroactively removes account experience/levels.
+    public const int PlaytimeExperiencePerMinute = 6;
+
+    // Experience granted at round end for participating, scaling with round length.
+    public const int RoundParticipationBaseExperience = 60;
+    public const int RoundParticipationPerMinute = 2;
+    public const int RoundParticipationMaxExperience = 240;
+
+    // Currency is derived from total experience (there is no separate currency backend yet).
+    public const int ExperiencePerMerit = 2;
+    public const int ExperiencePerShard = 250;
+
     private static readonly int[] ExperienceForLevel =
     [
         0,
@@ -162,6 +176,37 @@ public static class EclipseProgression
             <= 95 => "Регент",
             _ => "Глас",
         };
+    }
+
+    /// <summary>
+    /// Single source of truth for total account experience, shared by client (display) and server
+    /// (authoritative round-end stats) so the numbers always match.
+    /// </summary>
+    public static int CalculateTotalExperience(double playtimeMinutes, double bonusTrackerMinutes)
+    {
+        var playtime = Math.Max(0, (int) Math.Floor(playtimeMinutes * PlaytimeExperiencePerMinute));
+        var bonus = Math.Max(0, (int) Math.Floor(bonusTrackerMinutes * BonusExperiencePerMinute));
+        return playtime + bonus;
+    }
+
+    public static int CalculateMerits(int totalExperience)
+    {
+        return Math.Max(0, totalExperience) / ExperiencePerMerit;
+    }
+
+    public static int CalculateShards(int totalExperience)
+    {
+        return Math.Max(0, totalExperience) / ExperiencePerShard;
+    }
+
+    /// <summary>
+    /// Experience awarded at the end of a round for taking part, scaled by round duration and capped.
+    /// </summary>
+    public static int CalculateRoundParticipationExperience(double roundMinutes)
+    {
+        var minutes = Math.Max(0, (int) Math.Floor(roundMinutes));
+        var xp = RoundParticipationBaseExperience + minutes * RoundParticipationPerMinute;
+        return Math.Clamp(xp, RoundParticipationBaseExperience, RoundParticipationMaxExperience);
     }
 
     public static bool TryGetAttestationLevel(int level, out int attestationLevel)

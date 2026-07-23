@@ -186,6 +186,7 @@ public sealed partial class HumanoidProfileEditor
     {
         Profile = Profile?.WithSpecies(newSpecies);
         OnSkinColorOnValueChanged(); // Species may have special color prefs, make sure to update it.
+        _markingsModel.Species = newSpecies;
         _markingsModel.OrganData = _markingManager.GetMarkingData(newSpecies);
         _markingsModel.ValidateMarkings();
         // In case there's job restrictions for the species

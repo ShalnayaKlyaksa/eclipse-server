@@ -1,5 +1,7 @@
 using Content.Server.Administration.Logs;
+using Content.Server.Popups;
 using Content.Server.Power.Components;
+using Content.Shared._Eclipse.Industrial;
 using Content.Shared.Database;
 using Content.Shared.Interaction;
 using Content.Shared.Maps;
@@ -15,6 +17,7 @@ public sealed partial class CableSystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
+    [Dependency] private readonly PopupSystem _popup = default!;
 
     private void InitializeCablePlacer()
     {
@@ -39,6 +42,12 @@ public sealed partial class CableSystem
 
         if ((!component.OverTile && !tileDef.IsSubFloor) || !tileDef.Sturdy)
             return;
+
+        if (IndustrialPipingOccupancyHelper.TileContainsPiping(gridUid, grid, snapPos, EntityManager, _map))
+        {
+            _popup.PopupEntity(Loc.GetString("industrial-piping-tile-occupied"), args.User, args.User);
+            return;
+        }
 
         foreach (var anchored in _map.GetAnchoredEntities((gridUid, grid), snapPos))
         {

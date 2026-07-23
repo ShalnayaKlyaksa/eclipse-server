@@ -16,12 +16,16 @@ public sealed class ItemPipeNetworkSystem : EntitySystem
     private readonly Dictionary<int, ItemPipeNetwork> _networks = new();
     private int _nextNetworkId = 1;
 
-    public override void Initialize()
+    public void HandlePipeRemoved(Entity<ItemPipeComponent> ent)
     {
-        base.Initialize();
+        var adjacentPipes = GetAdjacentPipes(ent);
+        RemovePipeFromItsNetwork(ent);
 
-        SubscribeLocalEvent<ItemPipeComponent, AnchorStateChangedEvent>(OnPipeAnchorChanged);
-        SubscribeLocalEvent<ItemPipeComponent, EntityTerminatingEvent>(OnPipeTerminating);
+        foreach (var adjacent in adjacentPipes)
+        {
+            if (Exists(adjacent))
+                RebuildNetworkFrom((adjacent, Comp<ItemPipeComponent>(adjacent)));
+        }
     }
 
     public bool TryGetNetwork(int networkId, out ItemPipeNetwork network)
@@ -75,27 +79,9 @@ public sealed class ItemPipeNetworkSystem : EntitySystem
         }
     }
 
-    private void OnPipeAnchorChanged(Entity<ItemPipeComponent> ent, ref AnchorStateChangedEvent args)
+    public void RebuildAdjacentPipeNetworks(Entity<ItemPipeComponent> ent)
     {
-        RebuildNetworkFrom(ent);
-        RebuildAdjacentPipeNetworks(ent);
-    }
-
-    private void OnPipeTerminating(Entity<ItemPipeComponent> ent, ref EntityTerminatingEvent args)
-    {
-        var adjacentPipes = GetAdjacentPipes(ent);
-        RemovePipeFromItsNetwork(ent);
-
-        foreach (var adjacent in adjacentPipes)
-        {
-            if (Exists(adjacent))
-                RebuildNetworkFrom((adjacent, Comp<ItemPipeComponent>(adjacent)));
-        }
-    }
-
-    private void RebuildAdjacentPipeNetworks(Entity<ItemPipeComponent> ent)
-    {
-        foreach (var adjacent in GetAdjacentPipes(ent))
+        foreach (var adjacent in GetConnectedAdjacentPipes(ent).Concat(GetAdjacentPipes(ent)))
         {
             if (Exists(adjacent))
                 RebuildNetworkFrom((adjacent, Comp<ItemPipeComponent>(adjacent)));
@@ -114,7 +100,7 @@ public sealed class ItemPipeNetworkSystem : EntitySystem
             if (!result.Add(current))
                 continue;
 
-            foreach (var adjacent in GetAdjacentPipes((current, Comp<ItemPipeComponent>(current))))
+            foreach (var adjacent in GetConnectedAdjacentPipes(current))
             {
                 if (!result.Contains(adjacent))
                     queue.Enqueue(adjacent);
@@ -122,6 +108,31 @@ public sealed class ItemPipeNetworkSystem : EntitySystem
         }
 
         return result;
+    }
+
+    private IEnumerable<EntityUid> GetConnectedAdjacentPipes(EntityUid pipeUid)
+    {
+        var xform = Transform(pipeUid);
+        if (!xform.Anchored || xform.GridUid is not EntityUid gridUid ||
+            !TryComp<MapGridComponent>(gridUid, out var grid))
+        {
+            yield break;
+        }
+
+        var pos = _mapSystem.TileIndicesFor(gridUid, grid, xform.Coordinates);
+
+        foreach (var direction in CardinalDirections)
+        {
+            var enumerator = _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, pos.Offset(direction));
+            while (enumerator.MoveNext(out var entity) && entity != null)
+            {
+                if (entity == pipeUid || !HasComp<ItemPipeComponent>(entity))
+                    continue;
+
+                if (ItemPipeConnectionHelper.ArePipesConnected(pipeUid, entity.Value, direction, EntityManager, _mapSystem))
+                    yield return entity.Value;
+            }
+        }
     }
 
     private ItemPipeNetwork CreateNetwork(HashSet<EntityUid> pipes)
@@ -320,45 +331,18 @@ public sealed class ItemPipeNetworkSystem : EntitySystem
                 if (!HasComp<IndustrialProcessorComponent>(entity) || seen.Contains(entity))
                     return;
 
-                if (!IsProcessorPortConnectedToNetwork(entity, requiredMode, networkPipes))
+                var processor = entity;
+                var processorComp = Comp<IndustrialProcessorComponent>(processor);
+                if (processorComp.GetItemPortMode(direction.GetOpposite()) != requiredMode)
                     return;
 
-                seen.Add(entity);
-                result.Add(entity);
+                if (!ItemPipeConnectionHelper.IsProcessorConnectedToPipe(processor, pipeUid, direction.GetOpposite(), EntityManager))
+                    return;
+
+                seen.Add(processor);
+                result.Add(processor);
             });
         }
-    }
-
-    private bool IsProcessorPortConnectedToNetwork(
-        EntityUid processor,
-        PortMode requiredMode,
-        HashSet<EntityUid> networkPipes)
-    {
-        var xform = Transform(processor);
-        if (!xform.Anchored || xform.GridUid is not EntityUid gridUid ||
-            !TryComp<MapGridComponent>(gridUid, out var grid))
-            return false;
-
-        var processorComp = Comp<IndustrialProcessorComponent>(processor);
-        var pos = _mapSystem.TileIndicesFor(gridUid, grid, xform.Coordinates);
-
-        foreach (var direction in CardinalDirections)
-        {
-            if (processorComp.GetPortMode(direction) != requiredMode)
-                continue;
-
-            var connected = false;
-            ForAnchoredEntities(gridUid, grid, pos.Offset(direction), entity =>
-            {
-                if (networkPipes.Contains(entity))
-                    connected = true;
-            });
-
-            if (connected)
-                return true;
-        }
-
-        return false;
     }
 }
 

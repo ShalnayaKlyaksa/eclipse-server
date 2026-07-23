@@ -1,0 +1,233 @@
+# Anatomy profile IDs intentionally match SpeciesPrototype IDs.
+# Blood and plasma settings here are consumed by AdvancedHealth on spawn.
+
+- type: advancedHealthAnatomy
+  id: Human
+
+- type: advancedHealthAnatomy
+  id: Imperial
+  bodyFluid: Blood
+  fluidColor: "#c60000"
+  bloodTypes: [ "O-", "O+", "A-", "A+", "B-", "B+", "AB-", "AB+" ]
+  incompatibleTransfusionPopup: advanced-health-transfusion-incompatible-imperial
+
+- type: advancedHealthAnatomy
+  id: Dwarf
+  maxBloodVolume: 4500
+  bleedingModifier: 0.9
+  painModifier: 0.95
+  traumaModifier: 0.9
+  bodyFluid: DenseBlood
+  fluidColor: "#650000"
+  bloodTypes: [ "D-I", "D-II", "D-III" ]
+  incompatibleTransfusionPopup: advanced-health-transfusion-incompatible-dwarf
+  defaultBoneIntegrity: 115
+  bodyParts:
+    Chest:
+      organIntegrity: 112
+    LeftThigh:
+      hitWeightModifier: 0.9
+    RightThigh:
+      hitWeightModifier: 0.9
+
+- type: advancedHealthAnatomy
+  id: Molei
+  maxBloodVolume: 3900
+  bleedingModifier: 1.12
+  painModifier: 1.08
+  traumaModifier: 1.12
+  bodyFluid: Hemolymph
+  fluidColor: "#a7bdc8"
+  bloodTypes: [ "M-A", "M-B", "M-O" ]
+  incompatibleTransfusionPopup: advanced-health-transfusion-incompatible-molei
+  defaultBoneIntegrity: 80
+  defaultSkinIntegrity: 90
+
+- type: advancedHealthAnatomy
+  id: Lavrite
+  maxBloodVolume: 5000
+  bleedingModifier: 0.95
+  painModifier: 0.95
+  traumaModifier: 1.02
+  oxygenationModifier: 0.95
+  bodyFluid: Thermoblood
+  fluidColor: "#340000"
+  bloodTypes: [ "L-Ash", "L-Ember", "L-Slag" ]
+  incompatibleTransfusionPopup: advanced-health-transfusion-incompatible-lavrite
+  defaultSkinIntegrity: 108
+
+- type: advancedHealthAnatomy
+  id: Kobold
+  maxBloodVolume: 3600
+  bleedingModifier: 1.25
+  painModifier: 1.05
+  traumaModifier: 1.15
+  bodyFluid: ReptileBlood
+  fluidColor: "#174f20"
+  bloodTypes: [ "K-A", "K-B", "K-O" ]
+  incompatibleTransfusionPopup: advanced-health-transfusion-incompatible-kobold
+  defaultSkinIntegrity: 88
+  defaultBoneIntegrity: 82
+
+- type: advancedHealthAnatomy
+  id: Saurian
+  maxBloodVolume: 5200
+  bleedingModifier: 0.9
+  painModifier: 0.95
+  traumaModifier: 0.92
+  oxygenationModifier: 0.92
+  bodyFluid: ReptileBlood
+  fluidColor: "#3f5f21"
+  bloodTypes: [ "S-A", "S-B", "S-O" ]
+  incompatibleTransfusionPopup: advanced-health-transfusion-incompatible-saurian
+  defaultSkinIntegrity: 115
+
+- type: advancedHealthAnatomy
+  id: Therian
+  maxBloodVolume: 4800
+  bleedingModifier: 1.02
+  painModifier: 1.0
+  traumaModifier: 1.0
+  bodyFluid: Blood
+  fluidColor: "#d05a18"
+  bloodTypes: [ "T-A", "T-B", "T-O" ]
+  incompatibleTransfusionPopup: advanced-health-transfusion-incompatible-therian
+
+- type: advancedHealthAnatomy
+  id: Arkane
+  maxBloodVolume: 4700
+  bleedingModifier: 1.05
+  painModifier: 0.95
+  traumaModifier: 1.05
+  bodyFluid: Ichor
+  fluidColor: "#4b174f"
+  bloodTypes: [ "A-Spark", "A-Ash", "A-Void" ]
+  incompatibleTransfusionPopup: advanced-health-transfusion-incompatible-arkane
+
+- type: advancedHealthAnatomy
+  id: Avian
+  maxBloodVolume: 3700
+  bleedingModifier: 1.18
+  painModifier: 1.08
+  traumaModifier: 1.18
+  oxygenationModifier: 1.08
+  bodyFluid: LightBlood
+  fluidColor: "#d88418"
+  bloodTypes: [ "V-A", "V-B", "V-O" ]
+  incompatibleTransfusionPopup: advanced-health-transfusion-incompatible-avian
+  defaultBoneIntegrity: 78
+
+- type: advancedHealthAnatomy
+  id: Elir
+  maxBloodVolume: 4400
+  bleedingModifier: 1.08
+  painModifier: 1.1
+  traumaModifier: 1.08
+  bodyFluid: RefinedBlood
+  fluidColor: "#c9a7a7"
+  bloodTypes: [ "E-Light", "E-Shade", "E-Lineage" ]
+  incompatibleTransfusionPopup: advanced-health-transfusion-incompatible-elir
+  defaultBoneIntegrity: 88
+
+- type: advancedHealthAnatomy
+  id: Slimefolk
+  maxBloodVolume: 6000
+  bleedingModifier: 0.55
+  painModifier: 0.75
+  traumaModifier: 0.82
+  bodyFluid: Plasma
+  fluidColor: "#70d5ff"
+  bloodTypes: [ "P-Neutral", "P-Cryo", "P-Electro", "P-Acid", "P-Neuro" ]
+  incompatibleTransfusionPopup: advanced-health-transfusion-incompatible-slimefolk
+  canFracture: false
+  defaultSkinIntegrity: 82
+  defaultMuscleIntegrity: 125
+  defaultVesselIntegrity: 130
+
+- type: advancedHealthAnatomy
+  id: Reptilian
+  maxBloodVolume: 4800
+  bleedingModifier: 0.85
+  painModifier: 0.9
+  oxygenationModifier: 0.85
+  defaultSkinIntegrity: 115
+
+- type: advancedHealthAnatomy
+  id: SlimePerson
+  maxBloodVolume: 6000
+  bleedingModifier: 0.4
+  painModifier: 0.7
+  traumaModifier: 0.75
+  canFracture: false
+  defaultSkinIntegrity: 80
+  defaultMuscleIntegrity: 130
+  defaultVesselIntegrity: 130
+
+- type: advancedHealthAnatomy
+  id: Arachnid
+  maxBloodVolume: 4200
+  bleedingModifier: 0.8
+  painModifier: 0.8
+  traumaModifier: 0.9
+  defaultSkinIntegrity: 120
+
+- type: advancedHealthAnatomy
+  id: Moth
+  maxBloodVolume: 3800
+  bleedingModifier: 1.15
+  painModifier: 1.1
+  traumaModifier: 1.15
+  defaultBoneIntegrity: 75
+
+- type: advancedHealthAnatomy
+  id: Vox
+  maxBloodVolume: 4000
+  bleedingModifier: 1.1
+  oxygenationModifier: 1.2
+  defaultBoneIntegrity: 80
+  bodyParts:
+    Chest:
+      organIntegrity: 90
+
+- type: advancedHealthAnatomy
+  id: Diona
+  maxBloodVolume: 6500
+  bleedingModifier: 0.45
+  painModifier: 0.6
+  traumaModifier: 0.7
+  oxygenationModifier: 0.6
+  defaultSkinIntegrity: 140
+  defaultMuscleIntegrity: 120
+  defaultBoneIntegrity: 140
+
+- type: advancedHealthAnatomy
+  id: Vulpkanin
+  maxBloodVolume: 5000
+  painModifier: 1.05
+  oxygenationModifier: 0.9
+
+- type: advancedHealthAnatomy
+  id: Skeleton
+  maxBloodVolume: 1
+  hasBlood: false
+  hasPain: false
+  needsOxygen: false
+  bleedingModifier: 0
+  defaultSkinIntegrity: 0
+  defaultMuscleIntegrity: 0
+  defaultVesselIntegrity: 0
+  defaultNerveIntegrity: 0
+  defaultBoneIntegrity: 140
+  defaultOrganIntegrity: 80
+
+- type: advancedHealthAnatomy
+  id: Gingerbread
+  maxBloodVolume: 1
+  hasBlood: false
+  needsOxygen: false
+  bleedingModifier: 0
+  painModifier: 0.8
+  defaultSkinIntegrity: 110
+  defaultMuscleIntegrity: 70
+  defaultVesselIntegrity: 0
+  defaultBoneIntegrity: 60

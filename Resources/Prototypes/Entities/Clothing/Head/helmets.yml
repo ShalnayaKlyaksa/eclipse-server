@@ -26,6 +26,9 @@
         Slash: 0.9
         Piercing: 0.9
         Heat: 0.9
+  - type: BodyArmorRating
+    protection: 12
+    class: Medium
 
 #Basic Helmet (Security Helmet)
 - type: entity

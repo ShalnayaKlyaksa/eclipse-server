@@ -12,6 +12,10 @@ ent-PinpointerProtoCoreActivationKey = activation key tracker
     .desc = A handheld tracker locked onto the activation key's emergency beacon.
 ent-PinpointerSyndicateNuclear = ash legion pinpointer
     .desc = Produced specifically for ash legion operative missions, get that key!
+ent-ActivationKeyTrackerCartridge = activation key tracker cartridge
+    .desc = A single-use cartridge containing an application that tracks the proto core activation key.
+ent-AshLegionActivationKeyTrackerCartridge = { ent-ActivationKeyTrackerCartridge }
+    .desc = { ent-ActivationKeyTrackerCartridge.desc }
 
 ash-legion-title = Ash Legionnaires
 ash-legion-description = The Ash Legion targets the station's built-in proto core instead of bringing a nuclear device.

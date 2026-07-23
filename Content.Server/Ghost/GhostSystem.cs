@@ -17,6 +17,7 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Follower;
 using Content.Shared.Ghost;
 using Content.Shared.GhostTypes;
+using Content.Shared.Humanoid;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
@@ -453,7 +454,7 @@ namespace Content.Server.Ghost
             bool canReturn = false)
         {
             _transformSystem.TryGetMapOrGridCoordinates(targetEntity, out var spawnPosition);
-            return SpawnGhost(mind, spawnPosition, canReturn);
+            return SpawnGhost(mind, spawnPosition, canReturn, targetEntity);
         }
 
         private bool IsValidSpawnPosition(EntityCoordinates? spawnPosition)
@@ -474,7 +475,7 @@ namespace Content.Server.Ghost
         }
 
         public EntityUid? SpawnGhost(Entity<MindComponent?> mind, EntityCoordinates? spawnPosition = null,
-            bool canReturn = false)
+            bool canReturn = false, EntityUid? lastBody = null)
         {
             if (!Resolve(mind, ref mind.Comp))
                 return null;
@@ -498,10 +499,7 @@ namespace Content.Server.Ghost
             var ghost = SpawnAtPosition(GameTicker.ObserverPrototypeName, spawnPosition.Value);
             var ghostComponent = Comp<GhostComponent>(ghost);
 
-            if (TryComp<GhostSpriteStateComponent>(ghost, out var state))  // If more TryComps are added this should be turned into an event
-            {
-                _ghostState.SetGhostSprite((ghost, state), mind);
-            }
+            SetGhostSprite(ghost, mind, lastBody);
 
             // Try setting the ghost entity name to either the character name or the player name.
             // If all else fails, it'll default to the default entity prototype name, "observer".
@@ -528,6 +526,19 @@ namespace Content.Server.Ghost
             // we have to call this after the mind has been transferred since some mind roles modify the ghost's name
             _nameMod.RefreshNameModifiers(ghost);
             return ghost;
+        }
+
+        public void SetGhostSprite(EntityUid ghost, EntityUid mind, EntityUid? lastBody = null)
+        {
+            if (!TryComp<GhostSpriteStateComponent>(ghost, out var state))
+                return;
+
+            var body = lastBody ?? CompOrNull<MindComponent>(mind)?.CurrentEntity;
+            var sex = TryComp<HumanoidProfileComponent>(body, out var profile) && profile.Sex == Sex.Female
+                ? Sex.Female
+                : Sex.Male;
+
+            _ghostState.SetGhostSprite((ghost, state), mind, sex);
         }
 
         public bool OnGhostAttempt(EntityUid mindId, bool canReturnGlobal, bool viaCommand = false, bool forced = false, MindComponent? mind = null)

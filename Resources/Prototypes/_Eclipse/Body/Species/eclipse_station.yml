@@ -1,0 +1,161 @@
+# Placeholder Eclipse Station bodies reuse existing humanoid sprites until dedicated art lands.
+
+- type: entity
+  parent: AppearanceHuman
+  id: AppearanceImperial
+  categories: [ HideSpawnMenu ]
+  name: imperial appearance
+  components:
+  - type: HumanoidProfile
+    species: Imperial
+
+- type: entity
+  parent: [ AppearanceImperial, BaseSpeciesMobOrganic ]
+  id: MobImperial
+  name: Urist McImperial
+
+- type: entity
+  parent: AppearanceMoth
+  id: AppearanceMolei
+  categories: [ HideSpawnMenu ]
+  name: molei appearance
+  components:
+  - type: HumanoidProfile
+    species: Molei
+
+- type: entity
+  parent: [ AppearanceMolei, MobMoth ]
+  id: MobMolei
+  name: Urist McMolei
+
+- type: entity
+  parent: AppearanceHuman
+  id: AppearanceLavrite
+  categories: [ HideSpawnMenu ]
+  name: lavrite appearance
+  components:
+  - type: HumanoidProfile
+    species: Lavrite
+
+- type: entity
+  parent: [ AppearanceLavrite, BaseSpeciesMobOrganic ]
+  id: MobLavrite
+  name: Urist McLavrite
+
+- type: entity
+  parent: AppearanceReptilian
+  id: AppearanceKobold
+  categories: [ HideSpawnMenu ]
+  name: kobold appearance
+  components:
+  - type: HumanoidProfile
+    species: Kobold
+  - type: ScaleVisuals
+    scale: 0.9, 0.9
+
+- type: entity
+  parent: [ AppearanceKobold, MobReptilian ]
+  id: MobEclipseKobold
+  name: Urist McKobold
+  components:
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.32
+        density: 120
+        restitution: 0.0
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+
+- type: entity
+  parent: AppearanceReptilian
+  id: AppearanceSaurian
+  categories: [ HideSpawnMenu ]
+  name: saurian appearance
+  components:
+  - type: HumanoidProfile
+    species: Saurian
+  - type: ScaleVisuals
+    scale: 1.05, 1.05
+
+- type: entity
+  parent: [ AppearanceSaurian, MobReptilian ]
+  id: MobSaurian
+  name: Urist McSaurian
+
+- type: entity
+  parent: AppearanceAnthropomorph
+  id: AppearanceTherian
+  categories: [ HideSpawnMenu ]
+  name: therian appearance
+  components:
+  - type: HumanoidProfile
+    species: Therian
+
+- type: entity
+  parent: [ AppearanceTherian, MobAnthropomorph ]
+  id: MobTherian
+  name: Urist McTherian
+
+- type: entity
+  parent: AppearanceHuman
+  id: AppearanceArkane
+  categories: [ HideSpawnMenu ]
+  name: arkane appearance
+  components:
+  - type: HumanoidProfile
+    species: Arkane
+
+- type: entity
+  parent: [ AppearanceArkane, BaseSpeciesMobOrganic ]
+  id: MobArkane
+  name: Urist McArkane
+
+# Avians are harpies: an anthropomorph body carrying feathered wings, ears and a tail. Inheriting AppearanceMoth
+# gave them moth parts (antennae, moth wings) and put them in the Moth marking group, which is why they looked
+# like moths no matter what markings were selected.
+- type: entity
+  parent: AppearanceAnthropomorph
+  id: AppearanceAvian
+  categories: [ HideSpawnMenu ]
+  name: avian appearance
+  components:
+  - type: HumanoidProfile
+    species: Avian
+
+- type: entity
+  parent: [ AppearanceAvian, MobAnthropomorph ]
+  id: MobAvian
+  name: Urist McAvian
+
+- type: entity
+  parent: AppearanceHuman
+  id: AppearanceElir
+  categories: [ HideSpawnMenu ]
+  name: elir appearance
+  components:
+  - type: HumanoidProfile
+    species: Elir
+
+- type: entity
+  parent: [ AppearanceElir, BaseSpeciesMobOrganic ]
+  id: MobElir
+  name: Urist McElir
+
+- type: entity
+  parent: AppearanceSlimePerson
+  id: AppearanceSlimefolk
+  categories: [ HideSpawnMenu ]
+  name: slimefolk appearance
+  components:
+  - type: HumanoidProfile
+    species: Slimefolk
+
+- type: entity
+  parent: [ AppearanceSlimefolk, MobSlimePerson ]
+  id: MobSlimefolk
+  name: Urist McSlimefolk

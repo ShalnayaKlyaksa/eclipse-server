@@ -91,7 +91,9 @@ public sealed partial class LayerMarkingItem : BoxContainer, ISearchableControl
     private void UpdateData()
     {
         MarkingTexture.Textures = _markingPrototype.Sprites.Select(layer => _sprite.Frame0(layer)).ToList();
-        SelectButton.Text = Loc.GetString($"marking-{_markingPrototype.ID}");
+        var markingName = Loc.GetString($"marking-{_markingPrototype.ID}");
+        SelectButton.Text = markingName;
+        SelectButton.ToolTip = markingName;
 
         // Corvax-Sponsors-Start
         if (_markingPrototype.SponsorOnly && _sponsorsManager != null && _interactive)

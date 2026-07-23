@@ -1,39 +1,67 @@
 using Content.Shared._Eclipse.Industrial;
+using Content.Shared.Construction.Components;
 using Content.Shared.Examine;
-using Robust.Shared.Map.Components;
+using Content.Shared.Popups;
+using Robust.Server.GameObjects;
+using Robust.Shared.GameObjects;
 
 namespace Content.Server._Eclipse.Industrial;
 
-public sealed class ItemPipeSystem : SharedItemPipeSystem
+public sealed partial class ItemPipeSystem : SharedItemPipeSystem
 {
-    [Dependency] private readonly ItemPipeNetworkSystem _network = default!;
+    [Dependency] private ItemPipeNetworkSystem _network = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
-        SubscribeLocalEvent<ItemPipeComponent, ComponentInit>(OnComponentInit);
-        SubscribeLocalEvent<ItemPipeComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<ItemPipeComponent, MoveEvent>(OnMove);
+        SubscribeLocalEvent<ItemPipeComponent, UserUnanchoredEvent>(OnUserUnanchored);
     }
 
-    private void OnComponentInit(Entity<ItemPipeComponent> ent, ref ComponentInit args)
+    private void OnUserUnanchored(Entity<ItemPipeComponent> ent, ref UserUnanchoredEvent args)
     {
-        ApplyTierSettings(ent);
+        _popup.PopupEntity(Loc.GetString("industrial-item-pipe-detached"), ent, args.User);
+        QueueDel(ent);
+    }
+
+    private void OnMove(Entity<ItemPipeComponent> ent, ref MoveEvent args)
+    {
+        if (args.NewRotation.EqualsApprox(args.OldRotation))
+            return;
+
+        UpdateConnections(ent);
+        UpdateAdjacentConnections(ent);
+        OnPipeTopologyChanged(ent);
+    }
+
+    protected override void OnPipeTopologyChanged(Entity<ItemPipeComponent> ent)
+    {
         _network.RebuildNetworkFrom(ent);
+        _network.RebuildAdjacentPipeNetworks(ent);
     }
 
-    private void OnMapInit(Entity<ItemPipeComponent> ent, ref MapInitEvent args)
+    protected override void OnPipeRemoved(Entity<ItemPipeComponent> ent)
     {
-        ApplyTierSettings(ent);
-        _network.RebuildNetworkFrom(ent);
+        _network.HandlePipeRemoved(ent);
     }
 
-    private void ApplyTierSettings(Entity<ItemPipeComponent> ent)
+    protected override void TryAutoBindAdjacentProcessors(Entity<ItemPipeComponent> ent)
     {
-        var specs = PipeTierHelper.GetSpecs(ent.Comp.Tier);
-        ent.Comp.ThroughputPerSecond = specs.ThroughputPerSecond;
-        ent.Comp.TransferDelay = specs.TransferDelay;
-        Dirty(ent);
+        var procConnect = EntityManager.System<SharedIndustrialProcessorPipeConnectSystem>();
+        if (!procConnect.TryAutoBindAdjacentProcessors(ent))
+            return;
+
+        UpdateConnections(ent);
+        UpdateAdjacentConnections(ent);
+        OnPipeTopologyChanged(ent);
+    }
+
+    protected override void OnProcessorAdjacentChanged(EntityUid processor)
+    {
+        base.OnProcessorAdjacentChanged(processor);
+        _network.RebuildNetworksNearProcessor((processor, Comp<IndustrialProcessorComponent>(processor)));
     }
 
     protected override void PushNetworkExamine(Entity<ItemPipeComponent> ent, ExaminedEvent args)
@@ -44,14 +72,10 @@ public sealed class ItemPipeSystem : SharedItemPipeSystem
             return;
         }
 
-        if (!_network.TryGetNetwork(ent.Comp.NetworkId, out var network))
+        if (_network.TryGetNetwork(ent.Comp.NetworkId, out var network))
         {
-            args.PushMarkup(Loc.GetString("industrial-pipe-no-network"));
-            return;
+            args.PushMarkup(Loc.GetString("industrial-pipe-examine-network",
+                ("pipes", network.Pipes.Count), ("tier", GetPipeTierName(network.EffectiveTier))));
         }
-
-        args.PushMarkup(Loc.GetString("industrial-pipe-examine-network",
-            ("pipes", network.Pipes.Count),
-            ("tier", SharedItemPipeSystem.GetPipeTierName(network.EffectiveTier))));
     }
 }

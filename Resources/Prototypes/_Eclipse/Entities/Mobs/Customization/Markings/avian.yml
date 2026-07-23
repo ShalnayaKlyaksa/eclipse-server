@@ -1,0 +1,116 @@
+# Harpy parts for the Avian species.
+#
+# The wing/ear/tail sprites already existed in the build but had no marking prototypes, so Avians were stuck
+# with the moth wings they inherit from their Moth organ group.
+#
+# Avians build on the anthropomorph body, so these live in the Anthropomorph marking group.
+# speciesRestriction then narrows them to Avians only, so other anthropomorphs never see them.
+
+# --- Wings -------------------------------------------------------------------------------------------------
+# harpy_wings.rsi ships a plain pair plus multi-tone variants meant to be recoloured per layer.
+
+- type: marking
+  id: AvianWings
+  bodyPart: Tail
+  groupWhitelist: [Anthropomorph]
+  speciesRestriction: [Avian]
+  sprites:
+  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_wings.rsi
+    state: harpy
+
+- type: marking
+  id: AvianWingsTwoTone
+  bodyPart: Tail
+  groupWhitelist: [Anthropomorph]
+  speciesRestriction: [Avian]
+  sprites:
+  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_wings.rsi
+    state: harpy2tone1
+  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_wings.rsi
+    state: harpy2tone2
+
+- type: marking
+  id: AvianWingsThreeTone
+  bodyPart: Tail
+  groupWhitelist: [Anthropomorph]
+  speciesRestriction: [Avian]
+  sprites:
+  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_wings.rsi
+    state: harpy3tone1
+  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_wings.rsi
+    state: harpy3tone2
+  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_wings.rsi
+    state: harpy3tone3
+
+- type: marking
+  id: AvianWingsSpeckled
+  bodyPart: Tail
+  groupWhitelist: [Anthropomorph]
+  speciesRestriction: [Avian]
+  sprites:
+  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_wings.rsi
+    state: harpyspeckled1
+  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_wings.rsi
+    state: harpyspeckled2
+
+- type: marking
+  id: AvianWingsUndertone
+  bodyPart: Tail
+  groupWhitelist: [Anthropomorph]
+  speciesRestriction: [Avian]
+  sprites:
+  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_wings.rsi
+    state: harpyundertone1
+  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_wings.rsi
+    state: harpyundertone2
+
+- type: marking
+  id: AvianWingsTipped
+  bodyPart: Tail
+  groupWhitelist: [Anthropomorph]
+  speciesRestriction: [Avian]
+  sprites:
+  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_wings.rsi
+    state: harpywingtip1
+  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_wings.rsi
+    state: harpywingtip2
+
+# --- Ears --------------------------------------------------------------------------------------------------
+
+- type: marking
+  id: AvianEars
+  bodyPart: HeadTop
+  groupWhitelist: [Anthropomorph]
+  speciesRestriction: [Avian]
+  sprites:
+  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_ears.rsi
+    state: harpy_ears_default
+
+# --- Tail feathers -----------------------------------------------------------------------------------------
+
+- type: marking
+  id: AvianTailHarpy
+  bodyPart: Tail
+  groupWhitelist: [Anthropomorph]
+  speciesRestriction: [Avian]
+  sprites:
+  - sprite: _Eclipse/Mobs/Customization/harpy_tails.rsi
+    state: harpy_tail
+
+- type: marking
+  id: AvianTailPhoenix
+  bodyPart: Tail
+  groupWhitelist: [Anthropomorph]
+  speciesRestriction: [Avian]
+  sprites:
+  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_tails.rsi
+    state: phoenix_tail
+
+- type: marking
+  id: AvianTailRooster
+  bodyPart: Tail
+  groupWhitelist: [Anthropomorph]
+  speciesRestriction: [Avian]
+  sprites:
+  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_tails.rsi
+    state: rooster_tail

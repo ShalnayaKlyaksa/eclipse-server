@@ -47,6 +47,9 @@
   parent: UnsensoredClothingUniformBase
   id: ClothingUniformBase
   components:
+  - type: BodyArmorRating
+    protection: 2
+    class: Clothing
   - type: SuitSensor
   - type: DeviceNetwork
     deviceNetId: Wireless

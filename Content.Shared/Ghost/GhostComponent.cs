@@ -97,13 +97,12 @@ public sealed partial class GhostComponent : Component
 }
 
 /// <summary>
-/// Ghost sprites dependent on damage by the player body
+/// Ghost sprite variants.
 /// </summary>
-/// <remarks>Used to change a ghost sprite to better visually represent their cause of death</remarks>
 [Serializable, NetSerializable]
 public enum GhostVisuals : byte
 {
-    Damage
+    Variant
 }
 
 public sealed partial class ToggleFoVActionEvent : InstantActionEvent { }

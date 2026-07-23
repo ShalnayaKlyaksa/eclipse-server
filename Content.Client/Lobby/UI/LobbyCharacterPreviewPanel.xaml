@@ -25,7 +25,9 @@
                           HorizontalExpand="True"
                           Visible="False"
                           SeparationOverride="7">
-                <PanelContainer SetHeight="132"
+                <PanelContainer Name="PreviewViewport"
+                                SetHeight="132"
+                                RectClipContent="True"
                                 HorizontalExpand="True">
                     <PanelContainer.PanelOverride>
                         <gfx:StyleBoxFlat BackgroundColor="#050200A8"

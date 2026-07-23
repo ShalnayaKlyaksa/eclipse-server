@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Numerics;
 using Content.Shared.Atmos;
+using Content.Shared._Eclipse.AdvancedHealth;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
@@ -105,6 +106,42 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
         // Total Damage
 
         DamageLabel.Text = _damageable.GetTotalDamage(target.Value).ToString();
+
+        // Optional advanced physiology. Legacy patients never show this panel.
+        var advanced = state.AdvancedBodyParts != null;
+        AdvancedHealthContainer.Visible = advanced;
+        AdvancedHealthDivider.Visible = advanced;
+        if (advanced)
+        {
+            AdvancedBodyDoll.SetState(state.AdvancedBodyParts);
+            AdvancedBloodLabel.Text = Loc.GetString("advanced-health-scanner-blood",
+                ("value", (state.AdvancedBloodVolume ?? 0) * 100));
+            if (state.AdvancedBodyFluid != null && state.AdvancedBloodType != null)
+            {
+                var carry = (int) MathF.Round(Math.Clamp(state.AdvancedOxygenCarryingCapacity ?? 1f, 0f, 1f) * 100f);
+                AdvancedBloodLabel.ToolTip = Loc.GetString("advanced-health-blood-group-tooltip",
+                    ("group", BloodCompatibility.Format(state.AdvancedBodyFluid, state.AdvancedBloodType)),
+                    ("carry", carry));
+                if (state.AdvancedFluidColor is { } fluidColor)
+                    AdvancedBloodLabel.FontColorOverride = fluidColor;
+            }
+            AdvancedOxygenLabel.Text = Loc.GetString("advanced-health-scanner-oxygen",
+                ("value", state.Oxygenation ?? 0));
+            AdvancedPainLabel.Text = Loc.GetString("advanced-health-scanner-pain",
+                ("value", state.Pain ?? 0));
+            AdvancedShockLabel.Text = Loc.GetString("advanced-health-scanner-shock",
+                ("value", state.Shock ?? 0));
+            AdvancedTraumaLabel.Text = Loc.GetString("advanced-health-scanner-trauma",
+                ("value", state.TraumaLoad ?? 0));
+            var bleedingPart = state.AdvancedBodyParts?
+                .Where(x => x.Bleeding != BleedingLevel.None)
+                .OrderByDescending(x => x.Severity)
+                .Select(x => Loc.GetString($"advanced-health-part-{x.Slot.ToString().ToLowerInvariant()}"))
+                .FirstOrDefault();
+            AdvancedBleedingLabel.Text = bleedingPart == null
+                ? Loc.GetString("advanced-health-scanner-no-bleeding")
+                : Loc.GetString("advanced-health-scanner-bleeding", ("part", bleedingPart));
+        }
 
         // Alerts
 

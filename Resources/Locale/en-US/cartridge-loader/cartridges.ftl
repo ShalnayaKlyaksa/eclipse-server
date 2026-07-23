@@ -27,6 +27,7 @@ log-probe-printout-header = Latest logs:
 log-probe-printout-entry = #{$number} / {$time} / {$accessor}
 
 astro-nav-program-name = AstroNav
+activation-key-tracker-program-name = Key Tracker
 
 med-tek-program-name = MedTek
 

@@ -39,3 +39,8 @@ tool-quality-digging-tool-name = Лопата
 
 tool-quality-brushing-name = Оттирание
 tool-quality-brushing-tool-name = Проволочная щётка
+
+tool-quality-industrial-port-configuring-name = Настройка промышленных портов
+tool-quality-industrial-port-configuring-tool-name = Ключ настройки портов
+tool-quality-industrial-pipe-detaching-name = Снятие предметных труб
+tool-quality-industrial-pipe-detaching-tool-name = Ключ настройки портов

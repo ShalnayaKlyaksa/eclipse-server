@@ -1,42 +1,208 @@
-<DefaultWindow xmlns="https://spacestation14.io"
-               xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls">
-    <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
-        <BoxContainer Orientation="Vertical" MinWidth="243" Margin="0 0 5 0">
-            <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="0 0 0 5">
-                <LineEdit Name="SearchBar" PlaceHolder="{Loc 'construction-menu-search'}" HorizontalExpand="True"/>
-                <OptionButton Name="OptionCategories" Access="Public" MinSize="130 0"/>
-            </BoxContainer>
-            <controls:ListContainer Name="Recipes" Access="Public" Group="True" Toggle="True" VerticalExpand="True" />
-            <ScrollContainer Name="RecipesGridScrollContainer" VerticalExpand="True" Access="Public" Visible="False">
-                <GridContainer Name="RecipesGrid" Columns="5" Access="Public"/>
-            </ScrollContainer>
+<controls:FancyWindow xmlns="https://spacestation14.io"
+                      xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+                      Title=""
+                      MinSize="900 560"
+                      SetSize="960 600">
+    <BoxContainer Orientation="Vertical"
+                  HorizontalExpand="True"
+                  VerticalExpand="True"
+                  Margin="6 4 6 6"
+                  SeparationOverride="6">
+        <!-- Tab bar -->
+        <BoxContainer Name="TabBar"
+                      Orientation="Horizontal"
+                      SeparationOverride="4">
+            <ContainerButton Name="ConstructionTabButton"
+                             ToggleMode="True"
+                             Pressed="True"
+                             MinWidth="160"
+                             MinHeight="34">
+                <Label Text="{Loc 'construction-menu-tab-construction'}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center" />
+            </ContainerButton>
+            <ContainerButton Name="CraftTabButton"
+                             ToggleMode="True"
+                             MinWidth="160"
+                             MinHeight="34">
+                <Label Text="{Loc 'construction-menu-tab-craft'}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center" />
+            </ContainerButton>
         </BoxContainer>
-        <BoxContainer Orientation="Vertical" HorizontalExpand="True">
-            <BoxContainer Orientation="Horizontal">
-                <Button Name="MenuGridViewButton" ToggleMode="True" Text="{Loc construction-menu-grid-view}"/>
-                <Button Name="FavoriteButton" Visible="false"/>
-            </BoxContainer>
-            <Control>
-                <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="0 0 0 5">
-                    <BoxContainer Orientation="Horizontal" Align="Center">
-                        <EntityPrototypeView Name="TargetTexture" HorizontalAlignment="Right" Stretch="Fill" Margin="0 0 10 0"/>
-                        <BoxContainer Orientation="Vertical">
-                            <RichTextLabel Name="TargetName"/>
-                            <RichTextLabel Name="TargetDesc"/>
+
+        <!-- Main area -->
+        <BoxContainer Orientation="Horizontal"
+                      HorizontalExpand="True"
+                      VerticalExpand="True"
+                      SeparationOverride="6">
+            <!-- Left: categories -->
+            <PanelContainer MinWidth="210" MaxWidth="210" VerticalExpand="True">
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#050200E8"
+                                      BorderColor="#A85E124D"
+                                      BorderThickness="1" />
+                </PanelContainer.PanelOverride>
+                <BoxContainer Orientation="Vertical"
+                              Margin="8"
+                              SeparationOverride="6"
+                              VerticalExpand="True">
+                    <LineEdit Name="SearchBar"
+                              PlaceHolder="{Loc 'construction-menu-search-recipes'}"
+                              HorizontalExpand="True" />
+                    <Label Text="{Loc 'construction-menu-categories-header'}"
+                           StyleClasses="LabelHeading" />
+                    <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
+                        <BoxContainer Name="CategoryList"
+                                      Orientation="Vertical"
+                                      SeparationOverride="2" />
+                    </ScrollContainer>
+                </BoxContainer>
+            </PanelContainer>
+
+            <!-- Middle: recipe list -->
+            <PanelContainer MinWidth="280" MaxWidth="320" VerticalExpand="True">
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#0A0400E6"
+                                      BorderColor="#A85E124D"
+                                      BorderThickness="1" />
+                </PanelContainer.PanelOverride>
+                <BoxContainer Orientation="Vertical"
+                              Margin="8"
+                              SeparationOverride="6"
+                              VerticalExpand="True">
+                    <BoxContainer Orientation="Horizontal"
+                                  SeparationOverride="6">
+                        <CheckBox Name="ShowAvailableOnlyCheck"
+                                  Text="{Loc 'construction-menu-show-available'}"
+                                  Pressed="True" />
+                    </BoxContainer>
+                    <Label Name="RecipeListHeader"
+                           Text="{Loc 'construction-menu-recipes-header'}"
+                           StyleClasses="LabelHeading" />
+                    <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
+                        <BoxContainer Name="RecipeList"
+                                      Orientation="Vertical"
+                                      SeparationOverride="2" />
+                    </ScrollContainer>
+                </BoxContainer>
+            </PanelContainer>
+
+            <!-- Right: details -->
+            <PanelContainer HorizontalExpand="True" VerticalExpand="True">
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#0A0400E6"
+                                      BorderColor="#A85E124D"
+                                      BorderThickness="1" />
+                </PanelContainer.PanelOverride>
+                <BoxContainer Orientation="Vertical"
+                              Margin="10"
+                              SeparationOverride="8"
+                              VerticalExpand="True">
+                    <Label Name="TargetName"
+                           StyleClasses="LabelHeadingBigger" />
+                    <BoxContainer Orientation="Horizontal"
+                                  SeparationOverride="12">
+                        <PanelContainer MinSize="80 80" MaxSize="80 80">
+                            <PanelContainer.PanelOverride>
+                                <gfx:StyleBoxFlat BackgroundColor="#1A0900"
+                                                  BorderColor="#A85E1266"
+                                                  BorderThickness="1" />
+                            </PanelContainer.PanelOverride>
+                            <EntityPrototypeView Name="TargetTexture"
+                                                 HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center"
+                                                 Stretch="Fill"
+                                                 SetSize="64 64" />
+                        </PanelContainer>
+                        <BoxContainer Orientation="Vertical"
+                                      HorizontalExpand="True"
+                                      SeparationOverride="4">
+                            <RichTextLabel Name="TargetDesc" />
+                            <Label Name="TargetStats" StyleClasses="LabelSecondaryColor" />
                         </BoxContainer>
                     </BoxContainer>
+
+                    <Label Name="IngredientsHeader"
+                           Text="{Loc 'construction-menu-ingredients-header'}"
+                           StyleClasses="LabelHeading" />
+                    <ItemList Name="RecipeStepList"
+                              Access="Public"
+                              VerticalExpand="True"
+                              Margin="0 0 0 4" />
+
+                    <BoxContainer Name="ConstructionActions"
+                                  Orientation="Vertical"
+                                  SeparationOverride="6">
+                        <BoxContainer Orientation="Horizontal"
+                                      SeparationOverride="6">
+                            <Button Name="BuildButton"
+                                    ToggleMode="True"
+                                    Disabled="True"
+                                    HorizontalExpand="True"
+                                    MinHeight="36"
+                                    Text="{Loc 'construction-menu-place-ghost'}" />
+                        </BoxContainer>
+                        <BoxContainer Orientation="Horizontal"
+                                      SeparationOverride="6">
+                            <Button Name="EraseButton"
+                                    ToggleMode="True"
+                                    HorizontalExpand="True"
+                                    Text="{Loc 'construction-menu-eraser-mode'}" />
+                            <Button Name="ClearButton"
+                                    HorizontalExpand="True"
+                                    Text="{Loc 'construction-menu-clear-all'}" />
+                        </BoxContainer>
+                    </BoxContainer>
+
+                    <BoxContainer Name="CraftActions"
+                                  Orientation="Horizontal"
+                                  SeparationOverride="6"
+                                  Visible="False">
+                        <Label Text="{Loc 'construction-menu-quantity'}"
+                               VerticalAlignment="Center" />
+                        <Button Name="QuantityMinus10" Text="-10" MinWidth="36" />
+                        <Button Name="QuantityMinus" Text="-" MinWidth="28" />
+                        <LineEdit Name="QuantityInput"
+                                  Text="1"
+                                  MinWidth="48"
+                                  HorizontalAlignment="Center" />
+                        <Button Name="QuantityPlus" Text="+" MinWidth="28" />
+                        <Button Name="QuantityPlus10" Text="+10" MinWidth="36" />
+                        <Button Name="CraftButton"
+                                Disabled="True"
+                                HorizontalExpand="True"
+                                MinHeight="36"
+                                Text="{Loc 'construction-menu-create'}" />
+                    </BoxContainer>
                 </BoxContainer>
-            </Control>
-            <ItemList Name="RecipeStepList" Access="Public" VerticalExpand="True" Margin="0 0 0 5"/>
-            <BoxContainer Orientation="Vertical">
-                <Button Name="BuildButton" Disabled="True" ToggleMode="True"
-                        VerticalExpand="True" SizeFlagsStretchRatio="0.5"/>
-                <BoxContainer Orientation="Horizontal" VerticalExpand="True" SizeFlagsStretchRatio="0.5">
-                    <Button Name="EraseButton" ToggleMode="True"
-                        HorizontalExpand="True" SizeFlagsStretchRatio="0.7"/>
-                    <Button Name="ClearButton" HorizontalExpand="True" SizeFlagsStretchRatio="0.3"/>
-                </BoxContainer>
-            </BoxContainer>
+            </PanelContainer>
         </BoxContainer>
+
+        <!-- Bottom: favorites -->
+        <PanelContainer Name="FavoritesPanel" MinHeight="72">
+            <PanelContainer.PanelOverride>
+                <gfx:StyleBoxFlat BackgroundColor="#050200E8"
+                                  BorderColor="#A85E124D"
+                                  BorderThickness="1" />
+            </PanelContainer.PanelOverride>
+            <BoxContainer Orientation="Horizontal"
+                          Margin="8 6"
+                          SeparationOverride="8"
+                          VerticalExpand="True">
+                <Label Text="{Loc 'construction-menu-favorites-header'}"
+                       VerticalAlignment="Center"
+                       StyleClasses="LabelHeading" />
+                <ScrollContainer HScrollEnabled="True" VScrollEnabled="False" HorizontalExpand="True">
+                    <BoxContainer Name="FavoritesBar"
+                                  Orientation="Horizontal"
+                                  SeparationOverride="4" />
+                </ScrollContainer>
+                <Button Name="FavoriteButton"
+                        Visible="False"
+                        Text="{Loc 'construction-add-favorite-button'}" />
+            </BoxContainer>
+        </PanelContainer>
     </BoxContainer>
-</DefaultWindow>
+</controls:FancyWindow>

@@ -8,6 +8,13 @@ namespace Content.Client.CrewManifest;
 [UsedImplicitly]
 public sealed class CrewManifestEui : BaseEui
 {
+    /// <summary>
+    /// When set (by the lobby's manifest tab), manifest state is delivered here and rendered inline instead of
+    /// opening the popup window. Cleared by the lobby as soon as its manifest tab is left, so in-game manifest
+    /// requests keep their normal window. Static because the client creates a fresh EUI per request.
+    /// </summary>
+    public static Action<string, CrewManifestEntries?>? LobbyManifestSink;
+
     private readonly CrewManifestUi _window;
 
     public CrewManifestEui()
@@ -20,11 +27,14 @@ public sealed class CrewManifestEui : BaseEui
         };
     }
 
+    private bool Embedded => LobbyManifestSink != null;
+
     public override void Opened()
     {
         base.Opened();
 
-        _window.OpenCentered();
+        if (!Embedded)
+            _window.OpenCentered();
     }
 
     public override void Closed()
@@ -40,6 +50,12 @@ public sealed class CrewManifestEui : BaseEui
 
         if (state is not CrewManifestEuiState cast)
         {
+            return;
+        }
+
+        if (LobbyManifestSink is { } sink)
+        {
+            sink(cast.StationName, cast.Entries);
             return;
         }
 

@@ -1,4 +1,4 @@
-﻿version: 1 # Not used right now, whatever.
+version: 1 # Not used right now, whatever.
 binds:
 - function: UIClick
   type: State
@@ -213,6 +213,9 @@ binds:
   key: MouseLeft
   canFocus: true
   mod1: Shift
+- function: AdvancedHealthAimTarget
+  type: State
+  key: F
 - function: ActivateItemInWorld
   type: State
   key: E

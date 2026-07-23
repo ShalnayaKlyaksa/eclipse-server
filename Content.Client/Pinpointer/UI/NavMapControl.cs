@@ -44,6 +44,8 @@ public partial class NavMapControl : MapGridControl
     // Tracked data
     public Dictionary<EntityCoordinates, (bool Visible, Color Color)> TrackedCoordinates = new();
     public Dictionary<NetEntity, NavMapBlip> TrackedEntities = new();
+    public bool AutoUpdate = true;
+    public bool TrackedCoordinatesBlink = true;
 
     public List<(Vector2, Vector2)> TileLines = new();
     public List<(Vector2, Vector2)> TileRects = new();
@@ -113,6 +115,14 @@ public partial class NavMapControl : MapGridControl
         Pressed = true,
     };
 
+    private readonly PanelContainer _topPanel;
+
+    public bool ShowControls
+    {
+        get => _topPanel.Visible;
+        set => _topPanel.Visible = value;
+    }
+
     public NavMapControl() : base(MinDisplayedRange, MaxDisplayedRange, DefaultDisplayedRange)
     {
         IoCManager.InjectDependencies(this);
@@ -126,7 +136,7 @@ public partial class NavMapControl : MapGridControl
         HorizontalExpand = true;
         VerticalExpand = true;
 
-        var topPanel = new PanelContainer()
+        _topPanel = new PanelContainer()
         {
             StyleClasses = { StyleClass.PanelDark },
             VerticalExpand = false,
@@ -153,7 +163,7 @@ public partial class NavMapControl : MapGridControl
             HorizontalExpand = true,
             Children =
             {
-                topPanel,
+                _topPanel,
                 new Control()
                 {
                     Name = "DrawingControl",
@@ -164,7 +174,7 @@ public partial class NavMapControl : MapGridControl
         };
 
         AddChild(topContainer);
-        topPanel.Measure(Vector2Helpers.Infinity);
+        _topPanel.Measure(Vector2Helpers.Infinity);
 
         _recenter.OnPressed += args =>
         {
@@ -247,7 +257,7 @@ public partial class NavMapControl : MapGridControl
             TrackedEntitySelectedAction?.Invoke(null);
         }
 
-        else if (args.Function == ContentKeyFunctions.ExamineEntity)
+        else if (args.Function == ContentKeyFunctions.ExamineEntity && ShowControls)
         {
             // Toggle beacon labels
             _beacons.Pressed = !_beacons.Pressed;
@@ -388,7 +398,7 @@ public partial class NavMapControl : MapGridControl
         // Tracked coordinates (simple dot, legacy)
         foreach (var (coord, value) in TrackedCoordinates)
         {
-            if (lit && value.Visible)
+            if ((!TrackedCoordinatesBlink || lit) && value.Visible)
             {
                 var mapPos = _transformSystem.ToMapCoordinates(coord);
 
@@ -448,6 +458,10 @@ public partial class NavMapControl : MapGridControl
 
     protected override void FrameUpdate(FrameEventArgs args)
     {
+        // Static embedded maps only need to retry while their replicated map data is unavailable.
+        if (!AutoUpdate && _navMap != null)
+            return;
+
         // Update the timer
         _updateTimer += args.DeltaSeconds;
 
@@ -455,7 +469,10 @@ public partial class NavMapControl : MapGridControl
         {
             _updateTimer -= UpdateTime;
 
-            UpdateNavMap();
+            if (AutoUpdate)
+                UpdateNavMap();
+            else
+                ForceNavMapUpdate();
         }
     }
 

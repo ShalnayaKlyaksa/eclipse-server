@@ -9,9 +9,11 @@ using Content.Shared.Power;
 using Content.Shared.Power.EntitySystems;
 using Content.Shared.Stacks;
 using Content.Shared.Tools.Systems;
+using Content.Shared.Temperature.Components;
 using Content.Shared.Verbs;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
+using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._Eclipse.Industrial;
@@ -24,6 +26,10 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedPowerReceiverSystem _power = default!;
     [Dependency] private readonly SharedToolSystem _tools = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+
+    public static readonly Direction[] CardinalDirections =
+        [Direction.North, Direction.South, Direction.East, Direction.West];
 
     protected readonly Dictionary<IndustrialProcessorType, List<IndustrialRecipePrototype>> RecipesByProcessor = new();
 
@@ -32,6 +38,7 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<IndustrialProcessorComponent, InteractUsingEvent>(OnInteractUsing);
+        SubscribeLocalEvent<IndustrialProcessorComponent, AfterInteractUsingEvent>(OnAfterInteractUsing);
         SubscribeLocalEvent<IndustrialProcessorComponent, EntInsertedIntoContainerMessage>(OnContainerModified);
         SubscribeLocalEvent<IndustrialProcessorComponent, EntRemovedFromContainerMessage>(OnContainerModified);
         SubscribeLocalEvent<IndustrialProcessorComponent, ContainerIsInsertingAttemptEvent>(OnInsertAttempt);
@@ -39,7 +46,6 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
         SubscribeLocalEvent<IndustrialProcessorComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<IndustrialProcessorComponent, PowerChangedEvent>(OnPowerChanged);
         SubscribeLocalEvent<IndustrialProcessorComponent, GetVerbsEvent<AlternativeVerb>>(OnGetPortVerbs);
-        SubscribeLocalEvent<IndustrialProcessorComponent, AfterInteractUsingEvent>(OnAfterInteractUsing);
 
         foreach (var recipe in PrototypeManager.EnumeratePrototypes<IndustrialRecipePrototype>())
         {
@@ -58,8 +64,14 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
         if (args.Handled)
             return;
 
-        if (_tools.HasQuality(args.Used, SharedToolSystem.PulseQuality))
+        if (IsPortConfigurator(args.Used))
+        {
+            if (TryGetClickedFace(ent, args.ClickLocation, out var direction))
+                CycleFacePort(ent, args.User, direction);
+
+            args.Handled = true;
             return;
+        }
 
         if (!_container.TryGetContainer(ent, ent.Comp.InputContainerId, out var input))
             return;
@@ -86,9 +98,13 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
 
     private void OnAfterInteractUsing(Entity<IndustrialProcessorComponent> ent, ref AfterInteractUsingEvent args)
     {
-        if (args.Handled || !args.CanReach || !_tools.HasQuality(args.Used, SharedToolSystem.PulseQuality))
+        if (args.Handled || !args.CanReach || !IsPortConfigurator(args.Used))
             return;
 
+        if (!TryGetClickedFace(ent, args.ClickLocation, out var direction))
+            return;
+
+        CycleFacePort(ent, args.User, direction);
         args.Handled = true;
     }
 
@@ -104,6 +120,8 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
 
         if (ent.Comp.AutoStart)
             TryStartProcessing(ent);
+
+        UpdateUserInterface(ent);
     }
 
     private void OnInsertAttempt(Entity<IndustrialProcessorComponent> ent, ref ContainerIsInsertingAttemptEvent args)
@@ -155,7 +173,7 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
             return;
 
         var held = args.Using;
-        if (held == null || !_tools.HasQuality(held.Value, SharedToolSystem.PulseQuality))
+        if (held == null || !IsPortConfigurator(held.Value))
             return;
 
         var user = args.User;
@@ -176,27 +194,56 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
         args.Verbs.Add(new AlternativeVerb
         {
             Text = Loc.GetString(textKey),
-            Act = () => CyclePort(ent, user, direction),
+            Act = () => CycleFacePort(ent, user, direction),
         });
     }
 
-    protected void CyclePort(Entity<IndustrialProcessorComponent> ent, EntityUid user, Direction direction)
+    protected void CycleFacePort(Entity<IndustrialProcessorComponent> ent, EntityUid user, Direction direction)
     {
-        var mode = ent.Comp.CyclePortMode(direction);
+        var mode = ent.Comp.CycleFacePort(direction);
+
+        if (mode == FacePortState.ItemOutput)
+            ent.Comp.ClearItemOutputsExcept(direction);
+
         Dirty(ent);
-        _popup.PopupClient(Loc.GetString("industrial-port-switched", ("mode", GetPortModeName(mode))), ent, user);
+        _popup.PopupClient(Loc.GetString("industrial-face-port-switched",
+            ("direction", GetDirectionName(direction)),
+            ("mode", GetFacePortName(mode))), ent, user);
         OnPortModeChanged(ent);
+        UpdateUserInterface(ent);
     }
 
     protected virtual void OnPortModeChanged(Entity<IndustrialProcessorComponent> ent) { }
 
+    protected virtual void UpdateUserInterface(Entity<IndustrialProcessorComponent> ent) { }
+
+    public bool IsPortConfigurator(EntityUid item)
+    {
+        return HasComp<IndustrialConfiguratorComponent>(item) ||
+               _tools.HasQuality(item, IndustrialToolQualities.PortConfiguring);
+    }
+
+    public bool TryGetClickedFace(EntityUid processor, EntityCoordinates clickLocation, out Direction direction)
+    {
+        return IndustrialPortClickZones.TryGetClickedFace(
+            processor,
+            clickLocation,
+            EntityManager,
+            _transform,
+            out direction);
+    }
+
     private void OnExamined(Entity<IndustrialProcessorComponent> ent, ref ExaminedEvent args)
     {
         args.PushMarkup(Loc.GetString("industrial-examine-tier", ("tier", GetTierName(ent.Comp.Tier))));
-        args.PushMarkup(Loc.GetString("industrial-examine-port-north", ("mode", GetPortModeName(ent.Comp.NorthPort))));
-        args.PushMarkup(Loc.GetString("industrial-examine-port-south", ("mode", GetPortModeName(ent.Comp.SouthPort))));
-        args.PushMarkup(Loc.GetString("industrial-examine-port-east", ("mode", GetPortModeName(ent.Comp.EastPort))));
-        args.PushMarkup(Loc.GetString("industrial-examine-port-west", ("mode", GetPortModeName(ent.Comp.WestPort))));
+        args.PushMarkup(Loc.GetString("industrial-examine-face-port-north",
+            ("mode", GetFacePortName(ent.Comp.NorthFacePort))));
+        args.PushMarkup(Loc.GetString("industrial-examine-face-port-south",
+            ("mode", GetFacePortName(ent.Comp.SouthFacePort))));
+        args.PushMarkup(Loc.GetString("industrial-examine-face-port-east",
+            ("mode", GetFacePortName(ent.Comp.EastFacePort))));
+        args.PushMarkup(Loc.GetString("industrial-examine-face-port-west",
+            ("mode", GetFacePortName(ent.Comp.WestFacePort))));
 
         var inputCount = GetContainerCount(ent, ent.Comp.InputContainerId);
         var outputCount = GetContainerCount(ent, ent.Comp.OutputContainerId);
@@ -211,6 +258,7 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
             IndustrialProcessorState.Working => "industrial-processor-working",
             IndustrialProcessorState.Blocked => "industrial-processor-blocked",
             IndustrialProcessorState.Unpowered => "industrial-processor-unpowered",
+            IndustrialProcessorState.Unheated => "industrial-processor-unheated",
             _ => "industrial-processor-idle",
         };
 
@@ -229,6 +277,7 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
             _popup.PopupEntity(Loc.GetString("industrial-processor-no-power"), ent);
 
         UpdateAppearance(ent);
+        UpdateUserInterface(ent);
 
         if (args.Powered && ent.Comp.AutoStart)
             TryStartProcessing(ent);
@@ -236,8 +285,15 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
 
     protected IndustrialProcessorState GetState(Entity<IndustrialProcessorComponent> ent)
     {
-        if (!IsPowered(ent))
+        if (HasComp<IndustrialHeatPoweredComponent>(ent))
+        {
+            if (!HasSufficientHeat(ent))
+                return IndustrialProcessorState.Unheated;
+        }
+        else if (!IsPowered(ent))
+        {
             return IndustrialProcessorState.Unpowered;
+        }
 
         if (ent.Comp.IsWorking)
             return IndustrialProcessorState.Working;
@@ -246,6 +302,28 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
             return IndustrialProcessorState.Blocked;
 
         return IndustrialProcessorState.Idle;
+    }
+
+    protected bool HasSufficientHeat(Entity<IndustrialProcessorComponent> ent)
+    {
+        if (!TryComp<IndustrialHeatPoweredComponent>(ent, out var heat))
+            return true;
+
+        if (!TryComp<TemperatureComponent>(ent, out var temp))
+            return false;
+
+        return temp.CurrentTemperature >= heat.MinTemperature;
+    }
+
+    protected bool CanOperate(Entity<IndustrialProcessorComponent> ent)
+    {
+        if (HasComp<IndustrialHeatPoweredComponent>(ent))
+            return HasSufficientHeat(ent);
+
+        if (ent.Comp.CanWorkWithoutPower)
+            return true;
+
+        return IsPowered(ent);
     }
 
     protected bool IsPowered(Entity<IndustrialProcessorComponent> ent)
@@ -433,13 +511,27 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
         return container.Count;
     }
 
-    protected static string GetPortModeName(PortMode mode)
+    public static string GetFacePortName(FacePortState state)
     {
-        return Robust.Shared.Localization.Loc.GetString(mode switch
+        return Robust.Shared.Localization.Loc.GetString(state switch
         {
-            PortMode.Input => "industrial-port-input",
-            PortMode.Output => "industrial-port-output",
-            _ => "industrial-port-disabled",
+            FacePortState.ItemInput => "industrial-face-port-item-input",
+            FacePortState.ItemOutput => "industrial-face-port-item-output",
+            FacePortState.LiquidInput => "industrial-face-port-liquid-input",
+            FacePortState.LiquidOutput => "industrial-face-port-liquid-output",
+            FacePortState.HeatInput => "industrial-face-port-heat-input",
+            _ => "industrial-face-port-disabled",
+        });
+    }
+
+    public static string GetDirectionName(Direction direction)
+    {
+        return Robust.Shared.Localization.Loc.GetString(direction switch
+        {
+            Direction.North => "industrial-direction-north",
+            Direction.South => "industrial-direction-south",
+            Direction.East => "industrial-direction-east",
+            _ => "industrial-direction-west",
         });
     }
 

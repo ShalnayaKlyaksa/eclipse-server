@@ -175,6 +175,20 @@
   id: BaseSpeciesMobOrganic
   save: false
   components:
+  - type: AdvancedHealth
+    maxBloodVolume: 5000
+    bloodVolume: 5000
+    criticalBloodVolume: 2500
+    bloodDeathThreshold: 1000
+    criticalOxygenation: 55
+    oxygenDeathThreshold: 15
+    criticalTraumaThreshold: 90
+    lethalTraumaThreshold: 120
+    instantDeathTraumaThreshold: 160
+    shockUnconsciousThreshold: 70
+    shockHeartStopThreshold: 95
+    heartStoppedDeathTime: 120
+  - type: AimTarget
   - type: Hunger
   - type: Thirst
   - type: Barotrauma

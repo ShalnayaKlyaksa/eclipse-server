@@ -56,7 +56,7 @@
   id: VoxHairHawk
   bodyPart: Hair
   canBeDisplaced: false
-  groupWhitelist: [Vox]
+  groupWhitelist: [ DisabledCustomization ]
   sprites:
     - sprite: Mobs/Customization/vox_hair.rsi
       state: hawk_s

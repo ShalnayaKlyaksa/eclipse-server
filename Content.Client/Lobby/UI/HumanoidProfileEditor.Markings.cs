@@ -9,6 +9,7 @@ public sealed partial class HumanoidProfileEditor
             return;
         }
 
+        _markingsModel.Species = Profile.Species;
         _markingsModel.OrganData = _markingManager.GetMarkingData(Profile.Species);
         _markingsModel.OrganProfileData = _markingManager.GetProfileData(Profile.Species, Profile.Sex, Profile.Appearance.SkinColor, Profile.Appearance.EyeColor);
         _markingsModel.Markings = Profile.Appearance.Markings;

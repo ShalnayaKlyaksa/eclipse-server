@@ -43,6 +43,7 @@
           Working: { state: building }
           Blocked: { state: icon }
           Unpowered: { state: icon }
+          Unheated: { state: icon }
       enum.PowerDeviceVisuals.Powered:
         enum.PowerDeviceVisualLayers.Powered:
           True: { visible: true }
@@ -63,6 +64,14 @@
   - type: GuideHelp
     guides:
     - Salvage
+  - type: InteractionOutline
+  - type: ActivatableUI
+    key: enum.IndustrialProcessorUiKey.Key
+    requireActiveHand: false
+  - type: UserInterface
+    interfaces:
+      enum.IndustrialProcessorUiKey.Key:
+        type: IndustrialProcessorBoundUserInterface
 
 - type: entity
   abstract: true
@@ -124,119 +133,100 @@
     sprite: Structures/Machines/ore_processor_industrial.rsi
     state: icon
 
+- type: entity
+  abstract: true
+  parent: BasicTierIndustrialProcessor
+  id: BaseThermalCentrifugeProcessor
+  components:
+  - type: IndustrialProcessor
+    processorType: ThermalCentrifuge
+    canWorkWithoutPower: true
+  - type: IndustrialHeatPowered
+    minTemperature: 400
+  - type: Temperature
+    currentTemperature: 293.15
+    specificHeat: 200
+
 # Basic tier machines
 
 - type: entity
   parent: BasicTierIndustrialProcessor
   id: BasicIndustrialCrusher
   name: basic industrial crusher
-  description: Grinds raw ore into crushed ore for further processing.
+  description: Grinds raw ore into crushed ore, or sieved ore into dust.
   components:
   - type: IndustrialProcessor
     processorType: Crusher
   - type: ApcPowerReceiver
     powerLoad: 2000
+  - type: ActivatableUIRequiresPower
 
 - type: entity
-  parent: BasicTierIndustrialProcessor
-  id: BasicIndustrialRoughCentrifuge
-  name: basic rough centrifuge
-  description: Separates heavy ore fractions from waste rock.
+  parent: BaseThermalCentrifugeProcessor
+  id: BasicIndustrialThermalCentrifuge
+  name: basic thermal centrifuge
+  description: Separates crushed ore into sieved ore using heat. Must be warmed up to operate.
   components:
   - type: IndustrialProcessor
-    processorType: RoughCentrifuge
-  - type: ApcPowerReceiver
-    powerLoad: 3000
-
-- type: entity
-  parent: BasicTierIndustrialProcessor
-  id: BasicIndustrialOreWasher
-  name: basic ore washer
-  description: Cleans ore concentrate from sludge, dust and chemical contaminants.
-  components:
-  - type: IndustrialProcessor
-    processorType: OreWasher
-  - type: ApcPowerReceiver
-    powerLoad: 2000
-
-- type: entity
-  parent: BasicTierIndustrialProcessor
-  id: BasicIndustrialPrecisionCentrifuge
-  name: basic precision centrifuge
-  description: Separates cleaned concentrate into metallurgical fractions.
-  components:
-  - type: IndustrialProcessor
-    processorType: PrecisionCentrifuge
-  - type: ApcPowerReceiver
-    powerLoad: 4000
+    tier: Basic
 
 - type: entity
   parent: BasicTierIndustrialProcessor
   id: BasicIndustrialSmelter
   name: basic industrial smelter
-  description: Smelts metallurgical fractions into industrial billets.
+  description: Smelts metal dust into ingots and sheets.
   components:
   - type: IndustrialProcessor
     processorType: Smelter
   - type: ApcPowerReceiver
     powerLoad: 5000
+  - type: ActivatableUIRequiresPower
 
-# Industrial tier machines (existing IDs kept for compatibility)
+# Industrial tier machines
 
 - type: entity
   parent: IndustrialTierIndustrialProcessor
   id: IndustrialCrusher
   name: industrial crusher
-  description: Grinds raw ore into crushed ore for further processing.
+  description: Grinds raw ore into crushed ore, or sieved ore into dust.
   components:
   - type: IndustrialProcessor
     processorType: Crusher
   - type: ApcPowerReceiver
     powerLoad: 2000
+  - type: ActivatableUIRequiresPower
 
 - type: entity
-  parent: IndustrialTierIndustrialProcessor
-  id: IndustrialRoughCentrifuge
-  name: rough centrifuge
-  description: Separates heavy ore fractions from waste rock.
+  parent: BaseThermalCentrifugeProcessor
+  id: IndustrialThermalCentrifuge
+  name: thermal centrifuge
+  description: Separates crushed ore into sieved ore using heat. Must be warmed up to operate.
   components:
   - type: IndustrialProcessor
-    processorType: RoughCentrifuge
-  - type: ApcPowerReceiver
-    powerLoad: 3000
-
-- type: entity
-  parent: IndustrialTierIndustrialProcessor
-  id: IndustrialOreWasher
-  name: ore washer
-  description: Cleans ore concentrate from sludge, dust and chemical contaminants.
-  components:
-  - type: IndustrialProcessor
-    processorType: OreWasher
-  - type: ApcPowerReceiver
-    powerLoad: 2000
-
-- type: entity
-  parent: IndustrialTierIndustrialProcessor
-  id: IndustrialPrecisionCentrifuge
-  name: precision centrifuge
-  description: Separates cleaned concentrate into metallurgical fractions.
-  components:
-  - type: IndustrialProcessor
-    processorType: PrecisionCentrifuge
-  - type: ApcPowerReceiver
-    powerLoad: 4000
+    tier: Industrial
+  - type: Sprite
+    sprite: Structures/Machines/autolathe.rsi
+    layers:
+    - state: icon
+      map: ["enum.IndustrialProcessorVisualLayers.Base"]
+    - state: unlit
+      shader: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+  - type: Icon
+    sprite: Structures/Machines/autolathe.rsi
+    state: icon
 
 - type: entity
   parent: IndustrialTierIndustrialProcessor
   id: IndustrialSmelter
   name: industrial smelter
-  description: Smelts metallurgical fractions into industrial billets.
+  description: Smelts metal dust into ingots and sheets.
   components:
   - type: IndustrialProcessor
     processorType: Smelter
   - type: ApcPowerReceiver
     powerLoad: 5000
+  - type: ActivatableUIRequiresPower
 
 # Perfect tier machines
 
@@ -244,53 +234,42 @@
   parent: PerfectTierIndustrialProcessor
   id: PerfectIndustrialCrusher
   name: perfect industrial crusher
-  description: Grinds raw ore into crushed ore for further processing.
+  description: Grinds raw ore into crushed ore, or sieved ore into dust.
   components:
   - type: IndustrialProcessor
     processorType: Crusher
   - type: ApcPowerReceiver
     powerLoad: 2000
+  - type: ActivatableUIRequiresPower
 
 - type: entity
-  parent: PerfectTierIndustrialProcessor
-  id: PerfectIndustrialRoughCentrifuge
-  name: perfect rough centrifuge
-  description: Separates heavy ore fractions from waste rock.
+  parent: BaseThermalCentrifugeProcessor
+  id: PerfectIndustrialThermalCentrifuge
+  name: perfect thermal centrifuge
+  description: Separates crushed ore into sieved ore using heat. Must be warmed up to operate.
   components:
   - type: IndustrialProcessor
-    processorType: RoughCentrifuge
-  - type: ApcPowerReceiver
-    powerLoad: 3000
-
-- type: entity
-  parent: PerfectTierIndustrialProcessor
-  id: PerfectIndustrialOreWasher
-  name: perfect ore washer
-  description: Cleans ore concentrate from sludge, dust and chemical contaminants.
-  components:
-  - type: IndustrialProcessor
-    processorType: OreWasher
-  - type: ApcPowerReceiver
-    powerLoad: 2000
-
-- type: entity
-  parent: PerfectTierIndustrialProcessor
-  id: PerfectIndustrialPrecisionCentrifuge
-  name: perfect precision centrifuge
-  description: Separates cleaned concentrate into metallurgical fractions.
-  components:
-  - type: IndustrialProcessor
-    processorType: PrecisionCentrifuge
-  - type: ApcPowerReceiver
-    powerLoad: 4000
+    tier: Perfect
+  - type: Sprite
+    sprite: Structures/Machines/ore_processor_industrial.rsi
+    layers:
+    - state: icon
+      map: ["enum.IndustrialProcessorVisualLayers.Base"]
+    - state: unlit
+      shader: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+  - type: Icon
+    sprite: Structures/Machines/ore_processor_industrial.rsi
+    state: icon
 
 - type: entity
   parent: PerfectTierIndustrialProcessor
   id: PerfectIndustrialSmelter
   name: perfect industrial smelter
-  description: Smelts metallurgical fractions into industrial billets.
+  description: Smelts metal dust into ingots and sheets.
   components:
   - type: IndustrialProcessor
     processorType: Smelter
   - type: ApcPowerReceiver
     powerLoad: 5000
+  - type: ActivatableUIRequiresPower

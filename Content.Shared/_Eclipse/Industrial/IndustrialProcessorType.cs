@@ -6,8 +6,6 @@ namespace Content.Shared._Eclipse.Industrial;
 public enum IndustrialProcessorType : byte
 {
     Crusher,
-    RoughCentrifuge,
-    OreWasher,
-    PrecisionCentrifuge,
+    ThermalCentrifuge,
     Smelter,
 }

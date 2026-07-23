@@ -1,4 +1,5 @@
 using Content.Shared.Atmos.Rotting;
+using Content.Shared._Eclipse.AdvancedHealth;
 using Content.Shared.Chat;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
@@ -205,15 +206,41 @@ public abstract class SharedDefibrillatorSystem : EntitySystem
         }
         else
         {
-            if (_mobState.IsDead(target, targetMobState))
-                _damageable.TryChangeDamage(target, ent.Comp.ZapHeal, true, origin: user);
-
-            if (TryComp<MobThresholdsComponent>(target, out var targetThresholds) &&
-                _mobThreshold.TryGetThresholdForState(target, MobState.Dead, out var threshold, targetThresholds) &&
-                _damageable.GetTotalDamage(target) < threshold)
+            if (TryComp<AdvancedHealthComponent>(target, out var advanced))
             {
-                _mobState.ChangeMobState(target, MobState.Critical, targetMobState, user);
-                failedRevive = false;
+                // Defibrillation restarts a viable heart, but cannot repair lethal trauma or destroyed vital organs.
+                var viable = advanced.TraumaLoad < advanced.LethalTraumaThreshold &&
+                             (!advanced.HasBlood || advanced.BloodVolume > advanced.BloodDeathThreshold) &&
+                             advanced.BodyParts.TryGetValue(BodyPartSlot.Head, out var head) &&
+                             head.OrganIntegrity > 0 &&
+                             advanced.BodyParts.TryGetValue(BodyPartSlot.Chest, out var chest) &&
+                             chest.OrganIntegrity > 0;
+                if (viable)
+                {
+                    advanced.IsHeartStopped = false;
+                    advanced.TimeSinceHeartStopped = 0;
+                    advanced.IsInAgonalState = false;
+                    // Restart with a viable rhythm and pressure so the cardiovascular loop can pick up
+                    // instead of immediately re-arresting from a zeroed heart rate.
+                    advanced.HeartRate = Math.Max(advanced.HeartRate, 55f);
+                    advanced.MeanArterialPressure = Math.Max(advanced.MeanArterialPressure, 45f);
+                    Dirty(target, advanced);
+                    _mobState.ChangeMobState(target, MobState.Critical, targetMobState, user);
+                    failedRevive = false;
+                }
+            }
+            else
+            {
+                if (_mobState.IsDead(target, targetMobState))
+                    _damageable.TryChangeDamage(target, ent.Comp.ZapHeal, true, origin: user);
+
+                if (TryComp<MobThresholdsComponent>(target, out var targetThresholds) &&
+                    _mobThreshold.TryGetThresholdForState(target, MobState.Dead, out var threshold, targetThresholds) &&
+                    _damageable.GetTotalDamage(target) < threshold)
+                {
+                    _mobState.ChangeMobState(target, MobState.Critical, targetMobState, user);
+                    failedRevive = false;
+                }
             }
 
             if (_mind.TryGetMind(target, out var mindUid, out var mindComp) &&
