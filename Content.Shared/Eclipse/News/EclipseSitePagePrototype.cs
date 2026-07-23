@@ -19,7 +19,7 @@ public sealed partial class EclipseSiteSection
 /// A page of the in-game imitation of the station's public site. This is flavour only — there is no real site,
 /// the pages exist so the lobby can be browsed like one for immersion.
 /// </summary>
-[Prototype("eclipseSitePage")]
+[Prototype]
 public sealed partial class EclipseSitePagePrototype : IPrototype
 {
     /// <inheritdoc/>

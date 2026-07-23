@@ -36,7 +36,6 @@ public interface IConstructionMenuView : IDisposable
     event EventHandler<bool>? EraseButtonToggled;
     event EventHandler? ClearAllGhosts;
     event EventHandler? CraftRequested;
-    event EventHandler? FavoritesRefreshRequested;
 
     void SetMode(ConstructionMenuMode mode);
     void SetFavoritesPanelVisible(bool visible);
@@ -180,7 +179,6 @@ public sealed partial class ConstructionMenu : FancyWindow, IConstructionMenuVie
     public event EventHandler<bool>? EraseButtonToggled;
     public event EventHandler? ClearAllGhosts;
     public event EventHandler? CraftRequested;
-    public event EventHandler? FavoritesRefreshRequested;
 
     public void SetCategories(IReadOnlyList<CategoryEntry> categories)
     {

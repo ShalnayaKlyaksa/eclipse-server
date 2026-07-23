@@ -24,7 +24,7 @@ public enum EclipseNewsBadge : byte
 /// <summary>
 /// A single in-world news entry. Defined in YAML so the feed is content, not code, and cannot be edited in game.
 /// </summary>
-[Prototype("eclipseNews")]
+[Prototype]
 public sealed partial class EclipseNewsPrototype : IPrototype
 {
     /// <inheritdoc/>

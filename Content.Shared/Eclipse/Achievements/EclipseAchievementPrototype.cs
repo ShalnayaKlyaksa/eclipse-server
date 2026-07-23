@@ -24,7 +24,7 @@ public enum EclipseAchievementKind : byte
 /// <summary>
 /// A single account achievement. Defined in YAML so the list is content, not code.
 /// </summary>
-[Prototype("eclipseAchievement")]
+[Prototype]
 public sealed partial class EclipseAchievementPrototype : IPrototype
 {
     /// <inheritdoc/>

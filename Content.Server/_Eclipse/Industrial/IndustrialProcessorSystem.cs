@@ -580,7 +580,7 @@ public sealed partial class IndustrialProcessorSystem : SharedIndustrialProcesso
         return new IndustrialProcessorSlotState(null, 0, string.Empty);
     }
 
-    protected string GetRecipeDisplayName(IndustrialRecipePrototype recipe)
+    private string GetRecipeDisplayName(IndustrialRecipePrototype recipe)
     {
         foreach (var protoId in recipe.Outputs.Keys)
         {

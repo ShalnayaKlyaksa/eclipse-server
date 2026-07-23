@@ -1,6 +1,7 @@
 using Content.Shared._Eclipse.AdvancedHealth;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Tag;
+using Robust.Shared.Prototypes;
 
 namespace Content.Client._Eclipse.AdvancedHealth;
 
@@ -11,6 +12,9 @@ public sealed class AdvancedHealthClientSystem : EntitySystem
 {
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly TagSystem _tags = default!;
+
+    private static readonly ProtoId<TagPrototype> TourniquetTag = "Tourniquet";
+    private static readonly ProtoId<TagPrototype> OintmentTag = "Ointment";
 
     public void CompleteTreatment(EntityUid target, BodyPartSlot slot, AdvancedTreatmentType treatment,
         float quality, EntityUid? tool, int segments = 0)
@@ -104,7 +108,7 @@ public sealed class AdvancedHealthClientSystem : EntitySystem
         if (TryComp<AdvancedTreatmentComponent>(item, out var advanced))
             return advanced.Treatment == treatment;
 
-        if (!TryComp<MetaDataComponent>(item, out var meta) || meta.EntityPrototype is not { } proto)
+        if (MetaData(item).EntityPrototype is not { } proto)
             return false;
 
         var id = proto.ID;
@@ -112,9 +116,9 @@ public sealed class AdvancedHealthClientSystem : EntitySystem
         {
             AdvancedTreatmentType.Bandage or AdvancedTreatmentType.PressureBandage =>
                 HasComp<AdvancedBandageRollComponent>(item),
-            AdvancedTreatmentType.Tourniquet => _tags.HasTag(item, "Tourniquet"),
+            AdvancedTreatmentType.Tourniquet => _tags.HasTag(item, TourniquetTag),
             AdvancedTreatmentType.Splint => id is "Brutepack" or "Brutepack1",
-            AdvancedTreatmentType.Hemostatic => _tags.HasTag(item, "Ointment"),
+            AdvancedTreatmentType.Hemostatic => _tags.HasTag(item, OintmentTag),
             AdvancedTreatmentType.Suture => id is "MedicatedSuture" or "MedicatedSuture1" or "BrutepackAdvanced1",
             AdvancedTreatmentType.ForeignBodyRemoval => id is "AdvancedForcepsPack",
             _ => false,

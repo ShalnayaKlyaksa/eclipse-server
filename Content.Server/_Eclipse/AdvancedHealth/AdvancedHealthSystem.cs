@@ -35,6 +35,9 @@ public sealed class AdvancedHealthSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _prototypes = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
 
+    /// <summary>Anatomy used when the entity's species has no anatomy prototype of its own.</summary>
+    private static readonly ProtoId<AdvancedHealthAnatomyPrototype> FallbackAnatomy = "Human";
+
     public override void Initialize()
     {
         SubscribeLocalEvent<AdvancedHealthComponent, ComponentInit>(OnInit);
@@ -168,7 +171,7 @@ public sealed class AdvancedHealthSystem : EntitySystem
             profileId = humanoid.Species;
 
         if (profileId == null || !_prototypes.TryIndex<AdvancedHealthAnatomyPrototype>(profileId, out var anatomy))
-            _prototypes.TryIndex<AdvancedHealthAnatomyPrototype>("Human", out anatomy);
+            _prototypes.TryIndex(FallbackAnatomy, out anatomy);
         if (anatomy == null)
             return;
 
@@ -229,7 +232,6 @@ public sealed class AdvancedHealthSystem : EntitySystem
 public sealed class DamageToWoundSystem : EntitySystem
 {
     [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
 
     private const float MinWoundDamage = 4f;
     private const float MinStepWoundDamage = 1f;
@@ -1002,6 +1004,9 @@ public sealed class AdvancedTreatmentSystem : EntitySystem
     [Dependency] private readonly TagSystem _tags = default!;
     [Dependency] private readonly IPrototypeManager _prototypes = default!;
 
+    private static readonly ProtoId<TagPrototype> TourniquetTag = "Tourniquet";
+    private static readonly ProtoId<TagPrototype> OintmentTag = "Ointment";
+
     /// <summary>External bleeding (ml/s) removed per 1% of bandage durability spent (= 0.01 L/min).</summary>
     private const float BandageBleedPerSegmentMls = AdvancedBandageRollComponent.BleedPerPercent * 1000f / 60f;
 
@@ -1334,7 +1339,7 @@ public sealed class AdvancedTreatmentSystem : EntitySystem
         if (TryComp<AdvancedTreatmentComponent>(item, out var advanced))
             return advanced.Treatment == treatment;
 
-        if (!TryComp<MetaDataComponent>(item, out var meta) || meta.EntityPrototype is not { } proto)
+        if (MetaData(item).EntityPrototype is not { } proto)
             return false;
 
         var id = proto.ID;
@@ -1342,9 +1347,9 @@ public sealed class AdvancedTreatmentSystem : EntitySystem
         {
             AdvancedTreatmentType.Bandage or AdvancedTreatmentType.PressureBandage =>
                 HasComp<AdvancedBandageRollComponent>(item),
-            AdvancedTreatmentType.Tourniquet => _tags.HasTag(item, "Tourniquet"),
+            AdvancedTreatmentType.Tourniquet => _tags.HasTag(item, TourniquetTag),
             AdvancedTreatmentType.Splint => id is "Brutepack" or "Brutepack1",
-            AdvancedTreatmentType.Hemostatic => _tags.HasTag(item, "Ointment"),
+            AdvancedTreatmentType.Hemostatic => _tags.HasTag(item, OintmentTag),
             AdvancedTreatmentType.Suture => id is "MedicatedSuture" or "MedicatedSuture1" or "BrutepackAdvanced1",
             AdvancedTreatmentType.ForeignBodyRemoval => id is "AdvancedForcepsPack",
             _ => false,

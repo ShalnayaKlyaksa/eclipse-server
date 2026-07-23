@@ -1,7 +1,6 @@
 using Content.Shared._Eclipse.Industrial;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
-using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Tools.Components;
@@ -15,7 +14,6 @@ public abstract partial class SharedItemPipeLayersSystem : EntitySystem
 {
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedToolSystem _tools = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
 
     public override void Initialize()

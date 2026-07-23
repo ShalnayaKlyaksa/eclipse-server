@@ -12,7 +12,6 @@ namespace Content.Client._Eclipse.Industrial;
 public sealed class IndustrialPortOverlay : Overlay
 {
     [Dependency] private readonly IEntityManager _entMan = default!;
-    [Dependency] private readonly IEyeManager _eyeManager = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
 
     private TransformSystem _transform = default!;

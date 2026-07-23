@@ -8,7 +8,7 @@ namespace Content.Shared._Eclipse.AdvancedHealth;
 /// apply medical effects and debuffs (weakness, clumsiness, etc.). This is the foundation — more
 /// effects (melee/accuracy hooks) can be layered on later.
 /// </summary>
-[Prototype("advancedDisease")]
+[Prototype]
 public sealed partial class AdvancedDiseasePrototype : IPrototype
 {
     [IdDataField] public string ID { get; private set; } = default!;
