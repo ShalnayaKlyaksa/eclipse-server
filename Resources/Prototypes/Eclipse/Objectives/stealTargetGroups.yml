@@ -1,0 +1,21 @@
+#CMO
+- type: stealTargetGroup
+  id: MedChemHUD
+  name: steal-target-groups-medchemhud
+  sprite:
+    sprite: Eclipse/Clothing/Eyes/Hud/medchem.rsi
+    state: icon
+
+- type: stealTargetGroup
+  id: AdvancedDefib
+  name: steal-target-groups-advanced-defib
+  sprite:
+    sprite: Eclipse/Objects/Specific/Medical/advanceddefib.rsi
+    state: icon
+
+- type: stealTargetGroup
+  id: ProfessionalRCD
+  name: steal-target-groups-profesional-rcd
+  sprite:
+    sprite: Eclipse/Objects/Tools/cercd.rsi
+    state: icon

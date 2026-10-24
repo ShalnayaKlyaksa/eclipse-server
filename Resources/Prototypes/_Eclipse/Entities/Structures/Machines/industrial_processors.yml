@@ -1,0 +1,275 @@
+- type: entity
+  abstract: true
+  parent: BaseMachinePowered
+  id: BaseIndustrialProcessor
+  description: Industrial ore processing equipment.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.6,-0.6,0.6,0.6"
+        density: 200
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: Sprite
+    # TODO: Replace with dedicated _Eclipse/Structures/Machines/industrial_*.rsi sprites.
+    sprite: Structures/Machines/ore_processor.rsi
+    layers:
+    - state: icon
+      map: ["enum.IndustrialProcessorVisualLayers.Base"]
+    - state: unlit
+      shader: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+  - type: Icon
+    sprite: Structures/Machines/ore_processor.rsi
+    state: icon
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.IndustrialProcessorVisuals.State:
+        enum.IndustrialProcessorVisualLayers.Base:
+          Idle: { state: icon }
+          Working: { state: building }
+          Blocked: { state: icon }
+          Unpowered: { state: icon }
+          Unheated: { state: icon }
+      enum.PowerDeviceVisuals.Powered:
+        enum.PowerDeviceVisualLayers.Powered:
+          True: { visible: true }
+          False: { visible: false }
+  - type: IndustrialProcessor
+    inputContainerId: industrial_input
+    outputContainerId: industrial_output
+    autoStart: true
+    canWorkWithoutPower: false
+  - type: ContainerContainer
+    containers:
+      industrial_input: !type:Container
+      industrial_output: !type:Container
+  - type: EmptyOnMachineDeconstruct
+    containers:
+    - industrial_input
+    - industrial_output
+  - type: GuideHelp
+    guides:
+    - Salvage
+  - type: InteractionOutline
+  - type: ActivatableUI
+    key: enum.IndustrialProcessorUiKey.Key
+    requireActiveHand: false
+  - type: UserInterface
+    interfaces:
+      enum.IndustrialProcessorUiKey.Key:
+        type: IndustrialProcessorBoundUserInterface
+
+- type: entity
+  abstract: true
+  parent: BaseIndustrialProcessor
+  id: BasicTierIndustrialProcessor
+  components:
+  - type: IndustrialProcessor
+    tier: Basic
+  - type: Sprite
+    # TODO: Replace with dedicated basic-tier industrial machine RSI.
+    sprite: Structures/Machines/ore_processor.rsi
+    layers:
+    - state: icon
+      map: ["enum.IndustrialProcessorVisualLayers.Base"]
+    - state: unlit
+      shader: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+  - type: Icon
+    sprite: Structures/Machines/ore_processor.rsi
+    state: icon
+
+- type: entity
+  abstract: true
+  parent: BaseIndustrialProcessor
+  id: IndustrialTierIndustrialProcessor
+  components:
+  - type: IndustrialProcessor
+    tier: Industrial
+  - type: Sprite
+    # TODO: Replace with dedicated industrial-tier machine RSI.
+    sprite: Structures/Machines/autolathe.rsi
+    layers:
+    - state: icon
+      map: ["enum.IndustrialProcessorVisualLayers.Base"]
+    - state: unlit
+      shader: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+  - type: Icon
+    sprite: Structures/Machines/autolathe.rsi
+    state: icon
+
+- type: entity
+  abstract: true
+  parent: BaseIndustrialProcessor
+  id: PerfectTierIndustrialProcessor
+  components:
+  - type: IndustrialProcessor
+    tier: Perfect
+  - type: Sprite
+    # TODO: Replace with dedicated perfect-tier machine RSI.
+    sprite: Structures/Machines/ore_processor_industrial.rsi
+    layers:
+    - state: icon
+      map: ["enum.IndustrialProcessorVisualLayers.Base"]
+    - state: unlit
+      shader: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+  - type: Icon
+    sprite: Structures/Machines/ore_processor_industrial.rsi
+    state: icon
+
+- type: entity
+  abstract: true
+  parent: BasicTierIndustrialProcessor
+  id: BaseThermalCentrifugeProcessor
+  components:
+  - type: IndustrialProcessor
+    processorType: ThermalCentrifuge
+    canWorkWithoutPower: true
+  - type: IndustrialHeatPowered
+    minTemperature: 400
+  - type: Temperature
+    currentTemperature: 293.15
+    specificHeat: 200
+
+# Basic tier machines
+
+- type: entity
+  parent: BasicTierIndustrialProcessor
+  id: BasicIndustrialCrusher
+  name: basic industrial crusher
+  description: Grinds raw ore into crushed ore, or sieved ore into dust.
+  components:
+  - type: IndustrialProcessor
+    processorType: Crusher
+  - type: ApcPowerReceiver
+    powerLoad: 2000
+  - type: ActivatableUIRequiresPower
+
+- type: entity
+  parent: BaseThermalCentrifugeProcessor
+  id: BasicIndustrialThermalCentrifuge
+  name: basic thermal centrifuge
+  description: Separates crushed ore into sieved ore using heat. Must be warmed up to operate.
+  components:
+  - type: IndustrialProcessor
+    tier: Basic
+
+- type: entity
+  parent: BasicTierIndustrialProcessor
+  id: BasicIndustrialSmelter
+  name: basic industrial smelter
+  description: Smelts metal dust into ingots and sheets.
+  components:
+  - type: IndustrialProcessor
+    processorType: Smelter
+  - type: ApcPowerReceiver
+    powerLoad: 5000
+  - type: ActivatableUIRequiresPower
+
+# Industrial tier machines
+
+- type: entity
+  parent: IndustrialTierIndustrialProcessor
+  id: IndustrialCrusher
+  name: industrial crusher
+  description: Grinds raw ore into crushed ore, or sieved ore into dust.
+  components:
+  - type: IndustrialProcessor
+    processorType: Crusher
+  - type: ApcPowerReceiver
+    powerLoad: 2000
+  - type: ActivatableUIRequiresPower
+
+- type: entity
+  parent: BaseThermalCentrifugeProcessor
+  id: IndustrialThermalCentrifuge
+  name: thermal centrifuge
+  description: Separates crushed ore into sieved ore using heat. Must be warmed up to operate.
+  components:
+  - type: IndustrialProcessor
+    tier: Industrial
+  - type: Sprite
+    sprite: Structures/Machines/autolathe.rsi
+    layers:
+    - state: icon
+      map: ["enum.IndustrialProcessorVisualLayers.Base"]
+    - state: unlit
+      shader: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+  - type: Icon
+    sprite: Structures/Machines/autolathe.rsi
+    state: icon
+
+- type: entity
+  parent: IndustrialTierIndustrialProcessor
+  id: IndustrialSmelter
+  name: industrial smelter
+  description: Smelts metal dust into ingots and sheets.
+  components:
+  - type: IndustrialProcessor
+    processorType: Smelter
+  - type: ApcPowerReceiver
+    powerLoad: 5000
+  - type: ActivatableUIRequiresPower
+
+# Perfect tier machines
+
+- type: entity
+  parent: PerfectTierIndustrialProcessor
+  id: PerfectIndustrialCrusher
+  name: perfect industrial crusher
+  description: Grinds raw ore into crushed ore, or sieved ore into dust.
+  components:
+  - type: IndustrialProcessor
+    processorType: Crusher
+  - type: ApcPowerReceiver
+    powerLoad: 2000
+  - type: ActivatableUIRequiresPower
+
+- type: entity
+  parent: BaseThermalCentrifugeProcessor
+  id: PerfectIndustrialThermalCentrifuge
+  name: perfect thermal centrifuge
+  description: Separates crushed ore into sieved ore using heat. Must be warmed up to operate.
+  components:
+  - type: IndustrialProcessor
+    tier: Perfect
+  - type: Sprite
+    sprite: Structures/Machines/ore_processor_industrial.rsi
+    layers:
+    - state: icon
+      map: ["enum.IndustrialProcessorVisualLayers.Base"]
+    - state: unlit
+      shader: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+  - type: Icon
+    sprite: Structures/Machines/ore_processor_industrial.rsi
+    state: icon
+
+- type: entity
+  parent: PerfectTierIndustrialProcessor
+  id: PerfectIndustrialSmelter
+  name: perfect industrial smelter
+  description: Smelts metal dust into ingots and sheets.
+  components:
+  - type: IndustrialProcessor
+    processorType: Smelter
+  - type: ApcPowerReceiver
+    powerLoad: 5000
+  - type: ActivatableUIRequiresPower

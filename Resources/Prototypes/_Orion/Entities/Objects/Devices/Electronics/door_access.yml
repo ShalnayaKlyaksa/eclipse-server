@@ -1,0 +1,15 @@
+- type: entity
+  parent: DoorElectronics
+  id: DoorElectronicsAshLegionVanguard
+  suffix: AshLegion, Vanguard, Locked
+  components:
+  - type: AccessReader
+    access: [["AshLegionVanguard"]]
+
+- type: entity
+  parent: DoorElectronics
+  id: DoorElectronicsAshLegionVanguardLeader
+  suffix: AshLegion, Vanguard Leader, Locked
+  components:
+  - type: AccessReader
+    access: [["AshLegionVanguardLeader"]]

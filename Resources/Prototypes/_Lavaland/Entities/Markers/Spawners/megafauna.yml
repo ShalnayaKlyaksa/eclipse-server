@@ -1,0 +1,64 @@
+- type: entity
+  parent: MarkerBase
+  id: SpawnMobHierophant
+  name: Hierophant Spawner
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: ai
+  - type: ConditionalSpawner
+    prototypes:
+    - MobHierophant
+
+- type: entity
+  parent: MarkerBase
+  id: SpawnLavalandBossAshDrake
+  name: Ash Drake Spawner
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: ai
+  - type: ConditionalSpawner
+    prototypes:
+    - LavalandBossAshDrake
+
+- type: entity
+  parent: MarkerBase
+  id: SpawnLavalandBossBubblegum
+  name: Bubblegum Spawner
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: ai
+  - type: ConditionalSpawner
+    prototypes:
+    - LavalandBossBubblegum
+
+- type: entity
+  parent: MarkerBase
+  id: SpawnLavalandBossColossus
+  name: Colossus Spawner
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: ai
+  - type: ConditionalSpawner
+    prototypes:
+    - LavalandBossColossus
+
+- type: entity
+  parent: MarkerBase
+  id: SpawnLavalandBossMegaLegion
+  name: Legion Spawner
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: ai
+  - type: ConditionalSpawner
+    prototypes:
+    - LavalandBossMegaLegion

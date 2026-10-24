@@ -1,0 +1,11 @@
+- type: entity
+  parent: Intercom
+  id: IntercomAshLegion
+  suffix: AshLegion
+  components:
+  - type: ContainerFill
+    containers:
+      board:
+      - IntercomElectronics
+      key_slots:
+      - EncryptionKeyAshLegion

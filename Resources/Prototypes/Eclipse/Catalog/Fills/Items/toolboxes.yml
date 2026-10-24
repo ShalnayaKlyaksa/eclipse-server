@@ -1,0 +1,37 @@
+- type: entity
+  name: suspicious toolbox
+  parent: [ToolboxBase, BaseAshLegionContraband]
+  id: ToolboxAshLegion
+  description: Зловеще выглядящий ящик для инструментов. Кто знает, что может храниться в нем?...
+  components:
+  - type: Sprite
+    sprite: Eclipse/Objects/Tools/Toolboxes/toolbox_inteq.rsi
+    state: icon
+  - type: Item
+    sprite: Eclipse/Objects/Tools/Toolboxes/toolbox_inteq.rsi
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,7,3
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 20
+
+- type: entity
+  parent: ToolboxAshLegion
+  id: ToolboxAshLegionFilled
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: Crowbar
+    - id: Wrench
+    - id: Screwdriver
+    - id: Wirecutter
+    - id: Welder
+    - id: Multitool
+    - id: ClothingHandsGlovesCombat
+    - id: ClothingMaskGasLegion
+  - type: StaticPrice
+    price: 1000

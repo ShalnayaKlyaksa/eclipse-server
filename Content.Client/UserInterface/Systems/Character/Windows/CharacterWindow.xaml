@@ -1,0 +1,118 @@
+<windows:CharacterWindow
+    xmlns="https://spacestation14.io"
+    xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+    xmlns:cc="clr-namespace:Content.Client.UserInterface.Controls"
+    xmlns:windows="clr-namespace:Content.Client.UserInterface.Systems.Character.Windows"
+    Title="{Loc 'character-info-title'}"
+    MinWidth="1040"
+    MinHeight="700">
+    <BoxContainer Orientation="Horizontal"
+                  Margin="24 18 24 24"
+                  SeparationOverride="28">
+        <BoxContainer Orientation="Vertical"
+                      SetWidth="420"
+                      SeparationOverride="18">
+            <Label Name="RoleHeader"
+                   Access="Public"
+                   Text="Экипаж или их союзник"
+                   StyleIdentifier="mainMenuHeaderGold"
+                   Align="Center"
+                   ClipText="True" />
+            <BoxContainer Orientation="Horizontal"
+                          HorizontalAlignment="Center"
+                          SeparationOverride="18">
+                <SpriteView OverrideDirection="South"
+                            Scale="3 3"
+                            Name="SpriteView"
+                            Access="Public"
+                            SetSize="128 144" />
+                <BoxContainer Orientation="Vertical"
+                              VerticalAlignment="Center"
+                              SetWidth="230"
+                              SeparationOverride="6">
+                    <Label Name="NameLabel"
+                           Access="Public"
+                           StyleIdentifier="mainMenuHeaderGold"
+                           Align="Left"
+                           ClipText="True" />
+                    <Label Name="SubText"
+                           Access="Public"
+                           StyleIdentifier="mainMenuSubtle"
+                           Align="Left"
+                           ClipText="True" />
+                    <Label Name="RoleType"
+                           Access="Public"
+                           StyleIdentifier="mainMenuGoldSmall"
+                           Align="Left"
+                           Visible="False"
+                           ClipText="True" />
+                </BoxContainer>
+            </BoxContainer>
+
+            <PanelContainer VerticalExpand="True">
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#070300D8"
+                                      BorderColor="#A85E1288"
+                                      BorderThickness="1" />
+                </PanelContainer.PanelOverride>
+                <BoxContainer Orientation="Vertical"
+                              Margin="16 16 16 16"
+                              SeparationOverride="10">
+                    <Label Name="RoleEmptyLabel"
+                           Access="Public"
+                           Text="У вас нет специальных ролей"
+                           StyleIdentifier="mainMenuSubtle"
+                           Align="Center"
+                           VerticalExpand="True"
+                           VAlign="Center" />
+                    <Label Name="ObjectivesLabel"
+                           Access="Public"
+                           Text="{Loc 'character-info-objectives-label'}"
+                           StyleIdentifier="mainMenuHeaderGold"
+                           HorizontalAlignment="Center"
+                           Visible="False" />
+                    <ScrollContainer VerticalExpand="True"
+                                     HorizontalExpand="True"
+                                     Visible="False"
+                                     Name="ObjectivesScroll"
+                                     Access="Public">
+                        <BoxContainer Orientation="Vertical"
+                                      Name="Objectives"
+                                      Access="Public"
+                                      SeparationOverride="8" />
+                    </ScrollContainer>
+                    <cc:Placeholder Name="RolePlaceholder"
+                                    Access="Public"
+                                    Visible="False"
+                                    PlaceholderText="{Loc 'character-info-roles-antagonist-text'}" />
+                </BoxContainer>
+            </PanelContainer>
+        </BoxContainer>
+
+        <PanelContainer MinSize="1 0">
+            <PanelContainer.PanelOverride>
+                <gfx:StyleBoxFlat BackgroundColor="#A85E1264" />
+            </PanelContainer.PanelOverride>
+        </PanelContainer>
+
+        <BoxContainer Orientation="Vertical"
+                      HorizontalExpand="True"
+                      MinWidth="520"
+                      SeparationOverride="14">
+            <Label Text="Личные задания"
+                   StyleIdentifier="mainMenuHeaderGold"
+                   Align="Center"
+                   ClipText="True" />
+            <PanelContainer MinHeight="2">
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#E6A11A" />
+                </PanelContainer.PanelOverride>
+            </PanelContainer>
+            <BoxContainer Name="PersonalTasks"
+                          Access="Public"
+                          Orientation="Vertical"
+                          HorizontalExpand="True"
+                          SeparationOverride="12" />
+        </BoxContainer>
+    </BoxContainer>
+</windows:CharacterWindow>

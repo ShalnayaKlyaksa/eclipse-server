@@ -1,0 +1,70 @@
+- type: guideEntry
+  id: RuleEclipseC0
+  name: guide-entry-rules-c0
+  ruleEntry: true
+  text: "/ServerInfo/Guidebook/Eclipse/ServerRules/CoreRules/RuleC0.xml"
+
+- type: guideEntry
+  id: RuleEclipseC1
+  name: guide-entry-rules-c1
+  ruleEntry: true
+  text: "/ServerInfo/Guidebook/Eclipse/ServerRules/CoreRules/RuleC1.xml"
+
+- type: guideEntry
+  id: RuleEclipseC2
+  name: guide-entry-rules-c2
+  ruleEntry: true
+  text: "/ServerInfo/Guidebook/Eclipse/ServerRules/CoreRules/RuleC2.xml"
+
+- type: guideEntry
+  id: RuleEclipseC3
+  name: guide-entry-rules-c3
+  ruleEntry: true
+  text: "/ServerInfo/Guidebook/Eclipse/ServerRules/CoreRules/RuleC3.xml"
+
+- type: guideEntry
+  id: RuleEclipseC4
+  name: guide-entry-rules-c4
+  ruleEntry: true
+  text: "/ServerInfo/Guidebook/Eclipse/ServerRules/CoreRules/RuleC4.xml"
+
+- type: guideEntry
+  id: RuleEclipseC5
+  name: guide-entry-rules-c5
+  ruleEntry: true
+  text: "/ServerInfo/Guidebook/Eclipse/ServerRules/CoreRules/RuleC5.xml"
+
+- type: guideEntry
+  id: RuleEclipseC6
+  name: guide-entry-rules-c6
+  ruleEntry: true
+  text: "/ServerInfo/Guidebook/Eclipse/ServerRules/CoreRules/RuleC6.xml"
+
+- type: guideEntry
+  id: RuleEclipseC7
+  name: guide-entry-rules-c7
+  ruleEntry: true
+  text: "/ServerInfo/Guidebook/Eclipse/ServerRules/CoreRules/RuleC7.xml"
+
+- type: guideEntry
+  id: RuleEclipseC8
+  name: guide-entry-rules-c8
+  ruleEntry: true
+  text: "/ServerInfo/Guidebook/Eclipse/ServerRules/CoreRules/RuleC8.xml"
+
+- type: guideEntry
+  id: EclipseCoreRules
+  name: guide-entry-rules-core
+  ruleEntry: true
+  priority: 10
+  text: "/ServerInfo/Guidebook/Eclipse/ServerRules/CoreRules/RuleCC.xml"
+  children:
+  - RuleEclipseC0
+  - RuleEclipseC1
+  - RuleEclipseC2
+  - RuleEclipseC3
+  - RuleEclipseC4
+  - RuleEclipseC5
+  - RuleEclipseC6
+  - RuleEclipseC7
+  - RuleEclipseC8

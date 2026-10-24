@@ -1,0 +1,464 @@
+# Underwear loadouts, ported from LustStation.
+# Sunrise's sponsorOnly flag and the WomanMoment sex restriction are dropped: Eclipse has neither.
+
+# --- socks ---
+# Для тяночек
+- type: loadout
+  id: ThighWhiteSocks
+  equipment:
+    socks: ClothingThighWhite
+
+- type: loadout
+  id: FishnetTights
+  equipment:
+    socks: ClothingFishnet
+
+- type: loadout
+  id: KneeWhiteSocks
+  equipment:
+    socks: ClothingKneeWhite
+
+- type: loadout
+  id: KneeFishnetSocks
+  equipment:
+    socks: ClothingKneeFishnet
+
+- type: loadout
+  id: Pantyhose
+  equipment:
+    socks: ClothingPantyhose
+
+- type: loadout
+  id: ShortBlackSocks
+  equipment:
+    socks: ClothingShortBlack
+
+- type: loadout
+  id: StockingsBlue
+  equipment:
+    socks: ClothingStockingsBlue
+
+- type: loadout
+  id: StockingsCyan
+  equipment:
+    socks: ClothingStockingsCyan
+
+- type: loadout
+  id: StockingsDpink
+  equipment:
+    socks: ClothingStockingsDpink
+
+- type: loadout
+  id: StockingsGreen
+  equipment:
+    socks: ClothingStockingsGreen
+
+- type: loadout
+  id: Stockingslpink
+  equipment:
+    socks: ClothingStockingslpink
+
+- type: loadout
+  id: StockingsOrange
+  equipment:
+    socks: ClothingStockingsOrange
+
+- type: loadout
+  id: StockingsPurple
+  equipment:
+    socks: ClothingStockingsPurple
+
+- type: loadout
+  id: StockingsWhiteSheer
+  equipment:
+    socks: ClothingStockingsWhiteSheer
+
+- type: loadout
+  id: StockingsBlackSheer
+  equipment:
+    socks: ClothingStockingsBlackSheer
+
+- type: loadout
+  id: StockingsGarter
+  equipment:
+    socks: ClothingStockingsGarter
+
+- type: loadout
+  id: ThighAceSocks
+  equipment:
+    socks: ClothingThighAce
+
+- type: loadout
+  id: ThighAsblastusaSocks
+  equipment:
+    socks: ClothingThighAsblastusa
+
+- type: loadout
+  id: ThighBeeSocks
+  equipment:
+    socks: ClothingThighBee
+
+- type: loadout
+  id: ThighBlackSocks
+  equipment:
+    socks: ClothingThighBlack
+
+- type: loadout
+  id: ThighCommieSocks
+  equipment:
+    socks: ClothingThighCommie
+
+- type: loadout
+  id: ThighRainbowSocks
+  equipment:
+    socks: ClothingThighRainbow
+
+- type: loadout
+  id: ThighTransSocks
+  equipment:
+    socks: ClothingThighTrans
+
+- type: loadout
+  id: ThighUkSocks
+  equipment:
+    socks: ClothingThighUk
+
+- type: loadout
+  id: ThighChristmasSocks
+  equipment:
+    socks: ClothingThighChristmas
+
+# Для мужиков
+- type: loadout
+  id: ShortWhiteSocks
+  equipment:
+    socks: ClothingShortWhite
+
+- type: loadout
+  id: KneeAceSocks
+  equipment:
+    socks: ClothingKneeAce
+
+- type: loadout
+  id: KneeAssblastusaSocks
+  equipment:
+    socks: ClothingKneeAsblastusa
+
+- type: loadout
+  id: KneeBeeSocks
+  equipment:
+    socks: ClothingKneeBee
+
+- type: loadout
+  id: KneeBlackSocks
+  equipment:
+    socks: ClothingKneeBlack
+
+- type: loadout
+  id: KneeCommieSocks
+  equipment:
+    socks: ClothingKneeCommie
+
+- type: loadout
+  id: KneeRainbowSocks
+  equipment:
+    socks: ClothingKneeRainbow
+
+- type: loadout
+  id: KneeStripedSocks
+  equipment:
+    socks: ClothingKneeStriped
+
+- type: loadout
+  id: KneeThinSocks
+  equipment:
+    socks: ClothingKneeThin
+
+- type: loadout
+  id: KneeTransSocks
+  equipment:
+    socks: ClothingKneeTrans
+
+- type: loadout
+  id: KneeUkSocks
+  equipment:
+    socks: ClothingKneeUk
+
+- type: loadout
+  id: NormBlackSocks
+  equipment:
+    socks: ClothingNormBlack
+
+- type: loadout
+  id: NormWhiteSocks
+  equipment:
+    socks: ClothingNormWhite
+
+# --- pants ---
+# Для тяночек
+- type: loadout
+  id: StraplessWomanPants
+  equipment:
+    pants: ClothingPantsWomanStrapless
+
+- type: loadout
+  id: NekoWhiteWomanPants
+  equipment:
+    pants: ClothingPantsWomanNekoWhite
+
+- type: loadout
+  id: NekoBlackWomanPants
+  equipment:
+    pants: ClothingPantsWomanNekoBlack
+
+- type: loadout
+  id: AssblastusaWomanPants
+  equipment:
+    pants: ClothingPantsWomanAssblastusa
+
+- type: loadout
+  id: BikiniWomanPants
+  equipment:
+    pants: ClothingPantsWomanBikini
+
+- type: loadout
+  id: BraletteWomanPants
+  equipment:
+    pants: ClothingPantsWomanBralette
+
+- type: loadout
+  id: CommieWomanPants
+  equipment:
+    pants: ClothingPantsWomanCommie
+
+- type: loadout
+  id: KinkyWomanPants
+  equipment:
+    pants: ClothingPantsWomanKinky
+
+- type: loadout
+  id: LaceWomanPants
+  equipment:
+    pants: ClothingPantsWomanLace
+
+- type: loadout
+  id: SportWomanPants
+  equipment:
+    pants: ClothingPantsWomanSport
+
+- type: loadout
+  id: ThongWomanPants
+  equipment:
+    pants: ClothingPantsWomanThong
+
+- type: loadout
+  id: UkWomanPants
+  equipment:
+    pants: ClothingPantsWomanUk
+
+- type: loadout
+  id: PinkWomanPants
+  equipment:
+    pants: ClothingPantsWomanPink
+
+- type: loadout
+  id: PurpleWomanPants
+  equipment:
+    pants: ClothingPantsWomanPurple
+
+- type: loadout
+  id: BlackWomanPants
+  equipment:
+    pants: ClothingPantsWomanBlack
+
+- type: loadout
+  id: ChristmasWomanPants
+  equipment:
+    pants: ClothingPantsWomanChristmas
+
+# Для мужиков
+- type: loadout
+  id: BoxersManPants
+  equipment:
+    pants: ClothingPantsManBoxers
+
+- type: loadout
+  id: AssblastusaManPants
+  equipment:
+    pants: ClothingPantsManAssblastusa
+
+- type: loadout
+  id: BriefsManPants
+  equipment:
+    pants: ClothingPantsManBriefs
+
+- type: loadout
+  id: CommieManPants
+  equipment:
+    pants: ClothingPantsManCommie
+
+- type: loadout
+  id: HeartsManPants
+  equipment:
+    pants: ClothingPantsManHearts
+
+- type: loadout
+  id: KinkyManPants
+  equipment:
+    pants: ClothingPantsManKinky
+
+- type: loadout
+  id: LongjohnsManPants
+  equipment:
+    pants: ClothingPantsManLongjohns
+
+- type: loadout
+  id: MankiniManPants
+  equipment:
+    pants: ClothingPantsManMankini
+
+- type: loadout
+  id: StripeManPants
+  equipment:
+    pants: ClothingPantsManStripe
+
+- type: loadout
+  id: UkManPants
+  equipment:
+    pants: ClothingPantsManUk
+
+# --- bra ---
+- type: loadout
+  id: StraplessBra
+  equipment:
+    bra: ClothingBraStrapless
+
+- type: loadout
+  id: WhiteNekoBra
+  equipment:
+    bra: ClothingBraNekoWhite
+
+- type: loadout
+  id: BlackNekoBra
+  equipment:
+    bra: ClothingBraNekoBlack
+
+- type: loadout
+  id: AssblastusaBra
+  equipment:
+    bra: ClothingBraAssblastusa
+
+- type: loadout
+  id: BikiniBra
+  equipment:
+    bra: ClothingBraBikini
+
+- type: loadout
+  id: BraletteBra
+  equipment:
+    bra: ClothingBraBralette
+
+- type: loadout
+  id: CommieBra
+  equipment:
+    bra: ClothingBraCommie
+
+- type: loadout
+  id: KinkyBra
+  equipment:
+    bra: ClothingBraKinky
+
+- type: loadout
+  id: LaceBra
+  equipment:
+    bra: ClothingBraLace
+
+- type: loadout
+  id: SportBra
+  equipment:
+    bra: ClothingBraSport
+
+- type: loadout
+  id: ThongBra
+  equipment:
+    bra: ClothingBraThong
+
+- type: loadout
+  id: UkBra
+  equipment:
+    bra: ClothingBraUk
+
+- type: loadout
+  id: PinkBra
+  equipment:
+    bra: ClothingBraPink
+
+- type: loadout
+  id: PurpleBra
+  equipment:
+    bra: ClothingBraPurple
+
+- type: loadout
+  id: BlackBra
+  equipment:
+    bra: ClothingBraBlack
+
+- type: loadout
+  id: ChristmasBra
+  equipment:
+    bra: ClothingBraChristmas
+
+- type: loadout
+  id: BraTshirtWhite
+  equipment:
+    bra: ClothingBraTshirtWhite
+
+- type: loadout
+  id: BraTshirtRed
+  equipment:
+    bra: ClothingBraTshirtRed
+
+- type: loadout
+  id: BraTshirtYellow
+  equipment:
+    bra: ClothingBraTshirtYellow
+
+- type: loadout
+  id: BraTshirtGreen
+  equipment:
+    bra: ClothingBraTshirtGreen
+
+- type: loadout
+  id: BraTshirtBlue
+  equipment:
+    bra: ClothingBraTshirtBlue
+
+- type: loadout
+  id: BraTshirtLightBlue
+  equipment:
+    bra: ClothingBraTshirtLightBlue
+
+- type: loadout
+  id: BraTshirtBlack
+  equipment:
+    bra: ClothingBraTshirtBlack
+
+- type: loadout
+  id: BraTshirtGrey
+  equipment:
+    bra: ClothingBraTshirtGrey
+
+- type: loadout
+  id: BraTshirtPurple
+  equipment:
+    bra: ClothingBraTshirtPurple
+
+- type: loadout
+  id: BraTshirtBrown
+  equipment:
+    bra: ClothingBraTshirtBrown
+
+- type: loadout
+  id: BraTshirtOrange
+  equipment:
+    bra: ClothingBraTshirtOrange

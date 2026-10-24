@@ -1,0 +1,5 @@
+- type: localizedDataset
+  id: AshLegionDrobeAds
+  values:
+    prefix: advertisement-ashlegiondrobe-
+    count: 1

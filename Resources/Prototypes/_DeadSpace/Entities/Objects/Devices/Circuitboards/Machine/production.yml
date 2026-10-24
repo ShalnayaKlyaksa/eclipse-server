@@ -1,0 +1,11 @@
+- type: entity
+  id: PhotocopierMachineCircuitboard
+  parent: BaseMachineCircuitboard
+  name: photocopier machine board
+  description: A machine printed circuit board for a photocopier.
+  components:
+  - type: MachineBoard
+    prototype: PhotocopierCommand
+    stackRequirements:
+      Manipulator: 5
+      Glass: 1

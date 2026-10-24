@@ -1,0 +1,70 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Anthropomorph body adapted for Eclipse organ rendering. Body from Lust Station/Sunrise Vulpkanin compat set; human head from Mobs/Species/Human/parts.rsi with a small neck bridge from the Vulpkanin compat head. Original human head from tgstation human_parts_greyscale.dmi and modified by DrSmugleaf, also modified by Ko4erga (discord). Original Vulpkanin source: Occulus-Eris, modified by discord:kuro_0001 (388673708753027083).",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "full"
+        },
+        {
+            "name": "head_f",
+            "directions": 4
+        },
+        {
+            "name": "head_m",
+            "directions": 4
+        },
+        {
+            "name": "l_arm",
+            "directions": 4
+        },
+        {
+            "name": "l_foot",
+            "directions": 4
+        },
+        {
+            "name": "l_hand",
+            "directions": 4
+        },
+        {
+            "name": "l_leg",
+            "directions": 4
+        },
+        {
+            "name": "r_arm",
+            "directions": 4
+        },
+        {
+            "name": "r_foot",
+            "directions": 4
+        },
+        {
+            "name": "r_hand",
+            "directions": 4
+        },
+        {
+            "name": "r_leg",
+            "directions": 4
+        },
+        {
+            "name": "torso_f",
+            "directions": 4
+        },
+        {
+            "name": "torso_m",
+            "directions": 4
+        },
+        {
+            "name": "eyes",
+            "directions": 4
+        },
+        {
+            "name": "overlay_husk",
+            "directions": 4
+        }
+    ]
+}

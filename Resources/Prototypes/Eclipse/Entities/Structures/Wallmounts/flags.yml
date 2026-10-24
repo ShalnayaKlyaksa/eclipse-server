@@ -1,0 +1,19 @@
+- type: entity
+  parent: BaseSign
+  id: InteqFlag
+  name: Inteq flag
+  description: Smells like gun powder.
+  components:
+  - type: Sprite
+    sprite: Eclipse/Structures/Decoration/inteq_flag.rsi
+    state: inteq_flag
+
+- type: entity
+  parent: BaseFlag
+  id: PactFlag
+  name: Pact flag
+  description: Flag with the Pact logo.
+  components:
+  - type: Sprite
+    sprite: Eclipse/Structures/Decoration/pact_flag.rsi
+    state: pact_flag

@@ -1,0 +1,176 @@
+- type: entity
+  name: contraband spawner
+  id: LootSpawnerContrabandLow
+  suffix: Low Value
+  parent: MarkerBase
+  components:
+    - type: Sprite
+      layers:
+        - state: red
+        - sprite: Objects/Fun/Balloons/legion.rsi
+          state: icon
+    - type: RandomSpawner
+      rarePrototypes:
+        # Usefull non-contra loot
+        - ClothingHandsGlovesCombat
+        - ThievingGloves
+        - ClothingHeadHelmetCult
+        - ClothingOuterArmorCult
+        - DehydratedSpaceCarp
+        - ClothingOuterEVASuitLegion
+        - ClothingHeadHelmetLegion
+        - ClothingHeadHelmetSwatLegion
+        - ToolboxAshLegionFilled
+        - ClothingOuterVestWeb
+        - LegionJawsOfLife
+        - HappyHonkNukie
+        - CigPackLegion
+        - LanternFlash
+      rareChance: 0.2
+      prototypes:
+        # Useless non-contra loot
+        - ClothingEyesGlassesOutlawGlasses
+        - ClothingHeadHatPirate
+        - ClothingUniformJumpsuitPirate
+        - ClothingHeadHatHoodCulthood
+        - ClothingOuterRobesCult
+        - ClothingShoesCult
+        # Useless non-contra legion loot
+        - BalloonAshLegion
+        - ClothingUniformJumpsuitPyjamaLegionRed
+        - ClothingUniformJumpsuitPyjamaLegionBlack
+        - ClothingUniformJumpsuitPyjamaLegionPink
+        - ClothingHeadPyjamaLegionRed
+        - ClothingHeadPyjamaLegionBlack
+        - ClothingHeadPyjamaLegionPink
+        - ClothingHeadHatOutlawHat
+        - ClothingHeadHatLegion
+        - ClothingMaskNeckGaiter
+        - ClothingOuterWinterLegion
+        - ClothingHeadHatLegionMAA
+        - ClothingOuterWinterLegionCap
+        - ClothingOuterCoatLegionCap
+        - ClothingUniformJumpsuitLegionFormal
+        - ClothingUniformJumpskirtLegionFormalDress
+        - ClothingUniformJumpsuitOperative
+        - ClothingUniformJumpskirtOperative
+        - ClothingNeckScarfStripedLegionGreen
+        - ClothingNeckScarfStripedLegionRed
+        - ClothingShoesBootsWinterLegion
+        - ClothingBeltLegionHolster
+        - ToolboxLegion
+      chance: 0.8
+      offset: 0.0
+
+
+- type: entity
+  name: contraband spawner
+  id: LootSpawnerContraband
+  parent: MarkerBase
+  components:
+    - type: Sprite
+      layers:
+        - state: red
+        - sprite: Objects/Fun/Balloons/legion.rsi
+          state: icon
+    - type: RandomSpawner
+      rarePrototypes:
+        - RevolverCapGunFake
+        - ClothingShoesBootsMagLegion
+        - ClothingHeadsetAltLegion
+        - Stimpack
+        - EncryptionKeyAshLegion
+        - LegionSpongeBox
+        - PenExplodingBox
+        - HypopenBox
+        - GatfruitSeeds
+        - EnergyDagger
+        - SingularityGrenade
+        - WhiteholeGrenade
+        - HotPotato
+        - WeaponSniperMosin
+        - SpeedLoaderMagnumAP
+      rareChance: 0.2
+      prototypes:
+        - CigPackLegion
+        - HappyHonkNukie
+        - LanternFlash
+        - CyberPen
+        - ClothingHandsGlovesBoxingRiggedRed
+        - ClothingMaskGasLegion
+        - RubberStampAshLegion
+        - SoapAshLegion
+        - DrinkNukieCan
+        - StimpackMini
+        - NukeDiskFake
+        - InteqPersonalAI
+        - Telecrystal1
+        - LegionIDCard
+        - BaseUplinkRadio
+        - MagazinePistol
+        - MagazinePistolCaselessRifle
+      chance: 0.8
+      offset: 0.0
+
+
+- type: entity
+  name: contraband spawner
+  id: LootSpawnerContrabandHigh
+  suffix: High Value
+  parent: MarkerBase
+  components:
+    - type: Sprite
+      layers:
+        - state: red
+        - sprite: Objects/Fun/Balloons/legion.rsi
+          state: icon
+    - type: RandomSpawner
+      rarePrototypes:
+        - ClothingBackpackChameleonFill
+        - ToolboxElectricalTurretFilled
+        - EnergySword
+        - FireAxeFlaming
+        - HoloparasiteInjector
+        - StorageImplanter
+        - FreedomImplanter
+        - DnaScramblerImplanter
+        - MacroBombImplanter
+        - MicroBombImplanter
+        - Emag
+        - RadioJammer
+        - LegionBomb
+        - WeaponRevolverPythonAP
+        - ThrowingKnivesKit
+        - ExGrenade
+        - ChemistryBottleNocturine
+        - ChameleonProjector
+      rareChance: 0.2
+      prototypes:
+        - AgentIDCard
+        - Hypopen
+        - PenExploding
+        - StealthBox
+        - ClothingMaskGasVoiceChameleon
+        - ClothingShoesChameleonNoSlips
+        - ClothingHeadHatChameleon
+        - ClothingHeadsetChameleon
+        - ClothingOuterChameleon
+        - ClothingNeckChameleon
+        - ClothingMaskGasChameleon
+        - ClothingBackpackChameleon
+        - ClothingEyesChameleon
+        - ClothingHandsChameleon
+        - ClothingShoesChameleon
+        - ClothingUniformJumpsuitChameleon
+        - EncryptionKeyAshLegion
+        - LegionSpongeBox
+        - EnergyDagger
+        - EmpImplanter
+        - LegionMiniBomb
+        - C4
+        - EmpGrenade
+        - HotPotato
+        - Telecrystal5
+        - BorgModuleLegionWeapon
+      chance: 0.8
+      offset: 0.0

@@ -1,0 +1,38 @@
+- type: entity
+  parent: RubberStampWarden
+  id: RubberStampAshLegion
+  name: AshLegion rubber stamp
+  components:
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-AshLegion
+    stampedColor: "#FFA500"
+    stampState: "paper_stamp-ashlegion"
+  - type: Sprite
+    sprite: _Orion/Objects/Misc/inteq_bur.rsi
+    state: stamp-inteq
+
+- type: entity
+  parent: BoxFolderBase
+  id: BoxFolderSecretAshLegion
+  suffix: AshLegion
+  name: secret document folder
+  components:
+  - type: Sprite
+    sprite: _Orion/Objects/Misc/inteq_bur.rsi
+    layers:
+    - state: secret_folder
+
+- type: entity
+  parent: BasePaper
+  id: AshLegionSecretDocument
+  suffix: AshLegion
+  name: secret documents
+  components:
+  - type: Sprite
+    sprite: _Orion/Objects/Misc/inteq_bur.rsi
+    layers:
+    - state: secret_docs
+  - type: Item
+    size: Small
+  - type: StaticPrice # Literally Secret Docs
+    price: 10000

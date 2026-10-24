@@ -1,0 +1,91 @@
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconNanotrasenOSO
+  icon:
+    sprite: /Textures/_Backmen/Icons/jobicon.rsi
+    state: NanotrasenOSO
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconNanotrasenSec
+  icon:
+    sprite: /Textures/_Backmen/Icons/jobicon.rsi
+    state: NanotrasenSec
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconSergant
+  icon:
+    sprite: /Textures/_Backmen/Icons/jobicon.rsi
+    state: serg
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconPrivate
+  icon:
+    sprite: /Textures/_Backmen/Icons/jobicon.rsi
+    state: private
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconMilitia
+  icon:
+    sprite: /Textures/Eclipse/Interface/Misc/job_icons.rsi
+    state: militia
+  jobName: job-name-militia
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconNTNavyCaptain
+  icon:
+    sprite: /Textures/Eclipse/Interface/Misc/job_icons.rsi
+    state: NavyCaptain
+  jobName: job-name-nanotrasen-navy-captain
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconNTNavyOfficer
+  icon:
+    sprite: /Textures/Eclipse/Interface/Misc/job_icons.rsi
+    state: NavyOfficer
+  jobName: job-name-nanotrasen-navy-officer
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconNTNavyWOEngi
+  icon:
+    sprite: /Textures/Eclipse/Interface/Misc/job_icons.rsi
+    state: WarrantOfficerEngineer
+  jobName: job-name-nanotrasen-navy-warrant-officer-engineer
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconNTNavyWOMed
+  icon:
+    sprite: /Textures/Eclipse/Interface/Misc/job_icons.rsi
+    state: WarrantOfficerMedical
+  jobName: job-name-nanotrasen-navy-warrant-officer-medical
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconNTNavySailor
+  icon:
+    sprite: /Textures/Eclipse/Interface/Misc/job_icons.rsi
+    state: Sailor
+  jobName: job-name-nanotrasen-navy-sailor
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconNTNavyEngineer
+  icon:
+    sprite: /Textures/Eclipse/Interface/Misc/job_icons.rsi
+    state: NavyEngineer
+  jobName: job-name-nanotrasen-navy-engineer
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconNTNavyMedical
+  icon:
+    sprite: /Textures/Eclipse/Interface/Misc/job_icons.rsi
+    state: NavyMedical
+  jobName: job-name-nanotrasen-navy-medical

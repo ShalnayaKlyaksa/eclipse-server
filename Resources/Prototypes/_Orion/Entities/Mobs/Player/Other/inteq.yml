@@ -1,0 +1,32 @@
+# Settings
+- type: randomHumanoidSettings
+  id: AshLegionVanguard
+  randomizeName: false
+  speciesBlacklist:
+#  - Monkey
+#  - Kobold
+#  - Abductor
+#  - IPC
+  - Diona
+  - Vox
+  - Gingerbread
+#  - Plasmaman
+  - Shadowkin
+  components:
+  - type: AntagImmune
+  - type: GhostRole
+    raffle:
+      settings: default
+    mindRoles:
+    - MindRoleGhostRoleAshLegionAntagonist
+    job: AshLegionVanguard
+  - type: RandomMetadata
+    nameSegments:
+    - AshLegionVanguardNamesPrefix
+    - NamesMilitaryLast
+    nameFormat: name-format-standard
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: NpcFactionMember
+    factions:
+    - AshLegion

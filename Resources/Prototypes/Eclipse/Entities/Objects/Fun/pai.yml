@@ -1,0 +1,38 @@
+- type: entity
+  parent: [ PersonalAI, BaseAshLegionContraband]
+  id: InteqPersonalAI
+  name: ashlegion personal ai device
+  description: Your Inteq pal who's fun to be with!
+  components:
+  - type: Sprite
+    sprite: Eclipse/Objects/Fun/pai.rsi
+    layers:
+    - state: pai-base
+    - state: ashlegion-pai-off-overlay
+      shader: unshaded
+      map: ["screen"]
+  - type: ToggleableGhostRole
+    roleName: pai-system-role-name-ashlegion
+    roleDescription: pai-system-role-description-ashlegion
+    roleRules: ghost-role-information-familiar-rules
+    mindRoles:
+    - MindRoleGhostRoleFamiliar
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - AshLegion
+  - type: ActiveRadio
+    channels:
+    - AshLegion
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableGhostRoleVisuals.Status:
+        screen:
+          Off: { state: ashlegion-pai-off-overlay }
+          Searching: { state: ashlegion-pai-searching-overlay }
+          On: { state: ashlegion-pai-on-overlay }
+  - type: StaticPrice
+    price: 500
+  - type: Vocal
+    sounds:
+      Unsexed: UnisexSiliconSyndicate

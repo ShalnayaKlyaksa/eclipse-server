@@ -1,0 +1,36 @@
+#AshLegion
+- type: entity
+  parent: AirlockHatchAshLegion
+  id: AirlockHatchAshLegionVanguardLocked
+  suffix: AshLegion, Vanguard, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsAshLegionVanguard ]
+
+- type: entity
+  parent: AirlockHatchAshLegion
+  id: AirlockHatchAshLegionVanguardLeaderLocked
+  suffix: AshLegion, Vanguard Leader, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsAshLegionVanguardLeader ]
+
+- type: entity
+  parent: AirlockHatchAshLegionGlass
+  id: AirlockHatchAshLegionGlassVanguardLocked
+  suffix: AshLegion, Vanguard, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsAshLegionVanguard ]
+
+- type: entity
+  parent: AirlockHatchAshLegionGlass
+  id: AirlockHatchAshLegionGlassVanguardLeaderLocked
+  suffix: AshLegion, Vanguard Leader, Locked
+  components:
+  - type: ContainerFill
+    containers:
+      board: [ DoorElectronicsAshLegionVanguardLeader ]

@@ -1,0 +1,15 @@
+#default species weights used for randomly selected species
+- type: weightedRandomSpecies
+  id: SpeciesWeights
+  weights:
+    Imperial: 5
+    Molei: 3
+    Dwarf: 2
+    Lavrite: 2
+    Kobold: 3
+    Saurian: 3
+    Therian: 3
+    Arkane: 1
+    Avian: 2
+    Elir: 2
+    Slimefolk: 2

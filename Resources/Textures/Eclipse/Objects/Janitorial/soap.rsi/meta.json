@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from https://github.com/BlueMoon-Labs/BlueMoon-Station | Redacted by xkttty",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "ashlegion-inhand-left"
+    },
+    {
+      "name": "ashlegion-inhand-right"
+    },
+    {
+      "name": "ashlegion-1"
+    },
+    {
+      "name": "ashlegion-2"
+    },
+    {
+      "name": "ashlegion-3"
+    },
+    {
+      "name": "ashlegion-4"
+    },
+    {
+      "name": "inteq-1"
+    },
+    {
+      "name": "inteq-2"
+    },
+    {
+      "name": "inteq-3"
+    },
+    {
+      "name": "inteq-4"
+    },
+    {
+      "name": "inteq-inhand-left"
+    },
+    {
+      "name": "inteq-inhand-right"
+    }
+  ]
+}

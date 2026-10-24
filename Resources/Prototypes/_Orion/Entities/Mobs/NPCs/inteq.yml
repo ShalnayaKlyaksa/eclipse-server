@@ -1,0 +1,31 @@
+- type: entity
+  parent:
+  - BaseSimpleMob
+  - MobCombat
+  - MobAtmosStandard
+  id: MobAshLegionAgent
+  name: AshLegion agent
+  description: UGH!? AGH!! BREAK THINGS!!!
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRole
+    allowSpeech: true
+    allowMovement: true
+    name: Агент Интек
+    description: КРУШИ ЧЕРЕПА, ТЫ ЕБАНУТЫЙ, УБИВАЙ, ЛОМАЙ!!!
+    rules: Нельзя гибать. Нельзя гибать!!! ДАЖЕ НЕ ПЫТАЙСЯ!!!!!!
+    mindRoles:
+    - MindRoleGhostRoleSoloAntagonist
+    raffle:
+      settings: default
+    job: AshLegionVanguard
+  - type: RotationVisuals
+    defaultRotation: 90
+    horizontalRotation: 90
+  - type: RandomMetadata
+    nameSegments:
+    - AshLegionAgentNamesPrefix
+    - NamesMilitaryLast
+    nameFormat: name-format-standard
+  - type: DatasetVocalizer
+    dataset: AshLegionAgent

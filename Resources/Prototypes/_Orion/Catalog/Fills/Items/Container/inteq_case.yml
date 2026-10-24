@@ -1,0 +1,59 @@
+- type: entity
+  parent: CaseAshLegion
+  id: CaseAshLegionInfiltrator
+  suffix: AshLegion Infiltrator, Filled
+  components:
+  - type: StorageFill
+    contents:
+      - id: ClothingHeadHelmetAshLegionInfiltrator
+      - id: ClothingHandsGlovesAshLegionInfiltrator
+      - id: ClothingOuterArmorAshLegionInfiltrator
+      - id: ClothingShoesBootsAshLegionInfiltrator
+
+- type: entity
+  parent: CaseAshLegion
+  id: CaseAshLegionIronTombstone
+  suffix: AshLegion Iron Tombstone, Filled
+  components:
+  - type: StorageFill
+    contents:
+      - id: ClothingOuterArmorAshLegionIronTombstone
+  - type: ClothingSpeedModifier
+    walkModifier: 1
+    sprintModifier: 1
+
+- type: entity
+  parent: CaseAshLegion
+  id: CaseAshLegionAKM
+  suffix: AshLegion AKM, Filled
+  components:
+  - type: StorageFill
+    contents:
+      - id: WeaponRifleAshLegionAKM
+      - id: MagazineLightRifle
+        amount: 3
+      - id: MagazineBoxLightRifleAshLegion
+
+- type: entity
+  parent: CaseAshLegion
+  id: CaseAshLegionBulldog
+  suffix: AshLegion Bulldog, Filled
+  components:
+  - type: StorageFill
+    contents:
+      - id: WeaponShotgunAshLegionBulldog
+      - id: MagazineShotgun
+        amount: 2
+      - id: MagazineBoxShotgunAshLegion
+
+- type: entity
+  parent: CaseAshLegion
+  id: CaseAshLegionSMG
+  suffix: AshLegion SMG, Filled
+  components:
+  - type: StorageFill
+    contents:
+      - id: WeaponSubMachineGunAshLegionSMG
+      - id: MagazinePistolSubMachineGun
+        amount: 2
+      - id: MagazineBoxPistolAshLegion

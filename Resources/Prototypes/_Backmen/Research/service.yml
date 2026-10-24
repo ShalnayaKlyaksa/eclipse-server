@@ -1,0 +1,212 @@
+- type: technology
+  id: Lightning
+  name: research-technology-lightning
+  icon:
+    sprite: Objects/Power/light_bulb.rsi
+    state: normal
+  discipline: CivilianServices
+  tier: 1
+  cost: 500
+  recipeUnlocks:
+   - LightTube
+   - LightBulb
+   - WarmLightBulb
+  position: 1,6
+
+- type: technology
+  id: LightningAdvanced
+  name: research-technology-lightning-advanced
+  icon:
+    sprite: Objects/Power/light_tube.rsi
+    state: normal
+  discipline: CivilianServices
+  tier: 1
+  cost: 1000
+  recipeUnlocks:
+   - LedLightTube
+   - SodiumLightTube
+   - ExteriorLightTube
+   - LedLightBulb
+   - DimLightBulb
+  technologyPrerequisites:
+   - Lightning
+  position: 1,7
+
+- type: technology
+  id: Bootlegging
+  name: research-technology-bootlegging
+  icon:
+    sprite: Objects/Consumable/Drinks/generic_jug.rsi
+    state: icon
+  discipline: CivilianServices
+  tier: 1
+  cost: 500
+  recipeUnlocks:
+  - DrinkMug
+  - DrinkMugMetal
+  - DrinkGlass
+  - DrinkShotGlass
+  - DrinkGlassCoupeShaped
+  - CustomDrinkJug
+  technologyPrerequisites:
+  - ServiceMachines
+  position: 2,9
+
+- type: technology
+  id: Kitchen
+  name: research-technology-kitchen
+  icon:
+    sprite: Objects/Consumable/Food/bowl.rsi
+    state: bowl
+  discipline: CivilianServices
+  tier: 1
+  cost: 500
+  recipeUnlocks:
+  - Ashtray
+  - FoodPlate
+  - FoodPlateSmall
+  - FoodPlatePlastic
+  - FoodPlateSmallPlastic
+  - FoodBowlBig
+  - FoodPlateTin
+  - FoodPlateMuffinTin
+  - FoodKebabSkewer
+  - UtilityKnife
+  technologyPrerequisites:
+  - ServiceMachines
+  position: 4,9
+
+- type: technology
+  id: Hydroponics
+  name: research-technology-hydroponics
+  icon:
+    sprite: Objects/Tools/bucket.rsi
+    state: icon
+  discipline: CivilianServices
+  tier: 1
+  cost: 500
+  recipeUnlocks:
+   - Bucket
+   - HydroponicsToolMiniHoe
+   - HydroponicsToolHatchet
+   - HydroponicsToolScythe
+   - HydroponicsToolClippers
+   - ClothingBeltPlant
+   - PlantBag
+   - BotanicalSeedDnaDisk # Erida edit
+  technologyPrerequisites:
+  - ServiceMachines
+  position: 3,8
+
+- type: technology
+  id: Entertainment
+  name: research-technology-entertainment
+  icon:
+    sprite: Objects/Fun/Instruments/h_synthesizer.rsi
+    state: icon
+  discipline: CivilianServices
+  tier: 1
+  cost: 5000
+  recipeUnlocks:
+   - SynthesizerInstrument
+   - HandheldStationMap
+   - PushHorn
+  technologyPrerequisites:
+  - ServiceMachines
+  position: 3,10
+
+- type: technology
+  id: FauxAstroTiles
+  name: research-technology-faux-astro-tiles
+  icon:
+    sprite: Objects/Tiles/tile.rsi
+    state: astroice
+  discipline: CivilianServices
+  tier: 1
+  cost: 5000
+  recipeUnlocks:
+  - FauxTileAstroGrass
+  - FauxTileMowedAstroGrass
+  - FauxTileJungleAstroGrass
+  - FauxTileDarkAstroGrass
+  - FauxTileLightAstroGrass
+  - FauxTileAstroIce
+  - FauxTileAstroSnow
+  - FauxTileAstroAsteroidSand
+  - FauxTileDarkAstroGrass
+  - FauxTileLightAstroGrass
+  - FauxTileDesertAstroSand
+  - FauxTileAstroIronsand
+  - FauxTileAstroIronsandBorderless
+  - FauxTileAstroAsteroidSandBorderless
+  technologyPrerequisites:
+  - Entertainment
+  position: 2,10
+
+- type: technology
+  id: Cleaning
+  name: research-technology-cleaning
+  icon:
+    sprite: Objects/Specific/Janitorial/mop.rsi
+    state: mop
+  discipline: CivilianServices
+  tier: 1
+  cost: 500
+  recipeUnlocks:
+   - WireBrush
+   - MopItem
+   - TrashBag
+   - LightReplacer
+   - Holoprojector
+   - WetFloorSign
+   - ClothingHeadHatCone
+  technologyPrerequisites:
+  - ServiceMachines
+  position: 4,6
+
+- type: technology
+  id: CleaningAdvanced
+  name: research-technology-cleaning-advanced
+  icon:
+    sprite: Objects/Specific/Janitorial/advmop.rsi
+    state: advmop
+  discipline: CivilianServices
+  tier: 1
+  cost: 10000
+  recipeUnlocks:
+   - AdvMopItem
+  technologyPrerequisites:
+  - Cleaning
+  position: 4,7
+
+- type: technology
+  id: Spray
+  name: research-technology-spray
+  icon:
+    sprite: Objects/Specific/Janitorial/spray_bottle.rsi
+    state: cleaner
+  discipline: CivilianServices
+  tier: 1
+  cost: 500
+  recipeUnlocks:
+   - SprayBottle
+  technologyPrerequisites:
+  - Cleaning
+  position: 5,6
+
+- type: technology
+  id: SprayAdvanced
+  name: research-technology-spray-advanced
+  icon:
+    sprite: Objects/Weapons/Guns/Basic/spraynozzle.rsi
+    state: icon
+  discipline: CivilianServices
+  tier: 1
+  cost: 10000
+  recipeUnlocks:
+   - WeaponSprayNozzle
+   - ClothingBackpackWaterTank
+   - MegaSprayBottle
+  technologyPrerequisites:
+  - Spray
+  position: 5,7

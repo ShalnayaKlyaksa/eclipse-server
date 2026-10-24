@@ -1,0 +1,34 @@
+- type: entity
+  parent: [ClothingShoesBootsMagLegion, BaseAshLegionContraband]
+  id: ClothingShoesBootsMagAshLegion
+  name: orange magboots
+  description: Reverse-engineered magnetic boots that have a heavy magnetic pull and integrated thrusters. It can hold 0.75 L of gas.
+  components:
+  - type: Sprite
+    sprite: Eclipse/Clothing/Shoes/magboots-inteq.rsi
+    state: icon
+  - type: Clothing
+    sprite: Eclipse/Clothing/Shoes/magboots-inteq.rsi
+
+- type: entity
+  parent: ClothingShoesBootsMagBase
+  id: ClothingShoesBootsMagNTNavy
+  name: nanotrasen navy magboots
+  description:
+  components:
+  - type: Sprite
+    sprite: Eclipse/Clothing/Shoes/magboots-nanotrasen-navy.rsi
+    state: icon
+  - type: Clothing
+    sprite: Eclipse/Clothing/Shoes/magboots-nanotrasen-navy.rsi
+  - type: ClothingSpeedModifier
+    walkModifier: 0.9
+    sprintModifier: 0.9
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 10
+  - type: StaticPrice
+    price: 750
+  - type: StealTarget
+    stealGroup: ClothingShoesBootsMagAdv

@@ -1,0 +1,24 @@
+- type: reagent
+  id: Oxandrolone
+  name: reagent-name-oxandrolone
+  group: Medicine
+  desc: reagent-desc-oxandrolone
+  physicalDesc: reagent-physical-desc-thick
+  color: "#08aa6c"
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.1
+      effects:
+      - !type:HealthChange
+        damage:
+          types:
+            Heat: -0.5
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentCondition
+          reagent: Oxandrolone
+          min: 15
+        damage:
+          types:
+            Slash: 0.5
+            Piercing: 0.5

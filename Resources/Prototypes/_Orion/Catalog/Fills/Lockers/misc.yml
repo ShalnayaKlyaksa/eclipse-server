@@ -1,0 +1,47 @@
+- type: entityTable
+  id: AshLegionMaintLoot
+  table: !type:GroupSelector
+    children:
+    - !type:GroupSelector
+      children:
+      - id: ClothingBackpackAshLegion
+      - id: ClothingBackpackDuffelAshLegion
+      - id: ClothingBackpackSatchelAshLegion
+    - !type:GroupSelector
+      children:
+      - id: ClothingHeadHatAshLegionSoft
+      - id: ClothingHeadHatAshLegionMAA
+      - id: ClothingHeadAshLegionHonorableBeret
+      - id: ClothingHeadAshLegionBeret
+    - !type:GroupSelector
+      children:
+      - id: ClothingUniformJumpsuitAshLegionFormal
+      - id: ClothingUniformJumpskirtAshLegionFormalDress
+      - id: ClothingUniformJumpsuitAshLegionHonorable
+    - !type:GroupSelector
+      children:
+      - id: ClothingUniformJumpsuitAshLegionMedical
+      - id: ClothingUniformJumpskirtAshLegionMedical
+    - !type:GroupSelector
+      children:
+      - id: ClothingUniformJumpsuitAshLegionOperative
+      - id: ClothingUniformJumpskirtAshLegionOperative
+    - !type:GroupSelector
+      children:
+      - id: ClothingOuterCoatAshLegionBattle
+      - id: ClothingOuterCoatAshLegionMedical
+      - id: ClothingOuterWinterAshLegion
+      - id: ClothingOuterHoodieAshLegion
+    - !type:GroupSelector
+      children:
+      - id: ClothingBeltAshLegionWebbing
+        prob: 0.005
+      - id: ClothingBeltAshLegionDropPouch
+        prob: 0.005
+    - id: ItemFlagMiniAshLegion
+    - id: FoodSnackAshLegionCookies
+    - id: CigPackAshLegion
+    - id: ClothingNeckCloakAshLegion
+      prob: 0.005
+    - id: BoxAshLegionEVA
+      prob: 0.005

@@ -1,0 +1,27 @@
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconAshLegion
+  icon:
+    sprite: /Textures/Interface/Misc/job_icons.rsi
+    state: Legion
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconAshLegionCommander
+  icon:
+    sprite: /Textures/Interface/Misc/job_icons.rsi
+    state: LegionCommander
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconAshLegionCorpsman
+  icon:
+    sprite: /Textures/Interface/Misc/job_icons.rsi
+    state: LegionCorpsman
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconAshLegionOperative
+  icon:
+    sprite: /Textures/Interface/Misc/job_icons.rsi
+    state: LegionOperative

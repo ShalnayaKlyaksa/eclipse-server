@@ -1,0 +1,435 @@
+- type: entity
+  parent: CentcomPDA
+  id: CoSCCPDA
+  categories: [ HideSpawnMenu ]
+  suffix: Centcom Chief Of Staff PDA
+  components:
+  - type: Pda
+    id: CoSCCIDCard
+  - type: Tag #  Ignore Chameleon tags
+    tags:
+    - DoorBumpOpener
+
+- type: entity
+  parent: CentcomPDA
+  id: CentcomOfficerPDA
+  categories: [ HideSpawnMenu ]
+  suffix: Eidos Empire Officer PDA
+  components:
+  - type: Pda
+    id: CentcomOfficerIDCard
+  - type: Tag #  Ignore Chameleon tags
+    tags:
+    - DoorBumpOpener
+
+- type: entity
+  parent: CentcomPDA
+  id: CentcomOperatorPDA
+  categories: [ HideSpawnMenu ]
+  suffix: Eidos Empire Operator PDA
+  components:
+  - type: Pda
+    id: CentcomOperatorIDCard
+  - type: Tag #  Ignore Chameleon tags
+    tags:
+    - DoorBumpOpener
+
+- type: entity
+  parent: CentcomPDA
+  id: CentcomIntendantPDA
+  categories: [ HideSpawnMenu ]
+  suffix: Eidos Empire Intendant PDA
+  components:
+  - type: Pda
+    id: CentcomIntendantIDCard
+  - type: Tag #  Ignore Chameleon tags
+    tags:
+    - DoorBumpOpener
+
+- type: entity
+  parent: CentcomPDA
+  id: CentcomEngineerPDA
+  categories: [ HideSpawnMenu ]
+  suffix: Eidos Empire Engineer PDA
+  components:
+  - type: Pda
+    id: CentcomEngineerIDCard
+  - type: Tag #  Ignore Chameleon tags
+    tags:
+    - DoorBumpOpener
+
+- type: entity
+  parent: CentcomPDA
+  id: CentcomClercPDA
+  categories: [ HideSpawnMenu ]
+  suffix: Eidos Empire Clerc PDA
+  components:
+  - type: Pda
+    id: CentcomClercIDCard
+  - type: Tag #  Ignore Chameleon tags
+    tags:
+    - DoorBumpOpener
+
+- type: entity
+  parent: CentcomPDA
+  id: OSOPDA
+  categories: [ HideSpawnMenu ]
+  suffix: OSO PDA
+  components:
+  - type: Pda
+    id: OSOIDCard
+  - type: Tag #  Ignore Chameleon tags
+    tags:
+    - DoorBumpOpener
+
+- type: entity
+  parent: CentcomPDA
+  id: CentralCommandHoSPDA
+  categories: [ HideSpawnMenu ]
+  suffix: Eidos Empire HoS PDA
+  components:
+  - type: Pda
+    id: CentralCommandHoSIDCard
+  - type: Tag #  Ignore Chameleon tags
+    tags:
+    - DoorBumpOpener
+
+- type: entity
+  parent: CentcomPDA
+  id: CentralCommandSecPDA
+  categories: [ HideSpawnMenu ]
+  suffix: Eidos Empire Security PDA
+  components:
+  - type: Pda
+    id: CentralCommandSecIDCard
+  - type: Tag #  Ignore Chameleon tags
+    tags:
+    - DoorBumpOpener
+
+- type: entity
+  parent: [ BasePDA, BaseAshLegionContraband ]
+  id: AshLegionBasePDA
+  name: AshLegion PDA
+  components:
+  - type: Pda
+    id: AshLegionOpsBaseIDCard
+  - type: Sprite
+    sprite: Eclipse/Objects/Devices/pda.rsi
+    layers:
+    - map: [ "enum.PdaVisualLayers.Base" ]
+      state: "inteq-base"
+    - state: "light_overlay"
+      map: [ "enum.PdaVisualLayers.Flashlight" ]
+      shader: "unshaded"
+      visible: false
+    - state: "id_overlay"
+      map: [ "enum.PdaVisualLayers.IdLight" ]
+      shader: "unshaded"
+      visible: false
+  - type: Appearance
+    appearanceDataInit:
+      enum.PdaVisuals.PdaType:
+        !type:String
+        ashlegion-base
+  - type: PdaBorderColor
+    borderColor: "#c56c00"
+  - type: Icon
+    sprite: Eclipse/Objects/Devices/pda.rsi
+    state: inteq-base
+  - type: CartridgeLoader
+    uiKey: enum.PdaUiKey.Key
+    preinstalled:
+      - NotekeeperCartridge
+      - NanoTaskCartridge
+      - AstroNavCartridge
+      - AshLegionActivationKeyTrackerCartridge
+
+- type: entity
+  parent: AshLegionBasePDA
+  id: AshLegionMedicalPDA
+  name: AshLegion Medical PDA
+  components:
+    - type: Appearance
+      appearanceDataInit:
+        enum.PdaVisuals.PdaType:
+          !type:String
+          ashlegion-med
+    - type: Pda
+      id: AshLegionOpsMedicalIDCard
+    - type: Icon
+      state: inteq-med
+    - type: CartridgeLoader
+      uiKey: enum.PdaUiKey.Key
+      preinstalled:
+        - NotekeeperCartridge
+        - NanoTaskCartridge
+        - AstroNavCartridge
+        - MedTekCartridge
+        - AshLegionActivationKeyTrackerCartridge
+
+- type: entity
+  parent: AshLegionBasePDA
+  id: AshLegionLeaderPDA
+  name: AshLegion Leader PDA
+  components:
+    - type: Pda
+      id: AshLegionOpsLeaderIDCard
+    - type: Appearance
+      appearanceDataInit:
+        enum.PdaVisuals.PdaType:
+          !type:String
+          ashlegion-lead
+    - type: Icon
+      state: inteq-lead
+
+- type: entity
+  parent: CentcomPDA
+  id: NTNavyCaptainPDA
+  name: nanotrasen navy captain PDA
+  components:
+  - type: Pda
+    id: NTNavyCaptainIDCard
+  - type: Tag #  Ignore Chameleon tags
+    tags:
+    - DoorBumpOpener
+  - type: Sprite
+    sprite: Eclipse/Objects/Devices/pda.rsi
+    layers:
+    - map: [ "enum.PdaVisualLayers.Base" ]
+      state: "pda-nanotrasen-navy-captain"
+    - state: "light_overlay"
+      map: [ "enum.PdaVisualLayers.Flashlight" ]
+      shader: "unshaded"
+      visible: false
+    - state: "id_overlay"
+      map: [ "enum.PdaVisualLayers.IdLight" ]
+      shader: "unshaded"
+      visible: false
+  - type: Appearance
+    appearanceDataInit:
+      enum.PdaVisuals.PdaType:
+        !type:String
+        pda-nanotrasen-navy-captain
+  - type: PdaBorderColor
+    borderColor: "#0f0f0f"
+    accentHColor: "#aa6300"
+    accentVColor: "#f8d860"
+  - type: Icon
+    sprite: Eclipse/Objects/Devices/pda.rsi
+    state: pda-nanotrasen-navy-captain
+
+- type: entity
+  parent: CentcomPDA
+  id: NTNavyOfficerPDA
+  name: nanotrasen navy officer PDA
+  components:
+  - type: Pda
+    id: NTNavyOfficerIDCard
+  - type: Tag #  Ignore Chameleon tags
+    tags:
+    - DoorBumpOpener
+  - type: Sprite
+    sprite: Eclipse/Objects/Devices/pda.rsi
+    layers:
+    - map: [ "enum.PdaVisualLayers.Base" ]
+      state: "pda-nanotrasen-navy-officer"
+    - state: "light_overlay"
+      map: [ "enum.PdaVisualLayers.Flashlight" ]
+      shader: "unshaded"
+      visible: false
+    - state: "id_overlay"
+      map: [ "enum.PdaVisualLayers.IdLight" ]
+      shader: "unshaded"
+      visible: false
+  - type: Appearance
+    appearanceDataInit:
+      enum.PdaVisuals.PdaType:
+        !type:String
+        pda-nanotrasen-navy-officer
+  - type: PdaBorderColor
+    borderColor: "#0f0f0f"
+    accentHColor: "#d5d5d5"
+    accentVColor: "#d5d5d5"
+  - type: Icon
+    sprite: Eclipse/Objects/Devices/pda.rsi
+    state: pda-nanotrasen-navy-officer
+
+- type: entity
+  parent: CentcomPDA
+  id: NTNavyWOEngiPDA
+  name: nanotrasen navy warrant officer PDA
+  components:
+  - type: Pda
+    id: NTNavyWOEngiIDCard
+  - type: Tag #  Ignore Chameleon tags
+    tags:
+    - DoorBumpOpener
+  - type: Sprite
+    sprite: Eclipse/Objects/Devices/pda.rsi
+    layers:
+    - map: [ "enum.PdaVisualLayers.Base" ]
+      state: "pda-nanotrasen-navy-ce"
+    - state: "light_overlay"
+      map: [ "enum.PdaVisualLayers.Flashlight" ]
+      shader: "unshaded"
+      visible: false
+    - state: "id_overlay"
+      map: [ "enum.PdaVisualLayers.IdLight" ]
+      shader: "unshaded"
+      visible: false
+  - type: Appearance
+    appearanceDataInit:
+      enum.PdaVisuals.PdaType:
+        !type:String
+        pda-nanotrasen-navy-ce
+  - type: PdaBorderColor
+    borderColor: "#0f0f0f"
+    accentHColor: "#FF4500"
+    accentVColor: "#FF4500"
+  - type: Icon
+    sprite: Eclipse/Objects/Devices/pda.rsi
+    state: pda-nanotrasen-navy-ce
+
+- type: entity
+  parent: CentcomPDA
+  id: NTNavyWOMedPDA
+  name: nanotrasen navy warrant officer PDA
+  components:
+  - type: Pda
+    id: NTNavyWOMedIDCard
+  - type: Tag #  Ignore Chameleon tags
+    tags:
+    - DoorBumpOpener
+  - type: Sprite
+    sprite: Eclipse/Objects/Devices/pda.rsi
+    layers:
+    - map: [ "enum.PdaVisualLayers.Base" ]
+      state: "pda-nanotrasen-navy-cmo"
+    - state: "light_overlay"
+      map: [ "enum.PdaVisualLayers.Flashlight" ]
+      shader: "unshaded"
+      visible: false
+    - state: "id_overlay"
+      map: [ "enum.PdaVisualLayers.IdLight" ]
+      shader: "unshaded"
+      visible: false
+  - type: Appearance
+    appearanceDataInit:
+      enum.PdaVisuals.PdaType:
+        !type:String
+        pda-nanotrasen-navy-cmo
+  - type: PdaBorderColor
+    borderColor: "#0f0f0f"
+    accentHColor: "#4682B4"
+    accentVColor: "#4682B4"
+  - type: Icon
+    sprite: Eclipse/Objects/Devices/pda.rsi
+    state: pda-nanotrasen-navy-cmo
+
+- type: entity
+  parent: CentcomPDA
+  id: NTNavySailorPDA
+  name: nanotrasen navy sailor PDA
+  components:
+  - type: Pda
+    id: NTNavySailorIDCard
+  - type: Tag #  Ignore Chameleon tags
+    tags:
+    - DoorBumpOpener
+  - type: Sprite
+    sprite: Eclipse/Objects/Devices/pda.rsi
+    layers:
+    - map: [ "enum.PdaVisualLayers.Base" ]
+      state: "pda-nanotrasen-navy-sailor"
+    - state: "light_overlay"
+      map: [ "enum.PdaVisualLayers.Flashlight" ]
+      shader: "unshaded"
+      visible: false
+    - state: "id_overlay"
+      map: [ "enum.PdaVisualLayers.IdLight" ]
+      shader: "unshaded"
+      visible: false
+  - type: Appearance
+    appearanceDataInit:
+      enum.PdaVisuals.PdaType:
+        !type:String
+        pda-nanotrasen-navy-sailor
+  - type: PdaBorderColor
+    borderColor: "#0f0f0f"
+    accentHColor: "#0f0f0f"
+    accentVColor: "#d5d5d5"
+  - type: Icon
+    sprite: Eclipse/Objects/Devices/pda.rsi
+    state: pda-nanotrasen-navy-sailor
+
+- type: entity
+  parent: CentcomPDA
+  id: NTNavyEngineerPDA
+  name: nanotrasen navy engineer PDA
+  components:
+  - type: Pda
+    id: NTNavyEngineerIDCard
+  - type: Tag #  Ignore Chameleon tags
+    tags:
+    - DoorBumpOpener
+  - type: Sprite
+    sprite: Eclipse/Objects/Devices/pda.rsi
+    layers:
+    - map: [ "enum.PdaVisualLayers.Base" ]
+      state: "pda-nanotrasen-navy-engineer"
+    - state: "light_overlay"
+      map: [ "enum.PdaVisualLayers.Flashlight" ]
+      shader: "unshaded"
+      visible: false
+    - state: "id_overlay"
+      map: [ "enum.PdaVisualLayers.IdLight" ]
+      shader: "unshaded"
+      visible: false
+  - type: Appearance
+    appearanceDataInit:
+      enum.PdaVisuals.PdaType:
+        !type:String
+        pda-nanotrasen-navy-engineer
+  - type: PdaBorderColor
+    borderColor: "#0f0f0f"
+    accentHColor: "#0f0f0f"
+    accentVColor: "#FF4500"
+  - type: Icon
+    sprite: Eclipse/Objects/Devices/pda.rsi
+    state: pda-nanotrasen-navy-engineer
+
+- type: entity
+  parent: CentcomPDA
+  id: NTNavyMedicalPDA
+  name: nanotrasen navy medical PDA
+  components:
+  - type: Pda
+    id: NTNavyMedicalIDCard
+  - type: Tag #  Ignore Chameleon tags
+    tags:
+    - DoorBumpOpener
+  - type: Sprite
+    sprite: Eclipse/Objects/Devices/pda.rsi
+    layers:
+    - map: [ "enum.PdaVisualLayers.Base" ]
+      state: "pda-nanotrasen-navy-medical"
+    - state: "light_overlay"
+      map: [ "enum.PdaVisualLayers.Flashlight" ]
+      shader: "unshaded"
+      visible: false
+    - state: "id_overlay"
+      map: [ "enum.PdaVisualLayers.IdLight" ]
+      shader: "unshaded"
+      visible: false
+  - type: Appearance
+    appearanceDataInit:
+      enum.PdaVisuals.PdaType:
+        !type:String
+        pda-nanotrasen-navy-medical
+  - type: PdaBorderColor
+    borderColor: "#0f0f0f"
+    accentHColor: "#0f0f0f"
+    accentVColor: "#4682B4"
+  - type: Icon
+    sprite: Eclipse/Objects/Devices/pda.rsi
+    state: pda-nanotrasen-navy-medical

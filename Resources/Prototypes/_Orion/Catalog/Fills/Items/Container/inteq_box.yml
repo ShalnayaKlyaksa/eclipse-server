@@ -1,0 +1,23 @@
+- type: entity
+  parent: BoxAshLegion
+  id: BoxAshLegionEVA
+  suffix: AshLegion EVA, Filled
+  components:
+  - type: StorageFill
+    contents:
+      - id: ClothingHeadHelmetEVAAshLegion
+      - id: ClothingOuterEVASuitAshLegion
+      - id: DoubleEmergencyNitrogenTankFilled
+      - id: DoubleEmergencyOxygenTankFilled
+
+- type: entity
+  parent: BoxAshLegion
+  id: BoxAshLegionPistolCommissar
+  suffix: Commissar, Filled
+  components:
+  - type: StorageFill
+    contents:
+      - id: WeaponPistolAshLegionCommissar
+      - id: MagazinePistol
+        amount: 2
+      - id: MagazineBoxPistolAshLegion

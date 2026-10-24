@@ -1,0 +1,11 @@
+ent-ClothingHeadHelmetSwatAshLegion = { ent-ClothingHeadHelmetSwat }
+    .desc = Очень прочный шлем, широко используемый военизированными организациями. Его украшает ужасный узор из оранжевых и чёрных полос.
+    .suffix = Легион пепла
+ent-ClothingHeadHelmetAshLegionDarkTemplar = шлем тёмного крестоносца
+    .desc = Анти-еритичность.
+ent-ClothingHeadHelmetAshLegionDarkTemplarAlt = шлем коричневого крестоносца
+    .desc = { ent-ClothingHeadHelmetAshLegionDarkTemplar.desc }
+ent-ClothingHeadHelmetAshLegionInfiltrator = шлем лазутчика
+    .desc = Легкий шлем с панорамным забралом. Он покрыт защитной пленкой, которая защищает владельца от ярких вспышек, а усиленное стекло может выдержать более одной пули во время выполнения задания.
+ent-ClothingHeadHelmetAshLegionIronTombstone = шлем Железное Надробие
+    .desc = Тяжёло...

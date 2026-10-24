@@ -1,0 +1,4 @@
+Lucide Icons and Contributors — ISC license (see LICENSE.txt).
+Sources: https://github.com/lucide-icons/lucide/tree/main/icons
+Icons: brain, shield-plus, droplet.
+Original SVGs are retained; PNGs are white rasterizations for in-game tinting.

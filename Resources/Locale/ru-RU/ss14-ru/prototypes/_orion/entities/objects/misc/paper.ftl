@@ -1,0 +1,9 @@
+ent-RubberStampAshLegion = печать Легион пепла
+    .desc = { ent-RubberStampRd.desc }
+ent-BoxFolderSecretAshLegion = папка для секретных документов
+    .desc = { ent-BoxFolderBase.desc }
+    .suffix = Легион пепла
+ent-AshLegionSecretDocument = секретные документы
+    .desc = Абсолютно секретные документы Легион пепла, вы слишком слабоумны, что-бы понять, что там написано.
+    .suffix = Легион пепла
+stamp-component-stamped-name-AshLegion = Легион пепла

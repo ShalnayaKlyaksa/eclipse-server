@@ -1,0 +1,86 @@
+<Control
+    xmlns="https://spacestation14.io"
+    xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+    xmlns:eclipse="clr-namespace:Content.Client.MainMenu.UI"
+    xmlns:profile="clr-namespace:Content.Client.Lobby.UI.ProfileEditorControls">
+    <PanelContainer HorizontalExpand="True"
+                    VerticalExpand="True">
+        <PanelContainer.PanelOverride>
+            <eclipse:EclipseStyleBoxRounded BackgroundColor="#070300E8"
+                                            BorderColor="#A85E1258"
+                                            BorderThickness="1"
+                                            Radius="8" />
+        </PanelContainer.PanelOverride>
+        <BoxContainer Name="VBox"
+                      Orientation="Vertical"
+                      HorizontalExpand="True"
+                      VerticalExpand="True"
+                      Margin="12 10 12 10"
+                      SeparationOverride="8">
+            <Label Text="&#x041F;&#x0415;&#x0420;&#x0421;&#x041E;&#x041D;&#x0410;&#x0416;"
+                   StyleIdentifier="mainMenuHeaderGold"
+                   ClipText="True" />
+            <BoxContainer Name="Loaded"
+                          Orientation="Vertical"
+                          HorizontalExpand="True"
+                          Visible="False"
+                          SeparationOverride="7">
+                <PanelContainer Name="PreviewViewport"
+                                SetHeight="132"
+                                RectClipContent="True"
+                                HorizontalExpand="True">
+                    <PanelContainer.PanelOverride>
+                        <gfx:StyleBoxFlat BackgroundColor="#050200A8"
+                                          BorderColor="#2C221A66"
+                                          BorderThickness="1" />
+                    </PanelContainer.PanelOverride>
+                    <BoxContainer Name="ViewBox"
+                                  Orientation="Horizontal"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center">
+                        <profile:ProfilePreviewSpriteView Name="ProfilePreviewSpriteView"
+                                                          OverrideDirection="South"
+                                                          Scale="4 4"
+                                                          MaxSize="180 128"
+                                                          Stretch="Fill"
+                                                          Access="Public" />
+                    </BoxContainer>
+                </PanelContainer>
+                <BoxContainer Orientation="Vertical"
+                              HorizontalExpand="True"
+                              SeparationOverride="1">
+                    <Label Name="CharacterName"
+                           StyleIdentifier="mainMenuText"
+                           Align="Center"
+                           ClipText="True" />
+                    <Label Name="CharacterAge"
+                           StyleIdentifier="mainMenuTinySubtle"
+                           Align="Center"
+                           ClipText="True" />
+                </BoxContainer>
+                <Button Name="CharacterSetup"
+                        StyleIdentifier="mainMenuSecondary"
+                        HorizontalExpand="True"
+                        MinHeight="36">
+                    <Label Text="&#x041F;&#x0435;&#x0440;&#x0441;&#x043E;&#x043D;&#x0430;&#x043B;&#x0438;&#x0437;&#x0430;&#x0446;&#x0438;&#x044F;"
+                           StyleIdentifier="mainMenuSecondaryTitle"
+                           Align="Center"
+                           VAlign="Center"
+                           ClipText="True" />
+                </Button>
+            </BoxContainer>
+            <BoxContainer Name="Unloaded"
+                          Orientation="Vertical"
+                          VerticalExpand="True"
+                          HorizontalExpand="True"
+                          SeparationOverride="8">
+                <Control VerticalExpand="True" />
+                <Label Text="{Loc 'lobby-character-preview-panel-unloaded-preferences-label'}"
+                       StyleIdentifier="mainMenuSubtle"
+                       Align="Center"
+                       ClipText="True" />
+                <Control VerticalExpand="True" />
+            </BoxContainer>
+        </BoxContainer>
+    </PanelContainer>
+</Control>

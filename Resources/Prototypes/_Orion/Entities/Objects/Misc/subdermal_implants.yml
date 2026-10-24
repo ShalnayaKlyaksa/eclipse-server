@@ -1,0 +1,23 @@
+# AshLegion implants
+
+- type: entity
+  parent: BaseSubdermalImplant
+  id: RadioImplantAshLegion
+  name: radio implant
+  description: This implant grants access to the AshLegion channel without a headset.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SubdermalImplant
+  - type: RadioImplant
+    radioChannels:
+    - AshLegion
+
+- type: entity
+  parent: DeathRattleImplant
+  id: DeathRattleImplantAshLegion
+  name: AshLegion death rattle implant
+  description: This implant will inform the AshLegion radio channel should the user fall into critical condition or die.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RattleOnTrigger
+    radioChannel: AshLegion

@@ -1,0 +1,29 @@
+# Foundation diseases for the AdvancedHealth system.
+
+- type: advancedDisease
+  id: SpaceFlu
+  name: advanced-disease-space-flu
+  statusLabel: advanced-disease-status-weakness
+  speedModifier: 0.8          # −20% movement
+  meleeDamageModifier: 0.5    # −50% melee damage (hook pending)
+  blockTwoHandedMelee: true   # (hook pending)
+  rangedSpread: 8             # accuracy penalty (hook pending)
+  painPerSecond: 0.15
+  immuneDrain: 0.06
+  clearTime: 150
+  clearImmuneThreshold: 55
+  infectivity: 0.55
+
+- type: advancedDisease
+  id: WoundFever
+  name: advanced-disease-wound-fever
+  statusLabel: advanced-disease-status-fever
+  speedModifier: 0.9
+  meleeDamageModifier: 0.75
+  rangedSpread: 4
+  painPerSecond: 0.3
+  shockPerSecond: 0.15
+  immuneDrain: 0.1
+  clearTime: 180
+  clearImmuneThreshold: 65
+  infectivity: 0.35

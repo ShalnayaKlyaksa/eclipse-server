@@ -1,0 +1,26 @@
+- type: job
+  id: AshLegionVanguardLeader
+  name: job-name-ashlegion-vanguard-leader
+  description: job-description-ashlegion-vanguard-leader
+  playTimeTracker: AshLegionVanguardLeader
+  setPreference: false
+  icon: "JobIconAshLegion"
+  supervisors: job-supervisors-hire
+  canBeAntag: false
+  access:
+  - AshLegionVanguard
+  - AshLegionVanguardLeader
+  - Maintenance
+
+- type: job
+  id: AshLegionVanguard
+  name: job-name-ashlegion-vanguard
+  description: job-description-ashlegion-vanguard
+  playTimeTracker: AshLegionVanguard
+  setPreference: false
+  icon: "JobIconAshLegion"
+  supervisors: job-supervisors-hire
+  canBeAntag: false
+  access:
+  - AshLegionVanguard
+  - Maintenance

@@ -1,0 +1,66 @@
+- type: entity
+  name: soap
+  id: SoapAshLegion
+  parent: [Soap, BaseAshLegionContraband]
+  description: An untrustworthy bar of soap. Smells of fear.
+  components:
+  - type: Sprite
+    sprite: Eclipse/Objects/Janitorial/soap.rsi
+    layers:
+    - state: ashlegion-4
+      map: ["enum.SolutionContainerLayers.Fill"]
+  - type: SolutionContainerVisuals
+    fillBaseName: ashlegion-
+  - type: Slippery
+    staminaDamage: 50
+    slipData:
+      knockdownTime: 3
+      launchForwardsMultiplier: 3
+  - type: Item
+    heldPrefix: inteq
+  - type: FlavorProfile
+    flavors:
+      - clean
+      - punishment
+  - type: CleansForensics
+    cleanDelay: 8.0
+  - type: Residue
+    residueAdjective: residue-slippery
+    residueColor: residue-red
+  - type: StaticPrice
+    price: 500
+
+- type: entity
+  parent: [SoapAshLegion, ScatteringGrenadeBase, ImpactGrenadeBase, BaseAshLegionContraband]
+  id: SlipocalypseAshLegionClusterSoap
+  name: slipocalypse clustersoap
+  description: Spreads small pieces of AshLegion soap over an area upon landing on the floor.
+  components:
+  - type: Sprite
+    sprite: Eclipse/Objects/Janitorial/soap.rsi
+    layers:
+    - state: ashlegion-4
+      map: ["enum.SolutionContainerLayers.Fill"]
+  - type: SolutionContainerVisuals
+    fillBaseName: ashlegion-
+  - type: Item
+    heldPrefix: inteq
+  - type: ScatteringGrenade
+    triggerKey: trigger
+    fillPrototype: SoapletLegion
+    capacity: 30
+    delayBeforeTriggerContents: 60
+    randomDistance: true
+    randomThrowDistanceMax: 3
+  - type: LandAtCursor
+  - type: DamageOnLand
+    damage:
+      types:
+        Blunt: 10
+  - type: EmitSoundOnTrigger
+    keysIn:
+    - timer
+    sound:
+      path: "/Audio/Effects/flash_bang.ogg"
+  - type: StaticPrice
+    price: 1000

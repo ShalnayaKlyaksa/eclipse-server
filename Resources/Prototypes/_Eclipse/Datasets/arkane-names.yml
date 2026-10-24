@@ -1,0 +1,24 @@
+# Shadowkin names, ported from the Shadowkin name datasets in space-erida-14.
+# They are descriptive rather than conventional ("Хрупкий", "Разбитое сердце"), which is the shadowkin style.
+#
+# Surnames are one shared list: erida split the 121 entries across two .ftl files but kept a single key prefix,
+# so the files were merged here. Eclipse splits surnames by sex (a Corvax change), so both species fields
+# point at this one dataset.
+
+- type: localizedDataset
+  id: names-shadowkin-male-first
+  values:
+    prefix: names-shadowkin-male-first-
+    count: 76
+
+- type: localizedDataset
+  id: names-shadowkin-female-first
+  values:
+    prefix: names-shadowkin-female-first-
+    count: 76
+
+- type: localizedDataset
+  id: names-shadowkin-last
+  values:
+    prefix: names-shadowkin-male-last-
+    count: 121

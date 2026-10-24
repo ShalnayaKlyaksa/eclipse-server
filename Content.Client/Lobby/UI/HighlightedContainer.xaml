@@ -1,0 +1,14 @@
+<PanelContainer
+    xmlns="https://spacestation14.io"
+    xmlns:eclipse="clr-namespace:Content.Client.MainMenu.UI">
+    <PanelContainer.PanelOverride>
+        <eclipse:EclipseStyleBoxRounded BackgroundColor="#070300F8"
+                                        BorderColor="#A85E1268"
+                                        BorderThickness="1"
+                                        Radius="8"
+                                        ContentMarginTopOverride="10"
+                                        ContentMarginBottomOverride="10"
+                                        ContentMarginLeftOverride="10"
+                                        ContentMarginRightOverride="10"/>
+    </PanelContainer.PanelOverride>
+</PanelContainer>

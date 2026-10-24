@@ -1,0 +1,11 @@
+#Medical subgroup
+- type: entity
+  parent: BaseThiefStealObjective
+  id: CMOMedChemHUDStealObjective
+  name: MedChemHUD
+  description: Centcom has given the CMO a fancy new HUD. Would be a shame if it went missing.
+  components:
+  - type: StealCondition
+    stealGroup: MedChemHUD
+  - type: Objective
+    difficulty: 1

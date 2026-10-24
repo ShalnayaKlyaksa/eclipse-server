@@ -1,0 +1,37 @@
+- type: entity
+  parent: VendingMachine
+  id: VendingMachineAshLegionDrobe
+  name: AshLegionDrobe
+  description: Wardrobe machine encoded by the AshLegion, contains elite outfits for various operations.
+  components:
+  - type: VendingMachine
+    pack: AshLegionDrobeInventory
+    offState: off
+    brokenState: broken
+    normalState: normal-unshaded
+  - type: DatasetVocalizer
+    dataset: AshLegionDrobeAds
+  - type: Sprite
+    sprite: _Orion/Structures/Machines/VendingMachines/inteqdrobe.rsi
+    layers:
+    - state: "off"
+      map: ["enum.VendingMachineVisualLayers.Base"]
+    - state: "off"
+      map: ["enum.VendingMachineVisualLayers.BaseUnshaded"]
+      shader: unshaded
+    - state: panel
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+  - type: PointLight
+    radius: 1.5
+    energy: 1.6
+    color: "#FF8C00"
+  - type: AccessReader
+    access: [["AshLegionVanguardLeader"], ["AshLegionVanguard"]]
+
+- type: entity
+  parent: VendingMachineAshLegionDrobe
+  id: VendingMachineAshLegionDrobeNerf
+  suffix: For station hiden places
+  components:
+  - type: VendingMachine
+    pack: AshLegionDrobeNerfInventory

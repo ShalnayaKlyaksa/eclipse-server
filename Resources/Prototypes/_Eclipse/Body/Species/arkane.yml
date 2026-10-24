@@ -1,0 +1,229 @@
+# Shadowkin body and organs, ported from space-erida-14 (_Backmen).
+# Arkane are a separate demonic humanoid species defined in arkane_demon.yml.
+
+- type: markingsGroup
+  parent: Undergarments
+  id: Shadowkin
+  limits:
+    # Ears and tail are what makes a shadowkin one, so they are mandatory and default to the plain variants.
+    enum.HumanoidVisualLayers.HeadTop:
+      limit: 1
+      required: true
+      default: [ EarsShadowkin ]
+    enum.HumanoidVisualLayers.Tail:
+      limit: 1
+      required: true
+      default: [ TailShadowkin ]
+    enum.HumanoidVisualLayers.Hair:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.FacialHair:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.Chest:
+      limit: 2
+      required: false
+    enum.HumanoidVisualLayers.Snout:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.LArm:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.RArm:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.LHand:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.RHand:
+      limit: 1
+      required: false
+    # The body overlays (tattoo-like markings) sit on the legs, same as they do in erida.
+    enum.HumanoidVisualLayers.LLeg:
+      limit: 2
+      required: false
+    enum.HumanoidVisualLayers.RLeg:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.LFoot:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.RFoot:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.Special:
+      limit: 0
+      required: false
+
+# Organs. Mirrors the human hierarchy, only the sprites differ.
+- type: entity
+  parent: OrganBase
+  id: OrganShadowkin
+  abstract: true
+  suffix: shadowkin
+
+- type: entity
+  id: OrganShadowkinMetabolizer
+  abstract: true
+  components:
+  - type: Metabolizer
+    metabolizerTypes: [ Human ]
+
+- type: entity
+  parent: OrganShadowkin
+  id: OrganShadowkinInternal
+  abstract: true
+  components:
+  - type: Sprite
+    # The source Shadowkin implementation uses human internal-organ states. The bundled Shadowkin RSI only
+    # contains a subset and is missing eyes, lungs, heart and kidneys.
+    sprite: Mobs/Species/Human/organs.rsi
+
+- type: entity
+  parent: OrganShadowkin
+  id: OrganShadowkinExternal
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _Backmen/Mobs/Species/Shadowkin/parts.rsi
+  - type: VisualOrgan
+    data:
+      sprite: _Backmen/Mobs/Species/Shadowkin/parts.rsi
+  - type: VisualOrganMarkings
+    markingData:
+      group: Shadowkin
+
+- type: entity
+  parent: [ OrganBaseTorsoSexed, OrganBaseTorso, OrganShadowkinExternal ]
+  id: OrganShadowkinTorso
+
+- type: entity
+  parent: [ OrganBaseHeadSexed, OrganBaseHead, OrganShadowkinExternal ]
+  id: OrganShadowkinHead
+  components:
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.Hair
+    - enum.HumanoidVisualLayers.Snout
+
+- type: entity
+  parent: [ OrganBaseArmLeft, OrganShadowkinExternal ]
+  id: OrganShadowkinArmLeft
+
+- type: entity
+  parent: [ OrganBaseArmRight, OrganShadowkinExternal ]
+  id: OrganShadowkinArmRight
+
+- type: entity
+  parent: [ OrganBaseHandLeft, OrganShadowkinExternal ]
+  id: OrganShadowkinHandLeft
+
+- type: entity
+  parent: [ OrganBaseHandRight, OrganShadowkinExternal ]
+  id: OrganShadowkinHandRight
+
+- type: entity
+  parent: [ OrganBaseLegLeft, OrganShadowkinExternal ]
+  id: OrganShadowkinLegLeft
+
+- type: entity
+  parent: [ OrganBaseLegRight, OrganShadowkinExternal ]
+  id: OrganShadowkinLegRight
+
+- type: entity
+  parent: [ OrganBaseFootLeft, OrganShadowkinExternal ]
+  id: OrganShadowkinFootLeft
+
+- type: entity
+  parent: [ OrganBaseFootRight, OrganShadowkinExternal ]
+  id: OrganShadowkinFootRight
+
+- type: entity
+  parent: [ OrganBaseBrain, OrganShadowkinInternal ]
+  id: OrganShadowkinBrain
+
+- type: entity
+  parent: [ OrganBaseEyes, OrganShadowkinInternal, OrganShadowkinExternal ]
+  id: OrganShadowkinEyes
+  components:
+  - type: VisualOrgan
+    data:
+      sprite: Mobs/Customization/eyes.rsi
+
+- type: entity
+  parent: [ OrganBaseTongue, OrganShadowkinInternal ]
+  id: OrganShadowkinTongue
+
+- type: entity
+  parent: [ OrganBaseAppendix, OrganShadowkinInternal ]
+  id: OrganShadowkinAppendix
+
+- type: entity
+  parent: [ OrganBaseEars, OrganShadowkinInternal ]
+  id: OrganShadowkinEars
+
+- type: entity
+  parent: [ OrganBaseLungs, OrganShadowkinInternal, OrganShadowkinMetabolizer ]
+  id: OrganShadowkinLungs
+
+- type: entity
+  parent: [ OrganBaseHeart, OrganShadowkinInternal, OrganShadowkinMetabolizer ]
+  id: OrganShadowkinHeart
+
+- type: entity
+  parent: [ OrganBaseStomach, OrganShadowkinInternal, OrganShadowkinMetabolizer ]
+  id: OrganShadowkinStomach
+
+- type: entity
+  parent: [ OrganBaseLiver, OrganShadowkinInternal, OrganShadowkinMetabolizer ]
+  id: OrganShadowkinLiver
+
+- type: entity
+  parent: [ OrganBaseKidneys, OrganShadowkinInternal, OrganShadowkinMetabolizer ]
+  id: OrganShadowkinKidneys
+
+- type: entity
+  parent: BaseSpeciesAppearance
+  id: AppearanceShadowkin
+  categories: [ HideSpawnMenu ]
+  name: shadowkin appearance
+  components:
+  # Shadowkin sprites have no displacement map of their own; the human one lines up well enough.
+  - type: Inventory
+    femaleDisplacements:
+      jumpsuit:
+        sizeMaps:
+          32:
+            sprite: Mobs/Species/Human/displacement.rsi
+            state: jumpsuit-female
+  - type: InitialBody
+    organs:
+      Torso: OrganShadowkinTorso
+      Head: OrganShadowkinHead
+      ArmLeft: OrganShadowkinArmLeft
+      ArmRight: OrganShadowkinArmRight
+      HandRight: OrganShadowkinHandRight
+      HandLeft: OrganShadowkinHandLeft
+      LegLeft: OrganShadowkinLegLeft
+      LegRight: OrganShadowkinLegRight
+      FootLeft: OrganShadowkinFootLeft
+      FootRight: OrganShadowkinFootRight
+      Brain: OrganShadowkinBrain
+      Eyes: OrganShadowkinEyes
+      Tongue: OrganShadowkinTongue
+      Appendix: OrganShadowkinAppendix
+      Ears: OrganShadowkinEars
+      Lungs: OrganShadowkinLungs
+      Heart: OrganShadowkinHeart
+      Stomach: OrganShadowkinStomach
+      Liver: OrganShadowkinLiver
+      Kidneys: OrganShadowkinKidneys
+  - type: HumanoidProfile
+    species: Shadowkin
+  - type: ScaleVisuals
+    scale: 0.85, 0.85
+
+- type: entity
+  parent: [ AppearanceShadowkin, BaseSpeciesMobOrganic ]
+  id: MobShadowkin
+  name: Urist McShadowkin

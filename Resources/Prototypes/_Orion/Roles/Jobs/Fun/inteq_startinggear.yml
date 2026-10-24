@@ -1,0 +1,83 @@
+- type: startingGear
+  id: AshLegionVanguardLeaderGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitAshLegionHonorable
+    back: ClothingBackpackAshLegion
+    head: ClothingHeadAshLegionHonorableBeret
+    neck: ClothingNeckCloakAshLegion
+    mask: ClothingMaskNeckGaiter
+    eyes: ClothingEyesGogglessAshLegion
+    ears: ClothingHeadsetAltAshLegion
+    gloves: ClothingHandsGlovesCombat
+    outerClothing: ClothingOuterCoatAshLegionHonorableBattle
+    shoes: ClothingShoesBootsCombatFilled
+    id: AshLegionVanguardLeaderIDCard
+    pocket1: WeaponPistolAshLegionCommissar
+    pocket2: MagazinePistol
+    suitstorage: OxygenTankFilled
+    # belt: ClothingBeltAshLegionShieldBelt
+#  innerclothingskirt: ClothingUniformJumpsuitAshLegionHonorable
+#  satchel: ClothingBackpackSatchelAshLegion
+#  duffelbag: ClothingBackpackDuffelAshLegion
+
+- type: startingGear
+  id: AshLegionVanguardOperativeGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitAshLegionOperative
+    back: ClothingBackpackAshLegion
+    mask: ClothingMaskNeckGaiter
+    eyes: ClothingEyesGogglessAshLegion
+    ears: ClothingHeadsetAltAshLegion
+    gloves: ClothingHandsGlovesCombat
+    outerClothing: ClothingOuterHardsuitAshLegion
+    shoes: ClothingShoesBootsCombatFilled
+    id: AshLegionVanguardIDCard
+    pocket1: WeaponPistolAshLegionCommissar
+    pocket2: MagazinePistol
+    suitstorage: OxygenTankFilled
+    belt: ClothingBeltAshLegionWebbing
+#  innerclothingskirt: ClothingUniformJumpskirtAshLegionOperative
+#  satchel: ClothingBackpackSatchelAshLegion
+#  duffelbag: ClothingBackpackDuffelAshLegion
+
+- type: startingGear
+  id: AshLegionVanguardSoldierGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitAshLegionFormal
+    back: ClothingBackpackAshLegion
+    head: ClothingHeadHelmetSwatAshLegion
+    mask: ClothingMaskNeckGaiter
+    eyes: ClothingEyesGogglessAshLegion
+    ears: ClothingHeadsetAshLegion
+    gloves: ClothingHandsGlovesCombat
+    outerClothing: ClothingOuterArmorBasic
+    shoes: ClothingShoesBootsCombatFilled
+    id: AshLegionVanguardIDCard
+    pocket1: WeaponPistolAshLegionCommissar
+    pocket2: MagazinePistol
+    suitstorage: OxygenTankFilled
+    belt: ClothingBeltAshLegionWebbing
+#  innerclothingskirt: ClothingUniformJumpskirtAshLegionFormalDress
+#  satchel: ClothingBackpackSatchelAshLegion
+#  duffelbag: ClothingBackpackDuffelAshLegion
+
+- type: startingGear
+  id: AshLegionVanguardMedicGear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitAshLegionMedical
+    back: ClothingBackpackAshLegion
+    head: ClothingHeadAshLegionBeret
+    mask: ClothingMaskBreathMedicalSecurity
+    eyes: ClothingEyesHudMedical
+    ears: ClothingHeadsetAshLegion
+    gloves: ClothingHandsGlovesNitrile
+    outerClothing: ClothingOuterCoatAshLegionMedical
+    shoes: ClothingShoesBootsCombatFilled
+    id: AshLegionVanguardIDCard
+    pocket1: HandheldHealthAnalyzer
+    pocket2: WeaponPistolAshLegionCommissar
+    suitstorage: OxygenTankFilled
+    belt: ClothingBeltAshLegionDropPouchMedicFilled
+#  innerclothingskirt: ClothingUniformJumpskirtAshLegionMedical
+#  satchel: ClothingBackpackSatchelAshLegion
+#  duffelbag: ClothingBackpackDuffelAshLegionMedical

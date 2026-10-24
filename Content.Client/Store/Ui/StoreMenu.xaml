@@ -1,0 +1,262 @@
+<DefaultWindow
+    xmlns="https://spacestation14.io"
+    xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+    Title="{Loc 'store-ui-legion-terminal-title'}"
+    MinSize="960 660"
+    SetSize="1120 720">
+    <PanelContainer>
+        <PanelContainer.PanelOverride>
+            <gfx:StyleBoxFlat BackgroundColor="#070300F4" BorderColor="#A84B00" BorderThickness="1" />
+        </PanelContainer.PanelOverride>
+
+        <BoxContainer Orientation="Vertical" Margin="10 10 10 8">
+            <PanelContainer Margin="0 0 0 10">
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#0E0E0EDD" BorderColor="#2D2117" BorderThickness="1" />
+                </PanelContainer.PanelOverride>
+
+                <BoxContainer Orientation="Horizontal" VerticalAlignment="Center" Margin="10 8">
+                    <PanelContainer SetSize="62 62" Margin="0 0 12 0">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#130801" BorderColor="#FF7A00" BorderThickness="2" />
+                        </PanelContainer.PanelOverride>
+                        <TextureRect Name="HeaderIcon" TexturePath="/Textures/Interface/Actions/shop.png" Stretch="KeepAspectCentered" Margin="8" />
+                    </PanelContainer>
+
+                    <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalAlignment="Center">
+                        <Label
+                            Name="HeaderTitle"
+                            Text="{Loc 'store-ui-legion-terminal-title-caps'}"
+                            FontColorOverride="#F0F0F0"
+                            StyleClasses="LabelHeading" />
+                        <Label
+                            Name="HeaderSubtitle"
+                            Text="{Loc 'store-ui-legion-terminal-subtitle'}"
+                            FontColorOverride="#FF7A00"
+                            Margin="0 2 0 0" />
+                    </BoxContainer>
+
+                    <PanelContainer SetWidth="170" Margin="0 0 8 0">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#140904" BorderColor="#4E2A10" BorderThickness="1" />
+                        </PanelContainer.PanelOverride>
+                        <RichTextLabel
+                            Name="BalanceInfo"
+                            HorizontalAlignment="Center"
+                            Margin="10 8"
+                            Access="Public" />
+                    </PanelContainer>
+
+                    <Button
+                        Name="WithdrawButton"
+                        MinWidth="130"
+                        MinHeight="52"
+                        Text="{Loc 'store-ui-default-withdraw-text'}" />
+                    <Button
+                        Name="RefundButton"
+                        MinWidth="96"
+                        MinHeight="52"
+                        Margin="8 0 0 0"
+                        Text="{Loc 'store-ui-refund-text'}" />
+                </BoxContainer>
+            </PanelContainer>
+
+            <BoxContainer Orientation="Horizontal" VerticalExpand="True">
+                <PanelContainer SetWidth="330" VerticalExpand="True" Margin="0 0 10 0">
+                    <PanelContainer.PanelOverride>
+                        <gfx:StyleBoxFlat BackgroundColor="#0B0B0BEE" BorderColor="#A84B00" BorderThickness="1" />
+                    </PanelContainer.PanelOverride>
+                    <BoxContainer Orientation="Vertical" VerticalExpand="True" Margin="10">
+                        <Label Text="{Loc 'store-ui-selected-label'}" FontColorOverride="#FF7A00" />
+                        <PanelContainer StyleClasses="LowDivider" Margin="0 2 0 8" />
+                        <RichTextLabel Name="SelectedItemName" MinHeight="38" Margin="0 0 0 2" />
+                        <Label Name="SelectedItemSubtitle" FontColorOverride="#FF7A00" Margin="0 0 0 8" />
+                        <TextureRect
+                            Name="SelectedItemTexture"
+                            HorizontalExpand="True"
+                            SetHeight="108"
+                            Stretch="KeepAspectCentered" />
+                        <PanelContainer Name="StatsPanel" Margin="0 12 0 8">
+                            <PanelContainer.PanelOverride>
+                                <gfx:StyleBoxFlat BackgroundColor="#090909" BorderColor="#5B2B08" BorderThickness="1" />
+                            </PanelContainer.PanelOverride>
+                            <BoxContainer Orientation="Vertical" Margin="8">
+                                <Label Text="{Loc 'store-ui-characteristics-label'}" FontColorOverride="#FF7A00" />
+                                <BoxContainer Orientation="Horizontal" Margin="0 8 0 0" VerticalAlignment="Center">
+                                    <Label Name="DamageStatName" Text="{Loc 'store-ui-stat-damage'}" SetWidth="110" FontColorOverride="#BEBEBE" />
+                                    <ProgressBar Name="DamageStatBar" HorizontalExpand="True" MinValue="0" MaxValue="100" SetHeight="8">
+                                        <ProgressBar.ForegroundStyleBoxOverride>
+                                            <gfx:StyleBoxFlat BackgroundColor="#FF7A00"/>
+                                        </ProgressBar.ForegroundStyleBoxOverride>
+                                    </ProgressBar>
+                                    <Label Name="DamageStatValue" SetWidth="46" HorizontalAlignment="Right" FontColorOverride="#F2F2F2" />
+                                </BoxContainer>
+                                <BoxContainer Orientation="Horizontal" Margin="0 5 0 0" VerticalAlignment="Center">
+                                    <Label Name="DpsStatName" Text="{Loc 'store-ui-stat-dps'}" SetWidth="110" FontColorOverride="#BEBEBE" />
+                                    <ProgressBar Name="DpsStatBar" HorizontalExpand="True" MinValue="0" MaxValue="100" SetHeight="8">
+                                        <ProgressBar.ForegroundStyleBoxOverride>
+                                            <gfx:StyleBoxFlat BackgroundColor="#FF7A00"/>
+                                        </ProgressBar.ForegroundStyleBoxOverride>
+                                    </ProgressBar>
+                                    <Label Name="DpsStatValue" SetWidth="46" HorizontalAlignment="Right" FontColorOverride="#F2F2F2" />
+                                </BoxContainer>
+                                <BoxContainer Orientation="Horizontal" Margin="0 5 0 0" VerticalAlignment="Center">
+                                    <Label Name="AccuracyStatName" Text="{Loc 'store-ui-stat-accuracy'}" SetWidth="110" FontColorOverride="#BEBEBE" />
+                                    <ProgressBar Name="AccuracyStatBar" HorizontalExpand="True" MinValue="0" MaxValue="100" SetHeight="8">
+                                        <ProgressBar.ForegroundStyleBoxOverride>
+                                            <gfx:StyleBoxFlat BackgroundColor="#FF7A00"/>
+                                        </ProgressBar.ForegroundStyleBoxOverride>
+                                    </ProgressBar>
+                                    <Label Name="AccuracyStatValue" SetWidth="46" HorizontalAlignment="Right" FontColorOverride="#F2F2F2" />
+                                </BoxContainer>
+                                <BoxContainer Orientation="Horizontal" Margin="0 5 0 0" VerticalAlignment="Center">
+                                    <Label Name="FireRateStatName" Text="{Loc 'store-ui-stat-fire-rate'}" SetWidth="110" FontColorOverride="#BEBEBE" />
+                                    <ProgressBar Name="FireRateStatBar" HorizontalExpand="True" MinValue="0" MaxValue="100" SetHeight="8">
+                                        <ProgressBar.ForegroundStyleBoxOverride>
+                                            <gfx:StyleBoxFlat BackgroundColor="#FF7A00"/>
+                                        </ProgressBar.ForegroundStyleBoxOverride>
+                                    </ProgressBar>
+                                    <Label Name="FireRateStatValue" SetWidth="46" HorizontalAlignment="Right" FontColorOverride="#F2F2F2" />
+                                </BoxContainer>
+                                <BoxContainer Orientation="Horizontal" Margin="0 5 0 0" VerticalAlignment="Center">
+                                    <Label Name="MagazineStatName" Text="{Loc 'store-ui-stat-magazine'}" SetWidth="110" FontColorOverride="#BEBEBE" />
+                                    <ProgressBar Name="MagazineStatBar" HorizontalExpand="True" MinValue="0" MaxValue="100" SetHeight="8">
+                                        <ProgressBar.ForegroundStyleBoxOverride>
+                                            <gfx:StyleBoxFlat BackgroundColor="#FF7A00"/>
+                                        </ProgressBar.ForegroundStyleBoxOverride>
+                                    </ProgressBar>
+                                    <Label Name="MagazineStatValue" SetWidth="46" HorizontalAlignment="Right" FontColorOverride="#F2F2F2" />
+                                </BoxContainer>
+                            </BoxContainer>
+                        </PanelContainer>
+
+                        <ScrollContainer
+                            HScrollEnabled="False"
+                            VerticalExpand="True"
+                            MinHeight="42"
+                            Margin="0 4 0 8">
+                            <RichTextLabel
+                                Name="SelectedItemDescription"
+                                HorizontalExpand="True" />
+                        </ScrollContainer>
+
+                        <PanelContainer SetHeight="82" VerticalAlignment="Bottom">
+                            <PanelContainer.PanelOverride>
+                                <gfx:StyleBoxFlat BackgroundColor="#090909" BorderColor="#5B2B08" BorderThickness="1" />
+                            </PanelContainer.PanelOverride>
+                            <BoxContainer Orientation="Vertical" Margin="8">
+                                <Label Text="{Loc 'store-ui-purchase-details-label'}" FontColorOverride="#FF7A00" SetHeight="18" />
+                                <BoxContainer Orientation="Horizontal" Margin="0 4 0 0" SetHeight="20">
+                                    <Label Text="{Loc 'store-ui-cost-label'}" HorizontalExpand="True" FontColorOverride="#BEBEBE" />
+                                    <Label Name="SelectedPriceLabel" FontColorOverride="#F2F2F2" />
+                                </BoxContainer>
+                                <BoxContainer Orientation="Horizontal" Margin="0 1 0 0" SetHeight="20">
+                                    <Label Text="{Loc 'store-ui-availability-label'}" HorizontalExpand="True" FontColorOverride="#BEBEBE" />
+                                    <Label Name="SelectedAvailabilityLabel" FontColorOverride="#FF7A00" />
+                                </BoxContainer>
+                                <Label Name="SelectedDiscountLabel" FontColorOverride="#FFB35C" Margin="0 1 0 0" SetHeight="16" />
+                            </BoxContainer>
+                        </PanelContainer>
+
+                    </BoxContainer>
+                </PanelContainer>
+
+                <PanelContainer SetWidth="190" VerticalExpand="True" Margin="0 0 10 0">
+                    <PanelContainer.PanelOverride>
+                        <gfx:StyleBoxFlat BackgroundColor="#090909EE" BorderColor="#2D2117" BorderThickness="1" />
+                    </PanelContainer.PanelOverride>
+                    <BoxContainer Orientation="Vertical" Margin="8">
+                        <BoxContainer Orientation="Horizontal" Margin="0 0 0 8">
+                            <Label Text="{Loc 'store-ui-categories-label'}" FontColorOverride="#FF7A00" HorizontalExpand="True" />
+                            <Label Text="≡" FontColorOverride="#FF7A00" />
+                        </BoxContainer>
+                        <BoxContainer
+                            Name="CategoryListContainer"
+                            Orientation="Vertical"
+                            VerticalExpand="True">
+                            <!--  Category buttons are added here by code  -->
+                        </BoxContainer>
+                    </BoxContainer>
+                </PanelContainer>
+
+                <BoxContainer Orientation="Vertical" VerticalExpand="True" HorizontalExpand="True">
+                    <PanelContainer Margin="0 0 0 6">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#090909EE" BorderColor="#1F1F1F" BorderThickness="1" />
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Horizontal" Margin="8">
+                            <LineEdit
+                                Name="SearchBar"
+                                PlaceHolder="{Loc 'store-ui-search-placeholder'}"
+                                HorizontalExpand="True"
+                                MinHeight="38" />
+                            <OptionButton Name="SortOptionButton" SetWidth="190" Margin="8 0 0 0" Disabled="True" />
+                            <OptionButton Name="FilterOptionButton" SetWidth="180" Margin="8 0 0 0" Disabled="True" />
+                        </BoxContainer>
+                    </PanelContainer>
+
+                    <BoxContainer Orientation="Horizontal" Margin="8 0 14 4">
+                        <Label Text="{Loc 'store-ui-product-column'}" HorizontalExpand="True" FontColorOverride="#FF7A00" />
+                        <Label Text="{Loc 'store-ui-stock-column'}" SetWidth="110" FontColorOverride="#FF7A00" HorizontalAlignment="Center" />
+                        <Label Text="{Loc 'store-ui-price-column'}" SetWidth="80" FontColorOverride="#FF7A00" HorizontalAlignment="Right" />
+                    </BoxContainer>
+
+                    <PanelContainer VerticalExpand="True">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#040404FF" BorderColor="#1F1F1F" BorderThickness="1" />
+                        </PanelContainer.PanelOverride>
+                        <ScrollContainer
+                            Name="StoreListingsScroll"
+                            HScrollEnabled="False"
+                            HorizontalExpand="True"
+                            VerticalExpand="True">
+                            <BoxContainer
+                                Name="StoreListingsContainer"
+                                Orientation="Vertical"
+                                HorizontalExpand="True"
+                                VerticalExpand="True">
+                                <!--  Listings are added here by code  -->
+                            </BoxContainer>
+                        </ScrollContainer>
+                    </PanelContainer>
+
+                    <BoxContainer Orientation="Horizontal" Margin="0 10 0 0">
+                        <PanelContainer HorizontalExpand="True" SetHeight="82" Margin="0 0 8 0">
+                            <PanelContainer.PanelOverride>
+                                <gfx:StyleBoxFlat BackgroundColor="#0B0B0BEE" BorderColor="#A84B00" BorderThickness="1" />
+                            </PanelContainer.PanelOverride>
+                            <BoxContainer Orientation="Horizontal" Margin="8">
+                                <TextureRect
+                                    Name="SelectedFooterTexture"
+                                    SetSize="54 54"
+                                    Stretch="KeepAspectCentered"
+                                    Margin="0 0 8 0" />
+                                <BoxContainer Orientation="Vertical" VerticalAlignment="Center" HorizontalExpand="True">
+                                    <Label Text="{Loc 'store-ui-selected-product-label'}" FontColorOverride="#FF7A00" />
+                                    <Label Name="SelectedFooterName" FontColorOverride="#F2F2F2" ClipText="True" />
+                                    <Label Name="SelectedFooterPrice" FontColorOverride="#FF7A00" />
+                                </BoxContainer>
+                            </BoxContainer>
+                        </PanelContainer>
+
+                        <Button
+                            Name="PurchaseButton"
+                            MinWidth="260"
+                            SetHeight="82"
+                            Text="{Loc 'store-ui-buy-button-empty'}" />
+                    </BoxContainer>
+                </BoxContainer>
+            </BoxContainer>
+
+            <!-- Footer -->
+            <BoxContainer Orientation="Vertical" Name="TraitorFooter" Margin="0 8 0 0">
+                <PanelContainer StyleClasses="LowDivider" />
+                <BoxContainer Orientation="Horizontal" Margin="10 2 5 0" VerticalAlignment="Bottom">
+                    <Label Text="{Loc 'store-ui-traitor-flavor'}" StyleClasses="WindowFooterText" />
+                    <Label Text="{Loc 'store-ui-traitor-warning'}" StyleClasses="WindowFooterText"
+                            HorizontalAlignment="Right" HorizontalExpand="True"  Margin="0 0 5 0" />
+                </BoxContainer>
+            </BoxContainer>
+        </BoxContainer>
+    </PanelContainer>
+</DefaultWindow>

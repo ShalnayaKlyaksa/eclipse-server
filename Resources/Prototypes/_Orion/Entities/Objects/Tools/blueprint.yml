@@ -1,0 +1,37 @@
+- type: entity
+  parent: BaseBlueprint
+  id: BlueprintAshLegion
+  name: AshLegion blueprint
+  description: A blueprint with a schematic of a AshLegion contraband. It can be inserted into an autolathe.
+  components:
+  - type: Blueprint
+    providedRecipes:
+    - CaseAshLegion
+    - MagazineBoxPistolAshLegion
+    - MagazineBoxLightRifleAshLegion
+    - MagazineBoxShotgunAshLegion
+    - PlasmaSword
+    - PlasmaSwordAlt
+    - WhiteholeGrenade
+    - C4
+
+- type: entity
+  parent: BaseBlueprint
+  id: BlueprintSyndicate
+  name: Syndicate blueprint
+  description: A blueprint with a schematic of a Syndicate contraband. It can be inserted into an autolathe.
+  components:
+  - type: Blueprint
+    providedRecipes:
+    - SyndicateJawsOfLife
+    - SyndicateWhistle
+    - ClothingBeltAshLegionHolster
+    - ExGrenade
+    - WhiteholeGrenade
+    - C4
+    - EmpGrenade
+    - PenExplodingBox
+    - CyberPen
+    - RadioJammer
+    - CameraBug
+    - ClothingShoesBootsMagAshLegion

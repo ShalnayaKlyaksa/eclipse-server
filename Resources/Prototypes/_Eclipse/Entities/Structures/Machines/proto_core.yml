@@ -1,0 +1,144 @@
+- type: entity
+  id: ProtoCore
+  parent: BaseStructure
+  name: proto core
+  description: A stationary imperial energy vault used for emergency station power reserves.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Sprite
+    noRot: true
+    drawdepth: Mobs
+    sprite: _Eclipse/Structures/Machines/proto_core.rsi
+    layers:
+    - state: base
+    - sprite: _Eclipse/Objects/Devices/ash_hacking_device.rsi
+      state: icon
+      map: ["enum.ProtoCoreVisualLayers.HackingDevice"]
+      offset: 0, -0.62
+      scale: 0.75, 0.75
+      visible: false
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/proto_core.rsi
+    state: base
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.45,-1.45,1.45,1.45"
+        density: 600
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+        - BulletImpassable
+  - type: InteractionOutline
+  - type: ProtoCore
+    meltdownTime: 360
+    warningThreshold: 240
+    criticalThreshold: 120
+    emergencyShuttleTime: 60
+    emergencyShuttleDockTime: 30
+    meltdownMusic:
+      path: /Audio/_Eclipse/ProtoCore/protocore_meltdown.ogg
+    meltdownMusicDuration: 208
+    explosionTotalIntensity: 200000
+    explosionMaxTileIntensity: 200
+    explosionIntensitySlope: 5
+    roundEndDelay: 60
+  - type: ProtoCoreConsole
+    hackTime: 60
+    activationKeySlot:
+      name: proto-core-slot-component-slot-name-key
+      insertSound:
+        path: /Audio/Machines/terminal_insert_disc.ogg
+      ejectSound:
+        path: /Audio/Machines/terminal_insert_disc.ogg
+      whitelist:
+        components:
+        - ProtoCoreActivationKey
+    hackingDeviceSlot:
+      name: proto-core-slot-component-slot-name-device
+      insertSound:
+        path: /Audio/Machines/terminal_insert_disc.ogg
+      ejectSound:
+        path: /Audio/Machines/terminal_insert_disc.ogg
+      whitelist:
+        components:
+        - AshHackingDevice
+  - type: ActivatableUI
+    key: enum.ProtoCoreConsoleUiKey.Key
+    requireActiveHand: false
+  - type: UserInterface
+    interfaces:
+      enum.ProtoCoreConsoleUiKey.Key:
+        type: ProtoCoreConsoleBoundUserInterface
+  - type: Battery
+    netsync: false
+    maxCharge: 16000000
+    startingCharge: 16000000
+  - type: ExaminableBattery
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      output:
+        !type:ProtoCoreCableDeviceNode
+        nodeGroupID: HVPower
+        radius: 1
+  - type: BatteryDischarger
+    voltage: High
+    node: output
+  - type: PowerSupplier
+    voltage: High
+    node: output
+    supplyRate: 5000
+    supplyRampRate: 1000
+    supplyRampTolerance: 500
+  - type: PowerNetworkBattery
+    maxSupply: 250000
+    maxChargeRate: 0
+    supplyRampTolerance: 5000
+    supplyRampRate: 2000
+  - type: PointLight
+    radius: 3
+    energy: 1.8
+    color: "#ff8b24"
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: StructuralMetallicStrong
+  - type: ItemSlots
+  - type: ContainerContainer
+    containers:
+      ProtoCoreActivationKey: !type:ContainerSlot
+      ProtoCoreHackingDevice: !type:ContainerSlot
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ProtoCoreVisuals.HackingDeviceInstalled:
+        enum.ProtoCoreVisualLayers.HackingDevice:
+          True: { visible: true }
+          False: { visible: false }
+  - type: NavMapBeacon
+    color: "#ff8b24"
+    text: proto core
+    enabled: true
+
+- type: entity
+  parent: SMESAdvanced
+  id: ProtoCoreSMES
+  name: proto core SMES
+  description: A protected superconducting storage unit tuned for proto core stabilization.
+  suffix: Proto Core, 8MJ
+  components:
+  - type: ProtoCoreSmes
+  - type: Godmode
+  - type: Battery
+    maxCharge: 8000000
+    startingCharge: 8000000

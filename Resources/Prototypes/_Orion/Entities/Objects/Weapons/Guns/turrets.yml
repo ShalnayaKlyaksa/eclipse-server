@@ -1,0 +1,10 @@
+- type: entity
+  parent: BaseWeaponBallisticTurret
+  id: WeaponTurretAshLegion
+  suffix: AshLegion
+  components:
+  - type: NpcFactionMember
+    factions:
+    - AshLegionHostile
+  - type: BallisticAmmoProvider
+    capacity: 1500 # Was 500

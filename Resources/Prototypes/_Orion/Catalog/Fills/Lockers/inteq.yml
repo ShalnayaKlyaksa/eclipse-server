@@ -1,0 +1,53 @@
+- type: entity
+  parent: GunSafe
+  id: GunSafeAshLegionFilled
+  suffix: Sizo, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: AshLegionSecretDocument
+    - id: BlueprintAshLegion
+    - id: ClothingBackpackChameleonFill
+    - id: SecurityTechFabCircuitboard
+    - id: AngleGrinder
+  - type: AccessReader
+    access: [["AshLegionVanguardLeader"]]
+
+- type: entity
+  parent: LockerAshLegionVanguardLeader
+  id: LockerAshLegionVanguardLeaderSizoFilled
+  suffix: Sizo, Leader, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CombatKnife
+    - id: CrowbarOrange
+    - id: MagazineBoxPistolAshLegion
+    - id: FlashlightSeclite
+    - id: Emag
+    - id: PlasmaScythe
+
+- type: entity
+  parent: LockerAshLegionVanguard
+  id: LockerAshLegionVanguardSizoFilled
+  suffix: Sizo, Vanguard, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CombatKnife
+    - id: CrowbarOrange
+    - id: MagazineBoxPistolAshLegion
+    - id: FlashlightSeclite
+
+- type: entity
+  parent: LockerAshLegionVanguard
+  id: LockerAshLegionVanguardMedicSizoFilled
+  suffix: Sizo, Medic, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CombatKnife
+    - id: CrowbarOrange
+    - id: MagazineBoxPistolAshLegion
+    - id: FlashlightSeclite
+    - id: MedkitCombatFilled

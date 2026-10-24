@@ -1,0 +1,64 @@
+# Heat exchange buffer — plasma inlet/outlet (TEG-style atmos pipes) and heat distribution.
+
+- type: entity
+  parent: BaseMachine
+  id: IndustrialHeatBuffer
+  name: heat exchange buffer
+  description: Stores thermal energy from flowing plasma and supplies heat to adjacent industrial machines with heat-input ports.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    noRot: false
+  - type: Sprite
+  # TODO: Dedicated _Eclipse heat buffer sprite.
+    sprite: Structures/Power/Generation/teg.rsi
+    layers:
+    - state: circ-0
+    - state: circ-0-light
+      shader: unshaded
+      map: ["enum.IndustrialHeatBufferVisualLayers.Light"]
+  - type: Icon
+    sprite: Structures/Power/Generation/teg.rsi
+    state: circ-0
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.IndustrialHeatBufferVisuals.PlasmaFlowing:
+        enum.IndustrialHeatBufferVisualLayers.Light:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Anchorable
+  - type: Pullable
+  - type: Rotatable
+  - type: AtmosDevice
+  - type: AtmosUnsafeUnanchor
+  - type: PipeRestrictOverlap
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      inlet:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: North
+        volume: 100
+      outlet:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: South
+        volume: 100
+  - type: IndustrialHeatBuffer
+    operatingTemperature: 1200
+    minPlasmaMoles: 0.25
+    heatTransferRate: 1200
+  - type: Temperature
+    currentTemperature: 293.15
+    specificHeat: 500
+  - type: PointLight
+    enabled: false
+    castShadows: false
+    radius: 1.5
+    color: "#FF6600"
+  - type: GuideHelp
+    guides:
+    - TEG

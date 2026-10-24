@@ -1,0 +1,91 @@
+- type: startingGear
+  id: AshLegionOperativeGearFullNoUplink
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitAshLegionOperative
+    back: ClothingBackpackDuffelAshLegion
+    eyes: ClothingEyesGogglessAshLegion
+    ears: ClothingHeadsetAshLegion
+    gloves: ClothingHandsGlovesCombat
+    outerClothing: ClothingOuterHardsuitAshLegion
+    shoes: ClothingShoesBootsCombatFilled
+    id: AshLegionBasePDA
+    belt: ClothingBeltAshLegionWebbing
+  storage:
+    back:
+    - WeaponPistolAshLegionCommissar
+    - AshLegionActivationKeyTrackerCartridge
+    - DeathAcidifierImplanterAshLegion
+
+# Nuclear Operative Gear
+- type: startingGear
+  id: AshLegionOperativeGearFull
+  parent: AshLegionOperativeGearFullNoUplink
+  equipment:
+    pocket2: BaseUplinkRadio40TC
+
+- type: chameleonOutfit
+  id: AshLegionNukeopsOutfit
+  name: roles-antag-nuclear-operative-name
+  startingGear: AshLegionOperativeGearFullNoUplink
+  icon: "JobIconAshLegion"
+  equipment:
+    head: ClothingHeadHelmetHardsuitSyndie
+    neck: ClothingNeckScarfStripedSyndieRed
+
+# Nuclear Operative Commander Gear
+- type: startingGear
+  id: AshLegionCommanderGearFull
+  parent: AshLegionOperativeGearFull
+  equipment:
+    neck: ClothingNeckCloakAshLegion
+    outerClothing: ClothingOuterHardsuitAshLegion
+    id: AshLegionLeaderPDA
+  inhand:
+  - NukeOpsDeclarationOfWar
+
+# Nuclear Operative Medic Gear
+- type: startingGear
+  id: AshLegionOperativeMedicFull
+  parent: AshLegionOperativeGearFull
+  equipment:
+    back: ClothingBackpackDuffelAshLegionMedical
+    jumpsuit: ClothingUniformJumpsuitAshLegionMedical
+    eyes: ClothingEyesGogglessMedAshLegion
+    shoes: ClothingShoesBootsMagAshLegion
+    belt: ClothingBeltAshLegionWebbingMedFilled
+    id: AshLegionMedicalPDA
+  storage:
+    back:
+    - SyndiHypo
+    - SawAdvanced
+    - Cautery
+    - CombatKnife
+    - WeaponPistolAshLegionCommissar
+    - AshLegionActivationKeyTrackerCartridge
+    - HandheldHealthAnalyzer
+    - CombatMedipen
+    - DeathAcidifierImplanterAshLegion
+
+- type: chameleonOutfit
+  id: AshLegionNukeopsMedicOutfit
+  name: roles-antag-nuclear-operative-agent-name
+  startingGear: AshLegionOperativeMedicFull
+  icon: "JobIconAshLegion"
+  equipment:
+    back: ClothingBackpackDuffelAshLegionMedical
+    jumpsuit: ClothingUniformJumpsuitAshLegionMedical
+    head: ClothingHeadHelmetHardsuitSyndieMedic
+    neck: ClothingNeckScarfStripedLightBlue
+
+#Lone Operative Gear
+- type: startingGear
+  id: AshLegionLoneOperativeGearFull
+  parent: AshLegionOperativeGearFull
+  equipment:
+    pocket2: BaseUplinkRadio60TC
+  storage:
+    back:
+    - WeaponPistolAshLegionCommissar
+    - AshLegionActivationKeyTrackerCartridge
+    - DeathAcidifierImplanterAshLegion
+    - AshHackingDevice

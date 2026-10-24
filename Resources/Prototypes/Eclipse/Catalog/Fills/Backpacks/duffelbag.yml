@@ -1,0 +1,163 @@
+- type: entity
+  parent: ClothingBackpackDuffelAshLegion
+  id: ClothingBackpackDuffelAshLegionEVABundle
+  name: ashlegion EVA bundle
+  description: "Contains the AshLegion approved EVA suit."
+  components:
+  - type: StorageFill
+    contents:
+      - id: BoxAshLegionEVA
+
+- type: entity
+  parent: ClothingBackpackDuffelAshLegionAmmo
+  id: ClothingBackpackDuffelAshLegionFilledRifle
+  name: Estoc DMR bundle
+  description: "For medium-range sharpshooting, the Estoc DMR. Bundled with three magazines."
+  components:
+  - type: StorageFill
+    contents:
+    - id: WeaponRifleEstoc
+    - id: MagazineRifle
+      amount: 2
+
+- type: entity
+  parent: ClothingBackpackDuffelAshLegionAmmo
+  id: ClothingBackpackDuffelAshLegionFilledGrenadeLauncher
+  name: China-Lake bundle
+  description: "An old China-Lake grenade launcher bundled with 11 rounds of various destruction capability."
+  components:
+  - type: StorageFill
+    contents:
+      - id: WeaponLauncherChinaLake
+      - id: GrenadeBlast
+        amount: 4
+      - id: GrenadeFrag
+        amount: 4
+
+- type: entity
+  parent: ClothingBackpackDuffelAshLegion
+  id: ClothingBackpackDuffelAshLegionC4tBundle
+  name: ashlegion C-4 bundle
+  description: "Contains a lot of C-4 charges."
+  components:
+    - type: StorageFill
+      contents:
+        - id: C4
+          amount: 8
+
+- type: entity
+  parent: ClothingBackpackDuffelAshLegionAmmo
+  id: ClothingBackpackDuffelAshLegionAmmoFilled
+  name: ammo bundle
+  description: "Reloading! Contains 4 magazines for the C-20r, 5 drums for the Bulldog, 3 magazines for the Estoc DMR, and 2 ammo boxes for the L6 SAW."
+  components:
+  - type: StorageFill
+    contents:
+      - id: MagazineLightRifle
+        amount: 4
+      - id: MagazinePistolSubMachineGun
+        amount: 4
+      - id: MagazineShotgun
+        amount: 4
+      - id: MagazineRifle
+        amount: 3
+      - id: MagazineShotgunSlug
+        amount: 1
+      - id: MagazineLightRifleBox
+        amount: 2
+
+- type: entity
+  parent: ClothingBackpackDuffelAshLegionAmmo
+  id: ClothingBackpackDuffelAshLegionFilledLMG
+  name: L6 Saw bundle
+  description: "More dakka: The iconic L6 lightmachinegun, bundled with 2 box magazines."
+  components:
+  - type: StorageFill
+    contents:
+      - id: WeaponLightMachineGunL6
+      - id: MagazineLightRifleBox
+
+- type: entity
+  parent: ClothingBackpackDuffelAshLegionAmmo
+  id: ClothingBackpackDuffelAshLegionFilledAtreides
+  name: Atreides bundle
+  components:
+  - type: StorageFill
+    contents:
+      - id: WeaponSubMachineGunAtreides
+      - id: MagazinePistolSubMachineGun
+        amount: 2
+      - id: MagazineBoxPistolAshLegion
+
+- type: entity
+  parent: ClothingBackpackDuffelAshLegionMedical
+  id: ClothingBackpackDuffelAshLegionZombieBundle
+  name: syndicate zombie bundle
+  description: "An all-in-one kit for unleashing the undead upon a station."
+  components:
+  - type: StorageFill
+    contents:
+      - id: SyringeRomerol
+      - id: WeaponRevolverPython
+      - id: MagazineBoxMagnumIncendiary
+      - id: PillAmbuzolPlus
+      - id: PillAmbuzol
+        amount: 3
+
+- type: entity
+  parent: ClothingBackpackDuffelAshLegionMedical
+  id: ClothingBackpackDuffelAshLegionMedicalBundleFilled
+  name: medical bundle
+  description: "All you need to get your comrades back in the fight."
+  components:
+  - type: StorageFill
+    contents:
+      - id: DefibrillatorSyndicate
+      - id: MedkitCombatFilled
+        amount: 4
+      - id: Tourniquet
+        amount: 4
+      - id: CombatMedipen
+        amount: 4
+      - id: PunctAutoInjector
+        amount: 4
+      - id: PyraAutoInjector
+        amount: 4
+      - id: AirlossAutoInjector
+        amount: 4
+
+- type: entity
+  parent: ClothingBackpackDuffelAshLegion
+  id: ClothingBackpackDuffelAshLegionFilledStarterKit
+  name: basic operative bundle
+  description: "Contains a weapon, medical supplies, breaching tools, spare ammo, and some simple utilities."
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: WeaponSubMachineGunAshLegionSMG
+        - id: MagazinePistolSubMachineGun
+          amount: 3
+        - id: MagazinePistol
+        - id: AshLegionJawsOfLife
+        - id: C4
+          amount: 2
+        - id: MedkitCombatFilled
+        - id: EmpImplanterAshLegion
+        - id: ClothingShoesBootsMagAshLegion
+        - id: AgentIDCard
+
+- type: entity
+  parent: ClothingBackpackDuffelAshLegion
+  id: ClothingBackpackDuffelAshLegionCarpSuit
+  name: carp suit duffel bag
+  description: Contains a carp suit and some friends to play with.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: ClothingOuterSuitCarp
+        - id: PlushieCarp
+          amount: 6

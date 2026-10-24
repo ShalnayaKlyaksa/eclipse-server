@@ -1,0 +1,5 @@
+- type: localizedDataset
+  id: CorvaxNamesLegionSmuggler
+  values:
+    prefix: names-legion-smuggler-dataset-
+    count: 80

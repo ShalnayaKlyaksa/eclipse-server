@@ -1,0 +1,132 @@
+- type: decal
+  id: legionlogo1
+  tags: ["legion"]
+  sprite:
+    sprite: Decals/legionlogo.rsi
+    state: legionlogo1
+
+- type: decal
+  id: legionlogo2
+  tags: ["legion"]
+  sprite:
+    sprite: Decals/legionlogo.rsi
+    state: legionlogo2
+
+- type: decal
+  id: legionlogo3
+  tags: ["legion"]
+  sprite:
+    sprite: Decals/legionlogo.rsi
+    state: legionlogo3
+
+- type: decal
+  id: legionlogo4
+  tags: ["legion"]
+  sprite:
+    sprite: Decals/legionlogo.rsi
+    state: legionlogo4
+
+- type: decal
+  id: legionlogo5
+  tags: ["legion"]
+  sprite:
+    sprite: Decals/legionlogo.rsi
+    state: legionlogo5
+
+- type: decal
+  id: legionlogo6
+  tags: ["legion"]
+  sprite:
+    sprite: Decals/legionlogo.rsi
+    state: legionlogo6
+
+- type: decal
+  id: legionlogo7
+  tags: ["legion"]
+  sprite:
+    sprite: Decals/legionlogo.rsi
+    state: legionlogo7
+
+- type: decal
+  id: legionlogo8
+  tags: ["legion"]
+  sprite:
+    sprite: Decals/legionlogo.rsi
+    state: legionlogo8
+
+- type: decal
+  id: legionlogo9
+  tags: ["legion"]
+  sprite:
+    sprite: Decals/legionlogo.rsi
+    state: legionlogo9
+
+- type: decal
+  id: legionlogo10
+  tags: ["legion"]
+  sprite:
+    sprite: Decals/legionlogo.rsi
+    state: legionlogo10
+
+- type: decal
+  id: legionlogo11
+  tags: ["legion"]
+  sprite:
+    sprite: Decals/legionlogo.rsi
+    state: legionlogo11
+
+- type: decal
+  id: legionlogo12
+  tags: ["legion"]
+  sprite:
+    sprite: Decals/legionlogo.rsi
+    state: legionlogo12
+
+- type: decal
+  id: legionlogo13
+  tags: ["legion"]
+  sprite:
+    sprite: Decals/legionlogo.rsi
+    state: legionlogo13
+
+- type: decal
+  id: legionlogo14
+  tags: ["legion"]
+  sprite:
+    sprite: Decals/legionlogo.rsi
+    state: legionlogo14
+
+- type: decal
+  id: legionlogo15
+  tags: ["legion"]
+  sprite:
+    sprite: Decals/legionlogo.rsi
+    state: legionlogo15
+
+- type: decal
+  id: legionlogo16
+  tags: ["legion"]
+  sprite:
+    sprite: Decals/legionlogo.rsi
+    state: legionlogo16
+
+- type: decal
+  id: legionlogo17
+  tags: ["legion"]
+  sprite:
+    sprite: Decals/legionlogo.rsi
+    state: legionlogo17
+
+- type: decal
+  id: legionlogo18
+  tags: ["legion"]
+  sprite:
+    sprite: Decals/legionlogo.rsi
+    state: legionlogo18
+
+- type: decal
+  id: legionlogo19
+  tags: ["legion"]
+  sprite:
+    sprite: Decals/legionlogo.rsi
+    state: legionlogo19

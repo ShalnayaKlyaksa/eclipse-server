@@ -1,0 +1,12 @@
+ent-AirlockHatchAshLegionVanguardLocked = { ent-AirlockHatchAshLegion }
+    .desc = { ent-AirlockHatchAshLegion.desc }
+    .suffix = Легион пепла, Авангард, Закрыт
+ent-AirlockHatchAshLegionVanguardLeaderLocked = { ent-AirlockHatchAshLegion }
+    .desc = { ent-AirlockHatchAshLegion.desc }
+    .suffix = Легион пепла, Коммандер Авангарда, Закрыт
+ent-AirlockHatchAshLegionGlassVanguardLocked = { ent-AirlockHatchAshLegionGlass }
+    .desc = { ent-AirlockHatchAshLegionGlass.desc }
+    .suffix = Легион пепла, Авангард, Закрыт
+ent-AirlockHatchAshLegionGlassVanguardLeaderLocked = { ent-AirlockHatchAshLegionGlass }
+    .desc = { ent-AirlockHatchAshLegionGlass.desc }
+    .suffix = Легион пепла, Коммандер Авангарда, Закрыт

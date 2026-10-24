@@ -1,0 +1,7 @@
+- type: radioChannel
+  id: AshLegion
+  name: chat-radio-ash-legion
+  keycode: 'ш'
+  frequency: 1454
+  color: "#FF8C00"
+  longRange: true

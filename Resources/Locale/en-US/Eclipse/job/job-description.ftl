@@ -1,0 +1,9 @@
+job-description-coscc = Manage the Eidos Empire station, distribute work among other members of the Eidos Empire staff, and express your will.
+job-description-centcom-officer = Monitor the performance of operators and maintain order within the Eidos Empire headquarters.
+job-description-centcom-operator = Receive faxes from stations, respond to station requests, and maintain timely control of the situation at stations.
+job-description-centcom-hos = Manage your security personnel and monitor their performance, ensuring the safety of the entire Eidos Empire facility.
+job-description-centcom-sec = Catch access control violators and enemies of the corporation, protect the Eidos Empire employees, ensure compliance with the law and that no one violates document secrecy, and so on.
+job-description-centcom-oso = Do you really need a description of your job?
+job-description-centcom-intendant = Keep track of the relatively modest material needs of the Eidos Empire station.
+job-description-centcom-engineer = Monitor the technical condition of the Eidos Empire station or assist the Eidos Empire representative with inspections of engineering targets.
+job-description-centcom-clerc = Engage in sorting, processing and storing documents for Centcom.

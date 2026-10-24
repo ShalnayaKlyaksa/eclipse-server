@@ -1,0 +1,57 @@
+# Advantage traits spend points gained from disadvantage traits.
+# Most of these are data-only hooks until a small, existing mechanic can apply the effect safely.
+
+- type: trait
+  id: Endurance
+  name: trait-endurance-name
+  description: trait-endurance-desc
+  category: Advantages
+  cost: -2
+
+- type: trait
+  id: StrongBody
+  name: trait-strong-body-name
+  description: trait-strong-body-desc
+  category: Advantages
+  cost: -2
+
+- type: trait
+  id: Sober
+  name: trait-sober-name
+  description: trait-sober-desc
+  category: Advantages
+  cost: -1
+  conflicts:
+  - LightweightDrunk
+
+- type: trait
+  id: StrongLiver
+  name: trait-strong-liver-name
+  description: trait-strong-liver-desc
+  category: Advantages
+  cost: -1
+
+- type: trait
+  id: ClearDiction
+  name: trait-clear-diction-name
+  description: trait-clear-diction-desc
+  category: Advantages
+  cost: -1
+  conflicts:
+  - SocialAnxiety
+  - FrontalLisp
+  - Muted
+
+- type: trait
+  id: LightStep
+  name: trait-light-step-name
+  description: trait-light-step-desc
+  category: Advantages
+  cost: -1
+
+- type: trait
+  id: Tenacity
+  name: trait-tenacity-name
+  description: trait-tenacity-desc
+  category: Advantages
+  cost: -2

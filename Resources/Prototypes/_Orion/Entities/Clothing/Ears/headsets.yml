@@ -1,0 +1,14 @@
+- type: entity
+  parent: [ClothingHeadset, BaseMinorContraband]
+  id: ClothingHeadsetAshLegion
+  name: AshLegion headset
+  description: Headset used by AshLegion forces.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - EncryptionKeyAshLegion
+  - type: Sprite
+    sprite: _Orion/Clothing/Ears/inteq_headset.rsi
+  - type: Clothing
+    sprite: _Orion/Clothing/Ears/inteq_headset.rsi

@@ -1,0 +1,7 @@
+- type: accessLevel
+  id: AshLegion
+  name: id-card-access-level-ashlegion
+
+- type: contrabandSeverity
+  id: AshLegion
+  examineText: contraband-examine-text-AshLegion

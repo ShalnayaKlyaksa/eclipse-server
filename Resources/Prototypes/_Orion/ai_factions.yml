@@ -1,0 +1,33 @@
+- type: npcFaction
+  id: AshLegion
+  hostile:
+  - Dragon
+  - SimpleHostile
+  - AllHostile
+  - Xeno
+  - Zombie
+  friendly:
+  - NanoTrasen
+  - Syndicate
+  - AshLegionHostile
+
+- type: npcFaction
+  id: AshLegionHostile # Like AllHostile, but without "AshLegion" in hostile
+  hostile:
+  - NanoTrasen
+  - Dragon
+  - Mouse
+  - Passive
+  - PetsNT
+  - SimpleHostile
+  - SimpleNeutral
+  - AllHostile
+  - Syndicate
+  - Xeno
+  - Zombie
+  - Revolutionary
+  # Goob-Start-Factions
+  - Wizard
+  # Goob-End-Factions
+  friendly:
+  - AshLegion

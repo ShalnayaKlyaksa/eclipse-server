@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Provided by Xaoser for Eclipse.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "shield_north"
+    },
+    {
+      "name": "shield_east"
+    },
+    {
+      "name": "shield_south"
+    },
+    {
+      "name": "shield_west"
+    }
+  ]
+}

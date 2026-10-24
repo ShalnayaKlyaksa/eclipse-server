@@ -1,0 +1,16 @@
+- type: entity
+  parent: BaseAction
+  id: ToggleNightVision
+  name: Toggle Night Vision
+  description: Toggles night vision.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Action
+    itemIconStyle: BigAction
+    priority: -20
+    useDelay: 1
+    icon:
+      sprite: _Lavaland/Clothing/Head/Helmet/hecuhelmet.rsi
+      state: icon-nvg
+  - type: InstantAction
+    event: !type:ToggleNightVisionEvent

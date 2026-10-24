@@ -1,0 +1,24 @@
+- type: entity
+  name: jaunt
+  parent: BaseMobJaunt
+  id: ShadowWalkJaunt
+  components:
+  - type: Eye
+    drawFov: false
+    visMask:
+      - Normal
+      - Ghost
+  - type: Sprite
+    sprite: Mobs/Ghosts/ghost_human.rsi
+    color: "#83007c"
+    layers:
+    - state: animated
+      shader: unshaded
+    noRot: true
+    overrideContainerOcclusion: true
+    drawdepth: Ghosts
+  - type: MovementSpeedModifier
+    baseSprintSpeed: 12
+    baseWalkSpeed: 6
+  - type: Nightmare
+  - type: NightmarePolymorhed

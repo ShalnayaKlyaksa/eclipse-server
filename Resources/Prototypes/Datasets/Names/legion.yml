@@ -1,0 +1,17 @@
+- type: localizedDataset
+  id: NamesLegionNormal
+  values:
+    prefix: names-legion-normal-dataset-
+    count: 25
+
+- type: localizedDataset
+  id: NamesLegionElite
+  values:
+    prefix: names-legion-elite-dataset-
+    count: 23
+
+- type: localizedDataset
+  id: NamesLegionPrefix
+  values:
+    prefix: names-legion-prefix-dataset-
+    count: 2

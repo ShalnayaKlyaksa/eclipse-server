@@ -1,0 +1,143 @@
+- type: marking
+  id: DemomTail1
+  bodyPart: Tail
+  groupWhitelist: [Arkane]
+  speciesRestriction: [Arkane]
+  sprites:
+  - sprite: _Eclipse/Mobs/Demon/custom.rsi
+    state: demon_tail
+
+- type: marking
+  id: DemomTailLong
+  bodyPart: Tail
+  groupWhitelist: [Arkane]
+  speciesRestriction: [Arkane]
+  sprites:
+  - sprite: _Eclipse/Mobs/Demon/custom.rsi
+    state: long
+
+- type: marking
+  id: DemomTailUp
+  bodyPart: Tail
+  groupWhitelist: [Arkane]
+  speciesRestriction: [Arkane]
+  sprites:
+  - sprite: _Eclipse/Mobs/Demon/custom.rsi
+    state: up
+
+- type: marking
+  id: DemonCowEars
+  bodyPart: HeadSide
+  groupWhitelist: [Arkane]
+  speciesRestriction: [Arkane]
+  sprites:
+  - sprite: _Eclipse/Mobs/Demon/custom.rsi
+    state: cow_ears
+
+- type: marking
+  id: DemonEars
+  bodyPart: HeadSide
+  groupWhitelist: [Arkane]
+  speciesRestriction: [Arkane]
+  sprites:
+  - sprite: _Eclipse/Mobs/Demon/custom.rsi
+    state: demon_ears
+
+- type: marking
+  id: DemonCowHorns
+  bodyPart: HeadTop
+  groupWhitelist: [Arkane]
+  speciesRestriction: [Arkane]
+  sprites:
+  - sprite: _Eclipse/Mobs/Demon/custom.rsi
+    state: cow_horns
+
+- type: marking
+  id: DemonHornsDeer
+  bodyPart: HeadTop
+  groupWhitelist: [Arkane]
+  speciesRestriction: [Arkane]
+  sprites:
+  - sprite: _Eclipse/Mobs/Demon/custom.rsi
+    state: deer_antlers_horns
+
+- type: marking
+  id: DemonHornsSmall
+  bodyPart: HeadTop
+  groupWhitelist: [Arkane]
+  speciesRestriction: [Arkane]
+  sprites:
+  - sprite: _Eclipse/Mobs/Demon/custom.rsi
+    state: small_horns
+
+- type: marking
+  id: DemonChestCowSpots
+  bodyPart: Chest
+  groupWhitelist: [Arkane]
+  speciesRestriction: [Arkane]
+  sprites:
+  - sprite: _Eclipse/Mobs/Demon/custom.rsi
+    state: cow_spots
+
+- type: marking
+  id: DemonChestGuard
+  bodyPart: Chest
+  groupWhitelist: [Arkane]
+  speciesRestriction: [Arkane]
+  sprites:
+  - sprite: _Eclipse/Mobs/Demon/custom.rsi
+    state: guards_stripes
+
+- type: marking
+  id: DemonChestLinesEmperos
+  bodyPart: Chest
+  groupWhitelist: [Arkane]
+  speciesRestriction: [Arkane]
+  sprites:
+  - sprite: _Eclipse/Mobs/Demon/custom.rsi
+    state: lines_emperos
+
+- type: marking
+  id: DemonChestQueenLines
+  bodyPart: Chest
+  groupWhitelist: [Arkane]
+  speciesRestriction: [Arkane]
+  sprites:
+  - sprite: _Eclipse/Mobs/Demon/custom.rsi
+    state: queen_lines
+
+- type: marking
+  id: DemonChestTreeLines
+  bodyPart: Chest
+  groupWhitelist: [Arkane]
+  speciesRestriction: [Arkane]
+  sprites:
+  - sprite: _Eclipse/Mobs/Demon/custom.rsi
+    state: tree_lines
+
+- type: marking
+  id: DemonChestTrinitySpots
+  bodyPart: Chest
+  groupWhitelist: [Arkane]
+  speciesRestriction: [Arkane]
+  sprites:
+  - sprite: _Eclipse/Mobs/Demon/custom.rsi
+    state: trinity_spots
+
+- type: marking
+  id: DemonGoatee
+  bodyPart: FacialHair
+  groupWhitelist: [Arkane]
+  speciesRestriction: [Arkane]
+  sprites:
+  - sprite: _Eclipse/Mobs/Demon/custom.rsi
+    state: goatee
+
+- type: marking
+  id: TailDemon
+  bodyPart: Tail
+  groupWhitelist: [Arkane]
+  speciesRestriction: [Arkane]
+  sprites:
+    - sprite: _Eclipse/Mobs/Demon/custom.rsi
+      state: tail

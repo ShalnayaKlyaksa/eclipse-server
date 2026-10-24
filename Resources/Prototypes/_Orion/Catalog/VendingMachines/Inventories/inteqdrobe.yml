@@ -1,0 +1,71 @@
+- type: vendingMachineInventory
+  id: AshLegionDrobeInventory
+  startingInventory:
+    ClothingBackpackAshLegion: 5
+    ClothingBackpackDuffelAshLegion: 5
+    ClothingBackpackSatchelAshLegion: 5
+#    ClothingBackpackMessengerAshLegion: 5 # Not ported :(
+    ClothingHeadHatAshLegionSoft: 5
+    ClothingHeadHelmetSwatAshLegion: 5
+    ClothingEyesGogglessAshLegion: 5
+    ClothingHeadAshLegionBeret: 5
+    ClothingHeadAshLegionHonorableBeret: 1
+    ClothingHeadHatAshLegionMAA: 1
+    ClothingNeckCloakAshLegion: 1
+    ClothingHeadHelmetEVAAshLegion: 2
+    ClothingOuterEVASuitAshLegion: 2
+    ClothingUniformJumpsuitAshLegionFormal: 5
+    ClothingUniformJumpskirtAshLegionFormalDress: 5
+    ClothingUniformJumpsuitAshLegionOperative: 5
+    ClothingUniformJumpskirtAshLegionOperative: 5
+    ClothingUniformJumpsuitAshLegionMedical: 3
+    ClothingUniformJumpskirtAshLegionMedical: 3
+    ClothingUniformJumpsuitAshLegionHonorable: 1
+    ClothingOuterCoatAshLegionBattle: 3
+#    ClothingOuterCoatAshLegionHonorableBattle: 1 # Because OP
+    ClothingOuterCoatAshLegionMedical: 3
+    ClothingOuterWinterAshLegion: 5
+    ClothingOuterHoodieAshLegion: 5
+    ItemFlagMiniAshLegion: 5
+    FoodSnackAshLegionCookies: 20
+    CigPackAshLegion: 10
+    SusToolbox: 1
+  contrabandInventory:
+    ClothingHeadHatAshLegionTacticalMaidHeadband: 5
+    ClothingUniformJumpskirtAshLegionTacticalMaid: 5
+    ClothingHandsAshLegionTacticalMaidGloves: 5
+
+- type: vendingMachineInventory
+  id: AshLegionDrobeNerfInventory
+  startingInventory:
+    ClothingBackpackAshLegion: 2
+    ClothingBackpackDuffelAshLegion: 2
+    ClothingBackpackSatchelAshLegion: 2
+#    ClothingBackpackMessengerAshLegion: 2 # Not ported :(
+    ClothingHeadHatAshLegionSoft: 3
+#    ClothingHeadHelmetSwatAshLegion: 5
+#    ClothingEyesGogglessAshLegion: 5
+    ClothingHeadAshLegionBeret: 3
+#    ClothingHeadAshLegionHonorableBeret: 1
+#    ClothingHeadHatAshLegionMAA: 1
+#    ClothingHeadHelmetEVAAshLegion: 2
+#    ClothingOuterEVASuitAshLegion: 2
+    ClothingUniformJumpsuitAshLegionFormal: 2
+    ClothingUniformJumpskirtAshLegionFormalDress: 2
+    ClothingUniformJumpsuitAshLegionOperative: 3
+    ClothingUniformJumpskirtAshLegionOperative: 3
+    ClothingUniformJumpsuitAshLegionMedical: 3
+    ClothingUniformJumpskirtAshLegionMedical: 3
+#    ClothingUniformJumpsuitAshLegionHonorable: 1
+    ClothingOuterCoatAshLegionBattle: 1
+#    ClothingOuterCoatAshLegionHonorableBattle: 1
+    ClothingOuterCoatAshLegionMedical: 2
+    ClothingOuterWinterAshLegion: 5
+    ClothingOuterHoodieAshLegion: 5
+    ItemFlagMiniAshLegion: 5
+    FoodSnackAshLegionCookies: 20
+    CigPackAshLegion: 10
+  contrabandInventory:
+    ClothingHeadHatAshLegionTacticalMaidHeadband: 1
+    ClothingUniformJumpskirtAshLegionTacticalMaid: 1
+    ClothingHandsAshLegionTacticalMaidGloves: 1

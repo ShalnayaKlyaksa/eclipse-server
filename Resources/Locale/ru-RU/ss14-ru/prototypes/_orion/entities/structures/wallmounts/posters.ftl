@@ -1,0 +1,14 @@
+ent-PosterContrabandAshLegionRecruitment = Набор в Легион пепла
+    .desc = Набор в Легион пепла.
+ent-PosterContrabandAshLegionWorkship = Сотрудничество с Легион пепла
+    .desc = Сотрудничество с Легион пепла.
+ent-PosterContrabandAshLegionWorkship2 = Сотрудничество с Легион пепла
+    .desc = Сотрудничество с Легион пепла.
+ent-PosterContrabandAshLegion = Легион пепла
+    .desc = Легион пепла.
+ent-PosterContrabandAshLegionNoSex = НЕТ СЕКСУ
+    .desc = НЕТ СЕКСУ!!!
+ent-PosterContrabandAshLegionVulp = Вульпа Легион пепла
+    .desc = Мы берём даже фурри фриков, вступайте к нам!
+ent-PosterContrabandAshLegionJulie = Горячие Ящерицы
+    .desc = Самые красивые ящерицы во вселенной, вступайте к нам!

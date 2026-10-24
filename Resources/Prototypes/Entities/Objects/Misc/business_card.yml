@@ -1,0 +1,26 @@
+- type: entity
+  id: LegionBusinessCard
+  name: legion business card
+  parent: [ Paper, BaseLegionContraband ]
+  description: A black card with the legion's logo. There's something written on the back.
+  components:
+    - type: Sprite
+      sprite: Objects/Misc/bureaucracy.rsi
+      layers:
+      - state: legion_card
+      - state: legion_card
+        map: ["enum.PaperVisualLayers.Writing"]
+        visible: false
+      - state: paper_stamp-generic
+        map: ["enum.PaperVisualLayers.Stamp"]
+        visible: false
+    - type: Paper
+      content: legion-business-card-base
+    - type: PaperVisuals
+      headerImagePath: "/Textures/Interface/Paper/paper_heading_Legion(new)_logo.svg.96dpi.png"
+      headerMargin: 0.0, 0.0, 0.0, 2.0
+      backgroundImagePath: "/Textures/Interface/Paper/paper_background_Yellow.svg.96dpi.png"
+      backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+      contentMargin: 4.0, 4.0, 4.0, 4.0
+      maxWritableArea: 400.0, 256.0
+

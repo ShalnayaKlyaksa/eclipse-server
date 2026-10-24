@@ -1,0 +1,45 @@
+<Control xmlns="https://spacestation14.io"
+         xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client">
+    <PanelContainer
+        Name="StoreItemPanel"
+        HorizontalExpand="True"
+        MinHeight="76"
+        Margin="6 4"
+        Access="Public">
+        <PanelContainer.PanelOverride>
+            <gfx:StyleBoxFlat BackgroundColor="#070707" BorderColor="#1F1F1F" BorderThickness="1" />
+        </PanelContainer.PanelOverride>
+
+        <BoxContainer HorizontalExpand="True" VerticalExpand="True" Orientation="Horizontal" Margin="8 6">
+            <PanelContainer SetWidth="96" Margin="0 0 10 0">
+                <PanelContainer.PanelOverride>
+                    <gfx:StyleBoxFlat BackgroundColor="#090909" BorderColor="#202020" BorderThickness="1" />
+                </PanelContainer.PanelOverride>
+                <TextureRect
+                    Name="StoreItemTexture"
+                    MinSize="72 58"
+                    Margin="4"
+                    Stretch="KeepAspectCentered" />
+            </PanelContainer>
+
+            <BoxContainer Orientation="Vertical" VerticalAlignment="Center" HorizontalExpand="True">
+                <Label Name="StoreItemName" FontColorOverride="#F0F0F0" ClipText="True" />
+                <Label Name="StoreItemDescription" FontColorOverride="#9A9A9A" ClipText="True" />
+                <Label Name="DiscountSubText" FontColorOverride="#FFB35C" ClipText="True" />
+            </BoxContainer>
+
+            <Label
+                Name="AvailabilityLabel"
+                SetWidth="110"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                FontColorOverride="#FF7A00" />
+            <Label
+                Name="StoreItemPrice"
+                SetWidth="80"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Right"
+                FontColorOverride="#FF7A00" />
+        </BoxContainer>
+    </PanelContainer>
+</Control>

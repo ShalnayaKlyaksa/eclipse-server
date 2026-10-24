@@ -1,0 +1,13 @@
+- type: lavalandMap
+  id: Lavaland
+  planet: LavalandPlanet
+  layout: LavalandOutpost
+  ruins: LavalandRuins
+
+- type: lavalandMap
+  id: EclipseIceMoon
+  planet: EclipseIceMoonPlanet
+
+- type: lavalandMap
+  id: EclipseAshDunes
+  planet: EclipseAshDunesPlanet

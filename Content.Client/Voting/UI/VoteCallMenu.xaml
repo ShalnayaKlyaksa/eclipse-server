@@ -1,0 +1,22 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+               Title="{Loc 'ui-vote-create-title'}"
+               MinSize="350 200">
+    <BoxContainer Orientation="Vertical" SeparationOverride="6">
+        <PanelContainer StyleClasses="BorderedWindowPanel" VerticalExpand="True">
+            <BoxContainer Orientation="Vertical" Margin="8 6" VerticalExpand="True" SeparationOverride="4">
+                <BoxContainer Orientation="Vertical" VerticalExpand="True" VerticalAlignment="Top">
+                    <OptionButton Name="VoteTypeButton" HorizontalExpand="True" />
+                    <BoxContainer Name="VoteOptionsButtonContainer" HorizontalExpand="True" Orientation="Vertical" />
+                    <Button Margin="0 4 0 0" Name="FollowButton" Text="{Loc 'ui-vote-follow-button'}" Visible="False" />
+                    <Label Margin="0 2" Name="VoteNotTrustedLabel" Text="{Loc 'ui-vote-trusted-users-notice'}" Visible="False" />
+                    <Label Margin="0 2" Name="VoteWarningLabel" Text="{Loc 'ui-vote-abuse-warning'}" Visible="False" HorizontalAlignment="Center"/>
+                    <Label Margin="0 2" Name="VoteTypeTimeoutLabel" Visible="False" />
+                </BoxContainer>
+
+                <Button Name="CreateButton" Text="{Loc 'ui-vote-create-button'}" />
+            </BoxContainer>
+        </PanelContainer>
+
+        <Label Margin="2 0 0 0" StyleClasses="WindowFooterText" Text="{Loc 'ui-vote-fluff'}" />
+    </BoxContainer>
+</DefaultWindow>

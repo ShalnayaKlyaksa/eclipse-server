@@ -1,0 +1,5 @@
+- type: localizedDataset
+  id: AshLegionAgent
+  values:
+    prefix: ashlegion-agent-say-
+    count: 7

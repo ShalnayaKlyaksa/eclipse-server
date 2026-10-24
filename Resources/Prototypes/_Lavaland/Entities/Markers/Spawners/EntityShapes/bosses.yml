@@ -1,0 +1,42 @@
+- type: entity
+  parent: MarkerBase
+  id: LavalandBossShapeSwoop
+  name: megafauna impact spawner
+  categories: [ HideSpawnMenu, Spawner ]
+  components:
+  - type: Sprite
+    state: red
+  - type: ShapeSpawner
+    spawn: LavalandBossImpactSquare
+    alignCoords: true
+    shape: !type:NestedEntityShape
+      id: BoxFilled
+      size: 2
+
+- type: entity
+  id: LavalandBossImpactSquare
+  categories: [ DoNotMap ]
+  name: megafauna impact
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Sprite
+    sprite: _Lavaland/Effects/mob_effects.rsi
+    state: hierophant_blast
+  - type: Transform
+    anchored: true
+  - type: TimedDespawn
+    lifetime: 1
+  - type: DamageSquare
+    damageDelay: 0.55
+    damage:
+      types:
+        Blunt: 15
+        Heat: 5
+    damageWhitelist:
+      components:
+      - MobState
+    sound:
+      path: /Audio/_Lavaland/Effects/meteorimpact.ogg

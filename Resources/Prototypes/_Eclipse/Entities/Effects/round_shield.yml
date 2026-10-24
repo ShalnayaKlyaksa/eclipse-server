@@ -1,0 +1,63 @@
+- type: entity
+  id: RoundsShieldVisualBase
+  name: energy shield
+  abstract: true
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    layers:
+    - shader: unshaded
+      sprite: _Eclipse/Effects/round_shield.rsi
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: RoundsShieldVisualBase
+  id: RoundsShieldVisualNorth
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    layers:
+    - shader: unshaded
+      sprite: _Eclipse/Effects/round_shield.rsi
+      state: shield_north
+
+- type: entity
+  parent: RoundsShieldVisualBase
+  id: RoundsShieldVisualEast
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    layers:
+    - shader: unshaded
+      sprite: _Eclipse/Effects/round_shield.rsi
+      state: shield_east
+
+- type: entity
+  parent: RoundsShieldVisualBase
+  id: RoundsShieldVisualSouth
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    layers:
+    - shader: unshaded
+      sprite: _Eclipse/Effects/round_shield.rsi
+      state: shield_south
+
+- type: entity
+  parent: RoundsShieldVisualBase
+  id: RoundsShieldVisualWest
+  components:
+  - type: Sprite
+    drawdepth: Effects
+    noRot: true
+    layers:
+    - shader: unshaded
+      sprite: _Eclipse/Effects/round_shield.rsi
+      state: shield_west

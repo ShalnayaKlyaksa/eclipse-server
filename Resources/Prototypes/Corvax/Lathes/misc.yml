@@ -1,0 +1,9 @@
+- type: latheRecipe
+  id: PrinterDocMachineCircuitboard
+  parent: BaseCircuitboardRecipe
+  result: PrinterDocMachineCircuitboard
+
+- type: latheRecipe
+  id: PhotocopierMachineCircuitboard
+  parent: BaseCircuitboardRecipe
+  result: PhotocopierMachineCircuitboard

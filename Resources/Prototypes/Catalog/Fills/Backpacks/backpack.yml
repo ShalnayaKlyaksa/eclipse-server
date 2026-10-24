@@ -1,0 +1,22 @@
+- type: entity
+  parent: ClothingBackpackLegion
+  id: ClothingBackpackLegionBundle
+  abstract: true
+  components:
+  - type: Tag
+    tags: [] # ignore "WhitelistChameleon" tag
+
+- type: entity
+  parent: ClothingBackpackLegionBundle
+  id: ClothingBackpackLegionRaidBundle
+  name: legion raid suit bundle
+  description: "Contains the Legion's durable raid armor suit."
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: ClothingOuterArmorRaid
+        - id: ClothingHeadHelmetRaid
+        - id: ClothingMaskGasLegion
+        - id: ClothingHandsGlovesCombat

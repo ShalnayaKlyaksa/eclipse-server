@@ -1,0 +1,19 @@
+- type: traitCategory
+  id: Disadvantages
+  name: trait-category-disadvantages
+
+- type: traitCategory
+  id: Advantages
+  name: trait-category-advantages
+
+- type: traitCategory
+  id: Neutral
+  name: trait-category-neutral
+
+- type: traitCategory
+  id: SpeechTraits
+  name: trait-category-speech
+
+- type: traitCategory
+  id: Languages
+  name: trait-category-languages

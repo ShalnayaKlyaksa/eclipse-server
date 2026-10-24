@@ -1,0 +1,40 @@
+- type: entity
+  parent: ClothingBackpackDuffelAshLegion
+  id: ClothingBackpackDuffelAshLegionHardsuitElite
+  name: Elite hardsuit bundle
+  description: "ashlegion bundle with elite hardsuit"
+  components:
+  - type: StorageFill
+    contents:
+      - id: ClothingEyesGogglessAshLegion
+      - id: ClothingOuterHardsuitAshLegionElite
+      - id: ClothingHandsGlovesCombat
+      - id: DoubleEmergencyOxygenTankFilled
+      - id: DoubleEmergencyNitrogenTankFilled
+
+- type: entity
+  parent: ClothingBackpackDuffelAshLegion
+  id: ClothingBackpackDuffelAshLegionSyndicateHardsuit
+  name: AshLegionHardsuit
+  description: "duffel with a standart version of ashlegion hardsuit"
+  components:
+  - type: StorageFill
+    contents:
+      - id: ClothingOuterHardsuitSyndicateAshLegion
+      - id: ClothingHandsGlovesCombat
+      - id: DoubleEmergencyOxygenTankFilled
+      - id: DoubleEmergencyNitrogenTankFilled
+
+- type: entity
+  parent: ClothingBackpackDuffelAshLegion
+  id: ClothingBackpackDuffelAshLegionHardsuit
+  name: AshLegionHardsuit
+  description: "duffel with a standart version of ashlegion hardsuit"
+  components:
+  - type: StorageFill
+    contents:
+      - id: ClothingEyesGogglessAshLegion
+      - id: ClothingOuterHardsuitAshLegion
+      - id: ClothingHandsGlovesCombat
+      - id: DoubleEmergencyOxygenTankFilled
+      - id: DoubleEmergencyNitrogenTankFilled

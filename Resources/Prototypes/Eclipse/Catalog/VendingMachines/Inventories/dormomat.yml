@@ -1,0 +1,26 @@
+- type: vendingMachineInventory
+  id: DormomatInventory
+  startingInventory:
+    BedsheetWhite: 6
+    BedsheetGrey: 4
+    BedsheetBlue: 4
+    BedsheetGreen: 4
+    BedsheetOrange: 4
+    BedsheetPurple: 4
+    BedsheetRed: 4
+    BedsheetYellow: 4
+    BedsheetBlack: 2
+    ClothingHeadHatGreysoft: 4
+    ClothingHeadHatBlacksoft: 2
+    ClothingHeadHatBluesoft: 2
+    ClothingHeadHatGreensoft: 2
+    ClothingHeadHatRedsoft: 2
+    ClothingShoesSlippers: 4
+    ClothingShoeSlippersDuck: 2
+    PlushieHuman: 2
+    PlushieLizard: 2
+    PlushieMoth: 1
+    PlushieVulp: 1
+  contrabandInventory:
+    BedsheetLegion: 1
+    PlushieNuke: 1

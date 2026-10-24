@@ -1,0 +1,76 @@
+# Tutorial lessons shown in the lobby "Обучение" window.
+# Step sequences (dialogue / spotlight / tasks) are added on top of these in later stages.
+
+- type: tutorialLesson
+  id: TutorialIntro
+  name: Вступление
+  description: Знакомство с интерфейсом, управлением и основами станции.
+  icon: /Textures/Interface/VerbIcons/examine.svg.192dpi.png
+  order: 0
+  enabled: false
+
+- type: tutorialLesson
+  id: TutorialMedicine
+  name: Базовая Медицина
+  description: Диагностика, лечение ран и обращение с медицинскими инструментами.
+  icon: /Textures/Interface/VerbIcons/rejuvenate.svg.192dpi.png
+  order: 1
+  enabled: false
+
+- type: tutorialLesson
+  id: TutorialWeapons
+  name: Обращение с оружием
+  description: Виды оружия, перезарядка, безопасность и ведение боя.
+  icon: /Textures/Interface/VerbIcons/lock.svg.192dpi.png
+  order: 2
+  enabled: false
+
+- type: tutorialLesson
+  id: TutorialEngineering
+  name: Инженерия
+  description: Питание, атмосфера, ремонт и обслуживание систем станции.
+  icon: /Textures/Interface/VerbIcons/settings.svg.192dpi.png
+  order: 3
+  enabled: false
+
+# Демонстрационный урок вертикального среза: 3 реплики двух персонажей (квадрат и круг),
+# пустая карта, и задание — нажать на иконку здоровья.
+- type: tutorialLesson
+  id: TutorialTest
+  name: Тест
+  description: Тестовый урок — три реплики и задание.
+  icon: /Textures/Interface/VerbIcons/examine.svg.192dpi.png
+  order: -1
+  steps:
+    - !type:TutorialDialogueStep
+      speaker: Квадрат
+      portrait: shape:square
+      animation: Bounce
+      text: "Привет! Я Квадрат и проведу этот короткий тест."
+    - !type:TutorialDialogueStep
+      speaker: Круг
+      portrait: shape:circle
+      side: Right
+      animation: SwayLeft
+      text: "А я Круг. Сейчас научимся открывать своё здоровье."
+    - !type:TutorialDialogueStep
+      speaker: Квадрат
+      portrait: shape:square
+      animation: Nod
+      text: "Найди иконку здоровья внизу справа и нажми на неё."
+    - !type:TutorialClickHealthStep
+      speaker: Задание
+      objective: "Нажмите на иконку здоровья внизу справа."
+    - !type:TutorialDialogueStep
+      speaker: Круг
+      portrait: shape:circle
+      side: Right
+      animation: Bounce
+      text: "Молодец! Держи, это тебе пригодится."
+    # Серверный эффект: спавн предмета в руку игрока.
+    - !type:TutorialSpawnInHandStep
+      item: Screwdriver
+    - !type:TutorialDialogueStep
+      speaker: Квадрат
+      portrait: shape:square
+      text: "Теперь отвёртка у тебя в руке. На этом тест окончен!"

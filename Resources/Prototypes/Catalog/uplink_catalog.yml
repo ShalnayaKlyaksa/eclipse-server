@@ -1,0 +1,2298 @@
+# Weapons
+
+- type: listing
+  id: UplinkAshLegionCommissar
+  name: uplink-ashlegion-weapon-commissar-name
+  description: uplink-ashlegion-weapon-commissar-desc
+  icon: { sprite: /Textures/_Orion/Objects/Weapons/Guns/Pistols/inteq_commissar.rsi, state: icon }
+  productEntity: BoxAshLegionPistolCommissar
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkWeaponry
+
+- type: listing
+  id: UplinkAshLegionAKM
+  name: uplink-ashlegion-weapon-akm-name
+  description: uplink-ashlegion-weapon-akm-desc
+  icon: { sprite: /Textures/_Orion/Objects/Weapons/Guns/Rifles/inteq_akm.rsi, state: icon }
+  productEntity: CaseAshLegionAKM
+  cost:
+    Telecrystal: 12
+  categories:
+  - UplinkWeaponry
+
+- type: listing
+  id: UplinkAshLegionSMG
+  name: uplink-ashlegion-weapon-smg-name
+  description: uplink-ashlegion-weapon-smg-desc
+  icon: { sprite: /Textures/_Orion/Objects/Weapons/Guns/SMG/inteq_smg.rsi, state: icon }
+  productEntity: CaseAshLegionSMG
+  cost:
+    Telecrystal: 10
+  categories:
+  - UplinkWeaponry
+
+- type: listing
+  id: UplinkAshLegionBulldog
+  name: uplink-ashlegion-weapon-bulldog-name
+  description: uplink-ashlegion-weapon-bulldog-desc
+  icon: { sprite: /Textures/_Orion/Objects/Weapons/Guns/Shotguns/inteq_bulldog.rsi, state: icon }
+  productEntity: CaseAshLegionBulldog
+  cost:
+    Telecrystal: 14
+  categories:
+  - UplinkWeaponry
+
+- type: listing
+  id: UplinkAshLegionPlasmaSword
+  name: uplink-ashlegion-weapon-plasma-sword-name
+  description: uplink-ashlegion-weapon-plasma-sword-desc
+  icon: { sprite: /Textures/_Orion/Objects/Weapons/Melee/plasma_sword.rsi, state: icon }
+  productEntity: PlasmaSword
+  cost:
+    Telecrystal: 8
+  categories:
+  - UplinkWeaponry
+
+- type: listing
+  id: UplinkAshLegionPlasmaSwordAlt
+  name: uplink-ashlegion-weapon-plasma-sword-alt-name
+  description: uplink-ashlegion-weapon-plasma-sword-alt-desc
+  icon: { sprite: /Textures/_Orion/Objects/Weapons/Melee/plasma_sword_alt.rsi, state: icon }
+  productEntity: PlasmaSwordAlt
+  cost:
+    Telecrystal: 8
+  categories:
+  - UplinkWeaponry
+
+- type: listing
+  id: UplinkAshLegionPlasmaScythe
+  name: uplink-ashlegion-weapon-plasma-scythe-name
+  description: uplink-ashlegion-weapon-plasma-scythe-desc
+  icon: { sprite: /Textures/_Orion/Objects/Weapons/Melee/plasma_sword_double.rsi, state: icon }
+  productEntity: PlasmaScythe
+  cost:
+    Telecrystal: 20
+  categories:
+  - UplinkWeaponry
+
+- type: listing
+  id: UplinkAshLegionKnuckleDusters
+  name: uplink-ashlegion-weapon-knuckle-dusters-name
+  description: uplink-ashlegion-weapon-knuckle-dusters-desc
+  icon: { sprite: /Textures/Eclipse/Clothing/Hands/Gloves/KnuckleDusters/inteqknuckleduster.rsi, state: inteqknuckleduster }
+  productEntity: ClothingHandsKnuckleDustersAshLegion
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkWeaponry
+
+- type: listing
+  id: UplinkAshLegionEnergyShield
+  name: uplink-ashlegion-weapon-energy-shield-name
+  description: uplink-ashlegion-weapon-energy-shield-desc
+  icon: { sprite: /Textures/_Orion/Objects/Weapons/Melee/inteq_e_shield.rsi, state: eshield-on }
+  productEntity: EnergyShieldAshLegion
+  cost:
+    Telecrystal: 8
+  categories:
+  - UplinkWeaponry
+
+# Explosives
+
+- type: listing
+  id: UplinkExplosiveGrenade
+  name: uplink-explosive-grenade-name
+  description: uplink-explosive-grenade-desc
+  productEntity: ExGrenade
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 2
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkExplosives
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkSmokeGrenade
+  name: uplink-smoke-grenade-name
+  description: uplink-smoke-grenade-desc
+  productEntity: SmokeGrenade
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkExplosives
+
+- type: listing
+  id: UplinkLegionMiniBomb
+  name: uplink-mini-bomb-name
+  description: uplink-mini-bomb-desc
+  productEntity: LegionMiniBomb
+  discountCategory: veryRareDiscounts
+  discountDownTo:
+    Telecrystal: 3
+  cost:
+    Telecrystal: 6
+  categories:
+    - UplinkExplosives
+
+- type: listing
+  id: UplinkSingularityGrenade
+  name: uplink-singularity-grenade-name
+  description: uplink-singularity-grenade-desc
+  productEntity: SingularityGrenade
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 1
+  cost:
+    Telecrystal: 2
+  categories:
+    - UplinkDisruption
+
+- type: listing
+  id: UplinkGrenadePenguin
+  name: uplink-penguin-grenade-name
+  description: uplink-penguin-grenade-desc
+  productEntity: MobGrenadePenguin
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 3
+  cost:
+    Telecrystal: 4
+  categories:
+    - UplinkExplosives
+  conditions:
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkC4
+  name: uplink-c4-name
+  description: uplink-c4-desc
+  productEntity: C4
+  discountCategory: veryRareDiscounts
+  discountDownTo:
+    Telecrystal: 1
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkExplosives
+
+- type: listing
+  id: UplinkGrenadierRig
+  name: uplink-grenadier-rig-name
+  description: uplink-grenadier-rig-desc
+  productEntity: ClothingBeltMilitaryWebbingGrenadeFilled
+  discountCategory: veryRareDiscounts
+  discountDownTo:
+    Telecrystal: 6
+  cost:
+    Telecrystal: 12
+  categories:
+  - UplinkExplosives
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkC4Bundle
+  name: uplink-c4-bundle-name
+  description: uplink-c4-bundle-desc
+  productEntity: ClothingBackpackDuffelAshLegionC4tBundle
+  discountCategory: veryRareDiscounts
+  discountDownTo:
+    Telecrystal: 8
+  cost:
+    Telecrystal: 12 #you're buying bulk so its a 25% discount, so no additional random discount over it
+  categories:
+  - UplinkExplosives
+
+- type: listing
+  id: UplinkEmpGrenade
+  name: uplink-emp-grenade-name
+  description: uplink-emp-grenade-desc
+  productEntity: EmpGrenade
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 1
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkExplosives
+
+- type: listing
+  id: UplinkExplodingPen
+  name: uplink-exploding-pen-name
+  description: uplink-exploding-pen-desc
+  icon: { sprite: /Textures/Objects/Misc/pens.rsi, state: pen }
+  productEntity: PenExplodingBox
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 2
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkExplosives
+
+- type: listing
+  id: UplinkLegionBomb
+  name: uplink-exploding-legion-bomb-name
+  description: uplink-exploding-legion-bomb-desc
+  productEntity: LegionBomb
+  cost:
+    Telecrystal: 11
+  categories:
+    - UplinkExplosives
+  restockTime: 1800
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkLegionBombNukie
+  name: uplink-exploding-legion-bomb-name
+  description: uplink-exploding-legion-bomb-desc
+  productEntity: LegionBomb
+  cost:
+    Telecrystal: 11
+  categories:
+    - UplinkExplosives
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkGrenadeShrapnel
+  name: uplink-shrapnel-grenade-name
+  description: uplink-shrapnel-grenade-desc
+  productEntity: GrenadeShrapnel
+  discountCategory: rareDiscounts
+  discountDownTo:
+    Telecrystal: 2
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkExplosives
+
+- type: listing
+  id: UplinkGrenadeIncendiary
+  name: uplink-incendiary-grenade-name
+  description: uplink-incendiary-grenade-desc
+  productEntity: GrenadeIncendiary
+  discountCategory: rareDiscounts
+  discountDownTo:
+    Telecrystal: 2
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkExplosives
+
+# Ammo
+
+- type: listing
+  id: UplinkPistol9mmMagazine
+  name: uplink-pistol-magazine-name
+  description: uplink-pistol-magazine-desc
+  icon: { sprite: /Textures/Objects/Weapons/Guns/Ammunition/Magazine/Pistol/pistol_high_capacity_mag.rsi, state: base-icon }
+  productEntity: MagazinePistolHighCapacity
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkAmmo
+
+# For the C20R
+- type: listing
+  id: UplinkMagazinePistolSubMachineGun
+  name: uplink-pistol-magazine-c20r-name
+  description: uplink-pistol-magazine-c20r-desc
+  icon: { sprite: /Textures/Objects/Weapons/Guns/Ammunition/Magazine/Pistol/smg_mag.rsi, state: red-icon }
+  productEntity: MagazinePistolSubMachineGun
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkAmmo
+
+# For the Bulldog
+- type: listing
+  id: UplinkMagazineShotgunPellet
+  name: uplink-magazine-bulldog-pellet-name
+  description: uplink-magazine-bulldog-pellet-desc
+  icon: { sprite: /Textures/Objects/Weapons/Guns/Ammunition/Magazine/Shotgun/m12.rsi, state: pellets }
+  productEntity: MagazineShotgun
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkAmmo
+
+- type: listing
+  id: UplinkMagazineShotgunSlug
+  name: uplink-magazine-bulldog-slug-name
+  description: uplink-magazine-bulldog-slug-desc
+  icon: { sprite: /Textures/Objects/Weapons/Guns/Ammunition/Magazine/Shotgun/m12.rsi, state: slug }
+  productEntity: MagazineShotgunSlug
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkAmmo
+
+# For the Cobra
+- type: listing
+  id: UplinkMagazinePistolCaselessRifle
+  name: uplink-pistol-magazine-caseless-name
+  description: uplink-pistol-magazine-caseless-desc
+  icon: { sprite: /Textures/Objects/Weapons/Guns/Ammunition/Magazine/CaselessRifle/caseless_pistol_mag.rsi, state: red-icon }
+  productEntity: MagazinePistolCaselessRifle
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkAmmo
+
+# For the mosin
+- type: listing
+  id: UplinkMosinAmmo
+  name: uplink-mosin-ammo-name
+  description: uplink-mosin-ammo-desc
+  productEntity: MagazineBoxLightRifle
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkAmmo
+
+# For the Estoc
+- type: listing
+  id: UplinkEstocAmmo
+  name: uplink-estoc-ammo-name
+  description: uplink-estoc-ammo-desc
+  productEntity: MagazineRifle
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkAmmo
+
+# for the hristov
+- type: listing
+  id: UplinkHristovAmmo
+  name: uplink-sniper-ammo-name
+  description: uplink-sniper-ammo-desc
+  productEntity: MagazineBoxAntiMateriel
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkAmmo
+
+- type: listing
+  id: UplinkAmmoBundle
+  name: uplink-ammo-bundle-name
+  description: uplink-ammo-bundle-desc
+  productEntity: ClothingBackpackDuffelAshLegionAmmoFilled
+  cost:
+    Telecrystal: 15
+  categories:
+  - UplinkAmmo
+  conditions:
+    - !type:StoreWhitelistCondition
+      whitelist:
+        tags:
+          - NukeOpsUplink
+    - !type:BuyerWhitelistCondition
+      blacklist:
+        components:
+          - SurplusBundle
+
+#Chemicals
+
+- type: listing
+  id: UplinkHypopen
+  name: uplink-hypopen-name
+  description: uplink-hypopen-desc
+  icon: { sprite: /Textures/Objects/Misc/pens.rsi, state: pen }
+  productEntity: HypopenBox
+  discountCategory: rareDiscounts
+  discountDownTo:
+    Telecrystal: 4
+  cost:
+    Telecrystal: 6
+  categories:
+  - UplinkChemicals
+
+- type: listing
+  id: UplinkHypoDart
+  name: uplink-hypodart-name
+  description: uplink-hypodart-desc
+  icon: { sprite: /Textures/Objects/Fun/Darts/dart_red.rsi, state: icon }
+  productEntity: HypoDartBox
+  discountCategory: veryRareDiscounts
+  discountDownTo:
+    Telecrystal: 1
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkChemicals
+
+- type: listing
+  id: UplinkChemistryKitBundle
+  name: uplink-chemistry-kit-name
+  description: uplink-chemistry-kit-desc
+  icon: { sprite: /Textures/Objects/Storage/boxicons.rsi, state: vials }
+  productEntity: ChemicalSynthesisKit
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 2
+  cost:
+    Telecrystal: 3
+  categories:
+  - UplinkChemicals
+
+- type: listing
+  id: UplinkZombieBundle
+  name: uplink-zombie-bundle-name
+  description: uplink-zombie-bundle-desc
+  icon: { sprite: /Textures/Structures/Wallmounts/signs.rsi, state: bio }
+  productEntity: ClothingBackpackDuffelZombieBundle
+  cost:
+    Telecrystal: 40
+  categories:
+  - UplinkChemicals
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkNocturineChemistryBottle
+  name: uplink-nocturine-chemistry-bottle-name
+  description: uplink-nocturine-chemistry-bottle-desc
+  productEntity: ChemistryBottleNocturine
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 2
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkChemicals
+
+- type: listing
+  id: UplinkCombatMedkit
+  name: uplink-combat-medkit-name
+  description: uplink-combat-medkit-desc
+  productEntity: MedkitCombatFilled
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 2
+  cost:
+    Telecrystal: 3
+  categories:
+  - UplinkChemicals
+
+- type: listing
+  id: UplinkCombatMedipen
+  name: uplink-combat-medipen-name
+  description: uplink-combat-medipen-desc
+  productEntity: CombatMedipen
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 2
+  cost:
+    Telecrystal: 3
+  categories:
+  - UplinkChemicals
+
+- type: listing
+  id: UplinkStimpack
+  name: uplink-stimpack-name
+  description: uplink-stimpack-desc
+  productEntity: Stimpack
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 1
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkChemicals
+
+- type: listing
+  id: UplinkStimkit
+  name: uplink-stimkit-name
+  description: uplink-stimkit-desc
+  productEntity: StimkitFilled
+  discountCategory: rareDiscounts
+  discountDownTo:
+    Telecrystal: 3
+  cost:
+    Telecrystal: 5
+  categories:
+  - UplinkChemicals
+
+- type: listing
+  id: UplinkCigarettes
+  name: uplink-cigarettes-name
+  description: uplink-cigarettes-desc
+  productEntity: CigPackLegion
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkChemicals
+
+- type: listing
+  id: UplinkMedsBundle
+  name: uplink-meds-bundle-name
+  description: uplink-meds-bundle-desc
+  productEntity: ClothingBackpackDuffelAshLegionMedicalBundleFilled
+  discountCategory: rareDiscounts
+  discountDownTo:
+    Telecrystal: 16
+  cost:
+    Telecrystal: 24
+  categories:
+  - UplinkChemicals
+  conditions:
+    - !type:StoreWhitelistCondition
+      whitelist:
+        tags:
+          - NukeOpsUplink
+    - !type:BuyerWhitelistCondition
+      blacklist:
+        components:
+          - SurplusBundle
+
+# Deception
+- type: listing
+  id: UplinkAshLegionIDCard
+  name: uplink-legion-id-card-name
+  description: uplink-legion-id-card-desc
+  productEntity: AshLegionOpsBaseIDCard
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkDeception
+
+- type: listing
+  id: UplinkAgentIDCard
+  name: uplink-agent-id-card-name
+  description: uplink-agent-id-card-desc
+  productEntity: AgentIDCard
+  discountCategory: veryRareDiscounts
+  discountDownTo:
+    Telecrystal: 1
+  cost:
+    Telecrystal: 3
+  categories:
+  - UplinkDeception
+
+- type: listing
+  id: UplinkStealthBox
+  name: uplink-stealth-box-name
+  description: uplink-stealth-box-desc
+  productEntity: StealthBox
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 2
+  cost:
+    Telecrystal: 5
+  categories:
+  - UplinkDeception
+
+- type: listing
+  id: UplinkChameleonProjector
+  name: uplink-chameleon-projector-name
+  description: uplink-chameleon-projector-desc
+  productEntity: ChameleonProjector
+  discountCategory: rareDiscounts
+  discountDownTo:
+    Telecrystal: 2
+  cost:
+    Telecrystal: 3
+  categories:
+  - UplinkDeception
+
+- type: listing
+  id: UplinkHeadsetEncryptionKey
+  name: uplink-encryption-key-name
+  description: uplink-encryption-key-desc
+  icon: { sprite: /Textures/_Orion/Objects/Devices/encryption_keys.rsi, state: ashlegion_label }
+  productEntity: BoxEncryptionKeyAshLegion # Two for the price of one
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 1
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkDeception
+
+- type: listing
+  id: UplinkBinaryTranslatorKey
+  name: uplink-binary-translator-key-name
+  description: uplink-binary-translator-key-desc
+  icon: { sprite: /Textures/Objects/Devices/encryption_keys.rsi, state: ai_label }
+  productEntity: EncryptionKeyBinaryLegion
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkDeception
+
+- type: listing
+  id: UplinkCyberpen
+  name: uplink-cyberpen-name
+  description: uplink-cyberpen-desc
+  productEntity: CyberPen
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkDeception
+
+- type: listing
+  id: UplinkDecoyDisk
+  name: uplink-decoy-disk-name
+  description: uplink-decoy-disk-desc
+  productEntity: NukeDiskFake
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkDeception
+
+- type: listing
+  id: UplinkBribe
+  name: uplink-bribe-name
+  description: uplink-bribe-desc
+  productEntity: BriefcaseLegionLobbyingBundleFilled
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 2
+  cost:
+    Telecrystal: 4
+  categories:
+    - UplinkDeception
+
+# - type: listing
+#   id: UplinkGigacancerScanner
+#   name: Ultragigacancer Health Analyzer
+#   description: Works like a normal health analyzer, other than giving everyone it scans ultragigacancer.
+#   productEntity: HandheldHealthAnalyzerGigacancer
+#   cost:
+#     Telecrystal: 5
+#   categories:
+#   - UplinkDeception
+
+- type: listing
+  id: UplinkLegionBombFake
+  name: uplink-exploding-legion-bomb-fake-name
+  description: uplink-exploding-legion-bomb-fake-desc
+  productEntity: LegionBombFake
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 1
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkDeception
+  restockTime: 1800
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkLegionBombFakeNukie
+  name: uplink-exploding-legion-bomb-fake-name
+  description: uplink-exploding-legion-bomb-fake-desc
+  productEntity: LegionBombFake
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 1
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkDeception
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+# Disruption
+
+- type: listing
+  id: UplinkAccessBreakerAshLegion
+  name: uplink-access-breaker-name
+  description: uplink-access-breaker-desc
+  productEntity: AccessBreakerAshLegion
+  discountCategory: rareDiscounts
+  discountDownTo:
+    Telecrystal: 2
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkDisruption
+
+- type: listing
+  id: UplinkEmag
+  name: uplink-emag-name
+  description: uplink-emag-desc
+  productEntity: Emag
+  discountCategory: veryRareDiscounts
+  discountDownTo:
+    Telecrystal: 3
+  cost:
+    Telecrystal: 5
+  categories:
+  - UplinkDisruption
+
+- type: listing
+  id: UplinkRadioJammer
+  name: uplink-radio-jammer-name
+  description: uplink-radio-jammer-desc
+  productEntity: RadioJammer
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 2
+  cost:
+    Telecrystal: 3
+  categories:
+  - UplinkDisruption
+
+- type: listing
+  id: UplinkLegionWeaponModule
+  name: uplink-legion-weapon-module-name
+  description: uplink-legion-weapon-module-desc
+  productEntity: BorgModuleLegionWeapon
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 3
+  cost:
+    Telecrystal: 5
+  categories:
+  - UplinkDisruption
+
+- type: listing
+  id: UplinkDisposableTurret
+  name: uplink-disposable-turret-name
+  description: uplink-disposable-turret-desc
+  productEntity: ToolboxElectricalTurretFilled
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 2
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkDisruption
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkLegionMartyrModule
+  name: uplink-legion-martyr-module-name
+  description: uplink-legion-martyr-module-desc
+  productEntity: BorgModuleMartyr
+  icon: { sprite: /Textures/Objects/Specific/Robotics/borgmodule.rsi, state: legionborgbomb }
+  discountCategory: veryRareDiscounts
+  discountDownTo:
+    Telecrystal: 2
+  cost:
+    Telecrystal: 4
+  categories:
+    - UplinkDisruption
+
+- type: listing
+  id: UplinkSoapLegion
+  name: uplink-soap-name
+  description: uplink-soap-desc
+  productEntity: SoapAshLegion
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkDisruption
+
+- type: listing
+  id: UplinkSlipocalypseAshLegionClusterSoap
+  name: uplink-slipocalypse-clustersoap-name
+  description: uplink-slipocalypse-clustersoap-desc
+  productEntity: SlipocalypseAshLegionClusterSoap
+  discountCategory: rareDiscounts
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkDisruption
+
+- type: listing
+  id: UplinkToolbox
+  name: uplink-toolbox-name
+  description: uplink-toolbox-desc
+  productEntity: ToolboxAshLegionFilled
+  discountCategory: rareDiscounts
+  discountDownTo:
+    Telecrystal: 1
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkDisruption
+
+- type: listing
+  id: UplinkLegionJawsOfLife
+  name: uplink-legion-jaws-of-life-name
+  description: uplink-legion-jaws-of-life-desc
+  productEntity: LegionJawsOfLife
+  discountCategory: rareDiscounts
+  discountDownTo:
+    Telecrystal: 1
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkDisruption
+
+- type: listing
+  id: UplinkTravelCamera
+  name: uplink-travel-camera-name
+  description: uplink-travel-camera-desc
+  productEntity: TravelCamera
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkDeception
+
+# Note: Removed for the time being until surgery/newmed is added. Considered bloat until then.
+# - type: listing
+#   id: UplinkDuffelSurgery
+#   name: uplink-duffel-surgery-name
+#   description: uplink-duffel-surgery-desc
+#   productEntity: ClothingBackpackDuffelLegionFilledMedical
+#   discountCategory: usualDiscounts
+#   discountDownTo:
+#     Telecrystal: 2
+#   cost:
+#     Telecrystal: 4
+#   categories:
+#   - UplinkDisruption
+
+- type: listing
+  id: UplinkPowerSink
+  name: uplink-power-sink-name
+  description: uplink-power-sink-desc
+  productEntity: PowerSink
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 4
+  cost:
+    Telecrystal: 8
+  categories:
+  - UplinkExplosives
+
+- type: listing
+  id: UplinkLegionmovCircuitKit
+  name: uplink-legionmov-law-name
+  description: uplink-legionmov-law-desc
+  icon: { sprite: /Textures/Objects/Storage/boxicons.rsi, state: legion_circuit }
+  productEntity: LegionmovCircuitKit
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 6
+  cost:
+    Telecrystal: 8
+  categories:
+  - UplinkDisruption
+  conditions:
+  - !type:StoreWhitelistCondition
+     blacklist:
+       tags:
+       - NukeOpsUplink
+
+- type: listing
+  id: UplinkAntimovCircuitBoard
+  name: uplink-antimov-law-name
+  description: uplink-antimov-law-desc
+  productEntity: AntimovCircuitBoard
+  discountCategory: rareDiscounts
+  discountDownTo:
+    Telecrystal: 20
+  cost:
+    Telecrystal: 24
+  categories:
+  - UplinkDisruption
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkSurplusBundle
+  name: uplink-surplus-bundle-name
+  description: uplink-surplus-bundle-desc
+  productEntity: CrateAshLegionSurplusBundle
+  cost:
+    Telecrystal: 20
+  categories:
+  - UplinkDisruption
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkStarterKit
+  name: uplink-starter-kit-name
+  description: uplink-starter-kit-desc
+  productEntity: ClothingBackpackDuffelLegionFilledStarterKit
+  cost:
+    Telecrystal: 40
+  categories:
+  - UplinkDisruption
+  conditions:
+    - !type:StoreWhitelistCondition
+      whitelist:
+        tags:
+        - NukeOpsUplink
+    - !type:BuyerWhitelistCondition
+      blacklist:
+        components:
+        - SurplusBundle
+
+- type: listing
+  id: UplinkSingarityBeacon
+  name: uplink-singularity-beacon-name
+  description: uplink-singularity-beacon-desc
+  productEntity: SingularityBeacon
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 4
+  cost:
+    Telecrystal: 12
+  categories:
+    - UplinkDisruption
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkCameraBug
+  name: uplink-cameraBug-name
+  description: uplink-cameraBug-desc
+  productEntity: CameraBug
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 1
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkDisruption
+
+# Allies
+
+- type: listing
+  id: UplinkHoloparaKit
+  name: uplink-holopara-kit-name
+  description: uplink-holopara-kit-desc
+  icon: { sprite: /Textures/Objects/Misc/guardian_info.rsi, state: icon }
+  productEntity: BoxHoloparasite
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 8
+  cost:
+    Telecrystal: 12
+  categories:
+  - UplinkAllies
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkReinforcementRadioLegion
+  name: uplink-reinforcement-radio-name
+  description: uplink-reinforcement-radio-traitor-desc
+  productEntity: ReinforcementRadioLegion
+  icon: { sprite: Objects/Devices/communication.rsi, state: old-radio-urist }
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 7
+  cost:
+    Telecrystal: 11
+  categories:
+  - UplinkAllies
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - NukeOpsUplink
+
+- type: listing
+  id: UplinkReinforcementRadioAshLegionNukeops # Version for Nukeops that spawns another nuclear operative without the uplink.
+  name: uplink-reinforcement-radio-nukeops-name
+  description: uplink-reinforcement-radio-nukeops-desc
+  productEntity: ReinforcementRadioLegionNukeops
+  icon: { sprite: Objects/Devices/communication.rsi, state: old-radio-nukeop }
+  cost:
+    Telecrystal: 30
+  categories:
+  - UplinkAllies
+  conditions:
+    - !type:StoreWhitelistCondition
+      whitelist:
+        tags:
+          - NukeOpsUplink
+
+- type: listing
+  id: UplinkReinforcementRadioLegionCyborgAssault
+  name:  uplink-reinforcement-radio-cyborg-assault-name
+  description: uplink-reinforcement-radio-cyborg-assault-desc
+  productEntity: ReinforcementRadioLegionCyborgAssault
+  icon: { sprite: Objects/Devices/communication.rsi, state: old-radio-borg-assault }
+  cost:
+    Telecrystal: 65
+  categories:
+    - UplinkAllies
+  conditions:
+    - !type:StoreWhitelistCondition
+      whitelist:
+        tags:
+          - NukeOpsUplink
+
+- type: listing
+  id: UplinkReinforcementRadioLegionAncestor
+  name: uplink-reinforcement-radio-ancestor-name
+  description: uplink-reinforcement-radio-ancestor-desc
+  productEntity: ReinforcementRadioAshLegionAncestor
+  icon: { sprite: Objects/Devices/communication.rsi, state: old-radio-ancestor }
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 4
+  cost:
+    Telecrystal: 6
+  categories:
+  - UplinkAllies
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - NukeOpsUplink
+
+- type: listing
+  id: UplinkReinforcementRadioAshLegionAncestorNukeops # Version for Nukeops that spawns a legion monkey with the NukeOperative component.
+  name: uplink-reinforcement-radio-ancestor-name
+  description: uplink-reinforcement-radio-ancestor-desc
+  productEntity: ReinforcementRadioAshLegionAncestorNukeops
+  icon: { sprite: Objects/Devices/communication.rsi, state: old-radio-ancestor }
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 4
+  cost:
+    Telecrystal: 6
+  categories:
+  - UplinkAllies
+  conditions:
+    - !type:StoreWhitelistCondition
+      whitelist:
+        tags:
+          - NukeOpsUplink
+
+- type: listing
+  id: UplinkCarpDehydrated
+  name: uplink-carp-dehydrated-name
+  description: uplink-carp-dehydrated-desc
+  productEntity: DehydratedSpaceCarp
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkAllies
+  conditions:
+  - !type:StoreWhitelistCondition
+    blacklist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkMobCatMicrobomb
+  name: uplink-mobcat-microbomb-name
+  description: uplink-mobcat-microbomb-desc
+  icon: { sprite: Objects/Devices/communication.rsi, state: old-radio-legioncat }
+  productEntity: ReinforcementRadioLegionLegionCat
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 3
+  cost:
+    Telecrystal: 6
+  categories:
+    - UplinkAllies
+
+- type: listing
+  id: UplinkInteqPersonalAI
+  name: uplink-legion-pai-name
+  description: uplink-legion-pai-desc
+  icon: { sprite: /Textures/Eclipse/Objects/Fun/pai.rsi, state: inteq-icon-pai-off }
+  productEntity: InteqPersonalAI
+  cost:
+    Telecrystal: 1
+  categories:
+    - UplinkAllies
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+# Implants
+
+- type: listing
+  id: UplinkStorageImplanter
+  name: uplink-storage-implanter-name
+  description: uplink-storage-implanter-desc
+  icon: { sprite: /Textures/Clothing/Back/Backpacks/backpack.rsi, state: icon }
+  productEntity: StorageImplanter
+  discountCategory: rareDiscounts
+  discountDownTo:
+    Telecrystal: 4
+  cost:
+    Telecrystal: 8
+  categories:
+    - UplinkImplants
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - NukeOpsUplink
+
+- type: listing
+  id: UplinkFreedomImplanter
+  name: uplink-freedom-implanter-name
+  description: uplink-freedom-implanter-desc
+  icon: { sprite: /Textures/Actions/Implants/implants.rsi, state: freedom }
+  productEntity: FreedomImplanter
+  discountCategory: veryRareDiscounts
+  discountDownTo:
+    Telecrystal: 1
+  cost:
+    Telecrystal: 2
+  categories:
+    - UplinkImplants
+
+- type: listing
+  id: UplinkScramImplanter
+  name: uplink-scram-implanter-name
+  description: uplink-scram-implanter-desc
+  icon: { sprite: /Textures/Structures/Specific/anomaly.rsi, state: anom4 }
+  productEntity: ScramImplanter
+  discountCategory: veryRareDiscounts
+  discountDownTo:
+    Telecrystal: 1
+  cost:
+    Telecrystal: 2 # it's a gamble that may kill you easily so 1 TC per use.
+  categories:
+    - UplinkImplants
+
+- type: listing
+  id: UplinkDnaScramblerImplant
+  name: uplink-dna-scrambler-implanter-name
+  description: uplink-dna-scrambler-implanter-desc
+  icon: { sprite: /Textures/Mobs/Species/Human/parts.rsi, state: full }
+  productEntity: DnaScramblerImplanter
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 2
+  cost:
+    Telecrystal: 3
+  categories:
+    - UplinkImplants
+
+- type: listing
+  id: UplinkEmpImplanter
+  name: uplink-emp-implanter-name
+  description: uplink-emp-implanter-desc
+  icon: { sprite: /Textures/Effects/emp.rsi, state: emp_disable }
+  productEntity: EmpImplanter
+  discountCategory: veryRareDiscounts
+  discountDownTo:
+    Telecrystal: 1
+  cost:
+    Telecrystal: 2
+  categories:
+    - UplinkImplants
+
+- type: listing
+  id: UplinkRadioImplanterAshLegion
+  name: uplink-radio-implanter-name
+  description: uplink-radio-implanter-desc
+  icon: { sprite: /Textures/_Orion/Objects/Devices/encryption_keys.rsi, state: ashlegion_label }
+  productEntity: RadioImplanterAshLegion
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 1
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkImplants
+
+- type: listing
+  id: UplinkMicroBombImplanter
+  name: uplink-micro-bomb-implanter-name
+  description: uplink-micro-bomb-implanter-desc
+  icon: { sprite: /Textures/Actions/Implants/implants.rsi, state: explosive }
+  productEntity: MicroBombImplanter
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkImplants
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkMacroBombImplanter
+  name: uplink-macro-bomb-implanter-name
+  description: uplink-macro-bomb-implanter-desc
+  icon: { sprite: /Textures/Actions/Implants/implants.rsi, state: explosive }
+  productEntity: MacroBombImplanter
+  cost:
+    Telecrystal: 13
+  categories:
+    - UplinkImplants
+  conditions:
+    - !type:StoreWhitelistCondition
+      whitelist:
+        tags:
+          - NukeOpsUplink
+    - !type:BuyerWhitelistCondition
+      blacklist:
+        components:
+          - SurplusBundle
+
+- type: listing
+  id: UplinkDeathAcidifierImplanter
+  name: uplink-death-acidifier-implant-name
+  description: uplink-death-acidifier-implant-desc
+  icon: { sprite: /Textures/Objects/Magic/magicactions.rsi, state: gib }
+  productEntity: DeathAcidifierImplanter
+  cost:
+    Telecrystal: 4
+  categories:
+    - UplinkImplants
+  conditions:
+    - !type:StoreWhitelistCondition
+      whitelist:
+        tags:
+          - NukeOpsUplink
+
+- type: listing
+  id: UplinkUplinkImplanter # uplink uplink real
+  name: uplink-uplink-implanter-name
+  description: uplink-uplink-implanter-desc
+  icon: { sprite: _Eclipse/Objects/Devices/legion_supply_terminal.rsi, state: icon }
+  productEntity: UplinkImplanter
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkImplants
+  conditions:
+    - !type:StoreWhitelistCondition
+      blacklist:
+        tags:
+          - NukeOpsUplink
+
+- type: listing
+  id: UplinkDeathRattle
+  name: uplink-deathrattle-implant-name
+  description: uplink-deathrattle-implant-desc
+  productEntity: BoxDeathRattleImplants
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkImplants
+  conditions:
+    - !type:StoreWhitelistCondition
+      whitelist:
+        tags:
+          - NukeOpsUplink
+    - !type:BuyerWhitelistCondition
+      blacklist:
+        components:
+          - SurplusBundle
+
+- type: listing
+  id: UplinkFakeMindshield
+  name: uplink-fake-mindshield-name
+  description: uplink-fake-mindshield-desc
+  icon: { sprite: Interface/Actions/actions_fakemindshield.rsi, state: icon-on }
+  productEntity: FakeMindShieldImplanter
+  discountDownTo:
+    Telecrystal: 2
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkImplants
+
+- type: listing
+  id: UplinkVoiceMaskImplant
+  name: uplink-voice-mask-implanter-name
+  description: uplink-voice-mask-implanter-desc
+  icon: { sprite: Interface/Actions/voice-mask.rsi, state: icon }
+  productEntity: VoiceMaskImplanter
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 1
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkImplants
+
+# Wearables
+
+- type: listing
+  id: UplinkAshLegionBackpack
+  name: uplink-ashlegion-wearable-backpack-name
+  description: uplink-ashlegion-wearable-backpack-desc
+  productEntity: ClothingBackpackAshLegion
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkWearables
+
+- type: listing
+  id: UplinkAshLegionSatchel
+  name: uplink-ashlegion-wearable-satchel-name
+  description: uplink-ashlegion-wearable-satchel-desc
+  productEntity: ClothingBackpackSatchelAshLegion
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkWearables
+
+- type: listing
+  id: UplinkAshLegionDuffel
+  name: uplink-ashlegion-wearable-duffel-name
+  description: uplink-ashlegion-wearable-duffel-desc
+  productEntity: ClothingBackpackDuffelAshLegion
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkWearables
+
+- type: listing
+  id: UplinkAshLegionDuffelAmmo
+  name: uplink-ashlegion-wearable-duffel-ammo-name
+  description: uplink-ashlegion-wearable-duffel-ammo-desc
+  productEntity: ClothingBackpackDuffelAshLegionAmmo
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkWearables
+
+- type: listing
+  id: UplinkAshLegionDuffelMedical
+  name: uplink-ashlegion-wearable-duffel-medical-name
+  description: uplink-ashlegion-wearable-duffel-medical-desc
+  productEntity: ClothingBackpackDuffelAshLegionMedical
+  cost:
+    Telecrystal: 3
+  categories:
+  - UplinkWearables
+
+- type: listing
+  id: UplinkAshLegionJumpsuitFormal
+  name: uplink-ashlegion-wearable-jumpsuit-formal-name
+  description: uplink-ashlegion-wearable-jumpsuit-formal-desc
+  productEntity: ClothingUniformJumpsuitAshLegionFormal
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkPointless
+
+- type: listing
+  id: UplinkAshLegionJumpsuitOperative
+  name: uplink-ashlegion-wearable-jumpsuit-operative-name
+  description: uplink-ashlegion-wearable-jumpsuit-operative-desc
+  productEntity: ClothingUniformJumpsuitAshLegionOperative
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkPointless
+
+- type: listing
+  id: UplinkAshLegionJumpsuitHonorable
+  name: uplink-ashlegion-wearable-jumpsuit-honorable-name
+  description: uplink-ashlegion-wearable-jumpsuit-honorable-desc
+  productEntity: ClothingUniformJumpsuitAshLegionHonorable
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkPointless
+
+- type: listing
+  id: UplinkAshLegionJumpsuitMedical
+  name: uplink-ashlegion-wearable-jumpsuit-medical-name
+  description: uplink-ashlegion-wearable-jumpsuit-medical-desc
+  productEntity: ClothingUniformJumpsuitAshLegionMedical
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkPointless
+
+- type: listing
+  id: UplinkAshLegionJumpskirtFormal
+  name: uplink-ashlegion-wearable-jumpskirt-formal-name
+  description: uplink-ashlegion-wearable-jumpskirt-formal-desc
+  productEntity: ClothingUniformJumpskirtAshLegionFormalDress
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkPointless
+
+- type: listing
+  id: UplinkAshLegionJumpskirtOperative
+  name: uplink-ashlegion-wearable-jumpskirt-operative-name
+  description: uplink-ashlegion-wearable-jumpskirt-operative-desc
+  productEntity: ClothingUniformJumpskirtAshLegionOperative
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkPointless
+
+- type: listing
+  id: UplinkAshLegionJumpskirtMedical
+  name: uplink-ashlegion-wearable-jumpskirt-medical-name
+  description: uplink-ashlegion-wearable-jumpskirt-medical-desc
+  productEntity: ClothingUniformJumpskirtAshLegionMedical
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkPointless
+
+- type: listing
+  id: UplinkAshLegionJumpskirtMaid
+  name: uplink-ashlegion-wearable-jumpskirt-maid-name
+  description: uplink-ashlegion-wearable-jumpskirt-maid-desc
+  productEntity: ClothingUniformJumpskirtAshLegionTacticalMaid
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkPointless
+
+- type: listing
+  id: UplinkAshLegionHeadset
+  name: uplink-ashlegion-wearable-headset-name
+  description: uplink-ashlegion-wearable-headset-desc
+  productEntity: ClothingHeadsetAshLegion
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkWearables
+
+- type: listing
+  id: UplinkAshLegionAltHeadset
+  name: uplink-ashlegion-wearable-alt-headset-name
+  description: uplink-ashlegion-wearable-alt-headset-desc
+  productEntity: ClothingHeadsetAltAshLegion
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkWearables
+
+- type: listing
+  id: UplinkAshLegionGoggles
+  name: uplink-ashlegion-wearable-goggles-name
+  description: uplink-ashlegion-wearable-goggles-desc
+  productEntity: ClothingEyesGogglessAshLegion
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkWearables
+
+- type: listing
+  id: UplinkAshLegionMedicalGoggles
+  name: uplink-ashlegion-wearable-medical-goggles-name
+  description: uplink-ashlegion-wearable-medical-goggles-desc
+  productEntity: ClothingEyesGogglessMedAshLegion
+  cost:
+    Telecrystal: 3
+  categories:
+  - UplinkWearables
+
+- type: listing
+  id: UplinkAshLegionBeret
+  name: uplink-ashlegion-wearable-beret-name
+  description: uplink-ashlegion-wearable-beret-desc
+  productEntity: ClothingHeadAshLegionBeret
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkPointless
+
+- type: listing
+  id: UplinkAshLegionHonorableBeret
+  name: uplink-ashlegion-wearable-honorable-beret-name
+  description: uplink-ashlegion-wearable-honorable-beret-desc
+  productEntity: ClothingHeadAshLegionHonorableBeret
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkPointless
+
+- type: listing
+  id: UplinkAshLegionMAAHat
+  name: uplink-ashlegion-wearable-maa-hat-name
+  description: uplink-ashlegion-wearable-maa-hat-desc
+  productEntity: ClothingHeadHatAshLegionMAA
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkPointless
+
+- type: listing
+  id: UplinkAshLegionMaidHeadband
+  name: uplink-ashlegion-wearable-maid-headband-name
+  description: uplink-ashlegion-wearable-maid-headband-desc
+  productEntity: ClothingHeadHatAshLegionTacticalMaidHeadband
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkPointless
+
+- type: listing
+  id: UplinkAshLegionSoftCap
+  name: uplink-ashlegion-wearable-soft-cap-name
+  description: uplink-ashlegion-wearable-soft-cap-desc
+  productEntity: ClothingHeadHatAshLegionSoft
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkPointless
+
+- type: listing
+  id: UplinkAshLegionSwatHelmet
+  name: uplink-ashlegion-wearable-swat-helmet-name
+  description: uplink-ashlegion-wearable-swat-helmet-desc
+  productEntity: ClothingHeadHelmetSwatAshLegion
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkWearables
+
+- type: listing
+  id: UplinkAshLegionCloak
+  name: uplink-ashlegion-wearable-cloak-name
+  description: uplink-ashlegion-wearable-cloak-desc
+  productEntity: ClothingNeckCloakAshLegion
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkPointless
+
+- type: listing
+  id: UplinkAshLegionBattleCoat
+  name: uplink-ashlegion-wearable-battle-coat-name
+  description: uplink-ashlegion-wearable-battle-coat-desc
+  productEntity: ClothingOuterCoatAshLegionBattle
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkWearables
+- type: listing
+  id: UplinkAshLegionWinterCoat
+  name: uplink-ashlegion-wearable-winter-coat-name
+  description: uplink-ashlegion-wearable-winter-coat-desc
+  productEntity: ClothingOuterWinterAshLegion
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkPointless
+
+- type: listing
+  id: UplinkAshLegionHoodie
+  name: uplink-ashlegion-wearable-hoodie-name
+  description: uplink-ashlegion-wearable-hoodie-desc
+  productEntity: ClothingOuterHoodieAshLegion
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkPointless
+
+- type: listing
+  id: UplinkAshLegionEVABundle
+  name: uplink-ashlegion-wearable-eva-bundle-name
+  description: uplink-ashlegion-wearable-eva-bundle-desc
+  productEntity: ClothingBackpackDuffelAshLegionEVABundle
+  cost:
+    Telecrystal: 3
+  categories:
+  - UplinkWearables
+
+- type: listing
+  id: UplinkAshLegionHardsuit
+  name: uplink-ashlegion-wearable-hardsuit-name
+  description: uplink-ashlegion-wearable-hardsuit-desc
+  productEntity: ClothingOuterHardsuitAshLegion
+  cost:
+    Telecrystal: 8
+  categories:
+  - UplinkWearables
+
+- type: listing
+  id: UplinkAshLegionEliteHardsuit
+  name: uplink-ashlegion-wearable-elite-hardsuit-name
+  description: uplink-ashlegion-wearable-elite-hardsuit-desc
+  productEntity: ClothingOuterHardsuitAshLegionElite
+  cost:
+    Telecrystal: 12
+  categories:
+  - UplinkWearables
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+- type: listing
+  id: UplinkAshLegionInfiltratorArmor
+  name: uplink-ashlegion-wearable-infiltrator-armor-name
+  description: uplink-ashlegion-wearable-infiltrator-armor-desc
+  productEntity: ClothingOuterArmorAshLegionInfiltrator
+  cost:
+    Telecrystal: 6
+  categories:
+  - UplinkWearables
+
+- type: listing
+  id: UplinkAshLegionIronTombstoneArmor
+  name: uplink-ashlegion-wearable-iron-tombstone-armor-name
+  description: uplink-ashlegion-wearable-iron-tombstone-armor-desc
+  productEntity: ClothingOuterArmorAshLegionIronTombstone
+  cost:
+    Telecrystal: 10
+  categories:
+  - UplinkWearables
+  conditions:
+  - !type:StoreWhitelistCondition
+    whitelist:
+      tags:
+      - NukeOpsUplink
+
+- type: listing
+  id: UplinkAshLegionTacticalMaidGloves
+  name: uplink-ashlegion-wearable-maid-gloves-name
+  description: uplink-ashlegion-wearable-maid-gloves-desc
+  productEntity: ClothingHandsAshLegionTacticalMaidGloves
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkWearables
+
+- type: listing
+  id: UplinkAshLegionInfiltratorGloves
+  name: uplink-ashlegion-wearable-infiltrator-gloves-name
+  description: uplink-ashlegion-wearable-infiltrator-gloves-desc
+  productEntity: ClothingHandsGlovesAshLegionInfiltrator
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkWearables
+
+- type: listing
+  id: UplinkAshLegionInfiltratorBoots
+  name: uplink-ashlegion-wearable-infiltrator-boots-name
+  description: uplink-ashlegion-wearable-infiltrator-boots-desc
+  productEntity: ClothingShoesBootsAshLegionInfiltrator
+  cost:
+    Telecrystal: 3
+  categories:
+  - UplinkWearables
+
+- type: listing
+  id: UplinkAshLegionMagboots
+  name: uplink-ashlegion-wearable-magboots-name
+  description: uplink-ashlegion-wearable-magboots-desc
+  productEntity: ClothingShoesBootsMagAshLegion
+  cost:
+    Telecrystal: 3
+  categories:
+  - UplinkWearables
+
+- type: listing
+  id: UplinkAshLegionWebbing
+  name: uplink-ashlegion-wearable-webbing-name
+  description: uplink-ashlegion-wearable-webbing-desc
+  productEntity: ClothingBeltAshLegionWebbing
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkWearables
+
+- type: listing
+  id: UplinkAshLegionDropPouch
+  name: uplink-ashlegion-wearable-drop-pouch-name
+  description: uplink-ashlegion-wearable-drop-pouch-desc
+  productEntity: ClothingBeltAshLegionDropPouch
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkWearables
+
+- type: listing
+  id: UplinkAshLegionMedicDropPouch
+  name: uplink-ashlegion-wearable-medic-drop-pouch-name
+  description: uplink-ashlegion-wearable-medic-drop-pouch-desc
+  productEntity: ClothingBeltAshLegionDropPouchMedicFilled
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkWearables
+
+- type: listing
+  id: UplinkAshLegionGrenadierWebbing
+  name: uplink-ashlegion-wearable-grenadier-webbing-name
+  description: uplink-ashlegion-wearable-grenadier-webbing-desc
+  productEntity: ClothingBeltAshLegionWebbingGrenadeFilled
+  cost:
+    Telecrystal: 8
+  categories:
+  - UplinkWearables
+
+- type: listing
+  id: UplinkAshLegionMedicalWebbing
+  name: uplink-ashlegion-wearable-medical-webbing-name
+  description: uplink-ashlegion-wearable-medical-webbing-desc
+  productEntity: ClothingBeltAshLegionWebbingMedFilled
+  cost:
+    Telecrystal: 5
+  categories:
+  - UplinkWearables
+
+- type: listing
+  id: UplinkAshLegionHolster
+  name: uplink-ashlegion-wearable-holster-name
+  description: uplink-ashlegion-wearable-holster-desc
+  productEntity: ClothingBeltAshLegionHolster
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkWearables
+
+ # Pointless
+
+- type: listing
+  id: UplinkBarberScissors
+  name: uplink-barber-scissors-name
+  description: uplink-barber-scissors-desc
+  productEntity: BarberScissors
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkPointless
+
+- type: listing
+  id: UplinkSnackBox
+  name: uplink-snack-box-name
+  description: uplink-snack-box-desc
+  productEntity: HappyHonkNukieSnacks
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkPointless
+
+- type: listing
+  id: UplinkClothingConductingGloves
+  name: uplink-clothing-conducting-gloves-name
+  description: uplink-clothing-conducting-gloves-desc
+  productEntity: ClothingHandsGlovesConducting
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkPointless
+
+- type: listing
+  id: UplinkRevolverCapGun
+  name: uplink-revolver-cap-gun-name
+  description: uplink-revolver-cap-gun-desc
+  productEntity: RevolverCapGun
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkPointless
+
+- type: listing
+  id: UplinkAshLegionStamp
+  name: uplink-legion-stamp-name
+  description: uplink-legion-stamp-desc
+  productEntity: RubberStampAshLegion
+  categories:
+  - UplinkPointless
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: UplinkCatEars
+  name: uplink-cat-ears-name
+  description: uplink-cat-ears-desc
+  productEntity: ClothingHeadHatCatEars
+  cost:
+    Telecrystal: 26
+  categories:
+  - UplinkPointless
+  conditions:
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkOutlawHat
+  name: uplink-outlaw-hat-name
+  description: uplink-outlaw-hat-desc
+  productEntity: ClothingHeadHatOutlawHat
+  categories:
+  - UplinkPointless
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: UplinkOutlawGlasses
+  name: uplink-outlaw-glasses-name
+  description: uplink-outlaw-glasses-desc
+  productEntity: ClothingEyesGlassesOutlawGlasses
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkPointless
+
+- type: listing
+  id: UplinkCostumePyjama
+  name: uplink-costume-pyjama-name
+  description: uplink-costume-pyjama-desc
+  productEntity: ClothingBackpackDuffelLegionPyjamaBundle
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkPointless
+
+- type: listing
+  id: UplinkCostumeClown
+  name: uplink-costume-clown-name
+  description: uplink-costume-clown-desc
+  productEntity: ClothingBackpackDuffelLegionCostumeClown
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkPointless
+
+- type: listing
+  id: UplinkCarpSuitBundle
+  name: uplink-carp-suit-bundle-name
+  description: uplink-carp-suit-bundle-desc
+  productEntity: ClothingBackpackDuffelLegionCarpSuit
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkPointless
+
+- type: listing
+  id: UplinkOperativeSuit
+  name: uplink-operative-suit-name
+  description: uplink-operative-suit-desc
+  productEntity: ClothingUniformJumpsuitOperative
+  categories:
+  - UplinkPointless
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: UplinkOperativeSkirt
+  name: uplink-operative-skirt-name
+  description: uplink-operative-skirt-desc
+  productEntity: ClothingUniformJumpskirtOperative
+  categories:
+  - UplinkPointless
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: UplinkBalloon
+  name: uplink-balloon-name
+  description: uplink-balloon-desc
+  productEntity: BalloonAshLegion
+  cost:
+    Telecrystal: 20
+  categories:
+  - UplinkPointless
+  conditions:
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkScarfLegionRed
+  name: uplink-scarf-legion-red-name
+  description: uplink-scarf-legion-red-desc
+  productEntity: ClothingNeckScarfStripedLegionRed
+  categories:
+  - UplinkPointless
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: UplinkScarfLegionGreen
+  name: uplink-scarf-legion-green-name
+  description: uplink-scarf-legion-green-desc
+  productEntity: ClothingNeckScarfStripedLegionGreen
+  categories:
+    - UplinkPointless
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+
+- type: listing
+  id: UplinkLegionBusinessCard
+  name: uplink-business-card-name
+  description: uplink-business-card-desc
+  productEntity: LegionBusinessCard
+  categories:
+    - UplinkPointless
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 3
+
+- type: listing
+  id: UplinkDecoyKit
+  name: uplink-decoy-kit-name
+  description: uplink-decoy-kit-desc
+  icon: { sprite: /Textures/Objects/Tools/Decoys/operative_decoy.rsi, state: folded }
+  productEntity: ClothingBackpackDuffelLegionDecoyKitFilled
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkPointless
+
+# Job Specific
+
+- type: listing
+  id: uplinkGatfruitSeeds
+  name: uplink-gatfruit-seeds-name
+  description: uplink-gatfruit-seeds-desc
+  productEntity: GatfruitSeeds
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 3
+  cost:
+    Telecrystal: 6
+  categories:
+  - UplinkJob
+  conditions:
+  - !type:BuyerJobCondition
+    whitelist:
+    - Botanist
+
+- type: listing
+  id: uplinkHolyHandGrenade
+  name: uplink-holy-hand-grenade-name
+  description: uplink-holy-hand-grenade-desc
+  productEntity: HolyHandGrenade
+  discountCategory: rareDiscounts
+  discountDownTo:
+    Telecrystal: 14
+  cost:
+    Telecrystal: 20
+  categories:
+  - UplinkJob
+  conditions:
+  - !type:BuyerJobCondition
+    whitelist:
+    - Chaplain
+
+- type: listing
+  id: uplinkRevolverCapGunFake
+  name: uplink-revolver-cap-gun-fake-name
+  description: uplink-revolver-cap-gun-fake-desc
+  productEntity: RevolverCapGunFake
+  discountCategory: rareDiscounts
+  discountDownTo:
+    Telecrystal: 2
+  cost:
+    Telecrystal: 3
+  categories:
+  - UplinkJob
+  conditions:
+  - !type:BuyerJobCondition
+    whitelist:
+    - Mime
+    - Clown
+
+- type: listing
+  id: UplinkClusterBananaPeel
+  name: uplink-cluster-banana-peel-name
+  description: uplink-cluster-banana-peel-desc
+  productEntity: ClusterBananaPeel
+  discountCategory: rareDiscounts
+  discountDownTo:
+    Telecrystal: 3
+  cost:
+    Telecrystal: 5
+  categories:
+  - UplinkJob
+  conditions:
+  - !type:BuyerJobCondition
+    whitelist:
+    - Clown
+
+- type: listing
+  id: UplinkHoloclownKit
+  name: uplink-holoclown-kit-name
+  description: uplink-holoclown-kit-desc
+  icon: { sprite: /Textures/Objects/Fun/figurines.rsi, state: holoclown }
+  productEntity: BoxHoloclown
+  discountCategory: rareDiscounts
+  discountDownTo:
+    Telecrystal: 6
+  cost:
+    Telecrystal: 12
+  categories:
+  - UplinkJob
+  conditions:
+  - !type:BuyerJobCondition
+    whitelist:
+    - Clown
+
+- type: listing
+  id: uplinkHotPotato
+  name: uplink-hot-potato-name
+  description: uplink-hot-potato-desc
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 2
+  productEntity: HotPotato
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkJob
+  conditions:
+  - !type:BuyerJobCondition
+    whitelist:
+    - Chef
+    - Botanist
+    - Clown
+    - Mime
+
+- type: listing
+  id: UplinkChimpUpgradeKit
+  name: uplink-chimp-upgrade-kit-name
+  description: uplink-chimp-upgrade-kit-desc
+  productEntity: WeaponPistolCHIMPUpgradeKit
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 2
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkJob
+  conditions:
+    - !type:BuyerDepartmentCondition
+      whitelist:
+      - Science
+
+- type: listing
+  id: uplinkProximityMine
+  name: uplink-proximity-mine-name
+  description: uplink-proximity-mine-desc
+  productEntity: WetFloorSignMineExplosive
+  discountCategory: rareDiscounts
+  discountDownTo:
+    Telecrystal: 2
+  cost:
+    Telecrystal: 5 # was 4, with my buff made it 5 to be closer to minibomb -panzer
+  categories:
+  - UplinkJob
+  conditions:
+  - !type:BuyerJobCondition
+    whitelist:
+    - Janitor
+  - !type:BuyerWhitelistCondition
+    blacklist:
+      components:
+      - SurplusBundle
+
+- type: listing
+  id: UplinkLegionSpongeBox
+  name: uplink-legion-sponge-box-name
+  description: uplink-legion-sponge-box-desc
+  icon: { sprite:  Objects/Misc/monkeycube.rsi, state: box}
+  discountCategory: rareDiscounts
+  discountDownTo:
+    Telecrystal: 2
+  productEntity: LegionSpongeBox
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkJob
+  conditions:
+  - !type:BuyerJobCondition # We can't use BuyerDepartmentCondition here since Chef can also get this
+    whitelist:
+    - Scientist
+    - SeniorResearcher # Corvax-MentorRoles
+    - ResearchDirector
+    - Chef
+
+- type: listing
+  id: UplinkCaneBlade
+  name: uplink-cane-blade-name
+  description: uplink-cane-blade-desc
+  icon: { sprite:  Objects/Weapons/Melee/cane.rsi, state: cane}
+  productEntity: CaneSheathFilled
+  discountCategory: rareDiscounts
+  discountDownTo:
+    Telecrystal: 2
+  cost:
+    Telecrystal: 3
+  categories:
+  - UplinkJob
+  conditions:
+  - !type:BuyerJobCondition
+    whitelist:
+    - Librarian
+
+- type: listing
+  id: UplinkCombatBakery
+  name: uplink-combat-bakery-name
+  description: uplink-combat-bakery-desc
+  icon: { sprite:  Objects/Consumable/Food/Baked/bread.rsi, state: baguette}
+  productEntity: CombatBakeryKit
+  discountCategory: usualDiscounts
+  discountDownTo:
+    Telecrystal: 2
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkJob
+  conditions:
+  - !type:BuyerJobCondition
+    whitelist:
+    - Chef
+    - Mime
+
+- type: listing
+  id: UplinkContrabandLighter
+  name: uplink-contraband-lighter-name
+  description: uplink-contraband-lighter-desc
+  icon: { sprite:  Objects/Tools/Lighters/legionlighter.rsi, state: icon}
+  productEntity: UplinkLighterBox
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkPointless
+
+- type: listing
+  id: UplinkSmugglerSatchel
+  name: uplink-smuggler-satchel-name
+  description: uplink-smuggler-satchel-desc
+  productEntity: ClothingBackpackSatchelSmugglerUnanchored
+  cost:
+    Telecrystal: 1
+  categories:
+  - UplinkDeception
+
+- type: listing
+  id: UplinkAcolyteArmor
+  name: uplink-acolyte-armor-name
+  description: uplink-acolyte-armor-desc
+  icon: { sprite: Clothing/OuterClothing/Armor/cult_armour.rsi, state: icon}
+  productEntity: ClothingBackpackDuffelAcolyteBundle
+  discountCategory: veryRareDiscounts
+  discountDownTo:
+    Telecrystal: 3
+  cost:
+    Telecrystal: 4
+  categories:
+  - UplinkJob
+  conditions:
+  - !type:BuyerJobCondition
+    whitelist:
+    - Chaplain
+
+- type: listing
+  id: UplinkSawAdvanced
+  name: uplink-saw-advanced-name
+  description: uplink-saw-advanced-desc
+  icon: { sprite:  Objects/Specific/Medical/Surgery/saw.rsi, state: advanced}
+  productEntity: SawAdvanced
+  discountCategory: rareDiscounts
+  discountDownTo:
+    Telecrystal: 1
+  cost:
+    Telecrystal: 2
+  categories:
+  - UplinkJob
+  conditions:
+  - !type:BuyerJobCondition
+    whitelist:
+    - MedicalDoctor
+
+- type: listing
+  id: uplinkBriefcaseGun
+  name: uplink-briefcase-gun-name
+  description: uplink-briefcase-gun-desc
+  productEntity: WeaponSubMachineGunBriefcase
+  discountCategory: veryRareDiscounts
+  discountDownTo:
+    Telecrystal: 10
+  cost:
+    Telecrystal: 14
+  categories:
+  - UplinkJob
+  conditions:
+  - !type:BuyerJobCondition
+    whitelist:
+    - Lawyer
+
+#Objective items
+
+- type: listing
+  id: uplinkHijackBeacon
+  name: uplink-hijack-beacon-name
+  description: uplink-hijack-beacon-desc
+  productEntity: HijackBeacon
+  categories:
+    - UplinkObjective
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1
+  - !type:BuyerObjectiveWhitelistCondition
+    whitelist:
+      components:
+      - HijackTradeStationCondition

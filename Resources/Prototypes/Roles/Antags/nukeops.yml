@@ -1,0 +1,133 @@
+- type: antag
+  id: Nukeops
+  name: roles-antag-nuclear-operative-name
+  antagonist: true
+  setPreference: false
+  objective: roles-antag-nuclear-operative-objective
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 5h
+  guides: [ NuclearOperatives ]
+
+- type: antag
+  id: NukeopsMedic
+  name: roles-antag-nuclear-operative-agent-name
+  antagonist: true
+  setPreference: false
+  objective: roles-antag-nuclear-operative-agent-objective
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 5h
+  - !type:RoleTimeRequirement
+    role: JobChemist
+    time: 3h
+  guides: [ NuclearOperatives ]
+
+- type: antag
+  id: NukeopsCommander
+  name: roles-antag-nuclear-operative-commander-name
+  antagonist: true
+  setPreference: false
+  objective: roles-antag-nuclear-operative-commander-objective
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 5h
+  - !type:DepartmentTimeRequirement
+    department: Security
+    time: 5h
+  # should be changed to nukie playtime when thats tracked (wyci)
+  guides: [ NuclearOperatives ]
+
+- type: startingGear
+  id: LegionOperativeGearFullNoUplink
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitOperative
+    back: ClothingBackpackDuffelLegion
+    mask: ClothingMaskGasLegion
+    eyes: ClothingEyesHudLegion
+    ears: ClothingHeadsetAltLegion
+    gloves: ClothingHandsGlovesCombat
+    outerClothing: ClothingOuterHardsuitLegion
+    shoes: ClothingShoesBootsCombatFilled
+    id: LegionOperativePDA
+    pocket2: PlushieCarp
+    belt: ClothingBeltMilitaryWebbing
+  storage:
+    back:
+    - WeaponPistolAshLegionCommissar
+    - PinpointerLegionNuclear
+    - DeathAcidifierImplanter
+
+#Nuclear Operative Gear
+- type: startingGear
+  id: LegionOperativeGearFull
+  parent: LegionOperativeGearFullNoUplink
+  equipment:
+    pocket2: BaseUplinkRadio40TC
+
+- type: chameleonOutfit
+  id: NukeopsOutfit
+  name: roles-antag-nuclear-operative-name
+  startingGear: LegionOperativeGearFullNoUplink
+  icon: "JobIconLegionOperative"
+  equipment:
+    head: ClothingHeadHelmetHardsuitLegion
+    neck: ClothingNeckScarfStripedLegionRed
+
+#Nuclear Operative Commander Gear
+- type: startingGear
+  id: LegionCommanderGearFull
+  parent: LegionOperativeGearFull
+  equipment:
+    id: LegionCommanderPDA
+    neck: LegionWhistle
+    outerClothing: ClothingOuterHardsuitLegionCommander
+  inhand:
+  - NukeOpsDeclarationOfWar
+
+- type: chameleonOutfit
+  id: NukeopsCommanderOutfit
+  name: roles-antag-nuclear-operative-commander-name
+  startingGear: LegionCommanderGearFull
+  icon: "JobIconLegionCommander"
+  equipment:
+    head: ClothingHeadHelmetHardsuitLegionCommander
+    neck: ClothingNeckScarfStripedLegionGreen
+
+#Nuclear Operative Medic Gear
+- type: startingGear
+  id: LegionOperativeMedicFull
+  parent: LegionOperativeGearFull
+  equipment:
+    eyes: ClothingEyesHudLegionAgent
+    outerClothing: ClothingOuterHardsuitLegionMedic
+    shoes: ClothingShoesBootsMagLegion
+    id: LegionCorpsmanPDA
+    belt: ClothingBeltMilitaryWebbingMedFilled
+  storage:
+    back:
+    - LegionHypo
+    - SawAdvanced
+    - Cautery
+    - CombatKnife
+    - WeaponPistolAshLegionCommissar
+    - PinpointerLegionNuclear
+    - HandheldHealthAnalyzer
+    - CombatMedipen
+    - DeathAcidifierImplanter
+
+- type: chameleonOutfit
+  id: NukeopsMedicOutfit
+  name: roles-antag-nuclear-operative-agent-name
+  startingGear: LegionOperativeMedicFull
+  icon: "JobIconLegionCorpsman"
+  equipment:
+    head: ClothingHeadHelmetHardsuitLegionMedic
+    neck: ClothingNeckScarfStripedLightBlue
+
+#Lone Operative Gear
+- type: startingGear
+  id: LegionLoneOperativeGearFull
+  parent: LegionOperativeGearFull
+  equipment:
+    pocket2: BaseUplinkRadio60TC

@@ -1,0 +1,270 @@
+<Document>
+
+# Модификаторы
+
+Модификаторы уточняют итоговую меру наказания. Если несколько модификаторов противоречат друг другу, приоритет имеет безопасность объекта и решение командования или суда.
+
+  <Table Columns="4">
+    <ColorBox OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        [bold]Название[/bold]
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        [bold]Влияние на меру наказания[/bold]
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        [bold]Применение[/bold]
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        [bold]Описание[/bold]
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        [bold]Умышленное преступление[/bold]
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        +25% к сроку или переход к верхней границе санкции
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineColor="#db812c" OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        К статье
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineColor="#db812c" OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Лицо осознавало характер действия и желало наступления последствий либо сознательно допускало их.
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        [bold]Неосторожность[/bold]
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        -25% к сроку при отсутствии тяжких последствий
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineColor="#db812c" OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        К статье
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineColor="#db812c" OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Лицо нарушило осторожность, но не стремилось причинить вред. Не применяется к ИЗ-XX5 и ИЗ-XX6 без решения суда.
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        [bold]Отсутствие вины[/bold]
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Освобождение от наказания
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineColor="#db812c" OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        К статье
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineColor="#db812c" OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Действие совершено под непреодолимой силой, из-за технического сбоя, приказа с видимой законностью или в состоянии крайней необходимости.
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        [bold]Покушение[/bold]
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        До -50% к сроку
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineColor="#db812c" OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        К статье
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineColor="#db812c" OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Преступление начато, но не доведено до конца по причинам, не зависящим от нарушителя.
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        [bold]Добровольный отказ[/bold]
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Освобождение или минимальная санкция
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineColor="#69db2c" OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        К сроку
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineColor="#69db2c" OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Лицо добровольно прекратило преступление и предотвратило последствия до вмешательства служб.
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        [bold]Рецидив[/bold]
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        +50% к сроку или повышение тяжести на 1
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineColor="#69db2c" OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        К сроку
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineColor="#69db2c" OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Повторное совершение статьи или сходного состава в течение смены.
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        [bold]Должностное преступление[/bold]
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        +50% к сроку, увольнение или лишение доступа
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineColor="#db812c" OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        К статье
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineColor="#db812c" OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Нарушение совершено с использованием должности, доступа, власти или доверия отдела.
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        [bold]Преступление против должностного лица[/bold]
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        +25% к сроку
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineColor="#db812c" OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        К статье
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineColor="#db812c" OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Действие направлено против сотрудника СБ, командования, медика при исполнении, инженера при аварии или иного уполномоченного лица.
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        [bold]Чрезвычайная ситуация[/bold]
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        +50% к сроку или повышение тяжести на 1
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineColor="#db812c" OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        К статье
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineColor="#db812c" OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Нарушение совершено во время эвакуации, красного кода, катастрофы, эпидемии, атаки или потери критических систем.
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        [bold]Сотрудничество со следствием[/bold]
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        -25% к сроку
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineColor="#69db2c" OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        К сроку
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineColor="#69db2c" OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Лицо добровольно сообщает обстоятельства, выдаёт соучастников, возвращает имущество или помогает устранить последствия.
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        [bold]Возмещение ущерба[/bold]
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        -10% к сроку
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineColor="#69db2c" OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        К сроку
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineColor="#69db2c" OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Ущерб полностью возмещён до вынесения окончательного решения.
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        [bold]Состояние необходимости[/bold]
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Смягчение или освобождение
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineColor="#db812c" OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        К статье
+      </Box>
+    </ColorBox>
+    <ColorBox OutlineColor="#db812c" OutlineThickness="2">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Нарушение предотвращало больший вред и было соразмерно угрозе.
+      </Box>
+    </ColorBox>
+  </Table>
+
+</Document>

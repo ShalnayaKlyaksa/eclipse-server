@@ -1,0 +1,69 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "ss220 - Paradise at e7cf38dac1a945aad8d7ecc6f16dbbb966a82b46",
+    "size": {
+      "x": 32,
+      "y": 32
+    },
+    "states": [
+      {
+        "name": "legionlogo1"
+      },
+      {
+        "name": "legionlogo2"
+      },
+      {
+        "name": "legionlogo3"
+      },
+      {
+        "name": "legionlogo4"
+      },
+      {
+        "name": "legionlogo5"
+      },
+      {
+        "name": "legionlogo6"
+      },
+      {
+        "name": "legionlogo7"
+      },
+      {
+        "name": "legionlogo8"
+      },
+      {
+        "name": "legionlogo9"
+      },
+      {
+        "name": "legionlogo10"
+      },
+      {
+        "name": "legionlogo11"
+      },
+      {
+        "name": "legionlogo12"
+      },
+      {
+        "name": "legionlogo13"
+      },
+      {
+        "name": "legionlogo14"
+      },
+      {
+        "name": "legionlogo15"
+      },
+      {
+        "name": "legionlogo16"
+      },
+      {
+        "name": "legionlogo17"
+      },
+      {
+        "name": "legionlogo18"
+      },
+      {
+        "name": "legionlogo19"
+      }
+    ]
+  }
+  

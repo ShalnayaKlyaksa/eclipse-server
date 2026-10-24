@@ -1,0 +1,42 @@
+- type: entity
+  parent: ClothingBackpackDuffel
+  id: ClothingBackpackDuffelAshLegion
+  name: combat duffel bag
+  description: A large duffel bag for holding weapons and supplies.
+  components:
+  - type: Sprite
+    sprite: _Orion/Clothing/Back/Duffels/inteq_duffel.rsi
+
+- type: entity
+  parent: ClothingBackpackDuffelAshLegion
+  id: ClothingBackpackDuffelAshLegionAmmo
+  name: combat duffel bag
+  description: A large duffel bag for holding weapons and ammunition.
+  components:
+  - type: Sprite
+    sprite: _Orion/Clothing/Back/Duffels/inteq_duffel_ammo.rsi
+
+- type: entity
+  parent: ClothingBackpackDuffelAshLegion
+  id: ClothingBackpackDuffelAshLegionMedical
+  name: combat duffel bag
+  description: A large duffel bag for holding weapons and medical things.
+  components:
+  - type: Sprite
+    sprite: _Orion/Clothing/Back/Duffels/inteq_duffel_med.rsi
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,8,4
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: JugBicaridine
+        - id: JugPuncturase
+        - id: JugDermaline
+        - id: JugDylovene
+        - id: JugHyronalin
+        - id: JugSaline
+        - id: JugDexalinPlus
+        - id: JugTranexamicAcid

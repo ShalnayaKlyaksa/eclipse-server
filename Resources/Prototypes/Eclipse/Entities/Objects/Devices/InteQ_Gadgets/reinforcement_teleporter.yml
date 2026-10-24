@@ -1,0 +1,19 @@
+- type: entity
+  parent: [BaseItem, BaseAshLegionContraband, ReinforcementRadio]
+  abstract: true
+  id: ReinforcementRadioAshLegion
+  name: AshLegion reinforcement radio
+  description: Call in a AshLegion agent of questionable quality, instantly! Only basic equipment provided.
+
+
+- type: entity
+  parent: [ReinforcementRadioAshLegion, ReinforcementRadioLegionAncestor]
+  id: ReinforcementRadioAshLegionAncestor
+  name: AshLegion genetic ancestor reinforcement radio
+  description: Calls in a specially trained ancestor of your choosing to assist you.
+
+- type: entity
+  parent: [ReinforcementRadioAshLegion, ReinforcementRadioLegionAncestorNukeops]
+  id: ReinforcementRadioAshLegionAncestorNukeops
+  name: AshLegion genetic ancestor reinforcement radio
+  description: Calls in a specially trained ancestor of your choosing to assist you.

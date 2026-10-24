@@ -1,0 +1,86 @@
+# Actions
+- type: entity
+  parent: BaseAction
+  id: ActionJumpToCore
+  name: Jump to core
+  description: Sends your eye back to the core.
+  components:
+  - type: Action
+    priority: -9
+    itemIconStyle: BigAction
+    icon:
+      sprite: Interface/Actions/actions_ai.rsi
+      state: ai_core
+  - type: InstantAction
+    event: !type:JumpToCoreEvent
+
+- type: entity
+  parent: BaseMentalAction
+  id: ActionStationAiReturnToCore
+  name: Return to AI Core
+  description: Stop controlling this borg and return to your AI core.
+  components:
+  - type: Action
+    priority: -8
+    itemIconStyle: BigAction
+    icon:
+      sprite: Interface/Actions/actions_ai.rsi
+      state: ai_core
+  - type: InstantAction
+    event: !type:StationAiReturnToCoreEvent
+
+- type: entity
+  parent: BaseAction
+  id: ActionSurvCameraLights
+  name: Toggle camera lights
+  description: Enable surveillance camera lights near wherever you're viewing.
+  components:
+  - type: Action
+    priority: -5
+    itemIconStyle: BigAction
+    icon:
+      sprite: Interface/Actions/actions_ai.rsi
+      state: camera_light
+  - type: InstantAction
+    event: !type:RelayedActionComponentChangeEvent
+      components:
+      - type: FixturesChange
+        fixtures:
+          lightTrigger:
+            shape:
+              !type:PhysShapeCircle
+              radius: 0.35
+            density: 80
+            hard: false
+            layer:
+            - GhostImpassable
+
+- type: entity
+  parent: BaseMentalAction
+  id: ActionAIViewLaws
+  name: View Laws
+  description: View the laws that you must follow.
+  components:
+  - type: Action
+    priority: -3
+    itemIconStyle: NoItem
+    icon:
+      sprite: Interface/Actions/actions_ai.rsi
+      state: state_laws
+    useDelay: 0.5
+  - type: InstantAction
+    event: !type:ToggleLawsScreenEvent
+
+- type: entity
+  parent: BaseAGhostAction
+  id: ActionAIShowRobotics
+  name: Cyborg Control Interface
+  description: View the station cyborg control interface.
+  components:
+  - type: Action
+    icon: { sprite: Interface/Actions/actions_borg.rsi, state: xenoborg-control-computer }
+    iconOn: { sprite: Interface/Actions/actions_borg.rsi, state: xenoborg-control-computer }
+    keywords: [ "AI", "cyborg", "console", "interface" ]
+    priority: -5
+  - type: InstantAction
+    event: !type:ToggleIntrinsicUIEvent { key: enum.RoboticsConsoleUiKey.Key }

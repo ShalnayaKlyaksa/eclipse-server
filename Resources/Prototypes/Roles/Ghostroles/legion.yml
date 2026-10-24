@@ -1,0 +1,51 @@
+- type: ghostRole
+  id: LegionKobold
+  name: ghost-role-information-legion-kobold-reinforcement-name
+  description: ghost-role-information-legion-kobold-reinforcement-description
+  rules: ghost-role-information-legion-reinforcement-rules
+  entityPrototype: MobKoboldLegionAgent
+
+- type: ghostRole
+  id: LegionKoboldNukeops
+  name: ghost-role-information-legion-kobold-reinforcement-name
+  description: ghost-role-information-legion-kobold-reinforcement-description
+  rules: ghost-role-information-nukeop-reinforcement-rules
+  entityPrototype: MobKoboldLegionAgentNukeops
+
+- type: ghostRole
+  id: LegionMonkey
+  name: ghost-role-information-legion-monkey-reinforcement-name
+  description: ghost-role-information-legion-monkey-reinforcement-description
+  rules: ghost-role-information-legion-reinforcement-rules
+  entityPrototype: MobMonkeyLegionAgent
+
+- type: ghostRole
+  id: LegionMonkeyNukeops
+  name: ghost-role-information-legion-monkey-reinforcement-name
+  description: ghost-role-information-legion-monkey-reinforcement-description
+  rules: ghost-role-information-nukeop-reinforcement-rules
+  entityPrototype: MobMonkeyLegionAgentNukeops
+
+- type: ghostRole
+  id: LegionAgentMedic
+  name: ghost-role-information-legion-reinforcement-medic-name
+  description: ghost-role-information-legion-reinforcement-medic-description
+  rules: ghost-role-information-legion-reinforcement-rules
+  entityPrototype: MobHumanLegionAgentMedic
+  iconPrototype: MedkitCombat
+
+- type: ghostRole
+  id: LegionAgentSpy
+  name: ghost-role-information-legion-reinforcement-spy-name
+  description: ghost-role-information-legion-reinforcement-spy-description
+  rules: ghost-role-information-legion-reinforcement-rules
+  entityPrototype: MobHumanLegionAgentSpy
+  iconPrototype: ClothingMaskGasVoiceChameleon
+
+- type: ghostRole
+  id: LegionAgentThief
+  name: ghost-role-information-legion-reinforcement-thief-name
+  description: ghost-role-information-legion-reinforcement-thief-description
+  rules: ghost-role-information-legion-reinforcement-rules
+  entityPrototype: MobHumanLegionAgentThief
+  iconPrototype: LegionJawsOfLife

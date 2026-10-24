@@ -1,0 +1,39 @@
+- type: entity
+  parent: ComfyChair
+  id: ADTArmchairWhite
+
+- type: entity
+  parent: ComfyChair
+  id: ADTArmchairWhite2
+
+- type: entity
+  parent: ComfyChair
+  id: ADTArmchairBlack
+
+- type: entity
+  parent: ComfyChair
+  id: ADTArmchairViolet
+
+- type: entity
+  parent: ComfyChair
+  id: ADTArmchairRed
+
+- type: entity
+  parent: ComfyChair
+  id: ADTArmchairLeather
+
+- type: entity
+  parent: ComfyChair
+  id: ADTArmchairBrown
+
+- type: entity
+  parent: ComfyChair
+  id: ADTArmchairBrown2
+
+- type: entity
+  parent: ComfyChair
+  id: ADTArmchairBlue
+
+- type: entity
+  parent: ComfyChair
+  id: ADTArmchairBlue2

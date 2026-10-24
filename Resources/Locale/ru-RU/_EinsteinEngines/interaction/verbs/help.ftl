@@ -1,0 +1,40 @@
+interaction-HelpUp-name = Помочь встать
+interaction-HelpUp-description = Помочь человеку подняться.
+interaction-HelpUp-delayed-self-popup = Вы пытаетесь помочь {THE($target)} подняться...
+interaction-HelpUp-delayed-target-popup = {THE($user)} пытается помочь вам подняться...
+interaction-HelpUp-delayed-others-popup = {THE($user)} пытается помочь {THE($target)} подняться...
+interaction-HelpUp-success-self-popup = Вы помогаете {THE($target)} подняться.
+interaction-HelpUp-success-target-popup = {THE($user)} помогает вам подняться.
+interaction-HelpUp-success-others-popup = {THE($user)} помогает {THE($target)} подняться.
+interaction-HelpUp-fail-self-popup = Вам не удаётся помочь {THE($target)} подняться.
+interaction-HelpUp-fail-target-popup = {THE($user)} не удаётся помочь вам подняться.
+
+interaction-ForceDown-name = Уложить силой
+interaction-ForceDown-description = Заставить человека лечь на пол.
+interaction-ForceDown-delayed-self-popup = Вы пытаетесь уложить {THE($target)} силой...
+interaction-ForceDown-delayed-target-popup = {THE($user)} пытается уложить вас силой...
+interaction-ForceDown-delayed-others-popup = {THE($user)} пытается уложить {THE($target)} силой...
+interaction-ForceDown-success-self-popup = Вы укладываете {THE($target)} на пол.
+interaction-ForceDown-success-target-popup = {THE($user)} укладывает вас на пол.
+interaction-ForceDown-success-others-popup = {THE($user)} укладывает {THE($target)} на пол.
+interaction-ForceDown-fail-self-popup = Вам не удаётся уложить {THE($target)} силой.
+interaction-ForceDown-fail-target-popup = {THE($user)} не удаётся уложить вас силой.
+
+interaction-MakeSleepOther-name = Усыпить
+interaction-MakeSleepOther-description = Уложить цель спать.
+interaction-MakeSleepOther-delayed-self-popup = Вы пытаетесь уложить {THE($target)} спать...
+interaction-MakeSleepOther-delayed-target-popup = {THE($user)} пытается уложить вас спать...
+interaction-MakeSleepOther-delayed-others-popup = {THE($user)} пытается уложить {THE($target)} спать...
+interaction-MakeSleepOther-fail-self-popup = Вам не удаётся уложить {THE($target)} спать.
+interaction-MakeSleepOther-fail-target-popup = {THE($user)} не удаётся уложить вас спать.
+interaction-MakeSleepOther-success-self-popup = Вы укладываете {THE($target)} спать.
+interaction-MakeSleepOther-success-target-popup = {THE($user)} укладывает вас спать.
+interaction-MakeSleepOther-success-others-popup = {THE($user)} укладывает {THE($target)} спать.
+
+interaction-ShakeOther-name = Потрясти
+interaction-ShakeOther-description = Потрясти цель.
+interaction-ShakeOther-fail-self-popup = Вам не удаётся потрясти {THE($target)}.
+interaction-ShakeOther-fail-target-popup = {THE($user)} не удаётся потрясти вас.
+interaction-ShakeOther-success-self-popup = Вы хватаете и трясёте {THE($target)}.
+interaction-ShakeOther-success-target-popup = {THE($user)} хватает и трясёт вас.
+interaction-ShakeOther-success-others-popup = {THE($user)} хватает и трясёт {THE($target)}.

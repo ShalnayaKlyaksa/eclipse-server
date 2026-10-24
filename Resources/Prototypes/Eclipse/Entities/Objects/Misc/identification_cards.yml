@@ -1,0 +1,333 @@
+- type: entity
+  parent: IDCardStandard
+  id: CoSCCIDCard
+  name: centcom chief of staff ID card
+  components:
+  - type: Sprite
+    layers:
+    - state: silver
+    - state: stripe_top
+      color: "#343b7e"
+    - state: stripe_bottom
+      color: "#343b7e"
+    - sprite: &icon-rsi Interface/Misc/job_icons.rsi
+      offset: &icon-offset -0.15375, 0.0325 #3 pixels left, 2 pixels up
+      state: Nanotrasen
+  - type: Item
+    heldPrefix: blue
+  - type: PresetIdCard
+    job: ChiefOfStaffCentralCommand
+
+- type: entity
+  parent: IDCardStandard
+  id: CentcomOfficerIDCard
+  name: centcom officer ID card
+  components:
+  - type: Sprite
+    layers:
+    - state: silver
+    - state: stripe_top
+      color: "#343b7e"
+    - state: stripe_bottom
+      color: "#343b7e"
+    - sprite: *icon-rsi
+      offset: *icon-offset
+      state: Nanotrasen
+  - type: Item
+    heldPrefix: blue
+  - type: PresetIdCard
+    job: CentralCommandOfficer
+
+- type: entity
+  parent: IDCardStandard
+  id: CentcomOperatorIDCard
+  name: centcom operator ID card
+  components:
+  - type: Sprite
+    layers:
+    - state: silver
+    - state: stripe_top
+      color: "#343b7e"
+    - state: stripe_bottom
+      color: "#343b7e"
+    - sprite: *icon-rsi
+      offset: *icon-offset
+      state: Nanotrasen
+  - type: Item
+    heldPrefix: blue
+  - type: PresetIdCard
+    job: CentralCommandOperator
+
+- type: entity
+  parent: IDCardStandard
+  id: CentcomIntendantIDCard
+  name: centcom intendant ID card
+  components:
+  - type: Sprite
+    layers:
+    - state: silver
+    - state: stripe_top
+      color: "#343b7e"
+    - state: stripe_bottom
+      color: "#343b7e"
+    - sprite: *icon-rsi
+      offset: *icon-offset
+      state: Nanotrasen
+  - type: Item
+    heldPrefix: blue
+  - type: PresetIdCard
+    job: CentralCommandIntendant
+
+- type: entity
+  parent: IDCardStandard
+  id: CentcomEngineerIDCard
+  name: centcom engineer ID card
+  components:
+  - type: Sprite
+    layers:
+    - state: silver
+    - state: stripe_top
+      color: "#343b7e"
+    - state: stripe_bottom
+      color: "#343b7e"
+    - sprite: *icon-rsi
+      offset: *icon-offset
+      state: Nanotrasen
+  - type: Item
+    heldPrefix: blue
+  - type: PresetIdCard
+    job: CentralCommandEngineer
+
+- type: entity
+  parent: IDCardStandard
+  id: CentcomClercIDCard
+  name: centcom clerc ID card
+  components:
+  - type: Sprite
+    layers:
+    - state: silver
+    - state: stripe_top
+      color: "#343b7e"
+    - state: stripe_bottom
+      color: "#343b7e"
+    - sprite: *icon-rsi
+      offset: *icon-offset
+      state: Nanotrasen
+  - type: Item
+    heldPrefix: blue
+  - type: PresetIdCard
+    job: CentralCommandClerc
+
+- type: entity
+  parent: IDCardStandard
+  id: OSOIDCard
+  name: OSO ID card
+  components:
+  - type: Sprite
+    layers:
+    - state: silver
+    - state: stripe_top
+      color: "#2c2c2c"
+    - state: stripe_bottom
+      color: "#2c2c2c"
+    - sprite: *icon-rsi
+      offset: *icon-offset
+      state: Nanotrasen
+  - type: Item
+    heldPrefix: blue
+  - type: PresetIdCard
+    job: OSO
+
+- type: entity
+  parent: IDCardStandard
+  id: CentralCommandHoSIDCard
+  name: Eidos Empire HoS ID card
+  components:
+  - type: Sprite
+    layers:
+    - state: silver
+    - state: stripe_top
+      color: "#4e0808"
+    - state: stripe_bottom
+      color: "#4e0808"
+    - sprite: *icon-rsi
+      offset: *icon-offset
+      state: Nanotrasen
+  - type: Item
+    heldPrefix: blue
+  - type: PresetIdCard
+    job: CentralCommandHoS
+
+- type: entity
+  parent: IDCardStandard
+  id: CentralCommandSecIDCard
+  name: Eidos Empire Security ID card
+  components:
+  - type: Sprite
+    layers:
+    - state: silver
+    - state: stripe_top
+      color: "#282958"
+    - state: stripe_bottom
+      color: "#283758"
+    - sprite: *icon-rsi
+      offset: *icon-offset
+      state: Nanotrasen
+  - type: Item
+    heldPrefix: blue
+  - type: PresetIdCard
+    job: CentralCommandSecurity
+
+- type: entity
+  parent: [IDCardStandard, BaseAshLegionContraband]
+  id: BaseAshLegionOpsIDCard
+  components:
+  - type: Access
+    tags:
+    - NuclearOperative
+    - LegionAgent
+
+- type: entity
+  parent: [IDCardStandard, BaseAshLegionContraband, BaseAshLegionOpsIDCard]
+  id: AshLegionOpsLeaderIDCard
+  name: AshLegion Leader ID card
+  components:
+  - type: Sprite
+    layers:
+    - sprite: Eclipse/Objects/Misc/id_cards.rsi
+      state: id-card-hollow
+    - sprite: Eclipse/Objects/Misc/id_cards.rsi
+      state: lead
+  - type: IdCard
+    jobIcon: JobIconAshLegionCommander
+  - type: Access
+    tags:
+    - AshLegion
+    - NuclearOperative
+    - LegionAgent
+    - AshLegionVanguardLeader
+    - AshLegionVanguard
+
+- type: entity
+  parent: [IDCardStandard, BaseAshLegionContraband, BaseAshLegionOpsIDCard]
+  id: AshLegionOpsMedicalIDCard
+  name: AshLegion Medical ID card
+  components:
+  - type: Sprite
+    layers:
+    - sprite: Eclipse/Objects/Misc/id_cards.rsi
+      state: id-card-hollow
+    - sprite: Eclipse/Objects/Misc/id_cards.rsi
+      state: med
+  - type: IdCard
+    jobIcon: JobIconAshLegionCorpsman
+  - type: Access
+    tags:
+    - AshLegion
+    - NuclearOperative
+    - LegionAgent
+    - AshLegionVanguard
+
+- type: entity
+  parent: [IDCardStandard, BaseAshLegionContraband, BaseAshLegionOpsIDCard]
+  id: AshLegionOpsBaseIDCard
+  name: AshLegion ID card
+  components:
+  - type: Sprite
+    layers:
+    - sprite: Eclipse/Objects/Misc/id_cards.rsi
+      state: id-card-hollow
+    - sprite: Eclipse/Objects/Misc/id_cards.rsi
+      state: base
+  - type: IdCard
+    jobIcon: JobIconAshLegionOperative
+  - type: Access
+    tags:
+    - AshLegion
+    - NuclearOperative
+    - LegionAgent
+    - AshLegionVanguard
+
+- type: entity
+  parent: IDCardStandard
+  id: NTNavyCaptainIDCard
+  name: nanotrasen navy captain ID card
+  components:
+  - type: Sprite
+    layers:
+    - sprite: Eclipse/Objects/Misc/id_cards.rsi
+      state: id-nanotrasen-navy-cap
+  - type: PresetIdCard
+    job: NanoTrasenNavyCaptain
+
+- type: entity
+  parent: IDCardStandard
+  id: NTNavyOfficerIDCard
+  name: nanotrasen navy officer ID card
+  components:
+  - type: Sprite
+    layers:
+    - sprite: Eclipse/Objects/Misc/id_cards.rsi
+      state: id-nanotrasen-navy-officer
+  - type: PresetIdCard
+    job: NanoTrasenNavyOfficer
+
+- type: entity
+  parent: IDCardStandard
+  id: NTNavyWOEngiIDCard
+  name: nanotrasen navy warrant officer engineer ID card
+  components:
+  - type: Sprite
+    layers:
+    - sprite: Eclipse/Objects/Misc/id_cards.rsi
+      state: id-nanotrasen-navy-wo-engineer
+  - type: PresetIdCard
+    job: NanoTrasenNavyWarrantOfficerEngineer
+
+- type: entity
+  parent: IDCardStandard
+  id: NTNavyWOMedIDCard
+  name: nanotrasen navy warrant officer medical ID card
+  components:
+  - type: Sprite
+    layers:
+    - sprite: Eclipse/Objects/Misc/id_cards.rsi
+      state: id-nanotrasen-navy-wo-medical
+  - type: PresetIdCard
+    job: NanoTrasenNavyWarrantOfficerMedical
+
+- type: entity
+  parent: IDCardStandard
+  id: NTNavySailorIDCard
+  name: nanotrasen navy sailor ID card
+  components:
+  - type: Sprite
+    layers:
+    - sprite: Eclipse/Objects/Misc/id_cards.rsi
+      state: id-nanotrasen-navy-sailor
+  - type: PresetIdCard
+    job: NanoTrasenNavySailor
+
+- type: entity
+  parent: IDCardStandard
+  id: NTNavyEngineerIDCard
+  name: nanotrasen navy engineer ID card
+  components:
+  - type: Sprite
+    layers:
+    - sprite: Eclipse/Objects/Misc/id_cards.rsi
+      state: id-nanotrasen-navy-engineer
+  - type: PresetIdCard
+    job: NanoTrasenNavyEngineer
+
+- type: entity
+  parent: IDCardStandard
+  id: NTNavyMedicalIDCard
+  name: nanotrasen navy medical ID card
+  components:
+  - type: Sprite
+    layers:
+    - sprite: Eclipse/Objects/Misc/id_cards.rsi
+      state: id-nanotrasen-navy-medical
+  - type: PresetIdCard
+    job: NanoTrasenNavyMedical

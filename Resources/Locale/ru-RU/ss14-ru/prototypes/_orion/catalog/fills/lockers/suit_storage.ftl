@@ -1,0 +1,12 @@
+ent-SuitStorageAshLegionEVA = { ent-SuitStorageBase }
+    .desc = { ent-SuitStorageBase.desc }
+    .suffix = ЕВА Легион пепла
+ent-SuitStorageAshLegionEliteHardsuit = { ent-SuitStorageBase }
+    .desc = { ent-SuitStorageBase.desc }
+    .suffix = Легион пепла Элитный
+ent-SuitStorageAshLegionHardsuit = { ent-SuitStorageBase }
+    .desc = { ent-SuitStorageBase.desc }
+    .suffix = Легион пепла
+ent-SuitStorageAshLegionSyndicateHardsuit = { ent-SuitStorageBase }
+    .desc = { ent-SuitStorageBase.desc }
+    .suffix = Легион пепла (Синдикат)

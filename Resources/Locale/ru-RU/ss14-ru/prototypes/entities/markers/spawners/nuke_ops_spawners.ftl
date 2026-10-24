@@ -1,0 +1,12 @@
+ent-NukeOpsLootSpawner = спавнер добыча нюкеры (Не использовать)
+    .desc = { ent-MarkerBase.desc }
+ent-NukeOpsWeaponSpawner = спавнер оружие нюкеры (Не использовать)
+    .desc = { ent-MarkerBase.desc }
+ent-NukeOpsMedkitBruteSpawner = спавнер аптечка механических травм нюкеры (Не использовать)
+    .desc = { ent-MarkerBase.desc }
+ent-NukeOpsMedkitSpawner = спавнер аптечка нюкеры (Не использовать)
+    .desc = { ent-MarkerBase.desc }
+ent-NukeOpsGrenadeSpawner = спавнер граната нюкеры (Не использовать)
+    .desc = { ent-MarkerBase.desc }
+ent-NukeOpsAmmoSpawner = спавнер боеприпасы нюкеры (Не использовать)
+    .desc = { ent-MarkerBase.desc }

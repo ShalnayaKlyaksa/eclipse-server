@@ -1,0 +1,19 @@
+- type: entityTable
+  id: LavalandBossBonusLoot
+  table: !type:GroupSelector
+    children:
+    - id: CrusherUpgradeMainMarker
+    - id: CrusherUpgradeMainRudeBuster
+    - id: LavalandVampirismCrystal
+    - !type:NestedSelector
+      tableId: CrusherUpgradesHandle
+      weight: 2
+    - !type:NestedSelector
+      tableId: ProtoKineticWeapons
+      weight: 0.5
+    - !type:NestedSelector
+      tableId: SecondaryKineticWeapons
+      weight: 0.5
+    - !type:NestedSelector
+      tableId: LavalandMaterialRare
+      weight: 2

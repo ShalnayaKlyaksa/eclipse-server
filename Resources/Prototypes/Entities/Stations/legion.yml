@@ -1,0 +1,16 @@
+- type: entity
+  abstract: true
+  id: BaseStationLegion
+  components:
+    - type: NpcFactionMember
+      factions:
+        - Legion
+
+- type: entity
+  id: StandardNukieOutpost
+  parent:
+  - BaseStation
+  - BaseStationLegion
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Transform

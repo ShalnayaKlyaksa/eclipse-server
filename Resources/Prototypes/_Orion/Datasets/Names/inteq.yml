@@ -1,0 +1,17 @@
+- type: localizedDataset
+  id: AshLegionVanguardLeaderNamesPrefix
+  values:
+    prefix: ashlegion-vanguard-leader-prefix-
+    count: 1
+
+- type: localizedDataset
+  id: AshLegionVanguardNamesPrefix
+  values:
+    prefix: ashlegion-vanguard-prefix-
+    count: 1
+
+- type: localizedDataset
+  id: AshLegionAgentNamesPrefix
+  values:
+    prefix: ashlegion-agent-prefix-
+    count: 1

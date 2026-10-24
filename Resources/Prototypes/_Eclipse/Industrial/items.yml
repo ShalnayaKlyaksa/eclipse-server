@@ -1,0 +1,620 @@
+# Industrial ore processing intermediate items and byproducts.
+# TODO: Byproducts will feed a future waste recycler / chemistry department.
+
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: IndustrialMaterialBase
+  description: An industrial processing material.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+  - type: Item
+    sprite: Objects/Materials/ingots.rsi
+    size: Normal
+  - type: Tag
+    tags:
+    - IndustrialIntermediate
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.2
+        density: 20
+        mask:
+        - ItemMask
+        restitution: 0.3
+        friction: 0.2
+
+- type: entity
+  parent: OreBase
+  id: CopperOre
+  name: copper ore
+  suffix: Full
+  components:
+  - type: Stack
+    stackType: CopperOre
+  - type: Sprite
+    state: iron
+    # TODO: Add dedicated copper ore sprite to ore.rsi
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      RawIron: 100
+    # TODO: Add RawCopper material when copper material chain is added.
+  - type: Item
+    heldPrefix: iron
+  - type: Tag
+    tags:
+    - Ore
+
+- type: entity
+  parent: CopperOre
+  id: CopperOre1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+# Iron chain
+- type: entity
+  parent: IndustrialMaterialBase
+  id: CrushedIronOre
+  name: crushed iron ore
+  components:
+  - type: Stack
+    stackType: CrushedIronOre
+  - type: Sprite
+    state: iron
+
+- type: entity
+  parent: CrushedIronOre
+  id: CrushedIronOre1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IronConcentrate
+  name: iron concentrate
+  components:
+  - type: Stack
+    stackType: IronConcentrate
+  - type: Sprite
+    state: iron
+
+- type: entity
+  parent: IronConcentrate
+  id: IronConcentrate1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: CleanIronConcentrate
+  name: clean iron concentrate
+  components:
+  - type: Stack
+    stackType: CleanIronConcentrate
+  - type: Sprite
+    state: iron
+
+- type: entity
+  parent: CleanIronConcentrate
+  id: CleanIronConcentrate1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IronMetallurgicFraction
+  name: iron metallurgic fraction
+  components:
+  - type: Stack
+    stackType: IronMetallurgicFraction
+  - type: Sprite
+    state: iron
+
+- type: entity
+  parent: IronMetallurgicFraction
+  id: IronMetallurgicFraction1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialSteelBillet
+  name: industrial steel billet
+  components:
+  - type: Stack
+    stackType: IndustrialSteelBillet
+  - type: Sprite
+    state: iron
+
+- type: entity
+  parent: IndustrialSteelBillet
+  id: IndustrialSteelBillet1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+# Copper chain
+- type: entity
+  parent: IndustrialMaterialBase
+  id: CrushedCopperOre
+  name: crushed copper ore
+  components:
+  - type: Stack
+    stackType: CrushedCopperOre
+  - type: Sprite
+    state: iron
+
+- type: entity
+  parent: CrushedCopperOre
+  id: CrushedCopperOre1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: CopperConcentrate
+  name: copper concentrate
+  components:
+  - type: Stack
+    stackType: CopperConcentrate
+  - type: Sprite
+    state: iron
+
+- type: entity
+  parent: CopperConcentrate
+  id: CopperConcentrate1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: CleanCopperConcentrate
+  name: clean copper concentrate
+  components:
+  - type: Stack
+    stackType: CleanCopperConcentrate
+  - type: Sprite
+    state: iron
+
+- type: entity
+  parent: CleanCopperConcentrate
+  id: CleanCopperConcentrate1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: CopperMetallurgicFraction
+  name: copper metallurgic fraction
+  components:
+  - type: Stack
+    stackType: CopperMetallurgicFraction
+  - type: Sprite
+    state: iron
+
+- type: entity
+  parent: CopperMetallurgicFraction
+  id: CopperMetallurgicFraction1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialCopperBillet
+  name: industrial copper billet
+  components:
+  - type: Stack
+    stackType: IndustrialCopperBillet
+  - type: Sprite
+    state: iron
+
+- type: entity
+  parent: IndustrialCopperBillet
+  id: IndustrialCopperBillet1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+# Quartz / glass chain
+- type: entity
+  parent: IndustrialMaterialBase
+  id: CrushedQuartz
+  name: crushed quartz
+  components:
+  - type: Stack
+    stackType: CrushedQuartz
+  - type: Sprite
+    sprite: Objects/Materials/ore.rsi
+    state: spacequartz
+  - type: Item
+    sprite: Objects/Materials/ore.rsi
+    heldPrefix: spacequartz
+
+- type: entity
+  parent: CrushedQuartz
+  id: CrushedQuartz1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: QuartzConcentrate
+  name: quartz concentrate
+  components:
+  - type: Stack
+    stackType: QuartzConcentrate
+  - type: Sprite
+    sprite: Objects/Materials/ore.rsi
+    state: spacequartz
+  - type: Item
+    sprite: Objects/Materials/ore.rsi
+    heldPrefix: spacequartz
+
+- type: entity
+  parent: QuartzConcentrate
+  id: QuartzConcentrate1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: CleanQuartzConcentrate
+  name: clean quartz concentrate
+  components:
+  - type: Stack
+    stackType: CleanQuartzConcentrate
+  - type: Sprite
+    sprite: Objects/Materials/ore.rsi
+    state: spacequartz
+  - type: Item
+    sprite: Objects/Materials/ore.rsi
+    heldPrefix: spacequartz
+
+- type: entity
+  parent: CleanQuartzConcentrate
+  id: CleanQuartzConcentrate1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: QuartzGlassFraction
+  name: quartz glass fraction
+  components:
+  - type: Stack
+    stackType: QuartzGlassFraction
+  - type: Sprite
+    sprite: Objects/Materials/ore.rsi
+    state: spacequartz
+  - type: Item
+    sprite: Objects/Materials/ore.rsi
+    heldPrefix: spacequartz
+
+- type: entity
+  parent: QuartzGlassFraction
+  id: QuartzGlassFraction1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialGlassBatch
+  name: industrial glass batch
+  components:
+  - type: Stack
+    stackType: IndustrialGlassBatch
+  - type: Sprite
+    state: silver
+
+- type: entity
+  parent: IndustrialGlassBatch
+  id: IndustrialGlassBatch1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+# Byproducts
+- type: entity
+  parent: IndustrialMaterialBase
+  id: StoneDust
+  name: stone dust
+  description: Fine rock dust from crushing. TODO - route to waste recycler.
+  components:
+  - type: Stack
+    stackType: StoneDust
+  - type: Sprite
+    state: iron
+
+- type: entity
+  parent: StoneDust
+  id: StoneDust1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: WasteRock
+  name: waste rock
+  description: Low-value tailings from centrifuging. TODO - route to waste recycler.
+  components:
+  - type: Stack
+    stackType: WasteRock
+  - type: Sprite
+    state: iron
+
+- type: entity
+  parent: WasteRock
+  id: WasteRock1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: DirtySludge
+  name: dirty sludge
+  description: Contaminated slurry from washing. TODO - route to chemistry.
+  components:
+  - type: Stack
+    stackType: DirtySludge
+  - type: Sprite
+    state: iron
+
+- type: entity
+  parent: DirtySludge
+  id: DirtySludge1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: MineralResidue
+  name: mineral residue
+  description: Fine mineral byproduct. TODO - route to waste recycler.
+  components:
+  - type: Stack
+    stackType: MineralResidue
+  - type: Sprite
+    state: iron
+
+- type: entity
+  parent: MineralResidue
+  id: MineralResidue1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: MetalDust
+  name: metal dust
+  description: Fine metal particles. TODO - route to waste recycler.
+  components:
+  - type: Stack
+    stackType: MetalDust
+  - type: Sprite
+    state: iron
+
+- type: entity
+  parent: MetalDust
+  id: MetalDust1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialScrap
+  name: industrial scrap
+  description: Mixed industrial scrap. TODO - route to waste recycler.
+  components:
+  - type: Stack
+    stackType: IndustrialScrap
+  - type: Sprite
+    state: iron
+
+- type: entity
+  parent: IndustrialScrap
+  id: IndustrialScrap1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+# Stacks
+- type: stack
+  parent: BaseMediumStack
+  id: CopperOre
+  name: stack-copper-ore
+  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: iron }
+  spawn: CopperOre1
+
+- type: stack
+  parent: BaseMediumStack
+  id: CrushedIronOre
+  name: stack-crushed-iron-ore
+  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: iron }
+  spawn: CrushedIronOre1
+
+- type: stack
+  parent: BaseMediumStack
+  id: IronConcentrate
+  name: stack-iron-concentrate
+  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: iron }
+  spawn: IronConcentrate1
+
+- type: stack
+  parent: BaseMediumStack
+  id: CleanIronConcentrate
+  name: stack-clean-iron-concentrate
+  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: iron }
+  spawn: CleanIronConcentrate1
+
+- type: stack
+  parent: BaseMediumStack
+  id: IronMetallurgicFraction
+  name: stack-iron-metallurgic-fraction
+  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: iron }
+  spawn: IronMetallurgicFraction1
+
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialSteelBillet
+  name: stack-industrial-steel-billet
+  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: iron }
+  spawn: IndustrialSteelBillet1
+
+- type: stack
+  parent: BaseMediumStack
+  id: CrushedCopperOre
+  name: stack-crushed-copper-ore
+  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: iron }
+  spawn: CrushedCopperOre1
+
+- type: stack
+  parent: BaseMediumStack
+  id: CopperConcentrate
+  name: stack-copper-concentrate
+  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: iron }
+  spawn: CopperConcentrate1
+
+- type: stack
+  parent: BaseMediumStack
+  id: CleanCopperConcentrate
+  name: stack-clean-copper-concentrate
+  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: iron }
+  spawn: CleanCopperConcentrate1
+
+- type: stack
+  parent: BaseMediumStack
+  id: CopperMetallurgicFraction
+  name: stack-copper-metallurgic-fraction
+  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: iron }
+  spawn: CopperMetallurgicFraction1
+
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialCopperBillet
+  name: stack-industrial-copper-billet
+  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: iron }
+  spawn: IndustrialCopperBillet1
+
+- type: stack
+  parent: BaseMediumStack
+  id: CrushedQuartz
+  name: stack-crushed-quartz
+  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: spacequartz }
+  spawn: CrushedQuartz1
+
+- type: stack
+  parent: BaseMediumStack
+  id: QuartzConcentrate
+  name: stack-quartz-concentrate
+  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: spacequartz }
+  spawn: QuartzConcentrate1
+
+- type: stack
+  parent: BaseMediumStack
+  id: CleanQuartzConcentrate
+  name: stack-clean-quartz-concentrate
+  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: spacequartz }
+  spawn: CleanQuartzConcentrate1
+
+- type: stack
+  parent: BaseMediumStack
+  id: QuartzGlassFraction
+  name: stack-quartz-glass-fraction
+  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: spacequartz }
+  spawn: QuartzGlassFraction1
+
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialGlassBatch
+  name: stack-industrial-glass-batch
+  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: iron }
+  spawn: IndustrialGlassBatch1
+
+- type: stack
+  parent: BaseMediumStack
+  id: StoneDust
+  name: stack-stone-dust
+  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: iron }
+  spawn: StoneDust1
+
+- type: stack
+  parent: BaseMediumStack
+  id: WasteRock
+  name: stack-waste-rock
+  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: iron }
+  spawn: WasteRock1
+
+- type: stack
+  parent: BaseMediumStack
+  id: DirtySludge
+  name: stack-dirty-sludge
+  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: iron }
+  spawn: DirtySludge1
+
+- type: stack
+  parent: BaseMediumStack
+  id: MineralResidue
+  name: stack-mineral-residue
+  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: iron }
+  spawn: MineralResidue1
+
+- type: stack
+  parent: BaseMediumStack
+  id: MetalDust
+  name: stack-metal-dust
+  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: iron }
+  spawn: MetalDust1
+
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialScrap
+  name: stack-industrial-scrap
+  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: iron }
+  spawn: IndustrialScrap1
+
+- type: Tag
+  id: IndustrialIntermediate

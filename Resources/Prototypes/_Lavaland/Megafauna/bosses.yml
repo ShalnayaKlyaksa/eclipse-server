@@ -1,0 +1,167 @@
+- type: megafaunaSelector
+  id: AshDrake
+  selector: !type:AllMegafaunaSelector
+    children:
+    - id: PickTargetSimple
+    - id: AshDrakeActions
+
+- type: megafaunaSelector
+  id: Bubblegum
+  selector: !type:AllMegafaunaSelector
+    children:
+    - id: PickTargetSimple
+    - id: BubblegumActions
+
+- type: megafaunaSelector
+  id: Colossus
+  selector: !type:AllMegafaunaSelector
+    children:
+    - id: PickTargetSimple
+    - id: ColossusActions
+
+- type: megafaunaSelector
+  id: MegaLegion
+  selector: !type:AllMegafaunaSelector
+    children:
+    - id: PickTargetSimple
+    - id: MegaLegionActions
+
+- type: megafaunaSelector
+  id: AshDrakeActions
+  selector: !type:GroupMegafaunaSelector
+    children:
+    - id: ActionAshDrakeFireBreath
+    - id: ActionAshDrakeSwoop
+
+- type: megafaunaSelector
+  id: BubblegumActions
+  selector: !type:GroupMegafaunaSelector
+    children:
+    - id: ActionBubblegumBloodSpray
+    - id: ActionBubblegumCharge
+
+- type: megafaunaSelector
+  id: ColossusActions
+  selector: !type:GroupMegafaunaSelector
+    children:
+    - id: ActionColossusBlast
+    - id: ActionColossusCardinal
+    - id: ActionColossusDiagonal
+    - id: ActionColossusRing
+
+- type: megafaunaSelector
+  id: MegaLegionActions
+  selector: !type:GroupMegafaunaSelector
+    children:
+    - id: ActionMegaLegionSpawnSkull
+    - id: ActionMegaLegionSpawnSentinel
+
+- type: megafaunaSelector
+  id: ActionAshDrakeFireBreath
+  selector: !type:PerformActionSelector
+    delay: !type:AngerNumberSelector
+      range: 1.0,2.0
+      inverse: true
+    actionId: ActionAshDrakeFireBreath
+    conditions:
+    - !type:ActionAvailableCondition
+      actionId: ActionAshDrakeFireBreath
+
+- type: megafaunaSelector
+  id: ActionAshDrakeSwoop
+  selector: !type:PerformActionSelector
+    delay: !type:AngerNumberSelector
+      range: 2.0,5.0
+      inverse: true
+    actionId: ActionAshDrakeSwoop
+    conditions:
+    - !type:ActionAvailableCondition
+      actionId: ActionAshDrakeSwoop
+
+- type: megafaunaSelector
+  id: ActionBubblegumBloodSpray
+  selector: !type:PerformActionSelector
+    delay: !type:AngerNumberSelector
+      range: 0.8,2.0
+      inverse: true
+    actionId: ActionBubblegumBloodSpray
+    conditions:
+    - !type:ActionAvailableCondition
+      actionId: ActionBubblegumBloodSpray
+
+- type: megafaunaSelector
+  id: ActionBubblegumCharge
+  selector: !type:PerformActionSelector
+    delay: !type:AngerNumberSelector
+      range: 2.0,4.5
+      inverse: true
+    actionId: ActionBubblegumCharge
+    conditions:
+    - !type:ActionAvailableCondition
+      actionId: ActionBubblegumCharge
+
+- type: megafaunaSelector
+  id: ActionColossusBlast
+  selector: !type:PerformActionSelector
+    delay: !type:AngerNumberSelector
+      range: 0.8,2.0
+      inverse: true
+    actionId: ActionColossusBlast
+    conditions:
+    - !type:ActionAvailableCondition
+      actionId: ActionColossusBlast
+
+- type: megafaunaSelector
+  id: ActionColossusCardinal
+  selector: !type:PerformActionSelector
+    delay: !type:AngerNumberSelector
+      range: 1.5,3.0
+      inverse: true
+    actionId: ActionColossusCardinal
+    conditions:
+    - !type:ActionAvailableCondition
+      actionId: ActionColossusCardinal
+
+- type: megafaunaSelector
+  id: ActionColossusDiagonal
+  selector: !type:PerformActionSelector
+    delay: !type:AngerNumberSelector
+      range: 1.5,3.0
+      inverse: true
+    actionId: ActionColossusDiagonal
+    conditions:
+    - !type:ActionAvailableCondition
+      actionId: ActionColossusDiagonal
+
+- type: megafaunaSelector
+  id: ActionColossusRing
+  selector: !type:PerformActionSelector
+    delay: !type:AngerNumberSelector
+      range: 3.0,6.0
+      inverse: true
+    actionId: ActionColossusRing
+    conditions:
+    - !type:ActionAvailableCondition
+      actionId: ActionColossusRing
+
+- type: megafaunaSelector
+  id: ActionMegaLegionSpawnSkull
+  selector: !type:PerformActionSelector
+    delay: !type:AngerNumberSelector
+      range: 0.6,1.5
+      inverse: true
+    actionId: ActionMegaLegionSpawnSkull
+    conditions:
+    - !type:ActionAvailableCondition
+      actionId: ActionMegaLegionSpawnSkull
+
+- type: megafaunaSelector
+  id: ActionMegaLegionSpawnSentinel
+  selector: !type:PerformActionSelector
+    delay: !type:AngerNumberSelector
+      range: 2.0,4.5
+      inverse: true
+    actionId: ActionMegaLegionSpawnSentinel
+    conditions:
+    - !type:ActionAvailableCondition
+      actionId: ActionMegaLegionSpawnSentinel

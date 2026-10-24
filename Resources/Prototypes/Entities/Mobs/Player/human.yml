@@ -1,0 +1,107 @@
+#Legion
+- type: entity
+  parent: MobHuman
+  id: MobHumanLegionAgentBase
+  name: legion agent
+  suffix: Human, Base
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Loadout
+    prototypes: [LegionOperativeGearExtremelyBasic]
+    roleLoadout: [ RoleSurvivalLegion ]
+  - type: RandomMetadata
+    nameSegments: [NamesDeathCommando]
+  - type: NpcFactionMember
+    factions:
+    - Legion
+
+- type: entity
+  parent: MobHumanLegionAgentBase
+  id: MobHumanLegionAgent
+  name: legion agent
+  suffix: Human, Traitor
+  components:
+  # make the player a traitor once its taken
+  - type: AutoTraitor
+    profile: TraitorReinforcement
+
+- type: entity
+  parent: MobHumanLegionAgent
+  id: MobHumanLegionAgentMedic
+  name: legion medic
+  components:
+  - type: Loadout
+    prototypes: [LegionReinforcementMedic]
+    roleLoadout: [ RoleSurvivalLegion ]
+
+- type: entity
+  parent: MobHumanLegionAgent
+  id: MobHumanLegionAgentSpy
+  name: legion spy
+  components:
+  - type: Loadout
+    prototypes: [LegionReinforcementSpy]
+    roleLoadout: [ RoleSurvivalLegion ]
+
+- type: entity
+  parent: MobHumanLegionAgent
+  id: MobHumanLegionAgentThief
+  name: legion thief
+  components:
+  - type: Loadout
+    prototypes: [LegionReinforcementThief]
+    roleLoadout: [ RoleSurvivalLegion ]
+
+- type: entity
+  parent: MobHumanLegionAgentBase
+  id: MobHumanLegionAgentNukeops # Reinforcement exclusive to nukeops uplink
+  suffix: Human, NukeOps
+  components:
+  - type: NukeOperative
+  - type: RandomMetadata
+    nameSegments:
+    - NamesLegionNormal
+    nameFormat: name-format-nukie-operator
+  - type: Loadout
+    prototypes: [AshLegionOperativeGearFullNoUplink]
+
+# Nuclear Operative
+- type: entity
+  categories: [ HideSpawnMenu ]
+  name: Nuclear Operative
+  parent: MobHuman
+  id: MobHumanNukeOp
+  components:
+  - type: NukeOperative
+  - type: RandomHumanoidAppearance
+
+- type: entity
+  categories: [ HideSpawnMenu ]
+  parent: MobHuman
+  id: MobHumanLoneNuclearOperative
+  name: Ash Legion lone operative
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: NukeOperative
+  - type: RandomMetadata
+    nameSegments:
+    - NamesLegionPrefix
+    - NamesLegionNormal
+    nameFormat: name-format-nukie-generic
+  - type: NpcFactionMember
+    factions:
+    - Legion
+
+# Wizard
+- type: entity
+  categories: [ HideSpawnMenu ]
+  name: Wizard
+  parent: MobHuman
+  id: MobHumanWizard
+  components:
+  - type: RandomHumanoidAppearance
+  - type: NpcFactionMember
+    factions:
+    - Wizard

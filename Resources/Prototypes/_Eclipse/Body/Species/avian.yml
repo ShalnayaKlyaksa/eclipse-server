@@ -1,0 +1,173 @@
+# Avians use the anthropomorph body, but have their own marking group so harpy wings and tail feathers
+# are present by default and cannot leak into other anthropomorphic species.
+
+- type: markingsGroup
+  parent: Undergarments
+  id: Avian
+  limits:
+    enum.HumanoidVisualLayers.Head:
+      limit: 10
+      required: false
+    enum.HumanoidVisualLayers.HeadTop:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.HeadSide:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.Hair:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.FacialHair:
+      limit: 1
+      required: false
+    enum.HumanoidVisualLayers.Snout:
+      limit: 10
+      required: false
+    enum.HumanoidVisualLayers.SnoutCover:
+      limit: 10
+      required: false
+    enum.HumanoidVisualLayers.Chest:
+      limit: 10
+      required: false
+    enum.HumanoidVisualLayers.Tail:
+      limit: 1
+      required: true
+      default: [ AvianTailHarpy ]
+    enum.HumanoidVisualLayers.TailOverlay:
+      limit: 1
+      required: true
+      default: [ AvianWings ]
+    enum.HumanoidVisualLayers.LArm:
+      limit: 10
+      required: false
+    enum.HumanoidVisualLayers.RArm:
+      limit: 10
+      required: false
+    enum.HumanoidVisualLayers.LHand:
+      limit: 10
+      required: false
+    enum.HumanoidVisualLayers.RHand:
+      limit: 10
+      required: false
+    enum.HumanoidVisualLayers.LLeg:
+      limit: 10
+      required: false
+    enum.HumanoidVisualLayers.RLeg:
+      limit: 10
+      required: false
+    enum.HumanoidVisualLayers.LFoot:
+      limit: 10
+      required: false
+    enum.HumanoidVisualLayers.RFoot:
+      limit: 10
+      required: false
+    enum.HumanoidVisualLayers.UndergarmentTop:
+      limit: 10
+      required: false
+    enum.HumanoidVisualLayers.UndergarmentBottom:
+      limit: 10
+      required: false
+
+- type: entity
+  parent: OrganAnthropomorphExternal
+  id: OrganAvianExternal
+  abstract: true
+  suffix: avian
+  components:
+  - type: VisualOrganMarkings
+    markingData:
+      group: Avian
+
+- type: entity
+  parent: [ OrganBaseTorsoSexed, OrganBaseTorso, OrganAvianExternal ]
+  id: OrganAvianTorso
+
+- type: entity
+  parent: [ OrganBaseHeadSexed, OrganBaseHead, OrganAvianExternal ]
+  id: OrganAvianHead
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Mobs/Species/AnthropomorphCompat/parts.rsi
+    state: head_m
+  - type: VisualOrgan
+    data:
+      sprite: _Eclipse/Mobs/Species/AnthropomorphCompat/parts.rsi
+      state: head_m
+    sexStateOverrides:
+      Male: head_m
+      Female: head_f
+  - type: VisualOrganMarkings
+    hideableLayers:
+    - enum.HumanoidVisualLayers.Hair
+    - enum.HumanoidVisualLayers.Snout
+    markingData:
+      layers: [ Head, Hair, FacialHair, Snout, SnoutCover, HeadSide, HeadTop ]
+      group: Avian
+
+- type: entity
+  parent: [ OrganBaseArmLeft, OrganAvianExternal ]
+  id: OrganAvianArmLeft
+
+- type: entity
+  parent: [ OrganBaseArmRight, OrganAvianExternal ]
+  id: OrganAvianArmRight
+
+- type: entity
+  parent: [ OrganBaseHandLeft, OrganAvianExternal ]
+  id: OrganAvianHandLeft
+
+- type: entity
+  parent: [ OrganBaseHandRight, OrganAvianExternal ]
+  id: OrganAvianHandRight
+
+- type: entity
+  parent: [ OrganBaseLegLeft, OrganAvianExternal ]
+  id: OrganAvianLegLeft
+
+- type: entity
+  parent: [ OrganBaseLegRight, OrganAvianExternal ]
+  id: OrganAvianLegRight
+
+- type: entity
+  parent: [ OrganBaseFootLeft, OrganAvianExternal ]
+  id: OrganAvianFootLeft
+
+- type: entity
+  parent: [ OrganBaseFootRight, OrganAvianExternal ]
+  id: OrganAvianFootRight
+
+- type: entity
+  parent: AppearanceAnthropomorph
+  id: AppearanceAvian
+  categories: [ HideSpawnMenu ]
+  name: avian appearance
+  components:
+  - type: InitialBody
+    organs:
+      Torso: OrganAvianTorso
+      Head: OrganAvianHead
+      ArmLeft: OrganAvianArmLeft
+      ArmRight: OrganAvianArmRight
+      HandRight: OrganAvianHandRight
+      HandLeft: OrganAvianHandLeft
+      LegLeft: OrganAvianLegLeft
+      LegRight: OrganAvianLegRight
+      FootLeft: OrganAvianFootLeft
+      FootRight: OrganAvianFootRight
+      Brain: OrganAnthropomorphBrain
+      Eyes: OrganAnthropomorphEyes
+      Tongue: OrganAnthropomorphTongue
+      Appendix: OrganAnthropomorphAppendix
+      Ears: OrganAnthropomorphEars
+      Lungs: OrganAnthropomorphLungs
+      Heart: OrganAnthropomorphHeart
+      Stomach: OrganAnthropomorphStomach
+      Liver: OrganAnthropomorphLiver
+      Kidneys: OrganAnthropomorphKidneys
+  - type: HumanoidProfile
+    species: Avian
+
+- type: entity
+  parent: [ AppearanceAvian, MobAnthropomorph ]
+  id: MobAvian
+  name: Urist McAvian

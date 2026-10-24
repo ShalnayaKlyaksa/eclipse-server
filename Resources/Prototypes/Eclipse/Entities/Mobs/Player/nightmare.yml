@@ -1,0 +1,21 @@
+- type: entity
+  name: Nightmare
+  parent: MobHuman
+  id: MobNightmare
+  components:
+  - type: Nightmare
+  - type: LightDestroyer
+  - type: Insulated
+  - type: ProtectedFromStepTriggers
+  - type: GhostRole
+    name: ghost-role-information-nightmare-name
+    description: ghost-role-information-nightmare-description
+    rules: ghost-role-information-freeagent-rules
+    mindRoles:
+    - MindRoleGhostRoleSoloAntagonist
+    raffle:
+      settings: default
+  - type: GhostTakeoverAvailable
+  - type: Loadout
+    prototypes: [NightmareGear]
+  - type: RandomHumanoidAppearance

@@ -1,0 +1,322 @@
+- type: entity
+  parent: [ BaseMindRoleAntag, MindRoleGhostRoleNeutral ]
+  id: MindRoleGhostRoleAshLegionAntagonist
+  name: Ghost Role (AshLegion Antagonist)
+  components:
+  - type: MindRole
+    roleType: AshLegion
+    antagPrototype: GenericTeamAntagonist
+
+- type: entity
+  name: AshLegion Vanguard Leader spawner
+  id: SpawnMobAshLegionVanguardLeader
+  parent: MarkerBase
+  components:
+  - type: Sprite
+    layers:
+      - state: green
+      - sprite: _Orion/Icons/inteq.rsi
+        state: logo
+  - type: ConditionalSpawner
+    prototypes:
+      - RandomHumanoidSpawnerAshLegionVanguardLeader
+
+- type: entity
+  name: AshLegion Vanguard Operative spawner
+  id: SpawnMobAshLegionVanguardOperative
+  parent: MarkerBase
+  components:
+  - type: Sprite
+    layers:
+      - state: green
+      - sprite: _Orion/Icons/inteq.rsi
+        state: logo
+  - type: ConditionalSpawner
+    prototypes:
+      - RandomHumanoidSpawnerAshLegionVanguardOperative
+
+- type: entity
+  name: AshLegion Vanguard Soldier spawner
+  id: SpawnMobAshLegionVanguardSoldier
+  parent: MarkerBase
+  components:
+  - type: Sprite
+    layers:
+      - state: green
+      - sprite: _Orion/Icons/inteq.rsi
+        state: logo
+  - type: ConditionalSpawner
+    prototypes:
+      - RandomHumanoidSpawnerAshLegionVanguardSoldier
+
+- type: entity
+  name: AshLegion Vanguard Medic spawner
+  id: SpawnMobAshLegionVanguardMedic
+  parent: MarkerBase
+  components:
+  - type: Sprite
+    layers:
+      - state: green
+      - sprite: _Orion/Icons/inteq.rsi
+        state: logo
+  - type: ConditionalSpawner
+    prototypes:
+      - RandomHumanoidSpawnerAshLegionVanguardMedic
+
+# MOBS
+
+- type: entity
+  parent: MarkerBase
+  id: SpawnMobAshLegionAgent
+  name: AshLegion agent spawner
+  components:
+  - type: Sprite
+    layers:
+      - state: green
+      - sprite: _Orion/Mobs/Npc/gigachad_inteq.rsi
+        state: alive
+  - type: ConditionalSpawner
+    prototypes:
+      - MobAshLegionAgent
+
+- type: entity
+  parent: MarkerBase
+  id: SpawnMobAshLegionAgentRandom
+  name: AshLegion agent spawner
+  suffix: 20%
+  components:
+  - type: Sprite
+    layers:
+      - state: green
+      - sprite: _Orion/Mobs/Npc/gigachad_inteq.rsi
+        state: alive
+  - type: RandomSpawner
+    prototypes:
+      - MobAshLegionAgent
+    chance: 0.2
+
+- type: entity
+  parent: MarkerBase
+  id: SpawnMobCarpBrownAshLegion
+  name: AshLegion carp spawner
+  components:
+  - type: Sprite
+    layers:
+      - state: green
+      - sprite: _Orion/Mobs/Pets/inteq_carp.rsi
+        state: icon
+  - type: ConditionalSpawner
+    prototypes:
+      - MobCarpBrownAshLegion
+
+# Ghost Roles with Player Apperance
+
+- type: entity
+  parent: [ BaseStructure, MarkerBase ]
+  abstract: true
+  id: SpawnPointAshLegion
+  name: AshLegion sleeper
+  suffix: Spawner, Ghost Role, Player Appearance
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRole
+    raffle:
+      settings: default
+    mindRoles:
+    - MindRoleGhostRoleAshLegionAntagonist
+#  - type: CloningAppearance
+#    components:
+#    - type: AntagImmune
+#    - type: NpcFactionMember
+#      factions:
+#        - AshLegion
+#    - type: LanguageKnowledge
+#      speaks:
+#      - TauCetiBasic
+#      - OldFastCodes
+#      understands:
+#      - TauCetiBasic
+#      - OldFastCodes
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: RandomMetadata
+    nameFormat: name-format-standard
+  - type: Sprite
+    layers:
+      - sprite: Structures/cryostorage.rsi
+        state: sleeper_1
+        map: ["base"]
+
+- type: entity
+  parent: SpawnPointAshLegion
+  id: SpawnPointAshLegionVanguardLeader
+  name: AshLegion Vanguard Leader sleeper
+  suffix: Spawner, Ghost Role, Player Appearance
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRole
+    name: ghost-role-information-ashlegion-vanguard-leader
+    description: ghost-role-information-ashlegion-vanguard-description
+    rules: ghost-role-information-rules-team-antagonist
+#  - type: CloningAppearance
+#    startingGear: AshLegionVanguardLeaderGear
+#    components:
+#    - type: RandomMetadata
+#      nameSegments:
+#      - AshLegionVanguardLeaderNamesPrefix
+#      - NamesMilitaryLast
+#      nameFormat: name-format-standard
+
+- type: entity
+  parent: SpawnPointAshLegion
+  id: SpawnPointAshLegionVanguardOperative
+  name: AshLegion Vanguard Operative sleeper
+  suffix: Spawner, Ghost Role, Player Appearance
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRole
+    name: ghost-role-information-ashlegion-vanguard-operative
+    description: ghost-role-information-ashlegion-vanguard-description
+    rules: ghost-role-information-rules-team-antagonist
+#  - type: CloningAppearance
+#    startingGear: AshLegionVanguardOperativeGear
+#    components:
+#    - type: RandomMetadata
+#      nameSegments:
+#      - AshLegionVanguardNamesPrefix
+#      - NamesMilitaryLast
+#      nameFormat: name-format-standard
+
+- type: entity
+  parent: SpawnPointAshLegion
+  id: SpawnPointAshLegionVanguardSoldier
+  name: AshLegion Vanguard Soldier sleeper
+  suffix: Spawner, Ghost Role, Player Appearance
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRole
+    name: ghost-role-information-ashlegion-vanguard-soldier
+    description: ghost-role-information-ashlegion-vanguard-description
+    rules: ghost-role-information-rules-team-antagonist
+#  - type: CloningAppearance
+#    startingGear: AshLegionVanguardSoldierGear
+#    components:
+#    - type: RandomMetadata
+#      nameSegments:
+#      - AshLegionVanguardNamesPrefix
+#      - NamesMilitaryLast
+#      nameFormat: name-format-standard
+
+- type: entity
+  parent: SpawnPointAshLegion
+  id: SpawnPointAshLegionVanguardMedic
+  name: AshLegion Vanguard Medic sleeper
+  suffix: Spawner, Ghost Role, Player Appearance
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRole
+    name: ghost-role-information-ashlegion-vanguard-medic
+    description: ghost-role-information-ashlegion-vanguard-description
+    rules: ghost-role-information-rules-team-antagonist
+#  - type: CloningAppearance
+#    startingGear: AshLegionVanguardMedicGear
+#    components:
+#    - type: RandomMetadata
+#      nameSegments:
+#      - AshLegionVanguardNamesPrefix
+#      - NamesMilitaryLast
+#      nameFormat: name-format-standard
+
+# Ghost Roles with Player Apperance (SIZO-73)
+
+- type: entity
+  parent: SpawnPointAshLegion
+  id: SpawnPointAshLegionVanguardLeaderSizo37
+  name: AshLegion Vanguard Leader sleeper
+  suffix: Spawner, Sizo-73 Ghost Role, Player Appearance
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRole
+    name: ghost-role-information-ashlegion-vanguard-leader
+    description: ghost-role-information-ashlegion-vanguard-leader-SIZO-description
+    rules: ghost-role-information-ashlegion-SIZO-rules
+#  - type: CloningAppearance
+#    startingGear: AshLegionVanguardLeaderSizoGear
+#    components:
+#    - type: RandomMetadata
+#      nameSegments:
+#      - AshLegionVanguardLeaderNamesPrefix
+#      - NamesMilitaryLast
+#      nameFormat: name-format-standard
+#    - type: AutoImplant
+#      implants:
+#        - DeathRattleImplantAshLegion
+
+- type: entity
+  parent: SpawnPointAshLegion
+  id: SpawnPointAshLegionVanguardOperativeSizo37
+  name: AshLegion Vanguard Operative sleeper
+  suffix: Spawner, Sizo-73 Ghost Role, Player Appearance
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRole
+    name: ghost-role-information-ashlegion-vanguard-operative
+    description: ghost-role-information-ashlegion-vanguard-SIZO-description
+    rules: ghost-role-information-ashlegion-SIZO-rules
+#  - type: CloningAppearance
+#    startingGear: AshLegionVanguardOperativeSizoGear
+#    components:
+#    - type: RandomMetadata
+#      nameSegments:
+#      - AshLegionVanguardNamesPrefix
+#      - NamesMilitaryLast
+#      nameFormat: name-format-standard
+#    - type: AutoImplant
+#      implants:
+#        - DeathRattleImplantAshLegion
+
+- type: entity
+  parent: SpawnPointAshLegion
+  id: SpawnPointAshLegionVanguardSoldierSizo37
+  name: AshLegion Vanguard Soldier sleeper
+  suffix: Spawner, Sizo-73 Ghost Role, Player Appearance
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRole
+    name: ghost-role-information-ashlegion-vanguard-soldier
+    description: ghost-role-information-ashlegion-vanguard-SIZO-description
+    rules: ghost-role-information-ashlegion-SIZO-rules
+#  - type: CloningAppearance
+#    startingGear: AshLegionVanguardSoldierSizoGear
+#    components:
+#    - type: RandomMetadata
+#      nameSegments:
+#      - AshLegionVanguardNamesPrefix
+#      - NamesMilitaryLast
+#      nameFormat: name-format-standard
+#    - type: AutoImplant
+#      implants:
+#        - DeathRattleImplantAshLegion
+
+- type: entity
+  parent: SpawnPointAshLegion
+  id: SpawnPointAshLegionVanguardMedicSizo37
+  name: AshLegion Vanguard Medic sleeper
+  suffix: Spawner, Sizo-73 Ghost Role, Player Appearance
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRole
+    name: ghost-role-information-ashlegion-vanguard-medic
+    description: ghost-role-information-ashlegion-vanguard-SIZO-description
+    rules: ghost-role-information-ashlegion-SIZO-rules
+#  - type: CloningAppearance
+#    startingGear: AshLegionVanguardMedicSizoGear
+#    components:
+#    - type: RandomMetadata
+#      nameSegments:
+#      - AshLegionVanguardNamesPrefix
+#      - NamesMilitaryLast
+#      nameFormat: name-format-standard
+#    - type: AutoImplant
+#      implants:
+#        - DeathRattleImplantAshLegion

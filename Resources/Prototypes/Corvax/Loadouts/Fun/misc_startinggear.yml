@@ -1,0 +1,95 @@
+- type: startingGear
+  id: LegionSmugglerBase
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitOperative
+    head: ClothingHeadHatUshanka
+    eyes: ClothingEyesGlassesCheapSunglasses
+    outerClothing: ClothingOuterWinterLegion
+    gloves: ClothingHandsGlovesColorBlack
+    back: ClothingBackpackSalvage
+    shoes: ClothingShoesBootsWinterLegion
+    neck: ClothingNeckScarfStripedLegionRed
+    id: LegionPDA
+    belt: ClothingBeltMilitaryWebbing
+    mask: ClothingMaskGasSecurity
+
+- type: startingGear
+  id: LegionSmugglerGear
+  parent: LegionSmugglerBase
+  inhand:
+    - CombatKnife
+
+- type: startingGear
+  id: LegionSmugglerMedicGear
+  parent: LegionSmugglerBase
+  equipment:
+    back: ClothingBackpackSatchelGenetics
+    neck: ClothingNeckStethoscope
+    belt: ClothingBeltMilitaryWebbingMed
+    eyes: ClothingEyesEyepatchHudMedical
+    pocket1: EmergencyMedipen
+  storage:
+    back:
+    - MedkitCombatFilled
+  inhand:
+    - Scalpel
+
+- type: startingGear
+  id: LegionSmugglerSoldierGear
+  parent: LegionSmugglerBase
+  equipment:
+    shoes: ClothingShoesBootsCombat
+    outerClothing: ClothingOuterWinterLegionCapArmored
+    jumpsuit: ClothingUniformJumpsuitTacticool
+    gloves: ClothingHandsGlovesCombat
+    pocket1: WeaponPistolAshLegionCommissar
+    pocket2: MagazinePistol
+    eyes: ClothingEyesGlassesHiddenSecurity
+  inhand:
+    - CombatKnife
+
+- type: startingGear
+  id: LegionSmugglerMinerGear
+  parent: LegionSmugglerBase
+  equipment:
+    head: ClothingHeadHatHardhatArmored
+    eyes: ClothingEyesGlassesThermal
+    belt: OreBag
+    back: ClothingBackpackSatchelSalvage
+    gloves: ClothingHandsGlovesPowerglove
+    pocket1: MineralScanner
+  inhand:
+    - Pickaxe
+
+- type: startingGear
+  id: LegionSmugglerEngiGear
+  parent: LegionSmugglerBase
+  equipment:
+    head: ClothingHeadHatCanadaBeanie
+    eyes: ClothingEyesGlassesMeson
+    belt: ClothingBeltUtility
+    gloves: ClothingHandsGlovesColorYellowBudget
+    shoes: ClothingShoesBootsWork
+  storage:
+    back:
+    - SheetSteel10
+  inhand:
+    - ToolboxMechanicalFilled
+
+- type: startingGear
+  id: LegionSmugglerSpyGear
+  parent: LegionSmugglerBase
+  equipment:
+    ears: ClothingHeadsetGrey
+    eyes: ClothingEyesGlassesHiddenSecurity
+    neck: ClothingNeckScarfStripedLegionGreen
+    outerClothing: ClothingOuterWinterColorBlack
+    gloves: ThievingGloves
+    back: ClothingBackpackSatchel
+    pocket1: RadioJammer
+    id: PassengerPDA
+  storage:
+    back:
+    - SpaceCash2500
+  inhand:
+    - CombatKnife

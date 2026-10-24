@@ -1,0 +1,3 @@
+plushie-orlova-1 = Идиоты...
+plushie-orlova-2 = ГОЛДА!!!
+plushie-orlova-3 = Это ужасно.

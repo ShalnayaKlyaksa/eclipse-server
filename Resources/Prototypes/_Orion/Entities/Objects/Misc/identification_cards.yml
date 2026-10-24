@@ -1,0 +1,40 @@
+- type: entity
+  parent: IDCardStandard
+  id: AshLegionVanguardLeaderIDCard
+  name: AshLegion ID card
+  components:
+  - type: Sprite
+    layers:
+    - sprite: _Orion/Objects/Misc/id_cards.rsi
+      state: brown
+    - sprite: _Orion/Objects/Misc/id_cards.rsi
+      state: sword
+  - type: IdCard
+    jobTitle: job-title-vanguard-leader
+    jobIcon: JobIconAshLegionCommander
+  - type: Access
+    tags:
+    - AshLegionVanguardLeader
+    - AshLegionVanguard
+    - Maintenance
+
+- type: entity
+  parent: IDCardStandard
+  id: AshLegionVanguardIDCard
+  name: AshLegion ID card
+  components:
+  - type: Sprite
+    layers:
+    - sprite: _Orion/Objects/Misc/id_cards.rsi
+      state: brown
+    - sprite: _Orion/Objects/Misc/id_cards.rsi
+      state: sword
+  - type: IdCard
+    jobTitle: job-title-vanguard
+    jobIcon: JobIconAshLegionOperative
+  - type: Access
+    tags:
+    - NuclearOperative
+    - AshLegion
+    - AshLegionVanguard
+    - Maintenance

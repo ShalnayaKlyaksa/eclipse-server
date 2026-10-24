@@ -1,0 +1,15 @@
+- type: entity
+  parent: BaseSubdermalImplant
+  id: InferiorImplant
+  name: inferior implant
+  description: This implant that inferior another
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SubdermalImplant
+    whitelist:
+      components:
+      - MobState  # can implant ian.
+    blacklist:
+      components:
+      - MindShield
+  - type: InferiorImplant

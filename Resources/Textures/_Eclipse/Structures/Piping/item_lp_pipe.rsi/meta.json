@@ -1,0 +1,27 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-4.0",
+    "copyright": "Eclipse industrial LP item pipes",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        { "name": "lp0" },
+        { "name": "lp1" },
+        { "name": "lp2" },
+        { "name": "lp3" },
+        { "name": "lp4" },
+        { "name": "lp5" },
+        { "name": "lp6" },
+        { "name": "lp7" },
+        { "name": "lp8" },
+        { "name": "lp9" },
+        { "name": "lp10" },
+        { "name": "lp11" },
+        { "name": "lp12" },
+        { "name": "lp13" },
+        { "name": "lp14" },
+        { "name": "lp15" }
+    ]
+}

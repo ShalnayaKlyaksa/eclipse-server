@@ -1,0 +1,31 @@
+# If you add a new trait, make sure to add the corresponding component to the whitelist in \Resources\Prototypes\Entities\Mobs\Player\clone.yml so it gets copied to clones correctly!
+
+- type: trait
+  id: Pacifist
+  name: trait-pacifist-name
+  description: trait-pacifist-desc
+  category: Disadvantages
+  cost: 2
+  components:
+  - type: Pacified
+
+- type: trait
+  id: LightweightDrunk
+  name: trait-lightweight-name
+  description: trait-lightweight-desc
+  category: Disadvantages
+  cost: 1
+  conflicts:
+  - Sober
+  components:
+  - type: LightweightDrunk
+    boozeStrengthMultiplier: 2
+
+- type: trait
+  id: Snoring
+  name: trait-snoring-name
+  description: trait-snoring-desc
+  category: Disadvantages
+  cost: 1
+  components:
+  - type: Snoring

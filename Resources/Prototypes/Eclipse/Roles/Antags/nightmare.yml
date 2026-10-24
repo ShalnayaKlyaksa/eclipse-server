@@ -1,0 +1,11 @@
+- type: antag
+  id: Nightmare
+  name: role-antag-nightmare-name
+  antagonist: true
+  setPreference: false
+  objective: roles-antag-nightmare-objective
+
+- type: startingGear
+  id: NightmareGear
+  inhand:
+    - NightmareArmBlade

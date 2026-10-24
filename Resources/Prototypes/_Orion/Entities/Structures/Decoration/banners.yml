@@ -1,0 +1,9 @@
+- type: entity
+  parent: BannerBase
+  id: BannerAshLegion
+  name: AshLegion banner
+  description: Banner displaying the AshLegion logo.
+  components:
+  - type: Sprite
+    sprite: _Orion/Structures/Decoration/banner.rsi
+    state: banner_inteq

@@ -1,0 +1,69 @@
+- type: entity
+  parent: PosterBase
+  id: PosterContrabandAshLegionRecruitment
+  name: Recruitment to the AshLegion
+  description: Recruitment to the AshLegion.
+  components:
+  - type: Sprite
+    sprite: _Orion/Structures/Wallmounts/Posters/inteq_posters.rsi
+    state: inteq_poster1
+
+- type: entity
+  parent: PosterBase
+  id: PosterContrabandAshLegionWorkship
+  name: Workship with AshLegion
+  description: Workship with AshLegion.
+  components:
+  - type: Sprite
+    sprite: _Orion/Structures/Wallmounts/Posters/inteq_posters.rsi
+    state: inteq_poster2
+
+- type: entity
+  parent: PosterBase
+  id: PosterContrabandAshLegionWorkship2
+  name: Workship with AshLegion
+  description: Workship with AshLegion.
+  components:
+  - type: Sprite
+    sprite: _Orion/Structures/Wallmounts/Posters/inteq_posters.rsi
+    state: inteq_poster3
+
+- type: entity
+  parent: PosterBase
+  id: PosterContrabandAshLegion
+  name: AshLegion
+  description: AshLegion.
+  components:
+  - type: Sprite
+    sprite: _Orion/Structures/Wallmounts/Posters/inteq_posters.rsi
+    state: inteq_poster4
+
+- type: entity
+  parent: PosterBase
+  id: PosterContrabandAshLegionNoSex
+  name: No Sex in AshLegion
+  description: NO SEX!!!
+  components:
+  - type: Sprite
+    sprite: _Orion/Structures/Wallmounts/Posters/inteq_posters.rsi
+    state: inteq_poster5
+
+- type: entity
+  parent: PosterBase
+  id: PosterContrabandAshLegionVulp
+  name: AshLegion Vulp
+  description: We even take furry freaks, join us!
+  components:
+  - type: Sprite
+    sprite: _Orion/Structures/Wallmounts/Posters/inteq_posters.rsi
+    state: inteq_poster6
+
+- type: entity
+  parent: PosterBase
+  id: PosterContrabandAshLegionJulie
+  name: hot lizards
+  description: Most beautiful lizards in the whole universe, join us!
+  components:
+  - type: Sprite
+    sprite: _Orion/Structures/Wallmounts/Posters/inteq_posters.rsi
+    state: inteq_poster7

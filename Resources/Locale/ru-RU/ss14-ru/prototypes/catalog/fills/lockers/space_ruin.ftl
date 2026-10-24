@@ -1,0 +1,9 @@
+ent-LockerOldAISat = шкаф
+    .desc = { ent-LockerLegion.desc }
+    .suffix = шкаф пустотный скафандр NTSRA
+ent-LockerLegionShipGearBasic = { ent-LockerLegion }
+    .desc = { ent-LockerLegion.desc }
+    .suffix = Базовое корабельное снаряжение, Случайный
+ent-LockerLegionShipGearBasicChameleonKit = { ent-LockerLegionShipGearBasic }
+    .desc = { ent-LockerLegionShipGearBasic.desc }
+    .suffix = Базовое корабельное снаряжение, Случайный, Набор хамелеона

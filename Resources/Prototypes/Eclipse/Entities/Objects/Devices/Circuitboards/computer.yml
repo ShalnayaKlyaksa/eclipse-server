@@ -1,0 +1,8 @@
+- type: entity
+  parent: [ BaseComputerCircuitboard, BaseAshLegionContraband ]
+  id: AshLegionCommsComputerCircuitboard
+  components:
+  - type: Sprite
+    state: cpu_syndicate
+  - type: ComputerBoard
+    prototype: AshLegionComputerComms

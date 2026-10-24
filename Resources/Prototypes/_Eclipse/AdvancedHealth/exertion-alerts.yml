@@ -1,0 +1,23 @@
+- type: alert
+  id: AdvancedBreathless
+  icons:
+  - sprite: /Textures/Interface/Alerts/breathing.rsi
+    state: not_enough_oxy
+  name: advanced-exertion-breathless-name
+  description: advanced-exertion-breathless-desc
+
+- type: alert
+  id: AdvancedExhausted
+  icons:
+  - sprite: /Textures/Interface/Alerts/stamina.rsi
+    state: stamina4
+  name: advanced-exertion-exhausted-name
+  description: advanced-exertion-exhausted-desc
+
+- type: alert
+  id: AdvancedSleepy
+  icons:
+  - sprite: /Textures/Interface/Alerts/stamina.rsi
+    state: stamina2
+  name: advanced-exertion-sleepy-name
+  description: advanced-exertion-sleepy-desc

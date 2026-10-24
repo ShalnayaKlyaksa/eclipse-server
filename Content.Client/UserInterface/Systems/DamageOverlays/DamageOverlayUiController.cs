@@ -1,0 +1,223 @@
+using Content.Shared._Eclipse.AdvancedHealth;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
+using Content.Shared.FixedPoint;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.StatusEffectNew;
+using Content.Shared.Traits.Assorted;
+using JetBrains.Annotations;
+using Robust.Client.Graphics;
+using Robust.Client.Player;
+using Robust.Client.UserInterface;
+using Robust.Client.UserInterface.Controllers;
+using Robust.Shared.Player;
+
+namespace Content.Client.UserInterface.Systems.DamageOverlays;
+
+[UsedImplicitly]
+public sealed class DamageOverlayUiController : UIController
+{
+    [Dependency] private readonly IOverlayManager _overlayManager = default!;
+    [Dependency] private readonly IPlayerManager _playerManager = default!;
+
+    [UISystemDependency] private readonly MobThresholdSystem _mobThresholdSystem = default!;
+    [UISystemDependency] private readonly StatusEffectsSystem _statusEffects = default!;
+    [UISystemDependency] private readonly DamageableSystem _damageable = default!;
+    private Overlays.DamageOverlay _overlay = default!;
+
+    public override void Initialize()
+    {
+        _overlay = new Overlays.DamageOverlay();
+        SubscribeLocalEvent<LocalPlayerAttachedEvent>(OnPlayerAttach);
+        SubscribeLocalEvent<LocalPlayerDetachedEvent>(OnPlayerDetached);
+        SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
+        SubscribeLocalEvent<MobThresholdChecked>(OnThresholdCheck);
+    }
+
+    private void OnPlayerAttach(LocalPlayerAttachedEvent args)
+    {
+        ClearOverlay();
+        if (EntityManager.TryGetComponent<AdvancedHealthComponent>(args.Entity, out var advancedHealth))
+        {
+            UpdateFromAdvancedHealth(advancedHealth);
+            _overlayManager.AddOverlay(_overlay);
+            return;
+        }
+
+        if (!EntityManager.TryGetComponent<MobStateComponent>(args.Entity, out var mobState))
+            return;
+        if (mobState.CurrentState != MobState.Dead)
+            UpdateOverlays(args.Entity, mobState);
+        _overlayManager.AddOverlay(_overlay);
+    }
+
+    private void OnPlayerDetached(LocalPlayerDetachedEvent args)
+    {
+        _overlayManager.RemoveOverlay(_overlay);
+        ClearOverlay();
+    }
+
+    private void OnMobStateChanged(MobStateChangedEvent args)
+    {
+        if (args.Target != _playerManager.LocalEntity)
+            return;
+
+        if (EntityManager.TryGetComponent<AdvancedHealthComponent>(args.Target, out var advancedHealth))
+        {
+            UpdateFromAdvancedHealth(advancedHealth);
+            return;
+        }
+
+        UpdateOverlays(args.Target, args.Component);
+    }
+
+    private void OnThresholdCheck(ref MobThresholdChecked args)
+    {
+
+        if (args.Target != _playerManager.LocalEntity)
+            return;
+        UpdateOverlays(args.Target, args.MobState, args.Damageable, args.Threshold);
+    }
+
+    private void ClearOverlay()
+    {
+        _overlay.DeadLevel = 0f;
+        _overlay.CritLevel = 0f;
+        _overlay.PainLevel = 0f;
+        _overlay.OxygenLevel = 0f;
+    }
+
+    /// <summary>Steady dead overlay (no per-frame pulsing) for an actual corpse.</summary>
+    public void SetSteadyDeadOverlay()
+    {
+        _overlay.AdvancedPhysiology = true;
+        _overlay.State = MobState.Dead;
+        _overlay.DeadLevel = 1f;
+        _overlay.CritLevel = 0f;
+        _overlay.PainLevel = 0f;
+        _overlay.OxygenLevel = 0f;
+    }
+
+    /// <summary>Damage overlay driven by advanced-health vitals instead of vanilla damage thresholds.</summary>
+    public void UpdateFromAdvancedHealth(AdvancedHealthComponent health, MobState? actualState = null)
+    {
+        _overlay.AdvancedPhysiology = true;
+        // Replicated vitals and mob state can arrive in different orders. Actual death wins
+        // over stale living vitals until the server explicitly changes the mob state again.
+        if (actualState == MobState.Dead || EntityManager.TryGetComponent<MobStateComponent>(_playerManager.LocalEntity, out var mob)
+            && mob.CurrentState == MobState.Dead)
+        {
+            SetSteadyDeadOverlay();
+            return;
+        }
+        if (health.IsHeartStopped && health.TimeSinceHeartStopped >= health.HeartStoppedDeathTime)
+        {
+            _overlay.State = MobState.Dead;
+            _overlay.DeadLevel = Math.Clamp(health.TimeSinceHeartStopped / health.HeartStoppedDeathTime, 0.3f, 1f);
+            _overlay.PainLevel = 0f;
+            _overlay.OxygenLevel = 0f;
+            _overlay.CritLevel = 0f;
+            return;
+        }
+
+        _overlay.State = health.IsUnconscious ? MobState.Critical : MobState.Alive;
+        _overlay.DeadLevel = 0f;
+
+        _overlay.PainLevel = health.HasPain && health.Pain >= 5f
+            ? Math.Clamp(health.Pain / 100f, 0.05f, 1f)
+            : 0f;
+
+        _overlay.OxygenLevel = health.NeedsOxygen
+            ? Math.Clamp(1f - health.Oxygenation / 100f, 0f, 1f)
+            : 0f;
+
+        if (health.IsUnconscious)
+            _overlay.CritLevel = Math.Clamp(1f - health.Consciousness / 20f, 0.5f, 1f);
+        else if (health.Shock >= 50f)
+            _overlay.CritLevel = Math.Clamp((health.Shock - 50f) / 50f, 0f, 0.65f);
+        else
+            _overlay.CritLevel = 0f;
+    }
+
+    //TODO: Jezi: adjust oxygen and hp overlays to use appropriate systems once bodysim is implemented
+    private void UpdateOverlays(EntityUid entity, MobStateComponent? mobState, DamageableComponent? damageable = null, MobThresholdsComponent? thresholds = null)
+    {
+        if (EntityManager.TryGetComponent<AdvancedHealthComponent>(entity, out var advancedHealth))
+        {
+            UpdateFromAdvancedHealth(advancedHealth);
+            return;
+        }
+
+        _overlay.AdvancedPhysiology = false;
+        if (mobState == null && !EntityManager.TryGetComponent(entity, out mobState) ||
+            thresholds == null && !EntityManager.TryGetComponent(entity, out thresholds) ||
+            damageable == null && !EntityManager.TryGetComponent(entity, out  damageable))
+            return;
+
+        if (!_mobThresholdSystem.TryGetIncapThreshold(entity, out var foundThreshold, thresholds))
+            return; //this entity cannot die or crit!!
+
+        if (!thresholds.ShowOverlays)
+        {
+            ClearOverlay();
+            return; //this entity intentionally has no overlays
+        }
+
+        var damagePerGroup = _damageable.GetDamagePerGroup((entity, damageable));
+        var critThreshold = foundThreshold.Value;
+        _overlay.State = mobState.CurrentState;
+
+        switch (mobState.CurrentState)
+        {
+            case MobState.Alive:
+            {
+                FixedPoint2 painLevel = 0;
+                _overlay.PainLevel = 0;
+
+                if (!_statusEffects.TryEffectsWithComp<PainNumbnessStatusEffectComponent>(entity, out _))
+                {
+                    foreach (var painDamageType in damageable.PainDamageGroups)
+                    {
+
+                        damagePerGroup.TryGetValue(painDamageType, out var painDamage);
+                        painLevel += painDamage;
+                    }
+                    _overlay.PainLevel = FixedPoint2.Min(1f, painLevel / critThreshold).Float();
+
+                    if (_overlay.PainLevel < 0.05f) // Don't show damage overlay if they're near enough to max.
+                    {
+                        _overlay.PainLevel = 0;
+                    }
+                }
+
+                if (damagePerGroup.TryGetValue("Airloss", out var oxyDamage))
+                {
+                    _overlay.OxygenLevel = FixedPoint2.Min(1f, oxyDamage / critThreshold).Float();
+                }
+
+                _overlay.CritLevel = 0;
+                _overlay.DeadLevel = 0;
+                break;
+            }
+            case MobState.Critical:
+            {
+                if (!_mobThresholdSystem.TryGetDeadPercentage(entity,
+                        FixedPoint2.Max(0.0, _damageable.GetTotalDamage((entity, damageable))), out var critLevel))
+                    return;
+                _overlay.CritLevel = critLevel.Value.Float();
+
+                _overlay.PainLevel = 0;
+                _overlay.DeadLevel = 0;
+                break;
+            }
+            case MobState.Dead:
+            {
+                _overlay.PainLevel = 0;
+                _overlay.CritLevel = 0;
+                break;
+            }
+        }
+    }
+}

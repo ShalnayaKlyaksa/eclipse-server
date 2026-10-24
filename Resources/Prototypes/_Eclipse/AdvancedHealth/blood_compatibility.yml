@@ -1,0 +1,136 @@
+# Recipient type -> transfusable donor types. Emergency donors restore less oxygen-carrying capacity.
+
+- type: advancedHealthBloodCompatibility
+  id: O-
+  compatibleDonors: [ "O-" ]
+- type: advancedHealthBloodCompatibility
+  id: O+
+  compatibleDonors: [ "O-", "O+" ]
+- type: advancedHealthBloodCompatibility
+  id: A-
+  compatibleDonors: [ "O-", "A-" ]
+- type: advancedHealthBloodCompatibility
+  id: A+
+  compatibleDonors: [ "O-", "O+", "A-", "A+" ]
+- type: advancedHealthBloodCompatibility
+  id: B-
+  compatibleDonors: [ "O-", "B-" ]
+- type: advancedHealthBloodCompatibility
+  id: B+
+  compatibleDonors: [ "O-", "O+", "B-", "B+" ]
+- type: advancedHealthBloodCompatibility
+  id: AB-
+  compatibleDonors: [ "O-", "A-", "B-", "AB-" ]
+- type: advancedHealthBloodCompatibility
+  id: AB+
+  compatibleDonors: [ "O-", "O+", "A-", "A+", "B-", "B+", "AB-", "AB+" ]
+
+- type: advancedHealthBloodCompatibility
+  id: M-A
+  compatibleDonors: [ "M-A", "M-O" ]
+- type: advancedHealthBloodCompatibility
+  id: M-B
+  compatibleDonors: [ "M-B", "M-O" ]
+- type: advancedHealthBloodCompatibility
+  id: M-O
+  compatibleDonors: [ "M-O" ]
+
+- type: advancedHealthBloodCompatibility
+  id: D-I
+  compatibleDonors: [ "D-I" ]
+- type: advancedHealthBloodCompatibility
+  id: D-II
+  compatibleDonors: [ "D-II", "D-I" ]
+- type: advancedHealthBloodCompatibility
+  id: D-III
+  compatibleDonors: [ "D-III", "D-II", "D-I" ]
+
+- type: advancedHealthBloodCompatibility
+  id: L-Ash
+  compatibleDonors: [ "L-Ash" ]
+- type: advancedHealthBloodCompatibility
+  id: L-Ember
+  compatibleDonors: [ "L-Ember", "L-Ash" ]
+- type: advancedHealthBloodCompatibility
+  id: L-Slag
+  compatibleDonors: [ "L-Slag", "L-Ash" ]
+
+- type: advancedHealthBloodCompatibility
+  id: K-A
+  compatibleDonors: [ "K-A", "K-O" ]
+- type: advancedHealthBloodCompatibility
+  id: K-B
+  compatibleDonors: [ "K-B", "K-O" ]
+- type: advancedHealthBloodCompatibility
+  id: K-O
+  compatibleDonors: [ "K-O" ]
+
+- type: advancedHealthBloodCompatibility
+  id: S-A
+  compatibleDonors: [ "S-A", "S-O" ]
+- type: advancedHealthBloodCompatibility
+  id: S-B
+  compatibleDonors: [ "S-B", "S-O" ]
+- type: advancedHealthBloodCompatibility
+  id: S-O
+  compatibleDonors: [ "S-O" ]
+
+- type: advancedHealthBloodCompatibility
+  id: T-A
+  compatibleDonors: [ "T-A", "T-O" ]
+- type: advancedHealthBloodCompatibility
+  id: T-B
+  compatibleDonors: [ "T-B", "T-O" ]
+- type: advancedHealthBloodCompatibility
+  id: T-O
+  compatibleDonors: [ "T-O" ]
+
+- type: advancedHealthBloodCompatibility
+  id: A-Spark
+  compatibleDonors: [ "A-Spark", "A-Ash" ]
+- type: advancedHealthBloodCompatibility
+  id: A-Ash
+  compatibleDonors: [ "A-Ash" ]
+- type: advancedHealthBloodCompatibility
+  id: A-Void
+  compatibleDonors: [ "A-Void", "A-Ash" ]
+
+- type: advancedHealthBloodCompatibility
+  id: V-A
+  compatibleDonors: [ "V-A", "V-O" ]
+- type: advancedHealthBloodCompatibility
+  id: V-B
+  compatibleDonors: [ "V-B", "V-O" ]
+- type: advancedHealthBloodCompatibility
+  id: V-O
+  compatibleDonors: [ "V-O" ]
+
+- type: advancedHealthBloodCompatibility
+  id: E-Light
+  compatibleDonors: [ "E-Light" ]
+- type: advancedHealthBloodCompatibility
+  id: E-Shade
+  compatibleDonors: [ "E-Shade" ]
+- type: advancedHealthBloodCompatibility
+  id: E-Lineage
+  compatibleDonors: [ "E-Lineage", "E-Light" ]
+
+- type: advancedHealthBloodCompatibility
+  id: P-Neutral
+  compatibleDonors: [ "P-Neutral" ]
+- type: advancedHealthBloodCompatibility
+  id: P-Cryo
+  compatibleDonors: [ "P-Cryo" ]
+  emergencyDonors: [ "P-Neutral" ]
+- type: advancedHealthBloodCompatibility
+  id: P-Electro
+  compatibleDonors: [ "P-Electro" ]
+  emergencyDonors: [ "P-Neutral" ]
+- type: advancedHealthBloodCompatibility
+  id: P-Acid
+  compatibleDonors: [ "P-Acid" ]
+  emergencyDonors: [ "P-Neutral" ]
+- type: advancedHealthBloodCompatibility
+  id: P-Neuro
+  compatibleDonors: [ "P-Neuro" ]
+  emergencyDonors: [ "P-Neutral" ]

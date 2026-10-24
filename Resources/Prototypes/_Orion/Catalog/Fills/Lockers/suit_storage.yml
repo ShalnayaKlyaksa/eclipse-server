@@ -1,0 +1,47 @@
+- type: entity
+  parent: SuitStorageBase
+  id: SuitStorageAshLegionEVA
+  suffix: AshLegion EVA
+  components:
+  - type: StorageFill
+    contents:
+        - id: NitrogenTankFilled
+        - id: OxygenTankFilled
+        - id: ClothingOuterEVASuitAshLegion
+        - id: ClothingHeadHelmetEVAAshLegion
+
+- type: entity
+  parent: SuitStorageBase
+  id: SuitStorageAshLegionEliteHardsuit
+  suffix: AshLegion Elite
+  components:
+  - type: StorageFill
+    contents:
+        - id: NitrogenTankFilled
+        - id: OxygenTankFilled
+        - id: ClothingOuterHardsuitAshLegionElite
+        - id: ClothingMaskBreath
+
+- type: entity
+  parent: SuitStorageBase
+  id: SuitStorageAshLegionHardsuit
+  suffix: AshLegion
+  components:
+  - type: StorageFill
+    contents:
+        - id: NitrogenTankFilled
+        - id: OxygenTankFilled
+        - id: ClothingOuterHardsuitAshLegion
+        - id: ClothingMaskBreath
+
+- type: entity
+  parent: SuitStorageBase
+  id: SuitStorageAshLegionSyndicateHardsuit
+  suffix: AshLegion (Syndicate)
+  components:
+  - type: StorageFill
+    contents:
+        - id: NitrogenTankFilled
+        - id: OxygenTankFilled
+        - id: ClothingOuterHardsuitSyndicateAshLegion
+        - id: ClothingMaskBreath

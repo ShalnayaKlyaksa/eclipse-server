@@ -1,0 +1,25 @@
+- type: entityTable
+  id: BasicCalmGameRulesTable
+  table: !type:AllSelector
+    children:
+      - !type:NestedSelector
+        tableId: BasicCalmEventsTable
+      - !type:NestedSelector
+        tableId: CargoGiftsTable
+      - !type:NestedSelector
+        tableId: CalmPestEventsTable
+      - !type:NestedSelector
+        tableId: SpicyPestEventsTable
+
+- type: entity
+  id: BasicCalmStationEventScheduler
+  parent: BaseGameRule
+  components:
+  - type: BasicStationEventScheduler
+    minimumTimeUntilFirstEvent: 300 # 5 min
+    minMaxEventTiming:
+      min: 600 # 7.5 min
+      max: 900 # 12.5 mis
+    scheduledGameRules: !type:NestedSelector
+      tableId: BasicCalmGameRulesTable
+

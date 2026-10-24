@@ -1,0 +1,12 @@
+ent-GunSafeAshLegionFilled = { ent-GunSafe }
+    .desc = { ent-GunSafe.desc }
+    .suffix = Сизо, Заполненный
+ent-LockerAshLegionVanguardLeaderSizoFilled = { ent-LockerAshLegionVanguardLeader }
+    .desc = { ent-LockerAshLegionVanguardLeader.desc }
+    .suffix = Сизо, Коммандер, Заполненный
+ent-LockerAshLegionVanguardSizoFilled = { ent-LockerAshLegionVanguard }
+    .desc = { ent-LockerAshLegionVanguard.desc }
+    .suffix = Сизо, Авангард, Заполненный
+ent-LockerAshLegionVanguardMedicSizoFilled = { ent-LockerAshLegionVanguard }
+    .desc = { ent-LockerAshLegionVanguard.desc }
+    .suffix = Сизо, Медик, Заполненный

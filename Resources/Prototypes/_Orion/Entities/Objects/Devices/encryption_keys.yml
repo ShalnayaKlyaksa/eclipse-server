@@ -1,0 +1,15 @@
+- type: entity
+  parent: [EncryptionKey, BaseMinorContraband]
+  id: EncryptionKeyAshLegion
+  name: AshLegion encryption key
+  description: An encryption key used by AshLegion.
+  components:
+    - type: EncryptionKey
+      channels:
+      - AshLegion
+      defaultChannel: AshLegion
+    - type: Sprite
+      sprite: _Orion/Objects/Devices/encryption_keys.rsi
+      layers:
+      - state: crypt_brown
+      - state: ashlegion_label

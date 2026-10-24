@@ -1,0 +1,72 @@
+#Old AI sat voidsuits
+- type: entity
+  id: LockerOldAISat
+  name: closet
+  suffix: NTSRA voidsuit locker
+  parent: LockerLegion
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:NestedSelector
+        tableId: FilLockerOldAISat
+
+- type: entityTable
+  id: FilLockerOldAISat
+  table: !type:AllSelector
+    children:
+    - id: ClothingHeadHelmetAncient
+    - id: ClothingOuterHardsuitAncientEVA
+    - id: JetpackVoidFilled
+
+#Legion ship armory stuff
+- type: entity
+  id: LockerLegionShipGearBasic
+  parent: LockerLegion
+  suffix: Basic ship gear, Random
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:NestedSelector
+        tableId: FilLockerLegionShipGearBasic
+
+- type: entityTable
+  id: FilLockerLegionShipGearBasic
+  table: !type:AllSelector
+    children:
+    - id: CrowbarRed
+      prob: 0.6
+    - id: ClothingShoesBootsCombat
+      prob: 0.4
+    - id: ClothingUniformJumpsuitOperative
+      prob: 0.4
+    - id: ClothingHandsGlovesCombat
+      prob: 0.2
+    - id: ClothingBeltMilitaryWebbing
+      prob: 0.2
+
+#Garunteed chameleon kit spawn, for the legion dropship
+- type: entity
+  id: LockerLegionShipGearBasicChameleonKit
+  parent: LockerLegionShipGearBasic
+  suffix: Basic ship gear, Random, Chameleon Kit
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:NestedSelector
+        tableId: FilLockerLegionShipGearBasicChameleonKit
+
+- type: entityTable
+  id: FilLockerLegionShipGearBasicChameleonKit
+  table: !type:AllSelector
+    children:
+    - id: ClothingBackpackChameleonFill
+    - id: CrowbarRed
+      prob: 0.6
+    - id: ClothingShoesBootsCombat
+      prob: 0.4
+    - id: ClothingUniformJumpsuitOperative
+      prob: 0.4
+    - id: ClothingHandsGlovesCombat
+      prob: 0.2
+    - id: ClothingBeltMilitaryWebbing
+      prob: 0.2

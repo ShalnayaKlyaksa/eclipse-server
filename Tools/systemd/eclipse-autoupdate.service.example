@@ -1,0 +1,23 @@
+[Unit]
+Description=Eclipse SS14 server with GitHub autoupdate watchdog
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=eclipse
+Group=eclipse
+WorkingDirectory=/srv/eclipse-server
+EnvironmentFile=/etc/eclipse-autoupdate.env
+ExecStart=/srv/eclipse-server/Tools/server_autoupdate.sh
+Restart=always
+RestartSec=10
+KillSignal=SIGTERM
+TimeoutStopSec=45
+
+# Basic hardening. Relax these if your server layout needs broader access.
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

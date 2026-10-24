@@ -1,0 +1,35 @@
+- type: entity
+  name: legion smuggler
+  parent: MobHuman
+  id: MobLegionSmuggler
+  components:
+    - type: NpcFactionMember
+      factions:
+        - Legion
+    - type: Loadout
+      prototypes:
+        - LegionSmugglerGear
+        - LegionSmugglerMedicGear
+        - LegionSmugglerSoldierGear
+        - LegionSmugglerMinerGear
+        - LegionSmugglerEngiGear
+        - LegionSmugglerSpyGear
+      roleLoadout: [ RoleSurvivalEVA ]
+    - type: InputMover
+    - type: MobMover
+    - type: HTN
+      rootTask:
+        task: SimpleHumanoidHostileCompound
+    - type: RandomMetadata
+      nameSegments:
+      - NamesFakeHumanFirst
+      - CorvaxNamesLegionSmuggler
+      - NamesLast
+      nameFormat: name-format-smuggler
+    - type: GhostTakeoverAvailable
+    - type: GhostRole
+      name: ghost-role-information-legion-smuggler-name
+      description: ghost-role-information-legion-smuggler-description
+      rules: ghost-role-information-freeagent-rules
+      raffle:
+        settings: default

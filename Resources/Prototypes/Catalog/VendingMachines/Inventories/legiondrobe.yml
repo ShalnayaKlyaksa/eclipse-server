@@ -1,0 +1,27 @@
+- type: vendingMachineInventory
+  id: LegionDrobeInventory
+  startingInventory:
+    ClothingHeadHatOutlawHat: 3
+    ClothingHeadHatLegion: 5
+    ClothingMaskNeckGaiter: 5
+    ClothingOuterWinterLegion: 5
+    ClothingHeadHatLegionMAA: 3
+    ClothingOuterWinterLegionCap: 3
+    ClothingOuterCoatLegionCap: 3
+    ClothingUniformJumpsuitLegionFormal: 5
+    ClothingUniformJumpskirtLegionFormalDress: 5
+    ClothingUniformJumpsuitOperative: 5
+    ClothingUniformJumpskirtOperative: 5
+    ClothingNeckScarfStripedLegionGreen: 2
+    ClothingNeckScarfStripedLegionRed: 2
+    ClothingShoesBootsWinterLegion: 2
+  contrabandInventory:
+    ToyFigurineFootsoldier: 1
+    ToyFigurineNukieElite: 1
+    ToyFigurineNukieCommander: 1
+    ClothingUniformJumpskirtTacticalMaid: 5
+    ClothingHandsTacticalMaidGloves: 5
+  emaggedInventory:
+    ClothingOuterCoatLegionCapArmored: 1
+    ClothingOuterWinterLegionCapArmored: 1
+    ClothingHeadHatTacticalMaidHeadband: 5

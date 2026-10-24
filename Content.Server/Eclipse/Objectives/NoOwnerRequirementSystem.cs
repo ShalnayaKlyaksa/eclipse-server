@@ -1,0 +1,55 @@
+using Content.Server.CrewManifest;
+using Content.Server.Station.Systems;
+using Content.Shared.Mind;
+using Content.Shared.Objectives.Components;
+using Content.Shared.Objectives.Systems;
+using Robust.Shared.Random;
+using System.Linq;
+
+namespace Content.Server.Eclipse.Objectives;
+
+public sealed class NoOwnerRequirementSystem : EntitySystem
+{
+    [Dependency] private readonly CrewManifestSystem _crewManifest = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly IEntityManager _entityManager = default!;
+    [Dependency] private readonly TargetSystem _target = default!;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        SubscribeLocalEvent<NoOwnerRequirementComponent, RequirementCheckEvent>(OnCheck);
+    }
+
+    private void OnCheck(Entity<NoOwnerRequirementComponent> ent, ref RequirementCheckEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        var allAliveMinds = _target.GetAliveHumans(args.Mind.OwnedEntity);
+
+        foreach (var mind in allAliveMinds)
+        {
+            var stations = _entityManager.EntitySysManager.GetEntitySystem<StationSystem>().GetStations();
+            if (_random.Prob(ent.Comp.IgnoreChance))
+                return;
+
+            var stationComp = stations[0];
+
+            var (_, crewManifest) = _crewManifest.GetCrewManifest(stationComp);
+            if (crewManifest == null)
+                continue;
+
+            var isValid = crewManifest.Entries.Any(x => ent.Comp.Job.Contains(x.JobTitle));
+
+            if (!isValid)
+            {
+                args.Cancelled = true;
+                return;
+            }
+            else
+                return;
+        }
+    }
+}

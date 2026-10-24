@@ -1,0 +1,7 @@
+# non-stealth AshLegion stuff
+- type: entity
+  id: BaseAshLegionContraband
+  abstract: true
+  components:
+  - type: Contraband
+    severity: AshLegion

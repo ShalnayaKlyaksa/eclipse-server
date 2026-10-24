@@ -1,0 +1,64 @@
+- type: techDiscipline
+  id: Security
+  name: research-discipline-security
+  color: "#cb0000"
+  icon:
+    sprite: _Backmen/Interface/Misc/research_disciplines.rsi
+    state: security
+  tierPrerequisites:
+    1: 0
+    2: 0.75
+    3: 0.75
+  uiName: SEC # Backmen
+
+- type: techDiscipline
+  id: Cargo
+  name: research-discipline-cargo
+  color: "#b18644"
+  icon:
+    sprite: _Backmen/Interface/Misc/research_disciplines.rsi
+    state: cargo
+  tierPrerequisites:
+    1: 0
+    2: 0.75
+    3: 0.75
+  uiName: CRG # Backmen
+
+- type: techDiscipline
+  id: Shaft
+  name: research-discipline-shaft
+  color: "#b18644"
+  icon:
+    sprite: _Backmen/Interface/Misc/research_disciplines.rsi
+    state: shaft
+  tierPrerequisites:
+    1: 0
+    2: 0.75
+    3: 0.75
+  uiName: SFT # Backmen
+
+- type: techDiscipline
+  id: Robotics
+  name: research-discipline-robotics
+  color: "#793482"
+  icon:
+    sprite: _Backmen/Interface/Misc/research_disciplines.rsi
+    state: robotics
+  tierPrerequisites:
+    1: 0
+    2: 0.75
+    3: 0.75
+  uiName: ROB # Backmen
+
+- type: techDiscipline
+  id: Medical
+  name: research-discipline-medical
+  color: "#2ab0d9"
+  icon:
+    sprite: _Backmen/Interface/Misc/research_disciplines.rsi
+    state: medical
+  tierPrerequisites:
+    1: 0
+    2: 0.75
+    3: 0.75
+  uiName: MED # Backmen

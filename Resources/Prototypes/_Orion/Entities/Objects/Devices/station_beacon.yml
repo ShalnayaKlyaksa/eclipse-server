@@ -1,0 +1,8 @@
+- type: entity
+  parent: DefaultStationBeacon
+  id: DefaultStationBeaconAshLegionSizo73
+  suffix: AshLegion, Sizo-73
+  components:
+  - type: NavMapBeacon
+    defaultText: station-beacon-sizo-73
+    color: "#8B4513"

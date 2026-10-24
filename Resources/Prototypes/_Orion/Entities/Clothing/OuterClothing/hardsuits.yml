@@ -1,0 +1,38 @@
+- type: entity
+  parent: [ BaseMajorContraband, ClothingOuterHardsuitLegionElite ]
+  id: ClothingOuterHardsuitAshLegionElite
+  name: elite AshLegion hardsuit
+  description: An upgraded version of the syndicate hardsuit that features enhanced fireproofing, pressure resist, and superior armor.
+  components:
+  - type: Sprite
+    sprite: _Orion/Clothing/OuterClothing/Hardsuits/elite_inteq_hardsuit.rsi
+  - type: Clothing
+    sprite: _Orion/Clothing/OuterClothing/Hardsuits/elite_inteq_hardsuit.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitAshLegionElite
+
+- type: entity
+  parent: [ BaseMajorContraband, ClothingOuterHardsuitLegion ]
+  id: ClothingOuterHardsuitAshLegion
+  name: AshLegion hardsuit
+  description: An upgraded version of the syndicate hardsuit that features enhanced fireproofing, pressure resist, and superior armor.
+  components:
+  - type: Sprite
+    sprite: _Orion/Clothing/OuterClothing/Hardsuits/inteq_hardsuit.rsi
+  - type: Clothing
+    sprite: _Orion/Clothing/OuterClothing/Hardsuits/inteq_hardsuit.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitAshLegion
+
+- type: entity
+  parent: [ BaseMajorContraband, ClothingOuterHardsuitLegion ]
+  id: ClothingOuterHardsuitSyndicateAshLegion
+  name: AshLegion syndicate hardsuit
+  description: An upgraded version of the syndicate hardsuit that features enhanced fireproofing, pressure resist, and superior armor.
+  components:
+  - type: Sprite
+    sprite: _Orion/Clothing/OuterClothing/Hardsuits/inteq_syn_hardsuit.rsi
+  - type: Clothing
+    sprite: _Orion/Clothing/OuterClothing/Hardsuits/inteq_syn_hardsuit.rsi
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitSyndicateAshLegion

@@ -1,0 +1,24 @@
+
+- type: entity
+  parent: CrateBaseSecure
+  id: CrateNTNavyShellSecure
+  name: nanotasen navy shell secure crate
+  components:
+    - type: Icon
+      sprite: Eclipse/Structures/Storage/Crates/navy_shells_create.rsi
+    - type: Sprite
+      sprite: Eclipse/Structures/Storage/Crates/navy_shells_create.rsi
+    - type: AccessReader
+      access: [["CentralCommand"], ["NTNavy"]]
+
+- type: entity
+  parent: CrateBaseSecure
+  id: CrateNTNavyWeaponsSecure
+  name: nanotasen navy weapons secure crate
+  components:
+    - type: Icon
+      sprite: Eclipse/Structures/Storage/Crates/navy_weapons_create.rsi
+    - type: Sprite
+      sprite: Eclipse/Structures/Storage/Crates/navy_weapons_create.rsi
+    - type: AccessReader
+      access: [["CentralCommand"], ["NTNavyArmory"]]

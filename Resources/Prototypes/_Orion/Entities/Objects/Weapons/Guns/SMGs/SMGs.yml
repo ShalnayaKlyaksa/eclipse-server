@@ -1,0 +1,15 @@
+- type: entity
+  parent: [ BaseMajorContraband, WeaponSubMachineGunC20r ]
+  id: WeaponSubMachineGunAshLegionSMG
+  name: AshLegion submachine gun
+  suffix: SubmachineGun
+  description: Firearm that is often used by the AshLegion. Uses .35 auto ammo. It is painted in the AshLegion brand color.
+  components:
+  - type: Sprite
+    sprite: _Orion/Objects/Weapons/Guns/SMG/inteq_smg.rsi
+  - type: Clothing
+    sprite: _Orion/Objects/Weapons/Guns/SMG/inteq_smg.rsi
+  - type: MagazineVisuals
+    magState: mag
+    steps: 6
+    zeroVisible: true

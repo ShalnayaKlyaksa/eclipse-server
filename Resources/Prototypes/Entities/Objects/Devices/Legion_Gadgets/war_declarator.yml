@@ -1,0 +1,30 @@
+- type: entity
+  parent: [BaseItem, BaseLegionContraband ]
+  id: NukeOpsDeclarationOfWar
+  name: Ash Legion war declarator
+  description: Use to send a declaration of hostilities in the name of the Ash Legion, delaying your shuttle departure while the target prepares for your assault. Requires at least two operatives.
+  components:
+    - type: Sprite
+      sprite: Objects/Devices/declaration_of_war.rsi
+      layers:
+        - state: declarator
+    - type: Item
+    - type: UseDelay
+      delay: 0.5
+    - type: ActivatableUI
+      inHandsOnly: true
+      singleUser: true
+      requireActiveHand: false
+      key: enum.WarDeclaratorUiKey.Key
+    - type: UserInterface
+      interfaces:
+        enum.WarDeclaratorUiKey.Key:
+          type: WarDeclaratorBoundUserInterface
+    - type: WarDeclarator
+      message: war-declarator-default-message
+      senderTitle: comms-console-announcement-title-ashlegion
+      minOps: 2
+      warDeclarationDelay: 10
+      sound: /Audio/Announcements/war.ogg
+    - type: AccessReader
+      access: [["NuclearOperative"], ["AshLegion"], ["AshLegionVanguard"], ["AshLegionVanguardLeader"]]

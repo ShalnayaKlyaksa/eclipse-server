@@ -1,0 +1,6 @@
+- type: stealTargetGroup
+  id: ProtoCoreActivationKey
+  name: steal-target-groups-proto-core-activation-key
+  sprite:
+    sprite: _Eclipse/Objects/Devices/proto_core_activation_key.rsi
+    state: icon

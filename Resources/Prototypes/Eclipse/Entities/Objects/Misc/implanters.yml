@@ -1,0 +1,8 @@
+- type: entity
+  id: InferiorImplanter
+  name: inferior implanter
+  parent: BaseImplantOnlyImplanterLegion
+  components:
+  - type: Implanter
+    implant: InferiorImplant
+  - type: InferiorVerbs

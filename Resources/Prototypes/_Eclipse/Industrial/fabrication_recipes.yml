@@ -1,0 +1,83 @@
+# Expensive workbench fabrication recipes.
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialMechanicalCore
+  name: industrial-fabrication-mechanical-core
+  result: IndustrialMechanicalCore
+  duration: 25
+  ingredients:
+    SheetSteel: 15
+    SheetPlasteel: 5
+    SheetPlasma: 3
+    PartRodMetal: 10
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialHeatConduitAssembly
+  name: industrial-fabrication-heat-conduit
+  result: IndustrialHeatConduitAssembly
+  duration: 30
+  ingredients:
+    SheetSteel: 10
+    SheetPlasma: 8
+    SheetPlasteel: 4
+    SheetUranium: 2
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialCircuitCore
+  name: industrial-fabrication-circuit-core
+  result: IndustrialCircuitCore
+  duration: 35
+  ingredients:
+    SheetSteel: 8
+    SheetGlass: 10
+    SheetPlasma: 5
+    SheetPlasteel: 6
+    PartRodMetal: 8
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialMachineChassis
+  name: industrial-fabrication-machine-chassis
+  result: IndustrialMachineChassis
+  duration: 45
+  ingredients:
+    SheetSteel: 25
+    SheetPlasteel: 10
+    IndustrialMechanicalCore: 2
+    PartRodMetal: 15
+
+- type: industrialFabricationRecipe
+  id: FabricateUpgradeModuleCrusher
+  name: industrial-fabrication-upgrade-crusher
+  result: IndustrialUpgradeModuleCrusher
+  duration: 60
+  ingredients:
+    IndustrialMechanicalCore: 3
+    IndustrialCircuitCore: 2
+    SheetSteel: 20
+    SheetPlasteel: 8
+
+- type: industrialFabricationRecipe
+  id: FabricateUpgradeModuleThermalCentrifuge
+  name: industrial-fabrication-upgrade-thermal-centrifuge
+  result: IndustrialUpgradeModuleThermalCentrifuge
+  duration: 75
+  ingredients:
+    IndustrialMechanicalCore: 2
+    IndustrialHeatConduitAssembly: 4
+    IndustrialCircuitCore: 2
+    SheetSteel: 15
+    SheetPlasma: 10
+    SheetPlasteel: 10
+
+- type: industrialFabricationRecipe
+  id: FabricateUpgradeModuleSmelter
+  name: industrial-fabrication-upgrade-smelter
+  result: IndustrialUpgradeModuleSmelter
+  duration: 70
+  ingredients:
+    IndustrialMechanicalCore: 3
+    IndustrialHeatConduitAssembly: 3
+    IndustrialCircuitCore: 3
+    SheetSteel: 25
+    SheetPlasma: 6
+    SheetPlasteel: 12

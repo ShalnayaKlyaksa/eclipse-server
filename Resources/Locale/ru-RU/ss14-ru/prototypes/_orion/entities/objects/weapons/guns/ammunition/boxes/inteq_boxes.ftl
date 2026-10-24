@@ -1,0 +1,10 @@
+ent-BaseMagazineBoxAshLegion = коробка патронов
+    .desc = { ent-BaseItem.desc }
+ent-MagazineBoxPistolAshLegion = коробка патронов (.35 авто)
+    .desc = { ent-BaseItem.desc }
+ent-MagazineBoxLightRifleAshLegion = коробка патронов (.30 винтовочные)
+    .desc = { ent-BaseItem.desc }
+ent-MagazineBoxShotgunAshLegion = коробка патронов (.50 дробь)
+    .desc = { ent-BaseItem.desc }
+ent-MagazineBoxLightRifleIncendiaryAshLegion = коробка патронов (.30 зажигательные)
+    .desc = { ent-BaseItem.desc }

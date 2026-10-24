@@ -1,0 +1,341 @@
+- type: npcFaction
+  id: Legion
+  hostile:
+  - Dragon
+  - SimpleHostile
+  - AllHostile
+  - Xeno
+  - Zombie
+  friendly:
+  - AshLegion
+  - Syndicate
+  - AshLegionHostile
+
+- type: accessLevel
+  id: SyndicateAgent
+  name: id-card-access-level-legion-agent
+
+- type: accessLevel
+  id: NTNavyCaptain
+  name: id-card-access-level-ntnavy-captain
+
+- type: accessLevel
+  id: NTNavyOfficer
+  name: id-card-access-level-ntnavy-officer
+
+- type: accessLevel
+  id: NTNavyWOEngineering
+  name: id-card-access-level-ntnavy-woengineering
+
+- type: accessLevel
+  id: NTNavyWOMedical
+  name: id-card-access-level-ntnavy-womedical
+
+- type: accessLevel
+  id: NTNavy
+  name: id-card-access-level-ntnavy
+
+- type: accessLevel
+  id: NTNavyEngineering
+  name: id-card-access-level-ntnavy-engineering
+
+- type: accessLevel
+  id: NTNavyMedical
+  name: id-card-access-level-ntnavy-medical
+
+- type: accessLevel
+  id: NTNavyArmory
+  name: id-card-access-level-ntnavy-armory
+
+- type: Tag
+  id: Syndicate
+
+- type: Tag
+  id: CaptainNTNavySabre
+
+- type: Tag
+  id: SyndicateRapier
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconSyndicate
+  icon:
+    sprite: /Textures/Interface/Misc/job_icons.rsi
+    state: Syndicate
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconSyndicateOperative
+  icon:
+    sprite: /Textures/Interface/Misc/job_icons.rsi
+    state: SyndicateOperative
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconSyndicateCorpsman
+  icon:
+    sprite: /Textures/Interface/Misc/job_icons.rsi
+    state: SyndicateCorpsman
+
+- type: jobIcon
+  parent: JobIcon
+  id: JobIconSyndicateCommander
+  icon:
+    sprite: /Textures/Interface/Misc/job_icons.rsi
+    state: SyndicateCommander
+
+- type: entity
+  parent: SyndicateJawsOfLife
+  id: LegionJawsOfLife
+
+- type: entity
+  parent: DefibrillatorLegion
+  id: DefibrillatorSyndicate
+
+- type: entity
+  parent: PhoneInstrumentLegion
+  id: PhoneInstrumentSyndicate
+
+- type: entity
+  parent: LegionHypo
+  id: SyndiHypo
+
+- type: entity
+  parent: PinpointerLegionNuclear
+  id: PinpointerSyndicateNuclear
+  description: Produced specifically for ash legion operative missions, get that key!
+  components:
+  - type: Pinpointer
+    component: ProtoCoreActivationKey
+    targetName: activation key
+
+- type: entity
+  parent: ClothingHeadHelmetHardsuitLegion
+  id: ClothingHeadHelmetHardsuitSyndie
+
+- type: entity
+  parent: ClothingHeadHelmetHardsuitLegionMedic
+  id: ClothingHeadHelmetHardsuitSyndieMedic
+
+- type: entity
+  parent: ClothingNeckScarfStripedLegionRed
+  id: ClothingNeckScarfStripedSyndieRed
+
+- type: entity
+  parent: SoapletLegion
+  id: SoapletSyndie
+
+- type: entity
+  parent: LegionWhistle
+  id: SyndicateWhistle
+
+- type: entity
+  parent: LegionMiniBomb
+  id: SyndieMiniBomb
+
+- type: entity
+  parent: CigaretteLegion
+  id: CigaretteSyndicate
+
+- type: entity
+  parent: SyndicateIDCard
+  id: LegionIDCard
+
+- type: entity
+  parent: SyndiOperativeIDCard
+  id: LegionOperativeIDCard
+
+- type: entity
+  parent: SyndiCorpsmanIDCard
+  id: LegionCorpsmanIDCard
+
+- type: entity
+  parent: SyndiCommanderIDCard
+  id: LegionCommanderIDCard
+
+- type: entity
+  parent: AshLegionOpsBaseIDCard
+  id: ZookeeperIDCard
+
+- type: entity
+  parent: AshLegionOpsBaseIDCard
+  id: BoxerIDCard
+
+- type: entity
+  parent: AshLegionCommsComputerCircuitboard
+  id: LegionCommsComputerCircuitboard
+
+- type: entity
+  parent: AshLegionShuttleConsoleCircuitboard
+  id: LegionShuttleConsoleCircuitboard
+
+- type: entity
+  parent: ComputerIFFSyndicateCircuitboard
+  id: ComputerIFFLegionCircuitboard
+
+- type: entity
+  parent: LegionComputerComms
+  id: SyndicateComputerComms
+
+- type: entity
+  parent: ComputerShuttleLegion
+  id: ComputerShuttleSyndie
+
+- type: entity
+  parent: ComputerIFFLegion
+  id: ComputerIFFSyndicate
+
+- type: entity
+  parent: ToolboxAshLegion
+  id: SusToolbox
+
+- type: entity
+  parent: AshLegionJawsOfLife
+  id: AngleGrinder
+
+- type: emoteSounds
+  parent: UnisexSiliconLegion
+  id: UnisexSiliconSyndicate
+
+- type: job
+  id: NanoTrasenNavyCaptain
+  name: job-name-ntnavy-captain
+  playTimeTracker: JobNTNavyCaptain
+
+- type: job
+  id: NanoTrasenNavyOfficer
+  name: job-name-ntnavy-officer
+  playTimeTracker: JobNTNavyOfficer
+
+- type: job
+  id: NanoTrasenNavyWarrantOfficerEngineer
+  name: job-name-ntnavy-woengineer
+  playTimeTracker: JobNTNavyWOEngineer
+
+- type: job
+  id: NanoTrasenNavyWarrantOfficerMedical
+  name: job-name-ntnavy-womedical
+  playTimeTracker: JobNTNavyWOMedical
+
+- type: job
+  id: NanoTrasenNavySailor
+  name: job-name-ntnavy-sailor
+  playTimeTracker: JobNTNavySailor
+
+- type: job
+  id: NanoTrasenNavyEngineer
+  name: job-name-ntnavy-engineer
+  playTimeTracker: JobNTNavyEngineer
+
+- type: job
+  id: NanoTrasenNavyMedical
+  name: job-name-ntnavy-medical
+  playTimeTracker: JobNTNavyMedical
+
+- type: job
+  id: SecurityPilot
+  name: job-name-security-pilot
+  playTimeTracker: JobSecurityPilot
+
+- type: playTimeTracker
+  id: JobSecurityPilot
+
+- type: vendingMachineInventory
+  id: BrasVendingMachineServitorInventory
+  startingInventory: {}
+
+- type: vendingMachineInventory
+  id: UnderwearVendingMachineServitorInventory
+  startingInventory: {}
+
+- type: vendingMachineInventory
+  id: CaptainDrobeInventory
+  startingInventory: {}
+
+- type: vendingMachineInventory
+  id: ChemVendInventorySyndicate
+  startingInventory: {}
+
+- type: entity
+  id: RandomHumanoidSpawnerAshLegionVanguardLeader
+  name: AshLegion Vanguard Leader
+  components:
+  - type: Sprite
+    sprite: Mobs/Species/Human/parts.rsi
+    state: full
+  - type: RandomHumanoidSpawner
+    settings: AshLegionVanguard
+
+- type: entity
+  id: RandomHumanoidSpawnerAshLegionVanguardOperative
+  name: AshLegion Vanguard Operative
+  components:
+  - type: Sprite
+    sprite: Mobs/Species/Human/parts.rsi
+    state: full
+  - type: RandomHumanoidSpawner
+    settings: AshLegionVanguard
+
+- type: entity
+  id: RandomHumanoidSpawnerAshLegionVanguardSoldier
+  name: AshLegion Vanguard Soldier
+  components:
+  - type: Sprite
+    sprite: Mobs/Species/Human/parts.rsi
+    state: full
+  - type: RandomHumanoidSpawner
+    settings: AshLegionVanguard
+
+- type: entity
+  id: RandomHumanoidSpawnerAshLegionVanguardMedic
+  name: AshLegion Vanguard Medic
+  components:
+  - type: Sprite
+    sprite: Mobs/Species/Human/parts.rsi
+    state: full
+  - type: RandomHumanoidSpawner
+    settings: AshLegionVanguard
+
+- type: entity
+  parent: MobCarp
+  id: MobCarpBrownAshLegion
+
+- type: entity
+  parent: BaseNukeopsRule
+  id: LoneOpsSpawn
+  components:
+  - type: StationEvent
+    weight: 3
+    earliestStart: 30
+    reoccurrenceDelay: 20
+    minimumPlayers: 20
+    duration: null
+    maxOccurrences: 1
+  - type: LoadMapRule
+    gridPath: /Maps/Shuttles/inteqinfiltrator.yml
+  - type: NukeopsRule
+    canEnableWarOps: false
+    roundEndBehavior: Nothing
+    welcomeText: ash-legion-welcome
+    briefingText: ash-legion-briefing
+  - type: AntagSpawner
+    prototype: MobHumanLoneNuclearOperative
+  - type: AntagSelection
+    agentName: roles-antag-ash-legion-name
+    definitions:
+    - prefRoles: [ AshLegion ]
+      fallbackRoles: [ Nukeops ]
+      spawnerPrototype: SpawnPointGhostLoneOpsAshLegion
+      min: 1
+      max: 1
+      pickPlayer: false
+      startingGear: AshLegionLoneOperativeGearFull
+      roleLoadout:
+      - RoleSurvivalLegion
+      components:
+      - type: NukeOperative
+      - type: NpcFactionMember
+        factions:
+        - Legion
+      mindRoles:
+      - MindRoleLoneops

@@ -1,0 +1,43 @@
+- type: entity
+  parent: [ ClothingOuterHardsuitBase, BaseLegionContraband ]
+  id: ClothingOuterHardsuitLegionCustom
+  name: чёрный скафандр
+  description: Модифицированный скафандр Мародёров Горлекса, перекрашенный в чёрный цвет. Собственность коротколапки
+  components:
+  - type: Sprite
+    sprite: Eclipse/Clothing/OuterClothing/Hardsuits/legioncustom.rsi
+  - type: Item
+    size: Huge
+  - type: Clothing
+    sprite: Eclipse/Clothing/OuterClothing/Hardsuits/legioncustom.rsi
+  - type: PressureProtection
+    highPressureMultiplier: 0.05
+    lowPressureMultiplier: 1000
+  - type: ExplosionResistance
+    damageCoefficient: 0.5
+  - type: StaminaResistance
+    damageCoefficient: 0.35
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.5
+        Slash: 0.5
+        Piercing: 0.5
+        Heat: 0.5
+        Radiation: 0.5
+        Caustic: 0.5
+  - type: ClothingSpeedModifier
+    walkModifier: 0.9
+    sprintModifier: 0.9
+  - type: HeldSpeedModifier
+  - type: ToggleableClothing
+    clothingPrototype: ClothingHeadHelmetHardsuitLegionCustom
+  - type: Tag
+    tags:
+    - Hardsuit
+    - WhitelistChameleon
+  - type: StaticPrice
+    price: 1337
+  - type: Speech
+    speechVerb: Robotic
+

@@ -1,0 +1,152 @@
+<Document>
+
+# Санкции
+
+Санкция определяется последней цифрой статьи. Итоговая мера может быть изменена модификаторами, приказом командования в ЧС или решением уполномоченного суда/трибунала.
+
+  <Table Columns="7">
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Статья
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#0F4F27">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        XX1
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#414700">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        XX2
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#5F3800">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        XX3
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#611300">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        XX4
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#56000C">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        XX5
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#121212">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        XX6
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Правовое наказание
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#0F4F27">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        5 минут заключения, предупреждение или штраф по усмотрению СБ
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#414700">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        10 минут заключения, конфискация предметов нарушения
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#5F3800">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        15 минут заключения, ограничение доступа или временное отстранение
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#611300">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        25 минут заключения, изоляция, увольнение с должности при должностном составе
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#56000C">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Пожизненное заключение, криоизоляция или передача уполномоченному отряду
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#121212">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Высшая мера наказания, ликвидация угрозы или передача ИВК/НС
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Дисциплинарная мера
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#0F4F27">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Предупреждение, запись в отчёт или штраф
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#414700">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Выговор, временное ограничение доступа
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#5F3800">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Отстранение от должности до конца смены
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#611300">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Увольнение с должности, лишение доступа
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#56000C">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Полное увольнение, пожизненная изоляция
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#121212">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Стирание допуска, ликвидация угрозы, передача высшим силам реагирования
+      </Box>
+    </ColorBox>
+    <ColorBox>
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Дополнительные меры
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#0F4F27">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Возмещение ущерба при наличии потерпевшего
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#414700">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Конфискация незаконных предметов
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#5F3800">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Компенсация ущерба, запрет доступа к зоне нарушения
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#611300">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Изоляция, медицинская проверка, аудит доступа
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#56000C">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Криоизоляция, допрос, закрытие доступа ко всем системам
+      </Box>
+    </ColorBox>
+    <ColorBox Color="#121212">
+      <Box HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2">
+        Немедленная нейтрализация, эвакуационный запрет, передача ИВК/НС
+      </Box>
+    </ColorBox>
+  </Table>
+
+Высшая мера применяется только при невозможности безопасного содержания, угрозе объекту, массовой гибели, государственной измене или критическом аномальном инциденте.
+
+</Document>

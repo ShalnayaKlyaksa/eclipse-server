@@ -1,0 +1,22 @@
+﻿<BoxContainer
+    xmlns="https://spacestation14.io"
+    xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Orientation="Vertical"
+    HorizontalExpand="True"
+    VerticalExpand="True">
+    <OutputPanel Name="TextOutput" VerticalExpand="true">
+        <OutputPanel.StyleBoxOverride>
+            <gfx:StyleBoxFlat BackgroundColor="#120600F0"
+                              BorderColor="#D47D1B88"
+                              BorderThickness="1"
+                              ContentMarginLeftOverride="8"
+                              ContentMarginRightOverride="8"
+                              ContentMarginTopOverride="8"
+                              ContentMarginBottomOverride="8" />
+        </OutputPanel.StyleBoxOverride>
+    </OutputPanel>
+    <RichTextLabel Name="TypingIndicator" Access="Public" />
+    <HistoryLineEdit Name="SenderLineEdit" />
+    <RichTextLabel Name="RelayedToDiscordLabel" Access="Public" Visible="False" />
+</BoxContainer>

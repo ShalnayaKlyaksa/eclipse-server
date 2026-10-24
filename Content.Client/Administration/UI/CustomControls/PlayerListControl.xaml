@@ -1,0 +1,28 @@
+<BoxContainer xmlns="https://spacestation14.io"
+              xmlns:controls="using:Content.Client.UserInterface.Controls"
+              xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+              Orientation="Vertical">
+    <Control MinSize="0 5" />
+    <LineEdit Name="FilterLineEdit"
+              MinSize="100 0"
+              HorizontalExpand="True"
+              PlaceHolder="{Loc player-list-filter}" />
+    <PanelContainer Name="BackgroundPanel"
+                    VerticalExpand="True"
+                    HorizontalExpand="True">
+        <PanelContainer.PanelOverride>
+            <gfx:StyleBoxFlat BackgroundColor="#120600F0"
+                              BorderColor="#D47D1B88"
+                              BorderThickness="1"
+                              ContentMarginLeftOverride="3"
+                              ContentMarginRightOverride="3"
+                              ContentMarginTopOverride="3"
+                              ContentMarginBottomOverride="3" />
+        </PanelContainer.PanelOverride>
+        <controls:ListContainer Name="PlayerListContainer"
+                                Access="Public"
+                                Toggle="True"
+                                Group="True"
+                                MinSize="100 0" />
+    </PanelContainer>
+</BoxContainer>

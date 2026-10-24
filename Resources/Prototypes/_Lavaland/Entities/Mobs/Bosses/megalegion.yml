@@ -1,0 +1,97 @@
+- type: entity
+  name: Legion
+  id: LavalandBossMegaLegion
+  parent: LavalandMobBase
+  description: One of many.
+  components:
+  - type: EmitSoundOnSpawn
+    sound:
+      path: /Audio/_Lavaland/Mobs/legion_spawn.ogg
+      params:
+          volume: 5
+          maxDistance: 30
+  - type: Physics
+    bodyType: KinematicController
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        density: 1000
+        mask:
+        - LargeMobMask
+        layer:
+        - LargeMobLayer
+  - type: NpcFactionMember
+    factions:
+    - SimpleHostile
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+  - type: Actions
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _Lavaland/Mobs/Bosses/96x96.rsi
+    layers:
+    - map: ["enum.DamageStateVisualLayers.Base"]
+      state: mega_legion
+  - type: MeleeWeapon
+    altDisarm: false
+    angle: 0
+    soundHit:
+      collection: AlienClaw
+    animation: WeaponArcBite
+    damage:
+        types:
+          Blunt: 35
+          Structural: 200
+  - type: Tag
+    tags:
+    - CannotSuicide
+  - type: CombatMode
+  - type: MobState
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 5
+    baseSprintSpeed: 5
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      700: Dead
+  - type: SpawnLootOnDeath
+    table: !type:AllSelector
+      children:
+      - id: MaterialLegionSkull1
+      - !type:NestedSelector
+        tableId: LavalandBossBonusLoot
+    deleteOnDeath: true
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: Hierophant
+  - type: TileMovement
+  - type: Fauna
+  - type: Anger
+    totalHp: 700
+  - type: MobPhases
+    phaseThresholds:
+      0: 1
+      250: 2
+      500: 3
+  - type: ActionGrant
+    actions:
+    - ActionMegaLegionSpawnSkull
+    - ActionMegaLegionSpawnSentinel
+  - type: MegafaunaAi
+    selector: !type:NestedMegafaunaSelector
+      id: MegaLegion
+  - type: AngerPlayerScaling
+    angerScale: 1.1
+    hpScale: 1.2
+  - type: BossMusic
+    soundId: Legion
+  - type: Aggressive # also required component for aggro checking
+    forgiveRange: 20.0
+  # - type: CombatPower # Goobstation
+  #   factor: 25 # times more dangerous than a crew-member

@@ -1,0 +1,44 @@
+- type: antag
+  id: AshLegion
+  name: roles-antag-ash-legion-name
+  antagonist: true
+  setPreference: true
+  objective: roles-antag-ash-legion-objective
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 5h
+
+- type: antag
+  id: AshLegionMedic
+  name: roles-antag-ash-legion-medic-name
+  antagonist: true
+  setPreference: true
+  objective: roles-antag-ash-legion-objective
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 5h
+
+- type: antag
+  id: AshLegionCommander
+  name: roles-antag-ash-legion-commander-name
+  antagonist: true
+  setPreference: true
+  objective: roles-antag-ash-legion-objective
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 5h
+
+- type: startingGear
+  id: AshLegionMedicGearFull
+  parent: AshLegionOperativeMedicFull
+  storage:
+    back:
+    - LegionHypo
+    - SawAdvanced
+    - Cautery
+    - CombatKnife
+    - WeaponPistolAshLegionCommissar
+    - AshHackingDevice
+    - HandheldHealthAnalyzer
+    - CombatMedipen
+    - DeathAcidifierImplanterAshLegion

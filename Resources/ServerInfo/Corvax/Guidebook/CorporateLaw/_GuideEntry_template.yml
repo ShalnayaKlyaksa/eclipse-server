@@ -1,0 +1,97 @@
+# Шаблон для добавления новых глав в guidebook prototypes. Проверь путь под структуру своего проекта.
+- type: guideEntry
+  id: CLChapter11
+  name: ИЗ, глава 11
+  text: "/ServerInfo/Guidebook/CorporateLaw/Chapter11.xml"
+- type: guideEntry
+  id: CLChapter12
+  name: ИЗ, глава 12
+  text: "/ServerInfo/Guidebook/CorporateLaw/Chapter12.xml"
+- type: guideEntry
+  id: CLChapter13
+  name: ИЗ, глава 13
+  text: "/ServerInfo/Guidebook/CorporateLaw/Chapter13.xml"
+- type: guideEntry
+  id: CLChapter14
+  name: ИЗ, глава 14
+  text: "/ServerInfo/Guidebook/CorporateLaw/Chapter14.xml"
+- type: guideEntry
+  id: CLChapter21
+  name: ИЗ, глава 21
+  text: "/ServerInfo/Guidebook/CorporateLaw/Chapter21.xml"
+- type: guideEntry
+  id: CLChapter22
+  name: ИЗ, глава 22
+  text: "/ServerInfo/Guidebook/CorporateLaw/Chapter22.xml"
+- type: guideEntry
+  id: CLChapter23
+  name: ИЗ, глава 23
+  text: "/ServerInfo/Guidebook/CorporateLaw/Chapter23.xml"
+- type: guideEntry
+  id: CLChapter24
+  name: ИЗ, глава 24
+  text: "/ServerInfo/Guidebook/CorporateLaw/Chapter24.xml"
+- type: guideEntry
+  id: CLChapter31
+  name: ИЗ, глава 31
+  text: "/ServerInfo/Guidebook/CorporateLaw/Chapter31.xml"
+- type: guideEntry
+  id: CLChapter32
+  name: ИЗ, глава 32
+  text: "/ServerInfo/Guidebook/CorporateLaw/Chapter32.xml"
+- type: guideEntry
+  id: CLChapter33
+  name: ИЗ, глава 33
+  text: "/ServerInfo/Guidebook/CorporateLaw/Chapter33.xml"
+- type: guideEntry
+  id: CLChapter34
+  name: ИЗ, глава 34
+  text: "/ServerInfo/Guidebook/CorporateLaw/Chapter34.xml"
+- type: guideEntry
+  id: CLChapter41
+  name: ИЗ, глава 41
+  text: "/ServerInfo/Guidebook/CorporateLaw/Chapter41.xml"
+- type: guideEntry
+  id: CLChapter42
+  name: ИЗ, глава 42
+  text: "/ServerInfo/Guidebook/CorporateLaw/Chapter42.xml"
+- type: guideEntry
+  id: CLChapter43
+  name: ИЗ, глава 43
+  text: "/ServerInfo/Guidebook/CorporateLaw/Chapter43.xml"
+- type: guideEntry
+  id: CLChapter44
+  name: ИЗ, глава 44
+  text: "/ServerInfo/Guidebook/CorporateLaw/Chapter44.xml"
+- type: guideEntry
+  id: CLChapter51
+  name: ИЗ, глава 51
+  text: "/ServerInfo/Guidebook/CorporateLaw/Chapter51.xml"
+- type: guideEntry
+  id: CLChapter52
+  name: ИЗ, глава 52
+  text: "/ServerInfo/Guidebook/CorporateLaw/Chapter52.xml"
+- type: guideEntry
+  id: CLChapter53
+  name: ИЗ, глава 53
+  text: "/ServerInfo/Guidebook/CorporateLaw/Chapter53.xml"
+- type: guideEntry
+  id: CLChapter54
+  name: ИЗ, глава 54
+  text: "/ServerInfo/Guidebook/CorporateLaw/Chapter54.xml"
+- type: guideEntry
+  id: CLChapter61
+  name: ИЗ, глава 61
+  text: "/ServerInfo/Guidebook/CorporateLaw/Chapter61.xml"
+- type: guideEntry
+  id: CLChapter62
+  name: ИЗ, глава 62
+  text: "/ServerInfo/Guidebook/CorporateLaw/Chapter62.xml"
+- type: guideEntry
+  id: CLChapter63
+  name: ИЗ, глава 63
+  text: "/ServerInfo/Guidebook/CorporateLaw/Chapter63.xml"
+- type: guideEntry
+  id: CLChapter64
+  name: ИЗ, глава 64
+  text: "/ServerInfo/Guidebook/CorporateLaw/Chapter64.xml"

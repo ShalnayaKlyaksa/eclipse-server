@@ -1,0 +1,50 @@
+# Character language preferences are stored as neutral traits until a dedicated language system
+# is wired into character profiles.
+
+- type: trait
+  id: LanguageGalacticCommon
+  name: trait-language-galactic-common-name
+  description: trait-language-galactic-common-desc
+  category: Languages
+
+- type: trait
+  id: LanguageTradeband
+  name: trait-language-tradeband-name
+  description: trait-language-tradeband-desc
+  category: Languages
+
+- type: trait
+  id: LanguageFreespeak
+  name: trait-language-freespeak-name
+  description: trait-language-freespeak-desc
+  category: Languages
+
+- type: trait
+  id: LanguageElyran
+  name: trait-language-elyran-name
+  description: trait-language-elyran-desc
+  category: Languages
+
+- type: trait
+  id: LanguageValyrian
+  name: trait-language-valyrian-name
+  description: trait-language-valyrian-desc
+  category: Languages
+
+- type: trait
+  id: LanguageCanilunzt
+  name: trait-language-canilunzt-name
+  description: trait-language-canilunzt-desc
+  category: Languages
+
+- type: trait
+  id: LanguageBubblish
+  name: trait-language-bubblish-name
+  description: trait-language-bubblish-desc
+  category: Languages
+
+- type: trait
+  id: LanguageMoffic
+  name: trait-language-moffic-name
+  description: trait-language-moffic-desc
+  category: Languages

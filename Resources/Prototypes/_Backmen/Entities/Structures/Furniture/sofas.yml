@@ -1,0 +1,97 @@
+- type: entity
+  parent: SeatBase
+  id: BenchBaseMiddle
+  abstract: true
+  name: bench
+  description: Multiple seats spanning a single object. Truly a marvel of science.
+  suffix: Middle
+  components:
+  - type: Physics
+    bodyType: Static
+  - type: Transform
+    anchored: true
+  - type: Rotatable
+  - type: Sprite
+    state: middle
+
+# Standard sofa
+- type: entity
+  parent: BenchBaseMiddle
+  id: BenchSofaMiddle
+  name: sofa
+  components:
+  - type: Sprite
+    sprite: _Backmen/Structures/Benches/sofa.rsi
+
+- type: entity
+  parent: BenchSofaMiddle
+  id: BenchSofaLeft
+  suffix: Left
+  components:
+  - type: Sprite
+    state: left
+
+- type: entity
+  parent: BenchSofaMiddle
+  id: BenchSofaRight
+  suffix: Right
+  components:
+  - type: Sprite
+    state: right
+
+- type: entity
+  parent: BenchSofaMiddle
+  id: BenchSofaCorner
+  suffix: Corner
+  components:
+  - type: Sprite
+    state: corner
+
+- type: entity
+  parent: BenchSofaMiddle
+  id: BenchSofaCornerOut
+  suffix: Corner-Out
+  components:
+  - type: Sprite
+    state: corner_out
+
+# Corp sofa
+- type: entity
+  parent: BenchBaseMiddle
+  id: BenchSofaCorpMiddle
+  name: grey sofa
+  components:
+  - type: Sprite
+    sprite: _Backmen/Structures/Benches/sofa_corp.rsi
+
+- type: entity
+  parent: BenchSofaCorpMiddle
+  id: BenchSofaCorpLeft
+  suffix: Left
+  components:
+  - type: Sprite
+    state: left
+
+- type: entity
+  parent: BenchSofaCorpMiddle
+  id: BenchSofaCorpRight
+  suffix: Right
+  components:
+  - type: Sprite
+    state: right
+
+- type: entity
+  parent: BenchSofaCorpMiddle
+  id: BenchSofaCorpCorner
+  suffix: Corner
+  components:
+  - type: Sprite
+    state: corner
+
+- type: entity
+  parent: BenchSofaCorpMiddle
+  id: BenchSofaCorpCornerOut
+  suffix: Corner-Out
+  components:
+  - type: Sprite
+    state: corner_out

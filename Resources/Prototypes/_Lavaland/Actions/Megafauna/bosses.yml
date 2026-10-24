@@ -1,0 +1,215 @@
+- type: entity
+  id: ActionBaseLavalandMegafauna
+  parent: BaseAction
+  name: megafauna attack
+  abstract: true
+  components:
+  - type: Action
+    priority: -22
+    useDelay: 2
+    itemIconStyle: NoItem
+  - type: TargetAction
+    checkCanAccess: false
+    range: 35
+  - type: WorldTargetAction
+
+- type: entity
+  id: ActionAshDrakeFireBreath
+  parent: ActionBaseLavalandMegafauna
+  name: fire breath
+  description: Breathes a burning spread toward the target.
+  components:
+  - type: Action
+    icon:
+      sprite: _Lavaland/Objects/Projectiles/megafauna.rsi
+      state: drake_fire
+  - type: AngerDelayAction
+    minDelay: 2.5
+    maxDelay: 6.0
+    inverse: true
+  - type: WorldTargetAction
+    event: !type:MegafaunaProjectilePatternActionEvent
+      prototype: LavalandProjectileAshDrakeFire
+      pattern: TargetedSpread
+      count: 3
+      spreadDegrees: 42
+      speed: 12
+
+- type: entity
+  id: ActionAshDrakeSwoop
+  parent: ActionBaseLavalandMegafauna
+  name: swoop
+  description: Swoops onto the target and crushes the landing zone.
+  components:
+  - type: Action
+    icon:
+      sprite: _Lavaland/Mobs/Bosses/96x96.rsi
+      state: dragon
+  - type: AngerDelayAction
+    minDelay: 5.0
+    maxDelay: 11.0
+    inverse: true
+  - type: WorldTargetAction
+    event: !type:MegafaunaBlinkActionEvent
+
+- type: entity
+  id: ActionBubblegumBloodSpray
+  parent: ActionBaseLavalandMegafauna
+  name: blood spray
+  description: Sprays a brutal fan of projectiles.
+  components:
+  - type: Action
+    icon:
+      sprite: _Lavaland/Mobs/Bosses/96x96.rsi
+      state: bubblegum
+  - type: AngerDelayAction
+    minDelay: 2.0
+    maxDelay: 5.0
+    inverse: true
+  - type: WorldTargetAction
+    event: !type:MegafaunaProjectilePatternActionEvent
+      prototype: LavalandProjectileBubblegumBlood
+      pattern: TargetedSpread
+      count: 5
+      spreadDegrees: 50
+      speed: 10
+
+- type: entity
+  id: ActionBubblegumCharge
+  parent: ActionBaseLavalandMegafauna
+  name: demonic charge
+  description: Charges onto the target through a damaging wake.
+  components:
+  - type: Action
+    icon:
+      sprite: _Lavaland/Mobs/Bosses/96x96.rsi
+      state: bubblegum
+  - type: AngerDelayAction
+    minDelay: 4.0
+    maxDelay: 9.0
+    inverse: true
+  - type: WorldTargetAction
+    event: !type:MegafaunaBlinkActionEvent
+
+- type: entity
+  id: ActionColossusBlast
+  parent: ActionBaseLavalandMegafauna
+  name: death bolt blast
+  description: Fires a shotgun-like blast of death bolts.
+  components:
+  - type: Action
+    icon:
+      sprite: _Lavaland/Mobs/Bosses/96x96.rsi
+      state: eva
+  - type: AngerDelayAction
+    minDelay: 2.0
+    maxDelay: 5.0
+    inverse: true
+  - type: WorldTargetAction
+    event: !type:MegafaunaProjectilePatternActionEvent
+      prototype: LavalandProjectileColossusBolt
+      pattern: TargetedSpread
+      count: 5
+      spreadDegrees: 35
+      speed: 7
+
+- type: entity
+  id: ActionColossusCardinal
+  parent: ActionBaseLavalandMegafauna
+  name: cardinal death bolts
+  description: Fires death bolts in the cardinal directions.
+  components:
+  - type: Action
+    icon:
+      sprite: _Lavaland/Mobs/Bosses/96x96.rsi
+      state: eva
+  - type: AngerDelayAction
+    minDelay: 3.5
+    maxDelay: 7.0
+    inverse: true
+  - type: WorldTargetAction
+    event: !type:MegafaunaProjectilePatternActionEvent
+      prototype: LavalandProjectileColossusBolt
+      pattern: Cardinal
+      count: 4
+      speed: 7
+
+- type: entity
+  id: ActionColossusDiagonal
+  parent: ActionBaseLavalandMegafauna
+  name: diagonal death bolts
+  description: Fires death bolts diagonally around itself.
+  components:
+  - type: Action
+    icon:
+      sprite: _Lavaland/Mobs/Bosses/96x96.rsi
+      state: eva
+  - type: AngerDelayAction
+    minDelay: 3.5
+    maxDelay: 7.0
+    inverse: true
+  - type: WorldTargetAction
+    event: !type:MegafaunaProjectilePatternActionEvent
+      prototype: LavalandProjectileColossusBolt
+      pattern: Diagonal
+      count: 4
+      speed: 7
+
+- type: entity
+  id: ActionColossusRing
+  parent: ActionBaseLavalandMegafauna
+  name: judgement ring
+  description: Fires a full ring of death bolts.
+  components:
+  - type: Action
+    icon:
+      sprite: _Lavaland/Mobs/Bosses/96x96.rsi
+      state: eva
+  - type: AngerDelayAction
+    minDelay: 5.0
+    maxDelay: 10.0
+    inverse: true
+  - type: WorldTargetAction
+    event: !type:MegafaunaProjectilePatternActionEvent
+      prototype: LavalandProjectileColossusBolt
+      pattern: Ring
+      count: 12
+      speed: 6
+
+- type: entity
+  id: ActionMegaLegionSpawnSkull
+  parent: ActionBaseLavalandMegafauna
+  name: spawn skull
+  description: Calls a legion skull from the mass.
+  components:
+  - type: Action
+    icon:
+      sprite: _Lavaland/Mobs/legion.rsi
+      state: legion-skull
+  - type: AngerDelayAction
+    minDelay: 1.5
+    maxDelay: 4.0
+    inverse: true
+  - type: WorldTargetAction
+    event: !type:SpawnEntityActionEvent
+      spawn: MobLegionSkull
+      spawnAtUser: true
+
+- type: entity
+  id: ActionMegaLegionSpawnSentinel
+  parent: ActionBaseLavalandMegafauna
+  name: spawn sentinel
+  description: Calls a legion humanoid sentinel.
+  components:
+  - type: Action
+    icon:
+      sprite: _Lavaland/Mobs/legion.rsi
+      state: legion
+  - type: AngerDelayAction
+    minDelay: 4.0
+    maxDelay: 9.0
+    inverse: true
+  - type: WorldTargetAction
+    event: !type:SpawnEntityActionEvent
+      spawn: MobLegion
+      spawnAtUser: true
