@@ -1,14 +1,14 @@
 ent-BasicIndustrialThermalCentrifuge = basic thermal centrifuge
 
-    .desc = Separates crushed ore into sieved ore using heat. Warm it with fire or heaters.
+    .desc = Separates crushed ore into the main fraction and byproducts. Receives heat from an adjacent industrial heat exchanger.
 
 ent-IndustrialThermalCentrifuge = thermal centrifuge
 
-    .desc = Separates crushed ore into sieved ore using heat. Warm it with fire or heaters.
+    .desc = Separates crushed ore into the main fraction and byproducts. Receives heat from an adjacent industrial heat exchanger.
 
 ent-PerfectIndustrialThermalCentrifuge = perfect thermal centrifuge
 
-    .desc = Separates crushed ore into sieved ore using heat. Warm it with fire or heaters.
+    .desc = Separates crushed ore into the main fraction and byproducts. Receives heat from an adjacent industrial heat exchanger.
 
 ent-BasicIndustrialCrusher = basic industrial crusher
 
@@ -125,7 +125,6 @@ industrial-smelter-desc = Smelts metallurgical fractions into industrial billets
 
 basic-industrial-crusher-name = basic industrial crusher
 
-industrial-crusher-name = industrial crusher
 
 perfect-industrial-crusher-name = perfect industrial crusher
 
@@ -243,11 +242,11 @@ industrial-examine-output-buffer = Output buffer: {$count}/{$max}
 
 
 
-industrial-pipe-mode-transit = transit
+industrial-pipe-mode-transit = automatic
 
-industrial-pipe-mode-extract = extract
+industrial-pipe-mode-extract = extract only
 
-industrial-pipe-mode-insert = insert
+industrial-pipe-mode-insert = insert only
 
 industrial-pipe-mode-switched = Pipe mode changed: {$mode}
 
@@ -387,11 +386,11 @@ industrial-item-pipe-detached = Item pipe removed.
 
 ent-BasicLiquidPipe = basic liquid pipe
 
-    .desc = Transports fluids between industrial machines. Has low throughput.
+    .desc = A sealed section that transfers solutions between adjacent pipes. Low throughput.
 
 ent-IndustrialLiquidPipe = industrial liquid pipe
 
-    .desc = Quickly transports fluids between industrial machines.
+    .desc = A sealed high-throughput section. Its square shows the colour of its contents.
 
 ent-PerfectLiquidPipe = perfect liquid pipe
 
@@ -401,11 +400,11 @@ ent-PerfectLiquidPipe = perfect liquid pipe
 
 industrial-liquid-pipe-examine-tier = Pipe tier: {$tier}
 
-industrial-liquid-pipe-examine-throughput = Throughput: {$throughput}/s
+industrial-liquid-pipe-examine-throughput = Throughput: {$throughput} u/s
 
 industrial-liquid-pipe-examine-disconnected = Not connected to a liquid network.
 
-industrial-liquid-pipe-examine-network = Liquid network #{$id}: {$pipes} pipes
+industrial-liquid-pipe-examine-network = Liquid network #{$id}: {$pipes} pipes, shared budget {$throughput} u/s
 
 
 
@@ -540,7 +539,7 @@ industrial-workbench-ingredient-line = { $have }/{ $need } { $name }
 
 industrial-chassis-upgraded = Machine assembled: {$machine}.
 
-ent-IndustrialWorkbench = industrial workbench
+ent-IndustrialWorkbench = industrial workbench (tier 1)
 
     .desc = A two-tile fabrication station for expensive industrial components and upgrade modules.
 

@@ -8,6 +8,8 @@ namespace Content.Client.CartridgeLoader;
 
 public abstract class CartridgeLoaderBoundUserInterface : BoundUserInterface
 {
+    protected virtual bool PreserveCartridgeControls => false;
+    protected EntityUid? ActiveProgram => _activeProgram;
     [ViewVariables]
     private EntityUid? _activeProgram;
 
@@ -47,7 +49,7 @@ public abstract class CartridgeLoaderBoundUserInterface : BoundUserInterface
         var control = ui?.GetUIFragmentRoot();
 
         //Prevent the same UI fragment from getting disposed and attached multiple times
-        if (_activeUiFragment?.GetType() == control?.GetType())
+        if (PreserveCartridgeControls ? ReferenceEquals(_activeUiFragment, control) : _activeUiFragment?.GetType() == control?.GetType())
             return;
 
         if (_activeUiFragment is not null)
@@ -60,7 +62,7 @@ public abstract class CartridgeLoaderBoundUserInterface : BoundUserInterface
         }
 
         _activeCartridgeUI = ui;
-        _activeUiFragment?.Dispose();
+        if (!PreserveCartridgeControls) _activeUiFragment?.Dispose();
         _activeUiFragment = control;
     }
 
@@ -122,7 +124,7 @@ public abstract class CartridgeLoaderBoundUserInterface : BoundUserInterface
         base.Dispose(disposing);
 
         if (disposing)
-            _activeUiFragment?.Dispose();
+            if (!PreserveCartridgeControls) _activeUiFragment?.Dispose();
     }
 
     protected CartridgeComponent? RetrieveCartridgeComponent(EntityUid? cartridgeUid)
@@ -136,7 +138,7 @@ public abstract class CartridgeLoaderBoundUserInterface : BoundUserInterface
         SendMessage(message);
     }
 
-    private UIFragment? RetrieveCartridgeUI(EntityUid? cartridgeUid)
+    protected virtual UIFragment? RetrieveCartridgeUI(EntityUid? cartridgeUid)
     {
         var component = EntMan.GetComponentOrNull<UIFragmentComponent>(cartridgeUid);
         component?.Ui?.Setup(this, cartridgeUid);

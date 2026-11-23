@@ -76,6 +76,15 @@
         - id: Saw
         - id: Hemostat
         - id: ClothingMaskSterile
+        - id: AdvancedWoundIrrigationKit
+          amount: 4
+        - id: AdvancedRegionalAnesthetic
+          amount: 4
+        - id: AdvancedBoneFixationKit
+          amount: 2
+        - id: AdvancedSurgicalClosureKit
+          amount: 4
+        - id: AdvancedTraumaShears
 
 - type: entity
   parent: CrateMedical

@@ -7,6 +7,33 @@ namespace Content.Shared._Eclipse.Industrial;
 
 public static class ItemPipeConnectionHelper
 {
+    /// <summary>Masks point from the pipe towards the machine; input/output refer to the machine.</summary>
+    public static (PipeDirection Inputs, PipeDirection Outputs) GetMachineDirections(
+        EntityUid pipe, IEntityManager ent, SharedMapSystem map)
+    {
+        var inputs = PipeDirection.None;
+        var outputs = PipeDirection.None;
+        if (!ent.TryGetComponent(pipe, out TransformComponent? xform) || !xform.Anchored ||
+            xform.GridUid is not { } gridUid || !ent.TryGetComponent(gridUid, out MapGridComponent? grid))
+            return (inputs, outputs);
+        var pos = map.TileIndicesFor(gridUid, grid, xform.Coordinates);
+        foreach (var direction in CardinalDirections)
+        {
+            var enumerator = map.GetAnchoredEntitiesEnumerator(gridUid, grid, pos.Offset(direction));
+            while (enumerator.MoveNext(out var uid) && uid != null)
+            {
+                if (!ent.TryGetComponent(uid, out IndustrialProcessorComponent? processor) ||
+                    !IsProcessorConnectedToPipe(uid.Value, pipe, direction.GetOpposite(), ent))
+                    continue;
+                if (processor.GetItemPortMode(direction.GetOpposite()) == PortMode.Input)
+                    inputs |= direction.ToPipeDirection();
+                else
+                    outputs |= direction.ToPipeDirection();
+            }
+        }
+        return (inputs, outputs);
+    }
+
     public static readonly Direction[] CardinalDirections =
         [Direction.North, Direction.South, Direction.East, Direction.West];
 
@@ -46,7 +73,9 @@ public static class ItemPipeConnectionHelper
             return false;
         }
 
-        if (!xformA.Anchored || !xformB.Anchored)
+        if (!xformA.Anchored || !xformB.Anchored ||
+            ent.GetComponent<MetaDataComponent>(pipeA).EntityLifeStage >= EntityLifeStage.Terminating ||
+            ent.GetComponent<MetaDataComponent>(pipeB).EntityLifeStage >= EntityLifeStage.Terminating)
             return false;
 
         if (GetLayer(pipeA, ent) != GetLayer(pipeB, ent))
@@ -80,7 +109,9 @@ public static class ItemPipeConnectionHelper
             return false;
         }
 
-        if (!procXform.Anchored || !pipeXform.Anchored)
+        if (!procXform.Anchored || !pipeXform.Anchored ||
+            ent.GetComponent<MetaDataComponent>(processor).EntityLifeStage >= EntityLifeStage.Terminating ||
+            ent.GetComponent<MetaDataComponent>(pipe).EntityLifeStage >= EntityLifeStage.Terminating)
             return false;
 
         if (processorComp.GetItemPortMode(directionFromProcessorToPipe) == PortMode.Disabled)

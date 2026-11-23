@@ -8,6 +8,7 @@ using Content.Shared.Chemistry.Reaction;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Containers;
 using Content.Shared.Examine;
+using Content.Shared._Eclipse.MedicalChemistry;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Localizations;
@@ -1026,6 +1027,13 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
                 , ("type", proto.LocalizedName)
                 , ("color", proto.SubstanceColor.ToHexNoAlpha())
                 , ("amount", quantity)));
+            if (solution.Contents.Any(reagent => reagent.Reagent.Prototype == proto.ID && MedicalBatch.IsBatch(reagent.Reagent)))
+            {
+                msg.AddText(" " + Loc.GetString("medical-chemistry-scan-purity",
+                    ("purity", MathF.Round(MedicalBatch.GetPurity(solution, proto.ID) * 100))));
+                if (MedicalBatch.TryGetPatientProfile(solution, proto.ID, out var profile) && profile != null)
+                    msg.AddText(" " + Loc.GetString("medical-chemistry-personalized", ("profile", MedicalBatch.ProfileCode(profile))));
+            }
         }
 
         msg.PushNewline();

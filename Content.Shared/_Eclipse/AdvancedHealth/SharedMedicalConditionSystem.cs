@@ -87,7 +87,7 @@ public sealed class SharedMedicalConditionSystem : EntitySystem
                 function *= Math.Max(0f, 1f + (prototype.FunctionMultiplier - 1f)
                     * Math.Clamp(condition.Severity, 0f, 1f));
         }
-        return Math.Clamp(function, 0f, 1f);
+        return Math.Clamp(function * (1 - health.SystemicWeakness), 0f, 1f);
     }
 
     /// <summary>The weakest segment limits a chain; damage is never multiplied three times.</summary>
@@ -105,6 +105,19 @@ public sealed class SharedMedicalConditionSystem : EntitySystem
         => Math.Min(GetFunction(health, left ? BodyPartSlot.LeftThigh : BodyPartSlot.RightThigh),
             Math.Min(GetFunction(health, left ? BodyPartSlot.LeftShin : BodyPartSlot.RightShin),
                 GetFunction(health, left ? BodyPartSlot.LeftFoot : BodyPartSlot.RightFoot)));
+
+    public bool CanSprint(EntityUid user)
+    {
+        if (!TryComp<AdvancedHealthComponent>(user, out var health)) return true;
+        if (health.IsUnconscious || health.Shock >= 60 || health.Pain >= 85 || health.Consciousness < 50
+            || health.Perfusion < 0.5f || health.PulmonaryFunction * (1 - health.ClinicalLungImpairment) < 0.45f
+            || (GetLegFunction(health, true) + GetLegFunction(health, false)) * 0.5f < 0.65f) return false;
+        if (TryComp<AdvancedNutritionComponent>(user, out var nutrition)
+            && (nutrition.RequiresCrawling || nutrition.ReserveMultiplier < 0.4f)) return false;
+        if (TryComp<AdvancedExertionComponent>(user, out var exertion) && (exertion.Exhausted || exertion.SleepDebt >= 85)) return false;
+        if (TryComp<AdvancedDiseaseComponent>(user, out var diseases) && diseases.SprintBlocked) return false;
+        return true;
+    }
 
     public bool CanUseHand(EntityUid user, string handId, AdvancedHealthComponent? health = null)
     {
@@ -134,6 +147,7 @@ public sealed class SharedMedicalConditionSystem : EntitySystem
     public static MobState GetMobState(AdvancedHealthComponent health, MobState current)
     {
         if (current == MobState.Dead
+            || health.IsBrainDestroyed
             || health.IsHeartStopped && health.TimeSinceHeartStopped >= health.HeartStoppedDeathTime
             || health.HasBlood && health.BloodVolume <= health.BloodDeathThreshold
             || health.TraumaLoad >= health.InstantDeathTraumaThreshold
@@ -212,6 +226,7 @@ public sealed class SharedMedicalConditionSystem : EntitySystem
         var legs = (GetLegFunction(ent.Comp, true) + GetLegFunction(ent.Comp, false)) * 0.5f;
         // No functional legs: crawling remains possible, sprinting does not.
         args.ModifySpeed(0.2f + 0.8f * legs, legs);
+        if (TryComp<AdvancedNutritionComponent>(ent, out var nutrition)) args.ModifySpeed(nutrition.MovementMultiplier);
     }
 
     private void OnInsert(Entity<AdvancedHealthComponent> ent, ref ContainerIsInsertingAttemptEvent args)

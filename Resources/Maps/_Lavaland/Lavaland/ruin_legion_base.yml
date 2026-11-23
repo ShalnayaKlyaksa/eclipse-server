@@ -18232,7 +18232,7 @@ entities:
   - uid: 2797
     components:
     - type: MetaData
-      desc: A periodic table of the elements, from Hydrogen to Oganesson, and everything inbetween.  Looks like "Death to" was swiftly written above "NT" in the corner.
+      desc: A periodic table of the elements, from Hydrogen to Oganesson, and everything inbetween.  Looks like "Death to" was swiftly written above "VISH" in the corner.
       name: Periodic Table of the Elements
     - type: Transform
       pos: 20.5,4.5

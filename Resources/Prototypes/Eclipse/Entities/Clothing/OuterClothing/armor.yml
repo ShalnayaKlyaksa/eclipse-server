@@ -57,7 +57,7 @@
 - type: entity
   parent: [ClothingOuterArmorBaseCarapace, BaseCentcommContraband]
   id: ClothingOuterArmorNTNavyCapCarapace
-  name: nanotrasen navy captain carapace
+  name: VISH navy captain carapace
   description:
   components:
   - type: Sprite

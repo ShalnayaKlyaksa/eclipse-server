@@ -4,6 +4,7 @@
          xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
          xmlns:ui="clr-namespace:Content.Client.Lobby.UI"
          xmlns:profile="clr-namespace:Content.Client.Lobby.UI.ProfileEditorControls"
+         xmlns:pda="clr-namespace:Content.Client.PDA"
          HorizontalExpand="True"
          VerticalExpand="True"
          SeparationOverride="12">
@@ -62,17 +63,11 @@
                                     <TextureButton Name="SpeciesInfoButton" Scale="0.3 0.3"
                                                    VerticalAlignment="Center"
                                                    ToolTip="{Loc 'humanoid-profile-editor-guidebook-button-tooltip'}"/>
-                                    <OptionButton Name="SpeciesButton" HorizontalAlignment="Right" StyleClasses="OpenRight" />
-                                    <Button Name="IsCustomSpecies"
-                                            Text="{Loc 'humanoid-profile-editor-is-custom-species-button'}"
-                                            StyleClasses="OpenLeft"
-                                            HorizontalAlignment="Center"
-                                            ToggleMode="True"/>
+                                    <OptionButton Name="SpeciesButton" HorizontalAlignment="Right" />
                                 </BoxContainer>
-                                <BoxContainer Name="CustomSpeciesContainer" HorizontalExpand="True" Visible="False">
-                                    <Label Text="{Loc 'humanoid-profile-editor-custom-species-label'}"/>
-                                    <Control HorizontalExpand="True"/>
-                                    <LineEdit Name="CustomSpeciesEdit" MinSize="120 0" HorizontalAlignment="Right"/>
+                                <BoxContainer Name="BodyTypeRow" HorizontalExpand="True" Visible="False">
+                                    <Label Text="{Loc 'humanoid-profile-editor-body-type'}" HorizontalExpand="True" />
+                                    <OptionButton Name="BodyTypeButton" />
                                 </BoxContainer>
                                 <!-- Age -->
                                 <BoxContainer HorizontalExpand="True">
@@ -85,6 +80,10 @@
                                     <Label Text="{Loc 'humanoid-profile-editor-sex-label'}" />
                                     <Control HorizontalExpand="True"/>
                                     <OptionButton Name="SexButton" HorizontalAlignment="Right" />
+                                </BoxContainer>
+                                <BoxContainer HorizontalExpand="True">
+                                    <Label Text="{Loc 'humanoid-profile-editor-vocal-style'}" HorizontalExpand="True" />
+                                    <OptionButton Name="VocalStyleButton" />
                                 </BoxContainer>
                                 <!-- Pronouns -->
                                 <BoxContainer HorizontalExpand="True">
@@ -110,6 +109,25 @@
                                     <Control HorizontalExpand="True"/>
                                     <OptionButton Name="SpawnPriorityButton" HorizontalAlignment="Right" />
                                 </BoxContainer>
+                                <BoxContainer Name="TtsVoiceRow" HorizontalExpand="True" Visible="False" SeparationOverride="4">
+                                    <Label Text="{Loc 'humanoid-profile-editor-tts-voice'}" HorizontalExpand="True" />
+                                    <Button Name="TtsVoiceButton" />
+                                    <Button Name="TtsPreviewButton"
+                                            Text="{Loc 'humanoid-profile-editor-voice-play'}"
+                                            ToolTip="{Loc 'humanoid-profile-editor-voice-tooltip-play'}" />
+                                </BoxContainer>
+                            </BoxContainer>
+                            <BoxContainer Margin="10" Orientation="Vertical" SeparationOverride="6">
+                                <BoxContainer SeparationOverride="8">
+                                    <Label Name="HeightLabel" MinWidth="110" />
+                                    <Slider Name="HeightSlider" HorizontalExpand="True" />
+                                    <Button Name="ResetHeightButton" Text="{Loc 'humanoid-profile-editor-reset-button'}" />
+                                </BoxContainer>
+                                <BoxContainer SeparationOverride="8">
+                                    <Label Name="WeightLabel" MinWidth="110" />
+                                    <Slider Name="WeightSlider" HorizontalExpand="True" />
+                                    <Button Name="ResetWeightButton" Text="{Loc 'humanoid-profile-editor-reset-button'}" />
+                                </BoxContainer>
                             </BoxContainer>
                             <!-- Skin -->
                             <BoxContainer Margin="10" HorizontalExpand="True" Orientation="Vertical">
@@ -122,6 +140,22 @@
                                 <Label Text="{Loc 'humanoid-profile-editor-eyes-label'}" />
                                 <humanoid:EyeColorPicker Name="EyeColorPicker" />
                             </BoxContainer>
+                            <BoxContainer Margin="10" Orientation="Vertical" SeparationOverride="6">
+                                <Label Text="{Loc 'humanoid-profile-editor-roleplay-preferences'}" />
+                                <BoxContainer>
+                                    <Label Text="{Loc 'humanoid-profile-editor-erp'}" HorizontalExpand="True" />
+                                    <OptionButton Name="ErpButton" />
+                                </BoxContainer>
+                                <BoxContainer>
+                                    <Label Text="{Loc 'humanoid-profile-editor-virginity'}" HorizontalExpand="True" />
+                                    <OptionButton Name="VirginityButton" />
+                                </BoxContainer>
+                                <BoxContainer>
+                                    <Label Text="{Loc 'humanoid-profile-editor-anal-virginity'}" HorizontalExpand="True" />
+                                    <OptionButton Name="AnalVirginityButton" />
+                                </BoxContainer>
+                            </BoxContainer>
+                            <pda:PdaIdentityControl Name="PdaIdentity" Margin="10" HorizontalExpand="True" />
                         </BoxContainer>
                     </ScrollContainer>
                 </BoxContainer>

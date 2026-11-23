@@ -224,7 +224,7 @@
 - type: entity
   parent: ClothingHeadBase
   id: ClothingHeadHatNTNavyCapcap
-  name: nanotrasen navy cap cap
+  name: VISH navy cap cap
   description:
   components:
   - type: Sprite
@@ -249,7 +249,7 @@
 - type: entity
   parent: ClothingHeadBase
   id: ClothingHeadHatNTNavyCaptain
-  name: nanotrasen navy captain hardhat
+  name: VISH navy captain hardhat
   description:
   components:
   - type: Sprite
@@ -268,7 +268,7 @@
 - type: entity
   parent: ClothingHeadBase
   id: ClothingHeadHatNTNavyOfficerCap
-  name: nanotrasen navy officer cap
+  name: VISH navy officer cap
   description:
   components:
     - type: Sprite
@@ -279,7 +279,7 @@
 - type: entity
   parent: ClothingHeadBase
   id: ClothingHeadHatNTNavySailorCap
-  name: nanotrasen navy sailor cap
+  name: VISH navy sailor cap
   description:
   components:
     - type: Sprite
@@ -320,7 +320,7 @@
 - type: entity
   parent: ClothingHeadBase
   id: ClothingHeadHatBeretNTNavyMed
-  name: nanotrasen navy medical beret
+  name: VISH navy medical beret
   description:
   components:
   - type: Sprite

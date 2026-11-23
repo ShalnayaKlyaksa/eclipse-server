@@ -1,0 +1,16 @@
+uniform highp vec4 gradientRoot;
+uniform highp vec4 gradientTip;
+uniform highp vec2 gradientRange;
+uniform highp float gradientSteps;
+uniform highp float gradientHeight;
+
+highp vec4 markingGradient(highp float y) {
+    if (gradientSteps < 2.0) {
+        return vec4(1.0);
+    }
+
+    highp float pixel = floor(y * gradientHeight) + 0.5 - gradientHeight * 0.5;
+    highp float t = clamp((pixel - gradientRange.x) / max(gradientRange.y - gradientRange.x, 1.0), 0.0, 1.0);
+    highp float band = min(floor(t * gradientSteps), gradientSteps - 1.0) / (gradientSteps - 1.0);
+    return zFromSrgb(vec4(mix(gradientRoot.rgb, gradientTip.rgb, band), gradientRoot.a));
+}

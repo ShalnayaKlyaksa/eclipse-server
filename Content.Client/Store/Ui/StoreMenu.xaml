@@ -6,7 +6,7 @@
     SetSize="1120 720">
     <PanelContainer>
         <PanelContainer.PanelOverride>
-            <gfx:StyleBoxFlat BackgroundColor="#070300F4" BorderColor="#A84B00" BorderThickness="1" />
+            <gfx:StyleBoxFlat BackgroundColor="#161616F4" BorderColor="#505050" BorderThickness="1" />
         </PanelContainer.PanelOverride>
 
         <BoxContainer Orientation="Vertical" Margin="10 10 10 8">
@@ -64,7 +64,7 @@
             <BoxContainer Orientation="Horizontal" VerticalExpand="True">
                 <PanelContainer SetWidth="330" VerticalExpand="True" Margin="0 0 10 0">
                     <PanelContainer.PanelOverride>
-                        <gfx:StyleBoxFlat BackgroundColor="#0B0B0BEE" BorderColor="#A84B00" BorderThickness="1" />
+                        <gfx:StyleBoxFlat BackgroundColor="#0B0B0BEE" BorderColor="#505050" BorderThickness="1" />
                     </PanelContainer.PanelOverride>
                     <BoxContainer Orientation="Vertical" VerticalExpand="True" Margin="10">
                         <Label Text="{Loc 'store-ui-selected-label'}" FontColorOverride="#FF7A00" />
@@ -223,7 +223,7 @@
                     <BoxContainer Orientation="Horizontal" Margin="0 10 0 0">
                         <PanelContainer HorizontalExpand="True" SetHeight="82" Margin="0 0 8 0">
                             <PanelContainer.PanelOverride>
-                                <gfx:StyleBoxFlat BackgroundColor="#0B0B0BEE" BorderColor="#A84B00" BorderThickness="1" />
+                                <gfx:StyleBoxFlat BackgroundColor="#0B0B0BEE" BorderColor="#505050" BorderThickness="1" />
                             </PanelContainer.PanelOverride>
                             <BoxContainer Orientation="Horizontal" Margin="8">
                                 <TextureRect

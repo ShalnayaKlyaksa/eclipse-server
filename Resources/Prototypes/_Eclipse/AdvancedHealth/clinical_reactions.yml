@@ -1,0 +1,171 @@
+- type: reaction
+  id: ClinicalPrecursor
+  minTemp: 370
+  reactants:
+    Water:
+      amount: 1
+    Silicon:
+      amount: 1
+    Sugar:
+      amount: 1
+    Oxygen:
+      amount: 1
+      catalyst: true
+  products:
+    ClinicalPrecursor: 3
+
+- type: reaction
+  id: ClinicalAntibiotic
+  minTemp: 340
+  reactants:
+    ClinicalPrecursor:
+      amount: 1
+    Dylovene:
+      amount: 1
+    Nitrogen:
+      amount: 1
+  products:
+    ClinicalAntibioticPrecursor: 3
+
+- type: reaction
+  id: ClinicalAntifungal
+  minTemp: 360
+  reactants:
+    ClinicalPrecursor:
+      amount: 1
+    Dermaline:
+      amount: 1
+    Potassium:
+      amount: 1
+  products:
+    ClinicalAntifungalPrecursor: 3
+
+- type: reaction
+  id: ClinicalAntiviral
+  minTemp: 330
+  reactants:
+    ClinicalPrecursor:
+      amount: 1
+    Hyronalin:
+      amount: 1
+    Oxygen:
+      amount: 1
+  products:
+    ClinicalAntiviralPrecursor: 3
+
+- type: reaction
+  id: ClinicalOpioid
+  minTemp: 320
+  reactants:
+    ClinicalPrecursor:
+      amount: 1
+    Sugar:
+      amount: 1
+    Ethanol:
+      amount: 1
+  products:
+    ClinicalOpioidPrecursor: 3
+
+- type: reaction
+  id: ClinicalSedative
+  minTemp: 350
+  reactants:
+    ClinicalPrecursor:
+      amount: 1
+    Chlorine:
+      amount: 1
+    Ethanol:
+      amount: 1
+  products:
+    ClinicalSedativePrecursor: 3
+
+- type: reaction
+  id: ClinicalBronchodilator
+  minTemp: 335
+  reactants:
+    ClinicalPrecursor:
+      amount: 1
+    Dexalin:
+      amount: 1
+    Oxygen:
+      amount: 1
+  products:
+    ClinicalBronchodilatorPrecursor: 3
+
+- type: reaction
+  id: ClinicalAntihistamine
+  minTemp: 330
+  reactants:
+    ClinicalPrecursor:
+      amount: 1
+    Chlorine:
+      amount: 1
+    Dylovene:
+      amount: 1
+  products:
+    ClinicalAntihistaminePrecursor: 3
+
+- type: reaction
+  id: ClinicalAnticonvulsant
+  minTemp: 335
+  reactants:
+    ClinicalPrecursor:
+      amount: 1
+    Lithium:
+      amount: 1
+    Sugar:
+      amount: 1
+  products:
+    ClinicalAnticonvulsantPrecursor: 3
+
+- type: reaction
+  id: ClinicalAntiInflammatory
+  minTemp: 335
+  reactants:
+    ClinicalPrecursor:
+      amount: 1
+    Carbon:
+      amount: 1
+    Oxygen:
+      amount: 1
+  products:
+    ClinicalAntiInflammatoryPrecursor: 3
+
+- type: reaction
+  id: ClinicalInsulin
+  minTemp: 310
+  reactants:
+    ClinicalPrecursor:
+      amount: 1
+    Protein:
+      amount: 1
+    Water:
+      amount: 1
+  products:
+    ClinicalInsulinPrecursor: 3
+
+- type: reaction
+  id: ClinicalGlucose
+  minTemp: 315
+  reactants:
+    ClinicalPrecursor:
+      amount: 1
+    Sugar:
+      amount: 1
+    Water:
+      amount: 1
+  products:
+    ClinicalGlucosePrecursor: 3
+
+- type: reaction
+  id: ClinicalNaloxone
+  minTemp: 345
+  reactants:
+    ClinicalPrecursor:
+      amount: 1
+    Dylovene:
+      amount: 1
+    Carbon:
+      amount: 1
+  products:
+    ClinicalNaloxonePrecursor: 3

@@ -46,7 +46,8 @@ namespace Content.Server.Cargo.Systems
             if (price == 0)
                 return;
 
-            var stationUid = _station.GetOwningStation(args.Used);
+            // Cash may come from an ATM or another department. Credit the console's station.
+            var stationUid = _station.GetOwningStation(uid);
 
             if (!TryComp(stationUid, out StationBankAccountComponent? bank))
                 return;

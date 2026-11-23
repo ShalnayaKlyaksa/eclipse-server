@@ -14,34 +14,34 @@ public sealed class ScrollbarSheetlet : Sheetlet<PalettedStylesheet>
     {
         var vScrollBarGrabberNormal = new StyleBoxFlat
         {
-            BackgroundColor = Color.FromHex("#A85E12BB"), ContentMarginLeftOverride = DefaultGrabberSize,
+            BackgroundColor = ForgeStyle.Border, ContentMarginLeftOverride = DefaultGrabberSize,
             ContentMarginTopOverride = DefaultGrabberSize,
         };
         var vScrollBarGrabberHover = new StyleBoxFlat
         {
-            BackgroundColor = Color.FromHex("#D47D1BCC"), ContentMarginLeftOverride = DefaultGrabberSize,
+            BackgroundColor = ForgeStyle.Muted, ContentMarginLeftOverride = DefaultGrabberSize,
             ContentMarginTopOverride = DefaultGrabberSize,
         };
 
         var vScrollBarGrabberGrabbed = new StyleBoxFlat
         {
-            BackgroundColor = Color.FromHex("#FFB52ACC"), ContentMarginLeftOverride = DefaultGrabberSize,
+            BackgroundColor = ForgeStyle.Accent, ContentMarginLeftOverride = DefaultGrabberSize,
             ContentMarginTopOverride = DefaultGrabberSize,
         };
 
         var hScrollBarGrabberNormal = new StyleBoxFlat
         {
-            BackgroundColor = Color.FromHex("#A85E12BB"), ContentMarginTopOverride = DefaultGrabberSize,
+            BackgroundColor = ForgeStyle.Border, ContentMarginTopOverride = DefaultGrabberSize,
         };
 
         var hScrollBarGrabberHover = new StyleBoxFlat
         {
-            BackgroundColor = Color.FromHex("#D47D1BCC"), ContentMarginTopOverride = DefaultGrabberSize,
+            BackgroundColor = ForgeStyle.Muted, ContentMarginTopOverride = DefaultGrabberSize,
         };
 
         var hScrollBarGrabberGrabbed = new StyleBoxFlat
         {
-            BackgroundColor = Color.FromHex("#FFB52ACC"), ContentMarginTopOverride = DefaultGrabberSize,
+            BackgroundColor = ForgeStyle.Accent, ContentMarginTopOverride = DefaultGrabberSize,
         };
 
         return

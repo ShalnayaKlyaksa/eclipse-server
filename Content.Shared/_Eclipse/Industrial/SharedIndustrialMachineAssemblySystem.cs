@@ -97,7 +97,9 @@ public abstract class SharedIndustrialMachineAssemblySystem : EntitySystem
         if (!TryComp(tableA, out TransformComponent? xformA))
             return false;
 
-        var spawnCoords = xformA.Coordinates;
+        // The two-tile fixture extends along positive local X. Use the lower/left table as its origin.
+        var spawnCoords = directionFromAToB is Direction.South or Direction.West
+            ? Transform(tableB).Coordinates : xformA.Coordinates;
         var spawn = Spawn("IndustrialWorkbench", spawnCoords);
 
         if (TryComp(spawn, out TransformComponent? workbenchXform))
@@ -105,7 +107,8 @@ public abstract class SharedIndustrialMachineAssemblySystem : EntitySystem
             if (directionFromAToB is Direction.North or Direction.South)
                 _transform.SetLocalRotation(spawn, Angle.FromDegrees(90));
 
-            _transform.AnchorEntity(spawn, workbenchXform);
+            if (!workbenchXform.Anchored)
+                _transform.AnchorEntity(spawn, workbenchXform);
         }
 
         Del(tableA);

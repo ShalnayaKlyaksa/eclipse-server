@@ -4,6 +4,7 @@ using Content.Shared.Random;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using System.Linq;
+using Content.Server.Eclipse.Botany;
 
 namespace Content.Server.Botany;
 
@@ -94,13 +95,56 @@ public sealed class MutationSystem : EntitySystem
         // Union all of the chosen mutations into one list, and pick ones with a Distinct (unique) name.
         result.Mutations = result.Mutations.Where(m => Random(0.5f)).Union(a.Mutations.Where(m => Random(0.5f))).DistinctBy(m => m.Name).ToList();
 
-        // Hybrids have a high chance of being seedless. Balances very
-        // effective hybrid crossings.
-        if (a.Name != result.Name && Random(0.7f))
+        // Deliberate species discoveries are obtainable without mutagen.
+        foreach (var hybrid in _prototypeManager.EnumeratePrototypes<PlantHybridPrototype>())
         {
-            result.Seedless = true;
+            var first = _prototypeManager.Index(hybrid.ParentA).PacketPrototype;
+            var second = _prototypeManager.Index(hybrid.ParentB).PacketPrototype;
+            if (!((a.PacketPrototype == first && b.PacketPrototype == second)
+                  || (a.PacketPrototype == second && b.PacketPrototype == first)))
+                continue;
+            if (Random(hybrid.Chance))
+            {
+                var species = _prototypeManager.Index(hybrid.Result);
+                result = result.SpeciesChange(species);
+                result.HarvestRepeat = species.HarvestRepeat;
+                result.Yield = Math.Clamp(result.Yield, 1, Math.Max(1, species.Yield));
+                result.Seedless = false;
+                result.Viable = true;
+                return result;
+            }
         }
 
+        // One small variation per generation. Larger harvests and concentration have a resource cost.
+        switch (_robustRandom.Next(6))
+        {
+            case 0:
+                result.Potency = Math.Max(result.Potency, Math.Min(result.Potency + 3, 80));
+                result.NutrientConsumption = Math.Min(result.NutrientConsumption + 0.03f, 2);
+                break;
+            case 1:
+                result.Endurance = Math.Max(result.Endurance, Math.Min(result.Endurance + 5, 150));
+                break;
+            case 2:
+                result.WaterConsumption = Math.Min(result.WaterConsumption, Math.Max(result.WaterConsumption - 0.03f, 0.15f));
+                break;
+            case 3:
+                result.Production = Math.Min(result.Production, Math.Max(result.Production - 0.25f, 3));
+                break;
+            case 4:
+                result.Lifespan = Math.Max(result.Lifespan, Math.Min(result.Lifespan + 2, 80));
+                break;
+            case 5:
+                if (Random(0.25f) && result.Yield < 6)
+                {
+                    result.Yield++;
+                    result.NutrientConsumption = Math.Min(result.NutrientConsumption + 0.1f, 2);
+                }
+                break;
+        }
+
+        // Crossing does not arbitrarily destroy an otherwise fertile line.
+        result.Seedless = a.Seedless && b.Seedless;
         return result;
     }
 
@@ -127,7 +171,7 @@ public sealed class MutationSystem : EntitySystem
         }
 
         // if the target plant has chemical that the pollen in swab does not, 50% chance to remove it.
-        foreach (var thisChem in val)
+        foreach (var thisChem in val.ToArray())
         {
             if (!other.ContainsKey(thisChem.Key))
             {
@@ -162,7 +206,7 @@ public sealed class MutationSystem : EntitySystem
             }
         }
         // if the target plant has gas that the pollen in swab does not, 50% chance to remove it.
-        foreach (var thisGas in val)
+        foreach (var thisGas in val.ToArray())
         {
             if (!other.ContainsKey(thisGas.Key))
             {
@@ -175,12 +219,15 @@ public sealed class MutationSystem : EntitySystem
     }
     private void CrossFloat(ref float val, float other)
     {
-        val = Random(0.5f) ? val : other;
+        val += (other - val) * 0.25f;
     }
 
     private void CrossInt(ref int val, int other)
     {
-        val = Random(0.5f) ? val : other;
+        var change = (other - val) * 0.25f;
+        val += (int)Math.Truncate(change);
+        if (Random(Math.Abs(change % 1)))
+            val += Math.Sign(change);
     }
 
     private void CrossBool(ref bool val, bool other)

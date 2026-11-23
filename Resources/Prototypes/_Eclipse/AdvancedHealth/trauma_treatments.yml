@@ -1,0 +1,50 @@
+- type: entity
+  parent: AdvancedHemostaticPowder
+  id: AdvancedWoundIrrigationKit
+  name: sterile wound irrigation kit
+  description: Cleans wounds and prepares a surgical site. Does not cure an established infection.
+  components:
+  - type: AdvancedTreatment
+    treatment: WoundCleaning
+    delay: 5
+
+- type: entity
+  parent: AdvancedHemostaticPowder
+  id: AdvancedRegionalAnesthetic
+  name: regional anesthetic kit
+  description: Provides temporary regional pain control without putting the patient to sleep.
+  components:
+  - type: AdvancedTreatment
+    treatment: LocalAnesthesia
+    delay: 4
+
+- type: entity
+  parent: AdvancedSplint
+  id: AdvancedBoneFixationKit
+  name: bone fixation kit
+  description: Stabilises a fracture through an open surgical access. The bone still needs time to heal.
+  components:
+  - type: AdvancedTreatment
+    treatment: BoneFixation
+    delay: 12
+
+- type: entity
+  parent: AdvancedSutureKit
+  id: AdvancedSurgicalClosureKit
+  name: surgical closure kit
+  description: Closes a prepared surgical access after bleeding and unstable fractures have been treated.
+  components:
+  - type: AdvancedTreatment
+    treatment: SurgicalClosure
+    delay: 8
+
+- type: entity
+  parent: Retractor
+  id: AdvancedTraumaShears
+  name: trauma shears
+  description: Releases an applied tourniquet. Uncontrolled bleeding can resume immediately.
+  components:
+  - type: AdvancedTreatment
+    treatment: TourniquetRemoval
+    delay: 2
+    reusable: true

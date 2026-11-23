@@ -72,7 +72,7 @@ namespace Content.Server.AlertLevel.Commands
                 return;
             }
 
-            _alertLevelSystem.SetLevel(stationUid.Value, level, true, true, true, locked);
+            _alertLevelSystem.SetLevel(stationUid.Value, level, true, true, true, locked, overrideMortem: true);
         }
 
         private string[] GetStationLevelNames(EntityUid station)

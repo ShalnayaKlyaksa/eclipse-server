@@ -169,19 +169,30 @@ public sealed class HealthChipIndicator : BoxContainer
     public Label Value { get; }
     private readonly Label _state;
 
-    public HealthChipIndicator(string caption, float scale)
+    public HealthChipIndicator(string caption, float scale, bool stackedHeading = false)
     {
         Orientation = LayoutOrientation.Vertical;
         HorizontalExpand = true;
         SeparationOverride = Math.Max(2, (int) (3 * scale));
-        var heading = new BoxContainer { Orientation = LayoutOrientation.Horizontal, SeparationOverride = 4 };
-        heading.AddChild(HealthMenuStyle.Text(caption, Math.Max(9, (int) (11 * scale)), HealthMenuStyle.AmberDim));
-        heading.AddChild(new Control { HorizontalExpand = true });
+        var title = HealthMenuStyle.Text(caption, Math.Max(9, (int) (11 * scale)), HealthMenuStyle.AmberDim);
         Value = HealthMenuStyle.Text("", Math.Max(10, (int) (13 * scale)), HealthMenuStyle.AmberBright, true);
-        heading.AddChild(Value);
-        AddChild(heading);
         Gauge = new HealthMenuProgressBar { MinHeight = 14 * scale };
-        AddChild(Gauge);
+        var row = new BoxContainer { Orientation = LayoutOrientation.Horizontal, SeparationOverride = 4, HorizontalExpand = true };
+        if (stackedHeading)
+        {
+            AddChild(title);
+            row.AddChild(Gauge);
+            row.AddChild(Value);
+            AddChild(row);
+        }
+        else
+        {
+            row.AddChild(title);
+            row.AddChild(new Control { HorizontalExpand = true });
+            row.AddChild(Value);
+            AddChild(row);
+            AddChild(Gauge);
+        }
         _state = HealthMenuStyle.Text("", Math.Max(9, (int) (10 * scale)), HealthMenuStyle.AmberDim);
         _state.Visible = false;
         AddChild(_state);

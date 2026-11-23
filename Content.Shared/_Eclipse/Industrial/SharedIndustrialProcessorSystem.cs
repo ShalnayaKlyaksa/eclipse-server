@@ -1,4 +1,6 @@
+using System.Linq;
 using Content.Shared._Eclipse.Industrial.Prototypes;
+using Content.Shared.Construction.EntitySystems;
 using Content.Shared.Containers;
 using Content.Shared.Examine;
 using Content.Shared.Hands.EntitySystems;
@@ -18,26 +20,28 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._Eclipse.Industrial;
 
-public abstract class SharedIndustrialProcessorSystem : EntitySystem
+public abstract partial class SharedIndustrialProcessorSystem : EntitySystem
 {
-    [Dependency] protected readonly IPrototypeManager PrototypeManager = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedPowerReceiverSystem _power = default!;
-    [Dependency] private readonly SharedToolSystem _tools = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] protected IPrototypeManager PrototypeManager = default!;
+    [Dependency] protected IndustrialResourceSystem Resources = default!;
+    [Dependency] private SharedStackSystem _stacks = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPowerReceiverSystem _power = default!;
+    [Dependency] private SharedToolSystem _tools = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
-    public static readonly Direction[] CardinalDirections =
+    public static Direction[] CardinalDirections =
         [Direction.North, Direction.South, Direction.East, Direction.West];
 
-    protected readonly Dictionary<IndustrialProcessorType, List<IndustrialRecipePrototype>> RecipesByProcessor = new();
+    protected Dictionary<IndustrialProcessorType, List<IndustrialRecipePrototype>> RecipesByProcessor = new();
 
     public override void Initialize()
     {
         base.Initialize();
 
-        SubscribeLocalEvent<IndustrialProcessorComponent, InteractUsingEvent>(OnInteractUsing);
+        SubscribeLocalEvent<IndustrialProcessorComponent, InteractUsingEvent>(OnInteractUsing, after: [typeof(AnchorableSystem)]);
         SubscribeLocalEvent<IndustrialProcessorComponent, AfterInteractUsingEvent>(OnAfterInteractUsing);
         SubscribeLocalEvent<IndustrialProcessorComponent, EntInsertedIntoContainerMessage>(OnContainerModified);
         SubscribeLocalEvent<IndustrialProcessorComponent, EntRemovedFromContainerMessage>(OnContainerModified);
@@ -47,7 +51,16 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
         SubscribeLocalEvent<IndustrialProcessorComponent, PowerChangedEvent>(OnPowerChanged);
         SubscribeLocalEvent<IndustrialProcessorComponent, GetVerbsEvent<AlternativeVerb>>(OnGetPortVerbs);
 
-        foreach (var recipe in PrototypeManager.EnumeratePrototypes<IndustrialRecipePrototype>())
+        RebuildRecipeIndex();
+        SubscribeLocalEvent<PrototypesReloadedEventArgs>(_ => RebuildRecipeIndex());
+    }
+
+    private void RebuildRecipeIndex()
+    {
+        RecipesByProcessor.Clear();
+        // A supplied extra ingredient should select its specialised process rather than be ignored by a simpler recipe.
+        foreach (var recipe in PrototypeManager.EnumeratePrototypes<IndustrialRecipePrototype>()
+                     .OrderByDescending(r => r.Inputs.Count + r.FluidInputs.Count + r.Bath.Count).ThenBy(r => r.ID))
         {
             if (!RecipesByProcessor.TryGetValue(recipe.Processor, out var list))
             {
@@ -57,12 +70,26 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
 
             list.Add(recipe);
         }
+        var query = EntityQueryEnumerator<IndustrialProcessorComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            comp.RecipeCatalog = null;
+            UpdateUserInterface((uid, comp));
+        }
     }
 
     private void OnInteractUsing(Entity<IndustrialProcessorComponent> ent, ref InteractUsingEvent args)
     {
+        if (HasComp<IndustrialDataDiskComponent>(args.Used))
+            return;
         if (args.Handled)
             return;
+        if (TryComp<IndustrialUpgradeModuleComponent>(args.Used, out var module))
+        {
+            TryUpgradeMachine(ent, args.User, args.Used, module);
+            args.Handled = true;
+            return;
+        }
 
         if (IsPortConfigurator(args.Used))
         {
@@ -70,6 +97,20 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
                 CycleFacePort(ent, args.User, direction);
 
             args.Handled = true;
+            return;
+        }
+
+        if (HasComp<IndustrialFluidProcessorComponent>(ent) &&
+            HasComp<Content.Shared.Chemistry.Components.SolutionManager.SolutionContainerManagerComponent>(args.Used))
+        {
+            // Keep the native filled-container pouring priority; empty containers choose a machine tank.
+            if (TryComp<Content.Shared.Chemistry.Components.SolutionTransferComponent>(args.Used, out var transfer) &&
+                transfer.CanReceive && Solutions.TryGetRefillableSolution(args.Used, out _, out var heldSolution) &&
+                heldSolution.Volume == 0 && heldSolution.AvailableVolume > 0)
+            {
+                args.Handled = true;
+                OpenFluidSelection(ent, args.User, args.Used);
+            }
             return;
         }
 
@@ -83,13 +124,7 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
             return;
         }
 
-        if (input.Count >= ent.Comp.MaxInputSlots && !CanMergeIntoContainer(input, args.Used))
-        {
-            args.Handled = true;
-            return;
-        }
-
-        if (!_hands.TryDropIntoContainer(args.User, args.Used, input))
+        if (!TryInsertHeld(ent, args.User, args.Used))
             return;
 
         _popup.PopupClient(Loc.GetString("industrial-manual-insert-success"), ent, args.User);
@@ -118,6 +153,10 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
             remove.Container.ID != ent.Comp.OutputContainerId)
             return;
 
+        if (ent.Comp.InTransaction)
+            return;
+        ent.Comp.WaitingForOutput = false;
+
         if (ent.Comp.AutoStart)
             TryStartProcessing(ent);
 
@@ -133,7 +172,7 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
             ? ent.Comp.MaxInputSlots
             : ent.Comp.MaxOutputSlots;
 
-        if (args.Container.Count >= maxSlots && !CanMergeIntoContainer(args.Container, args.EntityUid))
+        if (args.Container.Count >= maxSlots)
             args.Cancel();
     }
 
@@ -200,10 +239,19 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
 
     protected void CycleFacePort(Entity<IndustrialProcessorComponent> ent, EntityUid user, Direction direction)
     {
-        var mode = ent.Comp.CycleFacePort(direction);
+        var mode = ent.Comp.GetFacePort(direction) switch
+        {
+            FacePortState.Disabled when ent.Comp.ProcessorType == IndustrialProcessorType.FluidTank => FacePortState.LiquidInput,
+            FacePortState.Disabled => FacePortState.ItemInput,
+            FacePortState.ItemInput => FacePortState.ItemOutput,
+            FacePortState.ItemOutput when HasComp<IndustrialFluidProcessorComponent>(ent) => FacePortState.LiquidInput,
+            FacePortState.LiquidInput => FacePortState.LiquidOutput,
+            FacePortState.LiquidOutput when HasComp<IndustrialHeatPoweredComponent>(ent) => FacePortState.HeatInput,
+            FacePortState.ItemOutput when HasComp<IndustrialHeatPoweredComponent>(ent) => FacePortState.HeatInput,
+            _ => FacePortState.Disabled,
+        };
+        ent.Comp.SetFacePort(direction, mode);
 
-        if (mode == FacePortState.ItemOutput)
-            ent.Comp.ClearItemOutputsExcept(direction);
 
         Dirty(ent);
         _popup.PopupClient(Loc.GetString("industrial-face-port-switched",
@@ -213,7 +261,12 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
         UpdateUserInterface(ent);
     }
 
+    protected virtual void TryUpgradeMachine(Entity<IndustrialProcessorComponent> ent, EntityUid user,
+        EntityUid moduleUid, IndustrialUpgradeModuleComponent module) { }
+
     protected virtual void OnPortModeChanged(Entity<IndustrialProcessorComponent> ent) { }
+
+    protected virtual void OpenFluidSelection(Entity<IndustrialProcessorComponent> ent, EntityUid user, EntityUid container) { }
 
     protected virtual void UpdateUserInterface(Entity<IndustrialProcessorComponent> ent) { }
 
@@ -259,6 +312,8 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
             IndustrialProcessorState.Blocked => "industrial-processor-blocked",
             IndustrialProcessorState.Unpowered => "industrial-processor-unpowered",
             IndustrialProcessorState.Unheated => "industrial-processor-unheated",
+            IndustrialProcessorState.Paused => "industrial-processor-paused",
+            IndustrialProcessorState.Unresearched => "industrial-processor-unresearched",
             _ => "industrial-processor-idle",
         };
 
@@ -285,6 +340,15 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
 
     protected IndustrialProcessorState GetState(Entity<IndustrialProcessorComponent> ent)
     {
+        if (IsEnvironmentBlocked(ent))
+            return IndustrialProcessorState.Blocked;
+        if (!ent.Comp.Enabled)
+            return IndustrialProcessorState.Paused;
+        if (TryComp<IndustrialExtractorComponent>(ent, out var extractor))
+            return extractor.State;
+        if (!HasAvailableRecipe(ent))
+            return IndustrialProcessorState.Unresearched;
+
         if (HasComp<IndustrialHeatPoweredComponent>(ent))
         {
             if (!HasSufficientHeat(ent))
@@ -295,8 +359,18 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
             return IndustrialProcessorState.Unpowered;
         }
 
-        if (ent.Comp.IsWorking)
+        if (ent.Comp.WaitingForOutput)
+            return IndustrialProcessorState.Blocked;
+        if (TryComp<IndustrialManualProcessorComponent>(ent, out var manual) && manual.Busy)
             return IndustrialProcessorState.Working;
+        if (ent.Comp.IsWorking)
+        {
+            if (ent.Comp.ProcessingAccumulator >= ent.Comp.ProcessingTime &&
+                ent.Comp.CurrentRecipe is { } current && PrototypeManager.TryIndex(current, out var active) &&
+                !CanAcceptOutputs(ent, active))
+                return IndustrialProcessorState.Blocked;
+            return IndustrialProcessorState.Working;
+        }
 
         if (TryMatchRecipe(ent, out var recipe) && recipe != null && !CanAcceptOutputs(ent, recipe))
             return IndustrialProcessorState.Blocked;
@@ -315,8 +389,22 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
         return temp.CurrentTemperature >= heat.MinTemperature;
     }
 
+    private bool HasAvailableRecipe(Entity<IndustrialProcessorComponent> ent)
+    {
+        var id = ent.Comp.CurrentRecipe ?? ent.Comp.SelectedRecipe;
+        return id == null || PrototypeManager.TryIndex(id.Value, out IndustrialRecipePrototype? recipe) &&
+            IsRecipeAvailable(ent, recipe);
+    }
+
     protected bool CanOperate(Entity<IndustrialProcessorComponent> ent)
     {
+        if (!ent.Comp.Enabled || !HasAvailableRecipe(ent))
+            return false;
+
+        if ((ent.Comp.CurrentRecipe ?? ent.Comp.SelectedRecipe) is { } id &&
+            PrototypeManager.TryIndex(id, out IndustrialRecipePrototype? recipe) && !HasProcessEnvironment(ent, recipe))
+            return false;
+
         if (HasComp<IndustrialHeatPoweredComponent>(ent))
             return HasSufficientHeat(ent);
 
@@ -324,6 +412,16 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
             return true;
 
         return IsPowered(ent);
+    }
+
+    protected bool HasProcessEnvironment(Entity<IndustrialProcessorComponent> ent, IndustrialRecipePrototype recipe)
+        => recipe.CleanroomGrade <= 0 || TryComp<RoomSanitationComponent>(ent, out var room) && room.Grade >= recipe.CleanroomGrade;
+
+    protected bool IsEnvironmentBlocked(Entity<IndustrialProcessorComponent> ent)
+    {
+        if ((ent.Comp.CurrentRecipe ?? ent.Comp.SelectedRecipe) is { } id && PrototypeManager.TryIndex(id, out IndustrialRecipePrototype? recipe))
+            return !HasProcessEnvironment(ent, recipe);
+        return TryMatchRecipe(ent, out var matched) && matched != null && !HasProcessEnvironment(ent, matched);
     }
 
     protected bool IsPowered(Entity<IndustrialProcessorComponent> ent)
@@ -336,6 +434,9 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
 
     protected bool IsValidInput(EntityUid item, IndustrialProcessorType processorType)
     {
+        if (processorType == IndustrialProcessorType.Buffer)
+            return HasComp<Content.Shared.Item.ItemComponent>(item);
+
         if (!RecipesByProcessor.TryGetValue(processorType, out var recipes))
             return false;
 
@@ -345,7 +446,7 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
 
         foreach (var recipe in recipes)
         {
-            if (recipe.Inputs.ContainsKey(proto.ID))
+            if (recipe.Inputs.Keys.Any(id => Resources.Key(id) == Resources.Key(proto.ID)))
                 return true;
         }
 
@@ -354,15 +455,24 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
 
     public bool CanAcceptInputProto(Entity<IndustrialProcessorComponent> ent, string protoId)
     {
+        if (ent.Comp.ProcessorType == IndustrialProcessorType.Buffer)
+        {
+            if (!PrototypeManager.TryIndex<EntityPrototype>(protoId, out var proto) ||
+                !proto.TryGetComponent<Content.Shared.Item.ItemComponent>(out _, EntityManager.ComponentFactory))
+                return false;
+            return ent.Comp.SelectedRecipe is not { } filter ||
+                   PrototypeManager.TryIndex(filter, out IndustrialRecipePrototype? filtered) &&
+                   filtered.Outputs.Keys.Any(id => Resources.Key(id) == Resources.Key(protoId));
+        }
         if (!RecipesByProcessor.TryGetValue(ent.Comp.ProcessorType, out var recipes))
             return false;
-
         foreach (var recipe in recipes)
         {
-            if (recipe.Inputs.ContainsKey(protoId))
+            if (ent.Comp.SelectedRecipe is { } selected && selected.Id != recipe.ID)
+                continue;
+            if (recipe.Inputs.Keys.Any(id => Resources.Key(id) == Resources.Key(protoId)))
                 return true;
         }
-
         return false;
     }
 
@@ -375,24 +485,21 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
         if (proto == null)
             return false;
 
+        long free = 0;
         foreach (var existing in container.ContainedEntities)
         {
-            if (Prototype(existing)?.ID != proto.ID || !TryComp<StackComponent>(existing, out var existingStack))
+            if (!Resources.Matches(existing, proto.ID) || !TryComp<StackComponent>(existing, out var other))
                 continue;
-
-            var max = existingStack.MaxCountOverride ?? PrototypeManager.Index(existingStack.StackTypeId).MaxCount;
-            if (existingStack.Count + stack.Count <= max)
-                return true;
+            free += _stacks.GetAvailableSpace(other);
         }
-
-        return false;
+        return free >= stack.Count;
     }
 
     public bool CanMergeProtoIntoContainer(BaseContainer container, string protoId, int amount)
     {
         foreach (var existing in container.ContainedEntities)
         {
-            if (Prototype(existing)?.ID != protoId || !TryComp<StackComponent>(existing, out var stack))
+            if (!Resources.Matches(existing, protoId) || !TryComp<StackComponent>(existing, out var stack))
                 continue;
 
             var max = stack.MaxCountOverride ?? PrototypeManager.Index(stack.StackTypeId).MaxCount;
@@ -423,70 +530,93 @@ public abstract class SharedIndustrialProcessorSystem : EntitySystem
 
         foreach (var candidate in recipes)
         {
-            var matched = true;
-
-            foreach (var (protoId, amount) in candidate.Inputs)
-            {
-                var found = false;
-
-                foreach (var contained in input.ContainedEntities)
-                {
-                    if (Prototype(contained)?.ID != protoId)
-                        continue;
-
-                    if (GetAvailableCount(contained) >= amount)
-                    {
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (!found)
-                {
-                    matched = false;
-                    break;
-                }
-            }
-
-            if (matched)
-            {
-                recipe = candidate;
-                return true;
-            }
+            if (ent.Comp.SelectedRecipe is { } selected && candidate.ID != selected.Id)
+                continue;
+            if (!IsRecipeAvailable(ent, candidate) || !Resources.CanAfford(input.ContainedEntities, candidate.Inputs) ||
+                !HasFluidIngredients(ent, candidate))
+                continue;
+            recipe = candidate;
+            return true;
         }
-
         return false;
+    }
+
+    protected bool IsRecipeAvailable(Entity<IndustrialProcessorComponent> ent, IndustrialRecipePrototype recipe)
+    {
+        if (ent.Comp.ProcessorType == IndustrialProcessorType.Buffer)
+            return true;
+        if (recipe.MinimumTier > ent.Comp.Tier)
+            return false;
+        if (recipe.RequiredTechnology is not { } technology)
+            return true;
+        if (TryComp<IndustrialMachineKnowledgeComponent>(ent, out var knowledge) && knowledge.Technologies.Contains(technology))
+            return true;
+        // New factory branches require a physical hand-off from science.
+        return !recipe.RequireDataDisk && !technology.Id.StartsWith("Industrial", StringComparison.Ordinal) &&
+            EntityManager.System<Content.Shared.Research.Systems.SharedResearchSystem>().HasTechnology(ent, technology);
     }
 
     protected bool CanAcceptOutputs(Entity<IndustrialProcessorComponent> ent, IndustrialRecipePrototype recipe)
     {
+        if (!CanAcceptFluidOutputs(ent, recipe))
+            return false;
         if (!_container.TryGetContainer(ent, ent.Comp.OutputContainerId, out var output))
             return false;
 
-        var newSlotsNeeded = 0;
-
-        foreach (var (protoId, amount) in recipe.Outputs)
+        var available = new Dictionary<string, long>();
+        foreach (var item in output.ContainedEntities)
         {
-            var merged = false;
-
-            foreach (var existing in output.ContainedEntities)
-            {
-                if (Prototype(existing)?.ID != protoId || !TryComp<StackComponent>(existing, out var stack))
-                    continue;
-
-                var max = stack.MaxCountOverride ?? PrototypeManager.Index(stack.StackTypeId).MaxCount;
-                if (stack.Count + amount <= max)
-                {
-                    merged = true;
-                    break;
-                }
-            }
-
-            if (!merged)
-                newSlotsNeeded++;
+            if (!TryComp<StackComponent>(item, out var stack) || Prototype(item) is not { } proto)
+                continue;
+            var key = Resources.Key(proto.ID);
+            available[key] = available.GetValueOrDefault(key) + _stacks.GetMaxCount(stack) - stack.Count;
         }
+        var slotsNeeded = 0L;
+        foreach (var (prototype, amount) in recipe.Outputs)
+        {
+            if (amount <= 0)
+                return false;
+            if (!Resources.TryGetStack(prototype, out var stack))
+            {
+                slotsNeeded += amount;
+                continue;
+            }
+            var key = Resources.Key(prototype);
+            var free = available.GetValueOrDefault(key);
+            var merged = Math.Min(free, amount);
+            available[key] = free - merged;
+            var remaining = amount - merged;
+            var max = _stacks.GetMaxCount(stack);
+            var slots = (remaining + max - 1L) / max;
+            slotsNeeded += slots;
+            available[key] += slots * max - remaining;
+        }
+        return output.Count + slotsNeeded <= ent.Comp.MaxOutputSlots;
+    }
 
-        return output.Count + newSlotsNeeded <= ent.Comp.MaxOutputSlots;
+    protected bool TryInsertHeld(Entity<IndustrialProcessorComponent> ent, EntityUid user, EntityUid item)
+    {
+        if (Prototype(item) is not { } prototype || !CanAcceptInputProto(ent, prototype.ID) ||
+            !_container.TryGetContainer(ent, ent.Comp.InputContainerId, out var input))
+            return false;
+        if (input.Count < ent.Comp.MaxInputSlots)
+            return _hands.TryDropIntoContainer(user, item, input);
+        if (!CanMergeIntoContainer(input, item) || !_hands.TryDrop(user, item))
+            return false;
+        foreach (var existing in input.ContainedEntities)
+        {
+            if (!TryComp<StackComponent>(existing, out var recipient) || !TryComp<StackComponent>(item, out var donor))
+                continue;
+            _stacks.TryMergeStacks((item, donor), (existing, recipient), out _);
+            if (donor.Count == 0)
+            {
+                TryStartProcessing(ent);
+                UpdateUserInterface(ent);
+                return true;
+            }
+        }
+        _hands.PickupOrDrop(user, item);
+        return false;
     }
 
     public bool CanAcceptInputItem(Entity<IndustrialProcessorComponent> ent, string protoId, int amount = 1)

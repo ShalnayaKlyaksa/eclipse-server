@@ -4,6 +4,7 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Maths;
 using Content.Shared.CartridgeLoader.Cartridges;
+using Content.Client.PDA;
 
 namespace Content.Client.CartridgeLoader.Cartridges;
 
@@ -16,18 +17,22 @@ public sealed partial class NanoTaskItemControl : Control
     public Action<int>? OnMainPressed;
     public Action<int>? OnDonePressed;
 
-    public NanoTaskItemControl(NanoTaskItemAndId item)
+    public NanoTaskItemControl(NanoTaskItemAndId item, bool selected = false)
     {
         RobustXamlLoader.Load(this);
+        DoneButton.RemoveStyleClass("ButtonSmall"); DoneButton.RemoveStyleClass("OpenLeft");
+        DoneButton.StyleBoxOverride = null; DoneButton.AddStyleClass("button");
 
         TaskLabel.Text = item.Data.Description;
+        MainButton.ToggleMode = true; MainButton.Pressed = selected;
+        MainButton.ToolTip = item.Data.Description + "\n" + item.Data.TaskIsFor;
         TaskLabel.FontColorOverride = Color.White;
         TaskForLabel.Text = item.Data.TaskIsFor;
 
         MainButton.OnPressed += _ => OnMainPressed?.Invoke(item.Id);
         DoneButton.OnPressed += _ => OnDonePressed?.Invoke(item.Id);
 
-        MainButton.Disabled = item.Data.IsTaskDone;
+        MainButton.ModulateSelfOverride = item.Data.IsTaskDone ? Color.FromHex("#9DAEB2") : Color.White;
         DoneButton.Text = item.Data.IsTaskDone ? Loc.GetString("nano-task-ui-revert-done") : Loc.GetString("nano-task-ui-done");
     }
 }

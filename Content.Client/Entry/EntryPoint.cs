@@ -48,6 +48,7 @@ namespace Content.Client.Entry
 {
     public sealed class EntryPoint : GameClient
     {
+        private Content.Client._Eclipse.Industrial.IndustrialPipeAtlas? _industrialPipeAtlas;
         [Dependency] private readonly IBaseClient _baseClient = default!;
         [Dependency] private readonly IGameController _gameController = default!;
         [Dependency] private readonly IStateManager _stateManager = default!;
@@ -100,6 +101,8 @@ namespace Content.Client.Entry
             Dependencies.BuildGraph();
             Dependencies.InjectDependencies(this);
 
+            _industrialPipeAtlas = new Content.Client._Eclipse.Industrial.IndustrialPipeAtlas(_resourceManager);
+
             _contentLoc.Initialize();
             _componentFactory.DoAutoRegistrations();
             _componentFactory.IgnoreMissingComponents();
@@ -113,6 +116,7 @@ namespace Content.Client.Entry
             _prototypeManager.RegisterIgnore("accent");
             _prototypeManager.RegisterIgnore("gasReaction");
             _prototypeManager.RegisterIgnore("seed"); // Seeds prototypes are server-only.
+            _prototypeManager.RegisterIgnore("plantHybrid");
             _prototypeManager.RegisterIgnore("objective");
             _prototypeManager.RegisterIgnore("holiday");
             _prototypeManager.RegisterIgnore("htnCompound");
@@ -157,6 +161,12 @@ namespace Content.Client.Entry
             _configManager.SetCVar("interface.resolutionAutoScaleMinimum", 0.5f);
         }
 
+        public override void Shutdown()
+        {
+            _industrialPipeAtlas?.Dispose();
+            base.Shutdown();
+        }
+
         public override void PostInit()
         {
             base.PostInit();
@@ -174,7 +184,8 @@ namespace Content.Client.Entry
             _clientPreferencesManager.Initialize();
             _euiManager.Initialize();
             _voteManager.Initialize();
-            _userInterfaceManager.SetDefaultTheme("SS14DefaultTheme");
+            _userInterfaceManager.SetDefaultTheme("SS14ForgeTheme");
+            _configManager.OverrideDefault(CVars.InterfaceTheme, "SS14ForgeTheme");
             _userInterfaceManager.SetActiveTheme(_configManager.GetCVar(CVars.InterfaceTheme));
             _documentParsingManager.Initialize();
             _titleWindowManager.Initialize();

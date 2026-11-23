@@ -1,0 +1,90 @@
+- type: organCategory
+  id: Intestines
+- type: organCategory
+  id: Uterus
+- type: organCategory
+  id: OvaryLeft
+- type: organCategory
+  id: OvaryRight
+- type: organCategory
+  id: VaginalCanal
+- type: organCategory
+  id: Prostate
+
+- type: entity
+  parent: OrganHumanInternal
+  id: EclipseOrganHumanIntestines
+  name: intestines
+  components:
+  - type: GibbableOrgan
+  - type: Organ
+    category: Intestines
+  - type: Sprite
+    scale: 0.45, 0.45
+    layers:
+    - texture: _Eclipse/Interface/AdvancedHealth/Organs48/intestines.png
+
+- type: entity
+  parent: OrganHumanInternal
+  id: EclipseOrganHumanUterus
+  name: uterus
+  components:
+  - type: GibbableOrgan
+  - type: Organ
+    category: Uterus
+  - type: Sprite
+    scale: 0.35, 0.35
+    layers:
+    - texture: _Eclipse/Interface/AdvancedHealth/Organs48/uterus.png
+
+- type: entity
+  parent: OrganHumanInternal
+  id: EclipseOrganHumanOvaryLeft
+  name: left ovary
+  components:
+  - type: GibbableOrgan
+  - type: Organ
+    category: OvaryLeft
+  - type: Sprite
+    scale: 0.28, 0.28
+    layers:
+    - texture: _Eclipse/Interface/AdvancedHealth/Organs48/ovary_left.png
+
+- type: entity
+  parent: OrganHumanInternal
+  id: EclipseOrganHumanOvaryRight
+  name: right ovary
+  components:
+  - type: GibbableOrgan
+  - type: Organ
+    category: OvaryRight
+  - type: Sprite
+    scale: 0.28, 0.28
+    layers:
+    - texture: _Eclipse/Interface/AdvancedHealth/Organs48/ovary_right.png
+
+- type: entity
+  parent: OrganHumanInternal
+  id: EclipseOrganHumanVaginalCanal
+  name: vaginal canal
+  components:
+  - type: GibbableOrgan
+  - type: Organ
+    category: VaginalCanal
+  - type: Sprite
+    scale: 0.35, 0.35
+    layers:
+    - texture: _Eclipse/Interface/AdvancedHealth/Organs48/vagina_internal.png
+
+- type: entity
+  parent: OrganHumanInternal
+  id: EclipseOrganHumanProstate
+  name: prostate
+  components:
+  - type: GibbableOrgan
+  - type: Organ
+    category: Prostate
+  - type: Sprite
+    scale: 0.28, 0.28
+    layers:
+    - texture: _Eclipse/Interface/AdvancedHealth/Organs48/prostate.png

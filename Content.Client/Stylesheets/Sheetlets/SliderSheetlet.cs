@@ -19,7 +19,7 @@ public sealed class SliderSheetlet<T> : Sheetlet<T> where T: PalettedStylesheet,
         var sliderFillBox = new StyleBoxTexture
         {
             Texture = sliderFillTex,
-            Modulate = sheet.PositivePalette.TextDark,
+            Modulate = ForgeStyle.Accent,
         };
 
         var sliderBackBox = new StyleBoxTexture

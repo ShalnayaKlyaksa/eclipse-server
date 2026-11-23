@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Client.Lathe;
 using Content.Client.Research;
 using Content.Client.Research.UI;
@@ -27,16 +28,26 @@ public sealed partial class FancyTechnologyInfoPanel : Control
         IoCManager.InjectDependencies(this);
 
         var lathe = _ent.System<LatheSystem>();
-        var research = _ent.System<ResearchSystem>();
         Prototype = proto;
+        NoPrereqLabel.SetMessage(Loc.GetString("industrial-research-no-prerequisites"), defaultColor: Color.FromHex("#718F77"));
+        TechnologyNameLabel.ToolTip = Loc.GetString(proto.Name);
 
-        TechnologyNameLabel.Text = Loc.GetString(proto.Name);
+        TechnologyNameLabel.SetMessage(Loc.GetString(proto.Name), defaultColor: Color.FromHex("#CBE8C5"));
+        DisciplineLabel.Text = Loc.GetString(_proto.Index(proto.Discipline).Name);
         DisciplineTexture.Texture = sprite.Frame0(_proto.Index(proto.Discipline).Icon);
         TechnologyTexture.Texture = sprite.Frame0(proto.Icon);
 
-        InitializePrerequisites(proto, research, sprite);
+        InitializePrerequisites(proto);
 
         InitializeRecipeUnlocks(proto, lathe, sprite);
+        foreach (var next in _proto.EnumeratePrototypes<TechnologyPrototype>()
+                     .Where(x => !x.Hidden && x.TechnologyPrerequisites.Any(p => p.Id == proto.ID)).OrderBy(x => x.Cost))
+        {
+            var button = new Button { Text = "> " + Loc.GetString(next.Name), ClipText = true, HorizontalExpand = true };
+            button.OnPressed += _ => OpenPrerequistAction?.Invoke(next);
+            NextTechContainer.AddChild(button);
+        }
+        NextSection.Visible = NextTechContainer.ChildCount != 0;
 
         ResearchButton.ToolTip = !hasAccess
             ? Loc.GetString("research-console-no-access-popup")
@@ -48,9 +59,9 @@ public sealed partial class FancyTechnologyInfoPanel : Control
 
         Color? color = availability switch
         {
-            ResearchAvailability.Researched => Color.LimeGreen,
-            ResearchAvailability.PrereqsMet => Color.Crimson,
-            ResearchAvailability.Unavailable => Color.Crimson,
+            ResearchAvailability.Researched => Color.FromHex("#9FCB9A"),
+            ResearchAvailability.PrereqsMet => Color.FromHex("#819386"),
+            ResearchAvailability.Unavailable => Color.FromHex("#819386"),
             _ => null
         };
         TechnologyCostLabel.SetMessage(
@@ -67,7 +78,7 @@ public sealed partial class FancyTechnologyInfoPanel : Control
         OpenPrerequistAction?.Invoke(tech);
     }
 
-    private void InitializePrerequisites(TechnologyPrototype proto, ResearchSystem research, SpriteSystem sprite)
+    private void InitializePrerequisites(TechnologyPrototype proto)
     {
         NoPrereqLabel.Visible = proto.TechnologyPrerequisites.Count == 0;
         PrereqsContainer.Visible = !NoPrereqLabel.Visible;
@@ -76,23 +87,70 @@ public sealed partial class FancyTechnologyInfoPanel : Control
         foreach (var techId in proto.TechnologyPrerequisites)
         {
             var tech = _proto.Index(techId);
-            var description = research.GetTechnologyDescription(tech, true, false, true);
 
-            var cardControl = new MiniTechnologyCardControl(tech, _proto, sprite, description);
-            cardControl.Main.Disabled = false;
-            cardControl.Main.OnPressed += args => { OnTechnologyButtonPressed(args, tech); };
-
-            RequiredTechContainer.AddChild(cardControl);
+            var button = new Button { Text = "> " + Loc.GetString(tech.Name), ClipText = true, HorizontalExpand = true };
+            button.ToolTip = Loc.GetString(tech.Name);
+            button.OnPressed += args => OnTechnologyButtonPressed(args, tech);
+            RequiredTechContainer.AddChild(button);
         }
     }
 
     private void InitializeRecipeUnlocks(TechnologyPrototype proto, LatheSystem lathe, SpriteSystem sprite)
     {
         UnlocksContainer.RemoveAllChildren();
+        foreach (var unlock in proto.GenericUnlocks)
+        {
+            var text = new Robust.Client.UserInterface.Controls.RichTextLabel();
+            text.SetMessage(Loc.GetString(unlock.UnlockDescription), defaultColor: Color.FromHex("#EEEEEE"));
+            UnlocksContainer.AddChild(text);
+        }
+        var shown = new HashSet<string>();
+        foreach (var recipe in _proto.EnumeratePrototypes<Content.Shared._Eclipse.Industrial.Prototypes.IndustrialRecipePrototype>())
+        {
+            if (recipe.RequiredTechnology != proto.ID) continue;
+            foreach (var reagentId in recipe.FluidOutputs.Keys)
+            {
+                if (!shown.Add("fluid:" + reagentId.Id)) continue;
+                var reagent = _proto.Index(reagentId);
+                var row = new BoxContainer { SeparationOverride = 8, HorizontalExpand = true };
+                row.AddChild(new PanelContainer { SetSize = new System.Numerics.Vector2(14), VerticalAlignment = VAlignment.Center,
+                    PanelOverride = new Robust.Client.Graphics.StyleBoxFlat { BackgroundColor = reagent.SubstanceColor } });
+                var label = new RichTextLabel { HorizontalExpand = true };
+                label.SetMessage(reagent.LocalizedName, defaultColor: Color.FromHex("#A6A6A6"));
+                row.AddChild(label);
+                UnlocksContainer.AddChild(row);
+            }
+            foreach (var result in recipe.Outputs.Keys)
+            {
+                if (!shown.Add(result) || !_proto.TryIndex<EntityPrototype>(result, out var output)) continue;
+                var row = new BoxContainer { SeparationOverride = 8, HorizontalExpand = true };
+                row.AddChild(new TextureRect { Texture = sprite.Frame0(output), SetSize = new System.Numerics.Vector2(24), Stretch = TextureRect.StretchMode.KeepAspectCentered });
+                var label = new RichTextLabel { HorizontalExpand = true, ToolTip = Loc.GetString("industrial-research-process-info", ("seconds", recipe.Time), ("grade", recipe.CleanroomGrade)) };
+                label.SetMessage(output.Name, defaultColor: Color.FromHex("#A6A6A6"));
+                row.AddChild(label);
+                UnlocksContainer.AddChild(row);
+            }
+        }
+        foreach (var craft in _proto.EnumeratePrototypes<Content.Shared._Eclipse.Industrial.Prototypes.IndustrialFabricationRecipePrototype>())
+        {
+            if (craft.RequiredTechnology != proto.ID || !shown.Add(craft.Result.Id) || !_proto.TryIndex(craft.Result, out var output)) continue;
+            var row = new BoxContainer { SeparationOverride = 8, HorizontalExpand = true };
+            row.AddChild(new TextureRect { Texture = sprite.Frame0(output), SetSize = new System.Numerics.Vector2(24), Stretch = TextureRect.StretchMode.KeepAspectCentered });
+            var label = new RichTextLabel { HorizontalExpand = true };
+            label.SetMessage(output.Name, defaultColor: Color.FromHex("#A6A6A6"));
+            row.AddChild(label);
+            UnlocksContainer.AddChild(row);
+        }
         foreach (var recipeId in proto.RecipeUnlocks)
         {
             var recipe = _proto.Index(recipeId);
-            UnlocksContainer.AddChild(new MiniRecipeCardControl(proto, recipe, _proto, sprite, lathe));
+            if (recipe.Result is not { } result || !shown.Add(result.Id) || !_proto.TryIndex(result, out var output)) continue;
+            var row = new BoxContainer { SeparationOverride = 8, HorizontalExpand = true };
+            row.AddChild(new TextureRect { Texture = sprite.Frame0(output), SetSize = new System.Numerics.Vector2(24), Stretch = TextureRect.StretchMode.KeepAspectCentered });
+            var label = new RichTextLabel { HorizontalExpand = true };
+            label.SetMessage(lathe.GetRecipeName(recipe), defaultColor: Color.FromHex("#A6A6A6"));
+            row.AddChild(label);
+            UnlocksContainer.AddChild(row);
         }
     }
 

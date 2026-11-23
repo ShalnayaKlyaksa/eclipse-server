@@ -126,7 +126,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: NT-SEC "Бобик"
+      name: ВИШ-SEC "Бобик"
     - type: Transform
       rot: 4.71238898038469 rad
       pos: -99.728226,25.594978

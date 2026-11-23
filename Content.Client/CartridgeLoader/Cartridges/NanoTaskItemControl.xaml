@@ -1,22 +1,22 @@
 <Control xmlns="https://spacestation14.io" xmlns:system="clr-namespace:System;assembly=System.Runtime">
     <BoxContainer Name="MainContainer"
                   Orientation="Horizontal"
-                  SetWidth="250">
+                  HorizontalExpand="True" SeparationOverride="2">
         <Button Name="MainButton"
                 HorizontalExpand="True"
                 VerticalExpand="True"
-                StyleClasses="ButtonSquare"
-                Margin="-1 0 0 0">
+                StyleClasses="button"
+                Margin="0">
             <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
                 <BoxContainer Orientation="Vertical"
                               VerticalExpand="True"
                               HorizontalExpand="True"
-                              Margin="-5 0 0 0">
+                              Margin="2">
                     <Label Name="TaskLabel"
-                           StyleClasses="LabelSubText" />
+                           ClipText="True" />
                     <Label Name="TaskForLabel"
-                           StyleClasses="LabelSubText"
-                           Margin="0 -5 0 0" />
+                           StyleClasses="terminal-muted" ClipText="True"
+                           Margin="0" />
                 </BoxContainer>
             </BoxContainer>
         </Button>

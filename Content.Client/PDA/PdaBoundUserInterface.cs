@@ -1,169 +1,74 @@
 using Content.Client.CartridgeLoader;
+using Content.Client.UserInterface.Fragments;
 using Content.Shared.CartridgeLoader;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.PDA;
 using JetBrains.Annotations;
+using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 
-namespace Content.Client.PDA
+namespace Content.Client.PDA;
+
+[UsedImplicitly]
+public sealed class PdaBoundUserInterface(EntityUid owner, Enum uiKey) : CartridgeLoaderBoundUserInterface(owner, uiKey)
 {
-    [UsedImplicitly]
-    public sealed class PdaBoundUserInterface : CartridgeLoaderBoundUserInterface
+    private PdaClientSession? _session;
+    private PdaMenu? _menu;
+    protected override bool PreserveCartridgeControls => true;
+    protected override void Open()
     {
-        private readonly PdaSystem _pdaSystem;
-
-        [ViewVariables]
-        private PdaMenu? _menu;
-        private Control? _pocketBlockinator;
-
-        public PdaBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey)
+        base.Open();
+        _session = EntMan.System<PdaSystem>().GetSession(Owner, PlayerManager.LocalEntity);
+        _menu = _session.Menu;
+        _menu.OnClose += Close;
+        _menu.OnHardwareAction += Hardware;
+        _menu.OnDesktopMessage += SendMessage;
+        _menu.OnServicesMessage += SendMessage;
+        _menu.OnProgramItemPressed += ActivateCartridge;
+        _menu.OnInstallButtonPressed += InstallCartridge;
+        _menu.OnUninstallButtonPressed += UninstallCartridge;
+        _menu.OnCartridgeClosed += DeactivateActiveCartridge;
+        var system = EntMan.System<UserInterfaceSystem>(); system.RegisterControl(this, _menu);
+        if (system.TryGetPosition(Owner, UiKey, out var position)) _menu.Open(position); else _menu.OpenCenteredLeft();
+        if (EntMan.TryGetComponent<PdaBorderColorComponent>(Owner, out var border))
+        { _menu.BorderColor = border.BorderColor; _menu.AccentHColor = border.AccentHColor; _menu.AccentVColor = border.AccentVColor; }
+        SendMessage(new PdaDesktopRequestMessage()); SendMessage(new PdaServicesRequestMessage()); SendMessage(new PdaMessengerRequestMessage(markRead: false));
+    }
+    private void Hardware(string action)
+    {
+        switch (action)
         {
-            _pdaSystem = EntMan.System<PdaSystem>();
+            case "light": SendMessage(new PdaToggleFlashlightMessage()); break;
+            case "id": SendPredictedMessage(new ItemSlotButtonPressedEvent(PdaComponent.PdaIdSlotId)); break;
+            case "pen": SendPredictedMessage(new ItemSlotButtonPressedEvent(PdaComponent.PdaPenSlotId)); break;
+            case "pai": SendPredictedMessage(new ItemSlotButtonPressedEvent(PdaComponent.PdaPaiSlotId)); break;
+            case "music": SendMessage(new PdaShowMusicMessage()); break;
+            case "ringtone": SendMessage(new PdaShowRingtoneMessage()); break;
+            case "uplink": SendMessage(new PdaShowUplinkMessage()); break;
+            case "lock": SendMessage(new PdaLockUplinkMessage()); break;
         }
-
-        protected override void Open()
-        {
-            base.Open();
-
-            if (_menu == null)
-                CreateMenu();
-        }
-
-        private void CreateMenu()
-        {
-            _menu = this.CreateWindowCenteredLeft<PdaMenu>();
-
-            _menu.FlashLightToggleButton.OnToggled += _ =>
-            {
-                SendMessage(new PdaToggleFlashlightMessage());
-            };
-
-            _menu.EjectIdButton.OnPressed += _ =>
-            {
-                SendPredictedMessage(new ItemSlotButtonPressedEvent(PdaComponent.PdaIdSlotId));
-            };
-
-            _menu.EjectPenButton.OnPressed += _ =>
-            {
-                SendPredictedMessage(new ItemSlotButtonPressedEvent(PdaComponent.PdaPenSlotId));
-            };
-
-            _menu.EjectPaiButton.OnPressed += _ =>
-            {
-                SendPredictedMessage(new ItemSlotButtonPressedEvent(PdaComponent.PdaPaiSlotId));
-            };
-
-            _menu.ActivateMusicButton.OnPressed += _ =>
-            {
-                SendMessage(new PdaShowMusicMessage());
-            };
-
-            _menu.AccessRingtoneButton.OnPressed += _ =>
-            {
-                SendMessage(new PdaShowRingtoneMessage());
-            };
-
-            _menu.ShowUplinkButton.OnPressed += _ =>
-            {
-                SendMessage(new PdaShowUplinkMessage());
-            };
-
-            _menu.LockUplinkButton.OnPressed += _ =>
-            {
-                SendMessage(new PdaLockUplinkMessage());
-            };
-
-            _menu.OnBlockGamePressed += () =>
-            {
-                OpenPocketBlockinator();
-            };
-
-            _menu.OnProgramItemPressed += ActivateCartridge;
-            _menu.OnInstallButtonPressed += InstallCartridge;
-            _menu.OnUninstallButtonPressed += UninstallCartridge;
-            _menu.ProgramCloseButton.OnPressed += _ =>
-            {
-                if (_pocketBlockinator != null)
-                {
-                    ClosePocketBlockinator();
-                    return;
-                }
-
-                DeactivateActiveCartridge();
-            };
-
-            var borderColorComponent = GetBorderColorComponent();
-            if (borderColorComponent == null)
-                return;
-
-            _menu.BorderColor = borderColorComponent.BorderColor;
-            _menu.AccentHColor = borderColorComponent.AccentHColor;
-            _menu.AccentVColor = borderColorComponent.AccentVColor;
-        }
-
-        protected override void UpdateState(BoundUserInterfaceState state)
-        {
-            base.UpdateState(state);
-
-            if (state is not PdaUpdateState updateState)
-                return;
-
-            if (_menu == null)
-            {
-                _pdaSystem.Log.Error("PDA state received before menu was created.");
-                return;
-            }
-
-            _menu.UpdateState(updateState);
-        }
-
-        protected override void AttachCartridgeUI(Control cartridgeUIFragment, string? title)
-        {
-            _menu?.ProgramView.AddChild(cartridgeUIFragment);
-            _menu?.ToProgramView(title ?? Loc.GetString("comp-pda-io-program-fallback-title"));
-        }
-
-        protected override void DetachCartridgeUI(Control cartridgeUIFragment)
-        {
-            if (_menu is null)
-                return;
-
-            _menu.ToHomeScreen();
-            _menu.HideProgramHeader();
-            _menu.ProgramView.RemoveChild(cartridgeUIFragment);
-        }
-
-        private void OpenPocketBlockinator()
-        {
-            if (_menu is null)
-                return;
-
-            _menu.ProgramView.RemoveAllChildren();
-            _pocketBlockinator = new PocketBlockinatorControl();
-            _menu.ProgramView.AddChild(_pocketBlockinator);
-            _menu.ToProgramView(Loc.GetString("pda-bound-user-interface-blockinator-title"));
-        }
-
-        private void ClosePocketBlockinator()
-        {
-            if (_menu is null || _pocketBlockinator is null)
-                return;
-
-            _menu.ProgramView.RemoveChild(_pocketBlockinator);
-            _pocketBlockinator = null;
-            _menu.HideProgramHeader();
-            _menu.ToHomeScreen();
-        }
-
-        protected override void UpdateAvailablePrograms(List<(EntityUid, CartridgeComponent)> programs)
-        {
-            _menu?.UpdateAvailablePrograms(programs);
-        }
-
-        private PdaBorderColorComponent? GetBorderColorComponent()
-        {
-            return EntMan.GetComponentOrNull<PdaBorderColorComponent>(Owner);
-        }
+    }
+    protected override UIFragment? RetrieveCartridgeUI(EntityUid? uid) => uid is { } program && _session != null ? EntMan.System<PdaSystem>().GetProgram(_session, program) : null;
+    protected override void UpdateState(BoundUserInterfaceState state)
+    {
+        base.UpdateState(state); if (state is PdaUpdateState update) _menu?.UpdateState(update);
+    }
+    protected override void ReceiveMessage(BoundUserInterfaceMessage message)
+    {
+        base.ReceiveMessage(message);
+        if (message is PdaDesktopProfileMessage profile) _menu?.ApplyDesktopProfile(profile);
+        if (message is PdaServicesStateMessage services) _menu?.ApplyServices(services);
+        if (message is PdaMessengerStateMessage messenger) _menu?.ApplyMessenger(messenger);
+    }
+    protected override void AttachCartridgeUI(Control control, string? title)
+    { if (ActiveProgram is { } uid) _menu?.AttachProgram(uid, control, title ?? Loc.GetString("comp-pda-io-program-fallback-title")); }
+    protected override void DetachCartridgeUI(Control control) => _menu?.HideProgram(control);
+    protected override void UpdateAvailablePrograms(List<(EntityUid, CartridgeComponent)> programs) => _menu?.UpdateAvailablePrograms(programs);
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing && _menu != null)
+        { _menu.OnClose -= Close; _menu.DisconnectUiHandlers(); _menu.Close(); _menu = null; }
+        base.Dispose(disposing);
     }
 }

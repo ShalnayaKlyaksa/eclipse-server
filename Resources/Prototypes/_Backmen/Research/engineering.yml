@@ -20,11 +20,9 @@
   discipline: Industrial
   tier: 1
   cost: 500
-  recipeUnlocks:
-   - PowerCellSmall
-   - PowerCellMedium
+  recipeUnlocks: []
   position: 0,5
-
+  hidden: true
 - type: technology
   id: PowercellsAdvanced
   name: research-technology-powercells-advanced
@@ -34,13 +32,11 @@
   discipline: Industrial
   tier: 1
   cost: 10000
-  recipeUnlocks:
-   - PowerCellHyper
-   - PowerCellHigh
+  recipeUnlocks: []
   technologyPrerequisites:
   - Powercells
   position: 1,5
-
+  hidden: true
 - type: technology
   id: PortableFission
   name: research-technology-portable-fission
@@ -51,10 +47,10 @@
   tier: 1
   cost: 20000
   recipeUnlocks:
-   - PowerCellMicroreactor
+  - PowerCellMicroreactor
   technologyPrerequisites:
-  - PowercellsAdvanced
-  position: 3,5
+  - IndustrialEnergyStorage
+  position: 12, 6
 
 - type: technology
   id: EngineeringTools
@@ -89,8 +85,9 @@
   - Igniter
   - HandLabeler
   - VoiceSensor
+  - Pickaxe
   position: -2,1
-
+  hidden: true
 - type: technology
   id: EngineeringAdvancedTools
   name: research-engineering-advanced-tools
@@ -101,12 +98,12 @@
   tier: 1
   cost: 15000
   recipeUnlocks:
-    - WelderExperimental
-    - PowerDrill
-    - JawsOfLife
+  - PowerDrill
+  - JawsOfLife
   technologyPrerequisites:
-  - EngineeringTools
-  position: -2,0
+  - IndustrialElectronics
+  - IndustrialAdvancedAutomation
+  position: 12, 4
 
 - type: technology
   id: AtmosphericTools
@@ -120,5 +117,5 @@
   recipeUnlocks:
   - HolofanProjector
   technologyPrerequisites:
-  - EngineeringTools
-  position: -1,2
+  - IndustrialElectronics
+  position: 12, 2

@@ -3,7 +3,7 @@ station-goal-news-title = Цель { $station }
 station-goal-news-author = Эйдосская империя
 station-goal-start = [color=#b8972d]███[/color][color=#1d7a1d]░███░░░░██░░░░[/color][color=#b8972d]                          ★ ★ ★[/color][color=#1d7a1d]
     ░██░████░░░██░░░░           [head=3]Бланк документа[/head]
-    ░░█░██░██░░██░█░░                   [head=3]NanoTrasen[/head]
+    ░░█░██░██░░██░█░░                   [head=3]ВИШ[/head]
     ░░░░██░░██░██░██░                        [bold]ЭИ-КОМ[/bold]
     ░░░░██░░░████░[/color][color=#b8972d]███[/color][color=#b8972d]                          ★ ★ ★[/color]
     ==================================================[bold]
@@ -22,7 +22,7 @@ station-goal-end =
     - Выполнения как минимум одной из целей
     - Экстренной ситуации на станции
 
-    Слава NanoTrasen!
+    Слава ВИШ!
     ==================================================[italic]
                                           Место для печати[/italic]
 station-goal-singularity =

@@ -73,3 +73,15 @@
       emergencyLightColor: DarkViolet
       forceEnableEmergencyLights: true
       shuttleTime: 1200
+    mortem:
+      announcement: alert-level-mortem-announcement
+      selectable: false
+      sound:
+        path: /Audio/Misc/epsilon.ogg
+        params:
+          volume: -4
+      disableSelection: true
+      color: "#B7BEC7"
+      emergencyLightColor: "#650B18"
+      forceEnableEmergencyLights: true
+      shuttleTime: 1200

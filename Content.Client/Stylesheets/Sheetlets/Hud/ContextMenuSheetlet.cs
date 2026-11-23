@@ -20,20 +20,15 @@ public sealed class ContextMenuSheetlet<T> : Sheetlet<T>
     // TODO: make this not hardcoded (I am too scared to change the context menu colors)
     private static readonly ColorPalette ContextButtonPalette = ColorPalette.FromHexBase("#000000") with
     {
-        HoveredElement = Color.DarkSlateGray,
-        Element = Color.FromHex("#1119"),
-        PressedElement = Color.LightSlateGray,
+        HoveredElement = ForgeStyle.Hover,
+        Element = ForgeStyle.Background,
+        PressedElement = ForgeStyle.Selection,
     };
 
     public override StyleRule[] GetRules(T sheet, object config)
     {
-        IWindowConfig windowCfg = sheet;
-
-        var borderedWindowBackground = new StyleBoxTexture
-        {
-            Texture = sheet.GetTextureOr(windowCfg.WindowBackgroundBorderedPath, NanotrasenStylesheet.TextureRoot),
-        };
-        borderedWindowBackground.SetPatchMargin(StyleBox.Margin.All, ContextMenuElement.ElementMargin);
+        var borderedWindowBackground = ForgeStyle.Panel(ForgeStyle.Background, ForgeStyle.Border,
+            ContextMenuElement.ElementMargin, ContextMenuElement.ElementMargin);
         var buttonContext = new StyleBoxTexture { Texture = Texture.White };
         var contextMenuExpansionTexture = ResCache.GetTexture("/Textures/Interface/VerbIcons/group.svg.192dpi.png");
         var verbMenuConfirmationTexture = ResCache.GetTexture("/Textures/Interface/VerbIcons/group.svg.192dpi.png");

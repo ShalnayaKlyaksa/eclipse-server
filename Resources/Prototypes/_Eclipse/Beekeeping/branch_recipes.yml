@@ -1,0 +1,80 @@
+- type: industrialRecipe
+  id: EclipseBuildSelectionFrame
+  processor: Assembler
+  time: 12
+  inputs:
+    MaterialWoodPlank1: 1
+    EclipseBeeswax: 1
+    EclipsePropolis: 1
+  outputs:
+    EclipseApiarySelectionFrame: 1
+- type: industrialRecipe
+  id: EclipseBuildNursingFrame
+  processor: Assembler
+  time: 12
+  inputs:
+    MaterialWoodPlank1: 1
+    EclipseBeeswax: 1
+    EclipseBeeBread: 1
+  outputs:
+    EclipseApiaryNursingFrame: 1
+- type: industrialRecipe
+  id: EclipseBuildInsulatedFrame
+  processor: Assembler
+  time: 12
+  inputs:
+    MaterialWoodPlank1: 1
+    EclipseBeeswax: 1
+    MaterialCloth1: 1
+  outputs:
+    EclipseApiaryInsulatedFrame: 1
+- type: industrialRecipe
+  id: EclipsePressCitrusHoneycomb
+  processor: FilterPress
+  time: 15
+  inputs:
+    EclipseFoodCitrusHoneycomb: 1
+  outputs:
+    EclipseBeeswax: 1
+  fluidOutputs:
+    EclipseHoney: 8
+- type: industrialRecipe
+  id: EclipsePressAromaticHoneycomb
+  processor: FilterPress
+  time: 15
+  inputs:
+    EclipseFoodAromaticHoneycomb: 1
+  outputs:
+    EclipseBeeswax: 1
+  fluidOutputs:
+    EclipseHoney: 8
+- type: industrialRecipe
+  id: EclipsePressCoolingHoneycomb
+  processor: FilterPress
+  time: 15
+  inputs:
+    EclipseFoodCoolingHoneycomb: 1
+  outputs:
+    EclipseBeeswax: 1
+  fluidOutputs:
+    EclipseHoney: 8
+- type: industrialRecipe
+  id: EclipsePressRestorativeHoneycomb
+  processor: FilterPress
+  time: 15
+  inputs:
+    EclipseFoodRestorativeHoneycomb: 1
+  outputs:
+    EclipseBeeswax: 1
+  fluidOutputs:
+    EclipseHoney: 8
+- type: industrialRecipe
+  id: EclipsePressResinHoneycomb
+  processor: FilterPress
+  time: 15
+  inputs:
+    EclipseFoodResinHoneycomb: 1
+  outputs:
+    EclipseBeeswax: 1
+  fluidOutputs:
+    EclipseHoney: 8

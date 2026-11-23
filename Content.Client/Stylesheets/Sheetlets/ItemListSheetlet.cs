@@ -1,4 +1,4 @@
-﻿using Robust.Client.Graphics;
+using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using static Content.Client.Stylesheets.StylesheetHelpers;
@@ -24,7 +24,7 @@ public sealed class ItemListSheetlet : Sheetlet<PalettedStylesheet>
     {
         var boxBackground = new StyleBoxFlat { BackgroundColor = sheet.PrimaryPalette.Background };
         var boxItemBackground = Box(sheet.PrimaryPalette.Background);
-        var boxSelected = Box(sheet.PrimaryPalette.Element);
+        var boxSelected = ForgeStyle.Panel(ForgeStyle.Selection, ForgeStyle.Accent, 4, 2);
         var boxDisabled = Box(sheet.PrimaryPalette.BackgroundDark);
 
         return

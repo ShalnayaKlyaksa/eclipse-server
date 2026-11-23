@@ -4,6 +4,8 @@ using System.Linq;
 using System.Numerics;
 using Content.Shared.Arcade;
 using Content.Shared.Input;
+using Content.Shared.CCVar;
+using Robust.Shared.Configuration;
 using Robust.Client.Input;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
@@ -24,9 +26,9 @@ public sealed class PocketBlockinatorControl : BoxContainer
     private const float HorizontalRepeatInterval = 0.09f;
     private const float SoftDropRefreshTime = 0.18f;
 
-    private readonly PocketBlockinatorBoard _board = new(BoardWidth, BoardHeight, new Vector2(160, 320));
-    private readonly PocketBlockinatorBoard _next = new(4, 4, new Vector2(64, 64));
-    private readonly PocketBlockinatorBoard _hold = new(4, 4, new Vector2(64, 64));
+    private readonly PocketBlockinatorBoard _board = new(BoardWidth, BoardHeight, new Vector2(140, 280));
+    private readonly PocketBlockinatorBoard _next = new(4, 4, new Vector2(32, 32));
+    private readonly PocketBlockinatorBoard _hold = new(4, 4, new Vector2(32, 32));
     private readonly Button _leftButton;
     private readonly Button _rightButton;
     private readonly Button _rotateButton;
@@ -37,6 +39,11 @@ public sealed class PocketBlockinatorControl : BoxContainer
     private readonly Label _levelLabel;
     private readonly Label _statusLabel;
     private readonly Button _newGameButton;
+    private readonly Button _pauseButton;
+    private readonly Label _bestLabel = new();
+    [Dependency] private readonly IConfigurationManager _config = default!;
+    private bool _manualPaused;
+    private bool _softDropHeld;
 
     [Dependency] private readonly IInputManager _inputManager = default!;
     [Dependency] private readonly IUserInterfaceManager _userInterface = default!;
@@ -53,7 +60,6 @@ public sealed class PocketBlockinatorControl : BoxContainer
     private bool _canHold;
     private bool _running;
     private bool _paused;
-    private bool _wasFocusedInside;
     private bool _gameOver;
     private float _softDropTimeLeft;
     private int _horizontalDirection;
@@ -92,7 +98,6 @@ public sealed class PocketBlockinatorControl : BoxContainer
         _scoreLabel = new Label { MinWidth = 90 };
         stats.AddChild(_levelLabel);
         stats.AddChild(_scoreLabel);
-        mainColumn.AddChild(stats);
         mainColumn.AddChild(WrapBoard(_board, new Thickness(6)));
         mainColumn.AddChild(new Control { MinSize = new Vector2(1, 6) });
 
@@ -101,39 +106,39 @@ public sealed class PocketBlockinatorControl : BoxContainer
             Orientation = LayoutOrientation.Horizontal,
             HorizontalAlignment = HAlignment.Center
         };
-        _leftButton = MakeControlButton("<", () => TryMoveHorizontal(-1));
-        _rotateButton = MakeControlButton("R", () => TryRotate(false));
-        _rightButton = MakeControlButton(">", () => TryMoveHorizontal(1));
+        _leftButton = MakeControlButton("←", () => TryMoveHorizontal(-1));
+        _rotateButton = MakeControlButton(Loc.GetString("pda-blocks-rotate"), () => TryRotate(false));
+        _rightButton = MakeControlButton("→", () => TryMoveHorizontal(1));
         controlsTop.AddChild(_leftButton);
         controlsTop.AddChild(_rotateButton);
         controlsTop.AddChild(_rightButton);
-        mainColumn.AddChild(controlsTop);
 
         var controlsBottom = new BoxContainer
         {
             Orientation = LayoutOrientation.Horizontal,
             HorizontalAlignment = HAlignment.Center
         };
-        _downButton = MakeControlButton("v", StepDown);
-        _dropButton = MakeControlButton("!", HardDrop);
-        _holdButton = MakeControlButton("H", HoldPiece);
+        _downButton = MakeControlButton("↓", StepDown);
+        _dropButton = MakeControlButton(Loc.GetString("pda-blocks-drop"), HardDrop);
+        _holdButton = MakeControlButton(Loc.GetString("pda-blocks-hold"), HoldPiece);
         controlsBottom.AddChild(_downButton);
         controlsBottom.AddChild(_dropButton);
         controlsBottom.AddChild(_holdButton);
-        mainColumn.AddChild(controlsBottom);
 
         var sideColumn = new BoxContainer
         {
             Orientation = LayoutOrientation.Vertical,
-            MinWidth = 96,
+            MinWidth = 180,
             Margin = new Thickness(10, 0, 0, 0)
         };
 
-        sideColumn.AddChild(new Label { Text = Loc.GetString("blockgame-menu-label-next"), Align = Label.AlignMode.Center });
-        sideColumn.AddChild(WrapBoard(_next, new Thickness(5)));
-        sideColumn.AddChild(new Control { MinSize = new Vector2(1, 8) });
-        sideColumn.AddChild(new Label { Text = Loc.GetString("blockgame-menu-label-hold"), Align = Label.AlignMode.Center });
-        sideColumn.AddChild(WrapBoard(_hold, new Thickness(5)));
+        sideColumn.AddChild(stats);
+        sideColumn.AddChild(_bestLabel);
+
+        var previews = new BoxContainer { SeparationOverride = 12, HorizontalAlignment = HAlignment.Center };
+        previews.AddChild(new BoxContainer { Orientation = LayoutOrientation.Vertical, Children = { new Label { Text = Loc.GetString("blockgame-menu-label-next") }, WrapBoard(_next, new Thickness(2)) } });
+        previews.AddChild(new BoxContainer { Orientation = LayoutOrientation.Vertical, Children = { new Label { Text = Loc.GetString("blockgame-menu-label-hold") }, WrapBoard(_hold, new Thickness(2)) } });
+        sideColumn.AddChild(previews);
         sideColumn.AddChild(new Control { MinSize = new Vector2(1, 10) });
 
         _statusLabel = new Label
@@ -150,12 +155,16 @@ public sealed class PocketBlockinatorControl : BoxContainer
             HorizontalExpand = true
         };
         _newGameButton.OnPressed += _ => StartNewGame();
-        sideColumn.AddChild(_newGameButton);
+        _pauseButton = new Button { Text = Loc.GetString("pda-game-pause") };
+        _pauseButton.OnPressed += _ => TogglePause();
+        sideColumn.AddChild(new BoxContainer { SeparationOverride = 5, Children = { _newGameButton, _pauseButton } });
+        sideColumn.AddChild(controlsTop);
+        sideColumn.AddChild(controlsBottom);
+        var help = new Label { Text = "← → · ↑ / Z · ↓ · Space · C · P", StyleClasses = { "terminal-muted" }, ToolTip = Loc.GetString("pda-blocks-help") };
+        sideColumn.AddChild(help);
 
         AddChild(mainColumn);
         AddChild(sideColumn);
-
-        _inputManager.FirstChanceOnKeyEvent += OnFirstChanceKeyEvent;
 
         _nextPiece = RandomPiece();
         UpdateLabels();
@@ -187,12 +196,7 @@ public sealed class PocketBlockinatorControl : BoxContainer
     {
         var frame = new PanelContainer
         {
-            PanelOverride = new StyleBoxFlat
-            {
-                BackgroundColor = Color.FromHex("#202631"),
-                BorderColor = Color.FromHex("#2b3544"),
-                BorderThickness = new Thickness(2)
-            },
+            PanelOverride = PdaTheme.Box("#202A31", "#666751", radius: 8),
             Margin = margin
         };
 
@@ -204,11 +208,13 @@ public sealed class PocketBlockinatorControl : BoxContainer
     protected override void EnteredTree()
     {
         base.EnteredTree();
+        _inputManager.FirstChanceOnKeyEvent += OnFirstChanceKeyEvent;
         GrabKeyboardFocus();
     }
 
     protected override void ExitedTree()
     {
+        SaveBest();
         base.ExitedTree();
         _inputManager.FirstChanceOnKeyEvent -= OnFirstChanceKeyEvent;
     }
@@ -297,17 +303,18 @@ public sealed class PocketBlockinatorControl : BoxContainer
             UpdateHorizontalRepeat(args.DeltaSeconds);
 
         _fallAccumulator += args.DeltaSeconds;
-        var softDropping = _softDropTimeLeft > 0f;
+        var softDropping = _softDropHeld || _softDropTimeLeft > 0f;
         var fallSpeed = softDropping ? 0.045f : MathF.Max(0.12f, 0.75f - _level * 0.055f);
-        while (_fallAccumulator >= fallSpeed)
+        while (_fallAccumulator >= fallSpeed && _running && !_paused)
         {
-            StepDown();
             _fallAccumulator -= fallSpeed;
+            StepDown();
         }
     }
 
     private void StartNewGame()
     {
+        SaveBest();
         Array.Clear(_field);
         _bag.Clear();
         _score = 0;
@@ -317,6 +324,9 @@ public sealed class PocketBlockinatorControl : BoxContainer
         _nextPiece = RandomPiece();
         _running = true;
         _paused = false;
+        _manualPaused = false;
+        _softDropHeld = false;
+        _pauseButton.Text = Loc.GetString("pda-game-pause");
         _gameOver = false;
         _statusLabel.Text = string.Empty;
         SpawnPiece();
@@ -348,7 +358,7 @@ public sealed class PocketBlockinatorControl : BoxContainer
         if (CanPlace(_current, nextPosition, _rotation))
         {
             _currentPosition = nextPosition;
-            if (_softDropTimeLeft > 0f)
+            if (_softDropHeld || _softDropTimeLeft > 0f)
                 _score++;
 
             UpdateVisuals();
@@ -507,6 +517,7 @@ public sealed class PocketBlockinatorControl : BoxContainer
 
     private void EndGame()
     {
+        SaveBest();
         _running = false;
         _paused = false;
         _gameOver = true;
@@ -524,12 +535,14 @@ public sealed class PocketBlockinatorControl : BoxContainer
         _downButton.Disabled = !canPlay;
         _dropButton.Disabled = !canPlay;
         _holdButton.Disabled = !canPlay || !_canHold;
+        _pauseButton.Disabled = !_running;
     }
 
     private void UpdateLabels()
     {
         _levelLabel.Text = Loc.GetString("blockgame-menu-label-level", ("level", _level + 1));
         _scoreLabel.Text = Loc.GetString("blockgame-menu-label-points", ("points", _score));
+        _bestLabel.Text = Loc.GetString("pda-game-best", ("score", Math.Max(_score, _config.GetCVar(CCVars.PdaBlocksBest))));
     }
 
     private void UpdateVisuals()
@@ -562,12 +575,7 @@ public sealed class PocketBlockinatorControl : BoxContainer
     private void UpdateFocusState()
     {
         var focusedInside = IsFocusedInsideThis();
-        if (focusedInside == _wasFocusedInside)
-            return;
-
-        _wasFocusedInside = focusedInside;
-
-        if (focusedInside)
+        if (focusedInside && !_manualPaused)
             ResumeGame();
         else
             PauseGame();
@@ -575,6 +583,7 @@ public sealed class PocketBlockinatorControl : BoxContainer
 
     private void OnFirstChanceKeyEvent(KeyEventArgs args, KeyEventType type)
     {
+        if (!VisibleInTree) { PauseGame(); return; }
         if (!IsGameKey(args.Key))
             return;
 
@@ -587,16 +596,19 @@ public sealed class PocketBlockinatorControl : BoxContainer
             return;
         }
 
+        if (args.Key == Keyboard.Key.P && type == KeyEventType.Down) { TogglePause(); args.Handle(); return; }
+
         if (!_running)
         {
             args.Handle();
             return;
         }
 
+        if (_manualPaused) { args.Handle(); return; }
         if (_paused)
             ResumeGame();
 
-        if (type == KeyEventType.Down || type == KeyEventType.Repeat)
+        if (type == KeyEventType.Down)
             HandleGameKeyDown(args.Key);
         else if (type == KeyEventType.Up)
             HandleGameKeyUp(args.Key);
@@ -607,15 +619,16 @@ public sealed class PocketBlockinatorControl : BoxContainer
     private void HandleGameKeyDown(Keyboard.Key key)
     {
         if (key == Keyboard.Key.Left)
-            TryMoveHorizontal(-1);
+            StartHorizontalInput(-1);
         else if (key == Keyboard.Key.Right)
-            TryMoveHorizontal(1);
+            StartHorizontalInput(1);
         else if (key == Keyboard.Key.Up)
             TryRotate(false);
         else if (key == Keyboard.Key.Z)
             TryRotate(true);
         else if (key == Keyboard.Key.Down)
         {
+            _softDropHeld = true;
             RefreshSoftDrop();
             StepDown();
         }
@@ -628,7 +641,12 @@ public sealed class PocketBlockinatorControl : BoxContainer
     private void HandleGameKeyUp(Keyboard.Key key)
     {
         if (key == Keyboard.Key.Down)
+        {
+            _softDropHeld = false;
             _softDropTimeLeft = 0f;
+        }
+        else if (key == Keyboard.Key.Left) EndHorizontalInput(-1);
+        else if (key == Keyboard.Key.Right) EndHorizontalInput(1);
     }
 
     private void PauseGame()
@@ -638,6 +656,7 @@ public sealed class PocketBlockinatorControl : BoxContainer
 
         _paused = true;
         _softDropTimeLeft = 0f;
+        _softDropHeld = false;
         _horizontalDirection = 0;
         _horizontalHoldTime = 0f;
         _horizontalRepeatStarted = false;
@@ -693,6 +712,7 @@ public sealed class PocketBlockinatorControl : BoxContainer
                || key == Keyboard.Key.Down
                || key == Keyboard.Key.Space
                || key == Keyboard.Key.C
+               || key == Keyboard.Key.P
                || key == Keyboard.Key.Z;
     }
 
@@ -724,6 +744,19 @@ public sealed class PocketBlockinatorControl : BoxContainer
         var kind = _bag[^1];
         _bag.RemoveAt(_bag.Count - 1);
         return Piece.FromKind(kind);
+    }
+
+    private void SaveBest()
+    {
+        if (_score > _config.GetCVar(CCVars.PdaBlocksBest)) _config.SetCVar(CCVars.PdaBlocksBest, _score);
+    }
+
+    private void TogglePause()
+    {
+        if (!_running) return;
+        _manualPaused = !_manualPaused;
+        _pauseButton.Text = Loc.GetString(_manualPaused ? "pda-game-resume" : "pda-game-pause");
+        if (_manualPaused) PauseGame(); else { ResumeGame(); GrabKeyboardFocus(); }
     }
 
     private void StartHorizontalInput(int direction)

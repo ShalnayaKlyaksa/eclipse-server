@@ -47,6 +47,10 @@ binds:
 - function: AdvancedCalmWalk
   type: State
   key: Alt
+- function: GroundJump
+  type: State
+  key: Space
+  priority: -1
 - function: LayeredZMoveUp
   type: State
   key: K
@@ -211,11 +215,13 @@ binds:
   key: MouseLeft
   mod1: Shift
   canFocus: true
+  allowSubCombs: true
 - function: ExamineEntity
   type: State
   key: MouseLeft
   canFocus: true
   mod1: Shift
+  allowSubCombs: true
 - function: AdvancedHealthAimTarget
   type: State
   key: F

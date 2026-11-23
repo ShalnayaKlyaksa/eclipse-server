@@ -1,0 +1,230 @@
+- type: entity
+  id: IndustrialMicroBlackHoleGenerator
+  parent: PortableGeneratorBase
+  name: micro black hole containment unit
+  description: A mass-fed gravity source. Requires four independently powered field stabilizers, pumped cooling and separate kinetic generators for electrical output.
+  components:
+  - type: Sprite
+    sprite: Structures/Power/Generation/ame.rsi
+    layers:
+    - state: shield_0
+  - type: FuelGenerator
+    minTargetPower: 200000
+    maxTargetPower: 1500000
+    targetPower: 1200000
+    optimalPower: 1200000
+    optimalBurnRate: 0.004
+    fuelEfficiencyConstant: 0.3
+  - type: SolidFuelGeneratorAdapter
+    fuelMaterial: Steel
+    multiplier: 0.01
+  - type: MaterialStorage
+    storageLimit: 3000
+    materialWhiteList: [Steel]
+  - type: PortableGenerator
+    startChance: 1
+    startTime: 5
+    startSound: null
+    startSoundEmpty: null
+    startSuccessMessage: power-plant-start-success
+    startFailureMessage: power-plant-start-failure
+  - type: PowerSupplier
+    supplyRampRate: 100000000
+    supplyRampTolerance: 10000000000
+  - type: PowerPlant
+    heatCapacity: 1000000
+    heatPerFuel: 300000000
+    shutdownTemperature: 850
+    failureTemperature: 1300
+    passiveCoolingPower: 500
+    maximumHeatTransfer: 2000000
+    warmupSeconds: 60
+    requiredFields: 4
+    fieldRadius: 3
+  - type: GravityPowerSource
+  - type: GravityWell
+    maxRange: -1
+    gravPulsePeriod: 0.2
+  - type: MicroBlackHoleVisual
+    activity: 0
+    radius: 2.5
+  - type: NodeContainer
+    # The source has coolant connections only. Kinetic generators provide electrical output.
+    nodes:
+      coolant_in:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: West
+        volume: 1000
+      coolant_out:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: East
+        volume: 1000
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [Destruction]
+  - type: Explosive
+    explosionType: Default
+  - type: AtmosUnsafeUnanchor
+
+- type: entity
+  id: PowerPlantFieldStabilizer
+  parent: BaseMachine
+  name: power plant field stabilizer
+  description: A powered field projector. Install next to the contained energy source, on a separate auxiliary circuit.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: false
+  - type: Pullable
+  - type: PowerPlantFieldStabilizer
+  - type: PowerConsumer
+    voltage: Medium
+    drawRate: 30000
+  - type: NodeContainer
+    nodes:
+      input:
+        !type:CableDeviceNode
+        nodeGroupID: MVPower
+  - type: Sprite
+    sprite: Structures/Power/Generation/Tesla/coil.rsi
+    state: coil
+
+- type: industrialRecipe
+  id: AssembleIndustrialMicroBlackHoleGenerator
+  processor: Assembler
+  minimumTier: Perfect
+  requiredTechnology: EnergySingularity
+  requireDataDisk: true
+  time: 60
+  inputs:
+    SheetPlasteel: 32
+    IndustrialPerfectBoard: 8
+    IndustrialAdvancedProcessor: 8
+    IndustrialHeatConduitAssembly: 12
+  outputs:
+    IndustrialMicroBlackHoleGeneratorFlatpack: 1
+
+- type: industrialRecipe
+  id: AssemblePowerPlantFieldStabilizer
+  processor: Assembler
+  minimumTier: Industrial
+  requiredTechnology: EnergyStabilization
+  requireDataDisk: true
+  time: 30
+  inputs:
+    SheetPlasteel: 8
+    IndustrialAdvancedBoard: 2
+    IndustrialCircuitCore: 2
+  outputs:
+    PowerPlantFieldStabilizerFlatpack: 1
+
+- type: entity
+  id: IndustrialMicroBlackHoleGeneratorFlatpack
+  parent: BaseFlatpack
+  name: power plant module flatpack
+  components:
+  - type: Flatpack
+    entity: IndustrialMicroBlackHoleGenerator
+    qualityNeeded: Anchoring
+
+- type: entity
+  id: PowerPlantFieldStabilizerFlatpack
+  parent: BaseFlatpack
+  name: power plant module flatpack
+  components:
+  - type: Flatpack
+    entity: PowerPlantFieldStabilizer
+    qualityNeeded: Anchoring
+
+- type: entity
+  id: GravitationalKineticGenerator
+  parent: BaseMachine
+  name: gravitational kinetic generator
+  description: A braced rotor driven by the gravity gradient of a contained micro black hole. Connect to high-voltage cable.
+  components:
+  - type: Transform
+    anchored: false
+  - type: Pullable
+  - type: GravitationalKineticGenerator
+  - type: PowerSupplier
+    supplyRate: 0
+    supplyRampRate: 10000000
+    supplyRampTolerance: 10000000
+  - type: NodeContainer
+    nodes:
+      output:
+        !type:CableDeviceNode
+        nodeGroupID: HVPower
+  - type: PowerMonitoringDevice
+    group: Generator
+    loadNode: output
+    collectionName: gravitationalKineticGenerator
+    sprite: Structures/Power/Generation/Singularity/collector.rsi
+    state: static
+  - type: Sprite
+    sprite: Structures/Power/Generation/Singularity/collector.rsi
+    layers:
+    - state: ca_off
+      map: [rotor]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.GeneratorVisuals.Running:
+        rotor:
+          True: { state: ca_active }
+          False: { state: ca_off }
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [Destruction]
+
+- type: entity
+  id: GravitationalKineticGeneratorFlatpack
+  parent: BaseFlatpack
+  name: gravitational kinetic generator flatpack
+  components:
+  - type: Flatpack
+    entity: GravitationalKineticGenerator
+    qualityNeeded: Anchoring
+
+- type: industrialRecipe
+  id: AssembleGravitationalKineticGenerator
+  processor: Assembler
+  minimumTier: Perfect
+  requiredTechnology: EnergySingularity
+  requireDataDisk: true
+  time: 40
+  inputs:
+    SheetPlasteel: 16
+    IndustrialPerfectBoard: 2
+    IndustrialAdvancedProcessor: 2
+    IndustrialCircuitCore: 4
+  outputs:
+    GravitationalKineticGeneratorFlatpack: 1
+
+- type: entity
+  id: ResidualMicroBlackHole
+  name: collapsing micro black hole
+  categories: [HideSpawnMenu]
+  components:
+  - type: ResidualMicroBlackHole
+  - type: MicroBlackHoleVisual
+    activity: 1
+    instability: 1
+  - type: GravityWell
+    maxRange: 10
+    baseRadialAcceleration: 35
+    baseTangentialAcceleration: 12
+    gravPulsePeriod: 0.2

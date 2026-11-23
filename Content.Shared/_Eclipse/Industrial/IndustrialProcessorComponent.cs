@@ -34,8 +34,20 @@ public sealed partial class IndustrialProcessorComponent : Component
     [DataField, AutoNetworkedField]
     public bool IsWorking;
 
-    [DataField]
-    public float RequiredPower = 1000f;
+    [DataField, AutoNetworkedField]
+    public bool Enabled = true;
+
+    [DataField, AutoNetworkedField]
+    public ProtoId<IndustrialRecipePrototype>? SelectedRecipe;
+
+    // Suppresses reentrant processing while container/stack events are raised by a transaction.
+    public bool InTransaction;
+    public bool WaitingForOutput;
+    public bool PendingStateRefresh;
+    public float UiAccumulator;
+    public IndustrialProcessorState? LastState;
+    public IndustrialRecipeUiState[]? RecipeCatalog;
+
 
     [DataField]
     public float ProcessingSpeedMultiplier = 1f;
@@ -69,12 +81,6 @@ public sealed partial class IndustrialProcessorComponent : Component
 
     [DataField, AutoNetworkedField]
     public FacePortState WestFacePort = FacePortState.Disabled;
-
-    /// <summary>
-    /// TODO: Add optional SolutionContainerId for washer water/reagent consumption.
-    /// </summary>
-    [DataField]
-    public string? SolutionContainerId;
 
     public FacePortState GetFacePort(Direction direction)
     {
@@ -127,31 +133,4 @@ public sealed partial class IndustrialProcessorComponent : Component
         };
     }
 
-    public FacePortState CycleFacePort(Direction direction)
-    {
-        var next = GetFacePort(direction) switch
-        {
-            FacePortState.Disabled => FacePortState.ItemInput,
-            FacePortState.ItemInput => FacePortState.ItemOutput,
-            FacePortState.ItemOutput => FacePortState.LiquidInput,
-            FacePortState.LiquidInput => FacePortState.LiquidOutput,
-            FacePortState.LiquidOutput => FacePortState.HeatInput,
-            _ => FacePortState.Disabled,
-        };
-
-        SetFacePort(direction, next);
-        return next;
-    }
-
-    public void ClearItemOutputsExcept(Direction except)
-    {
-        foreach (var direction in SharedIndustrialProcessorSystem.CardinalDirections)
-        {
-            if (direction == except)
-                continue;
-
-            if (GetFacePort(direction) == FacePortState.ItemOutput)
-                SetFacePort(direction, FacePortState.Disabled);
-        }
-    }
 }

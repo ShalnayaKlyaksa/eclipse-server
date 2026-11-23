@@ -1,0 +1,12 @@
+ent-EclipseOrganHumanIntestines = кишечник
+    .desc = Кишечник человека.
+ent-EclipseOrganHumanUterus = матка
+    .desc = Матка человека.
+ent-EclipseOrganHumanOvaryLeft = левый яичник
+    .desc = Левый яичник человека.
+ent-EclipseOrganHumanOvaryRight = правый яичник
+    .desc = Правый яичник человека.
+ent-EclipseOrganHumanVaginalCanal = влагалищный канал
+    .desc = Влагалищный канал человека.
+ent-EclipseOrganHumanProstate = предстательная железа
+    .desc = Предстательная железа человека.

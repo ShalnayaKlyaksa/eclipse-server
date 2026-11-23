@@ -1,15 +1,17 @@
 # Industrial liquid pipes — separate from atmos and item piping.
-# TODO: Replace placeholder sprites with dedicated liquid pipe RSI per tier.
+# Closed paired-channel sprites; contents are a flat colour square on top.
 
 - type: entity
   abstract: true
   parent: BaseStructure
   id: BaseLiquidPipe
   name: liquid pipe
-  description: Transports fluids between industrial machines.
+  description: Transfers solutions between adjacent sealed pipe sections.
   placement:
     mode: SnapgridCenter
   components:
+  - type: Item
+    size: Small
   - type: Transform
     anchored: true
     noRot: true
@@ -24,14 +26,29 @@
     delay: 0.5
   - type: IndustrialPipingOccupant
   - type: LiquidPipe
+  - type: Appearance
+  - type: SolutionContainerManager
+    solutions:
+      pipe:
+        maxVol: 20
+  - type: RefillableSolution
+    solution: pipe
+  - type: DrainableSolution
+    solution: pipe
+  - type: ExaminableSolution
+    solution: pipe
   - type: Sprite
-    sprite: Structures/Piping/Atmospherics/pipe.rsi
+    sprite: _Eclipse/Structures/Piping/liquid_pipe.rsi
     drawdepth: Objects
-    state: pipeStraight
-    color: "#4488FFAA"
+    layers:
+    - state: pipe0
+      map: ["pipe"]
+    - state: content
+      map: ["content"]
+      color: "#2B3139"
   - type: Icon
-    sprite: Structures/Piping/Atmospherics/pipe.rsi
-    state: storageStraight
+    sprite: _Eclipse/Structures/Piping/liquid_pipe.rsi
+    state: pipe12
   - type: Damageable
     damageContainer: StructuralInorganic
     damageModifierSet: Metallic
@@ -41,6 +58,8 @@
         !type:DamageTrigger
         damage: 100
       behaviors:
+      - !type:SpillBehavior
+        solution: pipe
       - !type:PlaySoundBehavior
         sound:
           collection: MetalBreak
@@ -53,7 +72,7 @@
   parent: BaseLiquidPipe
   id: BasicLiquidPipe
   name: basic liquid pipe
-  description: Transports fluids between industrial machines. Has low throughput.
+  description: A sealed section that transfers solutions between adjacent pipes. Low throughput.
   components:
   - type: LiquidPipe
     tier: Basic
@@ -62,12 +81,10 @@
   parent: BaseLiquidPipe
   id: IndustrialLiquidPipe
   name: industrial liquid pipe
-  description: Quickly transports fluids between industrial machines.
+  description: A sealed high-throughput section. Its square shows the colour of its contents.
   components:
   - type: LiquidPipe
     tier: Industrial
-  - type: Sprite
-    state: pipeHalf
 
 - type: entity
   parent: BaseLiquidPipe
@@ -77,5 +94,3 @@
   components:
   - type: LiquidPipe
     tier: Perfect
-  - type: Sprite
-    state: pipeFourway

@@ -1,65 +1,23 @@
-<cartridges:NewsReaderUiFragment xmlns:cartridges="clr-namespace:Content.Client.CartridgeLoader.Cartridges"
-                               xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
-                               xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
-                               xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls"
-                               xmlns="https://spacestation14.io"
-                               Margin="1 0 2 0"
-                               Orientation="Vertical"
-                               HorizontalExpand="True"
-                               VerticalExpand="True">
-    <PanelContainer StyleClasses="BackgroundDark"></PanelContainer>
-    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="5,5,5,5">
-        <Button
-            Name="Prev"
-            MinWidth="64"
-            Disabled="True"
-            HorizontalAlignment="Left"
-            Text="{Loc 'news-read-ui-prev-text'}"
-            ToolTip="{Loc 'news-read-ui-prev-tooltip'}"
-            Access="Public"
-            HorizontalExpand="True"/>
-        <Button
-            Name="Next"
-            MinWidth="64"
-            Disabled="True"
-            HorizontalAlignment="Right"
-            Text="{Loc 'news-read-ui-next-text'}"
-            ToolTip="{Loc 'news-read-ui-next-tooltip'}"/>
+<cartridges:NewsReaderUiFragment xmlns:cartridges="clr-namespace:Content.Client.CartridgeLoader.Cartridges" xmlns="https://spacestation14.io" Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="4">
+    <BoxContainer SeparationOverride="4">
+        <Button Name="Prev" Text="‹" MinWidth="28" MinHeight="26" Disabled="True" ToolTip="{Loc 'news-read-ui-prev-tooltip'}" Access="Public"/>
+        <Label Text="{Loc 'pda-news-heading'}" HorizontalExpand="True" StyleClasses="pda-caption"/>
+        <Label Name="PageNum" StyleClasses="terminal-muted"/>
+        <Button Name="Next" Text="›" MinWidth="28" MinHeight="26" Disabled="True" ToolTip="{Loc 'news-read-ui-next-tooltip'}"/>
     </BoxContainer>
-    <controls:StripeBack Name="ArticleNameContainer">
-        <PanelContainer>
-            <Label Name="PageNum" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="4,0,0,0"/>
-            <Label Name="PageName" Align="Center"/>
-        </PanelContainer>
-    </controls:StripeBack>
-    <PanelContainer VerticalExpand="True">
-        <PanelContainer.PanelOverride>
-            <gfx:StyleBoxFlat BackgroundColor="#80808005" />
-        </PanelContainer.PanelOverride>
-        <ScrollContainer
-                Name="PageTextScroll"
-                HScrollEnabled="False"
-                HorizontalExpand="True"
-                MinSize="0 0"
-                SizeFlagsStretchRatio="2"
-                VerticalExpand="True">
-            <BoxContainer
-                Name="PageTextContainer"
-                MinSize="0 0"
-                Orientation="Vertical"
-                SizeFlagsStretchRatio="2"
-                VerticalExpand="True">
-            </BoxContainer>
-            <RichTextLabel Margin="8,8,8,8" Name="PageText" VerticalAlignment="Top"/>
-        </ScrollContainer>
-    </PanelContainer>
-    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="5,5,5,5">
-        <Button
-            Name="NotificationSwitch"
-            ToolTip="{Loc news-reader-ui-mute-tooltip}"
-            MinWidth="20"/>
-        <RichTextLabel Margin="5,2,2,2" Name="ShareTime" VerticalAlignment="Top"/>
-        <customControls:VSeparator Margin="2 0"/>
-        <RichTextLabel Margin="5,2,2,2" Name="Author" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+    <PanelContainer Name="ArticleNameContainer" MinHeight="1" StyleClasses="pda-divider"/>
+    <ScrollContainer Name="PageTextScroll" HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
+        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="4">
+            <RichTextLabel Name="PageName" HorizontalExpand="True" StyleClasses="pda-title"/>
+            <RichTextLabel Name="PageText" HorizontalExpand="True" Margin="0 3"/>
+            <BoxContainer Name="PageTextContainer" Orientation="Vertical" HorizontalExpand="True"/>
+        </BoxContainer>
+    </ScrollContainer>
+    <PanelContainer MinHeight="1" StyleClasses="pda-divider"/>
+    <BoxContainer SeparationOverride="5">
+        <Button Name="NotificationSwitch" MinHeight="24" ToolTip="{Loc 'news-reader-ui-mute-tooltip'}"/>
+        <RichTextLabel Name="ShareTime" VerticalAlignment="Center"/>
+        <Control HorizontalExpand="True"/>
     </BoxContainer>
+    <RichTextLabel Name="Author" HorizontalExpand="True"/>
 </cartridges:NewsReaderUiFragment>

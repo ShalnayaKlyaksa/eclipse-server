@@ -1,0 +1,269 @@
+- type: industrialRecipe
+  id: AutoFabricateIndustrialMechanicalCore
+  requireDataDisk: true
+  requiredTechnology: IndustrialAutomation
+  processor: Assembler
+  time: 8
+  inputs:
+    IndustrialIronPlate: 4
+    IndustrialIronRod: 2
+  outputs:
+    IndustrialMechanicalCore: 1
+- type: industrialRecipe
+  id: AutoFabricateIndustrialHeatConduitAssembly
+  requireDataDisk: true
+  requiredTechnology: IndustrialAutomation
+  processor: Assembler
+  time: 15
+  inputs:
+    IndustrialIronPlate: 4
+    SheetGlass: 2
+    SheetPlasma: 2
+  outputs:
+    IndustrialHeatConduitAssembly: 1
+- type: industrialRecipe
+  id: AutoFabricateIndustrialCircuitCore
+  requireDataDisk: true
+  cleanroomGrade: 1
+  requiredTechnology: IndustrialElectronics
+  processor: Assembler
+  time: 8
+  inputs:
+    IndustrialSiliconDioxide: 2
+    IndustrialPrintedBoard: 1
+  outputs:
+    IndustrialCircuitCore: 2
+
+- type: industrialRecipe
+  id: AutoFabricateUpgradeModuleCrusher
+  requireDataDisk: true
+  requiredTechnology: IndustrialAutomation
+  processor: Assembler
+  time: 15
+  inputs:
+    IndustrialMechanicalCore: 2
+    IndustrialIronPlate: 8
+  outputs:
+    IndustrialUpgradeModuleCrusher: 1
+- type: industrialRecipe
+  id: AutoFabricateUpgradeModuleThermalCentrifuge
+  requireDataDisk: true
+  requiredTechnology: IndustrialAutomation
+  processor: Assembler
+  time: 15
+  inputs:
+    IndustrialMechanicalCore: 1
+    IndustrialHeatConduitAssembly: 2
+    IndustrialIronPlate: 6
+  outputs:
+    IndustrialUpgradeModuleThermalCentrifuge: 1
+- type: industrialRecipe
+  id: AutoFabricateUpgradeModuleSmelter
+  requireDataDisk: true
+  requiredTechnology: IndustrialAutomation
+  processor: Assembler
+  time: 15
+  inputs:
+    IndustrialMechanicalCore: 1
+    IndustrialHeatConduitAssembly: 1
+    IndustrialIronPlate: 8
+  outputs:
+    IndustrialUpgradeModuleSmelter: 1
+- type: industrialRecipe
+  id: AutoFabricateUpgradeModuleAssembler
+  requireDataDisk: true
+  requiredTechnology: IndustrialAutomation
+  processor: Assembler
+  time: 15
+  inputs:
+    IndustrialMechanicalCore: 2
+    IndustrialCircuitCore: 2
+    SheetSteel: 8
+  outputs:
+    IndustrialUpgradeModuleAssembler: 1
+- type: industrialRecipe
+  id: AutoFabricateUpgradeModuleCrusherIndustrial
+  requireDataDisk: true
+  requiredTechnology: IndustrialAutomation
+  processor: Assembler
+  time: 15
+  inputs:
+    IndustrialUpgradeModuleCrusher: 1
+    IndustrialCircuitCore: 2
+    SheetPlasteel: 4
+  outputs:
+    IndustrialUpgradeModuleCrusherIndustrial: 1
+- type: industrialRecipe
+  id: AutoFabricateUpgradeModuleThermalCentrifugeIndustrial
+  requireDataDisk: true
+  requiredTechnology: IndustrialAutomation
+  processor: Assembler
+  time: 15
+  inputs:
+    IndustrialUpgradeModuleThermalCentrifuge: 1
+    IndustrialCircuitCore: 2
+    SheetPlasteel: 4
+  outputs:
+    IndustrialUpgradeModuleThermalCentrifugeIndustrial: 1
+- type: industrialRecipe
+  id: AutoFabricateUpgradeModuleSmelterIndustrial
+  requireDataDisk: true
+  requiredTechnology: IndustrialAutomation
+  processor: Assembler
+  time: 15
+  inputs:
+    IndustrialUpgradeModuleSmelter: 1
+    IndustrialCircuitCore: 2
+    SheetPlasteel: 4
+  outputs:
+    IndustrialUpgradeModuleSmelterIndustrial: 1
+- type: industrialRecipe
+  id: AutoFabricateUpgradeModuleAssemblerIndustrial
+  requireDataDisk: true
+  requiredTechnology: IndustrialAdvancedAutomation
+  processor: Assembler
+  time: 15
+  inputs:
+    IndustrialUpgradeModuleAssembler: 1
+    IndustrialAdvancedBoard: 2
+    SheetPlasteel: 4
+  outputs:
+    IndustrialUpgradeModuleAssemblerIndustrial: 1
+- type: industrialRecipe
+  id: AutoFabricateUpgradeModuleCrusherPerfect
+  requireDataDisk: true
+  requiredTechnology: IndustrialPerfectAutomation
+  processor: Assembler
+  time: 15
+  inputs:
+    IndustrialUpgradeModuleCrusherIndustrial: 1
+    SheetPlasteel: 8
+    IndustrialPerfectBoard: 2
+    IndustrialAlloyBlank: 2
+  outputs:
+    IndustrialUpgradeModuleCrusherPerfect: 1
+
+- type: industrialRecipe
+  id: AutoFabricateUpgradeModuleThermalCentrifugePerfect
+  requireDataDisk: true
+  requiredTechnology: IndustrialPerfectAutomation
+  processor: Assembler
+  time: 15
+  inputs:
+    IndustrialUpgradeModuleThermalCentrifugeIndustrial: 1
+    SheetPlasteel: 8
+    IndustrialPerfectBoard: 2
+    IndustrialAlloyBlank: 2
+  outputs:
+    IndustrialUpgradeModuleThermalCentrifugePerfect: 1
+
+- type: industrialRecipe
+  id: AutoFabricateUpgradeModuleSmelterPerfect
+  requireDataDisk: true
+  requiredTechnology: IndustrialPerfectAutomation
+  processor: Assembler
+  time: 15
+  inputs:
+    IndustrialUpgradeModuleSmelterIndustrial: 1
+    SheetPlasteel: 8
+    IndustrialPerfectBoard: 2
+    IndustrialAlloyBlank: 2
+  outputs:
+    IndustrialUpgradeModuleSmelterPerfect: 1
+
+- type: industrialRecipe
+  id: AutoFabricateUpgradeModuleAssemblerPerfect
+  requireDataDisk: true
+  requiredTechnology: IndustrialPerfectAutomation
+  processor: Assembler
+  time: 15
+  inputs:
+    IndustrialUpgradeModuleAssemblerIndustrial: 1
+    SheetPlasteel: 8
+    IndustrialPerfectBoard: 2
+    IndustrialAlloyBlank: 2
+  outputs:
+    IndustrialUpgradeModuleAssemblerPerfect: 1
+
+- type: industrialRecipe
+  id: IndustrialRods
+  requireDataDisk: true
+  requiredTechnology: IndustrialAutomation
+  processor: Assembler
+  time: 2
+  inputs:
+    SheetSteel: 1
+  outputs:
+    PartRodMetal1: 2
+- type: industrialRecipe
+  id: IndustrialManipulators
+  requireDataDisk: true
+  requiredTechnology: IndustrialAutomation
+  processor: Assembler
+  time: 8
+  inputs:
+    SheetSteel: 1
+    SheetGlass: 1
+  outputs:
+    MicroManipulatorStockPart: 2
+- type: industrialRecipe
+  id: IndustrialBeakers
+  requireDataDisk: true
+  requiredTechnology: IndustrialAutomation
+  processor: Assembler
+  time: 5
+  inputs:
+    SheetGlass: 1
+  outputs:
+    Beaker: 2
+- type: industrialRecipe
+  id: IndustrialSyringes
+  requireDataDisk: true
+  requiredTechnology: IndustrialAutomation
+  processor: Assembler
+  time: 5
+  inputs:
+    SheetGlass: 1
+    SheetSteel: 1
+  outputs:
+    Syringe: 2
+- type: industrialRecipe
+  id: IndustrialPowerCells
+  requireDataDisk: true
+  processor: Assembler
+  time: 10
+  inputs:
+    SheetSteel: 2
+    SheetGlass: 1
+    SheetCopper: 2
+    IndustrialPrintedBoard: 1
+  outputs:
+    PowerCellMediumPrinted: 1
+  requiredTechnology: IndustrialElectronics
+  minimumTier: Basic
+
+- type: industrialRecipe
+  id: AutoFabricateUpgradeModuleBuffer
+  requireDataDisk: true
+  requiredTechnology: IndustrialAutomation
+  processor: Assembler
+  time: 8
+  inputs:
+    SheetSteel: 6
+    IndustrialMechanicalCore: 1
+  outputs:
+    IndustrialUpgradeModuleBuffer: 1
+- type: industrialRecipe
+  id: IndustrialHighPowerCells
+  requireDataDisk: true
+  processor: Assembler
+  minimumTier: Perfect
+  requiredTechnology: IndustrialEnergyStorage
+  time: 16
+  inputs:
+    SheetSteel: 4
+    SheetGlass: 2
+    SheetCopper: 4
+    IngotGold: 1
+  outputs:
+    PowerCellHighPrinted: 1

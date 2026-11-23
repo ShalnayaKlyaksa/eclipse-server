@@ -1,0 +1,25 @@
+- type: medicalCondition
+  id: AdvancedOrganTrauma
+  name: advanced-organ-trauma
+  description: advanced-organ-trauma-desc
+  detection: Surgery
+
+- type: medicalCondition
+  id: ClinicalFunctionalImpairment
+  name: clinical-organ-impairment
+  description: clinical-organ-impairment-desc
+  functionMultiplier: 0
+  detection: Examination
+
+- type: medicalCondition
+  id: AdvancedRenalDehydration
+  name: advanced-organ-renal-dehydration
+  description: advanced-organ-renal-dehydration-desc
+  functionMultiplier: 0.4
+  detection: Examination
+
+- type: medicalCondition
+  id: AdvancedOrganMalnutrition
+  name: advanced-organ-malnutrition
+  description: advanced-organ-malnutrition-desc
+  functionMultiplier: 0.7

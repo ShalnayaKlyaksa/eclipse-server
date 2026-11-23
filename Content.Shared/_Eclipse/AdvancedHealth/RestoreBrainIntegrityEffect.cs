@@ -16,13 +16,18 @@ public sealed partial class RestoreBrainIntegrityEffectSystem
             return;
 
         var restored = args.Effect.Amount * args.Scale;
-        if (restored <= 0f || head.OrganIntegrity >= head.MaxOrganIntegrity)
+        if (!float.IsFinite(restored) || restored <= 0f)
             return;
 
+        var repair = new AdvancedBrainRepairEvent(restored * 100f / Math.Max(1f, head.MaxOrganIntegrity));
+        RaiseLocalEvent(entity.Owner, ref repair);
         head.OrganIntegrity = Math.Min(head.MaxOrganIntegrity, head.OrganIntegrity + restored);
         Dirty(entity);
     }
 }
+
+[ByRefEvent]
+public readonly record struct AdvancedBrainRepairEvent(float Amount);
 
 /// <summary>Restores brain/head organ integrity by a fixed amount per metabolism effect.</summary>
 public sealed partial class RestoreBrainIntegrity : EntityEffectBase<RestoreBrainIntegrity>

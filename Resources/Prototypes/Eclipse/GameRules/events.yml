@@ -5,7 +5,7 @@
     - id: ClosetSkeleton
     - id: KingRatMigration
     - id: ParadoxCloneSpawn
-    - id: RevenantSpawn
+    - id: PoltergeistSpawn
     - id: SleeperAgents
     - id: DerelictGenericCyborgSpawn
 

@@ -62,24 +62,17 @@ public sealed partial class ItemPipeAppearanceSystem : EntitySystem
     }
 
     /// <summary>
-    /// lp0 hub is always visible; lp1–lp4 are toggled per connected neighbor direction.
+    /// One native connection-mask frame replaces the old hub and four overlapping arms.
     /// </summary>
     private void UpdateDirectionalSpriteState(EntityUid uid, SpriteComponent sprite)
     {
-        var connected = ResolveConnectedDirections(uid);
-
-        SetArmVisible(uid, sprite, ItemPipeVisualLayers.North, connected.HasDirection(PipeDirection.North));
-        SetArmVisible(uid, sprite, ItemPipeVisualLayers.West, connected.HasDirection(PipeDirection.West));
-        SetArmVisible(uid, sprite, ItemPipeVisualLayers.South, connected.HasDirection(PipeDirection.South));
-        SetArmVisible(uid, sprite, ItemPipeVisualLayers.East, connected.HasDirection(PipeDirection.East));
-    }
-
-    private void SetArmVisible(EntityUid uid, SpriteComponent sprite, ItemPipeVisualLayers layer, bool visible)
-    {
-        if (!_sprite.LayerMapTryGet((uid, sprite), layer, out var key, false))
+        if (!_sprite.LayerMapTryGet((uid, sprite), ItemPipeVisualLayers.Hub, out var key, false))
             return;
-
-        _sprite.LayerSetVisible((uid, sprite), key, visible);
+        var prefix = Comp<ItemPipeWireVisualizerComponent>(uid).StatePrefix;
+        _sprite.LayerSetRsiState((uid, sprite), key, prefix + ((int) ResolveConnectedDirections(uid) & 15));
+        var pipe = Comp<ItemPipeComponent>(uid);
+        EntityManager.System<IndustrialPipeConnectorSystem>().Update((uid, sprite),
+            pipe.MachineInputDirections, pipe.MachineOutputDirections, "_Eclipse/Structures/Piping/item_lp_pipe.rsi");
     }
 
     private PipeDirection ResolveConnectedDirections(EntityUid uid)

@@ -1,8 +1,8 @@
 - type: entity
   parent: BaseComputerAiAccess
   id: ComputerBotanicalSeedDnaManipulator
-  name: plant seed DNA manipulator
-  description: A powered botany console for copying specific seed genes to and from DNA disks.
+  name: botanical DNA analyzer
+  description: Shows approximate seed traits and chemical concentrations. It cannot copy or rewrite genes.
   components:
   - type: SeedDnaConsole
     seedSlot:
@@ -20,9 +20,9 @@
       insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
       ejectOnBreak: true
       swap: true
+      insertOnInteract: false
       whitelist:
-        components:
-        - DnaDisk
+        tags: []
   - type: ActivatableUI
     key: enum.SeedDnaConsoleUiKey.Key
   - type: UserInterface

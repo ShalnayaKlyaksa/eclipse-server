@@ -32,7 +32,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: NT Emergency Gamma 591
+      name: VISH Emergency Gamma 591
     - type: Transform
       pos: 0,0
       parent: invalid

@@ -38,7 +38,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: NT Emergency EntZero 673
+      name: VISH Emergency EntZero 673
     - type: Transform
       pos: 0,0
       parent: invalid

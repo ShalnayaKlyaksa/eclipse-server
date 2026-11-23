@@ -117,7 +117,8 @@ public sealed class VocalSystem : EntitySystem
         if (component.Sounds == null)
             return;
 
-        sex ??= CompOrNull<HumanoidProfileComponent>(uid)?.Sex ?? Sex.Unsexed;
+        var profile = CompOrNull<HumanoidProfileComponent>(uid);
+        sex = profile?.VocalSex ?? (sex ?? profile?.Sex ?? Sex.Unsexed).PresentationSex();
 
         if (!component.Sounds.TryGetValue(sex.Value, out var protoId))
             return;

@@ -142,7 +142,7 @@
   name: энергетический меч спецназа
   parent: EnergySword
   id: EnergySwordDedSad
-  description: Энергетический меч спецвойск NanoTrasen, используеться для веселой нарезки экипажа.
+  description: Энергетический меч спецвойск ВИШ, используеться для веселой нарезки экипажа.
   components:
   - type: Sprite
     sprite: Objects/Weapons/Melee/e_sword.rsi

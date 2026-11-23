@@ -1,0 +1,156 @@
+- type: medicalSynthesis
+  id: ClinicalAntibiotic
+  precursor: ClinicalAntibioticPrecursor
+  medicine: ClinicalAntibiotic
+  minTemperature: 340
+  maxTemperature: 360
+  advanced: true
+
+- type: reagent
+  parent: BicaridinePrecursor
+  id: ClinicalAntibioticPrecursor
+  name: reagent-name-clinical-antibiotic-precursor
+
+- type: medicalSynthesis
+  id: ClinicalAntifungal
+  precursor: ClinicalAntifungalPrecursor
+  medicine: ClinicalAntifungal
+  minTemperature: 360
+  maxTemperature: 380
+  advanced: true
+
+- type: reagent
+  parent: BicaridinePrecursor
+  id: ClinicalAntifungalPrecursor
+  name: reagent-name-clinical-antifungal-precursor
+
+- type: medicalSynthesis
+  id: ClinicalAntiviral
+  precursor: ClinicalAntiviralPrecursor
+  medicine: ClinicalAntiviral
+  minTemperature: 330
+  maxTemperature: 350
+  advanced: true
+
+- type: reagent
+  parent: BicaridinePrecursor
+  id: ClinicalAntiviralPrecursor
+  name: reagent-name-clinical-antiviral-precursor
+
+- type: medicalSynthesis
+  id: ClinicalOpioid
+  precursor: ClinicalOpioidPrecursor
+  medicine: ClinicalOpioid
+  minTemperature: 320
+  maxTemperature: 340
+  advanced: true
+
+- type: reagent
+  parent: BicaridinePrecursor
+  id: ClinicalOpioidPrecursor
+  name: reagent-name-clinical-opioid-precursor
+
+- type: medicalSynthesis
+  id: ClinicalSedative
+  precursor: ClinicalSedativePrecursor
+  medicine: ClinicalSedative
+  minTemperature: 350
+  maxTemperature: 370
+  advanced: true
+
+- type: reagent
+  parent: BicaridinePrecursor
+  id: ClinicalSedativePrecursor
+  name: reagent-name-clinical-sedative-precursor
+
+- type: medicalSynthesis
+  id: ClinicalBronchodilator
+  precursor: ClinicalBronchodilatorPrecursor
+  medicine: ClinicalBronchodilator
+  minTemperature: 335
+  maxTemperature: 355
+  advanced: true
+
+- type: reagent
+  parent: BicaridinePrecursor
+  id: ClinicalBronchodilatorPrecursor
+  name: reagent-name-clinical-bronchodilator-precursor
+
+- type: medicalSynthesis
+  id: ClinicalAntihistamine
+  precursor: ClinicalAntihistaminePrecursor
+  medicine: ClinicalAntihistamine
+  minTemperature: 330
+  maxTemperature: 350
+  advanced: true
+
+- type: reagent
+  parent: BicaridinePrecursor
+  id: ClinicalAntihistaminePrecursor
+  name: reagent-name-clinical-antihistamine-precursor
+
+- type: medicalSynthesis
+  id: ClinicalAnticonvulsant
+  precursor: ClinicalAnticonvulsantPrecursor
+  medicine: ClinicalAnticonvulsant
+  minTemperature: 335
+  maxTemperature: 355
+  advanced: true
+
+- type: reagent
+  parent: BicaridinePrecursor
+  id: ClinicalAnticonvulsantPrecursor
+  name: reagent-name-clinical-anticonvulsant-precursor
+
+- type: medicalSynthesis
+  id: ClinicalAntiInflammatory
+  precursor: ClinicalAntiInflammatoryPrecursor
+  medicine: ClinicalAntiInflammatory
+  minTemperature: 335
+  maxTemperature: 355
+  advanced: true
+
+- type: reagent
+  parent: BicaridinePrecursor
+  id: ClinicalAntiInflammatoryPrecursor
+  name: reagent-name-clinical-anti-inflammatory-precursor
+
+- type: medicalSynthesis
+  id: ClinicalInsulin
+  precursor: ClinicalInsulinPrecursor
+  medicine: ClinicalInsulin
+  minTemperature: 310
+  maxTemperature: 325
+  advanced: true
+
+- type: reagent
+  parent: BicaridinePrecursor
+  id: ClinicalInsulinPrecursor
+  name: reagent-name-clinical-insulin-precursor
+
+- type: medicalSynthesis
+  id: ClinicalGlucose
+  precursor: ClinicalGlucosePrecursor
+  medicine: ClinicalGlucose
+  minTemperature: 315
+  maxTemperature: 335
+  advanced: true
+
+- type: reagent
+  parent: BicaridinePrecursor
+  id: ClinicalGlucosePrecursor
+  name: reagent-name-clinical-glucose-precursor
+
+- type: medicalSynthesis
+  id: ClinicalNaloxone
+  precursor: ClinicalNaloxonePrecursor
+  medicine: ClinicalNaloxone
+  minTemperature: 345
+  maxTemperature: 365
+  advanced: true
+
+- type: reagent
+  parent: BicaridinePrecursor
+  id: ClinicalNaloxonePrecursor
+  name: reagent-name-clinical-naloxone-precursor
+

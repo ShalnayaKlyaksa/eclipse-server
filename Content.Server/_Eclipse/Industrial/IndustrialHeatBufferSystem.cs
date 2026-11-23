@@ -10,15 +10,15 @@ using Robust.Server.GameObjects;
 
 namespace Content.Server._Eclipse.Industrial;
 
-public sealed class IndustrialHeatBufferSystem : EntitySystem
+public sealed partial class IndustrialHeatBufferSystem : EntitySystem
 {
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly NodeContainerSystem _nodeContainer = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly AppearanceSystem _appearance = default!;
+    [Dependency] private AtmosphereSystem _atmosphere = default!;
+    [Dependency] private NodeContainerSystem _nodeContainer = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private AppearanceSystem _appearance = default!;
 
     private const float TransferMolesPerTick = 50f;
-    private const float AmbientTemperature = 293.15f;
+    [Dependency] private Content.Server.Temperature.Systems.TemperatureSystem _temperature = default!;
 
     public override void Initialize()
     {
@@ -26,6 +26,7 @@ public sealed class IndustrialHeatBufferSystem : EntitySystem
 
         SubscribeLocalEvent<IndustrialHeatBufferComponent, ComponentInit>(OnBufferInit);
         SubscribeLocalEvent<IndustrialHeatBufferComponent, MapInitEvent>(OnBufferMapInit);
+        SubscribeLocalEvent<IndustrialHeatBufferComponent, AnchorStateChangedEvent>(OnBufferAnchorChanged);
         SubscribeLocalEvent<IndustrialHeatBufferComponent, AtmosDeviceUpdateEvent>(OnBufferAtmosUpdate);
         SubscribeLocalEvent<IndustrialHeatBufferComponent, ExaminedEvent>(OnBufferExamined);
     }
@@ -38,6 +39,12 @@ public sealed class IndustrialHeatBufferSystem : EntitySystem
     private void OnBufferMapInit(Entity<IndustrialHeatBufferComponent> ent, ref MapInitEvent args)
     {
         EntityManager.System<SharedIndustrialHeatConnectSystem>().TryAutoBindAdjacentProcessors(ent);
+    }
+
+    private void OnBufferAnchorChanged(Entity<IndustrialHeatBufferComponent> ent, ref AnchorStateChangedEvent args)
+    {
+        if (args.Anchored)
+            EntityManager.System<SharedIndustrialHeatConnectSystem>().TryAutoBindAdjacentProcessors(ent);
     }
 
     private void OnBufferExamined(Entity<IndustrialHeatBufferComponent> ent, ref ExaminedEvent args)
@@ -63,35 +70,28 @@ public sealed class IndustrialHeatBufferSystem : EntitySystem
             return;
         }
 
-        var inletPlasma = inlet.Air.GetMoles(Gas.Plasma);
-        var outletPlasma = outlet.Air.GetMoles(Gas.Plasma);
-        comp.PlasmaFlowing = inletPlasma + outletPlasma >= comp.MinPlasmaMoles;
-
-        if (comp.PlasmaFlowing && inlet.Air.TotalMoles > 0)
+        if (TryComp<TemperatureComponent>(ent, out var body) &&
+            inlet.Air.GetMoles(Gas.Plasma) >= comp.MinPlasmaMoles && inlet.Air.TotalMoles > 0)
         {
-            var transferMoles = TransferMolesPerTick * args.dt;
-            var ratio = MathF.Min(1f, transferMoles / inlet.Air.TotalMoles);
-            var removed = inlet.Air.RemoveRatio(ratio);
-            _atmosphere.Merge(outlet.Air, removed);
-
-            if (TryComp<TemperatureComponent>(ent, out var bufferTemp))
+            var ratio = MathF.Min(1f, TransferMolesPerTick * args.dt / inlet.Air.TotalMoles);
+            var packet = inlet.Air.RemoveRatio(ratio);
+            comp.PlasmaFlowing = packet.TotalMoles > 0;
+            var gasCapacity = _atmosphere.GetHeatCapacity(packet, false);
+            var bodyCapacity = _temperature.GetHeatCapacity(ent, body);
+            if (gasCapacity > Atmospherics.MinimumHeatCapacity && bodyCapacity > Atmospherics.MinimumHeatCapacity)
             {
-                var gasTemp = MathF.Max(inlet.Air.Temperature, outlet.Air.Temperature);
-                var target = MathF.Max(comp.OperatingTemperature, gasTemp);
-                bufferTemp.CurrentTemperature = MathF.Min(
-                    target,
-                    bufferTemp.CurrentTemperature + comp.HeatTransferRate * args.dt * 0.05f);
+                var equilibriumEnergy = (packet.Temperature - body.CurrentTemperature) /
+                                        (1f / gasCapacity + 1f / bodyCapacity);
+                var energy = Math.Clamp(equilibriumEnergy, -comp.HeatTransferRate * args.dt,
+                    comp.HeatTransferRate * args.dt);
+                packet.Temperature -= energy / gasCapacity;
+                _temperature.ChangeHeat(ent, energy, true, body);
             }
-        }
-        else if (TryComp<TemperatureComponent>(ent, out var coolingTemp))
-        {
-            coolingTemp.CurrentTemperature = MathF.Max(
-                AmbientTemperature,
-                coolingTemp.CurrentTemperature - 20f * args.dt);
+            _atmosphere.Merge(outlet.Air, packet);
         }
 
-        if (comp.PlasmaFlowing)
-            TransferHeatToLinkedProcessors(ent, comp, args.dt);
+        // Stored heat remains usable without flow, but each joule delivered is removed from the buffer.
+        TransferHeatToLinkedProcessors(ent, comp, args.dt);
 
         if (wasFlowing != comp.PlasmaFlowing)
             UpdateBufferAppearance(ent, comp);
@@ -101,23 +101,26 @@ public sealed class IndustrialHeatBufferSystem : EntitySystem
 
     private void TransferHeatToLinkedProcessors(EntityUid buffer, IndustrialHeatBufferComponent comp, float dt)
     {
+        if (!TryComp<TemperatureComponent>(buffer, out var body))
+            return;
+        var budget = comp.HeatTransferRate * dt;
+        var bodyCapacity = _temperature.GetHeatCapacity(buffer, body);
         foreach (var (processor, face) in IndustrialHeatLinkHelper.GetLinkedProcessors(buffer, EntityManager, _map))
         {
-            if (!IndustrialHeatLinkHelper.IsHeatLinked(processor, buffer, face, EntityManager, _map))
-                continue;
-
-            if (!TryComp<TemperatureComponent>(processor, out var procTemp) ||
+            if (budget <= 0 || !IndustrialHeatLinkHelper.IsHeatLinked(processor, buffer, face, EntityManager, _map) ||
+                !TryComp<TemperatureComponent>(processor, out var target) ||
                 !HasComp<IndustrialHeatPoweredComponent>(processor))
-            {
                 continue;
-            }
-
-            if (procTemp.CurrentTemperature >= comp.OperatingTemperature)
+            var targetCapacity = _temperature.GetHeatCapacity(processor, target);
+            if (bodyCapacity <= Atmospherics.MinimumHeatCapacity || targetCapacity <= Atmospherics.MinimumHeatCapacity)
                 continue;
-
-            procTemp.CurrentTemperature = MathF.Min(
-                comp.OperatingTemperature,
-                procTemp.CurrentTemperature + comp.HeatTransferRate * dt / MathF.Max(procTemp.SpecificHeat, 1f));
+            var difference = MathF.Min(body.CurrentTemperature, comp.OperatingTemperature) - target.CurrentTemperature;
+            if (difference <= 0)
+                continue;
+            var energy = MathF.Min(budget, difference / (1f / bodyCapacity + 1f / targetCapacity));
+            _temperature.ChangeHeat(buffer, -energy, true, body);
+            _temperature.ChangeHeat(processor, energy, true, target);
+            budget -= energy;
         }
     }
 

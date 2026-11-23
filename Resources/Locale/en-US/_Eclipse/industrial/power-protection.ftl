@@ -1,0 +1,11 @@
+ent-IndustrialSurgeProtector = industrial surge protector
+    .desc = Anchor on a power cable. Absorbs external transients; replace its cartridge when depleted.
+ent-IndustrialSurgeFuse = surge suppression cartridge
+    .desc = A replacement 200 kJ cartridge for an industrial surge protector.
+industrial-power-cable-insulation = Insulation thermal stress: {$percent}%. At 100% it may ignite.
+industrial-power-last-surge = Last transient: ×{$peak} nominal voltage.
+industrial-power-protector-capacity = Protection remaining: {$remaining} / {$maximum} kJ.
+industrial-power-fuse-replaced = Surge suppression cartridge replaced.
+industrial-ui-power-supply = Supply: {$received} / {$required} W
+industrial-power-surge-warning = Power surge in the cable network!
+industrial-power-surge-absorbed = Cable-network protection absorbed the transient.

@@ -18,8 +18,9 @@
   - Zipties
   - ModularReceiver
   - WeaponFlareGunSecurity
-  position: 1,-3
-
+  position: 40, -16
+  technologyPrerequisites:
+  - IndustrialElectronics
 - type: technology
   id: Targets
   name: research-technology-targets
@@ -35,7 +36,7 @@
   - TargetLegion
   technologyPrerequisites:
   - Security
-  position: 1,-4
+  position: 42, -15
 
 - type: technology
   id: RiotControl
@@ -52,7 +53,7 @@
   - RiotShield
   technologyPrerequisites:
   - Security
-  position: 1,-2
+  position: 42, -13
 
 - type: technology
   id: RiotControlAdvanced
@@ -71,7 +72,7 @@
   - PortableRecharger
   technologyPrerequisites:
   - RiotControl
-  position: 2,-2
+  position: 44, -16
 
 - type: technology
   id: DualWieldingTechnology
@@ -86,7 +87,7 @@
   - ClothingBackpackHarmpack
   technologyPrerequisites:
   - RiotControlAdvanced
-  position: 1,-1
+  position: 46, -13
 
 - type: technology
   id: WarCrimes
@@ -101,4 +102,4 @@
   - ClothingBackpackElectropack
   technologyPrerequisites:
   - RiotControlAdvanced
-  position: 2,-3
+  position: 46, -15

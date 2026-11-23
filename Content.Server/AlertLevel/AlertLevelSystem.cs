@@ -6,6 +6,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Server.AlertLevel;
 
@@ -19,6 +20,7 @@ public sealed class AlertLevelSystem : EntitySystem
 
     // Until stations are a prototype, this is how it's going to have to be.
     public const string DefaultAlertLevelSet = "stationAlerts";
+    public const string MortemAlertLevel = "mortem";
 
     public override void Initialize()
     {
@@ -139,13 +141,16 @@ public sealed class AlertLevelSystem : EntitySystem
     /// <param name="announce">Say the alert level's announcement.</param>
     /// <param name="force">Force the alert change. This applies if the alert level is not selectable or not.</param>
     /// <param name="locked">Will it be possible to change level by crew.</param>
+    /// <param name="overrideMortem">Explicit administrative override of the final liquidation protocol.</param>
     public void SetLevel(EntityUid station, string level, bool playSound, bool announce, bool force = false,
-        bool locked = false, MetaDataComponent? dataComponent = null, AlertLevelComponent? component = null)
+        bool locked = false, MetaDataComponent? dataComponent = null, AlertLevelComponent? component = null,
+        bool overrideMortem = false)
     {
         if (!Resolve(station, ref component, ref dataComponent)
             || component.AlertLevels == null
             || !component.AlertLevels.Levels.TryGetValue(level, out var detail)
-            || component.CurrentLevel == level)
+            || component.CurrentLevel == level
+            || component.CurrentLevel == MortemAlertLevel && !overrideMortem)
         {
             return;
         }
@@ -161,6 +166,21 @@ public sealed class AlertLevelSystem : EntitySystem
 
             component.CurrentDelay = _cfg.GetCVar(CCVars.GameAlertLevelChangeDelay);
             component.ActiveDelay = true;
+        }
+
+        if (announce && level == MortemAlertLevel)
+        {
+            var death = Loc.GetString("alert-level-mortem-death");
+            var message = Loc.GetString("alert-level-mortem-preannouncement", ("death", death));
+            // Only the localized word is inserted into the trusted inline effect.
+            var effect = new MarkupNode("blood", new MarkupParameter(death), null).ToString();
+            var formatted = FormattedMessage.FromMarkupOrThrow(
+                Loc.GetString("alert-level-mortem-preannouncement", ("death", effect)));
+            _chatSystem.DispatchStationAnnouncement(station, message,
+                sender: Loc.GetString("alert-level-mortem-sender"),
+                playDefaultSound: playSound,
+                colorOverride: Color.FromHex("#D1D4D8"),
+                formattedMessage: formatted);
         }
 
         component.CurrentLevel = level;

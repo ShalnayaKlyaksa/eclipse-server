@@ -1,0 +1,26 @@
+- type: entity
+  id: EclipseCrateApiarySupplies
+  parent: CratePlastic
+  name: apiary maintenance crate
+  components:
+  - type: StorageFill
+    contents:
+    - id: EclipseApiaryFrame
+      amount: 2
+    - id: EclipseApiarySelectionFrame
+      amount: 2
+    - id: EclipseApiaryNursingFrame
+      amount: 2
+    - id: EclipseApiaryInsulatedFrame
+      amount: 2
+    - id: EclipseBeeSmoker
+      amount: 2
+- type: cargoProduct
+  id: EclipseApiaryMaintenanceSupply
+  icon:
+    sprite: _Eclipse/Beekeeping/equipment.rsi
+    state: frame
+  product: EclipseCrateApiarySupplies
+  cost: 1800
+  category: cargoproduct-category-name-food
+  group: market

@@ -68,6 +68,8 @@
 
 - type: species
   id: Shadowkin
+  defaultHeight: 150
+  defaultWeight: 55
   name: species-name-shadowkin
   roundStart: true
   prototype: MobShadowkin

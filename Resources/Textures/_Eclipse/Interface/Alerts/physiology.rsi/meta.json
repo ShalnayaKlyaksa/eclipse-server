@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-4.0",
+  "copyright": "Sprite by Xaoser",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "exhausted"
+    },
+    {
+      "name": "sleepy1"
+    },
+    {
+      "name": "sleepy2"
+    },
+    {
+      "name": "sleepy3"
+    }
+  ]
+}

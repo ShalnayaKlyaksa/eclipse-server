@@ -1,0 +1,247 @@
+- type: entity
+  parent: [BaseMachinePowered, SmallConstructibleMachine]
+  id: EclipseApiary
+  name: apiary
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Beekeeping/equipment.rsi
+    state: hive
+  - type: Apiary
+  - type: ApcPowerReceiver
+    needsPower: false
+    powerLoad: 0
+  - type: Machine
+    board: EclipseApiaryCircuitboard
+  - type: ActivatableUI
+    key: enum.ApiaryUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.ApiaryUiKey.Key:
+        type: ApiaryBoundUserInterface
+  - type: ContainerContainer
+    containers:
+      apiary-input: !type:Container
+      apiary-output: !type:Container
+      machine_board: !type:Container
+      machine_parts: !type:Container
+  - type: EmptyOnMachineDeconstruct
+    containers: [apiary-input, apiary-output]
+  - type: GuideHelp
+    guides: [EclipseBeekeeping]
+
+- type: entity
+  parent: EclipseApiary
+  id: EclipseAdvancedApiary
+  name: climate-controlled apiary
+  components:
+  - type: Apiary
+    controlledClimate: true
+  - type: Sprite
+    color: "#B9D8E2"
+  - type: ApcPowerReceiver
+    needsPower: true
+    powerLoad: 500
+  - type: Machine
+    board: EclipseAdvancedApiaryCircuitboard
+
+- type: entity
+  parent: BaseMachineCircuitboard
+  id: EclipseApiaryCircuitboard
+  name: apiary machine board
+  components:
+  - type: MachineBoard
+    prototype: EclipseApiary
+    stackRequirements:
+      WoodPlank: 8
+      Steel: 2
+
+- type: entity
+  parent: BaseMachineCircuitboard
+  id: EclipseAdvancedApiaryCircuitboard
+  name: climate-controlled apiary machine board
+  components:
+  - type: MachineBoard
+    prototype: EclipseAdvancedApiary
+    stackRequirements:
+      Steel: 8
+      Glass: 4
+      Cable: 5
+
+- type: entity
+  parent: BaseItem
+  id: EclipseBeePrincess
+  name: bee princess
+  components:
+  - type: Sprite
+    sprite: Mobs/Animals/bee.rsi
+    state: 0
+  - type: Item
+    size: Tiny
+  - type: BeeSpecimen
+    caste: Princess
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeDrone
+  name: bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeForestPrincess
+  components:
+  - type: BeeSpecimen
+    genome:
+      dominant: Forest
+      recessive: Forest
+
+- type: entity
+  parent: EclipseBeeDrone
+  id: EclipseBeeForestDrone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+    genome:
+      dominant: Forest
+      recessive: Forest
+
+- type: entity
+  parent: ClothingHeadBase
+  id: EclipseBeekeeperVeil
+  name: beekeeper veil
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Beekeeping/hat.rsi
+  - type: Clothing
+    sprite: _Eclipse/Beekeeping/hat.rsi
+  - type: BeekeeperProtection
+
+- type: entity
+  parent: ClothingOuterBaseLarge
+  id: EclipseBeekeeperSuit
+  name: beekeeper suit
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Beekeeping/suit.rsi
+  - type: Clothing
+    sprite: _Eclipse/Beekeeping/suit.rsi
+  - type: BeekeeperProtection
+
+- type: entity
+  parent: ClothingHandsGlovesColorYellow
+  id: EclipseBeekeeperGloves
+  name: beekeeper gloves
+  components:
+  - type: BeekeeperProtection
+
+- type: entity
+  parent: BaseItem
+  id: EclipseBeeSmoker
+  name: bee smoker
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Beekeeping/equipment.rsi
+    state: smoker
+  - type: Item
+    size: Small
+  - type: BeeSmoker
+
+- type: entity
+  parent: BaseItem
+  id: EclipseApiaryFrame
+  name: apiary frame
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Beekeeping/equipment.rsi
+    state: frame
+  - type: Item
+    size: Small
+  - type: ApiaryFrame
+
+- type: entity
+  parent: BaseItem
+  id: EclipseBeeCatchingFrame
+  name: bee catching frame
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Beekeeping/equipment.rsi
+    state: frame
+  - type: Item
+    size: Small
+  - type: BeeNet
+
+- type: entity
+  parent: BaseItem
+  id: EclipseBeeAnalyzer
+  name: bee genome analyzer
+  components:
+  - type: Sprite
+    sprite: Objects/Devices/health_analyzer.rsi
+    state: genetic
+  - type: Item
+    size: Small
+  - type: BeeAnalyzer
+
+- type: entity
+  parent: EclipseFoodHoneycomb
+  id: EclipseFoodHerbalHoneycomb
+  name: herbal honeycomb
+  components:
+  - type: Sprite
+    color: "#B8D4AA"
+
+- type: entity
+  parent: EclipseFoodHoneycomb
+  id: EclipseFoodEnergeticHoneycomb
+  name: energetic honeycomb
+  components:
+  - type: Sprite
+    color: "#E8B86A"
+
+- type: entity
+  parent: EclipseFoodHoneycomb
+  id: EclipseFoodRoyalHoneycomb
+  name: royal honeycomb
+  components:
+  - type: Sprite
+    color: "#E8B0CF"
+
+- type: reagent
+  id: EclipseHoney
+  name: reagent-name-eclipse-honey
+  desc: reagent-desc-eclipse-honey
+  physicalDesc: reagent-physical-desc-sticky
+  group: Foods
+  flavor: sweet
+  color: "#D49E32"
+  metabolisms:
+    Metabolites:
+      effects:
+      - !type:SatiateHunger
+
+- type: culinaryIngredient
+  id: EclipseCulinaryHerbalHoneycomb
+  foods: [EclipseFoodHerbalHoneycomb]
+  traits: {Calm: 2, Cooling: 1, Stability: 3}
+
+- type: culinaryIngredient
+  id: EclipseCulinaryEnergeticHoneycomb
+  foods: [EclipseFoodEnergeticHoneycomb]
+  traits: {Recovery: 2, Efficiency: 2, Rapid: 2}
+
+- type: culinaryIngredient
+  id: EclipseCulinaryRoyalHoneycomb
+  foods: [EclipseFoodRoyalHoneycomb]
+  traits: {Healing: 1, Calm: 2, Stability: 3}
+
+- type: culinaryIngredient
+  id: EclipseCulinaryHoney
+  reagents: [EclipseHoney]
+  traits: {Rapid: 2, Stability: 3, Stimulation: 1}
+
+- type: guideEntry
+  id: EclipseBeekeeping
+  name: guide-entry-eclipse-beekeeping
+  text: "/ServerInfo/Guidebook/Service/EclipseBeekeeping.xml"

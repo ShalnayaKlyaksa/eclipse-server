@@ -1,0 +1,200 @@
+- type: constructionGraph
+  id: EclipseWallBoard1
+  start: start
+  graph:
+  - node: start
+    actions:
+    - !type:DestroyEntity {}
+    edges:
+    - to: board
+      completed:
+      - !type:SnapToGrid {}
+      steps:
+      - material: WoodPlank
+        amount: 3
+        doAfter: 2
+      - material: Steel
+        amount: 1
+  - node: board
+    entity: EclipseWallBoard1
+    edges:
+    - to: start
+      completed:
+      - !type:GivePrototype
+          prototype: MaterialWoodPlank
+          amount: 3
+      - !type:GivePrototype
+          prototype: SheetSteel1
+          amount: 1
+      steps:
+      - tool: Prying
+        doAfter: 3
+
+- type: constructionGraph
+  id: EclipseWallBoard2
+  start: start
+  graph:
+  - node: start
+    actions:
+    - !type:DestroyEntity {}
+    edges:
+    - to: board
+      completed:
+      - !type:SnapToGrid {}
+      steps:
+      - material: WoodPlank
+        amount: 6
+        doAfter: 2
+      - material: Steel
+        amount: 2
+  - node: board
+    entity: EclipseWallBoard2
+    edges:
+    - to: start
+      completed:
+      - !type:GivePrototype
+          prototype: MaterialWoodPlank
+          amount: 6
+      - !type:GivePrototype
+          prototype: SheetSteel1
+          amount: 2
+      steps:
+      - tool: Prying
+        doAfter: 3
+
+- type: constructionGraph
+  id: EclipseWallBoard3
+  start: start
+  graph:
+  - node: start
+    actions:
+    - !type:DestroyEntity {}
+    edges:
+    - to: board
+      completed:
+      - !type:SnapToGrid {}
+      steps:
+      - material: WoodPlank
+        amount: 9
+        doAfter: 2
+      - material: Steel
+        amount: 3
+  - node: board
+    entity: EclipseWallBoard3
+    edges:
+    - to: start
+      completed:
+      - !type:GivePrototype
+          prototype: MaterialWoodPlank
+          amount: 9
+      - !type:GivePrototype
+          prototype: SheetSteel1
+          amount: 3
+      steps:
+      - tool: Prying
+        doAfter: 3
+
+- type: constructionGraph
+  id: EclipseWallTelevision
+  start: start
+  graph:
+  - node: start
+    actions:
+    - !type:DestroyEntity {}
+    edges:
+    - to: television
+      completed:
+      - !type:SnapToGrid {}
+      steps:
+      - material: Steel
+        amount: 2
+        doAfter: 2
+      - material: Glass
+        amount: 2
+      - material: Cable
+        amount: 5
+      - tag: ComputerTelevisionCircuitboard
+        name: construction-graph-tag-television-board
+        icon:
+          sprite: Objects/Misc/module.rsi
+          state: cpuboard
+  - node: television
+    entity: EclipseWallTelevision
+    edges:
+    - to: start
+      completed:
+      - !type:GivePrototype
+          prototype: SheetSteel1
+          amount: 2
+      - !type:GivePrototype
+          prototype: SheetGlass1
+          amount: 2
+      - !type:GivePrototype
+          prototype: CableApcStack1
+          amount: 5
+      - !type:GivePrototype
+          prototype: ComputerTelevisionCircuitboard
+          amount: 1
+      steps:
+      - tool: Prying
+        doAfter: 3
+
+- type: construction
+  id: EclipseWallBoard1
+  name: construction-name-eclipse-board-1
+  description: construction-desc-eclipse-board
+  graph: EclipseWallBoard1
+  startNode: start
+  targetNode: board
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
+  canBuildInImpassable: true
+  conditions:
+  - !type:WallmountCondition
+
+- type: construction
+  id: EclipseWallBoard2
+  name: construction-name-eclipse-board-2
+  description: construction-desc-eclipse-board
+  graph: EclipseWallBoard2
+  startNode: start
+  targetNode: board
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
+  canBuildInImpassable: true
+  conditions:
+  - !type:WallmountCondition
+
+- type: construction
+  id: EclipseWallBoard3
+  name: construction-name-eclipse-board-3
+  description: construction-desc-eclipse-board
+  graph: EclipseWallBoard3
+  startNode: start
+  targetNode: board
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
+  canBuildInImpassable: true
+  conditions:
+  - !type:WallmountCondition
+
+- type: construction
+  id: EclipseWallTelevision
+  name: construction-name-eclipse-tv
+  description: construction-desc-eclipse-tv
+  graph: EclipseWallTelevision
+  startNode: start
+  targetNode: television
+  category: construction-category-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
+  canBuildInImpassable: true
+  conditions:
+  - !type:WallmountCondition

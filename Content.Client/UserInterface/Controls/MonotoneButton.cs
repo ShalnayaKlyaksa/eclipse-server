@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using Content.Client.Stylesheets;
 using Robust.Client.UserInterface.Controls;
 using static Robust.Client.UserInterface.Controls.Label;
 
@@ -13,7 +14,7 @@ public sealed class MonotoneButton : Button
     /// Specifies the color of the label text when the button is pressed.
     /// </summary>
     [ViewVariables]
-    public Color AltTextColor { set; get; } = new Color(0.2f, 0.2f, 0.2f);
+    public Color AltTextColor { set; get; } = ForgeStyle.Accent;
 
     public MonotoneButton()
     {

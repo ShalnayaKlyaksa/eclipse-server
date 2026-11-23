@@ -26,6 +26,16 @@
   parent: CablePhysBase
   id: CableBase
   components:
+  - type: PowerSurgeCable
+  - type: Flammable
+    fireSpread: false
+    damage:
+      types:
+        Heat: 8
+  - type: FireVisuals
+    sprite: Effects/fire.rsi
+    normalState: fire
+    alternateState: fire
   - type: Visibility
     layer: 1
   - type: Sprite

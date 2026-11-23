@@ -318,3 +318,9 @@ Resources/MapImages
 
 # Direnv stuff
 .direnv/
+
+# arifacts
+art
+
+#hui_znaet
+/outputs/

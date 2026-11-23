@@ -1,7 +1,9 @@
 - type: species
   id: Vulpkanin
+  defaultHeight: 178
+  defaultWeight: 77
   name: species-name-vulpkanin
-  roundStart: false
+  roundStart: true
   prototype: MobVulpkanin
   defaultSkinTone:  "#eb943d" #Corvax-Vulp_Port "#5a3f2d"
   dollPrototype: AppearanceVulpkanin

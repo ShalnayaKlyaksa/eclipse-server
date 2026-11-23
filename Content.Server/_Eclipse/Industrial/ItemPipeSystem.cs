@@ -38,9 +38,11 @@ public sealed partial class ItemPipeSystem : SharedItemPipeSystem
 
     protected override void OnPipeTopologyChanged(Entity<ItemPipeComponent> ent)
     {
-        _network.RebuildNetworkFrom(ent);
-        _network.RebuildAdjacentPipeNetworks(ent);
+        _network.QueueTopologyChange(ent);
     }
+
+    protected override void OnTransferModeChanged(Entity<ItemPipeComponent> ent)
+        => _network.InvalidateEndpoints(ent.Comp.NetworkId);
 
     protected override void OnPipeRemoved(Entity<ItemPipeComponent> ent)
     {
@@ -61,7 +63,7 @@ public sealed partial class ItemPipeSystem : SharedItemPipeSystem
     protected override void OnProcessorAdjacentChanged(EntityUid processor)
     {
         base.OnProcessorAdjacentChanged(processor);
-        _network.RebuildNetworksNearProcessor((processor, Comp<IndustrialProcessorComponent>(processor)));
+        _network.InvalidateProcessorConnections((processor, Comp<IndustrialProcessorComponent>(processor)));
     }
 
     protected override void PushNetworkExamine(Entity<ItemPipeComponent> ent, ExaminedEvent args)

@@ -82,6 +82,7 @@
     preinstalled:
       - CrewManifestCartridge
       - NotekeeperCartridge
+      - ResearchMailCartridge
       - NanoTaskCartridge
       - NewsReaderCartridge
     cartridgeSlot:
@@ -1099,7 +1100,7 @@
   parent: [ LegionPDA, BaseLegionContraband ]
   id: LegionOperativePDA
   name: legion operative PDA
-  description: Death to NT!
+  description: Death to VISH!
   components:
   - type: Pda
     id: LegionOperativeIDCard

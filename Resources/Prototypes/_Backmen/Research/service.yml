@@ -8,11 +8,11 @@
   tier: 1
   cost: 500
   recipeUnlocks:
-   - LightTube
-   - LightBulb
-   - WarmLightBulb
+  - LightTube
+  - LightBulb
+  - WarmLightBulb
   position: 1,6
-
+  hidden: true
 - type: technology
   id: LightningAdvanced
   name: research-technology-lightning-advanced
@@ -23,14 +23,14 @@
   tier: 1
   cost: 1000
   recipeUnlocks:
-   - LedLightTube
-   - SodiumLightTube
-   - ExteriorLightTube
-   - LedLightBulb
-   - DimLightBulb
+  - LedLightTube
+  - SodiumLightTube
+  - ExteriorLightTube
+  - LedLightBulb
+  - DimLightBulb
   technologyPrerequisites:
-   - Lightning
-  position: 1,7
+  - IndustrialAutomation
+  position: 48, 0
 
 - type: technology
   id: Bootlegging
@@ -50,7 +50,7 @@
   - CustomDrinkJug
   technologyPrerequisites:
   - ServiceMachines
-  position: 2,9
+  position: 50, 1
 
 - type: technology
   id: Kitchen
@@ -74,7 +74,7 @@
   - UtilityKnife
   technologyPrerequisites:
   - ServiceMachines
-  position: 4,9
+  position: 50, 7
 
 - type: technology
   id: Hydroponics
@@ -86,17 +86,16 @@
   tier: 1
   cost: 500
   recipeUnlocks:
-   - Bucket
-   - HydroponicsToolMiniHoe
-   - HydroponicsToolHatchet
-   - HydroponicsToolScythe
-   - HydroponicsToolClippers
-   - ClothingBeltPlant
-   - PlantBag
-   - BotanicalSeedDnaDisk # Erida edit
+  - Bucket
+  - HydroponicsToolMiniHoe
+  - HydroponicsToolHatchet
+  - HydroponicsToolScythe
+  - HydroponicsToolClippers
+  - ClothingBeltPlant
+  - PlantBag
   technologyPrerequisites:
   - ServiceMachines
-  position: 3,8
+  position: 50, 5
 
 - type: technology
   id: Entertainment
@@ -108,12 +107,12 @@
   tier: 1
   cost: 5000
   recipeUnlocks:
-   - SynthesizerInstrument
-   - HandheldStationMap
-   - PushHorn
+  - SynthesizerInstrument
+  - HandheldStationMap
+  - PushHorn
   technologyPrerequisites:
   - ServiceMachines
-  position: 3,10
+  position: 50, 9
 
 - type: technology
   id: FauxAstroTiles
@@ -141,7 +140,7 @@
   - FauxTileAstroAsteroidSandBorderless
   technologyPrerequisites:
   - Entertainment
-  position: 2,10
+  position: 52, 4
 
 - type: technology
   id: Cleaning
@@ -153,16 +152,16 @@
   tier: 1
   cost: 500
   recipeUnlocks:
-   - WireBrush
-   - MopItem
-   - TrashBag
-   - LightReplacer
-   - Holoprojector
-   - WetFloorSign
-   - ClothingHeadHatCone
+  - WireBrush
+  - MopItem
+  - TrashBag
+  - LightReplacer
+  - Holoprojector
+  - WetFloorSign
+  - ClothingHeadHatCone
   technologyPrerequisites:
   - ServiceMachines
-  position: 4,6
+  position: 50, 3
 
 - type: technology
   id: CleaningAdvanced
@@ -174,10 +173,10 @@
   tier: 1
   cost: 10000
   recipeUnlocks:
-   - AdvMopItem
+  - AdvMopItem
   technologyPrerequisites:
   - Cleaning
-  position: 4,7
+  position: 52, 12
 
 - type: technology
   id: Spray
@@ -189,10 +188,10 @@
   tier: 1
   cost: 500
   recipeUnlocks:
-   - SprayBottle
+  - SprayBottle
   technologyPrerequisites:
   - Cleaning
-  position: 5,6
+  position: 52, 0
 
 - type: technology
   id: SprayAdvanced
@@ -204,9 +203,9 @@
   tier: 1
   cost: 10000
   recipeUnlocks:
-   - WeaponSprayNozzle
-   - ClothingBackpackWaterTank
-   - MegaSprayBottle
+  - WeaponSprayNozzle
+  - ClothingBackpackWaterTank
+  - MegaSprayBottle
   technologyPrerequisites:
   - Spray
-  position: 5,7
+  position: 54, 1

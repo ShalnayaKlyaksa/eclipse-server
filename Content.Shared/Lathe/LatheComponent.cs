@@ -70,6 +70,7 @@ namespace Content.Shared.Lathe
         /// </summary>
         [ViewVariables]
         public ProtoId<LatheRecipePrototype>? CurrentRecipe;
+        public Guid PaymentReceipt;
 
         #region MachineUpgrading
         /// <summary>
@@ -108,6 +109,7 @@ namespace Content.Shared.Lathe
         public ProtoId<LatheRecipePrototype> Recipe;
         public int ItemsPrinted;
         public int ItemsRequested;
+        public Guid PaymentReceipt;
 
         public LatheRecipeBatch(ProtoId<LatheRecipePrototype> recipe, int itemsPrinted, int itemsRequested)
         {

@@ -1,0 +1,4 @@
+- type: shader
+  id: EclipsePdaDisplay
+  kind: source
+  path: /Textures/_Eclipse/Shaders/pda_display.swsl

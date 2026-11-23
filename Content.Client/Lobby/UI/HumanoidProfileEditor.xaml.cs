@@ -43,7 +43,6 @@ namespace Content.Client.Lobby.UI
 
         // CCvar.
         private int _maxNameLength;
-        private int _maxCustomSpeciesLength;
 
         /// <summary>
         /// If we're attempting to save.
@@ -110,7 +109,6 @@ namespace Content.Client.Lobby.UI
             _sprite = _entManager.System<SpriteSystem>();
 
             _maxNameLength = _cfgManager.GetCVar(CCVars.MaxNameLength);
-            _maxCustomSpeciesLength = _cfgManager.GetCVar(CCVars.MaxCustomSpeciesLength);
             _allowFlavorText = _cfgManager.GetCVar(CCVars.FlavorText);
 
             Markings.SetModel(_markingsModel);
@@ -207,20 +205,6 @@ namespace Content.Client.Lobby.UI
                 OnSkinColorOnValueChanged();
             };
 
-            IsCustomSpecies.OnPressed += _ =>
-            {
-                CustomSpeciesContainer.Visible = IsCustomSpecies.Pressed;
-                if (!IsCustomSpecies.Pressed)
-                    SetCustomSpecies(string.Empty);
-            };
-
-            CustomSpeciesEdit.IsValid = args => args.Length <= _maxCustomSpeciesLength;
-            CustomSpeciesEdit.OnTextChanged += args =>
-            {
-                var formattedMessage = FormattedMessage.RemoveMarkupPermissive(args.Text);
-                SetCustomSpecies(formattedMessage);
-            };
-
             #region Skin
 
             Skin.OnValueChanged += _ =>
@@ -305,6 +289,7 @@ namespace Content.Client.Lobby.UI
             TabContainer.SetTabTitle(4, Loc.GetString("humanoid-profile-editor-markings-tab"));
 
             _markingsModel.MarkingsChanged += (_, _) => OnMarkingChange();
+            _markingsModel.MarkingColorsChanged += (_, _) => OnMarkingChange();
             _markingsModel.MarkingsReset += OnMarkingChange;
 
             #endregion Markings
@@ -343,6 +328,7 @@ namespace Content.Client.Lobby.UI
 
             SpeciesInfoButton.OnPressed += OnSpeciesInfoButtonPressed;
 
+            InitializeCustomization();
             UpdateSpeciesGuidebookIcon();
             ApplyEclipseStyle(this);
             ApplyResponsiveLayout();
@@ -435,6 +421,7 @@ namespace Content.Client.Lobby.UI
         {
             Profile = profile?.Clone();
             CharacterSlot = slot;
+            PdaIdentity.SetCharacter(profile != null ? slot : null);
             IsDirty = false;
             JobOverride = null;
 
@@ -445,7 +432,7 @@ namespace Content.Client.Lobby.UI
             UpdateSkinColor();
             UpdateSpawnPriorityControls();
             UpdateAgeEdit();
-            UpdateCustomSpeciesEdit();
+            UpdateCustomizationControls();
             UpdateEyePickers();
             UpdateSaveButton();
             UpdateMarkings();

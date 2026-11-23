@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client._Eclipse.AdvancedHealth;
 using Content.Shared._Eclipse.AdvancedHealth;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
@@ -9,7 +10,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.HealthAnalyzer.UI;
 
-public sealed class AdvancedHealthBodyDollControl : Control
+public sealed partial class AdvancedHealthBodyDollControl : Control
 {
     private readonly Texture _base;
     private readonly Texture _bloodLight;
@@ -60,6 +61,7 @@ public sealed class AdvancedHealthBodyDollControl : Control
     /// <summary>When set, moving the cursor over a part selects it (click is reserved for actions).</summary>
     public bool HoverSelect { get; set; }
     public bool EffectsEnabled { get; set; } = true;
+    public float SystemicWeakness { get; set; }
     public bool GroupPelvisWithAbdomen { get; set; }
     public bool GroupNeckWithHead { get; set; }
     public BodyPartSlot DisplaySlot(BodyPartSlot slot) => slot switch
@@ -142,6 +144,13 @@ public sealed class AdvancedHealthBodyDollControl : Control
             _enabled.Add(slot);
     }
 
+    public void SetAimHealth(IEnumerable<BodyPartUiState> states)
+    {
+        if (!AimMode) return;
+        _states.Clear();
+        foreach (var state in states) _states[state.Slot] = state;
+    }
+
     /// <summary>Centroid of a body zone in this control's local pixel space.</summary>
     public Vector2 GetSlotCentroidLocal(BodyPartSlot slot)
     {
@@ -171,23 +180,23 @@ public sealed class AdvancedHealthBodyDollControl : Control
 
     private void MergeRegion(BodyPartSlot parent, BodyPartSlot child)
     {
-        if (!_states.Remove(child, out var pelvis))
+        if (!_states.Remove(child, out var secondary))
             return;
         _enabled.Remove(child);
         _enabled.Add(parent);
-        if (!_states.TryGetValue(parent, out var abdomen))
-            abdomen = pelvis with { Slot = parent };
-        _states[parent] = abdomen with
+        if (!_states.TryGetValue(parent, out var primary))
+            primary = secondary with { Slot = parent };
+        _states[parent] = primary with
         {
-            Severity = (WoundSeverity) Math.Max((int) abdomen.Severity, (int) pelvis.Severity),
-            Damaged = abdomen.Damaged || pelvis.Damaged,
-            Bleeding = (BleedingLevel) Math.Max((int) abdomen.Bleeding, (int) pelvis.Bleeding),
-            Fractured = abdomen.Fractured || pelvis.Fractured,
-            Bandaged = abdomen.Bandaged || pelvis.Bandaged,
-            Splinted = abdomen.Splinted || pelvis.Splinted,
-            Tourniquet = abdomen.Tourniquet || pelvis.Tourniquet,
-            Destroyed = abdomen.Destroyed || pelvis.Destroyed,
-            ForeignBody = abdomen.ForeignBody || pelvis.ForeignBody,
+            Severity = (WoundSeverity) Math.Max((int) primary.Severity, (int) secondary.Severity),
+            Damaged = primary.Damaged || secondary.Damaged,
+            Bleeding = (BleedingLevel) Math.Max((int) primary.Bleeding, (int) secondary.Bleeding),
+            Fractured = primary.Fractured || secondary.Fractured,
+            Bandaged = primary.Bandaged || secondary.Bandaged,
+            Splinted = primary.Splinted || secondary.Splinted,
+            Tourniquet = primary.Tourniquet || secondary.Tourniquet,
+            Destroyed = primary.Destroyed || secondary.Destroyed,
+            ForeignBody = primary.ForeignBody || secondary.ForeignBody,
         };
     }
 
@@ -250,6 +259,7 @@ public sealed class AdvancedHealthBodyDollControl : Control
 
     private BodyPartSlot? TryHitTest(Vector2 pos)
     {
+        if (ViewMode == MedicalBodyViewMode.Organs) return null;
         var layout = LayoutSize;
         if (layout.X <= 0 || layout.Y <= 0)
             return null;
@@ -292,11 +302,16 @@ public sealed class AdvancedHealthBodyDollControl : Control
     protected override void Draw(DrawingHandleScreen handle)
     {
         var box = PixelSizeBox;
+        if (!AimMode && ViewMode != MedicalBodyViewMode.General)
+        {
+            DrawMedicalLayer(handle, box);
+            return;
+        }
         handle.DrawTextureRect(_base, box);
 
-        var scale = LayoutSize.X / 128f;
+        var scale = box.Width / 128f;
 
-        if (!AimMode)
+        if (!AimMode || _states.Count > 0)
         {
             foreach (var (slot, state) in _states)
             {
@@ -389,8 +404,8 @@ public sealed class AdvancedHealthBodyDollControl : Control
                     continue;
                 var p = point * scale;
                 var radius = Math.Max(5f, 5f * scale);
-                handle.DrawCircle(p, radius, Color.FromHex("#e8b65b"), filled: false);
-                handle.DrawLine(p - new Vector2(radius, 0), p + new Vector2(radius, 0), Color.FromHex("#e8b65b"));
+                handle.DrawCircle(p, radius, Color.FromHex("#f44250"), filled: false);
+                handle.DrawLine(p - new Vector2(radius, 0), p + new Vector2(radius, 0), Color.FromHex("#f44250"));
             }
             foreach (var (slot, state) in _states)
             {
@@ -416,27 +431,36 @@ public sealed class AdvancedHealthBodyDollControl : Control
 
     private void DrawHighlight(DrawingHandleScreen handle, UIBox2 box, float scale, BodyPartSlot slot)
     {
-        var color = Color.FromHex("#4be06e99");
-        if (_masks.TryGetValue(slot, out var mask))
+        var color = Color.FromHex("#75d59a");
+        if (AimMode && _masks.TryGetValue(slot, out var mask))
         {
-            handle.DrawTextureRect(mask, box, color);
+            handle.DrawTextureRect(mask, box, color.WithAlpha(0.6f));
             return;
         }
-
-        if (Regions.TryGetValue(slot, out var region))
+        if (!Regions.TryGetValue(slot, out var region)) return;
+        var rect = ScaleRegion(region, scale, scale).Translated(box.TopLeft);
+        var length = 3 * scale;
+        for (var i = 0; i < 4; i++)
         {
-            var rect = ScaleRegion(region, scale, scale);
-            handle.DrawRect(rect.Translated(box.TopLeft), color, filled: true);
+            var dx = (i & 1) == 0 ? 1 : -1;
+            var dy = (i & 2) == 0 ? 1 : -1;
+            var corner = new Vector2(dx > 0 ? rect.Left : rect.Right, dy > 0 ? rect.Top : rect.Bottom);
+            handle.DrawLine(corner, corner + new Vector2(length * dx, 0), color);
+            handle.DrawLine(corner, corner + new Vector2(0, length * dy), color);
         }
     }
 
-    private static Color GetColor(BodyPartUiState state)
+    private Color GetColor(BodyPartUiState state)
     {
-        if (state.Destroyed) return Color.FromHex("#481018ee");
-        if (state.Severity == WoundSeverity.Critical) return Color.FromHex("#8a0f18ee");
-        if (state.Severity == WoundSeverity.Severe) return Color.FromHex("#d81b2ade");
-        if (state.Severity == WoundSeverity.Moderate) return Color.FromHex("#ef6a6ac6");
-        if (state.Severity == WoundSeverity.Minor && state.Damaged) return Color.FromHex("#e0a3a3a0");
-        return Color.Transparent;
+        if (state.Destroyed) return Color.FromHex("#2b1a21");
+        if (!state.Damaged) return !AimMode && SystemicWeakness > 0.05f
+            ? HealthMenuStyle.SystemicWeakness.WithAlpha(Math.Clamp(SystemicWeakness * 0.8f, 0, 0.7f)) : Color.Transparent;
+        return (state.Severity switch
+        {
+            WoundSeverity.Critical => HealthMenuStyle.SeverityCritical,
+            WoundSeverity.Severe => HealthMenuStyle.SeveritySevere,
+            WoundSeverity.Moderate => HealthMenuStyle.SeverityModerate,
+            _ => HealthMenuStyle.SeverityMinor,
+        }).WithAlpha(0.8f);
     }
 }

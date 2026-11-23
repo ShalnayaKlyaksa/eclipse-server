@@ -32,12 +32,9 @@ namespace Content.Server.Power.Generation.Teg;
 /// The TEG center does HV power output, and must also be connected to an LV wire for the TEG to function.
 /// </para>
 /// <para>
-/// Unlike in SS13, the TEG actually adjusts gas heat exchange to match the energy demand of the power network.
-/// To achieve this, the TEG implements its own ramping logic instead of using the built-in Pow3r ramping.
-/// The TEG actually has a maximum output of +n% more than was really generated,
-/// which allows Pow3r to draw more power to "signal" that there is more network load.
-/// The ramping is also exponential instead of linear like in normal Pow3r.
-/// This system does mean a fully-loaded TEG creates +n% power out of thin air, but this is considered acceptable.
+/// Electrical output is bounded by the installed alternator and the actual heat exchange.
+/// Heat rejected into the cold loop is accounted for separately from generated electricity.
+/// Output smoothing cannot retain supply after the heat source disappears.
 /// </para>
 /// </remarks>
 /// <seealso cref="TegGeneratorComponent"/>
@@ -132,67 +129,13 @@ public sealed class TegSystem : EntitySystem
         var cA = _atmosphere.GetHeatCapacity(airA, true);
         var cB = _atmosphere.GetHeatCapacity(airB, true);
 
-        // Shift ramp position based on demand and generation from previous tick.
-        var curRamp = component.RampPosition;
-        var lastDraw = supplier.CurrentSupply;
-        curRamp = MathHelper.Clamp(lastDraw, curRamp / component.RampFactor, curRamp * component.RampFactor);
-        curRamp = MathF.Max(curRamp, component.RampMinimum);
-        component.RampPosition = curRamp;
-
-        var electricalEnergy = 0f;
-
-        if (airA.Pressure > 0 && airB.Pressure > 0)
-        {
-            var hotA = airA.Temperature > airB.Temperature;
-
-            // Calculate thermal and electrical energy transfer between the two sides.
-            // Assume temperature equalizes, i.e. Ta*cA + Tb*cB = Tf*(cA+cB)
-            var Tf = (airA.Temperature * cA + airB.Temperature * cB) / (cA + cB);
-            // The maximum energy we can extract is (Ta - Tf)*cA, which is equal to (Tf - Tb)*cB
-            var Wmax = MathF.Abs(airA.Temperature - Tf) * cA;
-
-            var N = component.ThermalEfficiency;
-
-            // Calculate Carnot efficiency
-            var Thot = hotA ? airA.Temperature : airB.Temperature;
-            var Tcold = hotA ? airB.Temperature : airA.Temperature;
-            var Nmax = 1 - Tcold / Thot;
-            N = MathF.Min(N, Nmax); // clamp by Carnot efficiency
-
-            // Reduce efficiency at low temperature differences to encourage burn chambers (instead
-            // of just feeding the TEG room temperature gas from an infinite gas miner).
-            var dT = Thot - Tcold;
-            N *= MathF.Tanh(dT/700); // https://www.wolframalpha.com/input?i=tanh(x/700)+from+0+to+1000
-
-            var transfer = Wmax * N;
-            electricalEnergy = transfer * component.PowerFactor;
-            var outTransfer = transfer * (1 - component.ThermalEfficiency);
-
-            // Adjust thermal energy in transferred gas mixtures.
-            if (hotA)
-            {
-                // A -> B
-                airA.Temperature -= transfer / cA;
-                airB.Temperature += outTransfer / cB;
-            }
-            else
-            {
-                // B -> A
-                airA.Temperature += outTransfer / cA;
-                airB.Temperature -= transfer / cB;
-            }
-        }
-
+        var electricalEnergy = ExchangeHeat(airA, airB, cA, cB, component.ThermalEfficiency,
+            component.PowerFactor, component.MaximumPower * args.dt);
         component.LastGeneration = electricalEnergy;
-
-        // Turn energy (at atmos tick rate) into wattage.
-        var power = electricalEnergy / args.dt;
-
-        // Add ramp factor. This magics slight power into existence, but allows us to ramp up.
-        // Also apply an exponential moving average to smooth out fluttering, as it was causing
-        // seizures.
-        supplier.MaxSupply = component.PowerSmoothingFactor * (power * component.RampFactor) +
-                             (1 - component.PowerSmoothingFactor) * supplier.MaxSupply;
+        var power = args.dt > 0 ? electricalEnergy / args.dt : 0;
+        // Smooth rising output, but never advertise energy not supplied by the current heat exchange.
+        supplier.MaxSupply = MathF.Min(power, component.PowerSmoothingFactor * power +
+            (1 - component.PowerSmoothingFactor) * supplier.MaxSupply);
 
         var circAComp = Comp<TegCirculatorComponent>(circA);
         var circBComp = Comp<TegCirculatorComponent>(circB);
@@ -206,6 +149,31 @@ public sealed class TegSystem : EntitySystem
         _atmosphere.Merge(outletB.Air, airB);
 
         UpdateAppearance(uid, component, powerReceiver, tegGroup);
+    }
+
+    /// <summary>Conserve total gas energy: heat removed from the hot loop = electricity + heat rejected to the cold loop.</summary>
+    public static float ExchangeHeat(GasMixture airA, GasMixture airB, float capacityA, float capacityB,
+        float thermalEfficiency, float powerFactor, float maximumEnergy)
+    {
+        if (airA.TotalMoles <= 0 || airB.TotalMoles <= 0 || capacityA <= 0 || capacityB <= 0 ||
+            !float.IsFinite(capacityA + capacityB) || !float.IsFinite(maximumEnergy) || maximumEnergy <= 0 ||
+            !float.IsFinite(airA.Temperature + airB.Temperature) || airA.Temperature <= 0 || airB.Temperature <= 0)
+            return 0;
+        var hotA = airA.Temperature >= airB.Temperature;
+        var hot = hotA ? airA : airB;
+        var cold = hotA ? airB : airA;
+        var hotCapacity = hotA ? capacityA : capacityB;
+        var coldCapacity = hotA ? capacityB : capacityA;
+        var difference = hot.Temperature - cold.Temperature;
+        var efficiency = Math.Clamp(thermalEfficiency * powerFactor, 0, 1 - cold.Temperature / hot.Temperature) * MathF.Tanh(difference / 700);
+        if (!float.IsFinite(efficiency) || efficiency <= 0) return 0;
+        var equilibrium = (airA.Temperature * capacityA + airB.Temperature * capacityB) / (capacityA + capacityB);
+        var availableHeat = MathF.Max(0, (hot.Temperature - equilibrium) * hotCapacity);
+        var electricity = MathF.Min(availableHeat * efficiency, maximumEnergy);
+        var heatTaken = electricity / efficiency;
+        hot.Temperature -= heatTaken / hotCapacity;
+        cold.Temperature += (heatTaken - electricity) / coldCapacity;
+        return electricity;
     }
 
     private void UpdateAppearance(
@@ -331,7 +299,7 @@ public sealed class TegSystem : EntitySystem
         return tegGroup;
     }
 
-    private static (GasMixture, float δp) GetCirculatorAirTransfer(GasMixture airInlet, GasMixture airOutlet)
+    public static (GasMixture, float δp) GetCirculatorAirTransfer(GasMixture airInlet, GasMixture airOutlet)
     {
         var n1 = airInlet.TotalMoles;
         var n2 = airOutlet.TotalMoles;

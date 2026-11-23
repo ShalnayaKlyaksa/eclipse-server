@@ -1,9 +1,9 @@
 advanced-exertion-breathless-name = Out of breath
-advanced-exertion-breathless-desc = Breathing and pulse remain elevated after exertion. Reduce your pace to recover.
+advanced-exertion-breathless-desc = Your heart is pounding and you cannot catch your breath. You need a moment to recover.
 advanced-exertion-exhausted-name = Exhausted
-advanced-exertion-exhausted-desc = Insufficient reserve for sprinting and heavy work. Walking and light actions remain available.
+advanced-exertion-exhausted-desc = Your legs feel heavy and your strength is gone. You need to slow down and rest.
 advanced-exertion-sleepy-name = Sleepy
-advanced-exertion-sleepy-desc = Sleep debt slows recovery. Actual sleep reduces accumulated fatigue.
+advanced-exertion-sleepy-desc = Your eyelids are heavy and your thoughts keep drifting. You could really use some sleep.
 advanced-exertion-reserve = Endurance
 advanced-exertion-sleep-debt = Sleep debt
 advanced-exertion-ready = Ready
@@ -16,3 +16,9 @@ advanced-exertion-block-reserve = Insufficient endurance for heavy work.
 advanced-exertion-block-hands = This task requires functioning hands.
 advanced-exertion-block-free-hand = Free a supporting hand.
 control-keybind-AdvancedCalmWalk = Calm walking (tap)
+ui-options-function-advanced-calm-walk = Calm walking (tap)
+ui-options-function-ground-jump = Jump
+control-keybind-GroundJump = Jump
+ground-jump-too-tired = You are too tired to jump.
+
+advanced-exertion-reserve-limit = Endurance capacity: { $value }%.

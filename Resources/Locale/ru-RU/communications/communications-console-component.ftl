@@ -22,7 +22,7 @@ comms-console-announcement-unknown-sender = Неизвестный
 
 # Comms console variant titles
 comms-console-announcement-title-station = Консоль связи
-comms-console-announcement-title-centcom = Эйдосская империя
+comms-console-announcement-title-centcom = ВИШ
 comms-console-announcement-title-nukie = Легион пепла
 comms-console-announcement-title-station-ai = Станционный ИИ
 comms-console-announcement-title-wizard = Волшебник

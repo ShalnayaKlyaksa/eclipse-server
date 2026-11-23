@@ -1,19 +1,19 @@
-﻿<cartridges:NetProbeUiFragment xmlns:cartridges="clr-namespace:Content.Client.CartridgeLoader.Cartridges"
-                                 xmlns="https://spacestation14.io" Margin="1 0 2 0">
-    <PanelContainer StyleClasses="BackgroundDark"></PanelContainer>
-    <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
-        <BoxContainer Orientation="Vertical" MinHeight="32" MaxHeight="32" VerticalAlignment="Top" Margin="3 0">
-            <PanelContainer Name="HeaderPanel">
-                <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Margin="4">
-                    <Label HorizontalExpand="True" Text="{Loc 'net-probe-label-name'}"/>
-                    <Label HorizontalExpand="True" Text="{Loc 'net-probe-label-address'}"/>
-                    <Label HorizontalExpand="True" Text="{Loc 'net-probe-label-frequency'}"/>
-                    <Label HorizontalExpand="True" Text="{Loc 'net-probe-label-network'}"/>
-                </BoxContainer>
-            </PanelContainer>
-        </BoxContainer>
-        <ScrollContainer Name="ScrollContainer" HorizontalExpand="True" VerticalExpand="True">
-            <BoxContainer Orientation="Vertical" Name="ProbedDeviceContainer" HorizontalExpand="True" VerticalExpand="True" VerticalAlignment="Top" Margin="3 0"/>
-        </ScrollContainer>
+<cartridges:NetProbeUiFragment xmlns:cartridges="clr-namespace:Content.Client.CartridgeLoader.Cartridges"
+                              xmlns="https://spacestation14.io" Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="4">
+    <BoxContainer SeparationOverride="4">
+        <LineEdit Name="Search" HorizontalExpand="True" MinHeight="26" PlaceHolder="{Loc 'pda-net-search'}"/>
+        <Label Name="Count" StyleClasses="terminal-muted" VerticalAlignment="Center"/>
     </BoxContainer>
+    <PanelContainer StyleClasses="pda-header">
+        <BoxContainer SeparationOverride="6" Margin="4 3">
+            <Label Text="{Loc 'net-probe-label-name'}" HorizontalExpand="True" MinWidth="100" StyleClasses="pda-caption"/>
+            <Label Text="{Loc 'net-probe-label-address'}" SetWidth="135" StyleClasses="pda-caption"/>
+            <Label Text="{Loc 'net-probe-label-frequency'}" SetWidth="100" StyleClasses="pda-caption"/>
+            <Label Text="{Loc 'net-probe-label-network'}" SetWidth="100" StyleClasses="pda-caption"/>
+        </BoxContainer>
+    </PanelContainer>
+    <ScrollContainer Name="ScrollContainer" HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="False">
+        <BoxContainer Orientation="Vertical" Name="ProbedDeviceContainer" HorizontalExpand="True" SeparationOverride="2"/>
+    </ScrollContainer>
+    <Label Text="{Loc 'pda-net-copy-hint'}" StyleClasses="terminal-muted"/>
 </cartridges:NetProbeUiFragment>

@@ -44,7 +44,7 @@ public sealed class TutorialWindow : DefaultWindow
         };
 
         var header = new RichTextLabel { HorizontalExpand = true };
-        header.SetMarkup("[color=#E6A11A][bold]ВЫБЕРИТЕ УРОК[/bold][/color]");
+        header.SetMarkup("[color=#FF861F][bold]ВЫБЕРИТЕ УРОК[/bold][/color]");
         list.AddChild(header);
 
         var subtitle = new RichTextLabel { HorizontalExpand = true };
@@ -87,7 +87,7 @@ public sealed class TutorialWindow : DefaultWindow
             SetSize = new Vector2(40, 40),
             Stretch = TextureRect.StretchMode.KeepAspectCentered,
             VerticalAlignment = VAlignment.Center,
-            ModulateSelfOverride = lesson.Enabled ? Color.FromHex("#E6A11A") : Color.FromHex("#7A7A7A"),
+            ModulateSelfOverride = lesson.Enabled ? Color.FromHex("#FF861F") : Color.FromHex("#7A7A7A"),
         });
 
         var text = new BoxContainer
@@ -99,7 +99,7 @@ public sealed class TutorialWindow : DefaultWindow
         };
 
         var name = new RichTextLabel { HorizontalExpand = true };
-        var nameColor = lesson.Enabled ? "#E6A11A" : "#8A8A8A";
+        var nameColor = lesson.Enabled ? "#FF861F" : "#8A8A8A";
         name.SetMarkup($"[color={nameColor}][bold]{FormattedMessage.EscapeText(lesson.Name)}[/bold][/color]");
         text.AddChild(name);
 

@@ -1,0 +1,153 @@
+- type: entity
+  parent: ChemMaster
+  id: PharmaceuticalSynthesizer
+  name: pharmaceutical synthesizer
+  description: A precision pharmaceutical reactor for clinical precursors and patient-specific formulations. Requires an assayed reference sample for personalisation.
+  components:
+  - type: MedicalSynthesizer
+    advanced: true
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/pharmaceutical_reactor.rsi
+    layers:
+    - state: idle
+    - state: powered
+      visible: false
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+    - state: working
+      visible: false
+      shader: unshaded
+      map: ["enum.MedicalReactorVisuals.Working"]
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/pharmaceutical_reactor.rsi
+    state: idle
+  - type: GenericVisualizer
+    visuals:
+      enum.MedicalReactorVisuals.Working:
+        enum.MedicalReactorVisuals.Working:
+          True: { visible: true }
+          False: { visible: false }
+  - type: ItemSlots
+    slots:
+      medicalSampleSlot:
+        whitelist:
+          components:
+          - FitsInDispenser
+  - type: ContainerContainer
+    containers:
+      medicalSampleSlot: !type:ContainerSlot
+  - type: Machine
+    board: PharmaceuticalSynthesizerMachineCircuitboard
+  - type: ApcPowerReceiver
+    powerLoad: 750
+
+- type: entity
+  parent: ChemMaster
+  id: PharmaceuticalAnalyzer
+  name: pharmaceutical laboratory analyzer
+  description: An analytical instrument for compound purity and biological reference assays. Reserves five units per analysis and returns the assayed sample for bottling.
+  components:
+  - type: MedicalSynthesizer
+    advanced: true
+    analysisOnly: true
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/pharmaceutical_analyzer.rsi
+    layers:
+    - state: idle
+    - state: powered
+      visible: false
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+    - state: working
+      visible: false
+      shader: unshaded
+      map: ["enum.MedicalReactorVisuals.Working"]
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/pharmaceutical_analyzer.rsi
+    state: idle
+  - type: GenericVisualizer
+    visuals:
+      enum.MedicalReactorVisuals.Working:
+        enum.MedicalReactorVisuals.Working:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Machine
+    board: PharmaceuticalAnalyzerMachineCircuitboard
+  - type: ApcPowerReceiver
+    powerLoad: 500
+
+- type: entity
+  parent: BaseMachineCircuitboard
+  id: PharmaceuticalSynthesizerMachineCircuitboard
+  name: pharmaceutical synthesizer machine board
+  components:
+  - type: Sprite
+    state: medical
+  - type: MachineBoard
+    prototype: PharmaceuticalSynthesizer
+    stackRequirements:
+      Manipulator: 2
+      Glass: 5
+      Cable: 3
+    tagRequirements:
+      GlassBeaker:
+        amount: 2
+        defaultPrototype: Beaker
+
+- type: entity
+  parent: PharmaceuticalSynthesizerMachineCircuitboard
+  id: PharmaceuticalAnalyzerMachineCircuitboard
+  name: pharmaceutical analyzer machine board
+  components:
+  - type: MachineBoard
+    prototype: PharmaceuticalAnalyzer
+
+- type: latheRecipe
+  parent: [BaseGoldCircuitboardRecipe, BaseMedicalMachineRecipeCategory]
+  id: PharmaceuticalSynthesizerMachineCircuitboard
+  result: PharmaceuticalSynthesizerMachineCircuitboard
+
+- type: latheRecipe
+  parent: [BaseGoldCircuitboardRecipe, BaseMedicalMachineRecipeCategory]
+  id: PharmaceuticalAnalyzerMachineCircuitboard
+  result: PharmaceuticalAnalyzerMachineCircuitboard
+
+- type: technology
+  id: PharmaceuticalLaboratory
+  name: research-technology-pharmaceutical-laboratory
+  icon:
+    sprite: _Eclipse/Structures/Machines/pharmaceutical_analyzer.rsi
+    state: powered
+  discipline: Medical
+  tier: 1
+  cost: 9000
+  recipeUnlocks:
+  - PharmaceuticalSynthesizerMachineCircuitboard
+  - PharmaceuticalAnalyzerMachineCircuitboard
+  technologyPrerequisites:
+  - ChemistryMachines
+  position: 40, 9
+
+- type: entity
+  parent: CrateChemistrySecure
+  id: CratePharmaceuticalLaboratory
+  name: pharmaceutical laboratory equipment crate
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: PharmaceuticalSynthesizerMachineCircuitboard
+        - id: PharmaceuticalAnalyzerMachineCircuitboard
+        - id: ChemistryEmptyVial
+          amount: 3
+        - id: LargeBeaker
+          amount: 2
+
+- type: cargoProduct
+  id: PharmaceuticalLaboratoryEquipment
+  icon:
+    sprite: _Eclipse/Structures/Machines/pharmaceutical_analyzer.rsi
+    state: powered
+  product: CratePharmaceuticalLaboratory
+  cost: 12000
+  category: cargoproduct-category-name-medical
+  group: market

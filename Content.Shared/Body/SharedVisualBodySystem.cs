@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid;
+using Content.Shared.Preferences;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -42,7 +43,7 @@ public abstract partial class SharedVisualBodySystem : EntitySystem
                 continue;
 
             if (!proto.ForcedColoring && appearances.GetValueOrDefault(proto.BodyPart)?.MatchSkin != true)
-                ret.Add(marking);
+                ret.Add(marking with { Gradient = marking.Gradient?.Normalized() });
             else
                 forcedColors.Add((marking, proto));
         }
@@ -128,11 +129,44 @@ public abstract partial class SharedVisualBodySystem : EntitySystem
         else
             SetOrganColor(ent, ent.Comp.Profile.SkinColor);
 
-        if (ent.Comp.SexStateOverrides is { } overrides && overrides.TryGetValue(data.Sex, out var state))
+        if (ent.Comp.VulpkaninBodyVariant && ApplyVulpkaninBodyType(ent, data))
+            return;
+
+        if (ent.Comp.SexStateOverrides is { } overrides && overrides.TryGetValue(data.Sex.PresentationSex(), out var state))
         {
             ent.Comp.Data.State = state;
             SetOrganAppearance(ent, ent.Comp.Data);
         }
+    }
+
+    private bool ApplyVulpkaninBodyType(Entity<VisualOrganComponent> organ, OrganProfileData data)
+    {
+        var layer = organ.Comp.Layer;
+        var part = layer switch
+        {
+            HumanoidVisualLayers.Head => data.Sex.PresentationSex() == Sex.Female ? "head_f" : "head_m",
+            HumanoidVisualLayers.LLeg => "l_leg",
+            HumanoidVisualLayers.RLeg => "r_leg",
+            HumanoidVisualLayers.LFoot => "l_foot",
+            HumanoidVisualLayers.RFoot => "r_foot",
+            _ => null,
+        };
+        if (part == null)
+            return false;
+
+        organ.Comp.Data.RsiPath = "_Eclipse/Mobs/Species/VulpkaninLustCompat/parts.rsi";
+        organ.Comp.Data.State = part;
+        if (data.BodyType != VulpkaninBodyType.Default)
+        {
+            var curved = data.BodyType is VulpkaninBodyType.CurvedShortMuzzle or VulpkaninBodyType.CurvedLongMuzzle;
+            var longMuzzle = data.BodyType is VulpkaninBodyType.CurvedLongMuzzle or VulpkaninBodyType.StraightLongMuzzle;
+            organ.Comp.Data.RsiPath = "_Sunrise/Mobs/Species/Vulpkanin/parts.rsi";
+            organ.Comp.Data.State = layer.Equals(HumanoidVisualLayers.Head)
+                ? part + (longMuzzle ? "_big_muzzle" : "_small_muzzle")
+                : part + (curved ? "_curved" : "_straight");
+        }
+        SetOrganAppearance(organ, organ.Comp.Data);
+        return true;
     }
 
     private void OnMarkingsOrganApplyMarkings(Entity<VisualOrganMarkingsComponent> ent, ref BodyRelayedEvent<ApplyOrganMarkingsEvent> args)
@@ -164,7 +198,10 @@ public abstract partial class SharedVisualBodySystem : EntitySystem
             organMarkings[layer] = okSet;
         }
 
-        var profile = Comp<VisualOrganComponent>(ent).Profile;
+        var visual = Comp<VisualOrganComponent>(ent);
+        var profile = visual.Profile;
+        if (visual.VulpkaninBodyVariant && profile.BodyType != VulpkaninBodyType.Default)
+            organMarkings.Remove(HumanoidVisualLayers.Snout);
         var resolved = organMarkings.ToDictionary(
             kvp => kvp.Key,
             kvp => ResolveMarkings(kvp.Value, profile.SkinColor, profile.EyeColor, groupProto.Appearances));

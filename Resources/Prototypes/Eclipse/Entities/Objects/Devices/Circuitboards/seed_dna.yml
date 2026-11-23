@@ -1,8 +1,8 @@
 - type: entity
   parent: BaseComputerCircuitboard
   id: BotanicalSeedDnaManipulatorCircuitboard
-  name: plant seed DNA manipulator board
-  description: A computer board for a plant seed DNA manipulator.
+  name: botanical DNA analyzer board
+  description: A computer board for a read-only botanical DNA analyzer.
   components:
   - type: Sprite
     state: cpu_service

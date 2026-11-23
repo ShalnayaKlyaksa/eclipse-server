@@ -13,14 +13,14 @@ namespace Content.Client.UserInterface.Systems.Emotes;
 
 public sealed class DirectedEmotesWindow : DefaultWindow
 {
-    private static readonly Color EclipseSurface = Color.FromHex("#080100F2");
-    private static readonly Color EclipseInput = Color.FromHex("#070100F4");
-    private static readonly Color EclipseButton = Color.FromHex("#090200F4");
-    private static readonly Color EclipseBorder = Color.FromHex("#8A2F12AA");
-    private static readonly Color EclipseAccent = Color.FromHex("#A84B00CC");
-    private static readonly Color EclipseAccentHover = Color.FromHex("#D47D1BAA");
-    private static readonly Color EclipseText = Color.FromHex("#FFF1D6");
-    private static readonly Color EclipseTextMuted = Color.FromHex("#BFA88A");
+    private static readonly Color EclipseSurface = ForgeStyle.Background;
+    private static readonly Color EclipseInput = ForgeStyle.Input;
+    private static readonly Color EclipseButton = ForgeStyle.Surface;
+    private static readonly Color EclipseBorder = ForgeStyle.Border;
+    private static readonly Color EclipseAccent = ForgeStyle.Accent;
+    private static readonly Color EclipseAccentHover = ForgeStyle.Accent;
+    private static readonly Color EclipseText = ForgeStyle.Text;
+    private static readonly Color EclipseTextMuted = ForgeStyle.Muted;
 
     private readonly BoxContainer _participants;
     private readonly OutputPanel _messages;
@@ -275,7 +275,7 @@ public sealed class DirectedEmotesWindow : DefaultWindow
             scrollButton.StyleBoxOverride = new StyleBoxFlat
             {
                 BackgroundColor = Color.FromHex("#3A1600E8"),
-                BorderColor = Color.FromHex("#D47D1B55"),
+                BorderColor = Color.FromHex("#70707055"),
                 BorderThickness = new Thickness(1),
                 ContentMarginLeftOverride = 8,
                 ContentMarginRightOverride = 8,
@@ -316,7 +316,7 @@ public sealed class DirectedEmotesWindow : DefaultWindow
         button.StyleBoxOverride = new StyleBoxFlat
         {
             BackgroundColor = hovered ? Color.FromHex("#5A2800F0") : Color.FromHex("#3A1600E8"),
-            BorderColor = hovered ? EclipseAccentHover : Color.FromHex("#D47D1B55"),
+            BorderColor = hovered ? EclipseAccentHover : Color.FromHex("#70707055"),
             BorderThickness = new Thickness(1),
             ContentMarginLeftOverride = 10,
             ContentMarginRightOverride = 10,
@@ -331,7 +331,7 @@ public sealed class DirectedEmotesWindow : DefaultWindow
         button.StyleBoxOverride = new StyleBoxFlat
         {
             BackgroundColor = selected ? Color.FromHex("#5A2800F0") : Color.FromHex("#090200F4"),
-            BorderColor = selected ? EclipseAccentHover : Color.FromHex("#A84B0066"),
+            BorderColor = selected ? EclipseAccentHover : Color.FromHex("#50505066"),
             BorderThickness = new Thickness(1),
             ContentMarginLeftOverride = 8,
             ContentMarginRightOverride = 8,

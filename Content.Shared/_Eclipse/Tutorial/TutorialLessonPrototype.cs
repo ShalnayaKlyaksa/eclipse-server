@@ -38,6 +38,14 @@ public sealed partial class TutorialLessonPrototype : IPrototype
     [DataField]
     public bool Enabled = true;
 
+    /// <summary>A dialogue-only scene played over the lobby, without spawning a body.</summary>
+    [DataField]
+    public bool LobbyOnly;
+
+    /// <summary>Build a small, lit practice room with gravity instead of empty space.</summary>
+    [DataField]
+    public bool PracticeRoom;
+
     /// <summary>
     /// Optional grid map file to load for this lesson. If null, a bare empty map is created and the
     /// player is spawned floating at its origin.

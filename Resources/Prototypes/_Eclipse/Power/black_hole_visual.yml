@@ -1,0 +1,13 @@
+- type: shader
+  id: EclipseMicroBlackHole
+  kind: source
+  path: /Textures/_Eclipse/Shaders/micro_black_hole.swsl
+
+# A visual-only entity for art review. It is not a working generator.
+- type: entity
+  id: MicroBlackHoleVisualPreview
+  name: micro black hole visual preview
+  suffix: Visual only
+  categories: [HideSpawnMenu]
+  components:
+  - type: MicroBlackHoleVisual

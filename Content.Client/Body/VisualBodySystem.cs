@@ -1,4 +1,6 @@
 using System.Linq;
+using System.Numerics;
+using Content.Client.Clickable;
 using Content.Client.DisplacementMap;
 using Content.Shared.Body;
 using Content.Shared.CCVar;
@@ -6,6 +8,7 @@ using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Client.ResourceManagement;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -19,6 +22,10 @@ public sealed class VisualBodySystem : SharedVisualBodySystem
     [Dependency] private readonly DisplacementMapSystem _displacement = default!;
     [Dependency] private readonly MarkingManager _marking = default!;
     [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private readonly IClickMapManager _clickMap = default!;
+    [Dependency] private readonly IResourceCache _resources = default!;
+
+    private static readonly ProtoId<ShaderPrototype> MarkingGradientShader = "MarkingGradient";
 
     public override void Initialize()
     {
@@ -184,6 +191,7 @@ public sealed class VisualBodySystem : SharedVisualBodySystem
                 continue;
 
             ent.Comp.MarkingsDisplacement.TryGetValue(proto.BodyPart, out var displacement);
+            var gradientRange = marking.Gradient.HasValue ? GetGradientRange(proto) : default;
 
             for (var i = 0; i < proto.Sprites.Count; i++)
             {
@@ -195,25 +203,63 @@ public sealed class VisualBodySystem : SharedVisualBodySystem
 
                 var layerId = $"{proto.ID}-{rsi.RsiState}";
 
-                if (!_sprite.LayerMapTryGet(target, layerId, out _, false))
+                if (!_sprite.LayerMapTryGet(target, layerId, out var spriteLayer, false))
                 {
-                    var spriteLayer = _sprite.AddLayer(target, sprite, index + i + 1);
+                    spriteLayer = _sprite.AddLayer(target, sprite, index + i + 1);
                     _sprite.LayerMapSet(target, layerId, spriteLayer);
                     _sprite.LayerSetSprite(target, layerId, rsi);
                 }
 
-                if (marking.MarkingColors is not null && i < marking.MarkingColors.Count)
-                    _sprite.LayerSetColor(target, layerId, marking.MarkingColors[i]);
-                else
-                    _sprite.LayerSetColor(target, layerId, Color.White);
+                var color = marking.MarkingColors is { } colors && i < colors.Count ? colors[i] : Color.White;
+                _sprite.LayerSetColor(target, layerId, color);
 
                 if (displacement != null && proto.CanBeDisplaced)
-                    _displacement.TryAddDisplacement(displacement, (target, target.Comp), index + i + 1, layerId, out _);
+                    _displacement.TryAddDisplacement(displacement, (target, target.Comp), spriteLayer, layerId, out _);
+
+                if (marking.Gradient is { } gradient && _sprite.TryGetLayer(target, layerId, out var layer, false))
+                    ApplyGradient(target.Comp, layer, layerId, color, gradient, gradientRange);
             }
 
             applied.Add(marking);
         }
         ent.Comp.AppliedMarkings = applied;
+    }
+
+    private Vector2 GetGradientRange(MarkingPrototype prototype)
+    {
+        var top = float.PositiveInfinity;
+        var bottom = float.NegativeInfinity;
+        foreach (var sprite in prototype.Sprites)
+        {
+            if (sprite is not SpriteSpecifier.Rsi rsi ||
+                !_resources.TryGetResource<RSIResource>(SpriteSystem.TextureRoot / rsi.RsiPath, out var resource) ||
+                _clickMap.GetVerticalBounds(resource.RSI, rsi.RsiState) is not { } bounds)
+                continue;
+
+            // Use sprite-space pixels so sprites of different sizes share the same center.
+            var halfHeight = (resource.RSI.Size.Y - 1) / 2f;
+            top = Math.Min(top, bounds.Top - halfHeight);
+            bottom = Math.Max(bottom, bounds.Bottom - halfHeight);
+        }
+
+        return top <= bottom ? new Vector2(top, bottom) : new Vector2(-0.5f, 0.5f);
+    }
+
+    private void ApplyGradient(SpriteComponent sprite, SpriteComponent.Layer layer, string layerId,
+        Color color, MarkingGradient gradient, Vector2 range)
+    {
+        var shaderId = layer.ShaderPrototype ?? MarkingGradientShader;
+        if (shaderId.Id is not ("MarkingGradient" or "DisplacedDraw" or "DisplacedDrawUnshaded" or "DisplacedStencilDraw"))
+            return;
+
+        var shader = _prototype.Index(shaderId).InstanceUnique();
+        shader.SetParameter("gradientRoot", color.RGBA);
+        shader.SetParameter("gradientTip", gradient.TipColor.RGBA);
+        shader.SetParameter("gradientRange", range);
+        shader.SetParameter("gradientSteps", (float) gradient.Steps);
+        shader.SetParameter("gradientHeight", (float) layer.PixelSize.Y);
+        sprite.LayerSetShader(layerId, shader, shaderId.Id);
+        _sprite.LayerSetColor(layer, Color.White);
     }
 
     private void RemoveMarkings(Entity<VisualOrganMarkingsComponent> ent, Entity<SpriteComponent?> target)

@@ -1,4 +1,4 @@
-seed-dna-window-title = Манипулятор ДНК семян
+seed-dna-window-title = Ботанический ДНК-анализатор
 seed-dna-window-seed = Семена:
 seed-dna-window-dnadisk = ДНК-диск:
 seed-dna-window-invalid-seed = Эти семена нельзя анализировать.
@@ -30,8 +30,8 @@ seed-dna-row-WeedHighLevelThreshold = Порог сорняков
 seed-dna-row-Endurance = Выносливость
 seed-dna-row-Yield = Урожайность
 seed-dna-row-Lifespan = Продолжительность жизни
-seed-dna-row-Maturation = Скорость созревания
-seed-dna-row-Production = Скорость роста
+seed-dna-row-Maturation = Срок созревания
+seed-dna-row-Production = Интервал между урожаями
 seed-dna-row-HarvestRepeat = Режим урожая
 seed-dna-row-Potency = Потенция
 seed-dna-row-Seedless = Бессемянность

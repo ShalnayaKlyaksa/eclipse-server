@@ -10,4 +10,6 @@ public enum IndustrialProcessorState : byte
     Blocked,
     Unpowered,
     Unheated,
+    Paused,
+    Unresearched,
 }

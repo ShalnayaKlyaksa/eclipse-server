@@ -26,40 +26,40 @@ public sealed class MainMenuSheetlet : Sheetlet<NanotrasenStylesheet>
 
             E<Label>().Identifier(MainMenuControl.StyleIdentifierLogoText)
                 .Font(sheet.BaseFont.GetFont(22, FontKind.Bold))
-                .FontColor(Color.FromHex("#F4A817")),
+                .FontColor(Color.FromHex("#F2A65C")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierLogoTitle)
                 .Font(sheet.BaseFont.GetFont(25, FontKind.Bold))
-                .FontColor(Color.FromHex("#F4A817")),
+                .FontColor(Color.FromHex("#F2A65C")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierLogoSub)
                 .Font(sheet.BaseFont.GetFont(14, FontKind.Bold))
-                .FontColor(Color.FromHex("#C6A25A")),
+                .FontColor(Color.FromHex("#B0B0B0")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierNavTitle)
                 .Font(sheet.BaseFont.GetFont(14, FontKind.Bold))
-                .FontColor(Color.FromHex("#F2F2F2")),
+                .FontColor(Color.FromHex("#F0F0F0")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierNavSubtitle)
                 .Font(sheet.BaseFont.GetFont(11))
-                .FontColor(Color.FromHex("#AFAFAF")),
+                .FontColor(Color.FromHex("#A8A8A8")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierFooterTitle)
                 .Font(sheet.BaseFont.GetFont(13, FontKind.Bold))
-                .FontColor(Color.FromHex("#E8E8E8")),
+                .FontColor(Color.FromHex("#E5E5E5")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierHeaderGold)
                 .Font(sheet.BaseFont.GetFont(15, FontKind.Bold))
-                .FontColor(Color.FromHex("#F0A513")),
+                .FontColor(Color.FromHex("#F0F0F0")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierGoldSmall)
                 .Font(sheet.BaseFont.GetFont(12, FontKind.Bold))
-                .FontColor(Color.FromHex("#E6A11A")),
+                .FontColor(Color.FromHex("#F2A65C")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierText)
                 .Font(sheet.BaseFont.GetFont(13, FontKind.Bold))
-                .FontColor(Color.FromHex("#EDEDED")),
+                .FontColor(Color.FromHex("#E5E5E5")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierSubtle)
                 .Font(sheet.BaseFont.GetFont(11))
-                .FontColor(Color.FromHex("#9A9A9A")),
+                .FontColor(Color.FromHex("#A8A8A8")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierTinySubtle)
                 .Font(sheet.BaseFont.GetFont(10))
-                .FontColor(Color.FromHex("#B8B8B8")),
+                .FontColor(Color.FromHex("#BFBFBF")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierSecondaryTitle)
                 .Font(sheet.BaseFont.GetFont(12, FontKind.Bold))
-                .FontColor(Color.FromHex("#BDBDBD")),
+                .FontColor(Color.FromHex("#BFBFBF")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierScore)
                 .Font(sheet.BaseFont.GetFont(15, FontKind.Bold))
                 .FontColor(Color.FromHex("#FFFFFF")),
@@ -68,85 +68,68 @@ public sealed class MainMenuSheetlet : Sheetlet<NanotrasenStylesheet>
                 .FontColor(Color.FromHex("#D5C9AE")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierServerIcon)
                 .Font(sheet.BaseFont.GetFont(18, FontKind.Bold))
-                .FontColor(Color.FromHex("#F0A513")),
+                .FontColor(Color.FromHex("#F2A65C")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierStatusIcon)
                 .Font(sheet.BaseFont.GetFont(16, FontKind.Bold))
                 .FontColor(Color.FromHex("#00C9A6")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierSecondaryIcon)
                 .Font(sheet.BaseFont.GetFont(16, FontKind.Bold))
-                .FontColor(Color.FromHex("#AFAFAF")),
+                .FontColor(Color.FromHex("#A8A8A8")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierTab)
                 .Font(sheet.BaseFont.GetFont(12, FontKind.Bold))
-                .FontColor(Color.FromHex("#BDBDBD")),
+                .FontColor(Color.FromHex("#BFBFBF")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierTabActive)
                 .Font(sheet.BaseFont.GetFont(12, FontKind.Bold))
-                .FontColor(Color.FromHex("#F0A513")),
+                .FontColor(Color.FromHex("#F2A65C")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierWarning)
                 .Font(sheet.BaseFont.GetFont(12, FontKind.Bold))
-                .FontColor(Color.FromHex("#FF1818")),
+                .FontColor(Color.FromHex("#FF9A78")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierCompactHeaderGold)
                 .Font(sheet.BaseFont.GetFont(14, FontKind.Bold))
-                .FontColor(Color.FromHex("#F0A513")),
+                .FontColor(Color.FromHex("#F2A65C")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierCompactText)
                 .Font(sheet.BaseFont.GetFont(12, FontKind.Bold))
-                .FontColor(Color.FromHex("#EDEDED")),
+                .FontColor(Color.FromHex("#E5E5E5")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierCompactSubtle)
                 .Font(sheet.BaseFont.GetFont(11))
-                .FontColor(Color.FromHex("#AFAFAF")),
+                .FontColor(Color.FromHex("#A8A8A8")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierRoadmapTitle)
                 .Font(sheet.BaseFont.GetFont(31, FontKind.Bold))
-                .FontColor(Color.FromHex("#F0A513")),
+                .FontColor(Color.FromHex("#F0F0F0")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierRoadmapSubtitle)
                 .Font(sheet.BaseFont.GetFont(14, FontKind.Bold))
                 .FontColor(Color.FromHex("#BEBEBE")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierRoadmapNumber)
                 .Font(sheet.BaseFont.GetFont(25, FontKind.Bold))
-                .FontColor(Color.FromHex("#E6A11A")),
+                .FontColor(Color.FromHex("#F2A65C")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierRoadmapItemTitle)
                 .Font(sheet.BaseFont.GetFont(15, FontKind.Bold))
-                .FontColor(Color.FromHex("#F0A513")),
+                .FontColor(Color.FromHex("#F2A65C")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierRoadmapDot)
                 .Font(sheet.BaseFont.GetFont(18, FontKind.Bold))
-                .FontColor(Color.FromHex("#E6A11A")),
+                .FontColor(Color.FromHex("#F2A65C")),
             E<Label>().Identifier(MainMenuControl.StyleIdentifierRoadmapDotActive)
                 .Font(sheet.BaseFont.GetFont(19, FontKind.Bold))
-                .FontColor(Color.FromHex("#F0A513")),
+                .FontColor(Color.FromHex("#F2A65C")),
         };
 
-        AddButtonRules(rules, MainMenuControl.StyleIdentifierPrimary,
-            ButtonBox("#070301F4", "#A85E126C", 0, 0, 0, 0),
-            ButtonBox("#090501F8", "#F0A51399", 1, 0, 0, 0),
-            ButtonBox("#140900F8", "#F0A513C4", 1, 0, 0, 0));
+        var surface = ButtonBox("#242424", "#383838", 1, 1, 1, 1);
+        var hover = ButtonBox("#393939", "#505050", 1, 1, 1, 1);
+        var selected = ButtonBox("#303030", "#F2A65C", 2, 0, 0, 0);
+        var selectedHover = ButtonBox("#414141", "#F2A65C", 2, 0, 0, 0);
+        var pressed = ButtonBox("#414141", "#B17A48", 1, 1, 1, 1);
+        var navigation = ButtonBox("#1C1C1C", "#383838", 0, 0, 0, 0);
+        var tab = ButtonBox("#1C1C1C", "#383838", 0, 0, 0, 0);
+        var selectedTab = ButtonBox("#303030", "#F2A65C", 0, 0, 0, 2);
 
-        AddButtonRules(rules, MainMenuControl.StyleIdentifierNav,
-            ButtonBox("#070300F0", "#A85E1200", 0, 0, 0, 0),
-            ButtonBox("#100700F6", "#A85E126A", 1, 0, 0, 0),
-            ButtonBox("#090501F8", "#F0A51388", 1, 0, 0, 0));
-
-        AddButtonRules(rules, MainMenuControl.StyleIdentifierFooter,
-            ButtonBox("#070300F0", "#A85E1200", 0, 0, 0, 0),
-            ButtonBox("#100700F6", "#A85E126A", 1, 0, 0, 0),
-            ButtonBox("#090501F8", "#F0A51388", 1, 0, 0, 0));
-
-        AddButtonRules(rules, MainMenuControl.StyleIdentifierSecondary,
-            ButtonBox("#070300F2", "#A85E1228", 1, 0, 0, 0),
-            ButtonBox("#100700F6", "#A85E1288", 1, 0, 0, 0),
-            ButtonBox("#100700F8", "#F0A51399", 1, 0, 0, 0));
-
-        AddButtonRules(rules, MainMenuControl.StyleIdentifierTabButton,
-            ButtonBox("#070300E8", "#A85E1200", 0, 0, 0, 0),
-            ButtonBox("#100700F2", "#A85E1255", 1, 0, 0, 0),
-            ButtonBox("#0C0600F2", "#F0A51377", 1, 0, 0, 0));
-
-        AddButtonRules(rules, MainMenuControl.StyleIdentifierTabButtonActive,
-            ButtonBox("#0B0500F6", "#A85E1288", 1, 0, 0, 0),
-            ButtonBox("#110800F8", "#F0A513AA", 1, 0, 0, 0),
-            ButtonBox("#160A00F8", "#F0A513CC", 1, 0, 0, 0));
-
-        AddButtonRules(rules, MainMenuControl.StyleIdentifierCompactButton,
-            ButtonBox("#070300F2", "#A85E1228", 1, 0, 0, 0),
-            ButtonBox("#100700F6", "#A85E1288", 1, 0, 0, 0),
-            ButtonBox("#100700F8", "#F0A51399", 1, 0, 0, 0));
+        AddButtonRules(rules, MainMenuControl.StyleIdentifierPrimary, selected, selectedHover, pressed);
+        AddButtonRules(rules, MainMenuControl.StyleIdentifierNav, navigation, hover, pressed);
+        AddButtonRules(rules, MainMenuControl.StyleIdentifierLobbyNav, ButtonBox("#0C0C0C", "#262626", 0, 0, 0, 0), hover, pressed);
+        AddButtonRules(rules, MainMenuControl.StyleIdentifierFooter, navigation, hover, pressed);
+        AddButtonRules(rules, MainMenuControl.StyleIdentifierSecondary, surface, hover, pressed);
+        AddButtonRules(rules, MainMenuControl.StyleIdentifierTabButton, tab, hover, pressed);
+        AddButtonRules(rules, MainMenuControl.StyleIdentifierTabButtonActive, selectedTab, hover, pressed);
+        AddButtonRules(rules, MainMenuControl.StyleIdentifierCompactButton, surface, hover, pressed);
 
         AddButtonLabelRules(rules, MainMenuControl.StyleIdentifierPrimary, sheet.BaseFont.GetFont(13, FontKind.Bold));
         AddButtonLabelRules(rules, MainMenuControl.StyleIdentifierNav, sheet.BaseFont.GetFont(13, FontKind.Bold));
@@ -170,8 +153,8 @@ public sealed class MainMenuSheetlet : Sheetlet<NanotrasenStylesheet>
     private static void AddButtonTextHighlightRules<T>(List<StyleRule> rules)
         where T : Control
     {
-        var titleGold = Color.FromHex("#F0A513");
-        var subtitleLight = Color.FromHex("#D8D8D8");
+        var titleGold = Color.FromHex("#F2A65C");
+        var subtitleLight = Color.FromHex("#D9D9D9");
 
         rules.AddRange([
             E<T>().Identifier(MainMenuControl.StyleIdentifierNav).PseudoHovered()

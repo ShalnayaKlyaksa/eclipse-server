@@ -1,14 +1,49 @@
 #nullable enable
 using Content.IntegrationTests.Tests.Interaction;
 using Content.IntegrationTests.Tests.Movement;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Maths;
+using Robust.Shared.Physics.Components;
+using Robust.Shared.Utility;
 using ClimbingComponent = Content.Shared.Climbing.Components.ClimbingComponent;
 using ClimbSystem = Content.Shared.Climbing.Systems.ClimbSystem;
 
 namespace Content.IntegrationTests.Tests.Climbing;
 
-public sealed class ClimbingTest : MovementTest
+[TestFixture("MobHuman")]
+[TestFixture("MobShadowkin")]
+public sealed class ClimbingTest(string playerPrototype) : MovementTest
 {
+    protected override string PlayerPrototype => playerPrototype;
+
+    [Test]
+    public async Task DevMapTablesHaveCollision()
+    {
+        var map = await Pair.LoadTestMap(new ResPath("/Maps/Test/dev_map.yml"));
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                var tables = 0;
+                var query = SEntMan.EntityQueryEnumerator<MetaDataComponent, TransformComponent, PhysicsComponent>();
+                while (query.MoveNext(out var uid, out var meta, out var xform, out var physics))
+                {
+                    if (xform.MapUid != map.MapUid || meta.EntityPrototype?.ID != "Table")
+                        continue;
+
+                    tables++;
+                    Assert.That(physics.CanCollide, Is.True, $"Mapped table {uid} at {xform.LocalPosition} must block movement.");
+                }
+
+                Assert.That(tables, Is.GreaterThan(0));
+            });
+        }
+        finally
+        {
+            await Server.WaitPost(() => SEntMan.DeleteEntity(map.MapUid));
+        }
+    }
+
     [Test]
     public async Task ClimbTableTest()
     {

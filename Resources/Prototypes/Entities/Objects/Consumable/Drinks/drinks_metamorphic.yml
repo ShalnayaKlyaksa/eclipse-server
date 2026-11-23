@@ -11,6 +11,20 @@
   components:
   - type: Sprite
     sprite: Objects/Consumable/Drinks/glass_clear.rsi
+    layers:
+    - state: icon
+      map: ["enum.SolutionContainerLayers.Base"]
+    - state: fill-1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+    - state: icon-front
+      map: ["enum.SolutionContainerLayers.Overlay"]
+    - sprite: Objects/Specific/Hydroponics/tea_plant.rsi
+      state: produce
+      scale: 0.4, 0.4
+      offset: 0.12, 0.16
+      map: [garden-garnish]
+      visible: false
   - type: SolutionContainerManager
     solutions:
       drink:
@@ -22,6 +36,24 @@
       sprite: Objects/Consumable/Drinks/glass_clear.rsi
       state: icon
   - type: TransformableContainer
+  - type: ItemSlots
+    slots:
+      garnish:
+        name: garden-garnish-slot
+        insertSound: null
+        ejectSound: null
+        whitelist:
+          tags: [CocktailGarnish]
+  - type: ContainerContainer
+    containers:
+      garnish: !type:ContainerSlot
+  - type: ItemMapper
+    containerWhitelist: [garnish]
+    spriteLayers: [garden-garnish]
+    mapLayers:
+      garden-garnish:
+        whitelist:
+          tags: [CocktailGarnish]
 
 - type: entity
   parent: DrinkGlass

@@ -71,6 +71,9 @@ public enum WoundSeverity : byte
     Critical,
 }
 
+[Serializable, NetSerializable]
+public enum ForeignBodyKind : byte { Unknown, Glass, Bullet, Fragment, Needle }
+
 [DataDefinition, Serializable, NetSerializable]
 public sealed partial class Wound
 {
@@ -86,6 +89,11 @@ public sealed partial class Wound
     [DataField] public bool IsBandaged;
     [DataField] public bool IsSutured;
     [DataField] public bool HasForeignBody;
+    [DataField] public ForeignBodyKind ForeignBody;
+    [DataField] public bool IsSurgicalIncision;
+    [DataField] public bool IsBoneFixed;
+    /// <summary>Game-time fracture union, not restoration by an analgesic.</summary>
+    [DataField] public float HealingProgress;
     /// <summary>How many hits were folded into this wound entry (for UI and network size).</summary>
     [DataField] public byte StackCount = 1;
 }
@@ -135,9 +143,13 @@ public sealed partial class BodyPartState
             function = Math.Min(function, Fraction(VesselIntegrity, MaxVesselIntegrity));
         if (canFracture)
         {
-            function = Math.Min(function, Fraction(BoneIntegrity, MaxBoneIntegrity));
+            var fixedFracture = Wounds.Any(wound => wound.Type == WoundType.Fracture)
+                && Wounds.Where(wound => wound.Type == WoundType.Fracture).All(wound => wound.IsBoneFixed);
+            function = Math.Min(function, fixedFracture
+                ? Math.Max(0.75f, Fraction(BoneIntegrity, MaxBoneIntegrity))
+                : Fraction(BoneIntegrity, MaxBoneIntegrity));
             if (Wounds.Any(wound => wound.Type == WoundType.Fracture))
-                function *= IsSplinted ? 0.75f : 0.35f;
+                function *= fixedFracture ? 0.85f : IsSplinted ? 0.75f : 0.35f;
         }
         if (Slot.IsCore())
             function = Math.Min(function, Fraction(OrganIntegrity, MaxOrganIntegrity));
@@ -151,12 +163,22 @@ public sealed partial class BodyPartState
     [DataField] public bool HasTourniquet;
     [DataField] public bool IsDestroyed;
     [DataField] public bool IsBleeding;
+    [DataField] public bool IsSurgicalSitePrepared;
+    [DataField] public bool IsSurgicalOpen;
+    /// <summary>Remaining local/regional anaesthesia in game seconds.</summary>
+    [DataField] public float LocalAnesthesia;
+    /// <summary>Only confirmed indications are exposed; hidden diagnoses remain server-side.</summary>
+    [DataField] public HashSet<AdvancedTreatmentType> ClinicalProcedures = new();
+    [DataField] public float DirtyExposure;
+    /// <summary>Accumulated exposure of an open incision to its environment, in game seconds.</summary>
+    [DataField] public float OpenSurgicalExposure;
+    [DataField] public bool PostoperativeRecovery;
     /// <summary>Embedded shrapnel/bullets remaining in this zone (one per penetrating hit).</summary>
     [DataField] public byte ForeignBodyCount;
 
-    public BodyPartUiState ToUiState()
+    public BodyPartUiState ToUiState(float? effectiveBleedRate = null)
     {
-        var bleedRate = Wounds.Sum(w => w.ExternalBleedingRate + w.InternalBleedingRate);
+        var bleedRate = effectiveBleedRate ?? Wounds.Sum(w => w.ExternalBleedingRate + w.InternalBleedingRate);
         var bleeding = GetBleedingLevel(bleedRate);
 
         // Condition is graded from actual tissue integrity so the doll and label show five stages.
@@ -229,15 +251,17 @@ public sealed partial class BodyPartState
         return Math.Max(integrityStage, woundStage);
     }
 
-    private BleedingLevel GetBleedingLevel(float bleedRate)
+    /// <summary>Input is ml/s; severity bands are 0.005 / 0.1 / 0.5 litres per minute.</summary>
+    public static BleedingLevel GetBleedingLevel(float bleedRate)
     {
-        if (!IsBleeding || bleedRate <= 0.01f)
+        var litresPerMinute = Math.Max(0f, bleedRate) * 0.06f;
+        if (litresPerMinute < 0.005f)
             return BleedingLevel.None;
 
-        return bleedRate switch
+        return litresPerMinute switch
         {
-            < 0.05f => BleedingLevel.Light,
-            < 0.11f => BleedingLevel.Moderate,
+            < 0.1f => BleedingLevel.Light,
+            < 0.5f => BleedingLevel.Moderate,
             _ => BleedingLevel.Heavy,
         };
     }

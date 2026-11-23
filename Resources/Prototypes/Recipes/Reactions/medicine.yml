@@ -52,7 +52,7 @@
     Carbon:
       amount: 1
   products:
-    Bicaridine: 2
+    BicaridinePrecursor: 2
 
 - type: reaction
   id: Cryoxadone
@@ -100,7 +100,7 @@
     Phosphorus:
       amount: 1
   products:
-    Dermaline: 3
+    DermalinePrecursor: 3
 
 - type: reaction
   id: Dexalin
@@ -111,7 +111,7 @@
       amount: 1
       catalyst: true
   products:
-    Dexalin: 3
+    DexalinPrecursor: 3
 
 - type: reaction
   id: DexalinPlus

@@ -114,13 +114,13 @@ namespace Content.Server.Atmos.EntitySystems
                 RemoveActiveTile(gridAtmosphere, tile);
         }
 
-        private void Archive(TileAtmosphere tile, int fireCount)
+        internal static void Archive(TileAtmosphere tile, int fireCount)
         {
             if (tile.Air != null)
             {
-                // TODO ATMOS: This is an extremely large hotspot in LINDA, accounting for 1/5th of its time.
-                // Please make GasMixture a struct or use a FauxGasMixture with an InlineArray to handle copying this sanely.
-                tile.AirArchived = new GasMixture(tile.Air);
+                // Keep each tile's snapshot storage rather than allocating a mixture and its arrays every cycle.
+                tile.AirArchived ??= new GasMixture(tile.Air.Volume);
+                tile.AirArchived.CopyFrom(tile.Air);
             }
             tile.ArchivedCycle = fireCount;
         }

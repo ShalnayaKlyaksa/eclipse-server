@@ -92,22 +92,21 @@ public sealed class GeneratorSystem : SharedGeneratorSystem
         if (!_solutionContainer.ResolveSolution(entity.Owner, entity.Comp.SolutionName, ref entity.Comp.Solution, out var solution))
             return;
 
-        var totalReagent = 0f;
-        foreach (var (reagentId, _) in entity.Comp.Reagents)
-        {
-            totalReagent += solution.GetTotalPrototypeQuantity(reagentId).Float();
-            totalReagent += entity.Comp.FractionalReagents.GetValueOrDefault(reagentId);
-        }
-
-        if (totalReagent == 0)
-            return;
-
+        var totalFuel = 0f;
         foreach (var (reagentId, multiplier) in entity.Comp.Reagents)
         {
+            var quantity = solution.GetTotalPrototypeQuantity(reagentId).Float() +
+                           entity.Comp.FractionalReagents.GetValueOrDefault(reagentId) * FixedPoint2.Epsilon.Float();
+            totalFuel += quantity * multiplier;
+        }
+        if (totalFuel <= 0) return;
+        foreach (var (reagentId, multiplier) in entity.Comp.Reagents)
+        {
+            if (multiplier <= 0) continue;
             var fractionalReagent = entity.Comp.FractionalReagents.GetValueOrDefault(reagentId);
             var availableReagent = solution.GetTotalPrototypeQuantity(reagentId);
-            var availForRatio = fractionalReagent + availableReagent.Float();
-            var removalPercentage = availForRatio / totalReagent;
+            var availableFuel = (availableReagent.Float() + fractionalReagent * FixedPoint2.Epsilon.Float()) * multiplier;
+            var removalPercentage = availableFuel / totalFuel;
 
             var toRemove = RemoveFractionalFuel(
                 ref fractionalReagent,
@@ -226,13 +225,24 @@ public sealed class GeneratorSystem : SharedGeneratorSystem
 
             supplier.Enabled = true;
 
-            supplier.MaxSupply = gen.TargetPower;
-
-            var eff = 1 / CalcFuelEfficiency(gen.TargetPower, gen.OptimalPower, gen);
+            var limit = new GeneratorOutputLimitEvent(gen.TargetPower, frameTime);
+            RaiseLocalEvent(uid, ref limit);
+            var power = float.IsFinite(limit.Power) ? Math.Clamp(limit.Power, 0, gen.TargetPower) : 0;
+            if (power <= 0 || frameTime <= 0)
+            {
+                supplier.MaxSupply = 0;
+                continue;
+            }
+            var eff = 1 / CalcFuelEfficiency(power, gen.OptimalPower, gen);
             var consumption = gen.OptimalBurnRate * frameTime * eff;
-            RaiseLocalEvent(uid, new GeneratorUseFuel(consumption));
+            var spent = MathF.Min(fuel, consumption);
+            var producedPower = consumption > 0 ? power * spent / consumption : 0;
+            supplier.MaxSupply = producedPower * Math.Clamp(limit.ElectricalFraction, 0, 1);
+            if (spent > 0) RaiseLocalEvent(uid, new GeneratorUseFuel(spent, producedPower));
         }
     }
+
+    public bool IsRunning(EntityUid generator) => Comp<FuelGeneratorComponent>(generator).On;
 
     public float GetFuel(EntityUid generator)
     {
@@ -281,7 +291,7 @@ public record struct GeneratorGetCloggedEvent(bool Clogged);
 /// <remarks>
 /// Implementations are expected to round fuel consumption up if the used fuel value is too small (e.g. reagent units).
 /// </remarks>
-public record struct GeneratorUseFuel(float FuelUsed);
+public record struct GeneratorUseFuel(float FuelUsed, float ProducedPower = 0);
 
 /// <summary>
 /// Raised by <see cref="GeneratorSystem"/> to empty a generator of its fuel contents.
@@ -290,3 +300,13 @@ public sealed class GeneratorEmpty
 {
     public static readonly GeneratorEmpty Instance = new();
 }
+
+/// <summary>Physical operating constraints can reduce a generator's requested output before fuel is consumed.</summary>
+[ByRefEvent]
+public record struct GeneratorOutputLimitEvent(float Power, float DeltaTime)
+{
+    public float ElectricalFraction = 1;
+}
+
+[ByRefEvent]
+public record struct GeneratorTelemetryEvent(Content.Shared._Eclipse.Power.PowerPlantOperatingState? State);

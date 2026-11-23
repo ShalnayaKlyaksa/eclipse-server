@@ -90,6 +90,9 @@
   name: cloth
   suffix: Full
   components:
+  - type: AdvancedTreatment
+    treatment: Bandage
+  - type: AdvancedBandageRoll
   - type: Healing
     damageContainers:
       - Biological

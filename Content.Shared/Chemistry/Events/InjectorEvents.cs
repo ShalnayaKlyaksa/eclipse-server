@@ -1,4 +1,5 @@
-﻿using Content.Shared.DoAfter;
+using Content.Shared.DoAfter;
+using Content.Shared._Eclipse.AdvancedHealth;
 using Content.Shared.Inventory;
 using Robust.Shared.Serialization;
 
@@ -8,7 +9,10 @@ namespace Content.Shared.Chemistry.Events;
 /// Raised on the injector when the doafter has finished.
 /// </summary>
 [Serializable, NetSerializable]
-public sealed partial class InjectorDoAfterEvent : SimpleDoAfterEvent;
+public sealed partial class InjectorDoAfterEvent : SimpleDoAfterEvent
+{
+    public BodyPartSlot? DrawPart;
+}
 
 /// <summary>
 /// The base injection attempt event. It'll be raised on the user and target when attempting to inject the target.

@@ -1,0 +1,48 @@
+- type: guideEntry
+  id: EclipseIndustrial
+  name: guide-entry-eclipse-industrial
+  text: /ServerInfo/Guidebook/Engineering/EclipseIndustry.xml
+  children:
+  - EclipseIndustrialStart
+  - EclipseIndustrialProgression
+  - EclipseIndustrialLines
+  - EclipseIndustrialPower
+  - EclipseNuclearReactor
+  - EclipseIndustrialRecipes
+  - EclipseIndustrialAdvanced
+  - EclipseIndustrialTroubleshooting
+
+- type: guideEntry
+  id: EclipseIndustrialStart
+  name: guide-entry-eclipse-industrial-start
+  text: /ServerInfo/Guidebook/Engineering/Industrial/Start.xml
+
+- type: guideEntry
+  id: EclipseIndustrialLines
+  name: guide-entry-eclipse-industrial-lines
+  text: /ServerInfo/Guidebook/Engineering/Industrial/Lines.xml
+
+- type: guideEntry
+  id: EclipseIndustrialPower
+  name: guide-entry-eclipse-industrial-power
+  text: /ServerInfo/Guidebook/Engineering/Industrial/Power.xml
+
+- type: guideEntry
+  id: EclipseIndustrialRecipes
+  name: guide-entry-eclipse-industrial-recipes
+  text: /ServerInfo/Guidebook/Engineering/Industrial/Recipes.xml
+
+- type: guideEntry
+  id: EclipseIndustrialAdvanced
+  name: guide-entry-eclipse-industrial-advanced
+  text: /ServerInfo/Guidebook/Engineering/Industrial/Advanced.xml
+
+- type: guideEntry
+  id: EclipseIndustrialTroubleshooting
+  name: guide-entry-eclipse-industrial-troubleshooting
+  text: /ServerInfo/Guidebook/Engineering/Industrial/Troubleshooting.xml
+
+- type: guideEntry
+  id: EclipseIndustrialProgression
+  name: guide-entry-eclipse-industrial-progression
+  text: /ServerInfo/Guidebook/Engineering/Industrial/Progression.xml

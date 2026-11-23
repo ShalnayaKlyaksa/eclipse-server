@@ -33,8 +33,9 @@
   - OffsetCaneWood
   - BodyBag
   - LauncherSyringe
-  position: 4,-5
-
+  position: 36, 2
+  technologyPrerequisites:
+  - IndustrialElectronics
 - type: technology
   id: Surgery
   name: research-technology-surgery
@@ -54,7 +55,7 @@
   - Implanter
   technologyPrerequisites:
   - Medicine
-  position: 4,-4
+  position: 38, 3
 
 - type: technology
   id: Chemistry
@@ -76,8 +77,9 @@
   - ChemistryEmptyVial
   - MiniSyringe
   - ChemistryEmptyVialSmall
-  position: 3,-4
-
+  position: 36, 0
+  technologyPrerequisites:
+  - IndustrialElectronics
 - type: technology
   id: ChemistryBluespace
   name: research-technology-chemistry-bluespace
@@ -92,7 +94,8 @@
   - SyringeBluespace
   technologyPrerequisites:
   - Chemistry
-  position: 3,-5
+  - IndustrialPrecisionElectronics
+  position: 38, 11
 
 - type: technology
   id: BiochemicalStasis
@@ -108,7 +111,8 @@
   - SyringeCryostasis
   technologyPrerequisites:
   - Medicine
-  position: 5,-5
+  - IndustrialPrecisionElectronics
+  position: 38, 7
 
 
 - type: technology
@@ -124,7 +128,7 @@
   - JetInjector
   technologyPrerequisites:
   - Chemistry
-  position: 3,-3
+  position: 38, 1
 
 - type: technology
   id: ChemistryAdvancedInjector
@@ -139,4 +143,4 @@
   - AdvancedJetInjector
   technologyPrerequisites:
   - ChemistryInjector
-  position: 3,-2
+  position: 40, 0

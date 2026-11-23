@@ -126,7 +126,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: NT-SEC "Стервятник"
+      name: ВИШ-SEC "Стервятник"
     - type: Transform
       pos: -107.754845,12.579616
       parent: invalid

@@ -1,6 +1,16 @@
 # Recipient type -> transfusable donor types. Emergency donors restore less oxygen-carrying capacity.
 
 - type: advancedHealthBloodCompatibility
+  id: SK-A
+  compatibleDonors: [ "SK-A", "SK-O" ]
+- type: advancedHealthBloodCompatibility
+  id: SK-B
+  compatibleDonors: [ "SK-B", "SK-O" ]
+- type: advancedHealthBloodCompatibility
+  id: SK-O
+  compatibleDonors: [ "SK-O" ]
+
+- type: advancedHealthBloodCompatibility
   id: O-
   compatibleDonors: [ "O-" ]
 - type: advancedHealthBloodCompatibility

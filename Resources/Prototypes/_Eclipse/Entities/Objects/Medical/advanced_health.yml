@@ -103,6 +103,7 @@
     size: Small
   - type: AdvancedTreatment
     treatment: ForeignBodyRemoval
+    reusable: true
     effectiveness: 1
     delay: 7
 

@@ -15,7 +15,7 @@ public sealed class SeedDnaConsoleBoundUserInterface(EntityUid owner, Enum uiKey
     {
         base.Open();
 
-        _window = new SeedDnaConsoleWindow(this);
+        _window = new SeedDnaConsoleWindow();
 
         _window.SeedButton.OnPressed += _ => SendMessage(new ItemSlotButtonPressedEvent(SeedSlotId));
         _window.DnaDiskButton.OnPressed += _ => SendMessage(new ItemSlotButtonPressedEvent(DnaDiskSlotId));
@@ -40,8 +40,4 @@ public sealed class SeedDnaConsoleBoundUserInterface(EntityUid owner, Enum uiKey
         _window?.UpdateState(castState);
     }
 
-    public void SubmitData(TargetSeedData target, SeedDataDto seedDataDto)
-    {
-        SendMessage(new WriteToTargetSeedDataMessage(target, seedDataDto));
-    }
 }

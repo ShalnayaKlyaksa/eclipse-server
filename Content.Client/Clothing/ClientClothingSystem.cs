@@ -272,9 +272,9 @@ public sealed class ClientClothingSystem : ClothingSystem
         var displacementData = inventory.Displacements.GetValueOrDefault(slot); //Default unsexed map
 
         var equipeeSex = CompOrNull<HumanoidProfileComponent>(equipee)?.Sex;
-        if (equipeeSex != null)
+        if (equipeeSex is { } sex)
         {
-            switch (equipeeSex)
+            switch (sex.PresentationSex())
             {
                 case Sex.Male:
                     if (inventory.MaleDisplacements.Count > 0)

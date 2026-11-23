@@ -180,6 +180,9 @@ public partial class SeedData
 
     [DataField] public float Potency = 1f;
 
+    /// <summary>Wireless output of a mature living plant, in watts. Species-specific, not inherited by unrelated crops.</summary>
+    [DataField] public float PowerProduction;
+
     /// <summary>
     ///     If true, cannot be harvested for seeds. Balances hybrids and
     ///     mutations.
@@ -295,6 +298,7 @@ public partial class SeedData
             GrowthStages = GrowthStages,
             HarvestRepeat = HarvestRepeat,
             Potency = Potency,
+            PowerProduction = PowerProduction,
 
             Seedless = Seedless,
             Viable = Viable,
@@ -356,6 +360,7 @@ public partial class SeedData
             GrowthStages = other.GrowthStages,
             HarvestRepeat = HarvestRepeat,
             Potency = Potency,
+            PowerProduction = other.PowerProduction,
 
             Mutations = Mutations,
 

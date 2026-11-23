@@ -1,6 +1,19 @@
 - type: vendingMachineInventory
   id: ChefvendInventory
   startingInventory:
+    EclipseCulinaryStationCircuitboard: 1
+    EclipseFoodCucumber: 3
+    EclipseFoodPeanut: 3
+    EclipseFoodOlive: 3
+    EclipseFoodGreenBean: 3
+    EclipseFoodBellPepper: 3
+    EclipseFoodParsnip: 3
+    EclipseFoodSweetPotato: 3
+    EclipseFoodWhiteBeet: 3
+    EclipseFoodRedBeet: 3
+    EclipseFoodPlum: 3
+    EclipseFoodVanillaPod: 2
+    EclipseFoodHoneycomb: 2
     ReagentContainerFlour: 2
     ReagentContainerCornmeal: 2
     ReagentContainerSugar: 2

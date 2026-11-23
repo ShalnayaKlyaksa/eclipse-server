@@ -34,6 +34,7 @@ public sealed class PortableGeneratorBoundUserInterface : BoundUserInterface
         _window.OnPower += SetTargetPower;
         _window.OnEjectFuel += EjectFuel;
         _window.OnSwitchOutput += SwitchOutput;
+        _window.OnReset += () => SendMessage(new Content.Shared._Eclipse.Power.PowerPlantResetMessage());
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)

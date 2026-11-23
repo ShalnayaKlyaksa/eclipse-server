@@ -3,10 +3,34 @@
   name: guide-entry-medical
   text: "/ServerInfo/Guidebook/Medical/Medical.xml"
   children:
+  - EclipseClinicalMedicine
+  - EclipseBloodMedicine
+  - EclipseTraumaCare
+  - EclipseSurgicalDiagnostics
   - MedicalDoctor
   - Chemist
   - Cloning
   - Cryogenics
+
+- type: guideEntry
+  id: EclipseSurgicalDiagnostics
+  name: guide-entry-eclipse-surgical-diagnostics
+  text: "/ServerInfo/Guidebook/Medical/EclipseSurgicalDiagnostics.xml"
+
+- type: guideEntry
+  id: EclipseTraumaCare
+  name: guide-entry-eclipse-trauma
+  text: "/ServerInfo/Guidebook/Medical/EclipseTraumaCare.xml"
+
+- type: guideEntry
+  id: EclipseClinicalMedicine
+  name: guide-entry-eclipse-clinical
+  text: "/ServerInfo/Guidebook/Medical/EclipseClinicalMedicine.xml"
+
+- type: guideEntry
+  id: EclipseBloodMedicine
+  name: guide-entry-eclipse-blood
+  text: "/ServerInfo/Guidebook/Medical/EclipseBloodMedicine.xml"
 
 - type: guideEntry
   id: MedicalDoctor
@@ -28,6 +52,7 @@
   name: guide-entry-chemist
   text: "/ServerInfo/Guidebook/Medical/Chemist.xml"
   children:
+  - EclipseMedicalChemistry
   # - Medicine
   # Duplicate guide entries are currently not supported
   # TODO GUIDEBOOK Maybe allow duplicate entries?

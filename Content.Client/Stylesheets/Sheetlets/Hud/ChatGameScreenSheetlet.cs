@@ -15,21 +15,11 @@ public sealed class ChatGameScreenSheetlet : Sheetlet<PalettedStylesheet>
         [
             E()
                 .Class(SeparatedChatGameScreen.StyleClassChatContainer)
-                .Panel(EclipsePanel("#070300F4", "#A85E1290")),
+                .Panel(ForgeStyle.Panel(ForgeStyle.Background, ForgeStyle.Border)),
             E<OutputPanel>()
                 .Class(SeparatedChatGameScreen.StyleClassChatOutput)
-                .Panel(EclipsePanel("#070300F4", "#00000000")),
+                .Prop(OutputPanel.StylePropertyStyleBox, ForgeStyle.Panel(Color.Transparent, Color.Transparent)),
         ];
     }
 
-    private static StyleBoxFlat EclipsePanel(string background, string border)
-    {
-        var borderColor = Color.FromHex(border);
-        return new StyleBoxFlat
-        {
-            BackgroundColor = Color.FromHex(background),
-            BorderColor = borderColor,
-            BorderThickness = borderColor.A > 0 ? new Thickness(1) : new Thickness(0),
-        };
-    }
 }

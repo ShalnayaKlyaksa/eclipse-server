@@ -11,6 +11,12 @@ namespace Content.Shared.Humanoid
         Male,
         Female,
         Unsexed,
+        Intersex,
+    }
+
+    public static class SexExtensions
+    {
+        public static Sex PresentationSex(this Sex sex) => sex == Sex.Intersex ? Sex.Female : sex;
     }
 
     /// <summary>

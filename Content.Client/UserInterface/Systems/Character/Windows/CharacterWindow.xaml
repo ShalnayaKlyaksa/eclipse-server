@@ -51,8 +51,8 @@
 
             <PanelContainer VerticalExpand="True">
                 <PanelContainer.PanelOverride>
-                    <gfx:StyleBoxFlat BackgroundColor="#070300D8"
-                                      BorderColor="#A85E1288"
+                    <gfx:StyleBoxFlat BackgroundColor="#161616D8"
+                                      BorderColor="#50505088"
                                       BorderThickness="1" />
                 </PanelContainer.PanelOverride>
                 <BoxContainer Orientation="Vertical"
@@ -91,7 +91,7 @@
 
         <PanelContainer MinSize="1 0">
             <PanelContainer.PanelOverride>
-                <gfx:StyleBoxFlat BackgroundColor="#A85E1264" />
+                <gfx:StyleBoxFlat BackgroundColor="#50505064" />
             </PanelContainer.PanelOverride>
         </PanelContainer>
 
@@ -105,7 +105,7 @@
                    ClipText="True" />
             <PanelContainer MinHeight="2">
                 <PanelContainer.PanelOverride>
-                    <gfx:StyleBoxFlat BackgroundColor="#E6A11A" />
+                    <gfx:StyleBoxFlat BackgroundColor="#FF861F" />
                 </PanelContainer.PanelOverride>
             </PanelContainer>
             <BoxContainer Name="PersonalTasks"

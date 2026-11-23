@@ -1,0 +1,47 @@
+- type: entity
+  parent: CrateMedical
+  id: CrateClinicalMedicine
+  name: clinical medicine supply crate
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: AdvancedEmptyBloodBag
+          amount: 4
+        - id: EclipsePackedCellsONeg
+          amount: 2
+        - id: AdvancedBloodTestKit
+          amount: 4
+        - id: AdvancedClinicalBloodAnalyzer
+        - id: AdvancedPortableXRay
+        - id: AdvancedElectrocardiograph
+        - id: AdvancedInstrumentSterilizationKit
+          amount: 8
+        - id: AdvancedSterileScalpel
+        - id: AdvancedSterileHemostat
+        - id: AdvancedCultureTestKit
+          amount: 4
+        - id: AdvancedThoracicDrainKit
+          amount: 2
+        - id: AdvancedSourceControlKit
+          amount: 2
+        - id: AdvancedOrganRepairKit
+          amount: 2
+        - id: ChemistryBottleClinicalAntibiotic
+        - id: ChemistryBottleClinicalAntifungal
+        - id: ChemistryBottleClinicalOpioid
+        - id: ChemistryBottleClinicalBronchodilator
+        - id: ChemistryBottleClinicalInsulin
+        - id: ChemistryBottleClinicalGlucose
+        - id: ChemistryBottleClinicalNaloxone
+
+- type: cargoProduct
+  id: ClinicalMedicineSupplies
+  icon:
+    sprite: Objects/Specific/Chemistry/bottle.rsi
+    state: bottle-1
+  product: CrateClinicalMedicine
+  cost: 6000
+  category: cargoproduct-category-name-medical
+  group: market

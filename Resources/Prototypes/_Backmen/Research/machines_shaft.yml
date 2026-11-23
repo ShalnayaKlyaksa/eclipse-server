@@ -12,8 +12,8 @@
   - SalvageMagnetMachineCircuitboard
   - SalvageExpeditionsComputerCircuitboard
   technologyPrerequisites:
-  - SalvageEquipment
-  position: 11,2
+  - IndustrialAutomation
+  position: 24, 24
 
 - type: technology
   id: SalvageEquipmentAdvancedMachines
@@ -28,7 +28,7 @@
   - OreProcessorIndustrialMachineCircuitboard
   technologyPrerequisites:
   - SalvageEquipmentMachines
-  position: 12,2
+  position: 26, 23
 
 - type: technology
   id: SpaceScanningMachines
@@ -42,5 +42,5 @@
   recipeUnlocks:
   - RadarConsoleCircuitboard
   technologyPrerequisites:
-  - SalvageEquipment
-  position: 11,3
+  - IndustrialAutomation
+  position: 24, 16

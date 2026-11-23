@@ -4,6 +4,8 @@ using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
 using Content.Shared.Swab;
+using Content.Shared.Administration.Logs;
+using Content.Shared.Database;
 
 namespace Content.Server.Botany.Systems;
 
@@ -12,6 +14,8 @@ public sealed class BotanySwabSystem : EntitySystem
     [Dependency] private readonly SharedDoAfterSystem _doAfterSystem = default!;
     [Dependency] private readonly PopupSystem _popupSystem = default!;
     [Dependency] private readonly MutationSystem _mutationSystem = default!;
+    [Dependency] private readonly PlantHolderSystem _plants = default!;
+    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
 
     public override void Initialize()
     {
@@ -60,10 +64,19 @@ public sealed class BotanySwabSystem : EntitySystem
         if (args.Cancelled || args.Handled || !TryComp<PlantHolderComponent>(args.Args.Target, out var plant))
             return;
 
+        if (plant.Seed == null || plant.Dead || plant.Seed.Immutable)
+            return;
+
+        if (plant.Age < plant.Seed.Maturation)
+        {
+            _popupSystem.PopupEntity(Loc.GetString("botany-cross-too-young"), args.Args.Target.Value, args.Args.User);
+            return;
+        }
+
         if (swab.SeedData == null)
         {
             // Pick up pollen
-            swab.SeedData = plant.Seed;
+            swab.SeedData = plant.Seed.Clone();
             _popupSystem.PopupEntity(Loc.GetString("botany-swab-from"), args.Args.Target.Value, args.Args.User);
         }
         else
@@ -71,9 +84,19 @@ public sealed class BotanySwabSystem : EntitySystem
             var old = plant.Seed;
             if (old == null)
                 return;
+            if (plant.CrossPollinated)
+            {
+                _popupSystem.PopupEntity(Loc.GetString("botany-cross-already-pollinated"), args.Args.Target.Value, args.Args.User);
+                return;
+            }
             plant.Seed = _mutationSystem.Cross(swab.SeedData, old); // Cross-pollenate
-            swab.SeedData = old; // Transfer old plant pollen to swab
-            _popupSystem.PopupEntity(Loc.GetString("botany-swab-to"), args.Args.Target.Value, args.Args.User);
+            plant.CrossPollinated = true;
+            swab.SeedData = null;
+            var discovered = old.PacketPrototype != plant.Seed.PacketPrototype;
+            _popupSystem.PopupEntity(Loc.GetString(discovered ? "botany-cross-discovery" : "botany-swab-to"), args.Args.Target.Value, args.Args.User);
+            if (discovered)
+                _adminLog.Add(LogType.Botany, LogImpact.Medium, $"{ToPrettyString(args.Args.User):player} bred {plant.Seed.PacketPrototype} at {Transform(args.Args.Target.Value).Coordinates}.");
+            _plants.ForceUpdateByExternalCause(args.Args.Target.Value, plant);
         }
 
         args.Handled = true;

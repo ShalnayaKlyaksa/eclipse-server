@@ -1,9 +1,10 @@
-﻿- type: guideEntry
+- type: guideEntry
   id: Engineering
   name: guide-entry-engineering
   text: "/ServerInfo/Guidebook/Engineering/Engineering.xml"
   children:
   - Construction
+  - EclipseIndustrial
   - Power
   - Atmospherics
   - ShuttleCraft

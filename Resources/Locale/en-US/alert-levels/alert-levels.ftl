@@ -32,5 +32,12 @@ alert-level-delta-announcement = The station is currently under threat of immine
 alert-level-delta-instructions = Crewmembers are advised to listen to heads of staff for more information.
 
 alert-level-epsilon = Epsilon
-alert-level-epsilon-announcement = Eidos Empire has ordered the Epsilon security level on the station. Consider all contracts terminated.
+alert-level-epsilon-announcement = VISH has ordered the Epsilon security level on the station. Consider all contracts terminated.
 alert-level-epsilon-instructions = Consider all contracts terminated.
+
+alert-level-mortem = Mortem
+alert-level-mortem-announcement = This facility is designated for final liquidation. The Zero Shift protocol is now in effect.
+alert-level-mortem-instructions = VISH has authorized the destruction of the station. No assistance will arrive. Find a way off the facility.
+alert-level-mortem-sender = ZS
+alert-level-mortem-death = death
+alert-level-mortem-preannouncement = VISH's final wish was your { $death }.

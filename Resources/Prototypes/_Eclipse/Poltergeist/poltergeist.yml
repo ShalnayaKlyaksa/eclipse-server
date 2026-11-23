@@ -1,0 +1,209 @@
+- type: antag
+  id: Poltergeist
+  name: roles-antag-poltergeist-name
+  antagonist: true
+  setPreference: false
+  objective: roles-antag-poltergeist-objective
+  guides: [ Poltergeist ]
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRolePoltergeist
+  name: Poltergeist Role
+  components:
+  - type: MindRole
+    antagPrototype: Poltergeist
+    exclusiveAntag: true
+
+- type: entity
+  parent: [ Incorporeal, BaseMob ]
+  id: MobPoltergeist
+  name: poltergeist
+  description: A restless spirit looking for something to haunt.
+  components:
+  - type: Poltergeist
+  - type: Input
+    context: ghost
+  - type: Sprite
+    sprite: Mobs/Ghosts/revenant.rsi
+    layers:
+    - state: active
+  - type: Visibility
+    layer: 2
+  - type: Eye
+    drawFov: false
+    visMask: [ Normal, Ghost ]
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4
+    baseSprintSpeed: 4
+  - type: Speech
+    speechVerb: Ghost
+  - type: GhostRole
+    makeSentient: true
+    reregister: false
+    name: roles-antag-poltergeist-name
+    description: ghost-role-information-poltergeist-description
+    rules: ghost-role-information-antagonist-rules
+    mindRoles: [ MindRolePoltergeist ]
+    raffle:
+      settings: default
+  - type: GhostTakeoverAvailable
+  - type: GuideHelp
+    guides: [ Poltergeist ]
+
+- type: entity
+  parent: BaseGameRule
+  id: PoltergeistSpawn
+  components:
+  - type: StationEvent
+    weight: 7.5
+    duration: 1
+    earliestStart: 30
+    minimumPlayers: 10
+    maxOccurrences: 1
+  - type: RandomSpawnRule
+    prototype: MobPoltergeist
+  - type: DynamicRuleCost
+    cost: 50
+
+- type: entity
+  abstract: true
+  id: BasePoltergeistAction
+  components:
+  - type: Action
+    icon:
+      sprite: Objects/Magic/magicactions.rsi
+      state: spell_default
+    checkCanInteract: false
+    checkConsciousness: false
+    useDelay: 1
+
+- type: entity
+  parent: BasePoltergeistAction
+  id: ActionPoltergeistPossess
+  name: Possess object
+  description: Enter an unoccupied object within four tiles. Held objects and living creatures cannot be possessed. Costs 10 activity.
+  components:
+  - type: Action
+    useDelay: 2
+    icon:
+      sprite: Objects/Magic/magicactions.rsi
+      state: item_recall
+  - type: TargetAction
+    range: 4
+  - type: EntityTargetAction
+    rotateOnUse: false
+    event: !type:PoltergeistPossessActionEvent
+
+- type: entity
+  parent: BasePoltergeistAction
+  id: ActionPoltergeistLeave
+  name: Leave object
+  description: Return to your spirit form. A spectral seal prevents escape.
+  components:
+  - type: Action
+    icon:
+      sprite: Objects/Magic/magicactions.rsi
+      state: jaunt
+  - type: InstantAction
+    event: !type:PoltergeistLeaveActionEvent
+
+- type: entity
+  parent: BasePoltergeistAction
+  id: ActionPoltergeistMove
+  name: Move object
+  description: Select a nearby point to slide your loose object towards it. Heavy, held and anchored objects cannot move. Costs 2 activity.
+  components:
+  - type: Action
+    icon:
+      sprite: Objects/Magic/magicactions.rsi
+      state: blink
+  - type: TargetAction
+    range: 1.5
+    repeat: true
+  - type: WorldTargetAction
+    rotateOnUse: false
+    event: !type:PoltergeistMoveActionEvent
+
+- type: entity
+  parent: BasePoltergeistAction
+  id: ActionPoltergeistRotate
+  name: Rotate object
+  description: Turn your loose object a quarter turn. Costs 1 activity.
+  components:
+  - type: Action
+    icon: Interface/Actions/defile.png
+  - type: InstantAction
+    event: !type:PoltergeistRotateActionEvent
+
+- type: entity
+  parent: BasePoltergeistAction
+  id: ActionPoltergeistKnock
+  name: Knock
+  description: Make an eerie knock from inside your object. Costs 2 activity.
+  components:
+  - type: Action
+    useDelay: 3
+    icon:
+      sprite: Objects/Magic/magicactions.rsi
+      state: knock
+  - type: InstantAction
+    event: !type:PoltergeistKnockActionEvent
+
+- type: entity
+  parent: BasePoltergeistAction
+  id: ActionPoltergeistUse
+  name: Haunt mechanism
+  description: Open or close your closet, switch your light or toggle your radio microphone. Locks and physical obstructions still apply. Costs 5 activity.
+  components:
+  - type: Action
+    useDelay: 3
+    icon: Interface/Actions/overloadlight.png
+  - type: InstantAction
+    event: !type:PoltergeistUseActionEvent
+
+- type: entity
+  parent: BasePoltergeistAction
+  id: ActionPoltergeistThrow
+  name: Hurl object
+  description: Launch your light, loose object at a point within five tiles. Costs 25 activity.
+  components:
+  - type: Action
+    useDelay: 8
+    icon:
+      sprite: Objects/Magic/magicactions.rsi
+      state: repulse
+  - type: TargetAction
+    range: 5
+  - type: WorldTargetAction
+    rotateOnUse: false
+    event: !type:PoltergeistThrowActionEvent
+
+- type: entity
+  parent: BaseItem
+  id: PoltergeistDetector
+  name: spectral detector
+  description: Use in hand to detect nearby haunted objects. Use on an object to seal a spirit inside for twelve seconds, then use the exorcism verb. A chaplain with a bible performs the exorcism faster.
+  components:
+  - type: Sprite
+    sprite: Objects/Devices/forensic_scanner.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: PoltergeistDetector
+  - type: GuideHelp
+    guides: [ Poltergeist ]
+
+- type: latheRecipe
+  parent: BaseToolRecipe
+  id: PoltergeistDetector
+  result: PoltergeistDetector
+  materials:
+    Steel: 200
+    Glass: 100
+    Plastic: 100
+
+- type: guideEntry
+  id: Poltergeist
+  name: guide-entry-poltergeist
+  text: /ServerInfo/Guidebook/Antagonist/Poltergeist.xml

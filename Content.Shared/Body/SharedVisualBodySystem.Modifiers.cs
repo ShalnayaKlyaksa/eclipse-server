@@ -1,10 +1,13 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Numerics;
 using Content.Shared.Administration.Managers;
 using Content.Shared.Administration;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
+using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Preferences;
+using Content.Shared.Sprite;
 using Content.Shared.Verbs;
 using JetBrains.Annotations;
 using Robust.Shared.Containers;
@@ -144,7 +147,8 @@ public abstract partial class SharedVisualBodySystem
         RaiseLocalEvent(ent, ref markingsEvt);
     }
 
-    private void ApplyAppearanceTo(Entity<VisualBodyComponent?> ent, HumanoidCharacterAppearance appearance, Sex sex)
+    private void ApplyAppearanceTo(Entity<VisualBodyComponent?> ent, HumanoidCharacterAppearance appearance, Sex sex,
+        VulpkaninBodyType bodyType = VulpkaninBodyType.Default)
     {
         if (!Resolve(ent, ref ent.Comp))
             return;
@@ -152,7 +156,8 @@ public abstract partial class SharedVisualBodySystem
         ApplyProfile(ent,
             new()
         {
-            Sex = sex,
+            Sex = sex.PresentationSex(),
+            BodyType = bodyType,
             SkinColor = appearance.SkinColor,
             EyeColor = appearance.EyeColor,
         });
@@ -170,7 +175,18 @@ public abstract partial class SharedVisualBodySystem
     [PublicAPI]
     public void ApplyProfileTo(Entity<VisualBodyComponent?> ent, HumanoidCharacterProfile profile)
     {
-        ApplyAppearanceTo(ent, profile.Appearance, profile.Sex);
+        if (!Resolve(ent, ref ent.Comp))
+            return;
+
+        ApplyAppearanceTo(ent, profile.Appearance, profile.Sex, profile.Customization.BodyType);
+
+        if (_prototype.TryIndex<SpeciesPrototype>(profile.Species, out var species))
+        {
+            var customization = profile.Customization;
+            var heightScale = customization.Height == 0 ? 1f : (float) customization.Height / species.DefaultHeight;
+            var widthScale = customization.Weight == 0 ? 1f : 1f + ((float) customization.Weight / species.DefaultWeight - 1f) * 0.25f;
+            EntityManager.System<SharedScaleVisualsSystem>().SetProfileScale(ent, new Vector2(widthScale, heightScale));
+        }
     }
 
     /// <summary>

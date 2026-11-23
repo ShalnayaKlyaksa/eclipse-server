@@ -22,7 +22,7 @@ comms-console-announcement-unknown-sender = Unknown
 
 # Comms console variant titles
 comms-console-announcement-title-station = Communications Console
-comms-console-announcement-title-centcom = Eidos Empire
+comms-console-announcement-title-centcom = VISH
 comms-console-announcement-title-nukie = Legion Nuclear Operative
 comms-console-announcement-title-ashlegion = Ash Legion
 comms-console-announcement-title-station-ai = Station AI

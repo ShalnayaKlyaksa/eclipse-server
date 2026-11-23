@@ -1,0 +1,529 @@
+# Batch enrichment, useful side streams, recovery and early departmental deliveries.
+- type: industrialRecipe
+  id: IndustrialWashIronConcentrate
+  processor: OreWasher
+  minimumTier: Industrial
+  requiredTechnology: IndustrialOreEnrichment
+  requireDataDisk: true
+  time: 12
+  inputs:
+    CrushedIronOre: 4
+  outputs:
+    IronConcentrate1: 4
+    WasteRock1: 1
+  fluidInputs:
+    Water: 20
+  fluidOutputs:
+    IndustrialDirtyWater: 20
+  name: industrial-process-industrial-wash-iron-concentrate
+- type: industrialRecipe
+  id: IndustrialSeparateIronConcentrate
+  processor: Separator
+  minimumTier: Industrial
+  requiredTechnology: IndustrialOreEnrichment
+  requireDataDisk: true
+  time: 10
+  inputs:
+    IronConcentrate: 4
+  outputs:
+    CleanIronConcentrate1: 4
+    DirtySludge1: 1
+  name: industrial-process-industrial-separate-iron-concentrate
+- type: industrialRecipe
+  id: IndustrialRefineIronFraction
+  processor: ThermalCentrifuge
+  minimumTier: Industrial
+  requiredTechnology: IndustrialOreEnrichment
+  requireDataDisk: true
+  time: 12
+  inputs:
+    CleanIronConcentrate: 4
+  outputs:
+    IronMetallurgicFraction1: 4
+    QuartzDust1: 1
+  heat: 500000
+  name: industrial-process-industrial-refine-iron-fraction
+- type: industrialRecipe
+  id: IndustrialSmeltIronBillets
+  processor: BlastFurnace
+  minimumTier: Industrial
+  requiredTechnology: IndustrialMetallurgy
+  requireDataDisk: true
+  time: 20
+  inputs:
+    IronMetallurgicFraction: 4
+    Coal: 1
+  outputs:
+    IndustrialSteelBillet1: 6
+  name: industrial-process-industrial-smelt-iron-billets
+- type: industrialRecipe
+  id: IndustrialCastIronBillets
+  processor: Smelter
+  minimumTier: Basic
+  requiredTechnology: IndustrialMetallurgy
+  requireDataDisk: true
+  time: 5
+  inputs:
+    IndustrialSteelBillet: 1
+  outputs:
+    SheetSteel1: 1
+  name: industrial-process-industrial-cast-iron-billets
+- type: industrialRecipe
+  id: IndustrialWashCopperConcentrate
+  processor: OreWasher
+  minimumTier: Industrial
+  requiredTechnology: IndustrialOreEnrichment
+  requireDataDisk: true
+  time: 12
+  inputs:
+    CrushedCopperOre: 4
+  outputs:
+    CopperConcentrate1: 4
+    WasteRock1: 1
+  fluidInputs:
+    Water: 20
+  fluidOutputs:
+    IndustrialDirtyWater: 20
+  name: industrial-process-industrial-wash-copper-concentrate
+- type: industrialRecipe
+  id: IndustrialSeparateCopperConcentrate
+  processor: Separator
+  minimumTier: Industrial
+  requiredTechnology: IndustrialOreEnrichment
+  requireDataDisk: true
+  time: 10
+  inputs:
+    CopperConcentrate: 4
+  outputs:
+    CleanCopperConcentrate1: 4
+    DirtySludge1: 1
+  name: industrial-process-industrial-separate-copper-concentrate
+- type: industrialRecipe
+  id: IndustrialRefineCopperFraction
+  processor: ThermalCentrifuge
+  minimumTier: Industrial
+  requiredTechnology: IndustrialOreEnrichment
+  requireDataDisk: true
+  time: 12
+  inputs:
+    CleanCopperConcentrate: 4
+  outputs:
+    CopperMetallurgicFraction1: 4
+    GoldDust1: 1
+  heat: 500000
+  name: industrial-process-industrial-refine-copper-fraction
+- type: industrialRecipe
+  id: IndustrialSmeltCopperBillets
+  processor: BlastFurnace
+  minimumTier: Industrial
+  requiredTechnology: IndustrialMetallurgy
+  requireDataDisk: true
+  time: 20
+  inputs:
+    CopperMetallurgicFraction: 4
+    Coal: 1
+  outputs:
+    IndustrialCopperBillet1: 6
+  name: industrial-process-industrial-smelt-copper-billets
+- type: industrialRecipe
+  id: IndustrialCastCopperBillets
+  processor: Smelter
+  minimumTier: Basic
+  requiredTechnology: IndustrialMetallurgy
+  requireDataDisk: true
+  time: 5
+  inputs:
+    IndustrialCopperBillet: 1
+  outputs:
+    IngotCopper1: 1
+  name: industrial-process-industrial-cast-copper-billets
+- type: industrialRecipe
+  id: IndustrialCleanGlassConcentrate
+  processor: OreWasher
+  minimumTier: Industrial
+  requiredTechnology: IndustrialOreEnrichment
+  requireDataDisk: true
+  time: 8
+  inputs:
+    QuartzConcentrate: 4
+  outputs:
+    CleanQuartzConcentrate1: 4
+  fluidInputs:
+    Water: 10
+  fluidOutputs:
+    IndustrialDirtyWater: 10
+  name: industrial-process-industrial-clean-glass-concentrate
+- type: industrialRecipe
+  id: IndustrialSeparateGlassFraction
+  processor: Separator
+  minimumTier: Industrial
+  requiredTechnology: IndustrialOreEnrichment
+  requireDataDisk: true
+  time: 10
+  inputs:
+    CleanQuartzConcentrate: 4
+  outputs:
+    QuartzGlassFraction1: 4
+    DirtySludge1: 1
+  name: industrial-process-industrial-separate-glass-fraction
+- type: industrialRecipe
+  id: IndustrialMixGlassBatch
+  processor: Mixer
+  minimumTier: Industrial
+  requiredTechnology: IndustrialSiliconPurification
+  requireDataDisk: true
+  time: 10
+  inputs:
+    QuartzGlassFraction: 4
+    MineralResidue: 1
+  outputs:
+    IndustrialGlassBatch1: 6
+  name: industrial-process-industrial-mix-glass-batch
+- type: industrialRecipe
+  id: IndustrialSmeltGlassBatch
+  processor: Smelter
+  minimumTier: Basic
+  requiredTechnology: IndustrialSiliconPurification
+  requireDataDisk: true
+  time: 5
+  inputs:
+    IndustrialGlassBatch: 1
+  outputs:
+    SheetGlass1: 1
+  name: industrial-process-industrial-smelt-glass-batch
+- type: industrialRecipe
+  id: IndustrialGrindWasteRock
+  processor: Grinder
+  minimumTier: Industrial
+  requiredTechnology: IndustrialRecycling
+  requireDataDisk: true
+  time: 8
+  inputs:
+    WasteRock: 2
+  outputs:
+    StoneDust1: 2
+  name: industrial-process-industrial-grind-waste-rock
+- type: industrialRecipe
+  id: IndustrialRecoverMineralSludge
+  processor: FilterPress
+  minimumTier: Industrial
+  requiredTechnology: IndustrialRecycling
+  requireDataDisk: true
+  time: 10
+  inputs:
+    DirtySludge: 2
+  outputs:
+    MineralResidue1: 1
+    StoneDust1: 1
+  fluidInputs:
+    IndustrialDirtyWater: 10
+  fluidOutputs:
+    Water: 6
+  name: industrial-process-industrial-recover-mineral-sludge
+- type: industrialRecipe
+  id: IndustrialGrindManufacturingScrap
+  processor: Grinder
+  minimumTier: Industrial
+  requiredTechnology: IndustrialRecycling
+  requireDataDisk: true
+  time: 8
+  inputs:
+    IndustrialScrap: 2
+  outputs:
+    MetalDust1: 1
+  name: industrial-process-industrial-grind-manufacturing-scrap
+- type: industrialRecipe
+  id: IndustrialRemeltMetalDust
+  processor: Smelter
+  minimumTier: Basic
+  requiredTechnology: IndustrialRecycling
+  requireDataDisk: true
+  time: 10
+  inputs:
+    MetalDust: 2
+  outputs:
+    IndustrialIronIngot1: 1
+  name: industrial-process-industrial-remelt-metal-dust
+- type: industrialRecipe
+  id: IndustrialPressConcreteTiles
+  processor: Mixer
+  minimumTier: Industrial
+  requiredTechnology: IndustrialRecycling
+  requireDataDisk: true
+  time: 12
+  inputs:
+    StoneDust: 4
+    MineralResidue: 1
+  outputs:
+    FloorTileItemConcrete: 8
+  fluidInputs:
+    Water: 5
+  name: industrial-process-industrial-press-concrete-tiles
+- type: industrialRecipe
+  id: IndustrialRecoverDeveloper
+  processor: FilterPress
+  minimumTier: Industrial
+  requiredTechnology: IndustrialRecycling
+  requireDataDisk: true
+  time: 12
+  inputs:
+    Coal: 1
+  fluidInputs:
+    IndustrialSpentDeveloper: 20
+  fluidOutputs:
+    IndustrialDeveloper: 12
+  name: industrial-process-industrial-recover-developer
+- type: industrialRecipe
+  id: IndustrialRecoverDopant
+  processor: Distillation
+  minimumTier: Industrial
+  requiredTechnology: IndustrialRecycling
+  requireDataDisk: true
+  time: 14
+  fluidInputs:
+    IndustrialSpentDopant: 20
+  fluidOutputs:
+    Water: 14
+  name: industrial-process-industrial-recover-dopant
+- type: industrialRecipe
+  id: IndustrialRecoverOxidizer
+  processor: FilterPress
+  minimumTier: Industrial
+  requiredTechnology: IndustrialRecycling
+  requireDataDisk: true
+  time: 12
+  inputs:
+    Coal: 1
+  fluidInputs:
+    IndustrialSpentOxidizer: 20
+  fluidOutputs:
+    Water: 14
+  name: industrial-process-industrial-recover-oxidizer
+- type: industrialRecipe
+  id: IndustrialRecoverProcessLiquor
+  processor: Distillation
+  minimumTier: Industrial
+  requiredTechnology: IndustrialRecycling
+  requireDataDisk: true
+  time: 16
+  fluidInputs:
+    IndustrialProcessLiquor: 20
+  fluidOutputs:
+    IndustrialChlorinatingAgent: 6
+  name: industrial-process-industrial-recover-process-liquor
+- type: industrialRecipe
+  id: IndustrialElectrolysisFuelBlend
+  processor: Electrolyzer
+  minimumTier: Industrial
+  requiredTechnology: EnergyFuelCells
+  requireDataDisk: true
+  time: 24
+  fluidInputs:
+    Water: 20
+  fluidOutputs:
+    Hydrogen: 20
+    Oxygen: 10
+  name: industrial-process-industrial-electrolysis-fuel-blend
+- type: industrialRecipe
+  id: IndustrialPurifiedSilicaControlFeed
+  processor: Smelter
+  minimumTier: Basic
+  requiredTechnology: IndustrialSiliconPurification
+  requireDataDisk: true
+  time: 8
+  inputs:
+    IndustrialPurifiedSilica: 2
+  outputs:
+    IndustrialSiliconDioxide1: 4
+  name: industrial-process-industrial-purified-silica-control-feed
+- type: industrialRecipe
+  id: IndustrialPrecisionReinforcedGlass
+  processor: Smelter
+  minimumTier: Basic
+  requiredTechnology: IndustrialProcessChemistry
+  requireDataDisk: true
+  time: 10
+  inputs:
+    SheetGlass: 4
+    PartRodMetal: 2
+    IndustrialPurifiedSilica: 1
+  outputs:
+    SheetRGlass1: 4
+  name: industrial-process-industrial-precision-reinforced-glass
+- type: industrialRecipe
+  id: IndustrialCleanroomGauze
+  processor: ChemicalBath
+  minimumTier: Industrial
+  requiredTechnology: IndustrialCleanroomEngineering
+  requireDataDisk: true
+  time: 12
+  inputs:
+    MaterialCloth: 2
+  outputs:
+    Gauze1: 5
+  fluidInputs:
+    Water: 5
+  cleanroomGrade: 1
+  name: industrial-process-industrial-cleanroom-gauze
+- type: industrialRecipe
+  id: IndustrialLargeGlassware
+  processor: Cutter
+  minimumTier: Industrial
+  requiredTechnology: IndustrialBulkProcessing
+  requireDataDisk: true
+  time: 8
+  inputs:
+    SheetGlass: 2
+  outputs:
+    LargeBeaker: 2
+  name: industrial-process-industrial-large-glassware
+- type: industrialRecipe
+  id: IndustrialEarlyGasAnalyzer
+  processor: Assembler
+  minimumTier: Basic
+  requiredTechnology: EngineeringTools
+  requireDataDisk: true
+  time: 12
+  inputs:
+    SheetSteel: 4
+    SheetGlass: 1
+    IndustrialCircuitCore: 1
+  outputs:
+    GasAnalyzer: 1
+  name: industrial-process-industrial-early-gas-analyzer
+- type: industrialRecipe
+  id: IndustrialEarlyHealthAnalyzer
+  processor: Assembler
+  minimumTier: Basic
+  requiredTechnology: Medicine
+  requireDataDisk: true
+  time: 12
+  inputs:
+    SheetSteel: 2
+    SheetGlass: 2
+    IndustrialCircuitCore: 1
+  outputs:
+    HandheldHealthAnalyzer: 1
+  name: industrial-process-industrial-early-health-analyzer
+- type: industrialRecipe
+  id: IndustrialRecoverDiamonds
+  processor: OreWasher
+  minimumTier: Industrial
+  requiredTechnology: IndustrialOreEnrichment
+  requireDataDisk: true
+  time: 15
+  inputs:
+    DiamondOre: 2
+  outputs:
+    MaterialDiamond1: 2
+  fluidInputs:
+    Water: 10
+  fluidOutputs:
+    IndustrialDirtyWater: 10
+  name: industrial-process-industrial-recover-diamonds
+- type: entity
+  id: IndustrialResearchSampleProcessChemistry
+  parent: IndustrialResearchSampleGeology
+  name: chemical process research sample
+  components:
+  - type: IndustrialResearchSample
+    points: 1000
+- type: industrialFabricationRecipe
+  id: PrepareIndustrialSampleProcessChemistry
+  result: IndustrialResearchSampleProcessChemistry
+  duration: 20
+  requiredTechnology: IndustrialProcessChemistry
+  ingredients:
+    IndustrialPurifiedSilica: 1
+    MineralResidue: 1
+    SheetGlass: 1
+- type: entity
+  id: IndustrialResearchSamplePowerSystems
+  parent: IndustrialResearchSampleMetallurgy
+  name: thermal power research sample
+  components:
+  - type: IndustrialResearchSample
+    points: 1800
+- type: industrialFabricationRecipe
+  id: PrepareIndustrialSamplePowerSystems
+  result: IndustrialResearchSamplePowerSystems
+  duration: 20
+  requiredTechnology: EnergyCooling
+  ingredients:
+    IndustrialHeatConduitAssembly: 1
+    IngotSilver: 1
+    IndustrialPrintedBoard: 1
+- type: stack
+  id: IndustrialMechanicalCore
+  parent: BaseMediumStack
+  name: stack-industrial-mechanical-core
+  maxCount: 10
+  icon:
+    sprite: /Textures/Objects/Misc/stock_parts.rsi
+    state: micro_mani
+  spawn: IndustrialMechanicalCore
+- type: stack
+  id: IndustrialCircuitCore
+  parent: BaseMediumStack
+  name: stack-industrial-circuit-core
+  maxCount: 10
+  icon:
+    sprite: /Textures/Objects/Misc/stock_parts.rsi
+    state: scan_module
+  spawn: IndustrialCircuitCore
+- type: stack
+  id: IndustrialHeatConduitAssembly
+  parent: BaseMediumStack
+  name: stack-industrial-heat-conduit-assembly
+  maxCount: 10
+  icon:
+    sprite: /Textures/Objects/Misc/stock_parts.rsi
+    state: capacitor
+  spawn: IndustrialHeatConduitAssembly
+- type: entity
+  id: IndustrialDrillFlatpack
+  parent: BaseFlatpack
+  name: stationary drill flatpack
+  components:
+  - type: Flatpack
+    entity: IndustrialDrill
+    qualityNeeded: Anchoring
+- type: entity
+  id: IndustrialExcavatorFlatpack
+  parent: BaseFlatpack
+  name: stationary excavator flatpack
+  components:
+  - type: Flatpack
+    entity: IndustrialExcavator
+    qualityNeeded: Anchoring
+- type: entity
+  id: IndustrialSurgeProtectorFlatpack
+  parent: BaseFlatpack
+  name: industrial surge protector flatpack
+  components:
+  - type: Flatpack
+    entity: IndustrialSurgeProtector
+    qualityNeeded: Anchoring
+- type: entity
+  id: IndustrialDepositDiamond
+  parent: IndustrialResourceDeposit
+  name: diamond floor vein
+  components:
+  - type: Sprite
+    state: rock_diamond
+  - type: IndustrialResourceDeposit
+    resource: DiamondOre1
+    remaining: 24
+- type: biomeMarkerLayer
+  id: IndustrialSurfaceVeinsDiamond
+  entityMask:
+    AsteroidRock: IndustrialDepositDiamond
+    WallRock: IndustrialDepositDiamond
+    WallRockBasalt: IndustrialDepositDiamond
+    WallRockChromite: IndustrialDepositDiamond
+    WallRockSand: IndustrialDepositDiamond
+    WallRockSnow: IndustrialDepositDiamond
+  maxCount: 2
+  minGroupSize: 3
+  maxGroupSize: 5
+  radius: 2

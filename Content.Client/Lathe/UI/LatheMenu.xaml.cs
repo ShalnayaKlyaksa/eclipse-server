@@ -72,6 +72,12 @@ public sealed partial class LatheMenu : FancyWindow
         DeleteFabricating.OnPressed += _ => DeleteFabricatingAction?.Invoke();
     }
 
+    public void SetCommercePrice(int price)
+    {
+        CommercePrice.Visible = price > 0;
+        CommercePrice.SetMessage(Loc.GetString("commerce-print-price", ("price", price)));
+    }
+
     public void SetEntity(EntityUid uid)
     {
         Entity = uid;

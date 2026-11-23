@@ -7,6 +7,7 @@ using Content.Shared.Maps;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
+using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -489,7 +490,6 @@ namespace Content.Server.Atmos.EntitySystems
                 _deltaPressureInvalidEntityQueue.Clear();
             }
 
-            var timeCheck1 = 0;
             while (atmosphere.DeltaPressureCursor < count)
             {
                 var remaining = count - atmosphere.DeltaPressureCursor;
@@ -503,10 +503,8 @@ namespace Content.Server.Atmos.EntitySystems
 
                 atmosphere.DeltaPressureCursor += toProcess;
 
-                if (timeCheck1++ < LagCheckIterations)
-                    continue;
-
-                timeCheck1 = 0;
+                // Each submission already processes up to a thousand entities. Check the deadline
+                // after every submission rather than after another LagCheckIterations submissions.
                 if (_simulationStopwatch.Elapsed.TotalMilliseconds >= AtmosMaxProcessTime)
                     return false;
             }
@@ -514,9 +512,12 @@ namespace Content.Server.Atmos.EntitySystems
             var timeCheck2 = 0;
             while (atmosphere.DeltaPressureDamageResults.TryDequeue(out var result))
             {
-                PerformDamage(result.Ent,
-                    result.Pressure,
-                    result.DeltaPressure);
+                var aboveThreshold = result.Pressure > result.Ent.Comp.MinPressure
+                                     || result.DeltaPressure > result.Ent.Comp.MinPressureDelta;
+                if (aboveThreshold && _random.Prob(result.Ent.Comp.RandomDamageChance))
+                    PerformDamage(result.Ent, result.Pressure, result.DeltaPressure);
+                else
+                    SetIsTakingDamageState(result.Ent, false);
 
                 if (timeCheck2++ < LagCheckIterations)
                     continue;

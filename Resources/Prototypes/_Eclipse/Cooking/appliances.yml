@@ -1,0 +1,179 @@
+- type: entity
+  parent: EclipseCulinaryStation
+  id: EclipseCulinaryGriddle
+  name: kitchen griddle
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/hotplate.rsi
+    state: icon
+  - type: CulinaryStation
+    allowedMethods: [Fry]
+  - type: Machine
+    board: EclipseCulinaryGriddleCircuitboard
+
+- type: entity
+  parent: EclipseCulinaryStation
+  id: EclipseCulinaryOven
+  name: kitchen oven
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/microwave.rsi
+    state: mw
+  - type: CulinaryStation
+    allowedMethods: [Bake]
+  - type: Machine
+    board: EclipseCulinaryOvenCircuitboard
+
+- type: entity
+  parent: EclipseCulinaryStation
+  id: EclipseCulinarySteamer
+  name: food steamer
+  components:
+  - type: Sprite
+    color: '#B9D8DF'
+  - type: CulinaryStation
+    allowedMethods: [Steam]
+  - type: Machine
+    board: EclipseCulinarySteamerCircuitboard
+
+- type: entity
+  parent: EclipseCulinaryStationCircuitboard
+  id: EclipseCulinaryGriddleCircuitboard
+  name: kitchen griddle machine board
+  components:
+  - type: MachineBoard
+    prototype: EclipseCulinaryGriddle
+
+- type: entity
+  parent: EclipseCulinaryStationCircuitboard
+  id: EclipseCulinaryOvenCircuitboard
+  name: kitchen oven machine board
+  components:
+  - type: MachineBoard
+    prototype: EclipseCulinaryOven
+
+- type: entity
+  parent: EclipseCulinaryStationCircuitboard
+  id: EclipseCulinarySteamerCircuitboard
+  name: food steamer machine board
+  components:
+  - type: MachineBoard
+    prototype: EclipseCulinarySteamer
+
+- type: entity
+  parent: BaseItem
+  id: EclipseCulinaryMixingBowl
+  name: preparation bowl
+  description: Add ingredients and stir with a spoon. The window offers soaking and marinating. Move the mixture using a batch pot.
+  components:
+  - type: Sprite
+    sprite: Objects/Consumable/Food/bowl.rsi
+    state: bowl2
+    color: '#D9D3BD'
+  - type: Item
+    size: Normal
+  - type: CulinaryStation
+    allowedMethods: [Soak, Marinate]
+  - type: ActivatableUI
+    key: enum.CulinaryUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.CulinaryUiKey.Key:
+        type: CulinaryBoundUserInterface
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 300
+        canReact: false
+  - type: Edible
+    solution: food
+    destroyOnEmpty: false
+    transferAmount: 1
+    utensil: Spoon
+    utensilRequired: true
+  - type: ContainerContainer
+    containers:
+      culinary-ingredients: !type:Container
+  - type: GuideHelp
+    guides: [EclipseExperimentalCooking]
+
+- type: entity
+  parent: FoodBowlBig
+  id: EclipseCulinaryVessel
+  name: batch pot
+  description: Use it empty on an appliance to take the mixture, then full on another appliance to pour it in.
+  components:
+  - type: CulinaryVessel
+  - type: Sprite
+    color: '#AEC1CA'
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 300
+        canReact: false
+        reagents: []
+  - type: DrainableSolution
+    solution: food
+  - type: RefillableSolution
+    solution: food
+
+- type: entity
+  parent: BaseItem
+  id: EclipseCulinaryPestle
+  name: culinary pestle
+  description: Use directly on food to grind it, without opening an interface.
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Kitchen/mortar_and_pestle.rsi
+    state: pestle
+  - type: Item
+    size: Small
+  - type: CulinaryPreparationTool
+
+- type: entity
+  parent: CratePlastic
+  id: EclipseCrateCulinaryAppliances
+  name: kitchen appliance boards crate
+  components:
+  - type: StorageFill
+    contents:
+    - id: EclipseCulinaryGriddleCircuitboard
+    - id: EclipseCulinaryOvenCircuitboard
+    - id: EclipseCulinarySteamerCircuitboard
+    - id: SheetSteel
+    - id: SheetGlass
+    - id: CableApcStack
+
+- type: entity
+  parent: CratePlastic
+  id: EclipseCrateCulinaryUtensils
+  name: food preparation utensils crate
+  components:
+  - type: StorageFill
+    contents:
+    - id: EclipseCulinaryMixingBowl
+    - id: EclipseCulinaryVessel
+      amount: 2
+    - id: EclipseCulinaryPestle
+    - id: KitchenKnife
+    - id: Spoon
+
+- type: cargoProduct
+  id: EclipseCulinaryAppliancesSupply
+  icon:
+    sprite: Structures/Machines/microwave.rsi
+    state: mw
+  product: EclipseCrateCulinaryAppliances
+  cost: 2200
+  category: cargoproduct-category-name-food
+  group: market
+
+- type: cargoProduct
+  id: EclipseCulinaryUtensilsSupply
+  icon:
+    sprite: Objects/Specific/Kitchen/mortar_and_pestle.rsi
+    state: icon
+  product: EclipseCrateCulinaryUtensils
+  cost: 650
+  category: cargoproduct-category-name-food
+  group: market

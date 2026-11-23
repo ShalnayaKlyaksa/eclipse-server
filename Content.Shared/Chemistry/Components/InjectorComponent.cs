@@ -26,6 +26,10 @@ public sealed partial class InjectorComponent : Component
     [DataField]
     public string SolutionName = "injector";
 
+    /// <summary>A needle is no longer sterile after touching a patient.</summary>
+    [DataField, AutoNetworkedField] public bool Sterile = true;
+    [DataField, AutoNetworkedField] public bool NeedleBroken;
+
     /// <summary>
     /// A cached reference to the solution.
     /// </summary>

@@ -1,0 +1,22 @@
+light_mode unshaded;
+
+uniform highp vec2 screen_size;
+uniform highp float elapsed;
+
+void fragment() {
+    highp vec2 pixel = vec2(1.0) / screen_size;
+    highp vec4 source = texture2D(TEXTURE, UV);
+    // A very restrained bright-pixel halo. The original sample stays sharp for small text.
+    highp vec3 halo = max(texture2D(TEXTURE, UV + vec2(pixel.x, 0.0)).rgb - vec3(0.60), vec3(0.0));
+    halo += max(texture2D(TEXTURE, UV - vec2(pixel.x, 0.0)).rgb - vec3(0.60), vec3(0.0));
+    halo += max(texture2D(TEXTURE, UV + vec2(0.0, pixel.y)).rgb - vec3(0.60), vec3(0.0));
+    halo += max(texture2D(TEXTURE, UV - vec2(0.0, pixel.y)).rgb - vec3(0.60), vec3(0.0));
+    highp vec2 edge = UV * 2.0 - vec2(1.0);
+    highp float vignette = 1.0 - 0.065 * pow(dot(edge, edge) * 0.5, 1.6);
+    highp float matrix = 0.995 + 0.005 * cos(UV.y * screen_size.y * 3.14159265);
+    highp float glass = pow(max(0.0, 1.0 - distance(UV, vec2(0.18, -0.48))), 3.0) * 0.022;
+    highp float grain = fract(sin(dot(floor(UV * screen_size), vec2(12.9898, 78.233)) + floor(elapsed * 2.0)) * 43758.5453) - 0.5;
+    highp vec3 color = source.rgb * vignette * matrix + halo * 0.022;
+    color += vec3(0.78, 0.85, 0.87) * glass + vec3(grain * 0.0012);
+    COLOR = vec4(color, source.a);
+}

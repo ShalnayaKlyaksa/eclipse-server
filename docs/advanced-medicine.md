@@ -82,11 +82,30 @@ hands/inventory systems. The original authored thermometer is retained. Horizont
 
 Abdomen and pelvis share one medical-map region. Their conditions remain separate and the
 procedure selector targets the original BodyPartSlot; grouping never transfers wounds or
-combines server anatomy. The overview uses the worse regional state. Bone and organ cards
-show existing regional tissue integrity and confirmed fractures. Individual organ identity,
-organ-local infection, crack subtypes and transplant operations are not yet modelled.
+combines server anatomy. The overview uses the worse regional state. The general view shows injuries and treatment, not generic bone/organ integrity cards.
+Neck injuries share the head map region; a damaged neck remains a selectable procedure
+subsection. Individual organ identity, organ-local infection, crack subtypes and transplant
+operations are not yet modelled.
 
 Zone equipment lists relevant worn items and their display classes. BodyArmorRating is a
 cosmetic classification, so it is not presented as a damage-absorption percentage. The rhythm
 strip visualizes simulated heart rate; its signal is sampled per time step instead of being
 held constant across all columns crossed during a render frame.
+
+
+## Exertion and corpse feedback
+
+The chip displays endurance and sleep debt in place of the former infection/toxin meters.
+Open wounds retain contamination risk but no longer create a fabricated systemic infection
+load. The future diagnostic minigame must establish confirmed disease information separately.
+The pulse drifts smoothly within +/-5 of the resting baseline, in addition to real physiological
+compensation and exertion. Brain, immune-defense and bleeding icons use Lucide assets;
+the ISC license and original SVG sources are retained alongside the PNGs.
+
+Actual MobState.Dead takes precedence over late vital updates in the damage overlay and
+chip. Corpses do not resume automatic consciousness or heartbeat recovery; an explicit
+revival can change the authoritative state. Advanced critical/dead feedback uses a bounded,
+non-flashing dark vignette instead of the old pulsing white mask.
+
+See advanced-exertion-design.md for the implemented work/endurance contract and
+advanced-medical-layers.md for future diagnostic layers.

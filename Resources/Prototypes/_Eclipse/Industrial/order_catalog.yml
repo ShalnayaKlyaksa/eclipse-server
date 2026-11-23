@@ -1,0 +1,347 @@
+- type: fabricationOrderProduct
+  id: OrderWrench
+  product: Wrench
+  category: tools
+  maxQuantity: 20
+
+- type: fabricationOrderProduct
+  id: OrderScrewdriver
+  product: Screwdriver
+  category: tools
+  maxQuantity: 20
+
+- type: fabricationOrderProduct
+  id: OrderCrowbar
+  product: Crowbar
+  category: tools
+  maxQuantity: 20
+
+- type: fabricationOrderProduct
+  id: OrderWirecutter
+  product: Wirecutter
+  category: tools
+  maxQuantity: 20
+
+- type: fabricationOrderProduct
+  id: OrderFlashlightLantern
+  product: FlashlightLantern
+  category: tools
+  maxQuantity: 20
+
+- type: fabricationOrderProduct
+  id: OrderRadioHandheld
+  product: RadioHandheld
+  category: tools
+  maxQuantity: 20
+
+- type: fabricationOrderProduct
+  id: OrderNetworkConfigurator
+  product: NetworkConfigurator
+  category: tools
+  maxQuantity: 20
+
+- type: fabricationOrderProduct
+  id: OrderGasAnalyzer
+  product: GasAnalyzer
+  category: tools
+  maxQuantity: 20
+
+- type: fabricationOrderProduct
+  id: OrderMiningDrill
+  product: MiningDrill
+  category: tools
+  maxQuantity: 20
+
+- type: fabricationOrderProduct
+  id: OrderMiningDrillDiamond
+  product: MiningDrillDiamond
+  category: tools
+  maxQuantity: 20
+
+- type: fabricationOrderProduct
+  id: OrderWelderExperimental
+  product: WelderExperimental
+  category: tools
+  maxQuantity: 20
+
+- type: fabricationOrderProduct
+  id: OrderBeaker
+  product: Beaker
+  category: medical
+  maxQuantity: 20
+
+- type: fabricationOrderProduct
+  id: OrderLargeBeaker
+  product: LargeBeaker
+  category: medical
+  maxQuantity: 20
+
+- type: fabricationOrderProduct
+  id: OrderSyringe
+  product: Syringe
+  category: medical
+  maxQuantity: 20
+
+- type: fabricationOrderProduct
+  id: OrderGauze1
+  product: Gauze1
+  category: medical
+  maxQuantity: 20
+
+- type: fabricationOrderProduct
+  id: OrderHandheldHealthAnalyzer
+  product: HandheldHealthAnalyzer
+  category: medical
+  maxQuantity: 20
+
+- type: fabricationOrderProduct
+  id: OrderClothingHeadHelmetBasic
+  product: ClothingHeadHelmetBasic
+  category: equipment
+  maxQuantity: 10
+
+- type: fabricationOrderProduct
+  id: OrderIndustrialAdvancedArmor
+  product: IndustrialAdvancedArmor
+  category: equipment
+  maxQuantity: 10
+
+- type: fabricationOrderProduct
+  id: OrderIndustrialAdvancedLaserCarbine
+  product: IndustrialAdvancedLaserCarbine
+  category: equipment
+  maxQuantity: 10
+
+- type: fabricationOrderProduct
+  id: OrderIndustrialPerfectArmor
+  product: IndustrialPerfectArmor
+  category: equipment
+  maxQuantity: 10
+
+- type: fabricationOrderProduct
+  id: OrderAnomalyScanner
+  product: AnomalyScanner
+  category: equipment
+  maxQuantity: 10
+
+- type: fabricationOrderProduct
+  id: OrderPowerCellSmallPrinted
+  product: PowerCellSmallPrinted
+  category: components
+  maxQuantity: 50
+
+- type: fabricationOrderProduct
+  id: OrderPowerCellMediumPrinted
+  product: PowerCellMediumPrinted
+  category: components
+  maxQuantity: 50
+
+- type: fabricationOrderProduct
+  id: OrderPowerCellHighPrinted
+  product: PowerCellHighPrinted
+  category: components
+  maxQuantity: 50
+
+- type: fabricationOrderProduct
+  id: OrderIndustrialCircuitCore
+  product: IndustrialCircuitCore
+  category: components
+  maxQuantity: 50
+
+- type: fabricationOrderProduct
+  id: OrderIndustrialMechanicalCore
+  product: IndustrialMechanicalCore
+  category: components
+  maxQuantity: 50
+
+- type: fabricationOrderProduct
+  id: OrderIndustrialHeatConduitAssembly
+  product: IndustrialHeatConduitAssembly
+  category: components
+  maxQuantity: 50
+
+- type: fabricationOrderProduct
+  id: OrderMicroManipulatorStockPart
+  product: MicroManipulatorStockPart
+  category: components
+  maxQuantity: 50
+
+- type: fabricationOrderProduct
+  id: OrderIndustrialPrintedBoard1
+  product: IndustrialPrintedBoard1
+  category: components
+  maxQuantity: 50
+
+- type: fabricationOrderProduct
+  id: OrderIndustrialAdvancedBoard1
+  product: IndustrialAdvancedBoard1
+  category: components
+  maxQuantity: 50
+
+- type: fabricationOrderProduct
+  id: OrderIndustrialPerfectBoard1
+  product: IndustrialPerfectBoard1
+  category: components
+  maxQuantity: 50
+
+- type: fabricationOrderProduct
+  id: OrderSheetCopper1
+  product: SheetCopper1
+  category: materials
+  maxQuantity: 50
+
+- type: fabricationOrderProduct
+  id: OrderIndustrialIronPlate1
+  product: IndustrialIronPlate1
+  category: materials
+  maxQuantity: 50
+
+- type: fabricationOrderProduct
+  id: OrderPartRodMetal1
+  product: PartRodMetal1
+  category: materials
+  maxQuantity: 50
+
+- type: fabricationOrderProduct
+  id: OrderSheetRGlass1
+  product: SheetRGlass1
+  category: materials
+  maxQuantity: 50
+
+- type: fabricationOrderProduct
+  id: OrderFloorTileItemConcrete
+  product: FloorTileItemConcrete
+  category: materials
+  maxQuantity: 50
+
+- type: fabricationOrderProduct
+  id: OrderIndustrialDrillFlatpack
+  product: IndustrialDrillFlatpack
+  category: infrastructure
+  maxQuantity: 10
+
+- type: fabricationOrderProduct
+  id: OrderIndustrialExcavatorFlatpack
+  product: IndustrialExcavatorFlatpack
+  category: infrastructure
+  maxQuantity: 10
+
+- type: fabricationOrderProduct
+  id: OrderIndustrialSurgeProtectorFlatpack
+  product: IndustrialSurgeProtectorFlatpack
+  category: infrastructure
+  maxQuantity: 10
+
+- type: fabricationOrderProduct
+  id: OrderIndustrialSurgeFuse
+  product: IndustrialSurgeFuse
+  category: infrastructure
+  maxQuantity: 10
+
+- type: fabricationOrderProduct
+  id: OrderIndustrialCleanroomController
+  product: IndustrialCleanroomController
+  category: infrastructure
+  maxQuantity: 10
+
+- type: fabricationOrderProduct
+  id: OrderIndustrialAdvancedCleanroomController
+  product: IndustrialAdvancedCleanroomController
+  category: infrastructure
+  maxQuantity: 10
+
+- type: fabricationOrderProduct
+  id: OrderIndustrialCoalGeneratorFlatpack
+  product: IndustrialCoalGeneratorFlatpack
+  category: power
+  maxQuantity: 10
+
+- type: fabricationOrderProduct
+  id: OrderIndustrialLiquidFuelGeneratorFlatpack
+  product: IndustrialLiquidFuelGeneratorFlatpack
+  category: power
+  maxQuantity: 10
+
+- type: fabricationOrderProduct
+  id: OrderIndustrialGasGeneratorFlatpack
+  product: IndustrialGasGeneratorFlatpack
+  category: power
+  maxQuantity: 10
+
+- type: fabricationOrderProduct
+  id: OrderIndustrialFuelCellGeneratorFlatpack
+  product: IndustrialFuelCellGeneratorFlatpack
+  category: power
+  maxQuantity: 10
+
+- type: fabricationOrderProduct
+  id: OrderIndustrialGeothermalGeneratorFlatpack
+  product: IndustrialGeothermalGeneratorFlatpack
+  category: power
+  maxQuantity: 10
+
+- type: fabricationOrderProduct
+  id: OrderPowerPlantFieldStabilizerFlatpack
+  product: PowerPlantFieldStabilizerFlatpack
+  category: power
+  maxQuantity: 10
+
+- type: fabricationOrderProduct
+  id: OrderGravitationalKineticGeneratorFlatpack
+  product: GravitationalKineticGeneratorFlatpack
+  category: power
+  maxQuantity: 10
+
+- type: fabricationOrderProduct
+  id: OrderLpItemPipe
+  product: LpItemPipe
+  category: logistics
+  maxQuantity: 50
+
+- type: fabricationOrderProduct
+  id: OrderMpItemPipe
+  product: MpItemPipe
+  category: logistics
+  maxQuantity: 50
+
+- type: fabricationOrderProduct
+  id: OrderHpItemPipe
+  product: HpItemPipe
+  category: logistics
+  maxQuantity: 50
+
+- type: fabricationOrderProduct
+  id: OrderBasicLiquidPipe
+  product: BasicLiquidPipe
+  category: logistics
+  maxQuantity: 50
+
+- type: fabricationOrderProduct
+  id: OrderIndustrialLiquidPipe
+  product: IndustrialLiquidPipe
+  category: logistics
+  maxQuantity: 50
+
+- type: fabricationOrderProduct
+  id: OrderGasPipeStraight
+  product: GasPipeStraight
+  category: logistics
+  maxQuantity: 50
+
+- type: fabricationOrderProduct
+  id: OrderGasPipeBend
+  product: GasPipeBend
+  category: logistics
+  maxQuantity: 50
+
+- type: fabricationOrderProduct
+  id: OrderGasPipeTJunction
+  product: GasPipeTJunction
+  category: logistics
+  maxQuantity: 50
+
+- type: fabricationOrderProduct
+  id: OrderGasPipeFourway
+  product: GasPipeFourway
+  category: logistics
+  maxQuantity: 50

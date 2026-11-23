@@ -9,6 +9,7 @@ using NUnit.Framework.Internal;
 using NUnit.Framework.Internal.Commands;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.Manager;
 using Robust.UnitTesting;
 
 namespace Content.IntegrationTests.Tests.Markings;
@@ -65,6 +66,7 @@ public sealed class MarkingsViewModelTests
             Model = new MarkingsViewModel();
             Manager = Client.ResolveDependency<MarkingManager>();
 
+            Model.Species = TestSpecies;
             Model.OrganData = Manager.GetMarkingData(TestSpecies);
             Model.OrganProfileData = Manager.GetProfileData(TestSpecies, Sex.Male, Color.White, Color.White);
             Model.ValidateMarkings();
@@ -132,5 +134,26 @@ public sealed class MarkingsViewModelTests
         Assert.That(Model.TrySelectMarking(Head, HumanoidVisualLayers.HeadTop, MothAntennasDefault), Is.True);
 
         Assert.That(Model.SelectedMarkings(Head, HumanoidVisualLayers.HeadTop)![0].MarkingColors[0], Is.EqualTo(Color.AliceBlue));
+    }
+
+    [MarkingTest]
+    public void MarkingGradientRestoration()
+    {
+        const HumanoidVisualLayers layer = HumanoidVisualLayers.HeadTop;
+        var serialization = Client.ResolveDependency<ISerializationManager>();
+        var original = Model.SelectedMarkings(Head, layer)![0];
+        var oldData = serialization.WriteValue(original);
+        Assert.That(serialization.Read<Marking>(oldData).Gradient, Is.Null);
+
+        var gradient = new MarkingGradient { TipColor = Color.Gold, Steps = 4 };
+        Model.TrySetMarkingGradient(Head, layer, original.MarkingId, gradient);
+        Assert.That(Model.TrySelectMarking(Head, layer, MothAntennasCharred), Is.True);
+        Assert.That(Model.TrySelectMarking(Head, layer, original.MarkingId), Is.True);
+        var restored = Model.SelectedMarkings(Head, layer)![0];
+        Assert.That(restored.Gradient, Is.EqualTo(gradient));
+        Assert.That(serialization.Read<Marking>(serialization.WriteValue(restored)), Is.EqualTo(restored));
+
+        Model.TrySetMarkingGradient(Head, layer, original.MarkingId, null);
+        Assert.That(Model.SelectedMarkings(Head, layer)![0], Is.EqualTo(original));
     }
 }

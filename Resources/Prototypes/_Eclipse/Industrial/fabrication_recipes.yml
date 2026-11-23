@@ -1,15 +1,12 @@
-# Expensive workbench fabrication recipes.
-
+# Manual bootstrap recipes; automated assembly uses the same material costs.
 - type: industrialFabricationRecipe
   id: FabricateIndustrialMechanicalCore
   name: industrial-fabrication-mechanical-core
   result: IndustrialMechanicalCore
   duration: 25
   ingredients:
-    SheetSteel: 15
-    SheetPlasteel: 5
-    SheetPlasma: 3
-    PartRodMetal: 10
+    IndustrialIronPlate: 4
+    IndustrialIronRod: 2
 
 - type: industrialFabricationRecipe
   id: FabricateIndustrialHeatConduitAssembly
@@ -17,33 +14,27 @@
   result: IndustrialHeatConduitAssembly
   duration: 30
   ingredients:
-    SheetSteel: 10
-    SheetPlasma: 8
-    SheetPlasteel: 4
-    SheetUranium: 2
+    IndustrialIronPlate: 4
+    SheetGlass: 2
+    SheetPlasma: 2
 
 - type: industrialFabricationRecipe
   id: FabricateIndustrialCircuitCore
+  requiredTechnology: IndustrialElectronics
   name: industrial-fabrication-circuit-core
   result: IndustrialCircuitCore
   duration: 35
   ingredients:
-    SheetSteel: 8
-    SheetGlass: 10
-    SheetPlasma: 5
-    SheetPlasteel: 6
-    PartRodMetal: 8
+    IndustrialSiliconDioxide: 2
+    IndustrialPrintedBoard: 1
 
 - type: industrialFabricationRecipe
   id: FabricateIndustrialMachineChassis
   name: industrial-fabrication-machine-chassis
-  result: IndustrialMachineChassis
-  duration: 45
+  result: IndustrialChassisBlueprint
+  duration: 8
   ingredients:
-    SheetSteel: 25
-    SheetPlasteel: 10
-    IndustrialMechanicalCore: 2
-    PartRodMetal: 15
+    SheetPaper: 1
 
 - type: industrialFabricationRecipe
   id: FabricateUpgradeModuleCrusher
@@ -51,33 +42,146 @@
   result: IndustrialUpgradeModuleCrusher
   duration: 60
   ingredients:
-    IndustrialMechanicalCore: 3
-    IndustrialCircuitCore: 2
-    SheetSteel: 20
-    SheetPlasteel: 8
-
+    IndustrialMechanicalCore: 2
+    IndustrialIronPlate: 8
 - type: industrialFabricationRecipe
   id: FabricateUpgradeModuleThermalCentrifuge
   name: industrial-fabrication-upgrade-thermal-centrifuge
   result: IndustrialUpgradeModuleThermalCentrifuge
   duration: 75
   ingredients:
-    IndustrialMechanicalCore: 2
-    IndustrialHeatConduitAssembly: 4
-    IndustrialCircuitCore: 2
-    SheetSteel: 15
-    SheetPlasma: 10
-    SheetPlasteel: 10
-
+    IndustrialMechanicalCore: 1
+    IndustrialHeatConduitAssembly: 2
+    IndustrialIronPlate: 6
 - type: industrialFabricationRecipe
   id: FabricateUpgradeModuleSmelter
   name: industrial-fabrication-upgrade-smelter
   result: IndustrialUpgradeModuleSmelter
   duration: 70
   ingredients:
-    IndustrialMechanicalCore: 3
-    IndustrialHeatConduitAssembly: 3
-    IndustrialCircuitCore: 3
-    SheetSteel: 25
-    SheetPlasma: 6
-    SheetPlasteel: 12
+    IndustrialMechanicalCore: 1
+    IndustrialHeatConduitAssembly: 1
+    IndustrialIronPlate: 8
+- type: industrialFabricationRecipe
+  id: FabricateUpgradeModuleAssembler
+  name: industrial-fabrication-upgrade-assembler
+  result: IndustrialUpgradeModuleAssembler
+  duration: 45
+  ingredients:
+    IndustrialMechanicalCore: 2
+    IndustrialCircuitCore: 2
+    SheetSteel: 8
+- type: industrialFabricationRecipe
+  id: FabricateUpgradeModuleCrusherIndustrial
+  requiredTechnology: IndustrialAutomation
+  result: IndustrialUpgradeModuleCrusherIndustrial
+  duration: 45
+  ingredients:
+    IndustrialUpgradeModuleCrusher: 1
+    IndustrialCircuitCore: 2
+    SheetPlasteel: 4
+- type: industrialFabricationRecipe
+  id: FabricateUpgradeModuleThermalCentrifugeIndustrial
+  requiredTechnology: IndustrialAutomation
+  result: IndustrialUpgradeModuleThermalCentrifugeIndustrial
+  duration: 45
+  ingredients:
+    IndustrialUpgradeModuleThermalCentrifuge: 1
+    IndustrialCircuitCore: 2
+    SheetPlasteel: 4
+- type: industrialFabricationRecipe
+  id: FabricateUpgradeModuleSmelterIndustrial
+  requiredTechnology: IndustrialAutomation
+  result: IndustrialUpgradeModuleSmelterIndustrial
+  duration: 45
+  ingredients:
+    IndustrialUpgradeModuleSmelter: 1
+    IndustrialCircuitCore: 2
+    SheetPlasteel: 4
+- type: industrialFabricationRecipe
+  id: FabricateUpgradeModuleAssemblerIndustrial
+  minimumWorkbenchTier: 2
+  requiredTechnology: IndustrialAdvancedAutomation
+  result: IndustrialUpgradeModuleAssemblerIndustrial
+  duration: 45
+  ingredients:
+    IndustrialUpgradeModuleAssembler: 1
+    IndustrialAdvancedBoard: 2
+    SheetPlasteel: 4
+
+- type: industrialFabricationRecipe
+  id: FabricateUpgradeModuleCrusherPerfect
+  requiredTechnology: IndustrialPerfectAutomation
+  result: IndustrialUpgradeModuleCrusherPerfect
+  minimumWorkbenchTier: 2
+  duration: 60
+  ingredients:
+    IndustrialUpgradeModuleCrusherIndustrial: 1
+    SheetPlasteel: 8
+    IndustrialPerfectBoard: 2
+    IndustrialAlloyBlank: 2
+
+- type: industrialFabricationRecipe
+  id: FabricateUpgradeModuleThermalCentrifugePerfect
+  requiredTechnology: IndustrialPerfectAutomation
+  result: IndustrialUpgradeModuleThermalCentrifugePerfect
+  minimumWorkbenchTier: 2
+  duration: 60
+  ingredients:
+    IndustrialUpgradeModuleThermalCentrifugeIndustrial: 1
+    SheetPlasteel: 8
+    IndustrialPerfectBoard: 2
+    IndustrialAlloyBlank: 2
+
+- type: industrialFabricationRecipe
+  id: FabricateUpgradeModuleSmelterPerfect
+  requiredTechnology: IndustrialPerfectAutomation
+  result: IndustrialUpgradeModuleSmelterPerfect
+  minimumWorkbenchTier: 2
+  duration: 60
+  ingredients:
+    IndustrialUpgradeModuleSmelterIndustrial: 1
+    SheetPlasteel: 8
+    IndustrialPerfectBoard: 2
+    IndustrialAlloyBlank: 2
+
+- type: industrialFabricationRecipe
+  id: FabricateUpgradeModuleAssemblerPerfect
+  requiredTechnology: IndustrialPerfectAutomation
+  result: IndustrialUpgradeModuleAssemblerPerfect
+  minimumWorkbenchTier: 2
+  duration: 60
+  ingredients:
+    IndustrialUpgradeModuleAssemblerIndustrial: 1
+    SheetPlasteel: 8
+    IndustrialPerfectBoard: 2
+    IndustrialAlloyBlank: 2
+
+- type: industrialFabricationRecipe
+  id: FabricateUpgradeModuleBuffer
+  name: industrial-fabrication-upgrade-buffer
+  result: IndustrialUpgradeModuleBuffer
+  duration: 15
+  ingredients:
+    SheetSteel: 6
+    IndustrialMechanicalCore: 1
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialHeatBuffer
+  name: industrial-fabrication-heat-buffer
+  result: IndustrialHeatBuffer
+  duration: 30
+  ingredients:
+    SheetSteel: 10
+    SheetGlass: 4
+    IndustrialHeatConduitAssembly: 2
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialWorkbenchTier2
+  requiredTechnology: IndustrialPrecisionElectronics
+  name: industrial-fabrication-workbench-tier2
+  result: IndustrialWorkbenchTier2
+  duration: 60
+  ingredients:
+    SheetPlasteel: 8
+    IndustrialAdvancedBoard: 2
+    IndustrialMechanicalCore: 2

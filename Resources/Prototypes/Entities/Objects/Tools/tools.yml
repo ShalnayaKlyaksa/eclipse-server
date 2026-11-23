@@ -322,8 +322,12 @@
     - HVCable
     - CableTerminal
     - Deconstruct
+    - IndustrialRCDLiquid
+    - IndustrialRCDGasStraight
+    - IndustrialRCDGasBend
+    - IndustrialRCDGasT
   - type: LimitedCharges
-    maxCharges: 30
+    maxCharges: 16
   - type: Sprite
     sprite: Objects/Tools/rcd.rsi
     state: icon
@@ -385,6 +389,7 @@
   description: A cartridge of raw matter compacted by bluespace technology. Used in rapid construction devices.
   components:
   - type: RCDAmmo
+    charges: 16
   - type: Sprite
     sprite: Objects/Tools/rcd.rsi
     state: ammo

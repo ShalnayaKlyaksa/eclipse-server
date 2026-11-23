@@ -8,14 +8,15 @@
   tier: 1
   cost: 5000
   recipeUnlocks:
-   - PowerCageSmall
-   - PowerCageMedium
-   - MagazineGrenadeEmpty
-   - GrenadeFlash
-   - GrenadeBlast
+  - PowerCageSmall
+  - PowerCageMedium
+  - MagazineGrenadeEmpty
+  - GrenadeFlash
+  - GrenadeBlast
   technologyPrerequisites:
   - SalvageWeapons
-  position: 13,-1
+  - IndustrialSecurityEquipment
+  position: 36, 18
 
 - type: technology
   id: ShuttleWeaponAdvanced
@@ -27,8 +28,9 @@
   tier: 1
   cost: 6000
   recipeUnlocks:
-   - GrenadeEMP
-   - PowerCageHigh
+  - GrenadeEMP
+  - PowerCageHigh
   technologyPrerequisites:
   - ShuttleWeapon
-  position: 13,-2
+  - IndustrialPerfectEquipment
+  position: 38, 17

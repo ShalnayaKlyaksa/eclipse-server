@@ -16,10 +16,7 @@ public sealed partial class PdaSettingsButton : ContainerButton
     public const string DisabledFgColor = "#5a5a5a";
     public const string EnabledFgColor = "#FFFFFF";
 
-    private readonly StyleBoxFlat _styleBox = new()
-    {
-        BackgroundColor = Color.FromHex("#25252a")
-    };
+    private Color _backgroundColor;
 
     public string? Text
     {
@@ -34,8 +31,13 @@ public sealed partial class PdaSettingsButton : ContainerButton
 
     public Color BackgroundColor
     {
-        get => _styleBox.BackgroundColor;
-        set => _styleBox.BackgroundColor = value;
+        get => _backgroundColor;
+        set
+        {
+            if (_backgroundColor == value) return;
+            _backgroundColor = value;
+            Panel.PanelOverride = PdaTheme.Box(value.ToHex(), "#43575C", radius: 7);
+        }
     }
 
     public Color? ForegroundColor
@@ -52,7 +54,8 @@ public sealed partial class PdaSettingsButton : ContainerButton
     public PdaSettingsButton()
     {
         RobustXamlLoader.Load(this);
-        Panel.PanelOverride = _styleBox;
+        StyleBoxOverride = new StyleBoxFlat();
+        BackgroundColor = Color.FromHex("#29373B");
     }
 
     protected override void Draw(DrawingHandleScreen handle)

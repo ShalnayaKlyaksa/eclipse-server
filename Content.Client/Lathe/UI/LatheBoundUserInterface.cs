@@ -10,6 +10,7 @@ namespace Content.Client.Lathe.UI
     {
         [ViewVariables]
         private LatheMenu? _menu;
+        private int _unitPrice;
         public LatheBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey)
         {
         }
@@ -28,7 +29,7 @@ namespace Content.Client.Lathe.UI
 
             _menu.RecipeQueueAction += (recipe, amount) =>
             {
-                SendMessage(new LatheQueueRecipeMessage(recipe, amount));
+                SendMessage(new LatheQueueRecipeMessage(recipe, amount, _unitPrice));
             };
             _menu.QueueDeleteAction += index => SendMessage(new LatheDeleteRequestMessage(index));
             _menu.QueueMoveUpAction += index => SendMessage(new LatheMoveRequestMessage(index, -1));
@@ -43,6 +44,8 @@ namespace Content.Client.Lathe.UI
             switch (state)
             {
                 case LatheUpdateState msg:
+                    _unitPrice = msg.UnitPrice;
+                    _menu?.SetCommercePrice(msg.UnitPrice);
                     if (_menu != null)
                         _menu.Recipes = msg.Recipes;
                     _menu?.PopulateRecipes();

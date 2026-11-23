@@ -116,7 +116,11 @@ public abstract partial class SharedSolutionContainerSystem
         if (!Resolve(entity, ref entity.Comp, logMissing: false))
             return;
 
-        AddSolution(soln, inject);
+        var delivered = inject.Clone();
+        var added = AddSolution(soln, inject);
+        delivered.ScaleTo(added);
+        var bloodEvent = new Content.Shared._Eclipse.AdvancedHealth.AdvancedBloodTransferEvent(delivered, false);
+        RaiseLocalEvent(entity.Owner, ref bloodEvent);
     }
 
     public Solution Drain(Entity<DrainableSolutionComponent?> entity, Entity<SolutionComponent> soln, FixedPoint2 quantity)

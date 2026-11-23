@@ -112,7 +112,7 @@ public sealed partial class GridAtmosphereComponent : Component
     public int DeltaPressureCursor;
 
     /// <summary>
-    /// Queue of entities that need to have damage applied to them.
+    /// Queue of entities that need damage applied or their previous damage state cleared on the simulation thread.
     /// </summary>
     [ViewVariables]
     public readonly ConcurrentQueue<DeltaPressureDamageResult> DeltaPressureDamageResults = new();

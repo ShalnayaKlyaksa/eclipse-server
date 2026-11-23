@@ -83,6 +83,7 @@
   save: false
   components:
   - type: Body
+  - type: AdvancedHumanAnatomy
   - type: VisualBody
   - type: Hands
   - type: ComplexInteraction

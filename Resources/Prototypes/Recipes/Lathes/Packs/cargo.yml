@@ -3,6 +3,7 @@
 - type: latheRecipePack
   id: CargoStatic
   recipes:
+  - ImperialPaymentTerminal
   - AppraisalTool
   - Pickaxe
   - UtilityKnife
@@ -10,6 +11,7 @@
 - type: latheRecipePack
   id: CargoBoardsStatic
   recipes:
+  - ImperialPersonalATMCircuitboard
   - OreProcessorMachineCircuitboard
   - SalvageMagnetMachineCircuitboard
 

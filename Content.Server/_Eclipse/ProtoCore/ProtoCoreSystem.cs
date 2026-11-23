@@ -449,7 +449,7 @@ public sealed class ProtoCoreSystem : GameRuleSystem<AshLegionRuleComponent>
         UpdateConsoleUisForCore(core);
         SetRuleResult(ProtoCoreState.Meltdown);
 
-        SetDeltaAlert(core.Owner);
+        SetMeltdownAlert(core.Owner, skipEmergencyShuttle);
         AnnounceForStation(
             core.Owner,
             Loc.GetString("proto-core-announcement-meltdown-started", ("time", FormatTime(core.Comp.RemainingTime))),
@@ -613,16 +613,17 @@ public sealed class ProtoCoreSystem : GameRuleSystem<AshLegionRuleComponent>
         }
     }
 
-    private void SetDeltaAlert(EntityUid core)
+    private void SetMeltdownAlert(EntityUid core, bool zeroShift)
     {
         var station = GetCoreStation(core);
         if (station is not { } stationUid)
             return;
 
+        var currentLevel = _alertLevel.GetLevel(stationUid);
         if (TryComp<ProtoCoreComponent>(core, out var protoCore))
-            protoCore.PreMeltdownAlertLevel = _alertLevel.GetLevel(stationUid);
+            protoCore.PreMeltdownAlertLevel = currentLevel;
 
-        _alertLevel.SetLevel(stationUid, "delta", true, true, true, true);
+        _alertLevel.SetLevel(stationUid, zeroShift ? AlertLevelSystem.MortemAlertLevel : "delta", true, true, true, true);
     }
 
     private void RestorePreMeltdownAlert(EntityUid core, ProtoCoreComponent component)

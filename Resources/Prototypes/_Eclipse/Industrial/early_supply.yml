@@ -1,0 +1,83 @@
+- type: industrialRecipe
+  id: IndustrialEarlyFlashlights
+  processor: Assembler
+  minimumTier: Basic
+  requiredTechnology: IndustrialElectronics
+  requireDataDisk: true
+  time: 8
+  inputs:
+    SheetSteel: 1
+    SheetGlass: 1
+    SheetCopper: 1
+  outputs:
+    FlashlightLantern: 1
+
+- type: industrialRecipe
+  id: IndustrialEarlySmallCells
+  processor: Assembler
+  minimumTier: Basic
+  requiredTechnology: IndustrialElectronics
+  requireDataDisk: true
+  time: 8
+  inputs:
+    SheetSteel: 1
+    SheetGlass: 1
+    SheetCopper: 1
+  outputs:
+    PowerCellSmallPrinted: 1
+
+- type: industrialRecipe
+  id: IndustrialEarlyNetworkTools
+  processor: Assembler
+  minimumTier: Basic
+  requiredTechnology: IndustrialElectronics
+  requireDataDisk: true
+  time: 8
+  inputs:
+    SheetSteel: 2
+    SheetGlass: 1
+    IndustrialCircuitCore: 1
+  outputs:
+    NetworkConfigurator: 1
+
+- type: industrialRecipe
+  id: IndustrialEarlyHandheldRadios
+  processor: Assembler
+  minimumTier: Basic
+  requiredTechnology: IndustrialAutomation
+  requireDataDisk: true
+  time: 8
+  inputs:
+    SheetSteel: 2
+    IndustrialCircuitCore: 1
+  outputs:
+    RadioHandheld: 1
+
+- type: industrialFabricationRecipe
+  id: SupplyWrench
+  result: Wrench
+  duration: 12
+  ingredients:
+    SheetSteel: 2
+
+- type: industrialFabricationRecipe
+  id: SupplyScrewdriver
+  result: Screwdriver
+  duration: 12
+  ingredients:
+    SheetSteel: 1
+
+- type: industrialFabricationRecipe
+  id: SupplyCrowbar
+  result: Crowbar
+  duration: 12
+  ingredients:
+    SheetSteel: 2
+
+- type: industrialFabricationRecipe
+  id: SupplyWirecutter
+  result: Wirecutter
+  duration: 12
+  ingredients:
+    SheetSteel: 2
+

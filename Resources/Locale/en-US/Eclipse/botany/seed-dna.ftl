@@ -1,4 +1,4 @@
-seed-dna-window-title = Plant Seed DNA Manipulator
+seed-dna-window-title = Botanical DNA Analyzer
 seed-dna-window-seed = Seeds:
 seed-dna-window-dnadisk = DNA disk:
 seed-dna-window-invalid-seed = These seeds cannot be analyzed.

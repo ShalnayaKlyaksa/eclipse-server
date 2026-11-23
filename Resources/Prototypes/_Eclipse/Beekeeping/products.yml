@@ -1,0 +1,192 @@
+- type: entity
+  id: EclipseBeeswax
+  parent: BaseItem
+  name: beeswax
+  components:
+  - type: Sprite
+    sprite: Objects/Consumable/Food/ingredients.rsi
+    state: butter
+    color: '#E7C26C'
+  - type: Item
+    size: Small
+- type: entity
+  id: EclipsePropolis
+  parent: FoodInjectableBase
+  name: propolis
+  components:
+  - type: Sprite
+    sprite: Objects/Consumable/Food/ingredients.rsi
+    state: dough
+    color: '#865137'
+  - type: Item
+    size: Small
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 15
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 3
+- type: entity
+  id: EclipseBeeBread
+  parent: FoodInjectableBase
+  name: bee bread
+  components:
+  - type: Sprite
+    sprite: Objects/Consumable/Food/ingredients.rsi
+    state: dough-slice
+    color: '#B18A51'
+  - type: Item
+    size: Small
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 15
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 10
+- type: entity
+  id: EclipseRoyalJelly
+  parent: FoodInjectableBase
+  name: royal jelly
+  components:
+  - type: Sprite
+    sprite: Objects/Consumable/Food/ingredients.rsi
+    state: cakebatter
+    color: '#FFF1CD'
+  - type: Item
+    size: Small
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 15
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 6
+- type: entity
+  id: EclipseFoodCitrusHoneycomb
+  parent: EclipseFoodHoneycomb
+  name: citrus honeycomb
+  components:
+  - type: Sprite
+    color: '#EBCB72'
+- type: entity
+  id: EclipseFoodAromaticHoneycomb
+  parent: EclipseFoodHoneycomb
+  name: aromatic honeycomb
+  components:
+  - type: Sprite
+    color: '#D2B8E6'
+- type: entity
+  id: EclipseFoodCoolingHoneycomb
+  parent: EclipseFoodHoneycomb
+  name: cooling honeycomb
+  components:
+  - type: Sprite
+    color: '#9BD2E0'
+- type: entity
+  id: EclipseFoodRestorativeHoneycomb
+  parent: EclipseFoodHoneycomb
+  name: restorative honeycomb
+  components:
+  - type: Sprite
+    color: '#E4A9A5'
+- type: entity
+  id: EclipseFoodResinHoneycomb
+  parent: EclipseFoodHoneycomb
+  name: resin honeycomb
+  components:
+  - type: Sprite
+    color: '#B6A66B'
+- type: entity
+  id: EclipseApiarySelectionFrame
+  parent: EclipseApiaryFrame
+  name: selection frame
+  components:
+  - type: Sprite
+    color: '#C6B4D8'
+  - type: ApiaryFrame
+    kind: Selection
+    durability: 8
+- type: entity
+  id: EclipseApiaryNursingFrame
+  parent: EclipseApiaryFrame
+  name: nursing frame
+  components:
+  - type: Sprite
+    color: '#A7CCAD'
+  - type: ApiaryFrame
+    kind: Nursing
+    durability: 10
+- type: entity
+  id: EclipseApiaryInsulatedFrame
+  parent: EclipseApiaryFrame
+  name: insulated frame
+  components:
+  - type: Sprite
+    color: '#A3C6E1'
+  - type: ApiaryFrame
+    kind: Insulated
+    durability: 16
+- type: culinaryIngredient
+  id: CulinaryEclipsePropolis
+  foods:
+  - EclipsePropolis
+  traits:
+    Stability: 5
+    Calm: 1
+    Acid: 1
+- type: culinaryIngredient
+  id: CulinaryEclipseBeeBread
+  foods:
+  - EclipseBeeBread
+  traits:
+    Recovery: 2
+    Satiety: 3
+    Starch: 2
+- type: culinaryIngredient
+  id: CulinaryEclipseRoyalJelly
+  foods:
+  - EclipseRoyalJelly
+  traits:
+    Blood: 2
+    Healing: 2
+    Fat: 1
+- type: culinaryIngredient
+  id: CulinaryEclipseFoodCitrusHoneycomb
+  foods:
+  - EclipseFoodCitrusHoneycomb
+  traits:
+    Acid: 3
+    Rapid: 2
+    Hydration: 1
+- type: culinaryIngredient
+  id: CulinaryEclipseFoodAromaticHoneycomb
+  foods:
+  - EclipseFoodAromaticHoneycomb
+  traits:
+    Warmth: 2
+    Calm: 2
+    Stability: 2
+- type: culinaryIngredient
+  id: CulinaryEclipseFoodCoolingHoneycomb
+  foods:
+  - EclipseFoodCoolingHoneycomb
+  traits:
+    Cooling: 3
+    Hydration: 3
+- type: culinaryIngredient
+  id: CulinaryEclipseFoodRestorativeHoneycomb
+  foods:
+  - EclipseFoodRestorativeHoneycomb
+  traits:
+    Recovery: 2
+    Healing: 1
+    Stability: 2
+- type: culinaryIngredient
+  id: CulinaryEclipseFoodResinHoneycomb
+  foods:
+  - EclipseFoodResinHoneycomb
+  traits:
+    Stability: 4
+    Calm: 2

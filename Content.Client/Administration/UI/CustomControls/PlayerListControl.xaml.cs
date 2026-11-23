@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Client.Administration.Systems;
+using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Controls;
 using Content.Client.Verbs.UI;
 using Content.Shared.Administration;
@@ -47,7 +48,7 @@ public sealed partial class PlayerListControl : BoxContainer
         FilterLineEdit.StyleBoxOverride = new StyleBoxFlat
         {
             BackgroundColor = Color.FromHex("#160800F4"),
-            BorderColor = Color.FromHex("#D47D1B88"),
+            BorderColor = Color.FromHex("#70707088"),
             BorderThickness = new Thickness(1),
             ContentMarginLeftOverride = 4,
             ContentMarginRightOverride = 4,
@@ -57,6 +58,13 @@ public sealed partial class PlayerListControl : BoxContainer
     }
 
     public IReadOnlyList<PlayerInfo> PlayerInfo => _playerList;
+
+    internal void ApplyNeutralStyle()
+    {
+        FilterLineEdit.MinHeight = 34;
+        FilterLineEdit.StyleBoxOverride = ForgeStyle.Panel(ForgeStyle.Surface, ForgeStyle.Border, 8, 4);
+        BackgroundPanel.PanelOverride = ForgeStyle.Panel(ForgeStyle.Input, ForgeStyle.Border, 4, 4);
+    }
 
     public event Action<PlayerInfo?>? OnSelectionChanged;
 

@@ -4,13 +4,21 @@
     xmlns:controls="clr-namespace:Content.Client.UserInterface.Systems.Chat.Controls">
     <PanelContainer Name="FilterPopupPanel" StyleClasses="BorderedWindowPanel">
         <BoxContainer Orientation="Horizontal" SeparationOverride="8" Margin="10 0">
-            <BoxContainer Name="FilterVBox" MinWidth="105" Margin="0 10" Orientation="Vertical" SeparationOverride="4"/>
+            <BoxContainer MinWidth="240" Margin="0 10" Orientation="Vertical" SeparationOverride="6">
+                <Label Text="{Loc 'hud-chatbox-filter-title'}"/>
+                <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+                    <Button Name="AllChannelsButton" StyleClasses="ForgeChatPreset" Text="{Loc 'hud-chatbox-filter-all'}" HorizontalExpand="True"/>
+                    <Button Name="GameChannelsButton" StyleClasses="ForgeChatPreset" Text="{Loc 'hud-chatbox-filter-game'}" HorizontalExpand="True"/>
+                    <Button Name="ServiceChannelsButton" StyleClasses="ForgeChatPreset" Text="{Loc 'hud-chatbox-filter-service'}" HorizontalExpand="True"/>
+                </BoxContainer>
+                <BoxContainer Name="FilterVBox" Orientation="Vertical" SeparationOverride="4"/>
+            </BoxContainer>
             <BoxContainer Name="HighlightsVBox" MinWidth="120" Margin="0 10" Orientation="Vertical" SeparationOverride="4">
                 <Label Text="{Loc 'hud-chatbox-highlights'}"/>
                 <PanelContainer>
                     <!-- Begin custom background for TextEdit -->
                     <PanelContainer.PanelOverride>
-                        <gfx:StyleBoxFlat BackgroundColor="#070100F4"/>
+                        <gfx:StyleBoxFlat BackgroundColor="#080C0F"/>
                     </PanelContainer.PanelOverride>
                     <!-- End custom background -->
                     <TextEdit Name="HighlightEdit" MinHeight="150" Margin="5 5"/>

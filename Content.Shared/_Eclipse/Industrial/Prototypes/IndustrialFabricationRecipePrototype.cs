@@ -22,6 +22,14 @@ public sealed partial class IndustrialFabricationRecipePrototype : IPrototype
     [DataField]
     public float Duration = 30f;
 
+    [DataField]
+    public int MinimumWorkbenchTier = 1;
+
+    [DataField]
+    public ProtoId<Content.Shared.Research.Prototypes.TechnologyPrototype>? RequiredTechnology;
+
+    [DataField] public int CleanroomGrade;
+
     [DataField(required: true, customTypeSerializer: typeof(PrototypeIdDictionarySerializer<int, EntityPrototype>))]
     public Dictionary<string, int> Ingredients = new();
 }

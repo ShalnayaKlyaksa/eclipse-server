@@ -41,7 +41,7 @@
   parent: [ ClothingUniformBase, BaseLegionContraband ]
   id: ClothingUniformJumpsuitRepairmanLegion
   name: legion repairman jumpsuit
-  description: Functional, fashionable, and badass. Nanotrasen's engineers wish they could look as good as this.
+  description: Functional, fashionable, and badass. VISH's engineers wish they could look as good as this.
   components:
   - type: Sprite
     sprite: Clothing/Uniforms/Jumpsuit/repairman_legion.rsi

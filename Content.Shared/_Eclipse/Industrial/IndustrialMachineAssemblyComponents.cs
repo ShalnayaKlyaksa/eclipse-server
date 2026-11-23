@@ -33,4 +33,11 @@ public sealed partial class IndustrialUpgradeModuleComponent : Component
 /// Two-tile industrial fabrication station.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
-public sealed partial class IndustrialWorkbenchComponent : Component;
+public sealed partial class IndustrialWorkbenchComponent : Component
+{
+    [DataField]
+    public int Tier = 1;
+
+    [DataField]
+    public float CraftSpeed = 1f;
+}

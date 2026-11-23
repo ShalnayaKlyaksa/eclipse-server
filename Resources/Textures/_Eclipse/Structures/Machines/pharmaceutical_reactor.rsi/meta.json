@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Unmodified tgstation contributors' sprites from https://github.com/tgstation/tgstation/blob/e07fcef2417ca4e7f4eb775cb622c71bf38238c9/icons/obj/medical/chemical.dmi; DMI to RSI conversion by Eclipse contributors.",
+  "states": [
+    {
+      "name": "idle",
+      "delays": [
+        [
+          1
+        ]
+      ]
+    },
+    {
+      "name": "powered",
+      "delays": [
+        [
+          1
+        ]
+      ]
+    },
+    {
+      "name": "working",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "mixer_loaded",
+      "delays": [
+        [
+          1
+        ]
+      ]
+    }
+  ]
+}

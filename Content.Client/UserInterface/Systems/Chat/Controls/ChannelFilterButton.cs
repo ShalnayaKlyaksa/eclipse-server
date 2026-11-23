@@ -7,9 +7,9 @@ namespace Content.Client.UserInterface.Systems.Chat.Controls;
 
 public sealed class ChannelFilterButton : ChatPopupButton<ChannelFilterPopup>
 {
-    private static readonly Color ColorNormal = Color.FromHex("#7b7e9e");
-    private static readonly Color ColorHovered = Color.FromHex("#9699bb");
-    private static readonly Color ColorPressed = Color.FromHex("#789B8C");
+    private static readonly Color ColorNormal = Color.FromHex("#99A7B3");
+    private static readonly Color ColorHovered = Color.FromHex("#BDC5CE");
+    private static readonly Color ColorPressed = Color.FromHex("#FF861F");
     private readonly TextureRect? _textureRect;
     private readonly ChatUIController _chatUIController;
 
@@ -33,6 +33,8 @@ public sealed class ChannelFilterButton : ChatPopupButton<ChannelFilterPopup>
         _chatUIController.FilterableChannelsChanged += Popup.SetChannels;
         _chatUIController.UnreadMessageCountsUpdated += Popup.UpdateUnread;
         Popup.SetChannels(_chatUIController.FilterableChannels);
+        Popup.OnChannelFilter += (_, _) => UpdateChildColors();
+        UpdateChildColors();
     }
 
     protected override UIBox2 GetPopupPosition()
@@ -50,7 +52,7 @@ public sealed class ChannelFilterButton : ChatPopupButton<ChannelFilterPopup>
         switch (DrawMode)
         {
             case DrawModeEnum.Normal:
-                _textureRect.ModulateSelfOverride = ColorNormal;
+                _textureRect.ModulateSelfOverride = Popup.HasDisabledChannels ? ColorPressed : ColorNormal;
                 break;
 
             case DrawModeEnum.Pressed:

@@ -1,6 +1,5 @@
 using System.Numerics;
 using System.Threading;
-using System.Threading.Tasks;
 using Content.Server.Administration.Managers;
 using Content.Server.DoAfter;
 using Content.Server.NPC.Components;
@@ -73,6 +72,8 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
     private EntityQuery<NpcFactionMemberComponent> _factionQuery;
     private EntityQuery<PhysicsComponent> _physicsQuery;
     private EntityQuery<TransformComponent> _xformQuery;
+
+    private readonly List<(EntityUid, NPCSteeringComponent, InputMoverComponent, TransformComponent)> _steeringNpcs = new();
 
     private ObjectPool<HashSet<EntityUid>> _entSetPool =
         new DefaultObjectPool<HashSet<EntityUid>>(new SetPolicy<EntityUid>());
@@ -233,39 +234,33 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
             return;
 
         // Not every mob has the modifier component so do it as a separate query.
-        var npcs = new (EntityUid, NPCSteeringComponent, InputMoverComponent, TransformComponent)[Count<ActiveNPCComponent>()];
+        var npcs = _steeringNpcs;
+        npcs.Clear();
 
         var query = EntityQueryEnumerator<ActiveNPCComponent, NPCSteeringComponent, InputMoverComponent, TransformComponent>();
-        var index = 0;
-
         while (query.MoveNext(out var uid, out _, out var steering, out var mover, out var xform))
         {
-            npcs[index] = (uid, steering, mover, xform);
-            index++;
+            npcs.Add((uid, steering, mover, xform));
         }
 
-        // Dependency issues across threads.
-        var options = new ParallelOptions
-        {
-            MaxDegreeOfParallelism = 1,
-        };
+        // Steering raises events and must remain on the simulation thread.
         var curTime = _timing.CurTime;
 
         _activeSteeringCount = 0;
 
-        Parallel.For(0, index, options, i =>
+        for (var i = 0; i < npcs.Count; i++)
         {
             var (uid, steering, mover, xform) = npcs[i];
             Steer(uid, steering, mover, xform, frameTime, curTime);
-        });
+        }
 
         ActiveSteeringGauge.Set(_activeSteeringCount);
 
         if (_subscribedSessions.Count > 0)
         {
-            var data = new List<NPCSteeringDebugData>(index);
+            var data = new List<NPCSteeringDebugData>(npcs.Count);
 
-            for (var i = 0; i < index; i++)
+            for (var i = 0; i < npcs.Count; i++)
             {
                 var (uid, steering, mover, _) = npcs[i];
 
@@ -282,6 +277,8 @@ public sealed partial class NPCSteeringSystem : SharedNPCSteeringSystem
 
             RaiseNetworkEvent(new NPCSteeringDebugEvent(data), filter);
         }
+
+        npcs.Clear();
     }
 
     private void SetDirection(EntityUid uid, InputMoverComponent component, NPCSteeringComponent steering, Vector2 value, bool clear = true)

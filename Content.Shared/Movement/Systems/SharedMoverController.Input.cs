@@ -41,6 +41,7 @@ namespace Content.Shared.Movement.Systems
                 .Bind(EngineKeyFunctions.MoveRight, moveRightCmdHandler)
                 .Bind(EngineKeyFunctions.MoveDown, moveDownCmdHandler)
                 .Bind(EngineKeyFunctions.Walk, new WalkInputCmdHandler(this))
+                .Bind(ContentKeyFunctions.AdvancedCalmWalk, new CalmWalkInputCmdHandler())
                 .Bind(EngineKeyFunctions.CameraRotateLeft, new CameraRotateInputCmdHandler(this, Direction.East))
                 .Bind(EngineKeyFunctions.CameraRotateRight, new CameraRotateInputCmdHandler(this, Direction.West))
                 .Bind(EngineKeyFunctions.CameraReset, new CameraResetInputCmdHandler(this))
@@ -91,6 +92,13 @@ namespace Content.Shared.Movement.Systems
 
         protected void SetMoveInput(Entity<InputMoverComponent> entity, MoveButtons buttons)
         {
+            // Attach/detach and relay resets also pass through here. None means the
+            // default gait for medical characters, rather than the legacy default sprint.
+            if (TryComp<AdvancedExertionComponent>(entity, out var exertion))
+                buttons = exertion.SprintRequested && EntityManager.System<SharedMedicalConditionSystem>().CanSprint(entity.Owner)
+                    ? buttons & ~MoveButtons.Walk
+                    : buttons | MoveButtons.Walk;
+
             if (entity.Comp.HeldMoveButtons == buttons)
                 return;
 
@@ -373,7 +381,8 @@ namespace Content.Shared.Movement.Systems
 
             if (moverComp == null) return;
 
-            SetSprinting((uid, moverComp), subTick, walking);
+            // Shift remains Walk for other movers. Only medical characters use it as a sprint request.
+            SetSprinting((uid, moverComp), subTick, HasComp<AdvancedExertionComponent>(uid) ? !walking : walking);
         }
 
         public (Vector2 Walking, Vector2 Sprinting) GetVelocityInput(InputMoverComponent mover)
@@ -484,10 +493,13 @@ namespace Content.Shared.Movement.Systems
         {
             if (TryComp<AdvancedExertionComponent>(entity, out var exertion))
             {
-                exertion.SprintRequested = walking;
-                Dirty(entity.Owner, exertion);
-                walking = !walking || exertion.Exhausted;
-                EntityManager.System<MovementSpeedModifierSystem>().RefreshMovementSpeedModifiers(entity.Owner);
+                if (exertion.SprintRequested != !walking)
+                {
+                    exertion.SprintRequested = !walking;
+                    Dirty(entity.Owner, exertion);
+                    EntityManager.System<MovementSpeedModifierSystem>().RefreshMovementSpeedModifiers(entity.Owner);
+                }
+                walking = walking || !EntityManager.System<SharedMedicalConditionSystem>().CanSprint(entity.Owner);
             }
             SetWalkingMode(entity, subTick, walking);
         }
@@ -525,6 +537,12 @@ namespace Content.Shared.Movement.Systems
             }
 
             return vec;
+        }
+
+        internal Vector2 GetHeldMovementDirection(InputMoverComponent mover)
+        {
+            var direction = DirVecForButtons(mover.HeldMoveButtons);
+            return _relativeMovement ? GetParentGridAngle(mover).RotateVec(direction) : direction;
         }
 
         private static bool HasFlag(MoveButtons buttons, MoveButtons flag)
@@ -610,6 +628,17 @@ namespace Content.Shared.Movement.Systems
                 if (session?.AttachedEntity == null) return false;
 
                 _controller.HandleRunChange(session.AttachedEntity.Value, message.SubTick, message.State == BoundKeyState.Down);
+                return false;
+            }
+        }
+
+        private sealed class CalmWalkInputCmdHandler : InputCmdHandler
+        {
+            public override bool HandleCmdMessage(IEntityManager entManager, ICommonSession? session, IFullInputCmdMessage message)
+            {
+                if (session?.AttachedEntity is not { } uid)
+                    return false;
+                entManager.System<SharedAdvancedExertionSystem>().SetCalmWalking(uid, message.State == BoundKeyState.Down);
                 return false;
             }
         }

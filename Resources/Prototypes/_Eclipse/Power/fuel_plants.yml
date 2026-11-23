@@ -1,0 +1,314 @@
+# Existing in-project sprites are temporary artwork pending the user's art selection.
+- type: entity
+  abstract: true
+  id: BaseEclipseFuelPlant
+  parent: PortableGeneratorSwitchableBase
+  components:
+  - type: Sprite
+    layers:
+    - state: portgen2
+  - type: PortableGenerator
+    startChance: 1
+    startSound: null
+    startSoundEmpty: null
+    startSuccessMessage: power-plant-start-success
+    startFailureMessage: power-plant-start-failure
+  - type: PowerSupplier
+    supplyRampRate: 100000000
+    supplyRampTolerance: 10000000000
+  - type: PowerPlant
+  - type: NodeContainer
+    # Node maps replace the parent map; keep both electrical outputs in every override.
+    nodes:
+      output_hv:
+        !type:CableDeviceNode
+        nodeGroupID: HVPower
+      output_mv:
+        !type:CableDeviceNode
+        nodeGroupID: MVPower
+        enabled: false
+      coolant_in:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: West
+        volume: 500
+      coolant_out:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: East
+        volume: 500
+  - type: AtmosUnsafeUnanchor
+  - type: Explosive
+    explosionType: Default
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [Destruction]
+
+- type: entity
+  id: IndustrialCoalGenerator
+  parent: BaseEclipseFuelPlant
+  name: coal generator
+  components:
+  - type: FuelGenerator
+    minTargetPower: 2400
+    maxTargetPower: 12000
+    targetPower: 12000
+    optimalPower: 12000
+    optimalBurnRate: 0.02
+    fuelEfficiencyConstant: 0.3
+  - type: PowerPlant
+    heatPerFuel: 900000
+    passiveCoolingPower: 500
+    warmupSeconds: 3
+
+  - type: SolidFuelGeneratorAdapter
+    fuelMaterial: Coal
+    multiplier: 0.01
+  - type: MaterialStorage
+    storageLimit: 3000
+    materialWhiteList: [Coal]
+  - type: GeneratorExhaustGas
+    gasType: CarbonDioxide
+    moleRatio: 2
+
+- type: entity
+  id: IndustrialCoalGeneratorFlatpack
+  parent: BaseFlatpack
+  name: coal generator flatpack
+  components:
+  - type: Flatpack
+    entity: IndustrialCoalGenerator
+    qualityNeeded: Anchoring
+
+- type: entity
+  id: IndustrialLiquidFuelGenerator
+  parent: BaseEclipseFuelPlant
+  name: liquid fuel generator
+  components:
+  - type: FuelGenerator
+    minTargetPower: 10000
+    maxTargetPower: 50000
+    targetPower: 50000
+    optimalPower: 50000
+    optimalBurnRate: 0.5
+    fuelEfficiencyConstant: 0.3
+  - type: PowerPlant
+    heatPerFuel: 200000
+    passiveCoolingPower: 500
+    warmupSeconds: 15
+
+  - type: ChemicalFuelGeneratorAdapter
+    solution: tank
+    reagents:
+      WeldingFuel: 1
+      Ethanol: 0.6
+      IndustrialBiofuel: 0.8
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        maxVol: 200
+        canReact: false
+  - type: RefillableSolution
+    solution: tank
+  - type: LiquidPipeEndpoint
+    inputFace: South
+    allowedInputs: [WeldingFuel, Ethanol, IndustrialBiofuel]
+  - type: GeneratorExhaustGas
+    gasType: CarbonDioxide
+    moleRatio: 0.5
+
+- type: entity
+  id: IndustrialLiquidFuelGeneratorFlatpack
+  parent: BaseFlatpack
+  name: liquid fuel generator flatpack
+  components:
+  - type: Flatpack
+    entity: IndustrialLiquidFuelGenerator
+    qualityNeeded: Anchoring
+
+- type: entity
+  id: IndustrialGasGenerator
+  parent: BaseEclipseFuelPlant
+  name: gas fuel generator
+  components:
+  - type: FuelGenerator
+    minTargetPower: 16000
+    maxTargetPower: 80000
+    targetPower: 80000
+    optimalPower: 80000
+    optimalBurnRate: 4
+    fuelEfficiencyConstant: 0.3
+  - type: PowerPlant
+    heatPerFuel: 40000
+    passiveCoolingPower: 500
+    warmupSeconds: 15
+
+  - type: GasFuelGeneratorAdapter
+  - type: NodeContainer
+    # Gas and coolant ports must not replace the electrical output nodes.
+    nodes:
+      output_hv:
+        !type:CableDeviceNode
+        nodeGroupID: HVPower
+      output_mv:
+        !type:CableDeviceNode
+        nodeGroupID: MVPower
+        enabled: false
+      coolant_in:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: West
+        volume: 500
+      coolant_out:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: East
+        volume: 500
+      fuel:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: North
+        volume: 500
+      exhaust:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: South
+        volume: 500
+
+- type: entity
+  id: IndustrialGasGeneratorFlatpack
+  parent: BaseFlatpack
+  name: gas fuel generator flatpack
+  components:
+  - type: Flatpack
+    entity: IndustrialGasGenerator
+    qualityNeeded: Anchoring
+
+- type: entity
+  id: IndustrialFuelCellGenerator
+  parent: BaseEclipseFuelPlant
+  name: reagent fuel cell
+  components:
+  - type: FuelGenerator
+    minTargetPower: 1600
+    maxTargetPower: 8000
+    targetPower: 8000
+    optimalPower: 8000
+    optimalBurnRate: 1.6
+    fuelEfficiencyConstant: 0.3
+  - type: PowerPlant
+    heatPerFuel: 1500
+    passiveCoolingPower: 3000
+    warmupSeconds: 15
+
+  - type: ReagentFuelCell
+    inputs:
+      Hydrogen: 2
+      Oxygen: 1
+    outputs:
+      Water: 2
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        maxVol: 200
+        canReact: false
+      output:
+        maxVol: 200
+        canReact: false
+  - type: RefillableSolution
+    solution: tank
+  - type: DrawableSolution
+    solution: output
+  - type: LiquidPipeEndpoint
+    inputFace: South
+    outputFace: North
+    hasOutput: true
+    allowedInputs: [Hydrogen, Oxygen]
+
+- type: entity
+  id: IndustrialFuelCellGeneratorFlatpack
+  parent: BaseFlatpack
+  name: reagent fuel cell flatpack
+  components:
+  - type: Flatpack
+    entity: IndustrialFuelCellGenerator
+    qualityNeeded: Anchoring
+
+- type: entity
+  id: IndustrialGeothermalGenerator
+  parent: BaseEclipseFuelPlant
+  name: geothermal generator
+  components:
+  - type: FuelGenerator
+    minTargetPower: 6000
+    maxTargetPower: 30000
+    targetPower: 30000
+    optimalPower: 30000
+    optimalBurnRate: 0.025
+    fuelEfficiencyConstant: 0.3
+  - type: PowerPlant
+    heatPerFuel: 1800000
+    passiveCoolingPower: 500
+    warmupSeconds: 15
+
+  - type: GeothermalGeneratorAdapter
+
+- type: entity
+  id: IndustrialGeothermalGeneratorFlatpack
+  parent: BaseFlatpack
+  name: geothermal generator flatpack
+  components:
+  - type: Flatpack
+    entity: IndustrialGeothermalGenerator
+    qualityNeeded: Anchoring
+
+- type: reagent
+  id: IndustrialBiofuel
+  name: reagent-name-industrial-biofuel
+  desc: reagent-desc-industrial-biofuel
+  physicalDesc: reagent-physical-desc-oily
+  color: '#AA8D4B'
+  flavor: bitter
+
+- type: industrialRecipe
+  id: IndustrialProduceBiofuel
+  processor: ChemicalReactor
+  minimumTier: Industrial
+  requiredTechnology: EnergyBiomass
+  requireDataDisk: true
+  time: 15
+  inputs:
+    MaterialWoodPlank: 2
+  fluidInputs:
+    Water: 10
+  fluidOutputs:
+    IndustrialBiofuel: 20
+
+- type: entity
+  id: IndustrialGeothermalDeposit
+  name: geothermal floor deposit
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: Sprite
+    sprite: Structures/Walls/rock.rsi
+    drawdepth: FloorTiles
+    state: rock_coal
+    color: '#CF9063'
+  - type: GeothermalDeposit
+
+- type: biomeMarkerLayer
+  id: IndustrialGeothermalSurfaceDeposits
+  entityMask:
+    AsteroidRock: IndustrialGeothermalDeposit
+    WallRockBasalt: IndustrialGeothermalDeposit
+  maxCount: 4
+  minGroupSize: 1
+  maxGroupSize: 2
+  radius: 2

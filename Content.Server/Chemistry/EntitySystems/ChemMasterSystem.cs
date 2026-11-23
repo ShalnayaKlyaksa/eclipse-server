@@ -69,7 +69,7 @@ namespace Content.Server.Chemistry.EntitySystems
             UpdateUiState(ent);
         }
 
-        private void UpdateUiState(Entity<ChemMasterComponent> ent, bool updateLabel = false)
+        public void UpdateUiState(Entity<ChemMasterComponent> ent, bool updateLabel = false)
         {
             var (owner, chemMaster) = ent;
             if (!_solutionContainerSystem.TryGetSolution(owner, SharedChemMaster.BufferSolutionName, out _, out var bufferSolution))
@@ -82,7 +82,8 @@ namespace Content.Server.Chemistry.EntitySystems
 
             var state = new ChemMasterBoundUserInterfaceState(
                 chemMaster.Mode, chemMaster.SortingType, BuildInputContainerInfo(inputContainer), BuildOutputContainerInfo(outputContainer),
-                bufferReagents, bufferCurrentVolume, chemMaster.PillType, chemMaster.PillDosageLimit, updateLabel, chemMaster.DrawSource);
+                bufferReagents, bufferCurrentVolume, chemMaster.PillType, chemMaster.PillDosageLimit, updateLabel, chemMaster.DrawSource,
+                EntityManager.System<Content.Server._Eclipse.MedicalChemistry.MedicalSynthesizerSystem>().GetState(owner));
 
             _userInterfaceSystem.SetUiState(owner, ChemMasterUiKey.Key, state);
         }

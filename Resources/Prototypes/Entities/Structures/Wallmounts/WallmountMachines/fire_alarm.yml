@@ -61,6 +61,7 @@
       gamma: fire_2
       delta: fire_3
       epsilon: fire_3
+      mortem: fire_3
   - type: UserInterface
     interfaces:
       enum.WiresUiKey.Key:

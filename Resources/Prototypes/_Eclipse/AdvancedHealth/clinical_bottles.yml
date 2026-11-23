@@ -1,0 +1,179 @@
+- type: entity
+  parent: BaseChemistryBottleFilled
+  id: ChemistryBottleClinicalAntibiotic
+  name: "bacteriostatin bottle"
+  components:
+  - type: Label
+    currentLabel: reagent-name-clinical-antibiotic
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: ClinicalAntibiotic
+          Quantity: 30
+
+- type: entity
+  parent: BaseChemistryBottleFilled
+  id: ChemistryBottleClinicalAntifungal
+  name: "fungistatin bottle"
+  components:
+  - type: Label
+    currentLabel: reagent-name-clinical-antifungal
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: ClinicalAntifungal
+          Quantity: 30
+
+- type: entity
+  parent: BaseChemistryBottleFilled
+  id: ChemistryBottleClinicalAntiviral
+  name: "virostatin bottle"
+  components:
+  - type: Label
+    currentLabel: reagent-name-clinical-antiviral
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: ClinicalAntiviral
+          Quantity: 30
+
+- type: entity
+  parent: BaseChemistryBottleFilled
+  id: ChemistryBottleClinicalOpioid
+  name: "neuralgin bottle"
+  components:
+  - type: Label
+    currentLabel: reagent-name-clinical-opioid
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: ClinicalOpioid
+          Quantity: 30
+
+- type: entity
+  parent: BaseChemistryBottleFilled
+  id: ChemistryBottleClinicalSedative
+  name: "sedatin bottle"
+  components:
+  - type: Label
+    currentLabel: reagent-name-clinical-sedative
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: ClinicalSedative
+          Quantity: 30
+
+- type: entity
+  parent: BaseChemistryBottleFilled
+  id: ChemistryBottleClinicalBronchodilator
+  name: "broncholin bottle"
+  components:
+  - type: Label
+    currentLabel: reagent-name-clinical-bronchodilator
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: ClinicalBronchodilator
+          Quantity: 30
+
+- type: entity
+  parent: BaseChemistryBottleFilled
+  id: ChemistryBottleClinicalAntihistamine
+  name: "histablock bottle"
+  components:
+  - type: Label
+    currentLabel: reagent-name-clinical-antihistamine
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: ClinicalAntihistamine
+          Quantity: 30
+
+- type: entity
+  parent: BaseChemistryBottleFilled
+  id: ChemistryBottleClinicalAnticonvulsant
+  name: "neurostabilin bottle"
+  components:
+  - type: Label
+    currentLabel: reagent-name-clinical-anticonvulsant
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: ClinicalAnticonvulsant
+          Quantity: 30
+
+- type: entity
+  parent: BaseChemistryBottleFilled
+  id: ChemistryBottleClinicalAntiInflammatory
+  name: "antiphlogin bottle"
+  components:
+  - type: Label
+    currentLabel: reagent-name-clinical-anti-inflammatory
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: ClinicalAntiInflammatory
+          Quantity: 30
+
+- type: entity
+  parent: BaseChemistryBottleFilled
+  id: ChemistryBottleClinicalInsulin
+  name: "insulin analogue bottle"
+  components:
+  - type: Label
+    currentLabel: reagent-name-clinical-insulin
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: ClinicalInsulin
+          Quantity: 30
+
+- type: entity
+  parent: BaseChemistryBottleFilled
+  id: ChemistryBottleClinicalGlucose
+  name: "glucose solution bottle"
+  components:
+  - type: Label
+    currentLabel: reagent-name-clinical-glucose
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: ClinicalGlucose
+          Quantity: 30
+
+- type: entity
+  parent: BaseChemistryBottleFilled
+  id: ChemistryBottleClinicalNaloxone
+  name: "reversin bottle"
+  components:
+  - type: Label
+    currentLabel: reagent-name-clinical-naloxone
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: ClinicalNaloxone
+          Quantity: 30

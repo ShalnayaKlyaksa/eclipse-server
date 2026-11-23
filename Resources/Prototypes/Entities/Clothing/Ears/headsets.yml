@@ -79,7 +79,7 @@
   parent: [ ClothingHeadset, BaseCentcommContraband ]
   id: ClothingHeadsetCentCom
   name: Eidos headset
-  description: A headset used by the upper echelons of Nanotrasen.
+  description: A headset used by the upper echelons of VISH.
   components:
   - type: ContainerFill
     containers:

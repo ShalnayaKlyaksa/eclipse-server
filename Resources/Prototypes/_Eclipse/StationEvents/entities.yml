@@ -1,0 +1,450 @@
+- type: entity
+  id: EclipseImpactWarning
+  name: impact prediction
+  description: A flashing warning of an imminent impact. Clear the area!
+  components:
+  - type: Sprite
+    sprite: Effects/rcd.rsi
+    state: deconstructPreview
+    color: "#ff453acc"
+    drawdepth: Effects
+    shader: unshaded
+  - type: PointLight
+    color: red
+    radius: 2
+    energy: 0.8
+  - type: TimedDespawn
+    lifetime: 180
+
+- type: entity
+  id: EclipseDamoclesIncoming
+  name: Damocles siege projectile
+  description: An approaching siege projectile. Destroy it before it reaches the station.
+  components:
+  - type: SiegeProjectileVisual
+  - type: AmbientSound
+    range: 30
+    volume: -8
+    sound:
+      path: /Audio/_Eclipse/Weapons/damocles_engine.wav
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/projectiles2.rsi
+    state: frag
+    scale: 2, 2
+  - type: PointLight
+    color: orange
+    radius: 5
+    energy: 2
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      body:
+        shape: !type:PhysShapeCircle
+          radius: 0.6
+        density: 100
+        hard: false
+        layer: [Impassable]
+  - type: MovementIgnoreGravity
+    weightless: true
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Metallic
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 80
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [Destruction]
+
+- type: entity
+  parent: EclipseDamoclesIncoming
+  id: EclipseDamoclesPayload
+  name: armed Damocles warhead
+  description: The fuse is running. Destroy the casing or drag the warhead away from the station!
+  components:
+  - type: SiegeProjectileVisual
+    exhaust: false
+  - type: AmbientSound
+    range: 22
+    volume: -3
+    sound:
+      path: /Audio/_Eclipse/Weapons/damocles_armed.wav
+  - type: Pullable
+  - type: EclipseTimedPayload
+    delay: 30
+    intensity: 1200
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 120
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [Destruction]
+
+- type: entity
+  id: EclipseZeroPoint
+  name: zero point
+  description: A slowly moving knot of cold mist. It drifts toward warmer air. Its crystalline centre looks fragile.
+  components:
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    sprite: Structures/Specific/Anomalies/ice_anom.rsi
+    state: anom
+    shader: unshaded
+  - type: PointLight
+    color: "#7ceaff"
+    radius: 4
+    energy: 1
+  - type: Physics
+    bodyType: Kinematic
+  - type: Fixtures
+    fixtures:
+      centre:
+        shape: !type:PhysShapeCircle
+          radius: 0.4
+        hard: false
+        layer: [Impassable]
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 120
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [Destruction]
+  - type: EclipseColdSource
+
+- type: entity
+  parent: BaseTree
+  id: EclipseLivingHeart
+  name: invasive root heart
+  description: A throbbing tangle of roots sustains the surrounding growth. Destroying it will stop the invasion.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/kudzu.rsi
+    offset: 0, 0
+    scale: 1.6, 1.6
+    color: "#9bdd43"
+    layers:
+    - state: kudzu_33
+  - type: EclipseLivingCore
+  - type: PointLight
+    color: "#87c94a"
+    radius: 3
+    energy: 0.8
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 250
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [Destruction]
+  - type: Flammable
+    fireSpread: true
+    damage:
+      types:
+        Heat: 5
+  - type: Reactive
+    groups:
+      Flammable: [Touch]
+      Extinguish: [Touch]
+    reactions:
+    - reagents: [WeedKiller, PlantBGone]
+      methods: [Touch]
+      effects:
+      - !type:HealthChange
+        damage:
+          types:
+            Heat: 2
+
+- type: entity
+  parent: EclipseLivingHeart
+  id: EclipseBlobSeedPlaceholder
+  name: unidentified biological nucleus
+  description: An opaque nucleus amongst the roots. Its biological classification requires further analysis.
+  components:
+  - type: EclipseBlobSeedPlaceholder
+  - type: EclipseLivingCore
+    level: Blob
+  - type: Sprite
+    color: "#b0b861"
+
+- type: entity
+  id: EclipseLivingVines
+  name: invasive root carpet
+  description: Tough roots are replacing the station floor. The living heart feeds their growth.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Clickable
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: Objects/Misc/kudzu.rsi
+    state: kudzu_33
+    drawdepth: FloorObjects
+    color: "#8cac61"
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      roots:
+        shape: !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,0.49"
+        hard: false
+        layer: [MidImpassable]
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Wood
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 25
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [Destruction]
+  - type: EclipseLivingGrowth
+  - type: EdgeSpreader
+    id: EclipseLivingHull
+  - type: ActiveEdgeSpreader
+  - type: SpeedModifierContacts
+    walkSpeedModifier: 0.7
+    sprintSpeedModifier: 0.7
+    ignoreWhitelist:
+      components: [IgnoreKudzu]
+  - type: Flammable
+    fireSpread: true
+    damage:
+      types:
+        Heat: 4
+  - type: Reactive
+    groups:
+      Flammable: [Touch]
+      Extinguish: [Touch]
+    reactions:
+    - reagents: [WeedKiller, PlantBGone]
+      methods: [Touch]
+      effects:
+      - !type:HealthChange
+        damage:
+          types:
+            Heat: 1
+
+- type: entity
+  parent: FloraTree
+  id: EclipseLivingTree
+  name: invasive tree
+  description: Its roots have forced their way through the deck plating.
+  components:
+  - type: Sprite
+    color: "#a2bb80"
+
+- type: entity
+  parent: BaseTree
+  id: EclipseLivingBush
+  name: invasive thorn bush
+  description: A dense mass of woody branches.
+  components:
+  - type: Sprite
+    sprite: Decals/Flora/flora_bushes.rsi
+    state: bushb1
+    drawdepth: Objects
+    offset: 0, 0
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 25
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [Destruction]
+
+- type: entity
+  parent: MobTomatoKiller
+  id: EclipseMobThornCrawler
+  name: thorn crawler
+  description: A mobile seed pod covered in sharp thorns.
+  components:
+  - type: GhostRole
+    prob: 0
+  - type: Sprite
+    color: "#7aaf58"
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+  - type: NPCImprintingOnSpawnBehaviour
+    follow: false
+    whitelist:
+      components: [EclipseLivingCore]
+  - type: IgnoreKudzu
+  - type: MeleeWeapon
+    damage:
+      types:
+        Piercing: 6
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      45: Dead
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 90
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [Destruction]
+
+- type: entity
+  parent: EclipseMobThornCrawler
+  id: EclipseMobRootWarden
+  name: root warden
+  description: A towering root creature protecting the invasive ecosystem.
+  components:
+  - type: Sprite
+    scale: 1.7, 1.7
+    color: "#50743d"
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 1.5
+    baseSprintSpeed: 2
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      120: Dead
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [Destruction]
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 8
+        Piercing: 5
+
+- type: entity
+  parent: [SimpleSpaceMobBase, FlyingMobBase, MobCombat]
+  id: EclipseMobTideMoth
+  name: void moth
+  description: A dark, chitinous migrant attracted to bright light. Turning off lights may divert it.
+  components:
+  - type: InputMover
+  - type: MobMover
+  - type: ActiveNPC
+  - type: EclipsePhototaxis
+  - type: Sprite
+    sprite: Mobs/Animals/mothroach/mothroach.rsi
+    color: "#77738d"
+    layers:
+    - state: mothroach
+      map: ["enum.DamageStateVisualLayers.Base"]
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: mothroach
+      Dead:
+        Base: mothroach_dead
+  - type: Physics
+  - type: Fixtures
+    fixtures:
+      body:
+        shape: !type:PhysShapeCircle
+          radius: 0.35
+        density: 60
+        mask: [FlyingMobMask]
+        layer: [FlyingMobLayer]
+  - type: MobState
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      35: Dead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2
+    baseSprintSpeed: 3
+  - type: NpcFactionMember
+    factions: [SimpleHostile]
+  - type: Butcherable
+    spawned:
+    - id: FoodMeatFish
+      amount: 1
+
+- type: entity
+  parent: EclipseDamoclesIncoming
+  id: EclipseTideCocoon
+  name: void moth cocoon
+  description: Something is moving beneath the brittle shell. Destroy it before it hatches.
+  components:
+  - type: SiegeProjectileVisual
+    exhaust: false
+  - type: AmbientSound
+    enabled: false
+  - type: Sprite
+    sprite: Objects/Misc/kudzu.rsi
+    state: kudzu_33
+    scale: 1, 1
+    color: "#746584"
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Wood
+  - type: EclipseTimedPayload
+    delay: 45
+    hatch: EclipseMobTideMoth
+    hatchCount: 3
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 35
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [Destruction]
+
+- type: entity
+  id: EclipseDerelictLamp
+  name: emergency beacon
+  components:
+  - type: Sprite
+    sprite: Objects/Fun/immovable_rod.rsi
+    state: icon
+    color: "#ff5d42"
+    scale: 0.3, 0.3
+  - type: PointLight
+    color: "#ff5d42"
+    radius: 5
+    energy: 1.2
+
+- type: entity
+  parent: Paper
+  id: EclipseDistressLog
+  name: damaged shift log
+  description: The last legible line reads, 'We thought it was only a distress signal. Then we recognised the voices.'
+
+- type: entity
+  parent: MobHuman
+  id: EclipseDistressSurvivor
+  name: distress vessel survivor
+  components:
+  - type: RandomHumanoidAppearance
+  - type: Loadout
+    prototypes: [PassengerGear]
+  - type: GhostRole
+    name: eclipse-ghost-survivor-name
+    description: eclipse-ghost-survivor-description
+    rules: ghost-role-information-freeagent-rules
+    mindRoles: [MindRoleGhostRoleFreeAgent]
+    raffle:
+      settings: short
+  - type: GhostTakeoverAvailable
+
+- type: entity
+  parent: EclipseDistressSurvivor
+  id: EclipseEchoSurvivor
+  name: survivor of the other shift
+  components:
+  - type: GhostRole
+    name: eclipse-ghost-echo-name
+    description: eclipse-ghost-echo-description

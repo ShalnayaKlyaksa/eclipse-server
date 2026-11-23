@@ -1,8 +1,7 @@
 namespace Content.Shared._Eclipse.Industrial;
 
 public readonly record struct PipeTierSpecs(
-    float ThroughputPerSecond,
-    float TransferDelay);
+    float ThroughputPerSecond);
 
 public static class PipeTierHelper
 {
@@ -10,10 +9,10 @@ public static class PipeTierHelper
     {
         return tier switch
         {
-            PipeTier.Basic => new PipeTierSpecs(1f, 1.0f),
-            PipeTier.Industrial => new PipeTierSpecs(3f, 0.5f),
-            PipeTier.Perfect => new PipeTierSpecs(6f, 0.25f),
-            _ => new PipeTierSpecs(1f, 1.0f),
+            PipeTier.Basic => new PipeTierSpecs(1f),
+            PipeTier.Industrial => new PipeTierSpecs(3f),
+            PipeTier.Perfect => new PipeTierSpecs(6f),
+            _ => new PipeTierSpecs(1f),
         };
     }
 

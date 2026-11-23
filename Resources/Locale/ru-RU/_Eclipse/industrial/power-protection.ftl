@@ -1,0 +1,11 @@
+ent-IndustrialSurgeProtector = промышленный ограничитель перенапряжения
+    .desc = Закрепите на силовом кабеле. Поглощает внешние импульсы; после исчерпания ресурса замените защитный картридж.
+ent-IndustrialSurgeFuse = защитный картридж ограничителя
+    .desc = Сменный картридж с ресурсом поглощения 200 кДж для промышленного ограничителя перенапряжения.
+industrial-power-cable-insulation = Нагрев изоляции: {$percent}%. При 100% возможно возгорание.
+industrial-power-last-surge = Последнее перенапряжение: ×{$peak} от номинального напряжения.
+industrial-power-protector-capacity = Ресурс защиты: {$remaining} / {$maximum} кДж.
+industrial-power-fuse-replaced = Защитный картридж заменён.
+industrial-ui-power-supply = Сеть: {$received} / {$required} Вт
+industrial-power-surge-warning = Перенапряжение в кабельной сети!
+industrial-power-surge-absorbed = Защита кабельной сети поглотила импульс.

@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "license": "CC0-1.0",
+  "copyright": "made by Xaoser for eclipse",
+  "size": {
+    "x": 64,
+    "y": 40
+  },
+  "states": [
+    {
+      "name": "icon",
+      "directions": 1
+    }
+  ]
+}

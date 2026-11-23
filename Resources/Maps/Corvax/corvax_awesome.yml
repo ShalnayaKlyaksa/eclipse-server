@@ -6293,7 +6293,7 @@ entities:
   - uid: 16911
     components:
     - type: MetaData
-      name: NT-LH Мусоровоз
+      name: ВИШ-LH Мусоровоз
     - type: Transform
       rot: 0.5759586531581288 rad
       pos: 2499.8523,1999.252
@@ -54500,7 +54500,7 @@ entities:
       pos: 37.5,-2.5
       parent: 16911
     - type: FaxMachine
-      name: NT-LH Мусоровоз
+      name: ВИШ-LH Мусоровоз
 - proto: FaxMachineCaptain
   entities:
   - uid: 7435
@@ -84250,7 +84250,7 @@ entities:
   - uid: 1023
     components:
     - type: MetaData
-      desc: Стандартное хранилище Nanotrasen. Теперь выполнен целиком из древесины.
+      desc: Стандартное хранилище ВИШ. Теперь выполнен целиком из древесины.
       name: шкафчик агента внутренних дел
     - type: Transform
       pos: 14.5,-21.5

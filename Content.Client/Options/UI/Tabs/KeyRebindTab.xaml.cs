@@ -169,6 +169,7 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(EngineKeyFunctions.MoveRight);
             AddButton(EngineKeyFunctions.Walk);
             AddButton(ContentKeyFunctions.AdvancedCalmWalk);
+            AddButton(ContentKeyFunctions.GroundJump);
             AddButton(ContentKeyFunctions.LayeredZMoveUp);
             AddButton(ContentKeyFunctions.LayeredZMoveDown);
             AddCheckBox("ui-options-hotkey-toggle-walk", _cfg.GetCVar(CCVars.ToggleWalk), HandleToggleWalk);
@@ -475,6 +476,7 @@ namespace Content.Client.Options.UI.Tabs
                 Mod2 = mods[1],
                 Mod3 = mods[2],
                 Priority = _currentlyRebinding.Binding?.Priority ?? 0,
+                AllowSubCombs = _currentlyRebinding.Binding?.AllowSubCombs ?? false,
                 Type = bindType,
                 CanFocus = key == Keyboard.Key.MouseLeft
                            || key == Keyboard.Key.MouseRight

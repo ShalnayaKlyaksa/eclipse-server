@@ -38,7 +38,7 @@
   sprite: /Textures/Interface/Radial/RCD/plating.png
   mode: ConstructTile
   prototype: PlatingRCD
-  cost: 1
+  cost: 2
   delay: 1
   collisionMask: InteractImpassable
   rules:
@@ -52,7 +52,7 @@
   sprite: /Textures/Interface/Radial/RCD/metal_tile.png
   mode: ConstructTile
   prototype: FloorSteel
-  cost: 1
+  cost: 3
   delay: 1
   collisionMask: InteractImpassable
   rules:
@@ -81,7 +81,7 @@
   sprite: /Textures/Interface/Radial/RCD/solid_wall.png
   mode: ConstructObject
   prototype: WallSolid
-  cost: 4
+  cost: 6
   delay: 2
   collisionMask: FullTileMask
   rotation: Fixed
@@ -167,7 +167,7 @@
   sprite: /Textures/Interface/Radial/RCD/airlock.png
   mode: ConstructObject
   prototype: Airlock
-  cost: 4
+  cost: 8
   delay: 4
   collisionMask: FullTileMask
   rotation: Camera
@@ -179,7 +179,7 @@
   sprite: /Textures/Interface/Radial/RCD/glass_airlock.png
   mode: ConstructObject
   prototype: AirlockGlass
-  cost: 4
+  cost: 8
   delay: 4
   collisionMask: FullTileMask
   rotation: Camera

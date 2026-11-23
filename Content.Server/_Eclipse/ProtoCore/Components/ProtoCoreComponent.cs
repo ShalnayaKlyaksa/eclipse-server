@@ -79,7 +79,7 @@ public sealed partial class ProtoCoreComponent : Component
     public bool Exploded;
 
     /// <summary>
-    /// Alert level active on the station before meltdown forced delta.
+    /// Alert level active on the station before meltdown changed the alert.
     /// </summary>
     [DataField]
     public string PreMeltdownAlertLevel = string.Empty;

@@ -242,8 +242,8 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
             HorizontalExpand = true,
             PanelOverride = new StyleBoxFlat
             {
-                BackgroundColor = Color.FromHex(completed ? "#071A0DD8" : highlighted ? "#1A0D00D8" : "#070300D8"),
-                BorderColor = Color.FromHex(completed ? "#62D17A99" : highlighted ? "#E6A11A99" : "#D5C9AE66"),
+                BackgroundColor = Color.FromHex(completed ? "#071A0DD8" : highlighted ? "#1A0D00D8" : "#161616D8"),
+                BorderColor = Color.FromHex(completed ? "#62D17A99" : highlighted ? "#FF861F99" : "#D5C9AE66"),
                 BorderThickness = new Thickness(1),
             },
         };
@@ -261,7 +261,7 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
             SetWidth = 8f,
             PanelOverride = new StyleBoxFlat
             {
-                BackgroundColor = Color.FromHex(completed ? "#62D17A" : highlighted ? "#E6A11A" : "#00000000"),
+                BackgroundColor = Color.FromHex(completed ? "#62D17A" : highlighted ? "#FF861F" : "#00000000"),
             },
         });
 
@@ -279,7 +279,7 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
             TexturePath = icon,
             SetSize = new Vector2(44f, 44f),
             Stretch = TextureRect.StretchMode.KeepAspectCentered,
-            ModulateSelfOverride = Color.FromHex(completed ? "#62D17A" : highlighted ? "#E6A11A" : "#D5C9AE"),
+            ModulateSelfOverride = Color.FromHex(completed ? "#62D17A" : highlighted ? "#FF861F" : "#D5C9AE"),
         });
 
         var texts = new BoxContainer
@@ -291,7 +291,7 @@ public sealed class CharacterUIController : UIController, IOnStateEntered<Gamepl
         row.AddChild(texts);
 
         var titleMessage = new FormattedMessage();
-        titleMessage.PushColor(completed ? Color.FromHex("#62D17A") : highlighted ? Color.FromHex("#E6A11A") : Color.White);
+        titleMessage.PushColor(completed ? Color.FromHex("#62D17A") : highlighted ? Color.FromHex("#FF861F") : Color.White);
         titleMessage.AddText(completed ? $"{title} - выполнено" : title);
         titleMessage.Pop();
 

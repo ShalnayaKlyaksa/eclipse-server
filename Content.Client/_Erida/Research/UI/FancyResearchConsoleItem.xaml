@@ -1,28 +1,25 @@
 <LayoutContainer xmlns="https://spacestation14.io"
-                 xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
-                 xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
-                 xmlns:goob="clr-namespace:Content.Client._Erida.Research.UI"
-                 Margin="5"
-                 HorizontalExpand="False">
-    <BoxContainer Orientation="Vertical" SetSize="80 80">
-        <PanelContainer VerticalExpand="True"
-                        HorizontalExpand="True"
-                        Name="Panel">
-            <PanelContainer.PanelOverride>
-                <graphics:StyleBoxFlat BackgroundColor="#162031"
-                                       BorderColor="#4972A1"
-                                       BorderThickness="2"/>
-            </PanelContainer.PanelOverride>
-            <goob:DrawButton Name="Button"
-                             Access="Public"
-                             ModulateSelfOverride="#00000000"
-                             HorizontalExpand="True"/>
-            <TextureRect
-                Name="ResearchDisplay"
-                TextureScale="2 2"
-                SetSize="64 64"
-                Stretch="KeepAspectCentered">
-            </TextureRect>
-        </PanelContainer>
+    xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+    xmlns:goob="clr-namespace:Content.Client._Erida.Research.UI" HorizontalExpand="False">
+    <BoxContainer Name="CardLayout" Orientation="Vertical" SetSize="176 112">
+        <goob:ResearchNodePanel Name="Panel" HorizontalExpand="True" VerticalExpand="True">
+            <goob:ResearchNodePanel.PanelOverride>
+                <gfx:StyleBoxFlat BackgroundColor="#0B2116" BorderColor="#3C634C" BorderThickness="1"/>
+            </goob:ResearchNodePanel.PanelOverride>
+            <goob:DrawButton Name="Button" Access="Public" ModulateSelfOverride="#00000000" HorizontalExpand="True"/>
+            <BoxContainer Name="CardContents" Orientation="Vertical" Margin="10 6" MouseFilter="Ignore" SeparationOverride="3">
+                <BoxContainer MouseFilter="Ignore" SeparationOverride="8">
+                    <TextureRect Name="ResearchDisplay" CanShrink="True" SetSize="30 30" TextureScale="1 1" Stretch="KeepAspectCentered" MouseFilter="Ignore"/>
+                    <Label Name="StatusLabel" StyleClasses="terminal-node" HorizontalExpand="True" HorizontalAlignment="Right" VerticalAlignment="Center" MouseFilter="Ignore"/>
+                </BoxContainer>
+                <RichTextLabel Name="TechnologyLabel" StyleClasses="terminal-node" HorizontalExpand="True" MouseFilter="Ignore"/>
+                <Control VerticalExpand="True" MouseFilter="Ignore"/>
+                <Label Name="CostLabel" StyleClasses="terminal-node" MouseFilter="Ignore"/>
+            </BoxContainer>
+            <BoxContainer Name="SummaryContents" Orientation="Vertical" Margin="5 3" VerticalAlignment="Center" MouseFilter="Ignore" Visible="False" SeparationOverride="0">
+                <Label Name="SummaryLine1" StyleClasses="terminal-summary" HorizontalExpand="True" ClipText="True" MouseFilter="Ignore"/>
+                <Label Name="SummaryLine2" StyleClasses="terminal-summary" HorizontalExpand="True" ClipText="True" MouseFilter="Ignore"/>
+            </BoxContainer>
+        </goob:ResearchNodePanel>
     </BoxContainer>
 </LayoutContainer>

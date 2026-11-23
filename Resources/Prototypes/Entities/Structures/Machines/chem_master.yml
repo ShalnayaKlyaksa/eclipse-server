@@ -26,6 +26,7 @@
           - FitsInDispenser
   - type: ChemMaster
     pillDosageLimit: 20
+  - type: MedicalSynthesizer
   - type: Physics
     bodyType: Static
   - type: Fixtures
@@ -93,6 +94,9 @@
   - type: SolutionContainerManager
     solutions:
       buffer: {}
+      medicalReactor:
+        maxVol: 60
+        canReact: false
   - type: DumpableSolution
     solution: buffer
     unlimited: true
@@ -100,3 +104,4 @@
     guides:
     - Chemicals
     - Chemist
+    - EclipseMedicalChemistry

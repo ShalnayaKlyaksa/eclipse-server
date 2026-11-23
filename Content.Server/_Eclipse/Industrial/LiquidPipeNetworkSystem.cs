@@ -1,21 +1,24 @@
+using System.Linq;
 using Content.Shared._Eclipse.Industrial;
+using Content.Shared.Atmos;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 
 namespace Content.Server._Eclipse.Industrial;
 
 /// <summary>
-/// Liquid pipe flood-fill networking. Fluid transfer logic is TODO.
+/// Liquid pipe topology and conservative transfer between adjacent section buffers.
 /// </summary>
-public sealed class LiquidPipeNetworkSystem : EntitySystem
+public sealed partial class LiquidPipeNetworkSystem : EntitySystem
 {
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
 
     private static readonly Direction[] CardinalDirections =
         SharedIndustrialProcessorSystem.CardinalDirections;
 
     private readonly Dictionary<int, LiquidPipeNetwork> _networks = new();
     private int _nextNetworkId = 1;
+    private readonly HashSet<EntityUid> _pendingRoots = new();
 
     public override void Initialize()
     {
@@ -23,6 +26,8 @@ public sealed class LiquidPipeNetworkSystem : EntitySystem
 
         SubscribeLocalEvent<LiquidPipeComponent, AnchorStateChangedEvent>(OnPipeAnchorChanged);
         SubscribeLocalEvent<LiquidPipeComponent, EntityTerminatingEvent>(OnPipeTerminating);
+        InitializeFluids();
+        InitializeProcessors();
     }
 
     public bool TryGetNetwork(int networkId, out LiquidPipeNetwork network)
@@ -50,57 +55,55 @@ public sealed class LiquidPipeNetworkSystem : EntitySystem
             return;
         }
 
+        // Retire the old membership of every pipe so superseded networks cannot retain the same component.
+        foreach (var pipe in connectedPipes)
+            RemovePipeFromItsNetwork((pipe, Comp<LiquidPipeComponent>(pipe)));
+
         var network = CreateNetwork(connectedPipes);
         AssignNetworkToPipes(network, connectedPipes);
-    }
-
-    public void RebuildNetworksNearProcessor(Entity<IndustrialProcessorComponent> ent)
-    {
-        var xform = Transform(ent);
-        if (xform.GridUid is not EntityUid gridUid || !TryComp<MapGridComponent>(gridUid, out var grid))
-            return;
-
-        var pos = _mapSystem.TileIndicesFor(gridUid, grid, xform.Coordinates);
-        var rebuilt = new HashSet<EntityUid>();
-
-        foreach (var direction in CardinalDirections)
-        {
-            ForAnchoredEntities(gridUid, grid, pos.Offset(direction), entity =>
-            {
-                if (!HasComp<LiquidPipeComponent>(entity) || rebuilt.Contains(entity))
-                    return;
-
-                RebuildNetworkFrom((entity, Comp<LiquidPipeComponent>(entity)));
-                rebuilt.Add(entity);
-            });
-        }
+        _pendingRoots.ExceptWith(connectedPipes);
     }
 
     private void OnPipeAnchorChanged(Entity<LiquidPipeComponent> ent, ref AnchorStateChangedEvent args)
     {
-        RebuildNetworkFrom(ent);
-        RebuildAdjacentPipeNetworks(ent);
+        QueueTopologyChange(ent);
     }
 
     private void OnPipeTerminating(Entity<LiquidPipeComponent> ent, ref EntityTerminatingEvent args)
     {
-        var adjacentPipes = GetAdjacentPipes(ent);
+        _pendingRoots.UnionWith(GetAdjacentPipes(ent));
         RemovePipeFromItsNetwork(ent);
-
-        foreach (var adjacent in adjacentPipes)
-        {
-            if (Exists(adjacent))
-                RebuildNetworkFrom((adjacent, Comp<LiquidPipeComponent>(adjacent)));
-        }
     }
 
-    private void RebuildAdjacentPipeNetworks(Entity<LiquidPipeComponent> ent)
+    public void QueueTopologyChange(Entity<LiquidPipeComponent> ent)
     {
-        foreach (var adjacent in GetAdjacentPipes(ent))
+        _pendingRoots.UnionWith(GetAdjacentPipes(ent));
+        if (Transform(ent).Anchored && !TerminatingOrDeleted(ent))
+            _pendingRoots.Add(ent);
+        else
+            RemovePipeFromItsNetwork(ent);
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+        var roots = _pendingRoots.ToArray();
+        _pendingRoots.Clear();
+        var visited = new HashSet<EntityUid>();
+        foreach (var root in roots)
         {
-            if (Exists(adjacent))
-                RebuildNetworkFrom((adjacent, Comp<LiquidPipeComponent>(adjacent)));
+            if (TerminatingOrDeleted(root) || visited.Contains(root) || !Transform(root).Anchored ||
+                !TryComp<LiquidPipeComponent>(root, out var pipe))
+                continue;
+            RebuildNetworkFrom((root, pipe));
+            if (TryGetNetwork(pipe.NetworkId, out var network))
+                visited.UnionWith(network.Pipes);
         }
+        foreach (var id in _dirtyEndpoints)
+            if (_networks.TryGetValue(id, out var network))
+                RebuildEndpoints(network);
+        _dirtyEndpoints.Clear();
+        UpdateFluids(frameTime);
     }
 
     private HashSet<EntityUid> FloodFillPipes(EntityUid startPipe)
@@ -142,7 +145,6 @@ public sealed class LiquidPipeNetworkSystem : EntitySystem
 
         var specs = PipeTierHelper.GetSpecs(network.EffectiveTier);
         network.ThroughputPerSecond = specs.ThroughputPerSecond;
-        network.TransferDelay = specs.TransferDelay;
 
         _networks[network.Id] = network;
         return network;
@@ -154,8 +156,20 @@ public sealed class LiquidPipeNetworkSystem : EntitySystem
         {
             var pipe = Comp<LiquidPipeComponent>(pipeUid);
             pipe.NetworkId = network.Id;
+            pipe.ConnectedDirections = PipeDirection.None;
+            foreach (var neighbor in GetAdjacentPipes((pipeUid, pipe)))
+            {
+                var offset = Transform(neighbor).LocalPosition - Transform(pipeUid).LocalPosition;
+                pipe.ConnectedDirections |= offset.X > 0.5f ? PipeDirection.East : offset.X < -0.5f ? PipeDirection.West :
+                    offset.Y > 0 ? PipeDirection.North : PipeDirection.South;
+                // Both endpoints are visited; retain each physical edge only once.
+                if (pipeUid.CompareTo(neighbor) < 0)
+                    network.Edges.Add((pipeUid, neighbor));
+            }
             Dirty(pipeUid, pipe);
         }
+        _activeNetworks.Add(network.Id);
+        RebuildEndpoints(network);
     }
 
     private void RemovePipeFromItsNetwork(Entity<LiquidPipeComponent> ent)
@@ -167,10 +181,15 @@ public sealed class LiquidPipeNetworkSystem : EntitySystem
         {
             network.Pipes.Remove(ent);
             if (network.Pipes.Count == 0)
+            {
                 _networks.Remove(ent.Comp.NetworkId);
+                _activeNetworks.Remove(ent.Comp.NetworkId);
+            }
         }
 
         ent.Comp.NetworkId = -1;
+        ent.Comp.ConnectedDirections = PipeDirection.None;
+        ent.Comp.MachineInputDirections = ent.Comp.MachineOutputDirections = PipeDirection.None;
         Dirty(ent);
     }
 
@@ -182,8 +201,6 @@ public sealed class LiquidPipeNetworkSystem : EntitySystem
         if (xform.GridUid is not EntityUid gridUid || !TryComp<MapGridComponent>(gridUid, out var grid))
             return result;
 
-        if (!xform.Anchored)
-            return result;
 
         var pos = _mapSystem.TileIndicesFor(gridUid, grid, xform.Coordinates);
 
@@ -191,7 +208,7 @@ public sealed class LiquidPipeNetworkSystem : EntitySystem
         {
             ForAnchoredEntities(gridUid, grid, pos.Offset(direction), entity =>
             {
-                if (HasComp<LiquidPipeComponent>(entity))
+                if (!TerminatingOrDeleted(entity) && HasComp<LiquidPipeComponent>(entity))
                     result.Add(entity);
             });
         }
@@ -217,5 +234,7 @@ public sealed class LiquidPipeNetwork
     public HashSet<EntityUid> Pipes = new();
     public PipeTier EffectiveTier = PipeTier.Perfect;
     public float ThroughputPerSecond;
-    public float TransferDelay;
+    public readonly List<(EntityUid First, EntityUid Second)> Edges = new();
+    public int EdgeCursor;
+    public readonly List<(EntityUid Pipe, EntityUid Machine, Direction Face, LiquidPortMode Mode)> Endpoints = new();
 }

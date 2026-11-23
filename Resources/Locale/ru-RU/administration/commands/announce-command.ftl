@@ -1,8 +1,8 @@
 cmd-announce-desc = Отправить внутриигровое объявление с заданным цветом и звуком.
-cmd-announce-help = { $command } <сообщение> [отправитель] [цвет] [звук] — Отправить объявление. По умоланию отправитель — Эйдосская империя, цвет — золотой, звук — announce.ogg. Цвет должен быть в #RRGGBB формате.
+cmd-announce-help = { $command } <сообщение> [отправитель] [цвет] [звук] — Отправить объявление. По умоланию отправитель — ВИШ, цвет — золотой, звук — announce.ogg. Цвет должен быть в #RRGGBB формате.
 
 # The default sender for the announcement
-cmd-announce-sender = Эйдосская империя
+cmd-announce-sender = ВИШ
 
 # Completion hints
 cmd-announce-arg-message = <сообщение>

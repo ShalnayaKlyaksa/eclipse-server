@@ -5,6 +5,7 @@ using System.Text.Json;
 using Content.Server.Players.PlayTimeTracking;
 using Content.Shared.Eclipse.Economy;
 using Content.Shared.Eclipse.Progression;
+using Content.Shared.PDA;
 using Robust.Server.Player;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Enums;
@@ -77,6 +78,8 @@ public sealed class EclipseCurrencyManager : EntitySystem
     /// </summary>
     public bool TrySpend(NetUserId user, int merits, int shards)
     {
+        if (merits < 0 || shards < 0)
+            return false;
         var balance = GetOrCreate(user);
         if (balance.Merits < merits || balance.Shards < shards)
             return false;
@@ -87,6 +90,132 @@ public sealed class EclipseCurrencyManager : EntitySystem
         Save();
         SyncToClient(user);
         return true;
+    }
+
+    public PdaDesktopProfile GetDesktop(NetUserId user) => _balances.TryGetValue(user, out var balance) ? balance.Desktop : new();
+
+    public string GetPdaPublicId(NetUserId user, int slot)
+    {
+        return _balances.TryGetValue(user, out var balance)
+            ? balance.CharacterPdaIds.GetValueOrDefault(slot, string.Empty)
+            : string.Empty;
+    }
+
+    public bool IsPdaPublicIdReserved(string id)
+    {
+        foreach (var wallet in _balances.Values)
+        {
+            if (wallet.Desktop.PublicId == id || wallet.CharacterPdaIds.ContainsValue(id))
+                return true;
+        }
+
+        return false;
+    }
+
+    public bool SetPdaPublicId(NetUserId user, int slot, string id)
+    {
+        if (!PdaPublicId.Valid(id) || !_balances.TryGetValue(user, out var balance))
+            return false;
+
+        var previous = GetPdaPublicId(user, slot);
+        if (previous == id)
+            return true;
+        if (IsPdaPublicIdReserved(id))
+            return false;
+
+        var ids = balance.CharacterPdaIds;
+        ids[slot] = id;
+        if (Save())
+            return true;
+
+        if (previous.Length == 0)
+            ids.Remove(slot);
+        else
+            ids[slot] = previous;
+        return false;
+    }
+
+    public void MigratePdaPublicId(NetUserId user, int slot)
+    {
+        if (!_balances.TryGetValue(user, out var balance) || !PdaPublicId.Valid(balance.Desktop.PublicId))
+            return;
+
+        var legacyId = balance.Desktop.PublicId;
+        if (!balance.CharacterPdaIds.TryAdd(slot, legacyId))
+            return;
+
+        balance.Desktop.PublicId = string.Empty;
+        if (Save())
+            return;
+
+        balance.Desktop.PublicId = legacyId;
+        balance.CharacterPdaIds.Remove(slot);
+    }
+
+    public bool RemovePdaPublicId(NetUserId user, int slot)
+    {
+        if (!_balances.TryGetValue(user, out var balance) || !balance.CharacterPdaIds.Remove(slot, out var id))
+            return true;
+        if (Save())
+            return true;
+
+        balance.CharacterPdaIds[slot] = id;
+        return false;
+    }
+
+    public bool TryBuyDesktopCosmetic(NetUserId user, string id, bool shards)
+    {
+        var item = PdaCosmetics.Find(id);
+        if (!_balances.TryGetValue(user, out var balance) || item == null || Array.IndexOf(balance.Desktop.Owned, id) >= 0)
+            return false;
+        var meritsCost = shards ? 0 : item.Merits;
+        var shardsCost = shards ? item.Shards : 0;
+        if (balance.Merits < meritsCost || balance.Shards < shardsCost)
+            return false;
+        balance.Merits -= meritsCost;
+        balance.Shards -= shardsCost;
+        var previousOwned = balance.Desktop.Owned;
+        balance.Desktop.Owned = [.. balance.Desktop.Owned, id];
+        if (!Save())
+        {
+            balance.Merits += meritsCost;
+            balance.Shards += shardsCost;
+            balance.Desktop.Owned = previousOwned;
+            return false;
+        }
+        SyncToClient(user);
+        return true;
+    }
+
+    public bool SaveDesktop(NetUserId user, PdaDesktopProfile profile)
+    {
+        if (profile == null || profile.Positions == null || profile.CardText == null ||
+            !_balances.TryGetValue(user, out var balance) || profile.Positions.Count > 64 || profile.CardText.Length > 256 ||
+            PdaCosmetics.Find(profile.Wallpaper) == null ||
+            Array.IndexOf(balance.Desktop.Owned, profile.Wallpaper) < 0)
+            return false;
+        foreach (var (key, cell) in profile.Positions)
+        {
+            if (key.Length > 96 || cell < -1 || cell > 63)
+                return false;
+        }
+        var studio = Array.IndexOf(balance.Desktop.Owned, "studio") >= 0;
+        var previous = balance.Desktop;
+        balance.Desktop = new PdaDesktopProfile
+        {
+            Owned = balance.Desktop.Owned,
+            Wallpaper = profile.Wallpaper,
+            PublicId = balance.Desktop.PublicId,
+            Positions = new Dictionary<string, int>(profile.Positions),
+            Card = studio && profile.Card,
+            Decor = studio && profile.Decor,
+            Photo = studio && profile.Photo,
+            CustomWallpaper = studio && profile.CustomWallpaper,
+            CardText = studio ? profile.CardText : "",
+        };
+        if (Save()) return true;
+        balance.Desktop = previous;
+        return false;
     }
 
     private void OnPlayerStatusChanged(object? sender, SessionStatusEventArgs args)
@@ -170,7 +299,7 @@ public sealed class EclipseCurrencyManager : EntitySystem
 
             using var reader = new StreamReader(_res.UserData.OpenRead(StorePath));
             var json = reader.ReadToEnd();
-            var data = JsonSerializer.Deserialize<Dictionary<string, Balance>>(json);
+            var data = JsonSerializer.Deserialize<Dictionary<string, Balance>>(json, JsonOptions);
             if (data == null)
                 return;
 
@@ -186,7 +315,7 @@ public sealed class EclipseCurrencyManager : EntitySystem
         }
     }
 
-    private void Save()
+    private bool Save()
     {
         try
         {
@@ -194,19 +323,35 @@ public sealed class EclipseCurrencyManager : EntitySystem
             foreach (var (user, balance) in _balances)
                 data[user.UserId.ToString()] = balance;
 
-            var json = JsonSerializer.Serialize(data);
-            using var writer = _res.UserData.OpenWriteText(StorePath);
-            writer.Write(json);
+            var json = JsonSerializer.Serialize(data, JsonOptions);
+            if (_res.UserData.RootDir is { } directory)
+            {
+                var path = Path.Combine(directory, "eclipse_currency.json");
+                var temporary = path + ".tmp";
+                File.WriteAllText(temporary, json);
+                File.Move(temporary, path, overwrite: true);
+            }
+            else
+            {
+                using var writer = _res.UserData.OpenWriteText(StorePath);
+                writer.Write(json);
+            }
+            return true;
         }
         catch (Exception e)
         {
             Log.Error($"Failed to save Eclipse currency store: {e}");
+            return false;
         }
     }
+
+    private static readonly JsonSerializerOptions JsonOptions = new() { IncludeFields = true };
 
     private sealed class Balance
     {
         public int Merits { get; set; }
         public int Shards { get; set; }
+        public PdaDesktopProfile Desktop { get; set; } = new();
+        public Dictionary<int, string> CharacterPdaIds { get; set; } = new();
     }
 }

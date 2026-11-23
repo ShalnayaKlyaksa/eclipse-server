@@ -18,6 +18,7 @@ public sealed class ContainmentBreachAlertSystem : EntitySystem
         "gamma",
         "delta",
         "epsilon",
+        AlertLevelSystem.MortemAlertLevel,
     };
 
     [Dependency] private readonly AlertLevelSystem _alertLevel = default!;

@@ -36,6 +36,8 @@
   - type: PhysicalComposition
     materialComposition:
       Steel: 100
+  - type: GuideHelp
+    guides: [EclipseIndustrial]
   - type: StaticPrice
     price: 40
 

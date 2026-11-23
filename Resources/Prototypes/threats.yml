@@ -12,5 +12,5 @@
 
 - type: ninjaHackingThreat
   id: Revenant
-  announcement: terror-revenant
-  rule: RevenantSpawn
+  announcement: terror-poltergeist
+  rule: PoltergeistSpawn

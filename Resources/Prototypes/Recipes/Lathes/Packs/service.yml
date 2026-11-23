@@ -3,6 +3,9 @@
 - type: latheRecipePack
   id: ServiceStatic
   recipes:
+  - PoltergeistDetector
+  - EclipseReporterCamera
+  - ImperialPaymentTerminal
   - Bucket
   - Ashtray
   - DrinkMug

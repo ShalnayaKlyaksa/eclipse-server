@@ -98,7 +98,7 @@
   parent: PhotocopierBase
   id: PhotocopierSyndicate
   name: копировальный аппарат AshLegion
-  description: Скорее всего он был украден со станции NanoTrasen.
+  description: Скорее всего он был украден со станции ВИШ.
   suffix: Syndicate
 
   components:
@@ -114,7 +114,7 @@
   parent: PhotocopierBase
   id: PhotocopierNukeops
   name: копировальный аппарат ядерных оперативников
-  description: Скорее всего он был украден со станции NanoTrasen.
+  description: Скорее всего он был украден со станции ВИШ.
   suffix: Ядерные оперативники
 
   components:
@@ -165,7 +165,7 @@
   parent: Paper
   id: PaperPrintedCargo
   description: Лист бумаги с заголовком отдела снабжения.
-  suffix: Nanotrasen, Снабжение
+  suffix: ВИШ, Снабжение
   components:
   - type: Sprite
     sprite: Objects/Misc/bureaucracy.rsi
@@ -189,7 +189,7 @@
   parent: Paper
   id: PaperPrintedCivilian
   description: Лист бумаги с заголовком сервисного отдела.
-  suffix: Nanotrasen, Сервис
+  suffix: ВИШ, Сервис
   components:
   - type: Sprite
     sprite: Objects/Misc/bureaucracy.rsi
@@ -213,7 +213,7 @@
   parent: Paper
   id: PaperPrintedCommand
   description: Лист бумаги с заголовком командования.
-  suffix: Nanotrasen, Командование
+  suffix: ВИШ, Командование
   components:
   - type: Sprite
     sprite: Objects/Misc/bureaucracy.rsi
@@ -237,7 +237,7 @@
   parent: Paper
   id: PaperPrintedEngineering
   description: Лист бумаги с заголовком инженерного отдела.
-  suffix: Nanotrasen, Инженерный
+  suffix: ВИШ, Инженерный
   components:
   - type: Sprite
     sprite: Objects/Misc/bureaucracy.rsi
@@ -261,7 +261,7 @@
   parent: Paper
   id: PaperPrintedLaw
   description: Лист бумаги с заголовком юридического отдела.
-  suffix: Nanotrasen, Юридический
+  suffix: ВИШ, Юридический
   components:
   - type: Sprite
     sprite: Objects/Misc/bureaucracy.rsi
@@ -285,7 +285,7 @@
   parent: Paper
   id: PaperPrintedMedical
   description: Лист бумаги с заголовком медицинского отдела.
-  suffix: Nanotrasen, Медицинский
+  suffix: ВИШ, Медицинский
   components:
   - type: Sprite
     sprite: Objects/Misc/bureaucracy.rsi
@@ -309,7 +309,7 @@
   parent: Paper
   id: PaperPrintedScience
   description: Лист бумаги с заголовком научного отдела.
-  suffix: Nanotrasen, Научный
+  suffix: ВИШ, Научный
   components:
   - type: Sprite
     sprite: Objects/Misc/bureaucracy.rsi
@@ -333,7 +333,7 @@
   parent: Paper
   id: PaperPrintedSecurity
   description: Лист бумаги с заголовком отдела службы безопасности.
-  suffix: Nanotrasen, Служба безопасности
+  suffix: ВИШ, Служба безопасности
   components:
   - type: Sprite
     sprite: Objects/Misc/bureaucracy.rsi
@@ -357,7 +357,7 @@
   parent: Paper
   id: PaperPrintedCentcomm
   description: Лист бумаги с заголовком центкома. Страшно даже смотреть на него.
-  suffix: Nanotrasen, Эйдосская империя
+  suffix: ВИШ, Эйдосская империя
   components:
   - type: Sprite
     sprite: Objects/Misc/bureaucracy.rsi
@@ -625,7 +625,7 @@
   parent: Paper
   id: PaperPrintedNukeopsSyndicateToNT
   description: Лист бумаги с заголовком синдиката.
-  suffix: Синдикат-Nanotrasen, Ядерные оперативники
+  suffix: Синдикат-ВИШ, Ядерные оперативники
   components:
   - type: Sprite
     sprite: Objects/Misc/bureaucracy.rsi

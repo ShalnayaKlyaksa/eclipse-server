@@ -25,12 +25,15 @@
         layer:
         - MachineLayer
   - type: Sprite
-  # TODO: Dedicated workbench sprite.
-    sprite: Structures/Machines/autolathe.rsi
-    state: icon
+    sprite: _Eclipse/Structures/Machines/industrial_workbench_wood.rsi
+    offset: "0.5,0.125"
+    layers:
+    - state: icon
   - type: Icon
-    sprite: Structures/Machines/autolathe.rsi
+    sprite: _Eclipse/Structures/Machines/industrial_workbench_wood.rsi
     state: icon
+  - type: RoomSanitation
+  - type: IndustrialMachineKnowledge
   - type: IndustrialWorkbench
   - type: Storage
     grid:
@@ -61,13 +64,30 @@
         acts: [ "Destruction" ]
 
 - type: entity
+  parent: IndustrialWorkbench
+  id: IndustrialWorkbenchTier2
+  name: advanced industrial workbench
+  description: A two-tile precision workbench. Crafts twice as fast and supports perfect machine modules.
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_workbench_metal.rsi
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_workbench_metal.rsi
+    state: icon
+  - type: IndustrialWorkbench
+    tier: 2
+    craftSpeed: 2
+
+- type: entity
   parent: BaseMachine
   id: IndustrialMachineChassis
   name: industrial machine chassis
   description: An empty industrial machine frame. Install an upgrade module to complete assembly.
   components:
   - type: Transform
-    anchored: true
+    anchored: false
     noRot: true
   - type: Sprite
     sprite: Structures/Machines/ore_processor.rsi
@@ -75,6 +95,8 @@
   - type: Icon
     sprite: Structures/Machines/ore_processor.rsi
     state: icon
+  - type: Physics
+    bodyType: Dynamic
   - type: IndustrialMachineChassis
   - type: Anchorable
   - type: Pullable
@@ -144,6 +166,9 @@
     state: micro_mani
   - type: Item
     size: Normal
+  - type: Stack
+    stackType: IndustrialMechanicalCore
+    count: 1
 
 - type: entity
   parent: BaseItem
@@ -156,6 +181,9 @@
     state: capacitor
   - type: Item
     size: Normal
+  - type: Stack
+    stackType: IndustrialHeatConduitAssembly
+    count: 1
 
 - type: entity
   parent: BaseItem
@@ -168,3 +196,98 @@
     state: scan_module
   - type: Item
     size: Normal
+  - type: Stack
+    stackType: IndustrialCircuitCore
+    count: 1
+
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleAssembler
+  name: basic assembler module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Assembler
+    tier: Basic
+    resultMachine: BasicIndustrialAssembler
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleCrusherIndustrial
+  name: industrial crusher module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Crusher
+    tier: Industrial
+    resultMachine: IndustrialCrusher
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleThermalCentrifugeIndustrial
+  name: industrial thermalcentrifuge module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: ThermalCentrifuge
+    tier: Industrial
+    resultMachine: IndustrialThermalCentrifuge
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleSmelterIndustrial
+  name: industrial smelter module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Smelter
+    tier: Industrial
+    resultMachine: IndustrialSmelter
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleAssemblerIndustrial
+  name: industrial assembler module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Assembler
+    tier: Industrial
+    resultMachine: IndustrialAssembler
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleCrusherPerfect
+  name: perfect crusher module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Crusher
+    tier: Perfect
+    resultMachine: PerfectIndustrialCrusher
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleThermalCentrifugePerfect
+  name: perfect thermalcentrifuge module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: ThermalCentrifuge
+    tier: Perfect
+    resultMachine: PerfectIndustrialThermalCentrifuge
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleSmelterPerfect
+  name: perfect smelter module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Smelter
+    tier: Perfect
+    resultMachine: PerfectIndustrialSmelter
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleAssemblerPerfect
+  name: perfect assembler module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Assembler
+    tier: Perfect
+    resultMachine: PerfectIndustrialAssembler
+
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleBuffer
+  name: industrial buffer module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Buffer
+    tier: Industrial
+    resultMachine: IndustrialBuffer

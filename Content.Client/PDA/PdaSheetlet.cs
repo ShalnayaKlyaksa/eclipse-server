@@ -27,18 +27,18 @@ public sealed class PdaSheetlet : Sheetlet<NanotrasenStylesheet>
             //PDA - Backgrounds
             E<PanelContainer>()
                 .Class("PdaContentBackground")
-                .Prop(PanelContainer.StylePropertyPanel, StyleBoxHelpers.SquareStyleBox(sheet))
-                .Prop(Control.StylePropertyModulateSelf, Color.FromHex("#25252a")),
+                .Prop(PanelContainer.StylePropertyPanel, ForgeStyle.Panel(ForgeStyle.Background, ForgeStyle.Border))
+                .Modulate(Color.White),
 
             E<PanelContainer>()
                 .Class("PdaBackground")
-                .Prop(PanelContainer.StylePropertyPanel, StyleBoxHelpers.SquareStyleBox(sheet))
-                .Prop(Control.StylePropertyModulateSelf, Color.FromHex("#000000")),
+                .Prop(PanelContainer.StylePropertyPanel, ForgeStyle.Panel(ForgeStyle.Input, ForgeStyle.Border))
+                .Modulate(Color.White),
 
             E<PanelContainer>()
                 .Class("PdaBackgroundRect")
-                .Prop(PanelContainer.StylePropertyPanel, StyleBoxHelpers.BaseStyleBox((sheet)))
-                .Prop(Control.StylePropertyModulateSelf, Color.FromHex("#717059")),
+                .Prop(PanelContainer.StylePropertyPanel, ForgeStyle.Panel(ForgeStyle.Surface, ForgeStyle.Border))
+                .Modulate(Color.White),
 
             E<PanelContainer>()
                 .Class("PdaBorderRect")

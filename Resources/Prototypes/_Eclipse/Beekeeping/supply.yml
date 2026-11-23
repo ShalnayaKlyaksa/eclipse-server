@@ -1,0 +1,46 @@
+- type: entity
+  parent: CratePlastic
+  id: EclipseCrateBeekeeping
+  name: beekeeping starter crate
+  components:
+  - type: StorageFill
+    contents:
+    - id: EclipseApiaryCircuitboard
+      amount: 1
+    - id: EclipseBeekeeperVeil
+      amount: 1
+    - id: EclipseBeekeeperSuit
+      amount: 1
+    - id: EclipseBeekeeperGloves
+      amount: 1
+    - id: EclipseBeeSmoker
+      amount: 1
+    - id: EclipseBeeAnalyzer
+      amount: 1
+    - id: EclipseBeeCatchingFrame
+      amount: 1
+    - id: EclipseApiaryFrame
+      amount: 4
+    - id: EclipseBeePrincess
+      amount: 1
+    - id: EclipseBeeDrone
+      amount: 1
+    - id: EclipseBeeForestPrincess
+      amount: 1
+    - id: EclipseBeeForestDrone
+      amount: 1
+    - id: LargeBeaker
+      amount: 1
+    - id: MaterialWoodPlank
+      amount: 1
+    - id: SheetSteel
+      amount: 1
+- type: cargoProduct
+  id: EclipseBeekeepingSupply
+  icon:
+    sprite: _Eclipse/Beekeeping/equipment.rsi
+    state: hive
+  product: EclipseCrateBeekeeping
+  cost: 4500
+  category: cargoproduct-category-name-food
+  group: market

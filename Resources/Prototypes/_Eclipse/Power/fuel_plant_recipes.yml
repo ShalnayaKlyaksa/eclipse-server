@@ -1,0 +1,74 @@
+- type: industrialRecipe
+  id: AssembleIndustrialCoalGenerator
+  processor: Assembler
+  time: 25
+  minimumTier: Basic
+  inputs:
+    SheetSteel: 8
+    IndustrialMechanicalCore: 2
+  outputs:
+    IndustrialCoalGeneratorFlatpack: 1
+
+- type: industrialRecipe
+  id: AssembleIndustrialLiquidFuelGenerator
+  processor: Assembler
+  time: 25
+  minimumTier: Basic
+  requireDataDisk: true
+  requiredTechnology: EnergyLiquidFuel
+  inputs:
+    SheetSteel: 12
+    IndustrialCircuitCore: 2
+    IndustrialHeatConduitAssembly: 2
+  outputs:
+    IndustrialLiquidFuelGeneratorFlatpack: 1
+
+- type: industrialRecipe
+  id: AssembleIndustrialGasGenerator
+  processor: Assembler
+  time: 25
+  minimumTier: Basic
+  requireDataDisk: true
+  requiredTechnology: EnergyGasFuel
+  inputs:
+    SheetSteel: 16
+    IndustrialAdvancedBoard: 2
+    IndustrialHeatConduitAssembly: 4
+  outputs:
+    IndustrialGasGeneratorFlatpack: 1
+
+- type: industrialRecipe
+  id: AssembleIndustrialFuelCellGenerator
+  processor: Assembler
+  time: 25
+  minimumTier: Basic
+  requireDataDisk: true
+  requiredTechnology: EnergyFuelCells
+  inputs:
+    SheetGlass: 8
+    IngotSilver: 4
+    IndustrialAdvancedBoard: 2
+  outputs:
+    IndustrialFuelCellGeneratorFlatpack: 1
+
+- type: industrialRecipe
+  id: AssembleIndustrialGeothermalGenerator
+  processor: Assembler
+  time: 25
+  minimumTier: Basic
+  requireDataDisk: true
+  requiredTechnology: EnergyGeothermal
+  inputs:
+    SheetSteel: 12
+    IndustrialMechanicalCore: 4
+    IndustrialHeatConduitAssembly: 4
+  outputs:
+    IndustrialGeothermalGeneratorFlatpack: 1
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialCoalGenerator
+  result: IndustrialCoalGeneratorFlatpack
+  duration: 40
+  ingredients:
+    SheetSteel: 8
+    IndustrialMechanicalCore: 2

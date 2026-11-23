@@ -18,7 +18,7 @@ public sealed class DividersSheetlet : Sheetlet<PalettedStylesheet>
             ContentMarginLeftOverride = 2,
         };
 
-        var boxLowDivider = new StyleBoxFlat(sheet.SecondaryPalette.TextDark);
+        var boxLowDivider = new StyleBoxFlat(ForgeStyle.Border);
 
         // high divider and low divider styles are VERY inconsistent but its too much of a pain to change right now (also HighDivider has its own Control ???)
         // i dont think theres a good resolution to this besides just deleting HighDivider. HighDivider is barely used but LowDivider is used everywhere.
@@ -27,7 +27,7 @@ public sealed class DividersSheetlet : Sheetlet<PalettedStylesheet>
             E<PanelContainer>()
                 .Class(StyleClass.LowDivider)
                 .Panel(boxLowDivider)
-                .MinSize(new Vector2(2, 2)),
+                .MinSize(new Vector2(1, 1)),
             E<PanelContainer>().Class(StyleClass.HighDivider).Panel(boxHighDivider),
         ];
     }

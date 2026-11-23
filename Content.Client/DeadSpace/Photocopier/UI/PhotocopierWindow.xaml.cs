@@ -16,10 +16,10 @@ namespace Content.Client.DeadSpace.Photocopier.UI;
 [GenerateTypedNameReferences]
 public sealed partial class PhotocopierWindow : FancyWindow
 {
-    private static readonly Color ConsoleBackground = Color.FromHex("#070300F8");
+    private static readonly Color ConsoleBackground = Color.FromHex("#161616F8");
     private static readonly Color ConsoleBackgroundSoft = Color.FromHex("#120700F0");
-    private static readonly Color ConsoleBorder = Color.FromHex("#A85E1290");
-    private static readonly Color ConsoleBorderSoft = Color.FromHex("#A85E1248");
+    private static readonly Color ConsoleBorder = Color.FromHex("#50505090");
+    private static readonly Color ConsoleBorderSoft = Color.FromHex("#50505048");
     private static readonly Color ConsoleText = Color.FromHex("#FFB11A");
 
     private IPrototypeManager _protoManager;
@@ -71,7 +71,7 @@ public sealed partial class PhotocopierWindow : FancyWindow
         TonerAmount.BackgroundStyleBoxOverride = Rounded(ConsoleBackgroundSoft, ConsoleBorderSoft, 3f);
         TonerAmount.ForegroundStyleBoxOverride = new StyleBoxFlat
         {
-            BackgroundColor = Color.FromHex("#A85E12CC"),
+            BackgroundColor = Color.FromHex("#505050CC"),
         };
 
         StyleActionButton(CopyModeButton);

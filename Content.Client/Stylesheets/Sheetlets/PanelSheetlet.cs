@@ -44,25 +44,25 @@ public sealed class PanelSheetlet<T> : Sheetlet<T> where T : PalettedStylesheet,
             // TODO: this should probably be cleaned up but too many UIs rely on this hardcoded color so I'm scared to touch it
             E<PanelContainer>()
                 .Class("BackgroundDark")
-                .Prop(PanelContainer.StylePropertyPanel, new StyleBoxFlat(Color.FromHex("#25252A"))),
+                .Prop(PanelContainer.StylePropertyPanel, new StyleBoxFlat(ForgeStyle.Input)),
 
             // panels that have the same corner bezels as buttons
             E()
                 .Class(StyleClass.BackgroundPanel)
-                .Prop(PanelContainer.StylePropertyPanel, StyleBoxHelpers.BaseStyleBox(sheet))
-                .Modulate(sheet.SecondaryPalette.Background),
+                .Prop(PanelContainer.StylePropertyPanel, ForgeStyle.Panel(ForgeStyle.Surface, ForgeStyle.Border))
+                .Modulate(Color.White),
             E()
                 .Class(StyleClass.BackgroundPanelDark)
-                .Prop(PanelContainer.StylePropertyPanel, StyleBoxHelpers.BaseStyleBox(sheet))
-                .Modulate(sheet.SecondaryPalette.BackgroundDark),
+                .Prop(PanelContainer.StylePropertyPanel, ForgeStyle.Panel(ForgeStyle.Background, ForgeStyle.Border))
+                .Modulate(Color.White),
              E()
                 .Class(StyleClass.BackgroundPanelOpenLeft)
-                .Prop(PanelContainer.StylePropertyPanel, StyleBoxHelpers.OpenLeftStyleBox(sheet))
-                .Modulate(sheet.SecondaryPalette.Background),
+                .Prop(PanelContainer.StylePropertyPanel, ForgeStyle.Panel(ForgeStyle.Surface, ForgeStyle.Border))
+                .Modulate(Color.White),
             E()
                 .Class(StyleClass.BackgroundPanelOpenRight)
-                .Prop(PanelContainer.StylePropertyPanel, StyleBoxHelpers.OpenRightStyleBox(sheet))
-                .Modulate(sheet.SecondaryPalette.Background),
+                .Prop(PanelContainer.StylePropertyPanel, ForgeStyle.Panel(ForgeStyle.Surface, ForgeStyle.Border))
+                .Modulate(Color.White),
         ];
     }
 }

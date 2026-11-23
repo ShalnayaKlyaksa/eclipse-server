@@ -1,0 +1,12 @@
+ent-AdvancedMedicineVialInaprovaline = склянка инапровалина
+    .desc = Склянка с 30 единицами препарата. Раствор набирается шприцом.
+ent-AdvancedMedicineVialTranexamicAcid = склянка транексамовой кислоты
+    .desc = Склянка с 30 единицами препарата. Раствор набирается шприцом.
+ent-AdvancedMedicineVialBicaridine = склянка бикаридина
+    .desc = Склянка с 30 единицами препарата. Раствор набирается шприцом.
+ent-AdvancedMedicineVialEpinephrine = склянка эпинефрина
+    .desc = Склянка с 30 единицами препарата. Раствор набирается шприцом.
+ent-AdvancedMedicineVialClinicalOpioid = склянка нейралгина
+    .desc = Склянка с 30 единицами препарата. Раствор набирается шприцом.
+ent-AdvancedMedicineVialClinicalNaloxone = склянка реверсина
+    .desc = Склянка с 30 единицами препарата. Раствор набирается шприцом.

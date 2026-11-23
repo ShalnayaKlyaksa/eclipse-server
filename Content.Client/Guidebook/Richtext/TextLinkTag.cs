@@ -6,6 +6,7 @@ using Robust.Client.UserInterface.RichText;
 using Robust.Shared.Input;
 using Robust.Shared.Utility;
 using Content.Client.UserInterface.ControlExtensions;
+using Content.Client.Guidebook.Controls;
 
 namespace Content.Client.Guidebook.RichText;
 
@@ -32,10 +33,13 @@ public sealed class TextLinkTag : IMarkupTagHandler
 
         label.MouseFilter = Control.MouseFilterMode.Stop;
         label.FontColorOverride = LinkColor;
+        label.AddStyleClass("GuidebookTextLink");
         label.DefaultCursorShape = Control.CursorShape.Hand;
 
-        label.OnMouseEntered += _ => label.FontColorOverride = Color.LightSkyBlue;
-        label.OnMouseExited += _ => label.FontColorOverride = Color.CornflowerBlue;
+        label.OnMouseEntered += args => label.FontColorOverride = label.TryGetParentHandler<GuidebookWindow>(out _)
+            ? Color.FromHex("#FFD09A") : Color.LightSkyBlue;
+        label.OnMouseExited += args => label.FontColorOverride = label.TryGetParentHandler<GuidebookWindow>(out _)
+            ? GuidebookWindow.Accent : LinkColor;
         label.OnKeyBindDown += args => OnKeybindDown(args, link, label);
 
         control = label;

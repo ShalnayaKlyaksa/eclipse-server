@@ -35,12 +35,6 @@ public sealed partial class CCVars
         CVarDef.Create("ic.flavor_text_length", 512, CVar.SERVER | CVar.REPLICATED);
 
     /// <summary>
-    ///     Sets the maximum custom species display name length.
-    /// </summary>
-    public static readonly CVarDef<int> MaxCustomSpeciesLength =
-        CVarDef.Create("ic.custom_species_length", 16, CVar.SERVER | CVar.REPLICATED);
-
-    /// <summary>
     ///     Sets the maximum character length of a job on an ID.
     /// </summary>
     public static readonly CVarDef<int> MaxIdJobLength =

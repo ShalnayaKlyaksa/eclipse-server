@@ -1,0 +1,231 @@
+# Focused production research. Every unlock licenses an existing working process.
+- type: technology
+  id: IndustrialBulkProcessing
+  name: research-branch-bulkprocessing
+  icon:
+    sprite: _Eclipse/Structures/Machines/industrial_crusher.rsi
+    state: icon
+  discipline: Industrial
+  tier: 2
+  cost: 900
+  technologyPrerequisites:
+  - IndustrialAutomation
+  position: 26, 40
+  genericUnlocks:
+  - unlockDescription: research-branch-bulkprocessing-desc
+  recipeUnlocks: []
+
+- type: technology
+  id: IndustrialOreEnrichment
+  name: research-branch-oreenrichment
+  icon:
+    sprite: _Eclipse/Structures/Machines/industrial_centrifuge.rsi
+    state: icon
+  discipline: Industrial
+  tier: 2
+  cost: 1000
+  technologyPrerequisites:
+  - IndustrialProcessChemistry
+  - IndustrialBulkProcessing
+  position: 27, 42
+  genericUnlocks:
+  - unlockDescription: research-branch-oreenrichment-desc
+  recipeUnlocks: []
+
+- type: technology
+  id: IndustrialRecycling
+  name: research-branch-recycling
+  icon:
+    sprite: Objects/Materials/ore.rsi
+    state: iron
+  discipline: Industrial
+  tier: 2
+  cost: 800
+  technologyPrerequisites:
+  - IndustrialOreEnrichment
+  position: 28, 41
+  genericUnlocks:
+  - unlockDescription: research-branch-recycling-desc
+  recipeUnlocks: []
+
+- type: technology
+  id: IndustrialChemicalSynthesis
+  name: research-branch-chemicalsynthesis
+  icon:
+    sprite: Objects/Specific/Chemistry/beaker.rsi
+    state: beaker
+  discipline: Industrial
+  tier: 2
+  cost: 1000
+  technologyPrerequisites:
+  - IndustrialProcessChemistry
+  position: 27, 40
+  genericUnlocks:
+  - unlockDescription: research-branch-chemicalsynthesis-desc
+  recipeUnlocks: []
+
+- type: technology
+  id: IndustrialSiliconPurification
+  name: research-branch-siliconpurification
+  icon:
+    sprite: Objects/Materials/ore.rsi
+    state: spacequartz
+  discipline: Industrial
+  tier: 2
+  cost: 1400
+  technologyPrerequisites:
+  - IndustrialChemicalSynthesis
+  - IndustrialOreEnrichment
+  position: 28, 42
+  genericUnlocks:
+  - unlockDescription: research-branch-siliconpurification-desc
+  recipeUnlocks: []
+
+- type: technology
+  id: IndustrialVacuumProcessing
+  name: research-branch-vacuumprocessing
+  icon:
+    sprite: _Eclipse/Structures/Machines/industrial_smelter.rsi
+    state: icon
+  discipline: Industrial
+  tier: 3
+  cost: 1200
+  technologyPrerequisites:
+  - IndustrialSiliconPurification
+  - IndustrialMetallurgy
+  position: 29, 41
+  genericUnlocks:
+  - unlockDescription: research-branch-vacuumprocessing-desc
+  recipeUnlocks: []
+
+- type: technology
+  id: IndustrialCrystalGrowth
+  name: research-branch-crystalgrowth
+  icon:
+    sprite: Objects/Materials/ore.rsi
+    state: spacequartz
+  discipline: Industrial
+  tier: 3
+  cost: 1600
+  technologyPrerequisites:
+  - IndustrialVacuumProcessing
+  position: 30, 40
+  genericUnlocks:
+  - unlockDescription: research-branch-crystalgrowth-desc
+  recipeUnlocks: []
+
+- type: technology
+  id: IndustrialCleanroomEngineering
+  name: research-branch-cleanroomengineering
+  icon:
+    sprite: Objects/Specific/Chemistry/beaker.rsi
+    state: beaker
+  discipline: Industrial
+  tier: 2
+  cost: 800
+  technologyPrerequisites:
+  - IndustrialElectronics
+  position: 25, 41
+  genericUnlocks:
+  - unlockDescription: research-branch-cleanroomengineering-desc
+  recipeUnlocks: []
+
+- type: technology
+  id: IndustrialWaferProcessing
+  name: research-branch-waferprocessing
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: cpuboard_adv
+  discipline: Industrial
+  tier: 3
+  cost: 1400
+  technologyPrerequisites:
+  - IndustrialCrystalGrowth
+  - IndustrialSurfaceChemistry
+  - IndustrialCleanroomEngineering
+  - IndustrialPrecisionElectronics
+  position: 31, 40
+  genericUnlocks:
+  - unlockDescription: research-branch-waferprocessing-desc
+  recipeUnlocks: []
+
+- type: technology
+  id: IndustrialPhotolithography
+  name: research-branch-photolithography
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: cpuboard_adv
+  discipline: Industrial
+  tier: 3
+  cost: 1800
+  technologyPrerequisites:
+  - IndustrialWaferProcessing
+  position: 32, 40
+  genericUnlocks:
+  - unlockDescription: research-branch-photolithography-desc
+  recipeUnlocks: []
+
+- type: technology
+  id: IndustrialChipPackaging
+  name: research-branch-chippackaging
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: cpuboard_adv
+  discipline: Industrial
+  tier: 3
+  cost: 1600
+  technologyPrerequisites:
+  - IndustrialPhotolithography
+  position: 33, 40
+  genericUnlocks:
+  - unlockDescription: research-branch-chippackaging-desc
+  recipeUnlocks: []
+
+- type: technology
+  id: IndustrialResourceExtraction
+  name: research-branch-resourceextraction
+  icon:
+    sprite: _Eclipse/Structures/Machines/industrial_crusher.rsi
+    state: icon
+  discipline: Industrial
+  tier: 2
+  cost: 1000
+  technologyPrerequisites:
+  - IndustrialAutomation
+  position: 26, 42
+  genericUnlocks:
+  - unlockDescription: research-branch-resourceextraction-desc
+  recipeUnlocks: []
+
+- type: technology
+  id: IndustrialHeavyExtraction
+  name: research-branch-heavyextraction
+  icon:
+    sprite: _Eclipse/Structures/Machines/industrial_crusher.rsi
+    state: icon
+  discipline: Industrial
+  tier: 3
+  cost: 1800
+  technologyPrerequisites:
+  - IndustrialResourceExtraction
+  - IndustrialAdvancedAutomation
+  position: 35, 41
+  genericUnlocks:
+  - unlockDescription: research-branch-heavyextraction-desc
+  recipeUnlocks: []
+
+- type: technology
+  id: IndustrialSurfaceChemistry
+  name: research-branch-surfacechemistry
+  icon:
+    sprite: Objects/Specific/Chemistry/beaker.rsi
+    state: beaker
+  discipline: Industrial
+  tier: 3
+  cost: 1200
+  technologyPrerequisites:
+  - IndustrialChemicalSynthesis
+  position: 28, 43
+  genericUnlocks:
+  - unlockDescription: research-branch-surfacechemistry-desc
+  recipeUnlocks: []

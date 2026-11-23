@@ -218,6 +218,7 @@ public abstract class SharedDefibrillatorSystem : EntitySystem
                 if (viable)
                 {
                     advanced.IsHeartStopped = false;
+                    advanced.ArrestTrigger = CardiacArrestTrigger.Unknown;
                     advanced.TimeSinceHeartStopped = 0;
                     advanced.IsInAgonalState = false;
                     // Restart with a viable rhythm and pressure so the cardiovascular loop can pick up

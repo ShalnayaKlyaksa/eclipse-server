@@ -83,7 +83,7 @@ namespace Content.Shared.Preferences
         public ProtoId<SpeciesPrototype> Species { get; set; } = DefaultSpecies;
 
         [DataField]
-        public string CustomSpecies { get; set; } = string.Empty;
+        public CharacterCustomization Customization { get; set; }
 
         [DataField] //Corvax-TTS
         public string Voice { get; set; } = HumanoidProfileSystem.DefaultVoice;
@@ -135,7 +135,6 @@ namespace Content.Shared.Preferences
             string name,
             string flavortext,
             string species,
-            string customspecies,
             string voice, // Corvax-TTS
             int age,
             Sex sex,
@@ -151,7 +150,6 @@ namespace Content.Shared.Preferences
             Name = name;
             FlavorText = flavortext;
             Species = species;
-            CustomSpecies = customspecies;
             Voice = voice; // Corvax-TTS
             Age = age;
             Sex = sex;
@@ -184,7 +182,6 @@ namespace Content.Shared.Preferences
             : this(other.Name,
                 other.FlavorText,
                 other.Species,
-                other.CustomSpecies,
                 other.Voice,
                 other.Age,
                 other.Sex,
@@ -197,6 +194,7 @@ namespace Content.Shared.Preferences
                 new HashSet<ProtoId<TraitPrototype>>(other.TraitPreferences),
                 new Dictionary<string, RoleLoadout>(other.Loadouts))
         {
+            Customization = other.Customization;
         }
 
         /// <summary>
@@ -320,9 +318,9 @@ namespace Content.Shared.Preferences
             return new(this) { Species = species };
         }
 
-        public HumanoidCharacterProfile WithCustomSpecies(string customspecies)
+        public HumanoidCharacterProfile WithCustomization(CharacterCustomization customization)
         {
-            return new(this) { CustomSpecies = customspecies };
+            return new(this) { Customization = customization };
         }
 
         // Corvax-TTS-Start
@@ -473,7 +471,8 @@ namespace Content.Shared.Preferences
             if (Sex != other.Sex) return false;
             if (Gender != other.Gender) return false;
             if (Species != other.Species) return false;
-            if (CustomSpecies != other.CustomSpecies) return false;
+            if (Customization != other.Customization) return false;
+            if (Voice != other.Voice) return false;
             if (PreferenceUnavailable != other.PreferenceUnavailable) return false;
             if (SpawnPriority != other.SpawnPriority) return false;
             if (!_jobPriorities.SequenceEqual(other._jobPriorities)) return false;
@@ -503,17 +502,10 @@ namespace Content.Shared.Preferences
             }
             // Corvax-Sponsors-End
 
-            var sex = Sex switch
-            {
-                Sex.Male => Sex.Male,
-                Sex.Female => Sex.Female,
-                Sex.Unsexed => Sex.Unsexed,
-                _ => Sex.Male // Invalid enum values.
-            };
-
             // ensure the species can be that sex and their age fits the founds
-            if (!speciesPrototype.Sexes.Contains(sex))
-                sex = speciesPrototype.Sexes[0];
+            var sex = speciesPrototype.Sexes.Contains(Sex) || Sex == Sex.Intersex && speciesPrototype.AllowsIntersex
+                ? Sex
+                : speciesPrototype.Sexes[0];
 
             var age = Math.Clamp(Age, speciesPrototype.MinAge, speciesPrototype.MaxAge);
 
@@ -570,12 +562,7 @@ namespace Content.Shared.Preferences
                 flavortext = FormattedMessage.RemoveMarkupOrThrow(FlavorText);
             }
 
-            var customSpecies = FormattedMessage.RemoveMarkupOrThrow(CustomSpecies).Trim();
-            var customSpeciesMaxLength = configManager.GetCVar(CCVars.MaxCustomSpeciesLength);
-            if (customSpecies.Length > customSpeciesMaxLength)
-                customSpecies = customSpecies[..customSpeciesMaxLength];
-
-            var appearance = HumanoidCharacterAppearance.EnsureValid(Appearance, Species, Sex, sponsorPrototypes);
+            var appearance = HumanoidCharacterAppearance.EnsureValid(Appearance, Species, sex.PresentationSex(), sponsorPrototypes);
 
             var prefsUnavailableMode = PreferenceUnavailable switch
             {
@@ -623,7 +610,7 @@ namespace Content.Shared.Preferences
 
             Name = name;
             FlavorText = flavortext;
-            CustomSpecies = customSpecies;
+            Customization = Customization.Validated(speciesPrototype);
             Age = age;
             Sex = sex;
             Gender = gender;
@@ -650,8 +637,9 @@ namespace Content.Shared.Preferences
 
             // Corvax-TTS-Start
             prototypeManager.TryIndex<TTSVoicePrototype>(Voice, out var voice);
-            if (voice is null || !CanHaveVoice(voice, Sex))
-                Voice = HumanoidProfileSystem.DefaultSexVoice[sex];
+            var vocalSex = Customization.GetVocalSex(sex);
+            if (voice is null || !voice.RoundStart || !CanHaveVoice(voice, vocalSex))
+                Voice = HumanoidProfileSystem.DefaultSexVoice[vocalSex];
             // Corvax-TTS-End
 
             // Checks prototypes exist for all loadouts and dump / set to default if not.
@@ -847,7 +835,8 @@ namespace Content.Shared.Preferences
             hashCode.Add(Name);
             hashCode.Add(FlavorText);
             hashCode.Add(Species);
-            hashCode.Add(CustomSpecies);
+            hashCode.Add(Customization);
+            hashCode.Add(Voice);
             hashCode.Add(Age);
             hashCode.Add((int)Sex);
             hashCode.Add((int)Gender);

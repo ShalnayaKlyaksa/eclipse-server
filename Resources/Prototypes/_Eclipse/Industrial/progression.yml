@@ -1,0 +1,1697 @@
+# Factory progression. Floor veins are passable and finite.
+- type: stack
+  id: IndustrialSiliconDioxide
+  parent: BaseMediumStack
+  name: stack-IndustrialSiliconDioxide
+  icon:
+    sprite: /Textures/Objects/Misc/reagent_fillings.rsi
+    state: powderpile
+  spawn: IndustrialSiliconDioxide1
+- type: entity
+  id: IndustrialSiliconDioxide
+  parent: IndustrialMaterialBase
+  name: silicon dioxide
+  components:
+  - type: Stack
+    stackType: IndustrialSiliconDioxide
+  - type: Sprite
+    sprite: Objects/Misc/reagent_fillings.rsi
+    state: powderpile
+    color: '#E5E4D7'
+  - type: Item
+    sprite: Objects/Misc/reagent_fillings.rsi
+- type: entity
+  id: IndustrialSiliconDioxide1
+  parent: IndustrialSiliconDioxide
+  name: silicon dioxide
+  components:
+  - type: Stack
+    count: 1
+  suffix: Single
+- type: stack
+  id: IndustrialPrintedBoard
+  parent: BaseMediumStack
+  name: stack-IndustrialPrintedBoard
+  icon:
+    sprite: /Textures/Objects/Misc/module.rsi
+    state: blank_mod
+  spawn: IndustrialPrintedBoard1
+- type: entity
+  id: IndustrialPrintedBoard
+  parent: IndustrialMaterialBase
+  name: printed circuit board
+  components:
+  - type: Stack
+    stackType: IndustrialPrintedBoard
+  - type: Sprite
+    sprite: Objects/Misc/module.rsi
+    state: blank_mod
+  - type: Item
+    sprite: Objects/Misc/module.rsi
+- type: entity
+  id: IndustrialPrintedBoard1
+  parent: IndustrialPrintedBoard
+  name: printed circuit board
+  components:
+  - type: Stack
+    count: 1
+  suffix: Single
+- type: stack
+  id: IndustrialAdvancedBoard
+  parent: BaseMediumStack
+  name: stack-IndustrialAdvancedBoard
+  icon:
+    sprite: /Textures/Objects/Misc/module.rsi
+    state: cpuboard_adv
+  spawn: IndustrialAdvancedBoard1
+- type: entity
+  id: IndustrialAdvancedBoard
+  parent: IndustrialMaterialBase
+  name: advanced circuit board
+  components:
+  - type: Stack
+    stackType: IndustrialAdvancedBoard
+  - type: Sprite
+    sprite: Objects/Misc/module.rsi
+    state: cpuboard_adv
+  - type: Item
+    sprite: Objects/Misc/module.rsi
+- type: entity
+  id: IndustrialAdvancedBoard1
+  parent: IndustrialAdvancedBoard
+  name: advanced circuit board
+  components:
+  - type: Stack
+    count: 1
+  suffix: Single
+- type: stack
+  id: IndustrialPerfectBoard
+  parent: BaseMediumStack
+  name: stack-IndustrialPerfectBoard
+  icon:
+    sprite: /Textures/Objects/Misc/module.rsi
+    state: cpuboard_super
+  spawn: IndustrialPerfectBoard1
+- type: entity
+  id: IndustrialPerfectBoard
+  parent: IndustrialMaterialBase
+  name: perfect circuit board
+  components:
+  - type: Stack
+    stackType: IndustrialPerfectBoard
+  - type: Sprite
+    sprite: Objects/Misc/module.rsi
+    state: cpuboard_super
+  - type: Item
+    sprite: Objects/Misc/module.rsi
+- type: entity
+  id: IndustrialPerfectBoard1
+  parent: IndustrialPerfectBoard
+  name: perfect circuit board
+  components:
+  - type: Stack
+    count: 1
+  suffix: Single
+- type: stack
+  id: IndustrialAlloyBlank
+  parent: BaseMediumStack
+  name: stack-IndustrialAlloyBlank
+  icon:
+    sprite: /Textures/Objects/Materials/ingots.rsi
+    state: iron
+  spawn: IndustrialAlloyBlank1
+- type: entity
+  id: IndustrialAlloyBlank
+  parent: IndustrialMaterialBase
+  name: heat-resistant alloy blank
+  components:
+  - type: Stack
+    stackType: IndustrialAlloyBlank
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+    state: iron
+    color: '#82969B'
+  - type: Item
+    sprite: Objects/Materials/ingots.rsi
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 200
+      Plasma: 100
+- type: entity
+  id: IndustrialAlloyBlank1
+  parent: IndustrialAlloyBlank
+  name: heat-resistant alloy blank
+  components:
+  - type: Stack
+    count: 1
+  suffix: Single
+- type: material
+  id: IndustrialIron
+  stackEntity: IndustrialIronPlate1
+  name: materials-industrial-iron
+  icon:
+    sprite: Objects/Materials/Sheets/metal.rsi
+    state: steel
+  color: '#9DA7AC'
+  price: 0.15
+- type: stack
+  id: IndustrialIronIngot
+  parent: BaseMediumStack
+  name: stack-IndustrialIronIngot
+  icon:
+    sprite: /Textures/Objects/Materials/ingots.rsi
+    state: iron
+  spawn: IndustrialIronIngot1
+- type: entity
+  id: IndustrialIronIngot
+  parent: IndustrialMaterialBase
+  name: iron ingots
+  components:
+  - type: Stack
+    stackType: IndustrialIronIngot
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+    state: iron
+  - type: Item
+    sprite: Objects/Materials/ingots.rsi
+  - type: PhysicalComposition
+    materialComposition:
+      IndustrialIron: 100
+- type: entity
+  id: IndustrialIronIngot1
+  parent: IndustrialIronIngot
+  name: iron ingots
+  components:
+  - type: Stack
+    count: 1
+  suffix: Single
+- type: stack
+  id: IndustrialIronPlate
+  parent: BaseMediumStack
+  name: stack-IndustrialIronPlate
+  icon:
+    sprite: /Textures/Objects/Materials/Sheets/metal.rsi
+    state: steel
+  spawn: IndustrialIronPlate1
+- type: entity
+  id: IndustrialIronPlate
+  parent: IndustrialMaterialBase
+  name: iron plates
+  components:
+  - type: Stack
+    stackType: IndustrialIronPlate
+  - type: Sprite
+    sprite: Objects/Materials/Sheets/metal.rsi
+    state: steel
+  - type: Item
+    sprite: Objects/Materials/Sheets/metal.rsi
+  - type: PhysicalComposition
+    materialComposition:
+      IndustrialIron: 100
+- type: entity
+  id: IndustrialIronPlate1
+  parent: IndustrialIronPlate
+  name: iron plates
+  components:
+  - type: Stack
+    count: 1
+  suffix: Single
+- type: entity
+  id: IndustrialProductionDisk
+  parent: BaseItem
+  name: production data disk
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Research/researchdisk.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: IndustrialDataDisk
+  - type: UserInterface
+    interfaces:
+      enum.IndustrialDiskUiKey.Write:
+        type: IndustrialDiskWriterBoundUserInterface
+- type: entity
+  id: IndustrialChassisBlueprint
+  parent: BaseItem
+  name: machine chassis blueprint
+  components:
+  - type: Sprite
+    sprite: Objects/Tools/blueprint.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: IndustrialBlueprint
+- type: entity
+  id: IndustrialManualCrusher
+  parent: BasicIndustrialCrusher
+  name: manual crusher
+  components:
+  - type: IndustrialManualProcessor
+  - type: IndustrialProcessor
+    canWorkWithoutPower: true
+    autoStart: false
+  - type: ApcPowerReceiver
+    powerLoad: 0
+- type: entity
+  id: IndustrialChassisConstruction
+  parent: UnfinishedMachineFrame
+  name: industrial chassis under construction
+  components:
+  - type: Construction
+    graph: IndustrialChassisAssembly
+    node: frame
+    defaultTarget: chassis
+  - type: Transform
+    anchored: true
+- type: entity
+  id: IndustrialCleanroomController
+  parent: BaseMachinePowered
+  name: cleanroom HEPA controller
+  components:
+  - type: Sprite
+    sprite: Structures/Piping/Atmospherics/Portable/portable_scrubber.rsi
+    state: icon
+  - type: ApcPowerReceiver
+    powerLoad: 1800
+  - type: CleanroomController
+  - type: RoomSanitation
+  - type: Anchorable
+  - type: Pullable
+  - type: Transform
+    anchored: false
+- type: entity
+  id: IndustrialAdvancedCleanroomController
+  parent: IndustrialCleanroomController
+  name: precision cleanroom HEPA controller
+  components:
+  - type: CleanroomController
+    grade: 2
+    maximumTiles: 96
+    purificationPerSecond: 3
+  - type: ApcPowerReceiver
+    powerLoad: 3200
+- type: entity
+  id: IndustrialExtruder
+  parent: IndustrialTierIndustrialProcessor
+  name: industrial extruder
+  components:
+  - type: IndustrialProcessor
+    processorType: Extruder
+    tier: Industrial
+  - type: ApcPowerReceiver
+    powerLoad: 3000
+- type: entity
+  id: PerfectIndustrialExtruder
+  parent: IndustrialExtruder
+  name: perfect extruder
+  components:
+  - type: IndustrialProcessor
+    tier: Perfect
+- type: entity
+  id: IndustrialUpgradeModuleExtruder
+  parent: BaseIndustrialUpgradeModule
+  name: Extruder module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Extruder
+    tier: Industrial
+    resultMachine: IndustrialExtruder
+- type: entity
+  id: IndustrialUpgradeModuleExtruderPerfect
+  parent: BaseIndustrialUpgradeModule
+  name: perfect Extruder module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Extruder
+    tier: Perfect
+    resultMachine: PerfectIndustrialExtruder
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialExtruder
+  result: IndustrialUpgradeModuleExtruder
+  ingredients:
+    IndustrialMechanicalCore: 2
+    IndustrialCircuitCore: 2
+    SheetSteel: 8
+  duration: 35
+  minimumWorkbenchTier: 1
+  requiredTechnology: IndustrialAutomation
+- type: industrialRecipe
+  id: AutoFabricateIndustrialExtruder
+  processor: Assembler
+  time: 10
+  inputs:
+    IndustrialMechanicalCore: 2
+    IndustrialCircuitCore: 2
+    SheetSteel: 8
+  outputs:
+    IndustrialUpgradeModuleExtruder: 1
+  minimumTier: Basic
+  requiredTechnology: IndustrialAutomation
+  requireDataDisk: true
+
+- type: industrialRecipe
+  id: AutoFabricatePerfectIndustrialExtruder
+  processor: Assembler
+  time: 20
+  inputs:
+    IndustrialUpgradeModuleExtruder: 1
+    IndustrialPerfectBoard: 2
+    SheetPlasteel: 8
+  outputs:
+    IndustrialUpgradeModuleExtruderPerfect: 1
+  minimumTier: Perfect
+  requiredTechnology: IndustrialPerfectAutomation
+  requireDataDisk: true
+- type: entity
+  id: IndustrialPipeFabricator
+  parent: IndustrialTierIndustrialProcessor
+  name: industrial pipe fabricator
+  components:
+  - type: IndustrialProcessor
+    processorType: PipeFabricator
+    tier: Industrial
+  - type: ApcPowerReceiver
+    powerLoad: 3000
+- type: entity
+  id: PerfectIndustrialPipeFabricator
+  parent: IndustrialPipeFabricator
+  name: perfect pipefabricator
+  components:
+  - type: IndustrialProcessor
+    tier: Perfect
+- type: entity
+  id: IndustrialUpgradeModulePipeFabricator
+  parent: BaseIndustrialUpgradeModule
+  name: PipeFabricator module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: PipeFabricator
+    tier: Industrial
+    resultMachine: IndustrialPipeFabricator
+- type: entity
+  id: IndustrialUpgradeModulePipeFabricatorPerfect
+  parent: BaseIndustrialUpgradeModule
+  name: perfect PipeFabricator module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: PipeFabricator
+    tier: Perfect
+    resultMachine: PerfectIndustrialPipeFabricator
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialPipeFabricator
+  result: IndustrialUpgradeModulePipeFabricator
+  ingredients:
+    IndustrialMechanicalCore: 2
+    IndustrialCircuitCore: 2
+    SheetSteel: 8
+  duration: 35
+  minimumWorkbenchTier: 1
+  requiredTechnology: IndustrialAutomation
+- type: industrialRecipe
+  id: AutoFabricateIndustrialPipeFabricator
+  processor: Assembler
+  time: 10
+  inputs:
+    IndustrialMechanicalCore: 2
+    IndustrialCircuitCore: 2
+    SheetSteel: 8
+  outputs:
+    IndustrialUpgradeModulePipeFabricator: 1
+  minimumTier: Basic
+  requiredTechnology: IndustrialAutomation
+  requireDataDisk: true
+
+- type: industrialRecipe
+  id: AutoFabricatePerfectIndustrialPipeFabricator
+  processor: Assembler
+  time: 20
+  inputs:
+    IndustrialUpgradeModulePipeFabricator: 1
+    IndustrialPerfectBoard: 2
+    SheetPlasteel: 8
+  outputs:
+    IndustrialUpgradeModulePipeFabricatorPerfect: 1
+  minimumTier: Perfect
+  requiredTechnology: IndustrialPerfectAutomation
+  requireDataDisk: true
+- type: industrialFabricationRecipe
+  id: FabricateProductionDataDisk
+  result: IndustrialProductionDisk
+  ingredients:
+    SheetGlass: 1
+    SheetSteel: 1
+  duration: 8
+  minimumWorkbenchTier: 1
+- type: industrialFabricationRecipe
+  id: FabricatePrintedBoard
+  result: IndustrialPrintedBoard1
+  ingredients:
+    SheetCopper: 1
+    SheetGlass: 1
+  duration: 10
+  minimumWorkbenchTier: 1
+  requiredTechnology: IndustrialElectronics
+- type: industrialFabricationRecipe
+  id: FabricateIronPlate
+  result: IndustrialIronPlate1
+  ingredients:
+    IndustrialIronIngot: 1
+  duration: 8
+  minimumWorkbenchTier: 1
+- type: industrialFabricationRecipe
+  id: FabricateHEPAController
+  result: IndustrialCleanroomController
+  ingredients:
+    SheetSteel: 6
+    SheetGlass: 2
+    IndustrialMechanicalCore: 1
+    IndustrialPrintedBoard: 1
+  duration: 35
+  minimumWorkbenchTier: 1
+  requiredTechnology: IndustrialElectronics
+- type: industrialFabricationRecipe
+  id: FabricateAdvancedHEPAController
+  result: IndustrialAdvancedCleanroomController
+  ingredients:
+    SheetPlasteel: 8
+    IndustrialAdvancedProcessor: 1
+    IndustrialPrintedBoard: 2
+    IndustrialMechanicalCore: 2
+  duration: 50
+  minimumWorkbenchTier: 1
+  requiredTechnology: IndustrialCleanroomEngineering
+- type: industrialRecipe
+  id: IndustrialPrepareSilica
+  processor: Smelter
+  time: 6
+  inputs:
+    QuartzDust: 1
+  outputs:
+    IndustrialSiliconDioxide1: 1
+  minimumTier: Basic
+- type: industrialRecipe
+  id: IndustrialFormIronPlates
+  processor: Assembler
+  time: 4
+  inputs:
+    IndustrialIronIngot: 1
+  outputs:
+    IndustrialIronPlate1: 1
+  minimumTier: Basic
+- type: industrialRecipe
+  id: IndustrialCrushIronIngot
+  processor: Crusher
+  time: 6
+  inputs:
+    IndustrialIronIngot: 1
+  outputs:
+    IronDust1: 1
+  minimumTier: Basic
+- type: industrialRecipe
+  id: IndustrialCrushIngotCopper
+  processor: Crusher
+  time: 6
+  inputs:
+    IngotCopper: 1
+  outputs:
+    CopperDust1: 1
+  minimumTier: Basic
+- type: industrialRecipe
+  id: IndustrialCrushIngotGold
+  processor: Crusher
+  time: 6
+  inputs:
+    IngotGold: 1
+  outputs:
+    GoldDust1: 1
+  minimumTier: Basic
+- type: industrialRecipe
+  id: IndustrialCrushIngotSilver
+  processor: Crusher
+  time: 6
+  inputs:
+    IngotSilver: 1
+  outputs:
+    SilverDust1: 1
+  minimumTier: Basic
+- type: industrialRecipe
+  id: IndustrialGrindQuartzDirect
+  processor: Crusher
+  time: 8
+  inputs:
+    SpaceQuartz: 1
+  outputs:
+    QuartzDust1: 1
+  minimumTier: Basic
+- type: industrialRecipe
+  id: IndustrialEtchPrintedBoards
+  processor: Assembler
+  time: 8
+  inputs:
+    SheetCopper: 1
+    SheetGlass: 1
+  outputs:
+    IndustrialPrintedBoard1: 2
+  minimumTier: Basic
+  requiredTechnology: IndustrialElectronics
+  cleanroomGrade: 1
+  requireDataDisk: true
+- type: industrialRecipe
+  id: IndustrialMakeAdvancedBoards
+  processor: Assembler
+  time: 12
+  inputs:
+    IndustrialPrintedBoard: 2
+    IndustrialAdvancedProcessor: 1
+    IndustrialSiliconDioxide: 2
+  outputs:
+    IndustrialAdvancedBoard1: 2
+  minimumTier: Basic
+  requiredTechnology: IndustrialPrecisionElectronics
+  cleanroomGrade: 2
+  requireDataDisk: true
+- type: industrialRecipe
+  id: IndustrialMakePerfectBoards
+  processor: Assembler
+  time: 20
+  inputs:
+    IndustrialAdvancedBoard: 2
+    IndustrialAdvancedProcessor: 2
+    IndustrialAlloyBlank: 1
+  outputs:
+    IndustrialPerfectBoard1: 2
+  minimumTier: Perfect
+  requiredTechnology: IndustrialPerfectMaterials
+  cleanroomGrade: 2
+  requireDataDisk: true
+
+- type: industrialRecipe
+  id: IndustrialSmeltSteel
+  processor: BlastFurnace
+  time: 12
+  inputs:
+    IndustrialIronIngot: 2
+    Coal: 1
+  outputs:
+    SheetSteel1: 2
+  minimumTier: Industrial
+  requiredTechnology: IndustrialMetallurgy
+  requireDataDisk: true
+- type: industrialRecipe
+  id: IndustrialMakeHeatResistantAlloy
+  processor: BlastFurnace
+  time: 16
+  inputs:
+    SheetSteel: 2
+    SheetPlasma: 1
+    QuartzDust: 1
+  outputs:
+    IndustrialAlloyBlank1: 2
+  minimumTier: Industrial
+  requiredTechnology: IndustrialMetallurgy
+  requireDataDisk: true
+
+- type: industrialRecipe
+  id: IndustrialExtrudeIronRods
+  processor: Extruder
+  time: 4
+  inputs:
+    IndustrialIronIngot: 1
+  outputs:
+    IndustrialIronRod1: 2
+  minimumTier: Industrial
+  requiredTechnology: IndustrialAutomation
+  requireDataDisk: true
+- type: industrialRecipe
+  id: IndustrialExtrudeSteelRods
+  processor: Extruder
+  time: 4
+  inputs:
+    SheetSteel: 1
+  outputs:
+    PartRodMetal1: 2
+  minimumTier: Industrial
+  requiredTechnology: IndustrialAutomation
+  requireDataDisk: true
+- type: technology
+  id: IndustrialElectronics
+  name: industrial-tech-electronics
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: cpuboard
+  discipline: Industrial
+  tier: 1
+  cost: 1500
+  technologyPrerequisites: []
+  position: 24, 40
+  genericUnlocks:
+  - unlockDescription: industrial-tech-electronics-desc
+  recipeUnlocks: []
+- type: technology
+  id: IndustrialAutomation
+  name: industrial-tech-automation
+  icon:
+    sprite: _Eclipse/Structures/Machines/industrial_assembler.rsi
+    state: icon
+  discipline: Industrial
+  tier: 2
+  cost: 2500
+  technologyPrerequisites:
+  - IndustrialElectronics
+  position: 25, 40
+  genericUnlocks:
+  - unlockDescription: industrial-tech-automation-desc
+  recipeUnlocks:
+  - MineralScannerEmpty
+  - ClothingMaskWeldingGas
+- type: technology
+  id: IndustrialProcessChemistry
+  name: industrial-tech-processchemistry
+  icon:
+    sprite: Objects/Specific/Chemistry/beaker.rsi
+    state: beaker
+  discipline: Industrial
+  tier: 2
+  cost: 1200
+  technologyPrerequisites:
+  - IndustrialAutomation
+  position: 26, 41
+  genericUnlocks:
+  - unlockDescription: industrial-tech-processchemistry-desc
+  recipeUnlocks: []
+- type: technology
+  id: IndustrialMetallurgy
+  name: industrial-tech-metallurgy
+  icon:
+    sprite: _Eclipse/Structures/Machines/industrial_smelter.rsi
+    state: icon
+  discipline: Industrial
+  tier: 2
+  cost: 3500
+  technologyPrerequisites:
+  - IndustrialProcessChemistry
+  position: 27, 41
+  genericUnlocks:
+  - unlockDescription: industrial-tech-metallurgy-desc
+  recipeUnlocks: []
+- type: technology
+  id: IndustrialPrecisionElectronics
+  name: industrial-tech-precisionelectronics
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: cpuboard_adv
+  discipline: Industrial
+  tier: 3
+  cost: 2400
+  technologyPrerequisites:
+  - IndustrialElectronics
+  - IndustrialMetallurgy
+  position: 28, 40
+  genericUnlocks:
+  - unlockDescription: industrial-tech-precisionelectronics-desc
+  recipeUnlocks: []
+- type: technology
+  id: IndustrialAdvancedAutomation
+  name: industrial-tech-advancedautomation
+  icon:
+    sprite: _Eclipse/Structures/Machines/industrial_assembler.rsi
+    state: icon
+  discipline: Industrial
+  tier: 3
+  cost: 6000
+  technologyPrerequisites:
+  - IndustrialPrecisionElectronics
+  - IndustrialChipPackaging
+  position: 34, 40
+  genericUnlocks:
+  - unlockDescription: industrial-tech-advancedautomation-desc
+  recipeUnlocks: []
+- type: technology
+  id: IndustrialSalvageEquipment
+  name: industrial-tech-salvageequipment
+  icon:
+    sprite: Objects/Tools/handdrill.rsi
+    state: handdrill
+  discipline: Industrial
+  tier: 3
+  cost: 4000
+  technologyPrerequisites:
+  - IndustrialAdvancedAutomation
+  position: 35, 43
+  genericUnlocks:
+  - unlockDescription: industrial-tech-salvageequipment-desc
+  recipeUnlocks:
+  - OreBagOfHolding
+  - AdvancedMineralScannerEmpty
+  - ClothingShoesBootsJump
+- type: technology
+  id: IndustrialSecurityEquipment
+  name: industrial-tech-securityequipment
+  icon:
+    sprite: Clothing/OuterClothing/Armor/bulletproof.rsi
+    state: icon
+  discipline: Arsenal
+  tier: 3
+  cost: 4500
+  technologyPrerequisites:
+  - IndustrialAdvancedAutomation
+  position: 35, 44
+  genericUnlocks:
+  - unlockDescription: industrial-tech-securityequipment-desc
+  recipeUnlocks: []
+- type: technology
+  id: IndustrialScienceEquipment
+  name: industrial-tech-scienceequipment
+  icon:
+    sprite: Objects/Specific/Research/anomalyscanner.rsi
+    state: icon
+  discipline: Experimental
+  tier: 3
+  cost: 4000
+  technologyPrerequisites:
+  - IndustrialPrecisionElectronics
+  position: 29, 40
+  genericUnlocks:
+  - unlockDescription: industrial-tech-scienceequipment-desc
+  recipeUnlocks: []
+- type: technology
+  id: IndustrialPerfectAutomation
+  name: industrial-tech-perfectautomation
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: bluespacearray
+  discipline: Industrial
+  tier: 4
+  cost: 14000
+  technologyPrerequisites:
+  - IndustrialAdvancedAutomation
+  - IndustrialProcessChemistry
+  position: 35, 42
+  genericUnlocks:
+  - unlockDescription: industrial-tech-perfectautomation-desc
+  recipeUnlocks: []
+- type: technology
+  id: IndustrialPerfectMaterials
+  name: industrial-tech-perfectmaterials
+  icon:
+    sprite: Objects/Materials/ingots.rsi
+    state: gold
+  discipline: Industrial
+  tier: 4
+  cost: 14000
+  technologyPrerequisites:
+  - IndustrialPerfectAutomation
+  - IndustrialMetallurgy
+  position: 36, 40
+  genericUnlocks:
+  - unlockDescription: industrial-tech-perfectmaterials-desc
+  recipeUnlocks: []
+- type: technology
+  id: IndustrialPerfectEquipment
+  name: industrial-tech-perfectequipment
+  icon:
+    sprite: Objects/Weapons/Guns/Battery/pulse_carbine.rsi
+    state: base
+  discipline: Arsenal
+  tier: 4
+  cost: 18000
+  technologyPrerequisites:
+  - IndustrialPerfectMaterials
+  - IndustrialSecurityEquipment
+  - IndustrialSalvageEquipment
+  position: 37, 40
+  genericUnlocks:
+  - unlockDescription: industrial-tech-perfectequipment-desc
+  recipeUnlocks: []
+- type: industrialRecipe
+  id: IndustrialProduceSalvageDrill
+  processor: Assembler
+  time: 20
+  inputs:
+    SheetSteel: 6
+    IndustrialCircuitCore: 2
+    IndustrialMechanicalCore: 2
+  outputs:
+    MiningDrill: 1
+  minimumTier: Basic
+  requiredTechnology: IndustrialAutomation
+  requireDataDisk: true
+- type: industrialRecipe
+  id: IndustrialProduceDiamondDrill
+  processor: Assembler
+  time: 20
+  inputs:
+    SheetPlasteel: 8
+    IndustrialAdvancedBoard: 2
+    IndustrialAdvancedProcessor: 1
+    MaterialDiamond: 4
+  outputs:
+    MiningDrillDiamond: 1
+  minimumTier: Perfect
+  requiredTechnology: IndustrialPerfectEquipment
+  requireDataDisk: true
+
+- type: industrialRecipe
+  id: IndustrialProduceSecurityArmor
+  processor: Assembler
+  time: 20
+  inputs:
+    SheetSteel: 8
+    IndustrialCircuitCore: 1
+    SheetPlasteel: 4
+    MaterialCloth: 2
+  outputs:
+    IndustrialAdvancedArmor: 1
+  minimumTier: Industrial
+  requiredTechnology: IndustrialSecurityEquipment
+  requireDataDisk: true
+- type: industrialRecipe
+  id: IndustrialProduceSecurityHelmet
+  processor: Assembler
+  time: 20
+  inputs:
+    SheetSteel: 4
+    IndustrialCircuitCore: 1
+  outputs:
+    ClothingHeadHelmetBasic: 1
+  minimumTier: Basic
+  requiredTechnology: IndustrialAutomation
+  requireDataDisk: true
+- type: industrialRecipe
+  id: IndustrialProduceScienceAnalyzer
+  processor: Assembler
+  time: 20
+  inputs:
+    SheetGlass: 4
+    IndustrialAdvancedBoard: 1
+    IndustrialCircuitCore: 2
+  outputs:
+    AnomalyScanner: 1
+  minimumTier: Industrial
+  requiredTechnology: IndustrialScienceEquipment
+  requireDataDisk: true
+- type: industrialRecipe
+  id: IndustrialProducePrototypeWelder
+  processor: Assembler
+  time: 20
+  inputs:
+    SheetPlasteel: 4
+    IndustrialAdvancedBoard: 1
+    IndustrialAdvancedProcessor: 1
+    SheetSteel: 2
+  outputs:
+    WelderExperimental: 1
+  minimumTier: Industrial
+  requiredTechnology: IndustrialSalvageEquipment
+  requireDataDisk: true
+- type: industrialRecipe
+  id: IndustrialProduceAdvancedLaser
+  processor: Assembler
+  time: 20
+  inputs:
+    SheetPlasteel: 8
+    IndustrialAdvancedBoard: 2
+    IndustrialAdvancedProcessor: 2
+    SheetSteel: 4
+    SheetGlass: 2
+    SheetPlastic: 2
+  outputs:
+    IndustrialAdvancedLaserCarbine: 1
+  minimumTier: Industrial
+  requiredTechnology: IndustrialSecurityEquipment
+  requireDataDisk: true
+- type: industrialRecipe
+  id: IndustrialProducePerfectArmor
+  processor: Assembler
+  time: 20
+  inputs:
+    SheetPlasteel: 12
+    IndustrialPerfectBoard: 2
+    IndustrialAlloyBlank: 4
+    MaterialCloth: 2
+  outputs:
+    IndustrialPerfectArmor: 1
+  minimumTier: Perfect
+  requiredTechnology: IndustrialPerfectEquipment
+  requireDataDisk: true
+- type: entity
+  id: IndustrialResourceDeposit
+  name: surface mineral vein
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: Sprite
+    sprite: Structures/Walls/rock.rsi
+    state: rock_tin
+    drawdepth: FloorTiles
+  - type: IndustrialResourceDeposit
+- type: entity
+  id: IndustrialDepositIron
+  parent: IndustrialResourceDeposit
+  name: iron floor vein
+  components:
+  - type: Sprite
+    state: rock_tin
+  - type: IndustrialResourceDeposit
+    resource: SteelOre1
+    remaining: 120
+- type: biomeMarkerLayer
+  id: IndustrialSurfaceVeinsIron
+  entityMask:
+    AsteroidRock: IndustrialDepositIron
+    WallRock: IndustrialDepositIron
+    WallRockBasalt: IndustrialDepositIron
+    WallRockChromite: IndustrialDepositIron
+    WallRockSand: IndustrialDepositIron
+    WallRockSnow: IndustrialDepositIron
+  maxCount: 12
+  minGroupSize: 6
+  maxGroupSize: 10
+  radius: 2
+- type: entity
+  id: IndustrialDepositCopper
+  parent: IndustrialResourceDeposit
+  name: copper floor vein
+  components:
+  - type: Sprite
+    state: rock_tin
+    color: '#C98050'
+  - type: IndustrialResourceDeposit
+    resource: CopperOre1
+    remaining: 120
+- type: biomeMarkerLayer
+  id: IndustrialSurfaceVeinsCopper
+  entityMask:
+    AsteroidRock: IndustrialDepositCopper
+    WallRock: IndustrialDepositCopper
+    WallRockBasalt: IndustrialDepositCopper
+    WallRockChromite: IndustrialDepositCopper
+    WallRockSand: IndustrialDepositCopper
+    WallRockSnow: IndustrialDepositCopper
+  maxCount: 12
+  minGroupSize: 6
+  maxGroupSize: 10
+  radius: 2
+- type: entity
+  id: IndustrialDepositQuartz
+  parent: IndustrialResourceDeposit
+  name: quartz floor vein
+  components:
+  - type: Sprite
+    state: rock_quartz
+  - type: IndustrialResourceDeposit
+    resource: SpaceQuartz1
+    remaining: 120
+- type: biomeMarkerLayer
+  id: IndustrialSurfaceVeinsQuartz
+  entityMask:
+    AsteroidRock: IndustrialDepositQuartz
+    WallRock: IndustrialDepositQuartz
+    WallRockBasalt: IndustrialDepositQuartz
+    WallRockChromite: IndustrialDepositQuartz
+    WallRockSand: IndustrialDepositQuartz
+    WallRockSnow: IndustrialDepositQuartz
+  maxCount: 12
+  minGroupSize: 6
+  maxGroupSize: 10
+  radius: 2
+- type: entity
+  id: IndustrialDepositCoal
+  parent: IndustrialResourceDeposit
+  name: coal floor vein
+  components:
+  - type: Sprite
+    state: rock_coal
+  - type: IndustrialResourceDeposit
+    resource: Coal1
+    remaining: 120
+- type: biomeMarkerLayer
+  id: IndustrialSurfaceVeinsCoal
+  entityMask:
+    AsteroidRock: IndustrialDepositCoal
+    WallRock: IndustrialDepositCoal
+    WallRockBasalt: IndustrialDepositCoal
+    WallRockChromite: IndustrialDepositCoal
+    WallRockSand: IndustrialDepositCoal
+    WallRockSnow: IndustrialDepositCoal
+  maxCount: 12
+  minGroupSize: 6
+  maxGroupSize: 10
+  radius: 2
+- type: entity
+  id: IndustrialDepositGold
+  parent: IndustrialResourceDeposit
+  name: gold floor vein
+  components:
+  - type: Sprite
+    state: rock_gold
+  - type: IndustrialResourceDeposit
+    resource: GoldOre1
+    remaining: 60
+- type: biomeMarkerLayer
+  id: IndustrialSurfaceVeinsGold
+  entityMask:
+    AsteroidRock: IndustrialDepositGold
+    WallRock: IndustrialDepositGold
+    WallRockBasalt: IndustrialDepositGold
+    WallRockChromite: IndustrialDepositGold
+    WallRockSand: IndustrialDepositGold
+    WallRockSnow: IndustrialDepositGold
+  maxCount: 6
+  minGroupSize: 6
+  maxGroupSize: 10
+  radius: 2
+- type: entity
+  id: IndustrialDepositSilver
+  parent: IndustrialResourceDeposit
+  name: silver floor vein
+  components:
+  - type: Sprite
+    state: rock_silver
+  - type: IndustrialResourceDeposit
+    resource: SilverOre1
+    remaining: 60
+- type: biomeMarkerLayer
+  id: IndustrialSurfaceVeinsSilver
+  entityMask:
+    AsteroidRock: IndustrialDepositSilver
+    WallRock: IndustrialDepositSilver
+    WallRockBasalt: IndustrialDepositSilver
+    WallRockChromite: IndustrialDepositSilver
+    WallRockSand: IndustrialDepositSilver
+    WallRockSnow: IndustrialDepositSilver
+  maxCount: 6
+  minGroupSize: 6
+  maxGroupSize: 10
+  radius: 2
+- type: entity
+  id: IndustrialDepositPlasma
+  parent: IndustrialResourceDeposit
+  name: plasma floor vein
+  components:
+  - type: Sprite
+    state: rock_phoron
+  - type: IndustrialResourceDeposit
+    resource: PlasmaOre1
+    remaining: 60
+- type: biomeMarkerLayer
+  id: IndustrialSurfaceVeinsPlasma
+  entityMask:
+    AsteroidRock: IndustrialDepositPlasma
+    WallRock: IndustrialDepositPlasma
+    WallRockBasalt: IndustrialDepositPlasma
+    WallRockChromite: IndustrialDepositPlasma
+    WallRockSand: IndustrialDepositPlasma
+    WallRockSnow: IndustrialDepositPlasma
+  maxCount: 6
+  minGroupSize: 6
+  maxGroupSize: 10
+  radius: 2
+- type: entity
+  id: IndustrialDepositUranium
+  parent: IndustrialResourceDeposit
+  name: uranium floor vein
+  components:
+  - type: Sprite
+    state: rock_uranium
+  - type: IndustrialResourceDeposit
+    resource: UraniumOre1
+    remaining: 60
+- type: biomeMarkerLayer
+  id: IndustrialSurfaceVeinsUranium
+  entityMask:
+    AsteroidRock: IndustrialDepositUranium
+    WallRock: IndustrialDepositUranium
+    WallRockBasalt: IndustrialDepositUranium
+    WallRockChromite: IndustrialDepositUranium
+    WallRockSand: IndustrialDepositUranium
+    WallRockSnow: IndustrialDepositUranium
+  maxCount: 6
+  minGroupSize: 6
+  maxGroupSize: 10
+  radius: 2
+- type: entity
+  id: IndustrialDrill
+  parent: IndustrialTierIndustrialProcessor
+  name: stationary drill
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_drill.rsi
+    layers:
+    - state: icon
+      map: ["enum.IndustrialProcessorVisualLayers.Base"]
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_drill.rsi
+    state: icon
+  - type: GenericVisualizer
+    visuals:
+      enum.IndustrialProcessorVisuals.State:
+        enum.IndustrialProcessorVisualLayers.Base:
+          Working: { state: icon }
+          Paused: { state: icon }
+  - type: IndustrialProcessor
+    processorType: Extractor
+    enabled: false
+    northFacePort: Disabled
+    southFacePort: Disabled
+    westFacePort: Disabled
+    eastFacePort: ItemOutput
+  - type: IndustrialExtractor
+    interval: 5
+    amount: 1
+  - type: ApcPowerReceiver
+    powerLoad: 3000
+  - type: Transform
+    anchored: false
+- type: industrialRecipe
+  id: IndustrialBuildDrill
+  processor: Assembler
+  minimumTier: Basic
+  requiredTechnology: IndustrialResourceExtraction
+  time: 25
+  inputs:
+    IndustrialIronPlate: 8
+    IndustrialCircuitCore: 2
+    IndustrialMechanicalCore: 2
+  outputs:
+    IndustrialDrillFlatpack: 1
+  requireDataDisk: true
+
+- type: entity
+  id: IndustrialExcavator
+  parent: IndustrialTierIndustrialProcessor
+  name: stationary excavator
+  components:
+  - type: IndustrialProcessor
+    processorType: Extractor
+    enabled: false
+    northFacePort: Disabled
+    southFacePort: Disabled
+    westFacePort: Disabled
+    eastFacePort: ItemOutput
+  - type: IndustrialExtractor
+    interval: 3
+    amount: 2
+  - type: ApcPowerReceiver
+    powerLoad: 6500
+  - type: Transform
+    anchored: false
+- type: industrialRecipe
+  id: IndustrialBuildExcavator
+  processor: Assembler
+  minimumTier: Industrial
+  requiredTechnology: IndustrialHeavyExtraction
+  time: 45
+  inputs:
+    SheetPlasteel: 8
+    IndustrialMechanicalCore: 4
+    IndustrialAdvancedBoard: 2
+    IndustrialAdvancedProcessor: 1
+    IndustrialAlloyBlank: 2
+  outputs:
+    IndustrialExcavatorFlatpack: 1
+  requireDataDisk: true
+
+- type: industrialFabricationRecipe
+  id: FabricateItemPipeLP
+  result: LpItemPipe
+  duration: 5
+  ingredients:
+    IndustrialIronPlate: 1
+- type: industrialRecipe
+  id: IndustrialProduceItemPipeLP
+  processor: PipeFabricator
+  minimumTier: Industrial
+  requiredTechnology: IndustrialAutomation
+  time: 4
+  inputs:
+    IndustrialIronPlate: 1
+  outputs:
+    LpItemPipe: 2
+  requireDataDisk: true
+- type: industrialFabricationRecipe
+  id: FabricateItemPipeMP
+  result: MpItemPipe
+  duration: 5
+  ingredients:
+    IndustrialIronPlate: 2
+  requiredTechnology: IndustrialAutomation
+- type: industrialRecipe
+  id: IndustrialProduceItemPipeMP
+  processor: PipeFabricator
+  minimumTier: Industrial
+  requiredTechnology: IndustrialAutomation
+  time: 4
+  inputs:
+    IndustrialIronPlate: 2
+  outputs:
+    MpItemPipe: 2
+  requireDataDisk: true
+- type: industrialFabricationRecipe
+  id: FabricateItemPipeHP
+  result: HpItemPipe
+  duration: 5
+  ingredients:
+    IndustrialIronPlate: 4
+  requiredTechnology: IndustrialAutomation
+- type: industrialRecipe
+  id: IndustrialProduceItemPipeHP
+  processor: PipeFabricator
+  minimumTier: Industrial
+  requiredTechnology: IndustrialPerfectAutomation
+  time: 4
+  inputs:
+    IndustrialIronPlate: 4
+  outputs:
+    HpItemPipe: 2
+  requireDataDisk: true
+- type: industrialRecipe
+  id: IndustrialProducePipeLP
+  processor: PipeFabricator
+  minimumTier: Industrial
+  requiredTechnology: IndustrialAutomation
+  time: 4
+  inputs:
+    SheetSteel: 1
+  outputs:
+    BasicLiquidPipe: 2
+  requireDataDisk: true
+- type: industrialRecipe
+  id: IndustrialProducePipeMP
+  processor: PipeFabricator
+  minimumTier: Industrial
+  requiredTechnology: IndustrialProcessChemistry
+  time: 4
+  inputs:
+    SheetSteel: 2
+  outputs:
+    IndustrialLiquidPipe: 2
+  requireDataDisk: true
+- type: industrialRecipe
+  id: IndustrialProducePipeHP
+  processor: PipeFabricator
+  minimumTier: Industrial
+  requiredTechnology: IndustrialPerfectAutomation
+  time: 4
+  inputs:
+    SheetSteel: 4
+  outputs:
+    PerfectLiquidPipe: 2
+  requireDataDisk: true
+- type: industrialRecipe
+  id: IndustrialProducePipeGasStraight
+  processor: PipeFabricator
+  minimumTier: Industrial
+  requiredTechnology: IndustrialAutomation
+  time: 4
+  inputs:
+    SheetSteel: 1
+  outputs:
+    GasPipeStraight: 2
+  requireDataDisk: true
+- type: industrialRecipe
+  id: IndustrialProducePipeGasBend
+  processor: PipeFabricator
+  minimumTier: Industrial
+  requiredTechnology: IndustrialAutomation
+  time: 4
+  inputs:
+    SheetSteel: 1
+  outputs:
+    GasPipeBend: 2
+  requireDataDisk: true
+- type: industrialRecipe
+  id: IndustrialProducePipeGasT
+  processor: PipeFabricator
+  minimumTier: Industrial
+  requiredTechnology: IndustrialAutomation
+  time: 4
+  inputs:
+    SheetSteel: 2
+  outputs:
+    GasPipeTJunction: 2
+  requireDataDisk: true
+- type: industrialRecipe
+  id: IndustrialProducePipeGasCross
+  processor: PipeFabricator
+  minimumTier: Industrial
+  requiredTechnology: IndustrialAutomation
+  time: 4
+  inputs:
+    SheetSteel: 2
+  outputs:
+    GasPipeFourway: 2
+  requireDataDisk: true
+- type: rcd
+  id: IndustrialRCDLiquid
+  name: industrial-rcd-liquid
+  category: Piping
+  sprite: /Textures/Interface/Radial/RCD/cable_terminal.png
+  mode: ConstructObject
+  prototype: BasicLiquidPipe
+  cost: 4
+  delay: 2
+  rotation: User
+- type: rcd
+  id: IndustrialRCDGasStraight
+  name: industrial-rcd-gasstraight
+  category: Piping
+  sprite: /Textures/Interface/Radial/RCD/cable_terminal.png
+  mode: ConstructObject
+  prototype: GasPipeStraight
+  cost: 4
+  delay: 2
+  rotation: User
+- type: rcd
+  id: IndustrialRCDGasBend
+  name: industrial-rcd-gasbend
+  category: Piping
+  sprite: /Textures/Interface/Radial/RCD/cable_terminal.png
+  mode: ConstructObject
+  prototype: GasPipeBend
+  cost: 4
+  delay: 2
+  rotation: User
+- type: rcd
+  id: IndustrialRCDGasT
+  name: industrial-rcd-gast
+  category: Piping
+  sprite: /Textures/Interface/Radial/RCD/cable_terminal.png
+  mode: ConstructObject
+  prototype: GasPipeTJunction
+  cost: 4
+  delay: 2
+  rotation: User
+- type: industrialFabricationRecipe
+  id: FabricatePerfectSeedBoard
+  result: IndustrialPerfectBoard1
+  duration: 90
+  minimumWorkbenchTier: 2
+  requiredTechnology: IndustrialPerfectAutomation
+  cleanroomGrade: 2
+  ingredients:
+    IndustrialAdvancedBoard: 2
+    IndustrialAdvancedProcessor: 2
+    IndustrialAlloyBlank: 1
+- type: stack
+  id: IndustrialIronRod
+  parent: BaseMediumStack
+  name: stack-industrial-iron-rods
+  icon:
+    sprite: /Textures/Objects/Materials/parts.rsi
+    state: rods
+  spawn: IndustrialIronRod1
+- type: entity
+  id: IndustrialIronRod
+  parent: PartRodMetal
+  name: iron rods
+  components:
+  - type: Stack
+    stackType: IndustrialIronRod
+  - type: PhysicalComposition
+    materialComposition:
+      IndustrialIron: 50
+- type: entity
+  id: IndustrialIronRod1
+  parent: IndustrialIronRod
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+- type: industrialFabricationRecipe
+  id: FabricateIronRods
+  result: IndustrialIronRod1
+  resultCount: 2
+  duration: 8
+  ingredients:
+    IndustrialIronIngot: 1
+- type: industrialRecipe
+  id: IndustrialCastIronPlates
+  processor: Smelter
+  time: 6
+  inputs:
+    IndustrialIronIngot: 1
+  outputs:
+    IndustrialIronPlate1: 1
+- type: industrialRecipe
+  id: IndustrialPolymerizePlastic
+  processor: ChemicalReactor
+  minimumTier: Industrial
+  requiredTechnology: IndustrialProcessChemistry
+  time: 12
+  inputs:
+    PlasmaDust: 2
+  fluidInputs:
+    Water: 10
+  outputs:
+    SheetPlastic1: 2
+  requireDataDisk: true
+- type: entity
+  id: IndustrialResearchSampleGeology
+  parent: BaseItem
+  name: geology research sample
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/module.rsi
+    state: blank_mod
+  - type: Item
+    size: Small
+  - type: IndustrialResearchSample
+    points: 750
+- type: industrialFabricationRecipe
+  id: PrepareIndustrialSampleGeology
+  result: IndustrialResearchSampleGeology
+  ingredients:
+    CopperOre: 2
+    IronDust: 2
+    QuartzDust: 2
+    SheetPaper: 1
+  duration: 15
+- type: entity
+  id: IndustrialResearchSampleMetallurgy
+  parent: BaseItem
+  name: metallurgy research sample
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/module.rsi
+    state: blank_mod
+  - type: Item
+    size: Small
+  - type: IndustrialResearchSample
+    points: 1500
+- type: industrialFabricationRecipe
+  id: PrepareIndustrialSampleMetallurgy
+  result: IndustrialResearchSampleMetallurgy
+  ingredients: &id001
+    IndustrialAlloyBlank: 1
+    IndustrialSiliconDioxide: 2
+    IndustrialPrintedBoard: 1
+  duration: 15
+  requiredTechnology: IndustrialMetallurgy
+- type: industrialRecipe
+  id: AutoPrepareIndustrialSampleMetallurgy
+  processor: Assembler
+  minimumTier: Industrial
+  requiredTechnology: IndustrialMetallurgy
+  time: 8
+  inputs: *id001
+  outputs:
+    IndustrialResearchSampleMetallurgy: 1
+  requireDataDisk: true
+- type: entity
+  id: IndustrialResearchSampleElectronics
+  parent: BaseItem
+  name: electronics research sample
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/module.rsi
+    state: cpuboard
+  - type: Item
+    size: Small
+  - type: IndustrialResearchSample
+    points: 2500
+- type: industrialFabricationRecipe
+  id: PrepareIndustrialSampleElectronics
+  result: IndustrialResearchSampleElectronics
+  ingredients: &id002
+    IndustrialAdvancedBoard: 1
+    IndustrialAdvancedProcessor: 1
+  duration: 15
+  requiredTechnology: IndustrialPrecisionElectronics
+- type: industrialRecipe
+  id: AutoPrepareIndustrialSampleElectronics
+  processor: Assembler
+  minimumTier: Industrial
+  requiredTechnology: IndustrialPrecisionElectronics
+  time: 8
+  inputs: *id002
+  outputs:
+    IndustrialResearchSampleElectronics: 1
+  requireDataDisk: true
+- type: entity
+  id: IndustrialAdvancedLaserCarbine
+  parent: WeaponLaserCarbine
+  name: precision laser carbine
+  components:
+  - type: Battery
+    maxCharge: 2400
+    startingCharge: 2400
+  - type: BatteryAmmoProvider
+    fireCost: 80
+- type: entity
+  id: IndustrialAdvancedArmor
+  parent: ClothingOuterArmorBulletproof
+  name: industrial composite armor
+  components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.6
+        Slash: 0.55
+        Piercing: 0.35
+        Heat: 0.55
+- type: entity
+  id: IndustrialPerfectArmor
+  parent: IndustrialAdvancedArmor
+  name: perfect composite armor
+  components:
+  - type: Armor
+    modifiers:
+      coefficients:
+        Blunt: 0.4
+        Slash: 0.4
+        Piercing: 0.2
+        Heat: 0.35
+- type: technology
+  id: IndustrialEnergyStorage
+  name: industrial-tech-energystorage
+  icon:
+    sprite: Objects/Power/power_cells.rsi
+    state: high
+  discipline: Industrial
+  tier: 3
+  cost: 4500
+  technologyPrerequisites:
+  - IndustrialAdvancedAutomation
+  position: 35, 40
+  genericUnlocks:
+  - unlockDescription: industrial-tech-energystorage-desc
+  recipeUnlocks: []
+- type: industrialRecipe
+  id: IndustrialAdvancedHighPowerCells
+  processor: Assembler
+  minimumTier: Industrial
+  requiredTechnology: IndustrialEnergyStorage
+  requireDataDisk: true
+  time: 15
+  inputs:
+    IndustrialAdvancedBoard: 1
+    SheetSteel: 2
+    SheetGlass: 2
+    SheetCopper: 2
+  outputs:
+    PowerCellHighPrinted: 1
+- type: construction
+  id: IndustrialWorkbenchConstruction
+  graph: IndustrialWorkbenchConstruction
+  startNode: start
+  targetNode: bench
+  category: construction-category-industrial-mechanisms
+  placementMode: SnapgridCenter
+  objectType: Structure
+  canBuildInImpassable: false
+- type: constructionGraph
+  id: IndustrialWorkbenchConstruction
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: bench
+      steps:
+      - material: WoodPlank
+        amount: 6
+        doAfter: 2
+      - material: IndustrialIronPlate
+        amount: 4
+        doAfter: 2
+      - tool: Screwing
+        doAfter: 3
+  - node: bench
+    entity: IndustrialWorkbench
+- type: constructionGraph
+  id: IndustrialChassisAssembly
+  start: frame
+  graph:
+  - node: frame
+    entity: IndustrialChassisConstruction
+    edges:
+    - to: chassis
+      steps:
+      - material: IndustrialIronPlate
+        amount: 8
+        doAfter: 3
+      - material: IndustrialIronRod
+        amount: 4
+        doAfter: 2
+      - tool: Screwing
+        doAfter: 3
+  - node: chassis
+    entity: IndustrialMachineChassis
+
+- type: construction
+  id: IndustrialManualCrusherConstruction
+  graph: IndustrialManualCrusherConstruction
+  startNode: start
+  targetNode: machine
+  category: construction-category-industrial-mechanisms
+  placementMode: SnapgridCenter
+  objectType: Structure
+  canBuildInImpassable: false
+- type: constructionGraph
+  id: IndustrialManualCrusherConstruction
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: machine
+      steps:
+      - material: Steel
+        amount: 6
+        doAfter: 3
+      - material: MetalRod
+        amount: 2
+        doAfter: 2
+      - tool: Screwing
+        doAfter: 3
+  - node: machine
+    entity: IndustrialManualCrusher
+
+- type: construction
+  id: IndustrialSmelterConstruction
+  graph: IndustrialSmelterConstruction
+  startNode: start
+  targetNode: machine
+  category: construction-category-industrial-mechanisms
+  placementMode: SnapgridCenter
+  objectType: Structure
+  canBuildInImpassable: false
+- type: constructionGraph
+  id: IndustrialSmelterConstruction
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: machine
+      steps:
+      - material: Steel
+        amount: 10
+        doAfter: 3
+      - material: MetalRod
+        amount: 4
+        doAfter: 2
+      - tool: Screwing
+        doAfter: 3
+  - node: machine
+    entity: BasicIndustrialSmelter

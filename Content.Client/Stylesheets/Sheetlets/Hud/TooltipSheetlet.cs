@@ -1,4 +1,4 @@
-﻿using Content.Client.Examine;
+using Content.Client.Examine;
 using Content.Client.Stylesheets.Fonts;
 using Content.Client.Stylesheets.SheetletConfigs;
 using Content.Client.Stylesheets.Stylesheets;
@@ -17,9 +17,7 @@ public sealed class TooltipSheetlet<T> : Sheetlet<T> where T: PalettedStylesheet
     {
         ITooltipConfig tooltipCfg = sheet;
 
-        var tooltipBox = sheet.GetTextureOr(tooltipCfg.TooltipBoxPath, NanotrasenStylesheet.TextureRoot)
-            .IntoPatch(StyleBox.Margin.All, 2);
-        tooltipBox.SetContentMarginOverride(StyleBox.Margin.Horizontal, 7);
+        var tooltipBox = ForgeStyle.Panel(ForgeStyle.Background, ForgeStyle.Border, 7, 2);
 
         var whisperBox = sheet.GetTextureOr(tooltipCfg.WhisperBoxPath, NanotrasenStylesheet.TextureRoot)
             .IntoPatch(StyleBox.Margin.All, 2);
@@ -29,7 +27,7 @@ public sealed class TooltipSheetlet<T> : Sheetlet<T> where T: PalettedStylesheet
         [
             E<PanelContainer>()
                 .Class(StyleClass.TooltipPanel)
-                .Modulate(Color.Gray.WithAlpha(0.9f)) // TODO: you know the drill by now
+                .Modulate(Color.White)
                 .Panel(tooltipBox),
             E<RichTextLabel>()
                 .Class(StyleClass.TooltipTitle)

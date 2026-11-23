@@ -1,0 +1,54 @@
+- type: medicalSynthesis
+  id: Bicaridine
+  precursor: BicaridinePrecursor
+  medicine: Bicaridine
+  minTemperature: 315.15
+  maxTemperature: 335.15
+
+- type: guideEntry
+  id: EclipseMedicalChemistry
+  name: guide-entry-eclipse-medical-chemistry
+  text: "/ServerInfo/Guidebook/Medical/EclipseMedicalChemistry.xml"
+
+- type: medicalSynthesis
+  id: Dermaline
+  precursor: DermalinePrecursor
+  medicine: Dermaline
+  minTemperature: 335.15
+  maxTemperature: 355.15
+
+- type: medicalSynthesis
+  id: Dexalin
+  precursor: DexalinPrecursor
+  medicine: Dexalin
+  minTemperature: 295.15
+  maxTemperature: 315.15
+
+# Precursors deliberately have no medical effects. Finished supplies are unchanged.
+- type: reagent
+  id: BicaridinePrecursor
+  name: reagent-name-bicaridine-precursor
+  desc: reagent-desc-medical-precursor
+  group: Medicine
+  physicalDesc: reagent-physical-desc-cloudy
+  flavor: medicine
+  color: "#b07c28"
+  metabolisms:
+    Bloodstream:
+      effects:
+      - !type:HealthChange
+        damage:
+          types:
+            Poison: 0.5
+
+- type: reagent
+  id: DermalinePrecursor
+  parent: BicaridinePrecursor
+  name: reagent-name-dermaline-precursor
+  color: "#447984"
+
+- type: reagent
+  id: DexalinPrecursor
+  parent: BicaridinePrecursor
+  name: reagent-name-dexalin-precursor
+  color: "#567ac5"

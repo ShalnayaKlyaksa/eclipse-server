@@ -1,0 +1,427 @@
+# Shared station production queue; consoles do not manufacture items or spend research points.
+- type: entity
+  parent: BaseComputer
+  id: ComputerFabricationDispatcher
+  name: fabrication orders terminal
+  components:
+  - type: Sprite
+    layers:
+    - state: computer
+      map: ["computerLayerBody"]
+    - state: generic_keyboard
+      map: ["computerLayerKeyboard"]
+    - state: request-eng
+      map: ["computerLayerScreen"]
+    - state: generic_keys
+      map: ["computerLayerKeys"]
+    - state: generic_panel_open
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+  - type: FabricationOrderConsole
+    dispatcher: true
+    department: Engineering
+  - type: ActivatableUI
+    key: enum.FabricationOrderUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.FabricationOrderUiKey.Key:
+        type: FabricationOrderBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+  - type: AccessReader
+    access: [["Engineering"], ["Command"]]
+  - type: Computer
+    board: FabricationDispatcherCircuitboard
+  - type: PointLight
+    color: '#B8A782'
+    radius: 1.2
+    energy: 1.6
+
+- type: entity
+  parent: BaseComputerCircuitboard
+  id: FabricationDispatcherCircuitboard
+  name: fabrication terminal board
+  components:
+  - type: Sprite
+    state: cpu_engineering
+  - type: ComputerBoard
+    prototype: ComputerFabricationDispatcher
+  - type: PhysicalComposition
+    materialComposition:
+      Glass: 200
+      Steel: 200
+      Copper: 100
+
+- type: industrialFabricationRecipe
+  id: FabricateFabricationDispatcherCircuitboard
+  result: FabricationDispatcherCircuitboard
+  duration: 12
+  ingredients:
+    SheetGlass1: 2
+    SheetSteel1: 2
+    IngotCopper1: 1
+
+- type: entity
+  parent: BaseComputer
+  id: ComputerFabricationMedical
+  name: fabrication orders terminal
+  components:
+  - type: Sprite
+    layers:
+    - state: computer
+      map: ["computerLayerBody"]
+    - state: generic_keyboard
+      map: ["computerLayerKeyboard"]
+    - state: request-med
+      map: ["computerLayerScreen"]
+    - state: generic_keys
+      map: ["computerLayerKeys"]
+    - state: generic_panel_open
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+  - type: FabricationOrderConsole
+    dispatcher: false
+    department: Medical
+  - type: ActivatableUI
+    key: enum.FabricationOrderUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.FabricationOrderUiKey.Key:
+        type: FabricationOrderBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+  - type: AccessReader
+    access: [["Medical"], ["Command"]]
+  - type: Computer
+    board: FabricationMedicalCircuitboard
+  - type: PointLight
+    color: '#B8A782'
+    radius: 1.2
+    energy: 1.6
+
+- type: entity
+  parent: BaseComputerCircuitboard
+  id: FabricationMedicalCircuitboard
+  name: fabrication terminal board
+  components:
+  - type: Sprite
+    state: cpu_medical
+  - type: ComputerBoard
+    prototype: ComputerFabricationMedical
+  - type: PhysicalComposition
+    materialComposition:
+      Glass: 200
+      Steel: 200
+      Copper: 100
+
+- type: industrialFabricationRecipe
+  id: FabricateFabricationMedicalCircuitboard
+  result: FabricationMedicalCircuitboard
+  duration: 12
+  ingredients:
+    SheetGlass1: 2
+    SheetSteel1: 2
+    IngotCopper1: 1
+
+- type: entity
+  parent: BaseComputer
+  id: ComputerFabricationScience
+  name: fabrication orders terminal
+  components:
+  - type: Sprite
+    layers:
+    - state: computer
+      map: ["computerLayerBody"]
+    - state: generic_keyboard
+      map: ["computerLayerKeyboard"]
+    - state: request-sci
+      map: ["computerLayerScreen"]
+    - state: generic_keys
+      map: ["computerLayerKeys"]
+    - state: generic_panel_open
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+  - type: FabricationOrderConsole
+    dispatcher: false
+    department: Science
+  - type: ActivatableUI
+    key: enum.FabricationOrderUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.FabricationOrderUiKey.Key:
+        type: FabricationOrderBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+  - type: AccessReader
+    access: [["Research"], ["Command"]]
+  - type: Computer
+    board: FabricationScienceCircuitboard
+  - type: PointLight
+    color: '#B8A782'
+    radius: 1.2
+    energy: 1.6
+
+- type: entity
+  parent: BaseComputerCircuitboard
+  id: FabricationScienceCircuitboard
+  name: fabrication terminal board
+  components:
+  - type: Sprite
+    state: cpu_science
+  - type: ComputerBoard
+    prototype: ComputerFabricationScience
+  - type: PhysicalComposition
+    materialComposition:
+      Glass: 200
+      Steel: 200
+      Copper: 100
+
+- type: industrialFabricationRecipe
+  id: FabricateFabricationScienceCircuitboard
+  result: FabricationScienceCircuitboard
+  duration: 12
+  ingredients:
+    SheetGlass1: 2
+    SheetSteel1: 2
+    IngotCopper1: 1
+
+- type: entity
+  parent: BaseComputer
+  id: ComputerFabricationSecurity
+  name: fabrication orders terminal
+  components:
+  - type: Sprite
+    layers:
+    - state: computer
+      map: ["computerLayerBody"]
+    - state: generic_keyboard
+      map: ["computerLayerKeyboard"]
+    - state: request-sec
+      map: ["computerLayerScreen"]
+    - state: generic_keys
+      map: ["computerLayerKeys"]
+    - state: generic_panel_open
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+  - type: FabricationOrderConsole
+    dispatcher: false
+    department: Security
+  - type: ActivatableUI
+    key: enum.FabricationOrderUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.FabricationOrderUiKey.Key:
+        type: FabricationOrderBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+  - type: AccessReader
+    access: [["Security"], ["Command"]]
+  - type: Computer
+    board: FabricationSecurityCircuitboard
+  - type: PointLight
+    color: '#B8A782'
+    radius: 1.2
+    energy: 1.6
+
+- type: entity
+  parent: BaseComputerCircuitboard
+  id: FabricationSecurityCircuitboard
+  name: fabrication terminal board
+  components:
+  - type: Sprite
+    state: cpu_security
+  - type: ComputerBoard
+    prototype: ComputerFabricationSecurity
+  - type: PhysicalComposition
+    materialComposition:
+      Glass: 200
+      Steel: 200
+      Copper: 100
+
+- type: industrialFabricationRecipe
+  id: FabricateFabricationSecurityCircuitboard
+  result: FabricationSecurityCircuitboard
+  duration: 12
+  ingredients:
+    SheetGlass1: 2
+    SheetSteel1: 2
+    IngotCopper1: 1
+
+- type: entity
+  parent: BaseComputer
+  id: ComputerFabricationCargo
+  name: fabrication orders terminal
+  components:
+  - type: Sprite
+    layers:
+    - state: computer
+      map: ["computerLayerBody"]
+    - state: generic_keyboard
+      map: ["computerLayerKeyboard"]
+    - state: request
+      map: ["computerLayerScreen"]
+    - state: generic_keys
+      map: ["computerLayerKeys"]
+    - state: generic_panel_open
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+  - type: FabricationOrderConsole
+    dispatcher: false
+    department: Cargo
+  - type: ActivatableUI
+    key: enum.FabricationOrderUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.FabricationOrderUiKey.Key:
+        type: FabricationOrderBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+  - type: AccessReader
+    access: [["Cargo"], ["Command"]]
+  - type: Computer
+    board: FabricationCargoCircuitboard
+  - type: PointLight
+    color: '#B8A782'
+    radius: 1.2
+    energy: 1.6
+
+- type: entity
+  parent: BaseComputerCircuitboard
+  id: FabricationCargoCircuitboard
+  name: fabrication terminal board
+  components:
+  - type: Sprite
+    state: cpu_supply
+  - type: ComputerBoard
+    prototype: ComputerFabricationCargo
+  - type: PhysicalComposition
+    materialComposition:
+      Glass: 200
+      Steel: 200
+      Copper: 100
+
+- type: industrialFabricationRecipe
+  id: FabricateFabricationCargoCircuitboard
+  result: FabricationCargoCircuitboard
+  duration: 12
+  ingredients:
+    SheetGlass1: 2
+    SheetSteel1: 2
+    IngotCopper1: 1
+
+- type: entity
+  parent: BaseComputer
+  id: ComputerFabricationService
+  name: fabrication orders terminal
+  components:
+  - type: Sprite
+    layers:
+    - state: computer
+      map: ["computerLayerBody"]
+    - state: generic_keyboard
+      map: ["computerLayerKeyboard"]
+    - state: request-srv
+      map: ["computerLayerScreen"]
+    - state: generic_keys
+      map: ["computerLayerKeys"]
+    - state: generic_panel_open
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+  - type: FabricationOrderConsole
+    dispatcher: false
+    department: Service
+  - type: ActivatableUI
+    key: enum.FabricationOrderUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.FabricationOrderUiKey.Key:
+        type: FabricationOrderBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+  - type: AccessReader
+    access: [["Service"], ["Command"]]
+  - type: Computer
+    board: FabricationServiceCircuitboard
+  - type: PointLight
+    color: '#B8A782'
+    radius: 1.2
+    energy: 1.6
+
+- type: entity
+  parent: BaseComputerCircuitboard
+  id: FabricationServiceCircuitboard
+  name: fabrication terminal board
+  components:
+  - type: Sprite
+    state: cpu_service
+  - type: ComputerBoard
+    prototype: ComputerFabricationService
+  - type: PhysicalComposition
+    materialComposition:
+      Glass: 200
+      Steel: 200
+      Copper: 100
+
+- type: industrialFabricationRecipe
+  id: FabricateFabricationServiceCircuitboard
+  result: FabricationServiceCircuitboard
+  duration: 12
+  ingredients:
+    SheetGlass1: 2
+    SheetSteel1: 2
+    IngotCopper1: 1
+
+- type: entity
+  parent: BaseComputer
+  id: ComputerFabricationCommand
+  name: fabrication orders terminal
+  components:
+  - type: Sprite
+    layers:
+    - state: computer
+      map: ["computerLayerBody"]
+    - state: generic_keyboard
+      map: ["computerLayerKeyboard"]
+    - state: request
+      map: ["computerLayerScreen"]
+    - state: generic_keys
+      map: ["computerLayerKeys"]
+    - state: generic_panel_open
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+  - type: FabricationOrderConsole
+    dispatcher: false
+    department: Command
+  - type: ActivatableUI
+    key: enum.FabricationOrderUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.FabricationOrderUiKey.Key:
+        type: FabricationOrderBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+  - type: AccessReader
+    access: [["Command"], ["Command"]]
+  - type: Computer
+    board: FabricationCommandCircuitboard
+  - type: PointLight
+    color: '#B8A782'
+    radius: 1.2
+    energy: 1.6
+
+- type: entity
+  parent: BaseComputerCircuitboard
+  id: FabricationCommandCircuitboard
+  name: fabrication terminal board
+  components:
+  - type: Sprite
+    state: cpu_command
+  - type: ComputerBoard
+    prototype: ComputerFabricationCommand
+  - type: PhysicalComposition
+    materialComposition:
+      Glass: 200
+      Steel: 200
+      Copper: 100
+
+- type: industrialFabricationRecipe
+  id: FabricateFabricationCommandCircuitboard
+  result: FabricationCommandCircuitboard
+  duration: 12
+  ingredients:
+    SheetGlass1: 2
+    SheetSteel1: 2
+    IngotCopper1: 1

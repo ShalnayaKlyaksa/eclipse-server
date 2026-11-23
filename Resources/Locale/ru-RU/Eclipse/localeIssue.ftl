@@ -42,7 +42,7 @@ door-remote-toggle-eletrify-text = Переключить электрифика
 
 store-preset-name-nukie-delivery = Терминал снабжения Легиона пепла
 
-nuke-label-nanotrasen = NT-{$serial}
+nuke-label-nanotrasen = ВИШ-{$serial}
 
 roles-antag-pirate-name = Пират
 

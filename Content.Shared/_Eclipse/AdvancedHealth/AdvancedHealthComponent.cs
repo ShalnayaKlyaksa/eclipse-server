@@ -18,6 +18,14 @@ public sealed partial class AdvancedHealthComponent : Component
     // Local refresh caches; never replicated or persisted as medical state.
     public float LastLeftArmFunction = 1f;
     public float LastRightArmFunction = 1f;
+    [DataField] public HashSet<string> ExpectedInternalOrgans = new();
+    [DataField, AutoNetworkedField] public bool HasOrganDysfunction;
+    [DataField, AutoNetworkedField] public float PulmonaryFunction = 1f;
+    [DataField, AutoNetworkedField] public float BrainFunction = 1f;
+    [DataField, AutoNetworkedField] public bool IsBrainDestroyed;
+    [DataField, AutoNetworkedField] public float SystemicWeakness;
+    [DataField, AutoNetworkedField] public float StomachVolume;
+    [DataField, AutoNetworkedField] public float StomachCapacity;
 
     [DataField, AutoNetworkedField] public float BloodVolume = 5000f;
     [DataField, AutoNetworkedField] public float MaxBloodVolume = 5000f;
@@ -34,9 +42,7 @@ public sealed partial class AdvancedHealthComponent : Component
         {
             if (!NeedsOxygen || IsHeartStopped || IsSuffocating)
                 return 0f;
-            var capacity = 1f;
-            if (BodyParts.TryGetValue(BodyPartSlot.Chest, out var chest))
-                capacity = Math.Min(capacity, chest.OrganFraction);
+            var capacity = PulmonaryFunction * (1f - ClinicalLungImpairment);
             if (BodyParts.TryGetValue(BodyPartSlot.Neck, out var neck))
                 capacity = Math.Min(capacity, neck.OrganFraction);
             return Math.Max(0f, RespiratoryRate * TidalVolume * capacity);
@@ -65,6 +71,17 @@ public sealed partial class AdvancedHealthComponent : Component
     [DataField, AutoNetworkedField] public float InfectionLoad;
     [DataField, AutoNetworkedField] public float ToxinLoad;
     [DataField, AutoNetworkedField] public float RadiationLoad;
+    [DataField, AutoNetworkedField] public float ClinicalPain;
+    [DataField, AutoNetworkedField] public float ClinicalShock;
+    [DataField, AutoNetworkedField] public float ClinicalLungImpairment;
+    [DataField, AutoNetworkedField] public float ClinicalPressureLoss;
+    [DataField, AutoNetworkedField] public float ClinicalFever;
+    [DataField, AutoNetworkedField] public float Analgesia;
+    [DataField, AutoNetworkedField] public float Sedation;
+    [DataField, AutoNetworkedField] public float RespiratoryDepression;
+    [DataField, AutoNetworkedField] public float ClinicalPulseDrive;
+    /// <summary>Game physiology concentration in mmol/L, tuned separately from real treatment.</summary>
+    [DataField, AutoNetworkedField] public float BloodGlucose = 5f;
 
     /// <summary>
     /// Physiological core body temperature in Kelvin. It follows the non-networked surface
@@ -104,10 +121,14 @@ public sealed partial class AdvancedHealthComponent : Component
     // --- Blood type & oxygen carrying ---
     [DataField, AutoNetworkedField] public AboGroup BloodGroup = AboGroup.O;
     [DataField, AutoNetworkedField] public bool RhPositive = true;
-    /// <summary>Randomise the blood group on spawn (real-world distribution) when true.</summary>
+    /// <summary>Choose one of the species' supported blood types on spawn.</summary>
     [DataField] public bool RandomizeBloodGroup = true;
     [DataField, AutoNetworkedField] public string BodyFluid = "Blood";
     [DataField, AutoNetworkedField] public string BloodType = "O+";
+    [DataField, AutoNetworkedField] public string MedicalIdentity = "";
+    [DataField, AutoNetworkedField] public bool BloodTypeConfirmed;
+    /// <summary>Remaining severity of an incompatible-transfusion reaction, treated with supportive care.</summary>
+    [DataField, AutoNetworkedField] public float TransfusionReaction;
     [DataField, AutoNetworkedField] public Color FluidColor = Color.Red;
     [DataField] public List<string> BloodTypes = new() { "O-", "O+", "A-", "A+", "B-", "B+", "AB-", "AB+" };
     [DataField] public string IncompatibleTransfusionPopup = "advanced-health-transfusion-incompatible";
@@ -134,6 +155,7 @@ public sealed partial class AdvancedHealthComponent : Component
 
     [DataField, AutoNetworkedField] public bool IsUnconscious;
     [DataField, AutoNetworkedField] public bool IsHeartStopped;
+    [DataField, AutoNetworkedField] public CardiacArrestTrigger ArrestTrigger;
     [DataField, AutoNetworkedField] public float TimeSinceHeartStopped;
     [DataField, AutoNetworkedField] public float TimeBelowLethalOxygen;
     [DataField, AutoNetworkedField] public bool IsInAgonalState;
@@ -183,6 +205,18 @@ public sealed partial class AdvancedHealthComponent : Component
     [DataField] public float PressureBandageEffectiveness = 0.8f;
     [DataField] public float TourniquetEffectiveness = 0.97f;
     [DataField] public float HemostaticEffectiveness = 0.7f;
+    /// <summary>Game seconds of protected recovery for a stabilised fracture.</summary>
+    [DataField] public float FractureHealingTime = 300f;
+}
+
+[Serializable, NetSerializable]
+public enum CardiacArrestTrigger : byte
+{
+    Unknown,
+    Shock,
+    Trauma,
+    Hypoxia,
+    Bradycardia,
 }
 
 [RegisterComponent]
@@ -212,6 +246,23 @@ public enum AdvancedTreatmentType : byte
     Hemostatic,
     Suture,
     ForeignBodyRemoval,
+    WoundCleaning,
+    LocalAnesthesia,
+    SurgicalAccess,
+    InternalHemostasis,
+    BoneFixation,
+    SurgicalClosure,
+    TourniquetRemoval,
+    ClinicalExamination,
+    BloodTest,
+    MedicalImaging,
+    MicrobiologyTest,
+    ThoracicDrain,
+    SourceControl,
+    OrganRepair,
+    Injection,
+    XRay,
+    Electrocardiogram,
 }
 
 [RegisterComponent]
@@ -220,6 +271,7 @@ public sealed partial class AdvancedTreatmentComponent : Component
     [DataField(required: true)] public AdvancedTreatmentType Treatment;
     [DataField] public float Effectiveness = 1f;
     [DataField] public float Delay = 3f;
+    [DataField] public bool Reusable;
 }
 
 [Serializable, NetSerializable]

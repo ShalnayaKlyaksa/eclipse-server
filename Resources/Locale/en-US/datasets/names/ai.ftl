@@ -105,7 +105,7 @@ names-ai-dataset-76 = Multivac
 names-ai-dataset-77 = NCH
 
 # A play on both NT as in NanoTrasen and NT as in windows NT, of which version 6.0 is windows vista
-names-ai-dataset-78 = NT v6.0
+names-ai-dataset-78 = VISH v6.0
 
 names-ai-dataset-79 = Packard Bell
 names-ai-dataset-80 = PTO

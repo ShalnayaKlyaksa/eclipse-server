@@ -1,5 +1,6 @@
 using System.Collections.Frozen;
 using System.Linq;
+using Content.Shared._Eclipse.MedicalChemistry;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Reagent;
@@ -174,13 +175,32 @@ namespace Content.Shared.Chemistry.Reaction
 
             var energy = reaction.ConserveEnergy ? solution.GetThermalEnergy(_prototypeManager) : 0;
 
+            // Downstream medical synthesis must not launder bound impurities into pristine drugs.
+            var purity = 1f;
+            var hasBatch = false;
+            var patientProfiles = new HashSet<string?>();
+            foreach (var (reactant, data) in reaction.Reactants)
+            {
+                if (data.Catalyst || !solution.Contents.Any(reagent => reagent.Reagent.Prototype == reactant && MedicalBatch.IsBatch(reagent.Reagent)))
+                    continue;
+                hasBatch = true;
+                purity = Math.Min(purity, MedicalBatch.GetPurity(solution, reactant));
+                patientProfiles.UnionWith(solution.Contents.Where(reagent => reagent.Reagent.Prototype == reactant)
+                    .Select(reagent => MedicalBatch.GetPatientDna(reagent.Reagent)));
+            }
+            if (patientProfiles.Count > 1)
+                purity *= 0.5f;
+
             //Remove reactants
             foreach (var reactant in reaction.Reactants)
             {
                 if (!reactant.Value.Catalyst)
                 {
                     var amountToRemove = unitReactions * reactant.Value.Amount;
-                    solution.RemoveReagent(reactant.Key, amountToRemove, ignoreReagentData: true);
+                    if (solution.Contents.Any(reagent => reagent.Reagent.Prototype == reactant.Key && MedicalBatch.IsBatch(reagent.Reagent)))
+                        MedicalBatch.Take(solution, reactant.Key, amountToRemove);
+                    else
+                        solution.RemoveReagent(reactant.Key, amountToRemove, ignoreReagentData: true);
                 }
             }
 
@@ -189,7 +209,14 @@ namespace Content.Shared.Chemistry.Reaction
             foreach (var product in reaction.Products)
             {
                 products.Add(product.Key);
-                solution.AddReagent(product.Key, product.Value * unitReactions);
+                var id = hasBatch && _prototypeManager.Index<ReagentPrototype>(product.Key).Group == "Medicine"
+                    ? new ReagentId(product.Key, new List<ReagentData> { new MedicalBatchData
+                    {
+                        Purity = (int) MathF.Round(purity * 100),
+                        PatientDna = patientProfiles.Count == 1 ? patientProfiles.First() : null,
+                    } })
+                    : new ReagentId(product.Key, null);
+                solution.AddReagent(id, product.Value * unitReactions);
             }
 
             if (reaction.ConserveEnergy)

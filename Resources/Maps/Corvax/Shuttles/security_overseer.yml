@@ -116,7 +116,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: NT-SEC "Overseer"
+      name: VISH-SEC "Overseer"
     - type: Transform
       rot: -1.5707963267948966 rad
       pos: 281.5021,188.41064

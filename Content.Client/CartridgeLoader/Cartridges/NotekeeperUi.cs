@@ -1,4 +1,4 @@
-﻿using Content.Client.UserInterface.Fragments;
+using Content.Client.UserInterface.Fragments;
 using Content.Shared.CartridgeLoader;
 using Content.Shared.CartridgeLoader.Cartridges;
 using Robust.Client.GameObjects;
@@ -18,8 +18,7 @@ public sealed partial class NotekeeperUi : UIFragment
     public override void Setup(BoundUserInterface userInterface, EntityUid? fragmentOwner)
     {
         _fragment = new NotekeeperUiFragment();
-        _fragment.OnNoteRemoved += note => SendNotekeeperMessage(NotekeeperUiAction.Remove, note, userInterface);
-        _fragment.OnNoteAdded += note => SendNotekeeperMessage(NotekeeperUiAction.Add, note, userInterface);
+        _fragment.OnAction += message => userInterface.SendMessage(new CartridgeUiMessage(message));
     }
 
     public override void UpdateState(BoundUserInterfaceState state)
@@ -27,13 +26,7 @@ public sealed partial class NotekeeperUi : UIFragment
         if (state is not NotekeeperUiState notekeepeerState)
             return;
 
-        _fragment?.UpdateState(notekeepeerState.Notes);
+        _fragment?.UpdateState(notekeepeerState);
     }
 
-    private void SendNotekeeperMessage(NotekeeperUiAction action, string note, BoundUserInterface userInterface)
-    {
-        var notekeeperMessage = new NotekeeperUiMessageEvent(action, note);
-        var message = new CartridgeUiMessage(notekeeperMessage);
-        userInterface.SendMessage(message);
-    }
 }

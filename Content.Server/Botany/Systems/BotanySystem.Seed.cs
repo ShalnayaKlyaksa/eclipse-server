@@ -88,9 +88,11 @@ public sealed partial class BotanySystem : EntitySystem
         using (args.PushGroup(nameof(SeedComponent), 1))
         {
             var name = Loc.GetString(seed.DisplayName);
+            var yieldRating = Loc.GetString(seed.Yield < 2 ? "seed-dna-rating-low" : seed.Yield < 5 ? "seed-dna-rating-medium" : "seed-dna-rating-high");
+            var potencyRating = Loc.GetString(seed.Potency < 15 ? "seed-dna-concentration-low" : seed.Potency < 45 ? "seed-dna-concentration-medium" : "seed-dna-concentration-high");
             args.PushMarkup(Loc.GetString($"seed-component-description", ("seedName", name)));
-            args.PushMarkup(Loc.GetString($"seed-component-plant-yield-text", ("seedYield", seed.Yield)));
-            args.PushMarkup(Loc.GetString($"seed-component-plant-potency-text", ("seedPotency", seed.Potency)));
+            args.PushMarkup(Loc.GetString("seed-component-plant-yield-text", ("seedYield", yieldRating)));
+            args.PushMarkup(Loc.GetString("seed-component-plant-potency-text", ("seedPotency", potencyRating)));
         }
     }
 
@@ -116,7 +118,7 @@ public sealed partial class BotanySystem : EntitySystem
         return seed;
     }
 
-    public IEnumerable<EntityUid> AutoHarvest(SeedData proto, EntityCoordinates position, int yieldMod = 1)
+    public IEnumerable<EntityUid> AutoHarvest(SeedData proto, EntityCoordinates position, int yieldMod = 1, int bonusYield = 0)
     {
         if (position.IsValid(EntityManager) &&
             proto.ProductPrototypes.Count > 0)
@@ -124,13 +126,13 @@ public sealed partial class BotanySystem : EntitySystem
             if (proto.HarvestLogImpact != null)
                 _adminLogger.Add(LogType.Botany, proto.HarvestLogImpact.Value, $"Auto-harvested {Loc.GetString(proto.Name):seed} at Pos:{position}.");
 
-            return GenerateProduct(proto, position, yieldMod);
+            return GenerateProduct(proto, position, yieldMod, bonusYield);
         }
 
         return Enumerable.Empty<EntityUid>();
     }
 
-    public IEnumerable<EntityUid> Harvest(SeedData proto, EntityUid user, int yieldMod = 1)
+    public IEnumerable<EntityUid> Harvest(SeedData proto, EntityUid user, int yieldMod = 1, int bonusYield = 0)
     {
         if (proto.ProductPrototypes.Count == 0 || proto.Yield <= 0)
         {
@@ -144,10 +146,10 @@ public sealed partial class BotanySystem : EntitySystem
         if (proto.HarvestLogImpact != null)
             _adminLogger.Add(LogType.Botany, proto.HarvestLogImpact.Value, $"{ToPrettyString(user):player} harvested {Loc.GetString(proto.Name):seed} at Pos:{Transform(user).Coordinates}.");
 
-        return GenerateProduct(proto, Transform(user).Coordinates, yieldMod);
+        return GenerateProduct(proto, Transform(user).Coordinates, yieldMod, bonusYield);
     }
 
-    public IEnumerable<EntityUid> GenerateProduct(SeedData proto, EntityCoordinates position, int yieldMod = 1)
+    public IEnumerable<EntityUid> GenerateProduct(SeedData proto, EntityCoordinates position, int yieldMod = 1, int bonusYield = 0)
     {
         var totalYield = 0;
         if (proto.Yield > -1)
@@ -157,7 +159,7 @@ public sealed partial class BotanySystem : EntitySystem
             else
                 totalYield = proto.Yield * yieldMod;
 
-            totalYield = Math.Max(1, totalYield);
+            totalYield = Math.Max(1, totalYield + bonusYield);
         }
 
         var products = new List<EntityUid>();

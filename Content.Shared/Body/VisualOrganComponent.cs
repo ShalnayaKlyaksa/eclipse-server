@@ -1,4 +1,5 @@
 using Content.Shared.Humanoid;
+using Content.Shared.Preferences;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 
@@ -30,6 +31,9 @@ public sealed partial class VisualOrganComponent : Component
     [DataField]
     public Dictionary<Sex, string>? SexStateOverrides;
 
+    [DataField]
+    public bool VulpkaninBodyVariant;
+
     /// <summary>
     /// The current profile data of this organ, used for alternate sprite selection and colouration.
     /// </summary>
@@ -49,6 +53,9 @@ public partial record struct OrganProfileData
     /// </summary>
     [DataField]
     public Sex Sex;
+
+    [DataField]
+    public VulpkaninBodyType BodyType;
 
     /// <summary>
     /// The "eye color" of this organ

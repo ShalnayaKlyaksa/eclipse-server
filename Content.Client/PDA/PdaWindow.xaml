@@ -1,31 +1,24 @@
-﻿<pda:PdaWindow  xmlns="https://spacestation14.io"
-                xmlns:pda="clr-namespace:Content.Client.PDA"
-                MouseFilter="Stop">
-    <PanelContainer Name="Background" Access="Public" StyleClasses="PdaBackgroundRect" />
-    <!-- The negative markin fixes a gap between the window edges and the decorative panel -->
-    <PanelContainer Name="AccentH" Margin="-1 170 -2 170" Access="Public" StyleClasses="PdaBackground" />
-    <PanelContainer Name="AccentV" Margin="220 -1 220 -1" Access="Public" StyleClasses="PdaBackground" />
-    <PanelContainer Name="Border" StyleClasses="PdaBorderRect" />
-    <BoxContainer Orientation="Vertical" HorizontalExpand="True">
-        <!--Heading-->
-        <BoxContainer SetHeight="26" Margin="4 2 8 0" Orientation="Horizontal">
-            <Control HorizontalExpand="True"/>
-            <TextureButton Name="CloseButton" StyleClasses="windowCloseButton"
-                           VerticalAlignment="Center" Margin="0 4 4 0"/>
+<pda:PdaWindow xmlns="https://spacestation14.io" xmlns:pda="clr-namespace:Content.Client.PDA"
+               xmlns:terminal="clr-namespace:Content.Client._Erida.Research.UI" MouseFilter="Stop">
+    <PanelContainer Name="Enclosure"/>
+    <PanelContainer Name="Background" Access="Public" SetSize="36 3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="22 3 0 0"/>
+    <PanelContainer Name="AccentH" SetSize="36 2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="22 6 0 0"/>
+    <PanelContainer Name="AccentV" SetSize="2 20" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="18 3 0 0"/>
+    <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="10 6 10 6" SeparationOverride="3">
+        <BoxContainer SetHeight="20" SeparationOverride="6">
+            <Label Text="{Loc 'pda-os-brand'}" StyleClasses="pda-brand" VerticalAlignment="Center"/>
+            <Label Text="ECLIPSE / HANDHELD" StyleClasses="terminal-muted" VerticalAlignment="Center" HorizontalExpand="True" Margin="6 0"/>
+            <Button Name="CloseButton" Text="×" SetSize="24 20" ToolTip="{Loc 'pda-os-device-close'}"/>
         </BoxContainer>
-        <!--Content-->
-        <Control Margin="18 0" RectClipContent="True" VerticalExpand="true"
-                 HorizontalExpand="True">
-            <PanelContainer Name="ContentBorder" StyleClasses="PdaBackground"/>
-            <Control Margin="3 3">
-                <PanelContainer Name="ContentBackground" StyleClasses="PdaContentBackground"/>
-                <BoxContainer Access="Public" Name="ContentsContainer" Orientation="Vertical" StyleClasses="PdaContent"/>
-
-            </Control>
-        </Control>
-        <!--Footer-->
-        <BoxContainer Orientation="Horizontal" SetHeight="28">
-            <Label Text="{Loc 'comp-pda-ui-footer'}" StyleClasses="PdaWindowFooterText" Margin="32 0 0 6"/>
+        <PanelContainer Name="ScreenWell" VerticalExpand="True" HorizontalExpand="True">
+            <terminal:ResearchTerminalSurface Name="Screen" Access="Public" HorizontalExpand="True" VerticalExpand="True" RectClipContent="True" Margin="3">
+                <BoxContainer Access="Public" Name="ContentsContainer" Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="0"/>
+            </terminal:ResearchTerminalSurface>
+        </PanelContainer>
+        <BoxContainer SetHeight="12">
+            <Label Text="EIDOS / PERSONAL DATA ASSISTANT" StyleClasses="terminal-muted"/>
+            <Control HorizontalExpand="True"/>
+            <Label Text="{Loc 'pda-os-device-series'}" StyleClasses="terminal-muted"/>
         </BoxContainer>
     </BoxContainer>
 </pda:PdaWindow>

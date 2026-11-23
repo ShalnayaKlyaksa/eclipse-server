@@ -1,0 +1,118 @@
+- type: clinicalMedication
+  id: ClinicalAntibiotic
+  reagent: ClinicalAntibiotic
+  class: Antibiotic
+  effectiveQuantity: 2
+  overdoseQuantity: 15
+  toxicity: 0.15
+
+- type: clinicalMedication
+  id: ClinicalAntifungal
+  reagent: ClinicalAntifungal
+  class: Antifungal
+  effectiveQuantity: 2
+  overdoseQuantity: 12
+  toxicity: 0.25
+
+- type: clinicalMedication
+  id: ClinicalAntiviral
+  reagent: ClinicalAntiviral
+  class: Antiviral
+  effectiveQuantity: 2
+  overdoseQuantity: 12
+  toxicity: 0.2
+
+- type: clinicalMedication
+  id: ClinicalOpioid
+  reagent: ClinicalOpioid
+  class: Opioid
+  effectiveQuantity: 2
+  analgesia: 0.7
+  sedation: 0.15
+  respiratoryDepression: 0.15
+  overdoseQuantity: 10
+  toxicity: 0.1
+
+- type: clinicalMedication
+  id: ClinicalSedative
+  reagent: ClinicalSedative
+  class: Sedative
+  effectiveQuantity: 2
+  sedation: 0.4
+  respiratoryDepression: 0.12
+  overdoseQuantity: 8
+  toxicity: 0.1
+
+- type: clinicalMedication
+  id: ClinicalBronchodilator
+  reagent: ClinicalBronchodilator
+  class: Bronchodilator
+  effectiveQuantity: 2
+  pulseDrive: 0.35
+  overdoseQuantity: 12
+  toxicity: 0.15
+
+- type: clinicalMedication
+  id: ClinicalAntihistamine
+  reagent: ClinicalAntihistamine
+  class: Antihistamine
+  effectiveQuantity: 2
+  sedation: 0.15
+  overdoseQuantity: 15
+  toxicity: 0.1
+
+- type: clinicalMedication
+  id: ClinicalAnticonvulsant
+  reagent: ClinicalAnticonvulsant
+  class: Anticonvulsant
+  effectiveQuantity: 2
+  sedation: 0.2
+  respiratoryDepression: 0.05
+  overdoseQuantity: 12
+  toxicity: 0.2
+
+- type: clinicalMedication
+  id: ClinicalAntiInflammatory
+  reagent: ClinicalAntiInflammatory
+  class: AntiInflammatory
+  effectiveQuantity: 2
+  analgesia: 0.3
+  antipyretic: 1.5
+  bleedingRisk: 0.001
+  overdoseQuantity: 15
+  toxicity: 0.25
+
+- type: clinicalMedication
+  id: ClinicalInsulin
+  reagent: ClinicalInsulin
+  class: Insulin
+  effectiveQuantity: 2
+  glucosePerSecond: -0.09
+  overdoseQuantity: 10
+  toxicity: 0.05
+
+- type: clinicalMedication
+  id: ClinicalGlucose
+  reagent: ClinicalGlucose
+  class: Glucose
+  effectiveQuantity: 2
+  glucosePerSecond: 0.15
+  overdoseQuantity: 15
+  toxicity: 0.05
+
+- type: clinicalMedication
+  id: ClinicalNaloxone
+  reagent: ClinicalNaloxone
+  class: Naloxone
+  effectiveQuantity: 2
+  overdoseQuantity: 15
+  toxicity: 0.1
+
+- type: clinicalMedication
+  id: ClinicalEpinephrine
+  reagent: Epinephrine
+  class: Adrenaline
+  effectiveQuantity: 2
+  overdoseQuantity: 15
+  pulseDrive: 0.8
+  toxicity: 0.15

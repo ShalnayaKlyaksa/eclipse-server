@@ -121,7 +121,10 @@ public sealed class WaggingSystem : EntitySystem
                     continue;
                 }
 
-                layerMarkings[i] = new Marking(newMarkingId, layerMarkings[i].MarkingColors);
+                layerMarkings[i] = new Marking(newMarkingId, layerMarkings[i].MarkingColors)
+                {
+                    Gradient = layerMarkings[i].Gradient,
+                };
             }
         }
 

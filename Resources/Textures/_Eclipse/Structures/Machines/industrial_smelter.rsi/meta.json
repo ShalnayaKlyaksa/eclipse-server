@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "made by Xaoser",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon",
+      "directions": 1
+    },
+    {
+      "name": "paused",
+      "directions": 1
+    },
+    {
+      "name": "power_on",
+      "directions": 1,
+      "delays": [
+        [
+          0.15,
+          0.15,
+          0.15,
+          0.15
+        ]
+      ]
+    },
+    {
+      "name": "building",
+      "directions": 4,
+      "delays": [
+        [
+          0.3,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.3,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.3,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.3,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    }
+  ]
+}

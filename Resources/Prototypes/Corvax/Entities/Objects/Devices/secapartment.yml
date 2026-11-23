@@ -2,7 +2,7 @@
   parent: BaseItem
   id: SecApartmentTabletUnpowered
   name: SecApartment handheld tablet
-  description: "A NanoTrasen-approved device for organizing and coordinating the actions of security personnel at corporate facilities."
+  description: "A VISH-approved device for organizing and coordinating the actions of security personnel at corporate facilities."
   components:
   - type: Sprite
     sprite: Corvax/Objects/Devices/secapartment.rsi

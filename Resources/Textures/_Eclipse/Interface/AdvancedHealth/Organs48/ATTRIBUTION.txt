@@ -1,0 +1,19 @@
+Medical chip organ artwork (48 x 48)
+
+eye_right.png, eye_right_mirrored.png,
+kidney_left.png and kidney_right.png derive from /tg/station 13:
+https://github.com/tgstation/tgstation/commit/c4b7f3c41b6742aca260fe60cc358a778ba9b8c8
+
+appendix.png derives from CEV-Eris:
+https://github.com/discordia-space/CEV-Eris/commit/476e374cea95ff5e8b1603c48342bf700e2cd7af
+
+These source and derivative textures are licensed CC-BY-SA-3.0:
+https://creativecommons.org/licenses/by-sa/3.0/
+Changes: isolated organs, transparent cropping, nearest-neighbour scaling
+horizontal mirroring of the eye and placement on transparent 48 x 48 canvases.
+Original project assets: Resources/Textures/Mobs/Species/Human/organs.rsi.
+
+Other organ drawings were created using the built-in image generator.
+Editable layered sources and provenance:
+art/medical-chip-organs/pixel_48/README.md
+art/medical-chip-organs/asset_manifest.json

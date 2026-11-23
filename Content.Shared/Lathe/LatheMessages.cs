@@ -12,6 +12,7 @@ public sealed class LatheUpdateState : BoundUserInterfaceState
     public LatheRecipeBatch[] Queue;
 
     public ProtoId<LatheRecipePrototype>? CurrentlyProducing;
+    public int UnitPrice;
 
     public LatheUpdateState(List<ProtoId<LatheRecipePrototype>> recipes, LatheRecipeBatch[] queue, ProtoId<LatheRecipePrototype>? currentlyProducing = null)
     {
@@ -38,10 +39,12 @@ public sealed class LatheQueueRecipeMessage : BoundUserInterfaceMessage
 {
     public readonly string ID;
     public readonly int Quantity;
-    public LatheQueueRecipeMessage(string id, int quantity)
+    public readonly int ExpectedPrice;
+    public LatheQueueRecipeMessage(string id, int quantity, int expectedPrice = 0)
     {
         ID = id;
         Quantity = quantity;
+        ExpectedPrice = expectedPrice;
     }
 }
 

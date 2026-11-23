@@ -12,6 +12,20 @@ namespace Content.IntegrationTests.Tests.DoAfter;
 /// </summary>
 public sealed class DoAfterCancellationTests : InteractionTest
 {
+    [TestCase("BasicIndustrialAssembler")]
+    [TestCase("IndustrialDrill")]
+    public async Task IndustrialMachineCanBeUnanchoredWithWrench(string prototype)
+    {
+        await SpawnTarget(prototype);
+        if (prototype == "IndustrialDrill")
+            await InteractUsing(Wrench);
+        AssertAnchored();
+
+        await InteractUsing(Wrench);
+
+        AssertAnchored(false);
+    }
+
     [Test]
     public async Task CancelWallDeconstruct()
     {

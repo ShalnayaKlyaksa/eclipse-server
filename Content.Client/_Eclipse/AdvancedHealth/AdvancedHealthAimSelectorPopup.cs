@@ -1,4 +1,6 @@
 using System.Numerics;
+using System.Linq;
+using Robust.Client.Player;
 using Content.Client.HealthAnalyzer.UI;
 using Content.Shared._Eclipse.AdvancedHealth;
 using Robust.Client.Graphics;
@@ -38,6 +40,10 @@ public sealed class AdvancedHealthAimSelectorPopup : LayoutContainer
     private readonly AdvancedHealthBodyDollControl _doll;
     private readonly PanelContainer _tooltip;
     private readonly Label _tooltipLabel;
+    private readonly Button _treat;
+    private BodyPartSlot? _actionSlot;
+    private float _actionLinger;
+    public event Action? OnTreatmentStarted;
 
     public AdvancedHealthAimSelectorPopup(BodyPartTarget initial = BodyPartTarget.Chest)
     {
@@ -69,6 +75,13 @@ public sealed class AdvancedHealthAimSelectorPopup : LayoutContainer
         _doll.EnableAimSelection();
         _doll.OnPartHovered += slot => Selected = slot.ToTarget();
         _doll.OnPartSelected += slot => Selected = slot.ToTarget();
+        _treat = new Button { Name = "MedicalPartToolAction", Visible = false };
+        _treat.OnPressed += _ =>
+        {
+            if (_actionSlot is not { } part || IoCManager.Resolve<IPlayerManager>().LocalEntity is not { } user) return;
+            IoCManager.Resolve<IEntityManager>().System<AdvancedHealthClientSystem>().UseHeldItemOnPart(user, user, part);
+            OnTreatmentStarted?.Invoke();
+        };
 
         _tooltipLabel = new Label
         {
@@ -92,6 +105,7 @@ public sealed class AdvancedHealthAimSelectorPopup : LayoutContainer
         AddChild(_halo);
         AddChild(_doll);
         AddChild(_tooltip);
+        AddChild(_treat);
 
         LayoutContainer.SetAnchorAndMarginPreset(_backdrop, LayoutPreset.Wide);
         LayoutContainer.SetAnchorPreset(_halo, LayoutPreset.TopLeft);
@@ -121,7 +135,33 @@ public sealed class AdvancedHealthAimSelectorPopup : LayoutContainer
     protected override void FrameUpdate(FrameEventArgs args)
     {
         base.FrameUpdate(args);
+        _actionLinger -= args.DeltaSeconds;
         UpdateTooltip();
+        UpdateTreatment();
+    }
+
+    private void UpdateTreatment()
+    {
+        var entities = IoCManager.Resolve<IEntityManager>();
+        if (IoCManager.Resolve<IPlayerManager>().LocalEntity is not { } user
+            || !entities.TryGetComponent<AdvancedHealthComponent>(user, out var health)) { _treat.Visible = false; return; }
+        _doll.SetAimHealth(health.BodyParts.Values.Select(p => p.ToUiState(p.Wounds.Sum(w => w.ExternalBleedingRate))));
+        var overButton = _treat.Visible && new UIBox2(_treat.GlobalPosition, _treat.GlobalPosition + _treat.Size)
+            .Contains(UserInterfaceManager.MousePositionScaled.Position);
+        if (_doll.HoveredSlot is { } slot
+            && entities.System<AdvancedHealthClientSystem>().TryGetPartAction(user, user, slot, out _, out var label))
+        {
+            _actionSlot = slot;
+            _actionLinger = 0.3f;
+            _treat.Text = label;
+        }
+        else if (!overButton && _actionLinger <= 0) { _treat.Visible = false; _actionSlot = null; return; }
+        if (_actionSlot is not { } selected) return;
+        _treat.Measure(Vector2Helpers.Infinity);
+        var anchor = _doll.Position + _doll.GetSlotCentroidLocal(selected);
+        var size = _treat.DesiredSize;
+        LayoutContainer.SetPosition(_treat, anchor - new Vector2(size.X / 2, size.Y + 8));
+        _treat.Visible = true;
     }
 
     private void LayoutOverlay(Vector2 center)
@@ -139,8 +179,8 @@ public sealed class AdvancedHealthAimSelectorPopup : LayoutContainer
             return;
         }
 
-        _tooltipLabel.Text = Loc.GetString("advanced-health-aim-penalty",
-            ("value", AdvancedHealthAimPenalties.GetDefaultPenalty(slot)));
+        _tooltipLabel.Text = Loc.GetString("advanced-health-part-" + slot.ToString().ToLowerInvariant()) + " · "
+            + Loc.GetString("advanced-health-aim-penalty", ("value", AdvancedHealthAimPenalties.GetDefaultPenalty(slot)));
         _tooltip.Measure(Vector2Helpers.Infinity);
 
         var tipSize = _tooltip.DesiredSize;

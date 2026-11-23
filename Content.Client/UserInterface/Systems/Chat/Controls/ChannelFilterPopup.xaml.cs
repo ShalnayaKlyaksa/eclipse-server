@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Shared.Chat;
 using Content.Shared.CCVar;
 using Robust.Shared.Utility;
@@ -31,12 +32,22 @@ public sealed partial class ChannelFilterPopup : Popup
 
     private readonly Dictionary<ChatChannel, ChannelFilterCheckbox> _filterStates = new();
 
+    public bool HasDisabledChannels => _filterStates.Values.Any(c => !c.IsHidden && !c.Pressed);
+
     public event Action<ChatChannel, bool>? OnChannelFilter;
     public event Action<string>? OnNewHighlights;
 
     public ChannelFilterPopup()
     {
         RobustXamlLoader.Load(this);
+
+        AllChannelsButton.OnPressed += _ => ApplyPreset(null);
+        GameChannelsButton.OnPressed += _ => ApplyPreset(
+            ChatChannel.Local | ChatChannel.Whisper | ChatChannel.Emotes | ChatChannel.Radio |
+            ChatChannel.LOOC | ChatChannel.OOC | ChatChannel.Dead);
+        ServiceChannelsButton.OnPressed += _ => ApplyPreset(
+            ChatChannel.Notifications | ChatChannel.Admin | ChatChannel.AdminAlert |
+            ChatChannel.AdminChat | ChatChannel.Server);
 
         HighlightButton.OnPressed += HighlightsEntered;
         // Add a placeholder text to the highlights TextEdit.
@@ -55,6 +66,16 @@ public sealed partial class ChannelFilterPopup : Popup
     public bool IsActive(ChatChannel channel)
     {
         return _filterStates.TryGetValue(channel, out var checkbox) && checkbox.Pressed;
+    }
+
+    internal void ApplyPreset(ChatChannel? channels)
+    {
+        foreach (var (channel, checkbox) in _filterStates)
+        {
+            // Leave unavailable channels and their saved preferences alone.
+            if (!checkbox.IsHidden)
+                SetActive(channel, channels == null || (channels.Value & channel) != 0);
+        }
     }
 
     public void SetActive(ChatChannel channel, bool isActive)

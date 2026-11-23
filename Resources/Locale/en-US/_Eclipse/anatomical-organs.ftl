@@ -1,0 +1,12 @@
+ent-EclipseOrganHumanIntestines = intestines
+    .desc = Human intestines.
+ent-EclipseOrganHumanUterus = uterus
+    .desc = A human uterus.
+ent-EclipseOrganHumanOvaryLeft = left ovary
+    .desc = A human left ovary.
+ent-EclipseOrganHumanOvaryRight = right ovary
+    .desc = A human right ovary.
+ent-EclipseOrganHumanVaginalCanal = vaginal canal
+    .desc = A human vaginal canal.
+ent-EclipseOrganHumanProstate = prostate
+    .desc = A human prostate.

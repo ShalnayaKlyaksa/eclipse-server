@@ -14,6 +14,9 @@ public sealed partial class StomachComponent : Component
     [ViewVariables]
     public Entity<SolutionComponent>? Solution;
 
+    /// <summary>Total volume emptied per digestion tick, shared by all ingested reagents.</summary>
+    [DataField] public float EmptyingRate = 0.25f;
+
     /// <summary>
     ///     A whitelist for what special-digestible-required foods this stomach is capable of eating.
     /// </summary>

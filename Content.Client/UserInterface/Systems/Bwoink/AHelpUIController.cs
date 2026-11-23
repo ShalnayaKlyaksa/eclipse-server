@@ -642,8 +642,6 @@ public sealed class UserAHelpUIHandler : IAHelpUIHandler
         EnsurePanel(relayActive);
         _window = new DefaultWindow()
         {
-            TitleClass="windowTitleAlert",
-            HeaderClass="windowHeaderAlert",
             Title=Loc.GetString("bwoink-user-title"),
             MinSize = new Vector2(500, 300),
         };

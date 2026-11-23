@@ -1,5 +1,7 @@
 - type: species
   id: Dwarf
+  defaultHeight: 145
+  defaultWeight: 80
   name: species-name-dwarf
   roundStart: true
   prototype: MobDwarf

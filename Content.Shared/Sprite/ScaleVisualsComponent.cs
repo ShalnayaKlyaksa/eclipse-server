@@ -17,6 +17,9 @@ public sealed partial class ScaleVisualsComponent : Component
     [ViewVariables]
     public Vector2 Scale = Vector2.One;
 
+    [DataField]
+    public Vector2 ProfileScale = Vector2.One;
+
     /// <summary>
     /// The original sprite scale, which we revert to if this component is removed.
     /// Only set on the client.

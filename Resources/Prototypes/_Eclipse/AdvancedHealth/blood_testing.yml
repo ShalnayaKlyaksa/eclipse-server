@@ -1,0 +1,29 @@
+- type: entity
+  parent: ChemistryEmptyVial
+  id: AdvancedClinicalBloodSample
+  name: identified blood sample
+  description: A dated blood sample for crossmatching and pharmaceutical analysis. Apply it to a blood pack for a compatibility test.
+  components:
+  - type: ClinicalBloodSample
+
+- type: entity
+  parent: BaseHealingItem
+  id: AdvancedEmptyBloodBag
+  name: donor blood collection bag
+  description: Apply to a donor to collect 250 ml of whole blood. Collection takes time and reduces the donor's blood volume.
+  components:
+  - type: Sprite
+    state: bloodpack
+  - type: Item
+    heldPrefix: bloodpack
+  - type: EmptyBloodBag
+
+- type: entity
+  parent: EclipseBloodPackONeg
+  id: EclipsePackedCellsONeg
+  name: packed red cells
+  suffix: O-, packed cells
+  components:
+  - type: BloodProduct
+    productType: PackedCells
+    volume: 300

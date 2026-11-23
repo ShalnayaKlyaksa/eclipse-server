@@ -25,14 +25,16 @@ namespace Content.Client._Eclipse.Tutorial;
 public sealed class TutorialDialogueControl : LayoutContainer
 {
     private const int PortraitSize = 300;
-    private const float BottomBarHeight = 150f;
-    private const float BottomBarInset = 60f;
+    private const float BottomBarHeight = 220f;
+    private const float BottomBarInset = 30f;
     private const float BottomBarBottom = 34f;
 
     private static readonly Color Square = Color.FromHex("#2EC4B6");
-    private static readonly Color Circle = Color.FromHex("#E6A11A");
+    private static readonly Color Circle = Color.FromHex("#FF861F");
 
     private readonly Action _onAdvance;
+    private readonly Action<bool> _onChoice;
+    private readonly Button _exit;
 
     private readonly SpotlightLayer _spotlight;
     private readonly PanelContainer _dim;
@@ -47,9 +49,10 @@ public sealed class TutorialDialogueControl : LayoutContainer
     private float _animTime;
     private bool _dialogueMode = true;
 
-    public TutorialDialogueControl(Action onAdvance)
+    public TutorialDialogueControl(Action onAdvance, Action<bool> onChoice, Action onExit)
     {
         _onAdvance = onAdvance;
+        _onChoice = onChoice;
         MouseFilter = MouseFilterMode.Stop;
 
         _spotlight = new SpotlightLayer { Visible = false, MouseFilter = MouseFilterMode.Ignore };
@@ -75,7 +78,7 @@ public sealed class TutorialDialogueControl : LayoutContainer
             PanelOverride = new EclipseStyleBoxRounded
             {
                 BackgroundColor = Color.FromHex("#0A0602F5"),
-                BorderColor = Color.FromHex("#A85E12B0"),
+                BorderColor = Color.FromHex("#505050B0"),
                 BorderThickness = new Thickness(2),
                 Radius = 12,
                 ContentMarginLeftOverride = 26,
@@ -109,8 +112,8 @@ public sealed class TutorialDialogueControl : LayoutContainer
             MouseFilter = MouseFilterMode.Ignore,
             PanelOverride = new EclipseStyleBoxRounded
             {
-                BackgroundColor = Color.FromHex("#070300F2"),
-                BorderColor = Color.FromHex("#E6A11A"),
+                BackgroundColor = Color.FromHex("#161616F2"),
+                BorderColor = Color.FromHex("#FF861F"),
                 BorderThickness = new Thickness(1),
                 Radius = 10,
                 ContentMarginLeftOverride = 24,
@@ -122,18 +125,28 @@ public sealed class TutorialDialogueControl : LayoutContainer
         _taskText = new RichTextLabel();
         _taskBanner.AddChild(_taskText);
         AddChild(_taskBanner);
-        SetAnchorLeft(_taskBanner, 0.5f);
-        SetAnchorRight(_taskBanner, 0.5f);
+        SetAnchorLeft(_taskBanner, 0.15f);
+        SetAnchorRight(_taskBanner, 0.85f);
         SetAnchorTop(_taskBanner, 0f);
         SetAnchorBottom(_taskBanner, 0f);
         SetMarginTop(_taskBanner, 40f);
         SetGrowHorizontal(_taskBanner, GrowDirection.Both);
         SetGrowVertical(_taskBanner, GrowDirection.End);
+
+        _exit = new Button { Text = "Вернуться в лобби", Visible = false };
+        _exit.OnPressed += _ => onExit();
+        AddChild(_exit);
+        SetAnchorPreset(_exit, LayoutPreset.TopRight);
+        SetMarginTop(_exit, 8);
+        SetMarginRight(_exit, -8);
+        SetGrowHorizontal(_exit, GrowDirection.Begin);
     }
 
-    public void ShowDialogue(string speaker, string text, string? portrait, TutorialSide side, TutorialAnimation animation)
+    public void SetCanExit(bool canExit) => _exit.Visible = canExit;
+
+    public void ShowDialogue(string speaker, string text, string? portrait, TutorialSide side, TutorialAnimation animation, bool choice = false)
     {
-        _dialogueMode = true;
+        _dialogueMode = !choice;
         _animation = animation;
         _animTime = 0f;
         MouseFilter = MouseFilterMode.Stop; // capture clicks: click anywhere to advance
@@ -148,21 +161,40 @@ public sealed class TutorialDialogueControl : LayoutContainer
 
         _bottomContent.RemoveAllChildren();
         var name = new RichTextLabel { HorizontalExpand = true };
-        name.SetMarkup($"[color=#E6A11A][bold]{FormattedMessage.EscapeText(speaker)}[/bold][/color]");
+        name.SetMarkup($"[color=#83DFF5][bold]{FormattedMessage.EscapeText(speaker)}[/bold][/color]");
         _bottomContent.AddChild(name);
 
         var body = new RichTextLabel { HorizontalExpand = true };
         body.SetMarkup(text);
         _bottomContent.AddChild(body);
 
-        var hint = new RichTextLabel { HorizontalAlignment = HAlignment.Right };
-        hint.SetMarkup("[color=#8A8A8A]нажмите, чтобы продолжить ▼[/color]");
-        _bottomContent.AddChild(hint);
+        if (choice)
+        {
+            var buttons = new BoxContainer { Orientation = LayoutOrientation.Horizontal, SeparationOverride = 16 };
+            var yes = new Button { Text = "Пройти обучение", HorizontalExpand = true };
+            var no = new Button { Text = "Перейти в лобби", HorizontalExpand = true };
+            void Choose(bool start)
+            {
+                yes.Disabled = no.Disabled = true;
+                _onChoice(start);
+            }
+            yes.OnPressed += _ => Choose(true);
+            no.OnPressed += _ => Choose(false);
+            buttons.AddChild(yes);
+            buttons.AddChild(no);
+            _bottomContent.AddChild(buttons);
+        }
+        else
+        {
+            var hint = new RichTextLabel { HorizontalAlignment = HAlignment.Right };
+            hint.SetMarkup("[color=#8A8A8A]нажмите, чтобы продолжить ▼[/color]");
+            _bottomContent.AddChild(hint);
+        }
 
         Visible = true;
     }
 
-    public void ShowHealthTask(string speaker, string objective)
+    public void ShowTask(string objective, bool spotlightHealth)
     {
         _dialogueMode = false;
         MouseFilter = MouseFilterMode.Ignore; // let clicks reach the real health alert underneath
@@ -170,10 +202,10 @@ public sealed class TutorialDialogueControl : LayoutContainer
         _dim.Visible = false;
         _bottomBar.Visible = false;
         _portraitSlot.Visible = false;
-        _spotlight.Visible = true;
+        _spotlight.Visible = spotlightHealth;
         _taskBanner.Visible = true;
 
-        _taskText.SetMarkup($"[color=#E6A11A][bold]{FormattedMessage.EscapeText(objective)}[/bold][/color]");
+        _taskText.SetMarkup($"[color=#FF861F][bold]{FormattedMessage.EscapeText(objective)}[/bold][/color]");
         Visible = true;
     }
 
@@ -183,10 +215,12 @@ public sealed class TutorialDialogueControl : LayoutContainer
         _portrait = MakePortrait(portrait);
 
         var bottom = BottomBarBottom + BottomBarHeight + 6f;
+        var height = Math.Clamp(Size.Y - bottom - 16f, 180f, 500f);
+        var width = height * 0.8f;
         SetAnchorTop(_portraitSlot, 1f);
         SetAnchorBottom(_portraitSlot, 1f);
         SetMarginBottom(_portraitSlot, -bottom);
-        SetMarginTop(_portraitSlot, -(bottom + PortraitSize));
+        SetMarginTop(_portraitSlot, -(bottom + height));
         SetGrowHorizontal(_portraitSlot, GrowDirection.Constrain);
         SetGrowVertical(_portraitSlot, GrowDirection.Constrain);
 
@@ -195,14 +229,21 @@ public sealed class TutorialDialogueControl : LayoutContainer
             SetAnchorLeft(_portraitSlot, 1f);
             SetAnchorRight(_portraitSlot, 1f);
             SetMarginRight(_portraitSlot, -BottomBarInset);
-            SetMarginLeft(_portraitSlot, -(BottomBarInset + PortraitSize));
+            SetMarginLeft(_portraitSlot, -(BottomBarInset + width));
+        }
+        else if (side == TutorialSide.Center)
+        {
+            SetAnchorLeft(_portraitSlot, 0.5f);
+            SetAnchorRight(_portraitSlot, 0.5f);
+            SetMarginLeft(_portraitSlot, -width / 2);
+            SetMarginRight(_portraitSlot, width / 2);
         }
         else
         {
             SetAnchorLeft(_portraitSlot, 0f);
             SetAnchorRight(_portraitSlot, 0f);
             SetMarginLeft(_portraitSlot, BottomBarInset);
-            SetMarginRight(_portraitSlot, BottomBarInset + PortraitSize);
+            SetMarginRight(_portraitSlot, BottomBarInset + width);
         }
 
         if (_portrait != null)
@@ -287,7 +328,7 @@ public sealed class TutorialDialogueControl : LayoutContainer
     private sealed class SpotlightLayer : Control
     {
         private static readonly Color Dim = Color.FromHex("#000000C0");
-        private static readonly Color BorderColor = Color.FromHex("#E6A11A");
+        private static readonly Color BorderColor = Color.FromHex("#FF861F");
 
         private readonly IUserInterfaceManager _ui;
 

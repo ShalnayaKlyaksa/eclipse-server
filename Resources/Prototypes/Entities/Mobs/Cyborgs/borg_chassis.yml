@@ -158,7 +158,7 @@
   id: BorgChassisLegionSaboteur
   parent: BaseBorgChassisLegion
   name: legion saboteur cyborg
-  description: A streamlined engineering cyborg, equipped with covert modules. Its chameleon projector lets it disguise itself as a Nanotrasen cyborg.
+  description: A streamlined engineering cyborg, equipped with covert modules. Its chameleon projector lets it disguise itself as a VISH cyborg.
   components:
     - type: Sprite
       layers:

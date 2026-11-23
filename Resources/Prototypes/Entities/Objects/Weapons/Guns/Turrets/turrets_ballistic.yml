@@ -59,7 +59,7 @@
 - type: entity
   parent: BaseWeaponBallisticTurret
   id: WeaponTurretNanoTrasen
-  suffix: NanoTrasen
+  suffix: VISH
   components:
   - type: NpcFactionMember
     factions:

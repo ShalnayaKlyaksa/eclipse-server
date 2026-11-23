@@ -102,6 +102,7 @@
   id: RandomOreDistributionStandard
   weights:
     OreSteel: 10
+    OreCopper: 5
     OreCoal: 10
     OreSpaceQuartz: 8
     OreGold: 2
@@ -121,3 +122,9 @@
     OreBananiumCrab: 1
     OreCoalCrab: 5
     OreGoldCrab: 2
+
+- type: ore
+  id: OreCopper
+  oreEntity: CopperOre1
+  minOreYield: 1
+  maxOreYield: 5

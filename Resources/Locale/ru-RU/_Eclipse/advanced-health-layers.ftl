@@ -1,0 +1,11 @@
+advanced-health-layer-general = Общий режим
+advanced-health-layer-organs = Органы
+advanced-health-layer-protection = Защищённость
+advanced-health-layer-hint-organs = Карта внутренних органов · яркость отражает функцию · повреждения тканей уточняются обследованием.
+advanced-health-layer-hint-protection = Защита экипировкой: снижение колющего и пулевого урона.
+advanced-health-layer-no-organs = Отдельные внутренние органы в этой области не моделируются.
+advanced-health-layer-organ-tissue = Целостность органной ткани области: {$value}%. Точный диагноз отдельного органа требует обследования.
+advanced-health-layer-present-organs = Органы в области
+advanced-health-layer-resistance = Снижение урона экипировкой: {$value}%.
+advanced-health-layer-current-armor = Защита экипировкой
+advanced-health-layer-flat-reduction = Дополнительный фиксированный вычет урона: {$values}.

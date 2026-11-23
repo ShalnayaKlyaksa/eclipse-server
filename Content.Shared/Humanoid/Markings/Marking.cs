@@ -25,6 +25,9 @@ public partial record struct Marking
     /// </summary>
     public IReadOnlyList<Color> MarkingColors => _markingColors;
 
+    [DataField]
+    public MarkingGradient? Gradient;
+
     /// <summary>
     /// Whether the marking is forced regardless of points
     /// </summary>
@@ -50,12 +53,19 @@ public partial record struct Marking
     {
         return MarkingId.Equals(other.MarkingId)
             && MarkingColors.SequenceEqual(other.MarkingColors)
+            && Gradient == other.Gradient
             && Forced.Equals(other.Forced);
     }
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(MarkingId, MarkingColors, Forced);
+        var hash = new HashCode();
+        hash.Add(MarkingId);
+        foreach (var color in MarkingColors)
+            hash.Add(color);
+        hash.Add(Gradient);
+        hash.Add(Forced);
+        return hash.ToHashCode();
     }
 
     public Marking WithColor(Color color) =>
@@ -100,4 +110,24 @@ public partial record struct Marking
 
         return new Marking(split[0], colorList);
     }
+}
+
+[DataDefinition, Serializable, NetSerializable]
+public partial record struct MarkingGradient()
+{
+    public const int MinSteps = 2;
+    public const int MaxSteps = 6;
+    public const int DefaultSteps = 3;
+
+    [DataField]
+    public Color TipColor = Color.White;
+
+    [DataField]
+    public int Steps = DefaultSteps;
+
+    public MarkingGradient Normalized() => this with
+    {
+        TipColor = HumanoidCharacterAppearance.ClampColor(TipColor),
+        Steps = Math.Clamp(Steps, MinSteps, MaxSteps),
+    };
 }

@@ -135,7 +135,10 @@ public sealed partial class SimpleRadialMenu : RadialMenu
         };
 
         if(imageControl != null)
+        {
+            imageControl.ModulateSelfOverride = model.IconColor;
             button.AddChild(imageControl);
+        }
 
         if (model is RadialMenuActionOptionBase actionOption)
         {
@@ -334,6 +337,9 @@ public abstract class RadialMenuOptionBase
     /// Specifier that describes icon to be used for radial menu button.
     /// </summary>
     public RadialMenuIconSpecifier? IconSpecifier { get; set; }
+
+    /// <summary>Optional tint for an icon without recolouring the menu sector.</summary>
+    public Color? IconColor { get; set; }
 }
 
 /// <summary> Base type for model of radial menu button with some action on button pressed. </summary>

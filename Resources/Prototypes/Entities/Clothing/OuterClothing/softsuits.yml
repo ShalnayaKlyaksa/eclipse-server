@@ -93,7 +93,7 @@
 - type: entity
   parent: ClothingOuterEVASuitBase
   id: ClothingOuterHardsuitAncientEVA
-  name: NTSRA voidsuit #Nanotrasen Space Research Association
+  name: NTSRA voidsuit #VISH Space Research Association
   description: An ancient space suit, designed by the NTSRA branch of Eidos. It is very finely crafted, allowing for greater mobility than most modern space suits.
   components:
   - type: Sprite

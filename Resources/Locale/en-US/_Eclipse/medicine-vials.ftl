@@ -1,0 +1,12 @@
+ent-AdvancedMedicineVialInaprovaline = Inaprovaline vial
+    .desc = A labelled 30-unit medicine vial. Draw the solution with a syringe.
+ent-AdvancedMedicineVialTranexamicAcid = TranexamicAcid vial
+    .desc = A labelled 30-unit medicine vial. Draw the solution with a syringe.
+ent-AdvancedMedicineVialBicaridine = Bicaridine vial
+    .desc = A labelled 30-unit medicine vial. Draw the solution with a syringe.
+ent-AdvancedMedicineVialEpinephrine = Epinephrine vial
+    .desc = A labelled 30-unit medicine vial. Draw the solution with a syringe.
+ent-AdvancedMedicineVialClinicalOpioid = ClinicalOpioid vial
+    .desc = A labelled 30-unit medicine vial. Draw the solution with a syringe.
+ent-AdvancedMedicineVialClinicalNaloxone = ClinicalNaloxone vial
+    .desc = A labelled 30-unit medicine vial. Draw the solution with a syringe.

@@ -1,6 +1,8 @@
 - type: vendingMachineInventory
   id: BoozeOMatInventory
   startingInventory:
+    BarMuddler: 2
+    BarInfuser: 2
     DrinkGlass: 20 #Kept glasses at top for ease to differentiate from booze.
     DrinkShotGlass: 10
     DrinkGlassCoupeShaped: 10

@@ -66,6 +66,7 @@ namespace Content.Shared.VendingMachines
         public TimeSpan? DispenseOnHitEnd;
 
         public string? NextItemToEject;
+        public Guid PaymentReceipt;
 
         [DataField]
         public bool Broken;

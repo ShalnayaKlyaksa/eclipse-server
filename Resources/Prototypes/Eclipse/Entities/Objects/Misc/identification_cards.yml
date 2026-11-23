@@ -251,7 +251,7 @@
 - type: entity
   parent: IDCardStandard
   id: NTNavyCaptainIDCard
-  name: nanotrasen navy captain ID card
+  name: VISH navy captain ID card
   components:
   - type: Sprite
     layers:
@@ -263,7 +263,7 @@
 - type: entity
   parent: IDCardStandard
   id: NTNavyOfficerIDCard
-  name: nanotrasen navy officer ID card
+  name: VISH navy officer ID card
   components:
   - type: Sprite
     layers:
@@ -275,7 +275,7 @@
 - type: entity
   parent: IDCardStandard
   id: NTNavyWOEngiIDCard
-  name: nanotrasen navy warrant officer engineer ID card
+  name: VISH navy warrant officer engineer ID card
   components:
   - type: Sprite
     layers:
@@ -287,7 +287,7 @@
 - type: entity
   parent: IDCardStandard
   id: NTNavyWOMedIDCard
-  name: nanotrasen navy warrant officer medical ID card
+  name: VISH navy warrant officer medical ID card
   components:
   - type: Sprite
     layers:
@@ -299,7 +299,7 @@
 - type: entity
   parent: IDCardStandard
   id: NTNavySailorIDCard
-  name: nanotrasen navy sailor ID card
+  name: VISH navy sailor ID card
   components:
   - type: Sprite
     layers:
@@ -311,7 +311,7 @@
 - type: entity
   parent: IDCardStandard
   id: NTNavyEngineerIDCard
-  name: nanotrasen navy engineer ID card
+  name: VISH navy engineer ID card
   components:
   - type: Sprite
     layers:
@@ -323,7 +323,7 @@
 - type: entity
   parent: IDCardStandard
   id: NTNavyMedicalIDCard
-  name: nanotrasen navy medical ID card
+  name: VISH navy medical ID card
   components:
   - type: Sprite
     layers:

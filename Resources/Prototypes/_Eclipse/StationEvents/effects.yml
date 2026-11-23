@@ -1,0 +1,31 @@
+- type: shader
+  id: EclipseStrikeCloud
+  kind: source
+  path: /Textures/_Eclipse/Shaders/orbital_strike.swsl
+
+- type: explosion
+  id: EclipseSiege
+  damagePerIntensity:
+    types:
+      Heat: 5
+      Blunt: 6
+      Piercing: 4
+      Structural: 25
+  tileBreakChance: [0, 0.5, 1]
+  tileBreakIntensity: [0, 7, 16]
+  tileBreakRerollReduction: 16
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireStates: 3
+  temperature: 1200
+
+- type: entity
+  id: EclipseStrikeFlash
+  categories: [HideSpawnMenu]
+  components:
+  - type: PointLight
+    color: "#ffe5c4"
+    radius: 7
+    energy: 3
+  - type: TimedDespawn
+    lifetime: 0.45

@@ -272,29 +272,18 @@ public sealed partial class ChatUIController : UIController
         if (panel is null)
             return;
 
-        Color color;
-        if (panel.PanelOverride is StyleBoxFlat styleBoxFlat)
-            color = styleBoxFlat.BackgroundColor;
-        else if (panel.PanelOverride is EclipseStyleBoxRounded roundedStyleBox)
+        if (panel.PanelOverride is not StyleBoxFlat source)
         {
-            panel.PanelOverride = new EclipseStyleBoxRounded
-            {
-                BackgroundColor = roundedStyleBox.BackgroundColor.WithAlpha(opacity),
-                BorderColor = roundedStyleBox.BorderColor,
-                BorderThickness = roundedStyleBox.BorderThickness,
-                Radius = roundedStyleBox.Radius,
-            };
-            return;
+            if (!panel.TryGetStyleProperty<StyleBox>(PanelContainer.StylePropertyPanel, out var style)
+                || style is not StyleBoxFlat styled)
+                return;
+            source = styled;
         }
-        else if (panel.TryGetStyleProperty<StyleBox>(PanelContainer.StylePropertyPanel, out var style)
-                 && style is StyleBoxFlat propStyleBoxFlat)
-            color = propStyleBoxFlat.BackgroundColor;
-        else
-            color = Color.FromHex("#25252ADD");
 
-        panel.PanelOverride = new StyleBoxFlat
+        // Copy the complete surface: changing opacity must not discard the Forge border or margins.
+        panel.PanelOverride = new StyleBoxFlat(source)
         {
-            BackgroundColor = color.WithAlpha(opacity)
+            BackgroundColor = source.BackgroundColor.WithAlpha(opacity),
         };
     }
 

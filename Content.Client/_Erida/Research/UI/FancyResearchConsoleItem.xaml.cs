@@ -17,9 +17,9 @@ public sealed partial class FancyResearchConsoleItem : LayoutContainer
     public ResearchAvailability Availability;
 
     // Some visuals
-    public static readonly Color DefaultColor = Color.FromHex("#141F2F");
-    public static readonly Color DefaultBorderColor = Color.FromHex("#4972A1");
-    public static readonly Color DefaultHoveredColor = Color.FromHex("#4972A1");
+    public static readonly Color DefaultColor = Color.FromHex("#202020");
+    public static readonly Color DefaultBorderColor = Color.FromHex("#FF861F");
+    public static readonly Color DefaultHoveredColor = Color.FromHex("#FF861F");
 
     public Color Color = DefaultColor;
     public Color BorderColor = DefaultBorderColor;
@@ -32,20 +32,88 @@ public sealed partial class FancyResearchConsoleItem : LayoutContainer
 
         Availability = availability;
         Prototype = proto;
+        _summaryName = proto.ID.StartsWith("Industrial", StringComparison.Ordinal)
+            ? Loc.GetString("research-node-" + proto.ID.ToLowerInvariant()) : Loc.GetString(proto.Name);
+        TechnologyLabel.SetMessage(Loc.GetString(proto.Name), defaultColor: Color.FromHex("#EEEEEE"));
+        StatusLabel.Text = availability == ResearchAvailability.Researched ? "[OK]" : availability == ResearchAvailability.Available ? "[+]" : "[—]";
 
+        CostLabel.Text = Loc.GetString("industrial-research-node-cost", ("points", proto.Cost));
         ResearchDisplay.Texture = sprite.Frame0(proto.Icon);
         Button.OnPressed += Selected;
         Button.OnDrawModeChanged += UpdateColor;
 
         (Color, HoveredColor, BorderColor) = availability switch
         {
-            ResearchAvailability.Researched => (Color.DarkOliveGreen, Color.PaleGreen, Color.LimeGreen),
-            ResearchAvailability.Available => (Color.FromHex("#7c7d2a"), Color.FromHex("#ecfa52"), Color.FromHex("#e8fa25")),
-            ResearchAvailability.PrereqsMet => (Color.FromHex("#6b572f"), Color.FromHex("#fad398"), Color.FromHex("#cca031")),
-            ResearchAvailability.Unavailable => (Color.DarkRed, Color.PaleVioletRed, Color.Crimson),
-            _ => (Color.DarkRed, Color.PaleVioletRed, Color.Crimson)
+            ResearchAvailability.Researched => (Color.FromHex("#10291A"), Color.FromHex("#183B25"), Color.FromHex("#5A9B6A")),
+            ResearchAvailability.Available => (Color.FromHex("#13271A"), Color.FromHex("#203D29"), Color.FromHex("#9CCB97")),
+            ResearchAvailability.PrereqsMet => (Color.FromHex("#152319"), Color.FromHex("#22362A"), Color.FromHex("#68876A")),
+            _ => (Color.FromHex("#0B1710"), Color.FromHex("#17271C"), Color.FromHex("#314E3A"))
         };
 
+        UpdateColor();
+    }
+
+    public bool IsClipped { get; private set; }
+    private bool _overview;
+    private bool _detailed;
+    private int _summaryCharacters;
+    private readonly string _summaryName;
+
+    public void SetZoom(float zoom)
+    {
+        _overview = false;
+        _detailed = zoom >= .85f;
+        Panel.Compact = _overview;
+        CardContents.Visible = _detailed;
+        SummaryContents.Visible = !_overview && !_detailed;
+        TechnologyLabel.Visible = zoom >= .85f;
+        StatusLabel.Visible = zoom >= .85f;
+        CostLabel.Visible = zoom >= 0.9f;
+        var size = System.Numerics.Vector2.Max(new(8), new(224 * zoom, 116 * zoom));
+        MinSize = MaxSize = size;
+        CardLayout.MinSize = CardLayout.MaxSize = CardLayout.SetSize = size;
+        var characters = Math.Max(5, (int) ((size.X - 10) / 6.5f));
+        if (_summaryCharacters != characters)
+        {
+            _summaryCharacters = characters;
+            var words = _summaryName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            var first = "";
+            var second = "";
+            var line = 0;
+            foreach (var word in words)
+            {
+                if (line == 0 && first.Length + word.Length + (first.Length == 0 ? 0 : 1) <= characters)
+                { first += (first.Length == 0 ? "" : " ") + word; continue; }
+                if (first.Length == 0) { first = word.Length > characters ? word[..(characters - 1)] + "." : word; continue; }
+                line = 1;
+                second += (second.Length == 0 ? "" : " ") + word;
+            }
+            SummaryLine1.Text = first;
+            SummaryLine2.Text = second.Length > characters ? second[..(characters - 2)] + ".." : second;
+            SummaryLine2.Visible = second.Length != 0;
+        }
+        var icon = MathF.Max(8, MathF.Min(30 * MathF.Max(.8f, zoom), MathF.Min(size.X - 20, size.Y - 12)));
+        ResearchDisplay.SetSize = new System.Numerics.Vector2(icon);
+        ResearchDisplay.TextureScale = new System.Numerics.Vector2(MathF.Max(.8f, zoom));
+    }
+
+    /// <summary>Leave clipping to the viewport, keeping cards and their connection anchors fixed while panning.</summary>
+    public System.Numerics.Vector2 PlaceInViewport(System.Numerics.Vector2 position, System.Numerics.Vector2 viewport)
+    {
+        IsClipped = false;
+        return position;
+    }
+
+    public System.Numerics.Vector2 ConnectionAnchor(bool output)
+        => (System.Numerics.Vector2) PixelPosition + (Panel.Compact
+            ? (System.Numerics.Vector2) PixelSize / 2 + new System.Numerics.Vector2(output ? 5 * UIScale : -5 * UIScale, 0)
+            : new System.Numerics.Vector2(output ? PixelWidth : 0, PixelHeight / 2f));
+
+    private bool _selected;
+    public void SetSelected(bool selected)
+    {
+        _selected = selected;
+        Panel.Selected = selected;
         UpdateColor();
     }
 
@@ -53,8 +121,15 @@ public sealed partial class FancyResearchConsoleItem : LayoutContainer
     {
         var panel = (StyleBoxFlat) Panel.PanelOverride!;
         panel.BackgroundColor = Button.IsHovered ? HoveredColor : Color;
+        Panel.MarkerColor = _selected ? Color.FromHex("#C4E6B4") : Availability switch
+        {
+            ResearchAvailability.Available => Color.FromHex("#A4C99C"),
+            ResearchAvailability.Researched => Color.FromHex("#79AC87"),
+            _ => Color.FromHex("#5B8166"),
+        };
 
-        panel.BorderColor = BorderColor;
+        panel.BorderColor = _selected ? Color.FromHex("#C4E6B4") : BorderColor;
+        panel.BorderThickness = new Thickness(_selected ? 2 : 1);
     }
 
     protected override void ExitedTree()

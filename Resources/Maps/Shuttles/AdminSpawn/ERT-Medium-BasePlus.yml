@@ -1580,7 +1580,7 @@ entities:
   - uid: 464
     components:
     - type: MetaData
-      name: NT-Griffin fax machine
+      name: VISH-Griffin fax machine
     - type: Transform
       pos: -2.5,3.5
       parent: 1

@@ -15811,29 +15811,21 @@ entities:
     - type: Transform
       pos: 35.5,14.5
       parent: 1
-    - type: Physics
-      canCollide: False
   - uid: 431
     components:
     - type: Transform
       pos: 36.5,14.5
       parent: 1
-    - type: Physics
-      canCollide: False
   - uid: 434
     components:
     - type: Transform
       pos: 33.5,15.5
       parent: 1
-    - type: Physics
-      canCollide: False
   - uid: 435
     components:
     - type: Transform
       pos: 33.5,16.5
       parent: 1
-    - type: Physics
-      canCollide: False
   - uid: 443
     components:
     - type: Transform

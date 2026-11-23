@@ -234,6 +234,14 @@ public abstract partial class SharedVendingMachineSystem : EntitySystem
             return;
         }
 
+        var payment = new Content.Shared.PDA.BeforePaidVendEvent(user);
+        RaiseLocalEvent(uid, ref payment);
+        if (payment.Cancelled)
+        {
+            Deny((uid, vendComponent), user);
+            return;
+        }
+
         // Start Ejecting, and prevent users from ordering while anim playing
         vendComponent.EjectEnd = Timing.CurTime + vendComponent.EjectDelay;
         vendComponent.NextItemToEject = entry.ID;

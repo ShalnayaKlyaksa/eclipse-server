@@ -1,0 +1,59 @@
+- type: entity
+  parent: AdvancedForcepsPack
+  id: AdvancedBloodTestKit
+  name: "blood test kit"
+  components:
+  - type: AdvancedTreatment
+    treatment: BloodTest
+    delay: 5
+    reusable: false
+
+- type: entity
+  parent: AdvancedForcepsPack
+  id: AdvancedMedicalImager
+  name: "portable medical imager"
+  components:
+  - type: AdvancedTreatment
+    treatment: MedicalImaging
+    delay: 7
+    reusable: true
+
+- type: entity
+  parent: AdvancedForcepsPack
+  id: AdvancedCultureTestKit
+  name: "microbiology test kit"
+  components:
+  - type: AdvancedTreatment
+    treatment: MicrobiologyTest
+    delay: 8
+    reusable: false
+
+- type: entity
+  parent: AdvancedForcepsPack
+  id: AdvancedThoracicDrainKit
+  name: "thoracic drainage kit"
+  components:
+  - type: AdvancedTreatment
+    treatment: ThoracicDrain
+    delay: 8
+    reusable: false
+
+- type: entity
+  parent: AdvancedForcepsPack
+  id: AdvancedSourceControlKit
+  name: "surgical source control kit"
+  components:
+  - type: AdvancedTreatment
+    treatment: SourceControl
+    delay: 12
+    reusable: false
+
+- type: entity
+  parent: AdvancedForcepsPack
+  id: AdvancedOrganRepairKit
+  name: "organ repair kit"
+  components:
+  - type: AdvancedTreatment
+    treatment: OrganRepair
+    delay: 12
+    reusable: false

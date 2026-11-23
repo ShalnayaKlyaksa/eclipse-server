@@ -354,8 +354,8 @@ namespace Content.Server.Power.EntitySystems
         {
             return !comp.PowerDisabled
                    && (!comp.NeedsPower
-                       || MathHelper.CloseToPercent(comp.NetworkLoad.ReceivingPower,
-                           comp.Load));
+                       || comp.BotanicalPower > 0 && comp.PowerReceived >= comp.Load
+                       || MathHelper.CloseToPercent(comp.PowerReceived, comp.Load));
         }
 
         public override bool IsPoweredCalculate(SharedApcPowerReceiverComponent comp)
@@ -425,7 +425,7 @@ namespace Content.Server.Power.EntitySystems
                 apcReceiver.Powered = powered;
                 Dirty(uid, apcReceiver, metadata);
 
-                var ev = new PowerChangedEvent(powered, apcReceiver.NetworkLoad.ReceivingPower);
+                var ev = new PowerChangedEvent(powered, apcReceiver.PowerReceived);
                 RaiseLocalEvent(uid, ref ev);
             }
         }

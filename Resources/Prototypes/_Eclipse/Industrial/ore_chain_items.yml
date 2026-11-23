@@ -9,7 +9,8 @@
   - type: Stack
     stackType: SievedIronOre
   - type: Sprite
-    state: iron
+    sprite: _Eclipse/Objects/Materials/processed_ore.rsi
+    state: sieved_iron
 
 - type: entity
   parent: SievedIronOre
@@ -27,7 +28,8 @@
   - type: Stack
     stackType: SievedCopperOre
   - type: Sprite
-    state: iron
+    sprite: _Eclipse/Objects/Materials/processed_ore.rsi
+    state: sieved_copper
 
 - type: entity
   parent: SievedCopperOre
@@ -45,8 +47,8 @@
   - type: Stack
     stackType: SievedQuartz
   - type: Sprite
-    sprite: Objects/Materials/ore.rsi
-    state: spacequartz
+    sprite: _Eclipse/Objects/Materials/processed_ore.rsi
+    state: sieved_quartz
   - type: Item
     sprite: Objects/Materials/ore.rsi
     heldPrefix: spacequartz
@@ -67,8 +69,8 @@
   - type: Stack
     stackType: SievedGoldOre
   - type: Sprite
-    sprite: Objects/Materials/ore.rsi
-    state: gold
+    sprite: _Eclipse/Objects/Materials/processed_ore.rsi
+    state: sieved_gold
   - type: Item
     sprite: Objects/Materials/ore.rsi
     heldPrefix: gold
@@ -89,8 +91,8 @@
   - type: Stack
     stackType: SievedSilverOre
   - type: Sprite
-    sprite: Objects/Materials/ore.rsi
-    state: silver
+    sprite: _Eclipse/Objects/Materials/processed_ore.rsi
+    state: sieved_silver
   - type: Item
     sprite: Objects/Materials/ore.rsi
     heldPrefix: silver
@@ -111,8 +113,8 @@
   - type: Stack
     stackType: SievedPlasmaOre
   - type: Sprite
-    sprite: Objects/Materials/ore.rsi
-    state: plasma
+    sprite: _Eclipse/Objects/Materials/processed_ore.rsi
+    state: sieved_plasma
   - type: Item
     sprite: Objects/Materials/ore.rsi
     heldPrefix: plasma
@@ -133,8 +135,8 @@
   - type: Stack
     stackType: SievedUraniumOre
   - type: Sprite
-    sprite: Objects/Materials/ore.rsi
-    state: uranium
+    sprite: _Eclipse/Objects/Materials/processed_ore.rsi
+    state: sieved_uranium
   - type: Item
     sprite: Objects/Materials/ore.rsi
     heldPrefix: uranium
@@ -156,8 +158,8 @@
   - type: Stack
     stackType: CrushedGoldOre
   - type: Sprite
-    sprite: Objects/Materials/ore.rsi
-    state: gold
+    sprite: _Eclipse/Objects/Materials/processed_ore.rsi
+    state: crushed_gold
   - type: Item
     sprite: Objects/Materials/ore.rsi
     heldPrefix: gold
@@ -178,8 +180,8 @@
   - type: Stack
     stackType: CrushedSilverOre
   - type: Sprite
-    sprite: Objects/Materials/ore.rsi
-    state: silver
+    sprite: _Eclipse/Objects/Materials/processed_ore.rsi
+    state: crushed_silver
   - type: Item
     sprite: Objects/Materials/ore.rsi
     heldPrefix: silver
@@ -200,8 +202,8 @@
   - type: Stack
     stackType: CrushedPlasmaOre
   - type: Sprite
-    sprite: Objects/Materials/ore.rsi
-    state: plasma
+    sprite: _Eclipse/Objects/Materials/processed_ore.rsi
+    state: crushed_plasma
   - type: Item
     sprite: Objects/Materials/ore.rsi
     heldPrefix: plasma
@@ -222,8 +224,8 @@
   - type: Stack
     stackType: CrushedUraniumOre
   - type: Sprite
-    sprite: Objects/Materials/ore.rsi
-    state: uranium
+    sprite: _Eclipse/Objects/Materials/processed_ore.rsi
+    state: crushed_uranium
   - type: Item
     sprite: Objects/Materials/ore.rsi
     heldPrefix: uranium
@@ -245,7 +247,11 @@
   - type: Stack
     stackType: IronDust
   - type: Sprite
-    state: iron
+    sprite: Objects/Misc/reagent_fillings.rsi
+    state: powderpile
+    color: "#A8ADB0"
+  - type: Item
+    sprite: null
 
 - type: entity
   parent: IronDust
@@ -263,7 +269,11 @@
   - type: Stack
     stackType: CopperDust
   - type: Sprite
-    state: copper
+    sprite: Objects/Misc/reagent_fillings.rsi
+    state: powderpile
+    color: "#C9824E"
+  - type: Item
+    sprite: null
 
 - type: entity
   parent: CopperDust
@@ -281,11 +291,11 @@
   - type: Stack
     stackType: QuartzDust
   - type: Sprite
-    sprite: Objects/Materials/ore.rsi
-    state: spacequartz
+    sprite: Objects/Misc/reagent_fillings.rsi
+    state: powderpile
+    color: "#E5E4D7"
   - type: Item
-    sprite: Objects/Materials/ore.rsi
-    heldPrefix: spacequartz
+    sprite: null
 
 - type: entity
   parent: QuartzDust
@@ -303,8 +313,11 @@
   - type: Stack
     stackType: GoldDust
   - type: Sprite
-    sprite: Objects/Materials/ingots.rsi
-    state: gold
+    sprite: Objects/Misc/reagent_fillings.rsi
+    state: powderpile
+    color: "#E6BD48"
+  - type: Item
+    sprite: null
 
 - type: entity
   parent: GoldDust
@@ -322,8 +335,11 @@
   - type: Stack
     stackType: SilverDust
   - type: Sprite
-    sprite: Objects/Materials/ingots.rsi
-    state: silver
+    sprite: Objects/Misc/reagent_fillings.rsi
+    state: powderpile
+    color: "#C6D0D9"
+  - type: Item
+    sprite: null
 
 - type: entity
   parent: SilverDust
@@ -341,8 +357,11 @@
   - type: Stack
     stackType: PlasmaDust
   - type: Sprite
-    sprite: Objects/Materials/Sheets/other.rsi
-    state: plasma
+    sprite: Objects/Misc/reagent_fillings.rsi
+    state: powderpile
+    color: "#A24CC2"
+  - type: Item
+    sprite: null
 
 - type: entity
   parent: PlasmaDust
@@ -360,8 +379,11 @@
   - type: Stack
     stackType: UraniumDust
   - type: Sprite
-    sprite: Objects/Materials/Sheets/other.rsi
-    state: uranium
+    sprite: Objects/Misc/reagent_fillings.rsi
+    state: powderpile
+    color: "#729E57"
+  - type: Item
+    sprite: null
 
 - type: entity
   parent: UraniumDust
@@ -376,124 +398,124 @@
   parent: BaseMediumStack
   id: SievedIronOre
   name: stack-sieved-iron-ore
-  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: iron }
+  icon: { sprite: /Textures/_Eclipse/Objects/Materials/processed_ore.rsi, state: sieved_iron }
   spawn: SievedIronOre1
 
 - type: stack
   parent: BaseMediumStack
   id: SievedCopperOre
   name: stack-sieved-copper-ore
-  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: iron }
+  icon: { sprite: /Textures/_Eclipse/Objects/Materials/processed_ore.rsi, state: sieved_copper }
   spawn: SievedCopperOre1
 
 - type: stack
   parent: BaseMediumStack
   id: SievedQuartz
   name: stack-sieved-quartz
-  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: spacequartz }
+  icon: { sprite: /Textures/_Eclipse/Objects/Materials/processed_ore.rsi, state: sieved_quartz }
   spawn: SievedQuartz1
 
 - type: stack
   parent: BaseMediumStack
   id: SievedGoldOre
   name: stack-sieved-gold-ore
-  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: gold }
+  icon: { sprite: /Textures/_Eclipse/Objects/Materials/processed_ore.rsi, state: sieved_gold }
   spawn: SievedGoldOre1
 
 - type: stack
   parent: BaseMediumStack
   id: SievedSilverOre
   name: stack-sieved-silver-ore
-  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: silver }
+  icon: { sprite: /Textures/_Eclipse/Objects/Materials/processed_ore.rsi, state: sieved_silver }
   spawn: SievedSilverOre1
 
 - type: stack
   parent: BaseMediumStack
   id: SievedPlasmaOre
   name: stack-sieved-plasma-ore
-  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: plasma }
+  icon: { sprite: /Textures/_Eclipse/Objects/Materials/processed_ore.rsi, state: sieved_plasma }
   spawn: SievedPlasmaOre1
 
 - type: stack
   parent: BaseMediumStack
   id: SievedUraniumOre
   name: stack-sieved-uranium-ore
-  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: uranium }
+  icon: { sprite: /Textures/_Eclipse/Objects/Materials/processed_ore.rsi, state: sieved_uranium }
   spawn: SievedUraniumOre1
 
 - type: stack
   parent: BaseMediumStack
   id: CrushedGoldOre
   name: stack-crushed-gold-ore
-  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: gold }
+  icon: { sprite: /Textures/_Eclipse/Objects/Materials/processed_ore.rsi, state: crushed_gold }
   spawn: CrushedGoldOre1
 
 - type: stack
   parent: BaseMediumStack
   id: CrushedSilverOre
   name: stack-crushed-silver-ore
-  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: silver }
+  icon: { sprite: /Textures/_Eclipse/Objects/Materials/processed_ore.rsi, state: crushed_silver }
   spawn: CrushedSilverOre1
 
 - type: stack
   parent: BaseMediumStack
   id: CrushedPlasmaOre
   name: stack-crushed-plasma-ore
-  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: plasma }
+  icon: { sprite: /Textures/_Eclipse/Objects/Materials/processed_ore.rsi, state: crushed_plasma }
   spawn: CrushedPlasmaOre1
 
 - type: stack
   parent: BaseMediumStack
   id: CrushedUraniumOre
   name: stack-crushed-uranium-ore
-  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: uranium }
+  icon: { sprite: /Textures/_Eclipse/Objects/Materials/processed_ore.rsi, state: crushed_uranium }
   spawn: CrushedUraniumOre1
 
 - type: stack
   parent: BaseMediumStack
   id: IronDust
   name: stack-iron-dust
-  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: iron }
+  icon: { sprite: /Textures/Objects/Misc/reagent_fillings.rsi, state: powderpile }
   spawn: IronDust1
 
 - type: stack
   parent: BaseMediumStack
   id: CopperDust
   name: stack-copper-dust
-  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: copper }
+  icon: { sprite: /Textures/Objects/Misc/reagent_fillings.rsi, state: powderpile }
   spawn: CopperDust1
 
 - type: stack
   parent: BaseMediumStack
   id: QuartzDust
   name: stack-quartz-dust
-  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: spacequartz }
+  icon: { sprite: /Textures/Objects/Misc/reagent_fillings.rsi, state: powderpile }
   spawn: QuartzDust1
 
 - type: stack
   parent: BaseMediumStack
   id: GoldDust
   name: stack-gold-dust
-  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: gold }
+  icon: { sprite: /Textures/Objects/Misc/reagent_fillings.rsi, state: powderpile }
   spawn: GoldDust1
 
 - type: stack
   parent: BaseMediumStack
   id: SilverDust
   name: stack-silver-dust
-  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: silver }
+  icon: { sprite: /Textures/Objects/Misc/reagent_fillings.rsi, state: powderpile }
   spawn: SilverDust1
 
 - type: stack
   parent: BaseMediumStack
   id: PlasmaDust
   name: stack-plasma-dust
-  icon: { sprite: /Textures/Objects/Materials/Sheets/other.rsi, state: plasma }
+  icon: { sprite: /Textures/Objects/Misc/reagent_fillings.rsi, state: powderpile }
   spawn: PlasmaDust1
 
 - type: stack
   parent: BaseMediumStack
   id: UraniumDust
   name: stack-uranium-dust
-  icon: { sprite: /Textures/Objects/Materials/Sheets/other.rsi, state: uranium }
+  icon: { sprite: /Textures/Objects/Misc/reagent_fillings.rsi, state: powderpile }
   spawn: UraniumDust1

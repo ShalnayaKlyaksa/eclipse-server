@@ -8,6 +8,7 @@ namespace Content.Shared._Eclipse.Tutorial;
 [Serializable, NetSerializable]
 public sealed class TutorialShowDialogueEvent : EntityEventArgs
 {
+    public Guid StepId;
     public string Speaker = string.Empty;
     public string Text = string.Empty;
     public string? Portrait;
@@ -22,6 +23,8 @@ public sealed class TutorialShowDialogueEvent : EntityEventArgs
 
     /// <summary>Task prompts: highlight the health alert with a spotlight and wait for the player to click it.</summary>
     public bool SpotlightHealthAlert;
+    public bool ShowChoice;
+    public bool CanExit;
 }
 
 /// <summary>
@@ -37,5 +40,18 @@ public sealed class TutorialHideEvent : EntityEventArgs
 /// </summary>
 [Serializable, NetSerializable]
 public sealed class TutorialAdvanceEvent : EntityEventArgs
+{
+    public Guid StepId;
+}
+
+[Serializable, NetSerializable]
+public sealed class TutorialChoiceEvent : EntityEventArgs
+{
+    public Guid StepId;
+    public bool StartLesson;
+}
+
+[Serializable, NetSerializable]
+public sealed class TutorialExitEvent : EntityEventArgs
 {
 }

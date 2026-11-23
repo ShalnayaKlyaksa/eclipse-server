@@ -149,6 +149,9 @@ namespace Content.Server.VendingMachines
 
             if (forceEject)
             {
+                // Deliver any already-paid order before a hit replaces NextItemToEject.
+                if (vendComponent.PaymentReceipt != Guid.Empty)
+                    EjectItem(uid, vendComponent, true);
                 vendComponent.NextItemToEject = item.ID;
                 vendComponent.ThrowNextItem = throwItem;
                 var entry = GetEntry(uid, item.ID, item.Type, vendComponent);
@@ -176,6 +179,19 @@ namespace Content.Server.VendingMachines
                 vendComponent.ThrowNextItem = false;
                 return;
             }
+
+            var commerce = EntityManager.System<Content.Server.PDA.StationCommerceSystem>();
+            if (!commerce.Complete(vendComponent.PaymentReceipt))
+            {
+                commerce.Refund(vendComponent.PaymentReceipt, 1);
+                var reserved = GetAllInventory(uid).FirstOrDefault(entry => entry.ID == vendComponent.NextItemToEject);
+                if (reserved != null) reserved.Amount++;
+                vendComponent.PaymentReceipt = Guid.Empty;
+                vendComponent.NextItemToEject = null;
+                Dirty(uid, vendComponent);
+                return;
+            }
+            vendComponent.PaymentReceipt = Guid.Empty;
 
             // Default spawn coordinates
             var xform = Transform(uid);

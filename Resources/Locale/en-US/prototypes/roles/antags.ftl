@@ -39,7 +39,7 @@ roles-antag-paradox-clone-objective = A freak space-time anomaly has teleported 
 roles-antag-pirate-name = Pirate
 
 roles-antag-thief-name = Thief
-roles-antag-thief-objective = Add some NT property to your personal collection without using violence.
+roles-antag-thief-objective = Add some VISH property to your personal collection without using violence.
 
 roles-antag-dragon-name = Space Dragon
 roles-antag-dragon-objective = Create a carp army to take over this quadrant.

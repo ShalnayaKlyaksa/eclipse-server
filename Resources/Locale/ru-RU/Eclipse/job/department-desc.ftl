@@ -1,1 +1,1 @@
-department-nanotrasen-navy-description = Служите на кораблях ВКФ NanoTrasen, а также управляйте ими.
+department-nanotrasen-navy-description = Служите на кораблях ВКФ ВИШ, а также управляйте ими.

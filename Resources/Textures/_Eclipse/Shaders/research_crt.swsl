@@ -1,0 +1,28 @@
+light_mode unshaded;
+
+uniform highp vec2 screen_size;
+uniform highp float elapsed;
+
+void fragment() {
+    highp vec2 pixel = vec2(1.0) / screen_size;
+    highp vec3 source = texture2D(TEXTURE, UV).rgb;
+    // A small, stable phosphor halo. The sharp original stays dominant for small Cyrillic text.
+    highp vec3 halo = texture2D(TEXTURE, UV + vec2(pixel.x, 0.0) * 1.4).rgb;
+    halo += texture2D(TEXTURE, UV - vec2(pixel.x, 0.0) * 1.4).rgb;
+    halo += texture2D(TEXTURE, UV + vec2(0.0, pixel.y) * 1.4).rgb;
+    halo += texture2D(TEXTURE, UV - vec2(0.0, pixel.y) * 1.4).rgb;
+    halo += texture2D(TEXTURE, UV + vec2(pixel.x, pixel.y) * 2.8).rgb * 0.5;
+    halo += texture2D(TEXTURE, UV - vec2(pixel.x, pixel.y) * 2.8).rgb * 0.5;
+    highp vec3 phosphor = source + halo * 0.018;
+    // Preserve the shared Forge palette instead of recolouring the entire window green.
+    highp float scan = 0.97 + 0.03 * cos(UV.y * screen_size.y * 3.14159265);
+    highp float grille = 0.985 + 0.015 * cos(UV.x * screen_size.x * 2.0943951);
+    highp vec2 edge = UV * 2.0 - vec2(1.0);
+    highp float vignette = 1.0 - 0.19 * pow(dot(edge, edge) * 0.5, 1.4);
+    highp float band = exp(-pow((UV.y - fract(elapsed * 0.065)) / 0.055, 2.0));
+    highp float grain = fract(sin(dot(floor(UV * screen_size), vec2(12.9898, 78.233)) + floor(elapsed * 8.0)) * 43758.5453);
+    highp float glass = pow(max(0.0, 1.0 - distance(UV, vec2(0.24, -0.7))), 3.0) * 0.018;
+    highp vec3 color = phosphor * scan * grille * vignette * (1.0 + band * 0.035);
+    color += vec3(0.5) * (grain * 0.0025 + glass);
+    COLOR = vec4(color, 1.0);
+}

@@ -1,0 +1,242 @@
+- type: entity
+  parent: FoodInjectableBase
+  id: EclipseFoodCucumber
+  name: cucumber
+  description: A culinary ingredient. Processing changes its properties.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Objects/Consumable/Food/culinary_produce.rsi
+    state: cucumber
+  - type: Item
+    size: Small
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 15
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 10
+  - type: Extractable
+    grindableSolutionName: food
+- type: entity
+  parent: FoodInjectableBase
+  id: EclipseFoodPeanut
+  name: peanuts
+  description: A culinary ingredient. Processing changes its properties.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Objects/Consumable/Food/culinary_produce.rsi
+    state: peanut
+  - type: Item
+    size: Small
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 15
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 10
+  - type: Extractable
+    grindableSolutionName: food
+- type: entity
+  parent: FoodInjectableBase
+  id: EclipseFoodOlive
+  name: olives
+  description: A culinary ingredient. Processing changes its properties.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Objects/Consumable/Food/culinary_produce.rsi
+    state: olive
+  - type: Item
+    size: Small
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 15
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 10
+  - type: Extractable
+    grindableSolutionName: food
+- type: entity
+  parent: FoodInjectableBase
+  id: EclipseFoodGreenBean
+  name: green beans
+  description: A culinary ingredient. Processing changes its properties.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Objects/Consumable/Food/culinary_produce.rsi
+    state: greenbean
+  - type: Item
+    size: Small
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 15
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 10
+  - type: Extractable
+    grindableSolutionName: food
+- type: entity
+  parent: FoodInjectableBase
+  id: EclipseFoodBellPepper
+  name: bell pepper
+  description: A culinary ingredient. Processing changes its properties.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Objects/Consumable/Food/culinary_produce.rsi
+    state: bellpepper
+  - type: Item
+    size: Small
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 15
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 10
+  - type: Extractable
+    grindableSolutionName: food
+- type: entity
+  parent: FoodInjectableBase
+  id: EclipseFoodParsnip
+  name: parsnip
+  description: A culinary ingredient. Processing changes its properties.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Objects/Consumable/Food/culinary_produce.rsi
+    state: parsnip
+  - type: Item
+    size: Small
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 15
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 10
+  - type: Extractable
+    grindableSolutionName: food
+- type: entity
+  parent: FoodInjectableBase
+  id: EclipseFoodSweetPotato
+  name: sweet potato
+  description: A culinary ingredient. Processing changes its properties.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Objects/Consumable/Food/culinary_produce.rsi
+    state: sweetpotato
+  - type: Item
+    size: Small
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 15
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 10
+  - type: Extractable
+    grindableSolutionName: food
+- type: entity
+  parent: FoodInjectableBase
+  id: EclipseFoodWhiteBeet
+  name: sugar beet
+  description: A culinary ingredient. Processing changes its properties.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Objects/Consumable/Food/culinary_produce.rsi
+    state: whitebeet
+  - type: Item
+    size: Small
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 15
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 10
+  - type: Extractable
+    grindableSolutionName: food
+- type: entity
+  parent: FoodInjectableBase
+  id: EclipseFoodRedBeet
+  name: red beet
+  description: A culinary ingredient. Processing changes its properties.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Objects/Consumable/Food/culinary_produce.rsi
+    state: redbeet
+  - type: Item
+    size: Small
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 15
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 10
+  - type: Extractable
+    grindableSolutionName: food
+- type: entity
+  parent: FoodInjectableBase
+  id: EclipseFoodPlum
+  name: plum
+  description: A culinary ingredient. Processing changes its properties.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Objects/Consumable/Food/culinary_produce.rsi
+    state: plum
+  - type: Item
+    size: Small
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 15
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 10
+  - type: Extractable
+    grindableSolutionName: food
+- type: entity
+  parent: FoodInjectableBase
+  id: EclipseFoodVanillaPod
+  name: vanilla pod
+  description: A culinary ingredient. Processing changes its properties.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Objects/Consumable/Food/culinary_produce.rsi
+    state: vanilla
+  - type: Item
+    size: Small
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 15
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 10
+  - type: Extractable
+    grindableSolutionName: food
+- type: entity
+  parent: FoodInjectableBase
+  id: EclipseFoodHoneycomb
+  name: honeycomb
+  description: A culinary ingredient. Processing changes its properties.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Objects/Consumable/Food/culinary_produce.rsi
+    state: honeycomb
+  - type: Item
+    size: Small
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 15
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 2
+        - ReagentId: EclipseHoney
+          Quantity: 8
+  - type: Extractable
+    grindableSolutionName: food

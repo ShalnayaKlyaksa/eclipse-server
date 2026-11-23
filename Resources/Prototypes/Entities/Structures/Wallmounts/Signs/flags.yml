@@ -18,8 +18,8 @@
 - type: entity
   parent: BaseFlag
   id: NTFlag
-  name: Nanotrasen flag
-  description: Glory to NT! Wait, they really made a flag for a corporation?
+  name: VISH flag
+  description: Glory to VISH! Wait, they really made a flag for a corporation?
   components:
   - type: Sprite
     state: NT_flag
@@ -28,7 +28,7 @@
   parent: BaseFlag
   id: LegionFlag
   name: legion flag
-  description: Smells bloody. Death to NT!
+  description: Smells bloody. Death to VISH!
   components:
   - type: Sprite
     state: legion_flag

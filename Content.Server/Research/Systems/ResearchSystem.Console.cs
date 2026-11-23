@@ -27,22 +27,15 @@ public sealed partial class ResearchSystem
 
     private void OnConsoleUnlock(EntityUid uid, ResearchConsoleComponent component, ConsoleUnlockTechnologyMessage args)
     {
-        var act = args.Actor;
+        TryConsoleResearch(uid, args.Actor, args.Id);
+    }
 
-        if (!this.IsPowered(uid, EntityManager))
-            return;
-
-        if (!PrototypeManager.TryIndex<TechnologyPrototype>(args.Id, out var technologyPrototype))
-            return;
-
-        if (TryComp<AccessReaderComponent>(uid, out var access) && !_accessReader.IsAllowed(act, uid, access))
-        {
-            _popup.PopupEntity(Loc.GetString("research-console-no-access-popup"), act);
-            return;
-        }
-
-        if (!UnlockTechnology(uid, args.Id, act))
-            return;
+    public bool TryConsoleResearch(EntityUid uid, EntityUid act, string technology)
+    {
+        if (!CanResearchAtTerminal(uid) || !TryComp<ResearchConsoleComponent>(uid, out var component) ||
+            !PrototypeManager.TryIndex<TechnologyPrototype>(technology, out var technologyPrototype) || technologyPrototype.Hidden)
+            return false;
+        if (!UnlockTechnology(uid, technology, act)) return false;
 
         if (!_emag.CheckFlag(uid, EmagType.Interaction))
         {
@@ -60,11 +53,13 @@ public sealed partial class ResearchSystem
 
         SyncClientWithServer(uid);
         UpdateConsoleInterface(uid, component);
+        return true;
     }
 
     private void OnConsoleBeforeUiOpened(EntityUid uid, ResearchConsoleComponent component, BeforeActivatableUIOpenEvent args)
     {
         SyncClientWithServer(uid);
+        UpdateConsoleInterface(uid, component);
     }
 
     private void UpdateConsoleInterface(EntityUid uid, ResearchConsoleComponent? component = null, ResearchClientComponent? clientComponent = null)
@@ -75,6 +70,7 @@ public sealed partial class ResearchSystem
 
     private void OnPointsChanged(EntityUid uid, ResearchConsoleComponent component, ref ResearchServerPointsChangedEvent args)
     {
+        TryAdvanceResearchQueue(uid, component);
         if (!_uiSystem.IsUiOpen(uid, ResearchConsoleUiKey.Key))
             return;
         UpdateConsoleInterface(uid, component);
@@ -94,6 +90,7 @@ public sealed partial class ResearchSystem
 
     private void OnConsoleDatabaseSynchronized(EntityUid uid, ResearchConsoleComponent component, ref TechnologyDatabaseSynchronizedEvent args)
     {
+        TryAdvanceResearchQueue(uid, component);
         UpdateConsoleInterface(uid, component);
     }
 

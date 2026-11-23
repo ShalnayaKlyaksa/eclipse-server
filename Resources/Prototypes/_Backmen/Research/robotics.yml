@@ -10,8 +10,9 @@
   recipeUnlocks:
   - ProximitySensor
   - PersonalAI
-  position: 7,2
-
+  position: 12, -16
+  technologyPrerequisites:
+  - IndustrialElectronics
 - type: technology
   id: RoboticsAdvanced
   name: research-technology-robotics-advanced
@@ -22,19 +23,20 @@
   tier: 1
   cost: 5000
   recipeUnlocks:
-   - CyborgEndoskeleton
-   - LeftArmBorg
-   - RightArmBorg
-   - LeftLegBorg
-   - RightLegBorg
-   - LightHeadBorg
-   - TorsoBorg
-   - MMI
-   - PositronicBrain
-   - SciFlash
+  - CyborgEndoskeleton
+  - LeftArmBorg
+  - RightArmBorg
+  - LeftLegBorg
+  - RightLegBorg
+  - LightHeadBorg
+  - TorsoBorg
+  - MMI
+  - PositronicBrain
+  - SciFlash
   technologyPrerequisites:
   - Robotics
-  position: 6,1
+  - IndustrialPrecisionElectronics
+  position: 14, -15
 
 - type: technology
   id: CritterMech
@@ -57,7 +59,8 @@
   - VimHarness
   technologyPrerequisites:
   - RoboticsMachines
-  position: 8,-1
+  - IndustrialAdvancedAutomation
+  position: 16, -14
 
 - type: technology
   id: HONKMech
@@ -80,7 +83,8 @@
   - MechEquipmentHorn
   technologyPrerequisites:
   - RoboticsMachines
-  position: 8,0
+  - IndustrialAdvancedAutomation
+  position: 16, -12
 
 - type: technology
   id: RipleyAPLUMech
@@ -102,7 +106,8 @@
   - MechEquipmentGrabber
   technologyPrerequisites:
   - RoboticsMachines
-  position: 8,1
+  - IndustrialAdvancedAutomation
+  position: 16, -10
 
 - type: technology
   id: CyborgModules
@@ -114,14 +119,14 @@
   tier: 1
   cost: 2500
   recipeUnlocks:
-   - BorgModuleCable
-   - BorgModuleFireExtinguisher
-   - BorgModuleTool
-   - BorgModuleInflatable
-   - BorgModuleArtistry
+  - BorgModuleCable
+  - BorgModuleFireExtinguisher
+  - BorgModuleTool
+  - BorgModuleInflatable
+  - BorgModuleArtistry
   technologyPrerequisites:
   - RoboticsAdvanced
-  position: 6,-2
+  position: 16, -16
 
 - type: technology
   id: AdvancedSurgeryModules
@@ -136,7 +141,8 @@
   - BorgModuleAdvancedTopical
   technologyPrerequisites:
   - CyborgModules
-  position: 7,-2
+  - IndustrialScienceEquipment
+  position: 18, -9
 
 - type: technology
   id: AdvancedMinerModules
@@ -151,7 +157,8 @@
   - BorgModuleAdvancedMining
   technologyPrerequisites:
   - CyborgModules
-  position: 5,-3
+  - IndustrialSalvageEquipment
+  position: 18, -11
 
 - type: technology
   id: AdvancedToolsModules
@@ -166,7 +173,7 @@
   - BorgModuleAdvancedTool
   technologyPrerequisites:
   - CyborgModules
-  position: 5,-2
+  position: 18, -7
 
 - type: technology
   id: AdvancedServiceModules
@@ -182,7 +189,7 @@
   - BorgModuleAdvancedClowning
   technologyPrerequisites:
   - CyborgModules
-  position: 7,-3
+  position: 18, -13
 
 - type: technology
   id: XenoArcheologyModules
@@ -197,7 +204,7 @@
   - BorgModuleArtifact
   technologyPrerequisites:
   - CyborgModules
-  position: 6,-4
+  position: 18, -15
 
 - type: technology
   id: AnomalyModules
@@ -212,4 +219,4 @@
   - BorgModuleAnomaly
   technologyPrerequisites:
   - XenoArcheologyModules
-  position: 6,-5
+  position: 20, -16

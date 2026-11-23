@@ -55,6 +55,10 @@ namespace Content.Server.Power.Components
             DesiredPower = 5
         };
 
-        public float PowerReceived => NetworkLoad.ReceivingPower;
+        public float PowerReceived => NetworkLoad.ReceivingPower + BotanicalPower;
+
+        /// <summary>Bounded local supply from mature energy flowers, recomputed by the botany system.</summary>
+        [ViewVariables]
+        public float BotanicalPower;
     }
 }

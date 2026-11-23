@@ -10,4 +10,6 @@
   recipeUnlocks:
   - ConveyorBeltAssembly
   - AppraisalTool
-  position: 7,3
+  position: 12, 16
+  technologyPrerequisites:
+  - IndustrialAutomation

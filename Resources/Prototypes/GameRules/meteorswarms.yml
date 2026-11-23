@@ -38,6 +38,8 @@
     - id: PotatoSwarm
     - id: FunSwarm
     - id: ImmovableRodSpawn
+    - !type:NestedSelector
+      tableId: EclipseSiegeEventsTable
 
 - type: weightedRandomEntity
   id: MeteorSpawnAsteroidWallTable

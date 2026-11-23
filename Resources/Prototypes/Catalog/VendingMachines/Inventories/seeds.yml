@@ -1,6 +1,10 @@
 - type: vendingMachineInventory
   id: MegaSeedServitorInventory
   startingInventory:
+    GardenMintSeeds: 5
+    GardenSoilBag: 8
+    Wrench: 2
+    DiseaseSwab: 10
     AloeSeeds: 3
     AmbrosiaVulgarisSeeds: 3
     AppleSeeds: 5

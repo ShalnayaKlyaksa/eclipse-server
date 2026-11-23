@@ -105,6 +105,8 @@
 - type: latheRecipePack
   id: MedicalBoards
   recipes:
+  - PharmaceuticalSynthesizerMachineCircuitboard
+  - PharmaceuticalAnalyzerMachineCircuitboard
   - StasisBedMachineCircuitboard
   - CryoPodMachineCircuitboard
   - BiomassReclaimerMachineCircuitboard

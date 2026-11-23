@@ -1,0 +1,12 @@
+reagent-name-clinical-antibiotic-precursor = precursor: { reagent-name-clinical-antibiotic }
+reagent-name-clinical-antifungal-precursor = precursor: { reagent-name-clinical-antifungal }
+reagent-name-clinical-antiviral-precursor = precursor: { reagent-name-clinical-antiviral }
+reagent-name-clinical-opioid-precursor = precursor: { reagent-name-clinical-opioid }
+reagent-name-clinical-sedative-precursor = precursor: { reagent-name-clinical-sedative }
+reagent-name-clinical-bronchodilator-precursor = precursor: { reagent-name-clinical-bronchodilator }
+reagent-name-clinical-antihistamine-precursor = precursor: { reagent-name-clinical-antihistamine }
+reagent-name-clinical-anticonvulsant-precursor = precursor: { reagent-name-clinical-anticonvulsant }
+reagent-name-clinical-anti-inflammatory-precursor = precursor: { reagent-name-clinical-anti-inflammatory }
+reagent-name-clinical-insulin-precursor = precursor: { reagent-name-clinical-insulin }
+reagent-name-clinical-glucose-precursor = precursor: { reagent-name-clinical-glucose }
+reagent-name-clinical-naloxone-precursor = precursor: { reagent-name-clinical-naloxone }

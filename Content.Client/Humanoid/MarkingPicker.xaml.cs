@@ -1,3 +1,4 @@
+using Content.Client.Stylesheets;
 using System.Linq;
 using System.Numerics;
 using Content.Client.MainMenu.UI;
@@ -65,12 +66,12 @@ public sealed partial class MarkingPicker : Control
     private const int NavSeparationCompact = 3;
     private const int RootSeparation = 10;
 
-    private static readonly Color PanelColor = Color.FromHex("#080706E8");
-    private static readonly Color CardColor = Color.FromHex("#151311E8");
-    private static readonly Color CardSelectedColor = Color.FromHex("#321A07F0");
-    private static readonly Color BorderColor = Color.FromHex("#40230B");
-    private static readonly Color AccentColor = Color.FromHex("#F08A12");
-    private static readonly Color MutedTextColor = Color.FromHex("#B8B1A8");
+    private static readonly Color PanelColor = ForgeStyle.Background.WithAlpha(0.91f);
+    private static readonly Color CardColor = ForgeStyle.Surface.WithAlpha(0.91f);
+    private static readonly Color CardSelectedColor = ForgeStyle.Selection.WithAlpha(0.94f);
+    private static readonly Color BorderColor = ForgeStyle.Border;
+    private static readonly Color AccentColor = ForgeStyle.Accent;
+    private static readonly Color MutedTextColor = ForgeStyle.Muted;
 
     private static readonly ZoneDefinition[] Zones =
     [
@@ -264,6 +265,7 @@ public sealed partial class MarkingPicker : Control
         if (_markingsModel == model)
             return;
 
+        _colorPopup?.Close();
         UnsubscribeModel();
         _markingsModel = model;
         SubscribeModel();
@@ -278,6 +280,7 @@ public sealed partial class MarkingPicker : Control
 
     protected override void ExitedTree()
     {
+        _colorPopup?.Close();
         base.ExitedTree();
         UnsubscribeModel();
     }
@@ -301,6 +304,7 @@ public sealed partial class MarkingPicker : Control
                 : LeftPanelWidth;
         var rightWidth = Width < RightPanelShrinkBreakpoint ? RightPanelWidthCompact : RightPanelWidth;
         var rightVisible = !compact;
+        var rightVisibilityChanged = _rightPanel.Visible != rightVisible;
 
         _leftPanel.SetWidth = leftWidth;
         _rightPanel.Visible = rightVisible;
@@ -320,7 +324,7 @@ public sealed partial class MarkingPicker : Control
             RebuildFilterButtons();
         }
 
-        if (compactEntries != _compactEntries)
+        if (compactEntries != _compactEntries || rightVisibilityChanged)
         {
             _compactEntries = compactEntries;
             RebuildAvailableItems();
@@ -595,6 +599,14 @@ public sealed partial class MarkingPicker : Control
             StyleIdentifier = selected ? MainMenuControl.StyleIdentifierPrimary : MainMenuControl.StyleIdentifierCompactButton,
         });
 
+        if (!_rightPanel.Visible && CreateColorButton(entry) is { } colorButton)
+        {
+            var controls = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Horizontal, SeparationOverride = 4 };
+            controls.AddChild(panel);
+            controls.AddChild(colorButton);
+            return controls;
+        }
+
         return panel;
     }
 
@@ -632,6 +644,9 @@ public sealed partial class MarkingPicker : Control
             HorizontalExpand = true,
             ClipText = true,
         });
+
+        if (CreateColorButton(entry) is { } colorButton)
+            row.AddChild(colorButton);
 
         var remove = new Button
         {

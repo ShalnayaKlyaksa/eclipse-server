@@ -1,1 +1,1 @@
-chat-radio-nanotrasen-navy = ВКФ NT
+chat-radio-nanotrasen-navy = ВКФ ВИШ

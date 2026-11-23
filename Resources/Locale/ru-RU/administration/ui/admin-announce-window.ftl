@@ -1,7 +1,7 @@
 admin-announce-title = Сделать объявление
 admin-announce-announcement-placeholder = Текст объявления...
 admin-announce-announcer-placeholder = Отправитель
-admin-announce-announcer-default = Эйдосская империя
+admin-announce-announcer-default = ВИШ
 admin-announce-button = Сделать объявление
 admin-announce-type-station = Станция
 admin-announce-type-server = Сервер

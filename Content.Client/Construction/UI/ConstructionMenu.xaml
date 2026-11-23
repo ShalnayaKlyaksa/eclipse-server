@@ -40,8 +40,8 @@
             <!-- Left: categories -->
             <PanelContainer MinWidth="210" MaxWidth="210" VerticalExpand="True">
                 <PanelContainer.PanelOverride>
-                    <gfx:StyleBoxFlat BackgroundColor="#050200E8"
-                                      BorderColor="#A85E124D"
+                    <gfx:StyleBoxFlat BackgroundColor="#161616E8"
+                                      BorderColor="#5050504D"
                                       BorderThickness="1" />
                 </PanelContainer.PanelOverride>
                 <BoxContainer Orientation="Vertical"
@@ -64,8 +64,8 @@
             <!-- Middle: recipe list -->
             <PanelContainer MinWidth="280" MaxWidth="320" VerticalExpand="True">
                 <PanelContainer.PanelOverride>
-                    <gfx:StyleBoxFlat BackgroundColor="#0A0400E6"
-                                      BorderColor="#A85E124D"
+                    <gfx:StyleBoxFlat BackgroundColor="#202020E6"
+                                      BorderColor="#5050504D"
                                       BorderThickness="1" />
                 </PanelContainer.PanelOverride>
                 <BoxContainer Orientation="Vertical"
@@ -92,8 +92,8 @@
             <!-- Right: details -->
             <PanelContainer HorizontalExpand="True" VerticalExpand="True">
                 <PanelContainer.PanelOverride>
-                    <gfx:StyleBoxFlat BackgroundColor="#0A0400E6"
-                                      BorderColor="#A85E124D"
+                    <gfx:StyleBoxFlat BackgroundColor="#202020E6"
+                                      BorderColor="#5050504D"
                                       BorderThickness="1" />
                 </PanelContainer.PanelOverride>
                 <BoxContainer Orientation="Vertical"
@@ -106,8 +106,8 @@
                                   SeparationOverride="12">
                         <PanelContainer MinSize="80 80" MaxSize="80 80">
                             <PanelContainer.PanelOverride>
-                                <gfx:StyleBoxFlat BackgroundColor="#1A0900"
-                                                  BorderColor="#A85E1266"
+                                <gfx:StyleBoxFlat BackgroundColor="#202020"
+                                                  BorderColor="#50505066"
                                                   BorderThickness="1" />
                             </PanelContainer.PanelOverride>
                             <EntityPrototypeView Name="TargetTexture"
@@ -183,8 +183,8 @@
         <!-- Bottom: favorites -->
         <PanelContainer Name="FavoritesPanel" MinHeight="72">
             <PanelContainer.PanelOverride>
-                <gfx:StyleBoxFlat BackgroundColor="#050200E8"
-                                  BorderColor="#A85E124D"
+                <gfx:StyleBoxFlat BackgroundColor="#161616E8"
+                                  BorderColor="#5050504D"
                                   BorderThickness="1" />
             </PanelContainer.PanelOverride>
             <BoxContainer Orientation="Horizontal"

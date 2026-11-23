@@ -20,27 +20,34 @@ public sealed class ButtonSheetlet<T> : Sheetlet<T> where T : PalettedStylesheet
         var crossTex = sheet.GetTextureOr(iconCfg.CrossIconPath, NanotrasenStylesheet.TextureRoot);
         var refreshTex = sheet.GetTextureOr(iconCfg.RefreshIconPath, NanotrasenStylesheet.TextureRoot);
         var helpTex = sheet.GetTextureOr(iconCfg.HelpIconPath, NanotrasenStylesheet.TextureRoot);
+        var normal = ForgeStyle.Button();
+        var hover = ForgeStyle.Button("_hover");
+        var pressed = ForgeStyle.Button("_pressed");
 
         var rules = new List<StyleRule>
         {
             // Set textures for the kinds of buttons
             CButton()
-                .Box(StyleBoxHelpers.BaseStyleBox(sheet)),
+                .Box(normal),
             CButton()
                 .Class(StyleClass.ButtonOpenLeft)
-                .Box(StyleBoxHelpers.OpenLeftStyleBox(sheet)),
+                .Box(ForgeStyle.Button(horizontalPadding: 8)),
             CButton()
                 .Class(StyleClass.ButtonOpenRight)
-                .Box(StyleBoxHelpers.OpenRightStyleBox(sheet)),
+                .Box(ForgeStyle.Button(horizontalPadding: 8)),
             CButton()
                 .Class(StyleClass.ButtonOpenBoth)
-                .Box(StyleBoxHelpers.SquareStyleBox(sheet)),
+                .Box(ForgeStyle.Button(horizontalPadding: 8)),
             CButton()
                 .Class(StyleClass.ButtonSquare)
-                .Box(StyleBoxHelpers.SquareStyleBox(sheet)),
+                .Box(ForgeStyle.Button(horizontalPadding: 8)),
             CButton()
                 .Class(StyleClass.ButtonSmall)
-                .Box(StyleBoxHelpers.SmallStyleBox(sheet)),
+                .Box(ForgeStyle.Button(horizontalPadding: 4, verticalPadding: 0)),
+            CButton().PseudoNormal().Box(normal).Modulate(Color.White),
+            CButton().PseudoHovered().Box(hover).Modulate(Color.White),
+            CButton().PseudoPressed().Box(pressed).Modulate(Color.White),
+            CButton().PseudoDisabled().Box(normal).Modulate(Color.Gray),
             CButton()
                 .Class(StyleClass.ButtonSmall)
                 .ParentOf(E<Label>())
@@ -76,9 +83,31 @@ public sealed class ButtonSheetlet<T> : Sheetlet<T> where T : PalettedStylesheet
         MakeButtonRules<TextureButton>(rules, Palettes.AlphaModulate, null);
         MakeButtonRules<TextureButton>(rules, sheet.NegativePalette, StyleClass.CrossButtonRed);
 
-        MakeButtonRules(rules, buttonCfg.ButtonPalette, null);
-        MakeButtonRules(rules, buttonCfg.PositiveButtonPalette, StyleClass.Positive);
-        MakeButtonRules(rules, buttonCfg.NegativeButtonPalette, StyleClass.Negative);
+        // Keep semantic actions distinct without tinting unrelated controls or turning all toggles green.
+        foreach (var (styleClass, palette) in new[]
+                 {
+                     (StyleClass.Positive, buttonCfg.PositiveButtonPalette),
+                     (StyleClass.Negative, buttonCfg.NegativeButtonPalette),
+                 })
+        {
+            rules.AddRange([
+                CButton().Class(styleClass).PseudoNormal().Box(ForgeStyle.Panel(ForgeStyle.Surface, palette.Base, 14, 2)),
+                CButton().Class(styleClass).PseudoHovered().Box(ForgeStyle.Panel(ForgeStyle.Hover, palette.Base, 14, 2)),
+                CButton().Class(styleClass).PseudoPressed().Box(ForgeStyle.Panel(ForgeStyle.Selection, palette.Base, 14, 2)),
+            ]);
+        }
+
+        // State changes must preserve the padding of compact and joined buttons.
+        foreach (var styleClass in new[] { StyleClass.ButtonOpenLeft, StyleClass.ButtonOpenRight, StyleClass.ButtonOpenBoth, StyleClass.ButtonSquare, StyleClass.ButtonSmall })
+        {
+            var small = styleClass == StyleClass.ButtonSmall;
+            rules.AddRange([
+                CButton().Class(styleClass).PseudoNormal().Box(ForgeStyle.Button(horizontalPadding: small ? 4 : 8, verticalPadding: small ? 0 : 2)),
+                CButton().Class(styleClass).PseudoHovered().Box(ForgeStyle.Button("_hover", small ? 4 : 8, small ? 0 : 2)),
+                CButton().Class(styleClass).PseudoPressed().Box(ForgeStyle.Button("_pressed", small ? 4 : 8, small ? 0 : 2)),
+                CButton().Class(styleClass).PseudoDisabled().Box(ForgeStyle.Button(horizontalPadding: small ? 4 : 8, verticalPadding: small ? 0 : 2)),
+            ]);
+        }
 
         return rules.ToArray();
     }
@@ -94,22 +123,6 @@ public sealed class ButtonSheetlet<T> : Sheetlet<T> where T : PalettedStylesheet
             E<TC>().MaybeClass(styleclass).PseudoHovered().Modulate(palette.HoveredElement),
             E<TC>().MaybeClass(styleclass).PseudoPressed().Modulate(palette.PressedElement),
             E<TC>().MaybeClass(styleclass).PseudoDisabled().Modulate(palette.DisabledElement),
-        ]);
-    }
-
-    public static void MakeButtonRules(
-        List<StyleRule> rules,
-        ColorPalette palette,
-        string? styleclass)
-    {
-        rules.AddRange([
-            E().MaybeClass(styleclass).PseudoNormal().Prop(Control.StylePropertyModulateSelf, palette.Element),
-            E().MaybeClass(styleclass).PseudoHovered().Prop(Control.StylePropertyModulateSelf, palette.HoveredElement),
-            E().MaybeClass(styleclass).PseudoPressed().Prop(Control.StylePropertyModulateSelf, palette.PressedElement),
-            E()
-                .MaybeClass(styleclass)
-                .PseudoDisabled()
-                .Prop(Control.StylePropertyModulateSelf, palette.DisabledElement),
         ]);
     }
 

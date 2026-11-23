@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-4.0",
+  "copyright": "Made by Xaoser for Eclipse Station",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "crushed_iron",
+      "directions": 1
+    },
+    {
+      "name": "crushed_copper",
+      "directions": 1
+    },
+    {
+      "name": "crushed_quartz",
+      "directions": 1
+    },
+    {
+      "name": "crushed_gold",
+      "directions": 1
+    },
+    {
+      "name": "crushed_silver",
+      "directions": 1
+    },
+    {
+      "name": "crushed_plasma",
+      "directions": 1
+    },
+    {
+      "name": "crushed_uranium",
+      "directions": 1
+    },
+    {
+      "name": "sieved_iron",
+      "directions": 1
+    },
+    {
+      "name": "sieved_copper",
+      "directions": 1
+    },
+    {
+      "name": "sieved_quartz",
+      "directions": 1
+    },
+    {
+      "name": "sieved_gold",
+      "directions": 1
+    },
+    {
+      "name": "sieved_silver",
+      "directions": 1
+    },
+    {
+      "name": "sieved_plasma",
+      "directions": 1
+    },
+    {
+      "name": "sieved_uranium",
+      "directions": 1
+    }
+  ]
+}

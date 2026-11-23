@@ -34,7 +34,7 @@
 - type: entity
   parent: ClothingOuterStorageBase
   id: ClothingOuterCoatNTNavyCaptain
-  name: nanotrasen navy captain jacket
+  name: VISH navy captain jacket
   description:
   components:
   - type: Sprite
@@ -54,7 +54,7 @@
 - type: entity
   parent: ClothingOuterStorageBase
   id: ClothingOuterCoatNTNavyOfficer
-  name: nanotrasen navy officer jacket
+  name: VISH navy officer jacket
   description:
   components:
   - type: Sprite
@@ -74,7 +74,7 @@
 - type: entity
   parent: ClothingOuterStorageFoldableBase
   id: ClothingOuterCoatLabNTNavy
-  name: nanotrasen navy lab coat
+  name: VISH navy lab coat
   description: A suit that protects against minor chemical spills.
   components:
   - type: Sprite
@@ -89,4 +89,4 @@
 - type: entity
   parent: [ClothingOuterStorageFoldableBaseOpened, ClothingOuterCoatLabNTNavy]
   id: ClothingOuterCoatLabNTNavyOpened
-  name: nanotrasen navy lab coat
+  name: VISH navy lab coat

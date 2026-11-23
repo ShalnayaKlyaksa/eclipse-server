@@ -1,10 +1,21 @@
-<cartridges:NotekeeperUiFragment xmlns:cartridges="clr-namespace:Content.Client.CartridgeLoader.Cartridges"
-                                 xmlns="https://spacestation14.io" Margin="1 0 2 0">
-    <PanelContainer StyleClasses="BackgroundDark"></PanelContainer>
-    <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
-        <ScrollContainer HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="True">
-            <BoxContainer Orientation="Vertical" Name="MessageContainer" HorizontalExpand="True" VerticalExpand="True"/>
-        </ScrollContainer>
-        <LineEdit Name="Input" HorizontalExpand="True" SetHeight="32"/>
+<cartridges:NotekeeperUiFragment xmlns:cartridges="clr-namespace:Content.Client.CartridgeLoader.Cartridges" xmlns="https://spacestation14.io" Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="5">
+    <BoxContainer Orientation="Vertical" SetWidth="165" SeparationOverride="4">
+        <BoxContainer SeparationOverride="4">
+            <Label Text="{Loc 'notekeeper-program-name'}" StyleClasses="pda-caption" HorizontalExpand="True"/>
+            <Button Name="NewNote" Text="+" MinHeight="24" ToolTip="{Loc 'pda-notes-new'}"/>
+        </BoxContainer>
+        <LineEdit Name="Search" MinHeight="26" PlaceHolder="{Loc 'pda-notes-search'}"/>
+        <ScrollContainer HScrollEnabled="False" VerticalExpand="True"><BoxContainer Name="NoteList" Orientation="Vertical" SeparationOverride="2"/></ScrollContainer>
+    </BoxContainer>
+    <PanelContainer StyleClasses="pda-divider" MinWidth="1"/>
+    <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="4">
+        <LineEdit Name="NoteTitle" MinHeight="28" PlaceHolder="{Loc 'pda-notes-untitled'}"/>
+        <PanelContainer StyleClasses="pda-editor" VerticalExpand="True" HorizontalExpand="True"><TextEdit Name="Editor" Margin="3" VerticalExpand="True" HorizontalExpand="True"/></PanelContainer>
+        <BoxContainer SeparationOverride="4">
+            <Label Name="Status" StyleClasses="terminal-muted" ClipText="True" HorizontalExpand="True"/>
+            <Button Name="ReloadNote" Visible="False" Text="{Loc 'pda-notes-reload'}"/>
+            <Button Name="SaveNote" MinHeight="26" StyleClasses="pda-primary" Text="{Loc 'pda-notes-save'}"/>
+            <Button Name="DeleteNote" MinHeight="26" Text="{Loc 'pda-notes-delete'}"/>
+        </BoxContainer>
     </BoxContainer>
 </cartridges:NotekeeperUiFragment>

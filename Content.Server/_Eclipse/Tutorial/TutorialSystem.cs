@@ -1,19 +1,25 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Numerics;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Shared.Damage.Systems;
 using Content.Shared.GameTicking;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Gravity;
+using Content.Shared.Light.Components;
 using Content.Shared.Mind;
 using Content.Shared._Eclipse.Tutorial;
 using Robust.Server.Player;
 using Robust.Shared.Enums;
+using Robust.Shared.ContentPack;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Server._Eclipse.Tutorial;
 
@@ -35,6 +41,12 @@ public sealed class TutorialSystem : EntitySystem
     [Dependency] private readonly SharedGodmodeSystem _godmode = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly GameTicker _ticker = default!;
+    [Dependency] private readonly IResourceManager _resources = default!;
+    [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly ITileDefinitionManager _tiles = default!;
+
+    private const string WelcomeLesson = "TutorialWelcome";
+    private static readonly ResPath WelcomeDirectory = new("/avi-welcome");
 
     private readonly Dictionary<Guid, TutorialRun> _runs = new();
 
@@ -43,8 +55,29 @@ public sealed class TutorialSystem : EntitySystem
         base.Initialize();
         SubscribeNetworkEvent<TutorialStartRequestEvent>(OnStartRequest);
         SubscribeNetworkEvent<TutorialAdvanceEvent>(OnAdvance);
+        SubscribeNetworkEvent<TutorialChoiceEvent>(OnChoice);
+        SubscribeNetworkEvent<TutorialExitEvent>(OnExit);
+        SubscribeLocalEvent<PlayerJoinedLobbyEvent>(OnJoinedLobby);
+        SubscribeLocalEvent<PlayerBeforeSpawnEvent>(OnBeforeSpawn);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
         _players.PlayerStatusChanged += OnPlayerStatusChanged;
+    }
+
+    private void OnJoinedLobby(PlayerJoinedLobbyEvent ev)
+    {
+        var session = ev.PlayerSession;
+        if (session.AttachedEntity != null || _runs.ContainsKey(session.UserId.UserId) ||
+            _resources.UserData.Exists(WelcomeDirectory / $"{session.UserId.UserId}.txt"))
+            return;
+
+        if (_prototypes.TryIndex<TutorialLessonPrototype>(WelcomeLesson, out var lesson) && lesson.Enabled)
+            StartTutorial(session, lesson);
+    }
+
+    private void OnBeforeSpawn(PlayerBeforeSpawnEvent ev)
+    {
+        if (_runs.ContainsKey(ev.Player.UserId.UserId))
+            ev.Handled = true;
     }
 
     public override void Shutdown()
@@ -82,8 +115,19 @@ public sealed class TutorialSystem : EntitySystem
         // consistent (never set JoinedGame from the lobby — that trips a round-start assert).
         _ticker.ToggleReady(session, false);
 
+        var run = new TutorialRun { Session = session, Lesson = lesson };
+        _runs[session.UserId.UserId] = run;
+        if (lesson.LobbyOnly)
+        {
+            RunCurrentStep(run);
+            return;
+        }
+
         var mapUid = _maps.CreateMap(out var mapId);
-        var mob = Spawn(lesson.Body, new EntityCoordinates(mapUid, Vector2.Zero));
+        var coordinates = lesson.PracticeRoom
+            ? CreatePracticeRoom(mapId)
+            : new EntityCoordinates(mapUid, Vector2.Zero);
+        var mob = Spawn(lesson.Body, coordinates);
 
         // Bare space; keep the player unharmed for the lesson.
         _godmode.EnableGodmode(mob);
@@ -98,17 +142,30 @@ public sealed class TutorialSystem : EntitySystem
         comp.LessonId = lesson.ID;
         comp.MapId = mapId;
 
-        var run = new TutorialRun
-        {
-            Session = session,
-            Lesson = lesson,
-            Mob = mob,
-            MapId = mapId,
-            StepIndex = 0,
-        };
-        _runs[session.UserId.UserId] = run;
+        run.Mob = mob;
+        run.MapId = mapId;
 
         RunCurrentStep(run);
+    }
+
+    private EntityCoordinates CreatePracticeRoom(MapId mapId)
+    {
+        var grid = _mapManager.CreateGridEntity(mapId);
+        var tiles = new List<(Vector2i, Tile)>();
+        var floor = new Tile(_tiles["FloorSteel"].TileId);
+        for (var x = -5; x <= 5; x++)
+        for (var y = -5; y <= 5; y++)
+            tiles.Add((new Vector2i(x, y), floor));
+        _maps.SetTiles(grid.Owner, grid.Comp, tiles);
+        var gravity = EnsureComp<GravityComponent>(grid);
+        gravity.Enabled = gravity.Inherent = true;
+        Dirty(grid, gravity);
+        _maps.SetAmbientLight(mapId, Color.White);
+        for (var x = -5; x <= 5; x++)
+        for (var y = -5; y <= 5; y++)
+            if (Math.Abs(x) == 5 || Math.Abs(y) == 5)
+                Spawn("WallSolid", new EntityCoordinates(grid.Owner, new Vector2(x + 0.5f, y + 0.5f)));
+        return new EntityCoordinates(grid.Owner, new Vector2(0.5f, 0.5f));
     }
 
     private void RunCurrentStep(TutorialRun run)
@@ -116,11 +173,14 @@ public sealed class TutorialSystem : EntitySystem
         // Run through instant (server-action) steps until we hit one that waits for the player.
         while (run.StepIndex < run.Lesson.Steps.Count)
         {
+            run.StepId = Guid.NewGuid();
             switch (run.Lesson.Steps[run.StepIndex])
             {
                 case TutorialDialogueStep d:
                     RaiseNetworkEvent(new TutorialShowDialogueEvent
                     {
+                        StepId = run.StepId,
+                        CanExit = !run.Lesson.LobbyOnly,
                         Speaker = d.Speaker,
                         Text = d.Text,
                         Portrait = d.Portrait,
@@ -133,11 +193,39 @@ public sealed class TutorialSystem : EntitySystem
                 case TutorialClickHealthStep t:
                     RaiseNetworkEvent(new TutorialShowDialogueEvent
                     {
+                        StepId = run.StepId,
+                        CanExit = !run.Lesson.LobbyOnly,
                         Speaker = t.Speaker,
                         Text = t.Objective,
                         Portrait = t.Portrait,
                         CanAdvance = false,
                         SpotlightHealthAlert = true,
+                    }, run.Session.Channel);
+                    return;
+
+                case TutorialChoiceStep choice:
+                    RaiseNetworkEvent(new TutorialShowDialogueEvent
+                    {
+                        StepId = run.StepId,
+                        Speaker = choice.Speaker,
+                        Text = choice.Text,
+                        Portrait = choice.Portrait,
+                        ShowChoice = true,
+                        CanAdvance = false,
+                    }, run.Session.Channel);
+                    return;
+
+                case TutorialPracticeStep task:
+                    if (run.Mob is not { } body)
+                        throw new InvalidOperationException("Practice tasks require a tutorial body.");
+                    run.TaskStart = Transform(body).LocalPosition;
+                    RaiseNetworkEvent(new TutorialShowDialogueEvent
+                    {
+                        StepId = run.StepId,
+                        Speaker = "Ави",
+                        Text = task.Objective,
+                        CanAdvance = false,
+                        CanExit = true,
                     }, run.Session.Channel);
                     return;
 
@@ -162,13 +250,18 @@ public sealed class TutorialSystem : EntitySystem
 
     private void SpawnInHand(TutorialRun run, EntProtoId proto)
     {
-        var item = Spawn(proto, Transform(run.Mob).Coordinates);
-        _hands.TryForcePickupAnyHand(run.Mob, item);
+        if (run.Mob is not { } mob)
+            return;
+        var item = Spawn(proto, Transform(mob).Coordinates);
+        _hands.TryForcePickupAnyHand(mob, item);
+        run.PracticeItem = item;
     }
 
     private void ClearHands(TutorialRun run)
     {
-        foreach (var held in _hands.EnumerateHeld(run.Mob))
+        if (run.Mob is not { } mob)
+            return;
+        foreach (var held in _hands.EnumerateHeld(mob).ToArray())
             QueueDel(held);
     }
 
@@ -177,11 +270,79 @@ public sealed class TutorialSystem : EntitySystem
         if (!_runs.TryGetValue(args.SenderSession.UserId.UserId, out var run))
             return;
 
-        if (run.StepIndex >= run.Lesson.Steps.Count)
+        if (ev.StepId != run.StepId || run.StepIndex >= run.Lesson.Steps.Count ||
+            run.Lesson.Steps[run.StepIndex] is not (TutorialDialogueStep or TutorialClickHealthStep))
             return;
 
         run.StepIndex++;
         RunCurrentStep(run);
+    }
+
+    private void OnChoice(TutorialChoiceEvent ev, EntitySessionEventArgs args)
+    {
+        if (!_runs.TryGetValue(args.SenderSession.UserId.UserId, out var run) ||
+            ev.StepId != run.StepId || run.StepIndex >= run.Lesson.Steps.Count ||
+            run.Lesson.Steps[run.StepIndex] is not TutorialChoiceStep choice)
+            return;
+
+        TutorialLessonPrototype? next = null;
+        if (ev.StartLesson && (!_prototypes.TryIndex(choice.Lesson, out next) || !next.Enabled || next.LobbyOnly))
+            return;
+
+        if (run.Lesson.ID == WelcomeLesson)
+        {
+            try
+            {
+                _resources.UserData.CreateDir(WelcomeDirectory);
+                using var writer = _resources.UserData.OpenWriteText(WelcomeDirectory / $"{run.Session.UserId.UserId}.txt");
+                writer.WriteLine(ev.StartLesson ? "training" : "lobby");
+            }
+            catch (IOException e)
+            {
+                Log.Error($"Could not save Avi welcome completion: {e}");
+            }
+        }
+
+        EndTutorial(run);
+        if (next != null)
+            StartTutorial(args.SenderSession, next);
+    }
+
+    private void OnExit(TutorialExitEvent ev, EntitySessionEventArgs args)
+    {
+        if (_runs.TryGetValue(args.SenderSession.UserId.UserId, out var run) && !run.Lesson.LobbyOnly)
+            EndTutorial(run);
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+        foreach (var run in _runs.Values.ToArray())
+        {
+            if (run.Mob is not { } mob || run.StepIndex >= run.Lesson.Steps.Count)
+                continue;
+            if (Deleted(mob) || run.Session.AttachedEntity != mob)
+            {
+                EndTutorial(run);
+                continue;
+            }
+            if (run.Lesson.Steps[run.StepIndex] is not TutorialPracticeStep task)
+                continue;
+
+            var held = run.PracticeItem is { } item && _hands.IsHolding(mob, item);
+            var complete = task.Action switch
+            {
+                TutorialPracticeAction.Move => Vector2.Distance(Transform(mob).LocalPosition, run.TaskStart) >= task.Distance,
+                TutorialPracticeAction.DropItem => run.PracticeItem != null && !held,
+                TutorialPracticeAction.PickUpItem => held,
+                TutorialPracticeAction.ActivateLight => held && TryComp<HandheldLightComponent>(run.PracticeItem, out var light) && light.Activated,
+                _ => false,
+            };
+            if (!complete)
+                continue;
+            run.StepIndex++;
+            RunCurrentStep(run);
+        }
     }
 
     private void EndTutorial(TutorialRun run)
@@ -190,22 +351,23 @@ public sealed class TutorialSystem : EntitySystem
         _runs.Remove(run.Session.UserId.UserId);
 
         // Return to the lobby (wipes the tutorial mind), then delete the private map.
-        if (run.Session.Status == SessionStatus.InGame)
+        if (run.Mob != null && run.Session.Status == SessionStatus.InGame)
             _ticker.Respawn(run.Session);
 
-        if (_maps.MapExists(run.MapId))
-            _maps.DeleteMap(run.MapId);
+        if (run.MapId is { } mapId && _maps.MapExists(mapId))
+            _maps.DeleteMap(mapId);
     }
 
     private void OnRoundRestart(RoundRestartCleanupEvent ev)
     {
-        foreach (var run in _runs.Values)
+        // Respawn may raise PlayerJoinedLobbyEvent: keep the run registered until cleanup finishes.
+        foreach (var run in _runs.Values.ToArray())
         {
             RaiseNetworkEvent(new TutorialHideEvent(), run.Session.Channel);
             // Make sure the client leaves the in-game view (its tutorial body is going away).
             RaiseNetworkEvent(new TickerJoinLobbyEvent(), run.Session.Channel);
-            if (_maps.MapExists(run.MapId))
-                _maps.DeleteMap(run.MapId);
+            if (run.MapId is { } mapId && _maps.MapExists(mapId))
+                _maps.DeleteMap(mapId);
         }
 
         _runs.Clear();
@@ -219,16 +381,19 @@ public sealed class TutorialSystem : EntitySystem
         if (!_runs.Remove(args.Session.UserId.UserId, out var run))
             return;
 
-        if (_maps.MapExists(run.MapId))
-            _maps.DeleteMap(run.MapId);
+        if (run.MapId is { } mapId && _maps.MapExists(mapId))
+            _maps.DeleteMap(mapId);
     }
 
     private sealed class TutorialRun
     {
         public ICommonSession Session = default!;
         public TutorialLessonPrototype Lesson = default!;
-        public EntityUid Mob;
-        public MapId MapId;
+        public EntityUid? Mob;
+        public MapId? MapId;
         public int StepIndex;
+        public Guid StepId;
+        public Vector2 TaskStart;
+        public EntityUid? PracticeItem;
     }
 }

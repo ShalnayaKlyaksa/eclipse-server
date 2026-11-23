@@ -1,6 +1,6 @@
 # Command
 
-figurines-captain-1 = Слава НТ!
+figurines-captain-1 = Слава ВИШ!
 figurines-captain-2 = Как я получил эту должность? Да.
 figurines-captain-3 = Ядерный диск в безопасности. Где? Где-то.
 figurines-captain-4 = Где моя айди?
@@ -283,8 +283,8 @@ figurines-AI-7 = { law-nutimov-4 }
 figurines-footsoldier-1 = Я злой мальчик. С каждым днём всё меньше мальчик, с каждым днём всё больше злой.
 figurines-footsoldier-2 = Кого ты выберешь? Их или нас? Нас или их?
 figurines-footsoldier-3 = Слава Легиону!
-figurines-footsoldier-4 = Долой Nanotrasen!
-figurines-footsoldier-5 = Я лучше умру, чем присоединюсь к Nanotrasen.
+figurines-footsoldier-4 = Долой ВИШ!
+figurines-footsoldier-5 = Я лучше умру, чем присоединюсь к ВИШ.
 
 figurines-holoclown-1 = Помогаю своему старшему брату.
 figurines-holoclown-2 = Привет, офицер!
@@ -306,7 +306,7 @@ figurines-nukie-commander-3 = Легион передаёт привет.
 figurines-nukie-commander-4 = Провал — это не вариант.
 figurines-nukie-commander-5 = Упс.
 
-figurines-nukie-elite-1 = Ни слова по нанотрейзен.
+figurines-nukie-elite-1 = Ни слова по ВИШ.
 figurines-nukie-elite-2 = ЭТО ПИВНАЯ!
 figurines-nukie-elite-3 = Ребят, вы живы?
 figurines-nukie-elite-4 = Взрывайте и зачищайте!

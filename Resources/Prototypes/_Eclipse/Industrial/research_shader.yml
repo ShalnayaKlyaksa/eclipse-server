@@ -1,0 +1,9 @@
+- type: shader
+  id: EclipseResearchCRT
+  kind: source
+  path: /Textures/_Eclipse/Shaders/research_crt.swsl
+
+- type: shader
+  id: EclipseTerminalPhosphor
+  kind: source
+  path: /Textures/_Eclipse/Shaders/terminal_phosphor.swsl

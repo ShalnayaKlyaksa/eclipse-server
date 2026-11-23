@@ -6,7 +6,7 @@
             <gfx:StyleBoxFlat 
                 BorderThickness="2" 
                 BorderColor="#464966"
-                BackgroundColor="#25252A"
+                BackgroundColor="#202020"
             />
         </PanelContainer.PanelOverride>
         <BoxContainer 

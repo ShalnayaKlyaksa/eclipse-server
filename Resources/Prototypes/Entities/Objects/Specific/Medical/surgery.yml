@@ -66,6 +66,11 @@
   parent: BaseToolSurgery
   description: A surgical tool used to make incisions into flesh.
   components:
+  - type: SurgicalInstrument
+  - type: AdvancedTreatment
+    treatment: SurgicalAccess
+    delay: 8
+    reusable: true
   - type: Sharp
     butcherDelayModifier: 1.5 # Butchering with a scalpel, regardless of the type, will take 50% longer
   - type: Tool
@@ -97,6 +102,8 @@
   parent: Scalpel
   description: A pointy piece of glass, abraded to an edge and wrapped in tape for a handle. # Could become a decent tool or weapon with right tool mods.
   components:
+  - type: SurgicalInstrument
+    sterile: false
   - type: Sprite
     state: shiv
   - type: Item
@@ -160,6 +167,11 @@
   parent: Retractor
   description: A surgical tool used to compress blood vessels to prevent bleeding.
   components:
+  - type: SurgicalInstrument
+  - type: AdvancedTreatment
+    treatment: InternalHemostasis
+    delay: 10
+    reusable: true
   - type: Sprite
     state: hemostat
   - type: Item

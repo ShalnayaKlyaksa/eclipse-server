@@ -201,7 +201,7 @@ ghost-role-information-hellspawn-name = Адское отродье
 ghost-role-information-hellspawn-description = Несите смерть всем, кто не повинуется великой богине Нар'Си.
 
 ghost-role-information-Death-Squad-name = Оперативник Эскадрона смерти
-ghost-role-information-Death-Squad-description = Один из лучших агентов внутренних дел Nanotrasen. Ожидайте приказов от Эйдосской империи или представителя Эйдосской империи.
+ghost-role-information-Death-Squad-description = Один из лучших агентов внутренних дел ВИШ. Ожидайте приказов от Эйдосской империи или представителя Эйдосской империи.
 ghost-role-information-Death-Squad-rules = Вы обязаны подчиняться приказам своего командира, вы фактически его [color={ role-type-familiar-color }][bold]{ role-type-familiar-name }[/bold][/color].
 
 ghost-role-information-LegionCat-name = ЛегионКот

@@ -1,14 +1,14 @@
 ent-BasicIndustrialThermalCentrifuge = базовая термическая центрифуга
 
-    .desc = Отделяет измельчённую руду в просеянную с помощью тепла. Нагрейте огнём или нагревателями.
+    .desc = Разделяет дроблёную руду на основную фракцию и примеси. Получает тепло от соседнего промышленного теплообменника.
 
 ent-IndustrialThermalCentrifuge = термическая центрифуга
 
-    .desc = Отделяет измельчённую руду в просеянную с помощью тепла. Нагрейте огнём или нагревателями.
+    .desc = Разделяет дроблёную руду на основную фракцию и примеси. Получает тепло от соседнего промышленного теплообменника.
 
 ent-PerfectIndustrialThermalCentrifuge = совершенная термическая центрифуга
 
-    .desc = Отделяет измельчённую руду в просеянную с помощью тепла. Нагрейте огнём или нагревателями.
+    .desc = Разделяет дроблёную руду на основную фракцию и примеси. Получает тепло от соседнего промышленного теплообменника.
 
 ent-BasicIndustrialCrusher = базовая дробилка
 
@@ -125,7 +125,6 @@ industrial-smelter-desc = Переплавляет металлургическ�
 
 basic-industrial-crusher-name = базовая дробилка
 
-industrial-crusher-name = промышленная дробилка
 
 perfect-industrial-crusher-name = совершенная дробилка
 
@@ -243,11 +242,11 @@ industrial-examine-output-buffer = Выходной буфер: {$count}/{$max}
 
 
 
-industrial-pipe-mode-transit = транзит
+industrial-pipe-mode-transit = автоматический
 
-industrial-pipe-mode-extract = извлечение
+industrial-pipe-mode-extract = только извлечение
 
-industrial-pipe-mode-insert = помещение
+industrial-pipe-mode-insert = только загрузка
 
 industrial-pipe-mode-switched = Режим трубы изменён: {$mode}
 
@@ -387,11 +386,11 @@ industrial-item-pipe-detached = Предметная труба снята.
 
 ent-BasicLiquidPipe = базовая жидкостная труба
 
-    .desc = Перемещает жидкости между промышленными машинами. Низкая пропускная способность.
+    .desc = Закрытая секция для передачи растворов между соседними трубами. Низкая пропускная способность.
 
 ent-IndustrialLiquidPipe = промышленная жидкостная труба
 
-    .desc = Быстро перемещает жидкости между промышленными машинами.
+    .desc = Закрытая секция повышенной пропускной способности. Квадрат показывает цвет содержимого.
 
 ent-PerfectLiquidPipe = совершенная жидкостная труба
 
@@ -401,11 +400,11 @@ ent-PerfectLiquidPipe = совершенная жидкостная труба
 
 industrial-liquid-pipe-examine-tier = Тир трубы: {$tier}
 
-industrial-liquid-pipe-examine-throughput = Пропускная способность: {$throughput}/с
+industrial-liquid-pipe-examine-throughput = Пропускная способность: {$throughput} ед./с
 
 industrial-liquid-pipe-examine-disconnected = Не подключена к жидкостной сети.
 
-industrial-liquid-pipe-examine-network = Жидкостная сеть #{$id}: {$pipes} труб
+industrial-liquid-pipe-examine-network = Жидкостная сеть #{$id}: {$pipes} труб, общий бюджет {$throughput} ед./с
 
 
 
@@ -504,7 +503,7 @@ industrial-workbench-ingredient-line = { $have }/{ $need } { $name }
 
 industrial-chassis-upgraded = Машина собрана: {$machine}.
 
-ent-IndustrialWorkbench = рабочий стол
+ent-IndustrialWorkbench = промышленный верстак (тир 1)
 
     .desc = Двухтайловый стол для дорогих промышленных компонентов и модулей улучшения.
 

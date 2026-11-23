@@ -124,7 +124,7 @@ public sealed class PortableGeneratorSystem : SharedPortableGeneratorSystem
             if (user is null)
                 return;
 
-            _popup.PopupEntity(Loc.GetString("portable-generator-start-success"), uid, user.Value);
+            _popup.PopupEntity(Loc.GetString(component.StartSuccessMessage ?? "portable-generator-start-success"), uid, user.Value);
 
         }
         else
@@ -135,7 +135,7 @@ public sealed class PortableGeneratorSystem : SharedPortableGeneratorSystem
             if (user is null)
                 return;
 
-            _popup.PopupEntity(Loc.GetString("portable-generator-start-fail"), uid, user.Value);
+            _popup.PopupEntity(Loc.GetString(component.StartFailureMessage ?? "portable-generator-start-fail"), uid, user.Value);
         }
     }
 
@@ -219,9 +219,15 @@ public sealed class PortableGeneratorSystem : SharedPortableGeneratorSystem
         if (powerSupplier.Net is { IsConnectedNetwork: true } net)
             networkStats = (net.NetworkNode.LastCombinedLoad, net.NetworkNode.LastCombinedSupply);
 
+        GeneratorTelemetryEvent telemetry = default;
+        RaiseLocalEvent(uid, ref telemetry);
         _uiSystem.SetUiState(
             uid,
             GeneratorComponentUiKey.Key,
-            new PortableGeneratorComponentBuiState(fuelComp, fuel, clogged, networkStats));
+            new PortableGeneratorComponentBuiState(fuelComp, fuel, clogged, networkStats)
+            {
+                Operating = telemetry.State,
+                CanEjectFuel = HasComp<SolidFuelGeneratorAdapterComponent>(uid) || HasComp<ChemicalFuelGeneratorAdapterComponent>(uid),
+            });
     }
 }

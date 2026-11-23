@@ -29,6 +29,9 @@ namespace Content.Client.VendingMachines.UI
         /// Whether the vending machine is able to be interacted with or not.
         /// </summary>
         private bool _enabled;
+        private int _price;
+
+        public void SetPrice(int price) => _price = price;
 
         public event Action<GUIBoundKeyEventArgs, ListData>? OnItemSelected;
 
@@ -135,7 +138,7 @@ namespace Content.Client.VendingMachines.UI
                 }
 
                 var itemName = Identity.Name(dummy, _entityManager);
-                var itemText = $"{itemName} [{entry.Amount}]";
+                var itemText = GetItemText(dummy, entry.Amount);
                 _amounts[entry.ID] = entry.Amount;
 
                 if (itemText.Length > longestEntry.Length)
@@ -179,7 +182,7 @@ namespace Content.Client.VendingMachines.UI
         private string GetItemText(EntityUid dummy, uint amount)
         {
             var itemName = Identity.Name(dummy, _entityManager);
-            return $"{itemName} [{amount}]";
+            return $"{itemName} [{amount}]" + (_price > 0 ? " — " + Loc.GetString("commerce-price", ("price", _price)) : "");
         }
 
         private void SetSizeAfterUpdate(int longestEntryLength, int contentCount)

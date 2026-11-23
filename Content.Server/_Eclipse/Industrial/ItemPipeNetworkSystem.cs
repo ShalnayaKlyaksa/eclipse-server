@@ -5,27 +5,44 @@ using Robust.Shared.Map.Components;
 
 namespace Content.Server._Eclipse.Industrial;
 
-public sealed class ItemPipeNetworkSystem : EntitySystem
+public sealed partial class ItemPipeNetworkSystem : EntitySystem
 {
-    [Dependency] private readonly IndustrialProcessorSystem _processor = default!;
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
+    [Dependency] private IndustrialProcessorSystem _processor = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
 
     private static readonly Direction[] CardinalDirections =
         [Direction.North, Direction.South, Direction.East, Direction.West];
 
     private readonly Dictionary<int, ItemPipeNetwork> _networks = new();
     private int _nextNetworkId = 1;
+    private readonly HashSet<EntityUid> _pendingRoots = new();
+    public int TopologyRebuilds { get; private set; }
 
     public void HandlePipeRemoved(Entity<ItemPipeComponent> ent)
     {
-        var adjacentPipes = GetAdjacentPipes(ent);
+        var neighbors = GetAdjacentPipes(ent);
         RemovePipeFromItsNetwork(ent);
+        _pendingRoots.UnionWith(neighbors);
+    }
 
-        foreach (var adjacent in adjacentPipes)
+    private void RebuildComponents(IEnumerable<EntityUid> roots)
+    {
+        var visited = new HashSet<EntityUid>();
+        foreach (var root in roots)
         {
-            if (Exists(adjacent))
-                RebuildNetworkFrom((adjacent, Comp<ItemPipeComponent>(adjacent)));
+            if (TerminatingOrDeleted(root) || visited.Contains(root) ||
+                !TryComp<ItemPipeComponent>(root, out var pipe) || !Transform(root).Anchored)
+                continue;
+            RebuildNetworkFrom((root, pipe));
+            if (TryGetNetwork(pipe.NetworkId, out var network))
+                visited.UnionWith(network.Pipes);
         }
+    }
+
+    public void InvalidateEndpoints(int networkId)
+    {
+        if (_networks.TryGetValue(networkId, out var network))
+            network.EndpointsDirty = true;
     }
 
     public bool TryGetNetwork(int networkId, out ItemPipeNetwork network)
@@ -53,39 +70,42 @@ public sealed class ItemPipeNetworkSystem : EntitySystem
             return;
         }
 
+        // A rebuild replaces membership for the entire connected component, not just its starting pipe.
+        // Otherwise the previous networks retain these pipes and keep processing duplicate transfers.
+        foreach (var pipe in connectedPipes)
+            RemovePipeFromItsNetwork((pipe, Comp<ItemPipeComponent>(pipe)));
+
         var network = CreateNetwork(connectedPipes);
         AssignNetworkToPipes(network, connectedPipes);
+        _pendingRoots.ExceptWith(connectedPipes);
+        TopologyRebuilds++;
     }
 
-    public void RebuildNetworksNearProcessor(Entity<IndustrialProcessorComponent> ent)
+    public void InvalidateProcessorConnections(Entity<IndustrialProcessorComponent> ent)
     {
         var xform = Transform(ent);
         if (xform.GridUid is not EntityUid gridUid || !TryComp<MapGridComponent>(gridUid, out var grid))
             return;
 
         var pos = _mapSystem.TileIndicesFor(gridUid, grid, xform.Coordinates);
-        var rebuilt = new HashSet<EntityUid>();
-
         foreach (var direction in CardinalDirections)
         {
-            ForAnchoredEntities(gridUid, grid, pos.Offset(direction), entity =>
+            var enumerator = _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, pos.Offset(direction));
+            while (enumerator.MoveNext(out var entity) && entity != null)
             {
-                if (!HasComp<ItemPipeComponent>(entity) || rebuilt.Contains(entity))
-                    return;
-
-                RebuildNetworkFrom((entity, Comp<ItemPipeComponent>(entity)));
-                rebuilt.Add(entity);
-            });
+                if (TryComp<ItemPipeComponent>(entity, out var pipe))
+                    InvalidateEndpoints(pipe.NetworkId);
+            }
         }
     }
 
-    public void RebuildAdjacentPipeNetworks(Entity<ItemPipeComponent> ent)
+    public void QueueTopologyChange(Entity<ItemPipeComponent> ent)
     {
-        foreach (var adjacent in GetConnectedAdjacentPipes(ent).Concat(GetAdjacentPipes(ent)))
-        {
-            if (Exists(adjacent))
-                RebuildNetworkFrom((adjacent, Comp<ItemPipeComponent>(adjacent)));
-        }
+        _pendingRoots.UnionWith(GetAdjacentPipes(ent));
+        if (Transform(ent).Anchored && !TerminatingOrDeleted(ent))
+            _pendingRoots.Add(ent);
+        else
+            RemovePipeFromItsNetwork(ent);
     }
 
     private HashSet<EntityUid> FloodFillPipes(EntityUid startPipe)
@@ -126,7 +146,7 @@ public sealed class ItemPipeNetworkSystem : EntitySystem
             var enumerator = _mapSystem.GetAnchoredEntitiesEnumerator(gridUid, grid, pos.Offset(direction));
             while (enumerator.MoveNext(out var entity) && entity != null)
             {
-                if (entity == pipeUid || !HasComp<ItemPipeComponent>(entity))
+                if (entity == pipeUid || TerminatingOrDeleted(entity.Value) || !HasComp<ItemPipeComponent>(entity))
                     continue;
 
                 if (ItemPipeConnectionHelper.ArePipesConnected(pipeUid, entity.Value, direction, EntityManager, _mapSystem))
@@ -152,7 +172,6 @@ public sealed class ItemPipeNetworkSystem : EntitySystem
 
         var specs = PipeTierHelper.GetSpecs(network.EffectiveTier);
         network.ThroughputPerSecond = specs.ThroughputPerSecond;
-        network.TransferDelay = specs.TransferDelay;
 
         _networks[network.Id] = network;
         return network;
@@ -192,8 +211,6 @@ public sealed class ItemPipeNetworkSystem : EntitySystem
         if (xform.GridUid is not EntityUid gridUid || !TryComp<MapGridComponent>(gridUid, out var grid))
             return result;
 
-        if (!xform.Anchored)
-            return result;
 
         var pos = _mapSystem.TileIndicesFor(gridUid, grid, xform.Coordinates);
 
@@ -223,97 +240,95 @@ public sealed class ItemPipeNetworkSystem : EntitySystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
-
+        if (_pendingRoots.Count > 0)
+        {
+            var roots = _pendingRoots.ToArray();
+            _pendingRoots.Clear();
+            RebuildComponents(roots);
+        }
         foreach (var network in _networks.Values)
         {
             network.SecondAccumulator += frameTime;
             if (network.SecondAccumulator >= 1f)
             {
-                network.SecondAccumulator = 0f;
+                network.SecondAccumulator %= 1f;
                 network.TransfersThisSecond = 0;
                 network.MachineTransfersThisSecond.Clear();
             }
-
-            network.TimeSinceLastTransfer += frameTime;
-            if (network.TimeSinceLastTransfer < network.TransferDelay)
+            if (network.ThroughputPerSecond <= 0)
                 continue;
-
-            if (TryTransferOne(network))
-                network.TimeSinceLastTransfer = 0f;
+            var interval = 1f / network.ThroughputPerSecond;
+            // Bound catch-up work after a long frame. Idle networks never accumulate a burst.
+            network.TimeSinceLastTransfer = MathF.Min(network.TimeSinceLastTransfer + frameTime, 1f);
+            var attempts = 0;
+            while (network.TimeSinceLastTransfer + 0.00001f >= interval &&
+                   attempts++ < MathF.Ceiling(network.ThroughputPerSecond))
+            {
+                network.TimeSinceLastTransfer = MathF.Max(0, network.TimeSinceLastTransfer - interval);
+                if (network.TransfersThisSecond >= network.ThroughputPerSecond)
+                    continue;
+                TryTransferOne(network);
+            }
         }
     }
 
     private bool TryTransferOne(ItemPipeNetwork network)
     {
-        if (network.TransfersThisSecond >= (int) network.ThroughputPerSecond)
-            return false;
-
-        var sources = GetConnectedOutputProcessors(network)
-            .OrderBy(uid => uid)
-            .ToList();
-
-        foreach (var sourceUid in sources)
+        if (network.EndpointsDirty)
         {
-            Entity<IndustrialProcessorComponent> source = (sourceUid, Comp<IndustrialProcessorComponent>(sourceUid));
-            var transfers = network.MachineTransfersThisSecond.GetValueOrDefault(sourceUid, 0);
-            if (transfers >= source.Comp.MaxAutoTransferPerSecond)
+            CollectProcessors(network, PortMode.Output, network.Sources);
+            CollectProcessors(network, PortMode.Input, network.Sinks);
+            network.EndpointsDirty = false;
+            network.EndpointRebuilds++;
+        }
+        for (var i = 0; i < network.Sources.Count; i++)
+        {
+            var sourceIndex = (network.SourceCursor + i) % network.Sources.Count;
+            var sourceUid = network.Sources[sourceIndex];
+            if (TerminatingOrDeleted(sourceUid) || !Transform(sourceUid).Anchored ||
+                !TryComp<IndustrialProcessorComponent>(sourceUid, out var sourceComp))
                 continue;
-
-            if (!_processor.TryGetFirstOutputProto(source, out var protoId))
+            var transfers = network.MachineTransfersThisSecond.GetValueOrDefault(sourceUid);
+            if (transfers >= sourceComp.MaxAutoTransferPerSecond)
                 continue;
-
-            var sinks = GetConnectedInputProcessors(network, protoId)
-                .Where(uid => uid != sourceUid)
-                .OrderBy(uid => uid)
-                .ToList();
-
-            foreach (var sinkUid in sinks)
+            for (var j = 0; j < network.Sinks.Count; j++)
             {
-                Entity<IndustrialProcessorComponent> sink = (sinkUid, Comp<IndustrialProcessorComponent>(sinkUid));
-                if (_processor.TryPipeTransfer(source, sink, protoId))
-                {
-                    network.TransfersThisSecond++;
-                    network.MachineTransfersThisSecond[sourceUid] = transfers + 1;
-                    return true;
-                }
+                var sinkIndex = (network.SinkCursor + j) % network.Sinks.Count;
+                var sinkUid = network.Sinks[sinkIndex];
+                if (sourceUid == sinkUid || TerminatingOrDeleted(sinkUid) || !Transform(sinkUid).Anchored ||
+                    !TryComp<IndustrialProcessorComponent>(sinkUid, out var sinkComp))
+                    continue;
+                if (!_processor.TryPipeTransfer((sourceUid, sourceComp), (sinkUid, sinkComp)))
+                    continue;
+                network.TransfersThisSecond++;
+                network.MachineTransfersThisSecond[sourceUid] = transfers + 1;
+                network.SourceCursor = (sourceIndex + 1) % network.Sources.Count;
+                network.SinkCursor = (sinkIndex + 1) % network.Sinks.Count;
+                return true;
             }
         }
-
         return false;
     }
 
-    private List<EntityUid> GetConnectedOutputProcessors(ItemPipeNetwork network)
+    private void CollectProcessors(ItemPipeNetwork network, PortMode mode, List<EntityUid> result)
     {
-        var result = new List<EntityUid>();
+        result.Clear();
         var seen = new HashSet<EntityUid>();
-
         foreach (var pipeUid in network.Pipes)
         {
-            CollectProcessorsOnPipeSide(pipeUid, PortMode.Output, network.Pipes, seen, result);
+            if (TerminatingOrDeleted(pipeUid) || !TryComp<ItemPipeComponent>(pipeUid, out var pipe))
+                continue;
+            if (mode == PortMode.Input && pipe.TransferMode == PipeTransferMode.Extract ||
+                mode == PortMode.Output && pipe.TransferMode == PipeTransferMode.Insert)
+                continue;
+            CollectProcessorsOnPipeSide(pipeUid, mode, seen, result);
         }
-
-        return result;
-    }
-
-    private List<EntityUid> GetConnectedInputProcessors(ItemPipeNetwork network, string protoId)
-    {
-        var result = new List<EntityUid>();
-        var seen = new HashSet<EntityUid>();
-
-        foreach (var pipeUid in network.Pipes)
-        {
-            CollectProcessorsOnPipeSide(pipeUid, PortMode.Input, network.Pipes, seen, result);
-        }
-
-        result.RemoveAll(uid => !_processor.CanAcceptInputItem((uid, Comp<IndustrialProcessorComponent>(uid)), protoId));
-
-        return result;
+        result.Sort();
     }
 
     private void CollectProcessorsOnPipeSide(
         EntityUid pipeUid,
         PortMode requiredMode,
-        HashSet<EntityUid> networkPipes,
         HashSet<EntityUid> seen,
         List<EntityUid> result)
     {
@@ -328,7 +343,7 @@ public sealed class ItemPipeNetworkSystem : EntitySystem
         {
             ForAnchoredEntities(gridUid, grid, pipePos.Offset(direction), entity =>
             {
-                if (!HasComp<IndustrialProcessorComponent>(entity) || seen.Contains(entity))
+                if (TerminatingOrDeleted(entity) || !HasComp<IndustrialProcessorComponent>(entity) || seen.Contains(entity))
                     return;
 
                 var processor = entity;
@@ -348,11 +363,16 @@ public sealed class ItemPipeNetworkSystem : EntitySystem
 
 public sealed class ItemPipeNetwork
 {
+    public bool EndpointsDirty = true;
+    public int EndpointRebuilds;
+    public List<EntityUid> Sources = new();
+    public List<EntityUid> Sinks = new();
+    public int SourceCursor;
+    public int SinkCursor;
     public int Id;
     public HashSet<EntityUid> Pipes = new();
     public PipeTier EffectiveTier = PipeTier.Perfect;
     public float ThroughputPerSecond;
-    public float TransferDelay;
     public float TimeSinceLastTransfer;
     public float SecondAccumulator;
     public int TransfersThisSecond;

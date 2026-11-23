@@ -1,0 +1,68 @@
+- type: entity
+  parent: CratePlastic
+  id: EclipseCrateCulinaryEquipment
+  name: experimental cooking equipment crate
+  components:
+  - type: StorageFill
+    contents:
+    - id: EclipseCulinaryStationCircuitboard
+    - id: FoodBowlBig
+      amount: 10
+    - id: Spoon
+      amount: 2
+    - id: LargeBeaker
+    - id: SheetSteel
+    - id: SheetGlass
+    - id: CableApcStack
+
+- type: entity
+  parent: CratePlastic
+  id: EclipseCrateCulinaryProduce
+  name: culinary produce crate
+  components:
+  - type: StorageFill
+    contents:
+    - id: EclipseFoodCucumber
+      amount: 3
+    - id: EclipseFoodPeanut
+      amount: 3
+    - id: EclipseFoodOlive
+      amount: 3
+    - id: EclipseFoodGreenBean
+      amount: 3
+    - id: EclipseFoodBellPepper
+      amount: 3
+    - id: EclipseFoodParsnip
+      amount: 3
+    - id: EclipseFoodSweetPotato
+      amount: 3
+    - id: EclipseFoodWhiteBeet
+      amount: 3
+    - id: EclipseFoodRedBeet
+      amount: 3
+    - id: EclipseFoodPlum
+      amount: 3
+    - id: EclipseFoodVanillaPod
+      amount: 2
+    - id: EclipseFoodHoneycomb
+      amount: 2
+
+- type: cargoProduct
+  id: EclipseCulinaryEquipmentSupply
+  icon:
+    sprite: Structures/Machines/electric_grill.rsi
+    state: icon
+  product: EclipseCrateCulinaryEquipment
+  cost: 1200
+  category: cargoproduct-category-name-food
+  group: market
+
+- type: cargoProduct
+  id: EclipseCulinaryProduceSupply
+  icon:
+    sprite: _Eclipse/Objects/Consumable/Food/culinary_produce.rsi
+    state: bellpepper
+  product: EclipseCrateCulinaryProduce
+  cost: 900
+  category: cargoproduct-category-name-food
+  group: market

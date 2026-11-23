@@ -1,39 +1,46 @@
-﻿<Control
+<Control
     xmlns="https://spacestation14.io"
     xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
     xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
     xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls">
-    <PanelContainer Name="RootPanel" Access="Public">
-        <PanelContainer.PanelOverride>
-            <gfx:StyleBoxFlat BackgroundColor="#070300E8"
-                              BorderColor="#D47D1BAA"
-                              BorderThickness="1"
-                              ContentMarginLeftOverride="8"
-                              ContentMarginRightOverride="8"
-                              ContentMarginTopOverride="8"
-                              ContentMarginBottomOverride="8" />
-        </PanelContainer.PanelOverride>
-        <SplitContainer Orientation="Vertical" ResizeMode="NotResizable">
-            <SplitContainer Orientation="Horizontal" VerticalExpand="True">
-                <cc:PlayerListControl Access="Public" Name="ChannelSelector" HorizontalExpand="True" SizeFlagsStretchRatio="2" />
-                <BoxContainer Orientation="Vertical" HorizontalExpand="True" SizeFlagsStretchRatio="2">
-                    <BoxContainer Access="Public" Name="BwoinkArea" VerticalExpand="True" />
-                </BoxContainer>
-            </SplitContainer>
-            <BoxContainer Orientation="Horizontal" SetHeight="30" >
-                <CheckBox Name="AdminOnly" Access="Public" Text="{Loc 'admin-ahelp-admin-only'}" ToolTip="{Loc 'admin-ahelp-admin-only-tooltip'}" />
-                <Control HorizontalExpand="True" MinWidth="5" />
-                <CheckBox Name="PlaySound" Access="Public" Text="{Loc 'admin-bwoink-play-sound'}" Pressed="True" />
-                <Control HorizontalExpand="True" MinWidth="5" />
-                <Button Visible="True" Name="PopOut" Access="Public" Text="{Loc 'admin-logs-pop-out'}" StyleClasses="OpenBoth" HorizontalAlignment="Left" />
-                <Control HorizontalExpand="True" />
-                <Button Visible="False" Name="Bans" Text="{Loc 'admin-player-actions-bans'}" StyleClasses="OpenRight" />
-                <Button Visible="False" Access="Public" Name="Notes" Text="{Loc 'admin-player-actions-notes'}" StyleClasses="OpenBoth" />
-                <controls:ConfirmButton Visible="False" Name="Kick" Text="{Loc 'admin-player-actions-kick'}" ConfirmationText="{Loc 'admin-player-actions-confirm'}" StyleClasses="OpenBoth" />
-                <Button Visible="False" Name="Ban" Text="{Loc 'admin-player-actions-ban'}" StyleClasses="OpenBoth" />
-                <controls:ConfirmButton Visible="False" Name="Respawn" Text="{Loc 'admin-player-actions-respawn'}" ConfirmationText="{Loc 'admin-player-actions-confirm'}" StyleClasses="OpenBoth" />
-                <Button Visible="False" Name="Follow" Text="{Loc 'admin-player-actions-follow'}" StyleClasses="OpenLeft" />
+    <BoxContainer Orientation="Vertical" SeparationOverride="10">
+        <SplitContainer Orientation="Horizontal" SplitWidth="14" VerticalExpand="True">
+            <BoxContainer Orientation="Vertical" HorizontalExpand="True" SizeFlagsStretchRatio="1" SeparationOverride="6">
+                <Label Text="{Loc 'bwoink-player-list-title'}" StyleIdentifier="mainMenuText" />
+                <cc:PlayerListControl Name="ChannelSelector" Access="Public" VerticalExpand="True" />
+            </BoxContainer>
+            <BoxContainer Orientation="Vertical" HorizontalExpand="True" SizeFlagsStretchRatio="2.2" SeparationOverride="6">
+                <Label Name="ConversationTitle"
+                       Text="{Loc 'bwoink-title-none-selected'}"
+                       StyleIdentifier="mainMenuText"
+                       ClipText="True" />
+                <Label Name="ConversationPlaytime"
+                       StyleIdentifier="mainMenuSubtle"
+                       Visible="False"
+                       ClipText="True" />
+                <BoxContainer Name="BwoinkArea" Access="Public" Orientation="Vertical" VerticalExpand="True" />
             </BoxContainer>
         </SplitContainer>
-    </PanelContainer>
+        <PanelContainer MinHeight="1">
+            <PanelContainer.PanelOverride>
+                <gfx:StyleBoxFlat BackgroundColor="#333333" />
+            </PanelContainer.PanelOverride>
+        </PanelContainer>
+        <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+            <CheckBox Name="AdminOnly" Access="Public"
+                      Text="{Loc 'admin-ahelp-admin-only'}"
+                      ToolTip="{Loc 'admin-ahelp-admin-only-tooltip'}" />
+            <CheckBox Name="PlaySound" Access="Public" Text="{Loc 'admin-bwoink-play-sound'}" Pressed="True" />
+            <Control HorizontalExpand="True" />
+            <Button Name="PopOut" Access="Public" Text="{Loc 'admin-logs-pop-out'}" MinHeight="30" />
+        </BoxContainer>
+        <BoxContainer Orientation="Horizontal" Align="End" SeparationOverride="6">
+            <Button Visible="False" Name="Follow" Text="{Loc 'admin-player-actions-follow'}" MinHeight="30" />
+            <Button Visible="False" Access="Public" Name="Notes" Text="{Loc 'admin-player-actions-notes'}" MinHeight="30" />
+            <Button Visible="False" Name="Bans" Text="{Loc 'admin-player-actions-bans'}" MinHeight="30" />
+            <controls:ConfirmButton Visible="False" Name="Respawn" Text="{Loc 'admin-player-actions-respawn'}" ConfirmationText="{Loc 'admin-player-actions-confirm'}" MinHeight="30" />
+            <controls:ConfirmButton Visible="False" Name="Kick" Text="{Loc 'admin-player-actions-kick'}" ConfirmationText="{Loc 'admin-player-actions-confirm'}" MinHeight="30" />
+            <Button Visible="False" Name="Ban" Text="{Loc 'admin-player-actions-ban'}" MinHeight="30" />
+        </BoxContainer>
+    </BoxContainer>
 </Control>

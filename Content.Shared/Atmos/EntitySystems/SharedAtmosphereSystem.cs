@@ -95,7 +95,7 @@ public readonly record struct AirtightData(
 
 /// <summary>
 /// Struct that holds the result of delta pressure damage processing for an entity.
-/// This is only created and enqueued when the entity needs to take damage.
+/// Enqueued when pressure exceeds the damage threshold or the entity's previous damage state needs clearing.
 /// </summary>
 /// <param name="Ent">The entity to deal damage to.</param>
 /// <param name="Pressure">The current absolute pressure the entity is experiencing.</param>

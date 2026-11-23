@@ -1,0 +1,9 @@
+light_mode unshaded;
+
+void fragment() {
+    highp vec4 source = zTexture(UV);
+    highp float level = max(source.r, max(source.g, source.b));
+    highp float scan = 0.96 + 0.04 * cos(FRAGCOORD.y * 3.14159265);
+    highp float phosphor = 0.985 + 0.015 * sin(TIME * 3.0);
+    COLOR = vec4(vec3(0.47, 0.83, 0.57) * level * scan * phosphor, source.a);
+}

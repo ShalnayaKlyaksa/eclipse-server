@@ -8,4 +8,5 @@ public sealed partial class NotekeeperCartridgeComponent : Component
     /// </summary>
     [DataField("notes")]
     public List<string> Notes = new();
+    [DataField] public List<Content.Shared.CartridgeLoader.Cartridges.NotekeeperEntry> Entries = new();
 }

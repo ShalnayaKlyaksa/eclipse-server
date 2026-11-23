@@ -9,15 +9,21 @@
 - type: alert
   id: AdvancedExhausted
   icons:
-  - sprite: /Textures/Interface/Alerts/stamina.rsi
-    state: stamina4
+  - sprite: /Textures/_Eclipse/Interface/Alerts/physiology.rsi
+    state: exhausted
   name: advanced-exertion-exhausted-name
   description: advanced-exertion-exhausted-desc
 
 - type: alert
   id: AdvancedSleepy
   icons:
-  - sprite: /Textures/Interface/Alerts/stamina.rsi
-    state: stamina2
+  - sprite: /Textures/_Eclipse/Interface/Alerts/physiology.rsi
+    state: sleepy1
+  - sprite: /Textures/_Eclipse/Interface/Alerts/physiology.rsi
+    state: sleepy2
+  - sprite: /Textures/_Eclipse/Interface/Alerts/physiology.rsi
+    state: sleepy3
+  minSeverity: 1
+  maxSeverity: 3
   name: advanced-exertion-sleepy-name
   description: advanced-exertion-sleepy-desc

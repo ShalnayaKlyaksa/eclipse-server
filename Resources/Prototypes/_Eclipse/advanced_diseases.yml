@@ -2,6 +2,14 @@
 
 - type: advancedDisease
   id: SpaceFlu
+  description: clinical-space-flu-desc
+  cause: Viral
+  diagnostic: Microbiology
+  requiredOrgan: Lungs
+  airborne: true
+  progression: 0.0005
+  naturalRecovery: 0.003
+  fever: 2
   name: advanced-disease-space-flu
   statusLabel: advanced-disease-status-weakness
   speedModifier: 0.8          # −20% movement
@@ -16,6 +24,15 @@
 
 - type: advancedDisease
   id: WoundFever
+  description: clinical-wound-fever-desc
+  cause: Bacterial
+  diagnostic: Microbiology
+  treatment: Antibiotic
+  region: LeftForearm
+  naturalRecovery: 0
+  progression: 0.002
+  fever: 2
+  complication: ClinicalAbscess
   name: advanced-disease-wound-fever
   statusLabel: advanced-disease-status-fever
   speedModifier: 0.9

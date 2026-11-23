@@ -28,8 +28,9 @@
   - CircuitImprinterMachineCircuitboard
   #technologyPrerequisites:
   #- MachineParts
-  position: -3,3
-
+  position: 12, 0
+  technologyPrerequisites:
+  - IndustrialElectronics
 - type: technology
   id: EngineeringAdvancedMachines
   name: research-technology-engineering-advanced-machines
@@ -40,14 +41,15 @@
   tier: 1
   cost: 15000
   recipeUnlocks:
-   - AutolatheHyperConvectionMachineCircuitboard
-   - ProtolatheHyperConvectionMachineCircuitboard
-   - CircuitImprinterHyperConvectionMachineCircuitboard
-   - SheetifierMachineCircuitboard
+  - AutolatheHyperConvectionMachineCircuitboard
+  - ProtolatheHyperConvectionMachineCircuitboard
+  - CircuitImprinterHyperConvectionMachineCircuitboard
+  - SheetifierMachineCircuitboard
   technologyPrerequisites:
   - EngineeringMachines
   - PowerGenerationAdvancedMachines
-  position: -4,4
+  - IndustrialAdvancedAutomation
+  position: 18, 1
 
 - type: technology
   id: PowerGenerationMachines
@@ -67,7 +69,8 @@
   - EmitterCircuitboard
   technologyPrerequisites:
   - EngineeringMachines
-  position: -3,5
+  - IndustrialAutomation
+  position: 14, 1
 
 - type: technology
   id: PowerGenerationAdvancedMachines
@@ -84,7 +87,7 @@
   - SMESAdvancedMachineCircuitboard
   technologyPrerequisites:
   - PowerGenerationMachines
-  position: -3,6
+  position: 16, 2
 
 - type: technology
   id: MechanicalCompressionMachines
@@ -99,7 +102,7 @@
   - FlatpackerMachineCircuitboard
   technologyPrerequisites:
   - EngineeringAdvancedMachines
-  position: -4,5
+  position: 20, 0
 
 - type: technology
   id: AtmosphericMachines
@@ -111,13 +114,13 @@
   tier: 1
   cost: 8500
   recipeUnlocks:
-   - ThermomachineFreezerMachineCircuitBoard
-   - GasRecyclerMachineCircuitboard
-   - SpaceHeaterMachineCircuitBoard
+  - ThermomachineFreezerMachineCircuitBoard
+  - GasRecyclerMachineCircuitboard
+  - SpaceHeaterMachineCircuitBoard
   technologyPrerequisites:
   - EngineeringMachines
   - AtmosphericTools
-  position: -2,3
+  position: 14, 3
 
 - type: technology
   id: AtmosphericAdvancedMachines
@@ -131,8 +134,9 @@
   recipeUnlocks:
   - HellfireFreezerMachineCircuitBoard
   - PortableScrubberMachineCircuitBoard
-  - TinyFanCircuitboard # ERIDA-start
-  - TinyFanDirectionalCircuitboard # ERIDA-end
+  - TinyFanCircuitboard
+  - TinyFanDirectionalCircuitboard
   technologyPrerequisites:
   - AtmosphericMachines
-  position: -2,4
+  - IndustrialProcessChemistry
+  position: 16, 4

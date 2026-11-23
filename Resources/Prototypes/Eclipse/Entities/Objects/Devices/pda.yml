@@ -185,7 +185,7 @@
 - type: entity
   parent: CentcomPDA
   id: NTNavyCaptainPDA
-  name: nanotrasen navy captain PDA
+  name: VISH navy captain PDA
   components:
   - type: Pda
     id: NTNavyCaptainIDCard
@@ -221,7 +221,7 @@
 - type: entity
   parent: CentcomPDA
   id: NTNavyOfficerPDA
-  name: nanotrasen navy officer PDA
+  name: VISH navy officer PDA
   components:
   - type: Pda
     id: NTNavyOfficerIDCard
@@ -257,7 +257,7 @@
 - type: entity
   parent: CentcomPDA
   id: NTNavyWOEngiPDA
-  name: nanotrasen navy warrant officer PDA
+  name: VISH navy warrant officer PDA
   components:
   - type: Pda
     id: NTNavyWOEngiIDCard
@@ -293,7 +293,7 @@
 - type: entity
   parent: CentcomPDA
   id: NTNavyWOMedPDA
-  name: nanotrasen navy warrant officer PDA
+  name: VISH navy warrant officer PDA
   components:
   - type: Pda
     id: NTNavyWOMedIDCard
@@ -329,7 +329,7 @@
 - type: entity
   parent: CentcomPDA
   id: NTNavySailorPDA
-  name: nanotrasen navy sailor PDA
+  name: VISH navy sailor PDA
   components:
   - type: Pda
     id: NTNavySailorIDCard
@@ -365,7 +365,7 @@
 - type: entity
   parent: CentcomPDA
   id: NTNavyEngineerPDA
-  name: nanotrasen navy engineer PDA
+  name: VISH navy engineer PDA
   components:
   - type: Pda
     id: NTNavyEngineerIDCard
@@ -401,7 +401,7 @@
 - type: entity
   parent: CentcomPDA
   id: NTNavyMedicalPDA
-  name: nanotrasen navy medical PDA
+  name: VISH navy medical PDA
   components:
   - type: Pda
     id: NTNavyMedicalIDCard

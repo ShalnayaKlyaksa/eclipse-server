@@ -349,8 +349,13 @@ public abstract class SharedBloodstreamSystem : EntitySystem
             || !SolutionContainer.ResolveSolution(ent.Owner, ent.Comp.BloodSolutionName, ref ent.Comp.BloodSolution))
             return false;
 
+        var delivered = solution.Clone();
         if (SolutionContainer.TryAddSolution(ent.Comp.BloodSolution.Value, solution))
+        {
+            var bloodEvent = new AdvancedBloodTransferEvent(delivered, false);
+            RaiseLocalEvent(ent.Owner, ref bloodEvent);
             return true;
+        }
 
         return false;
     }
@@ -591,7 +596,14 @@ public abstract class SharedBloodstreamSystem : EntitySystem
         if (!Resolve(entity, ref entity.Comp))
             return NewEntityBloodData(entity);
 
-        return entity.Comp.BloodData ?? NewEntityBloodData(entity);
+        var data = new List<ReagentData>(entity.Comp.BloodData ?? NewEntityBloodData(entity));
+        if (TryComp<AdvancedHealthComponent>(entity, out var health))
+        {
+            data.RemoveAll(value => value is ClinicalBloodData);
+            data.Add(new ClinicalBloodData { BodyFluid = health.BodyFluid, BloodType = health.BloodType,
+                PatientIdentity = health.MedicalIdentity, OxygenCarryFactor = health.OxygenCarryingCapacity });
+        }
+        return data;
     }
 
     /// <summary>

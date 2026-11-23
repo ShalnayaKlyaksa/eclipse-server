@@ -29,7 +29,7 @@ roles-antag-ash-legion-medic-name = Ash Legion medic
 roles-antag-ash-legion-commander-name = Ash Legion commander
 roles-antag-ash-legion-objective = Use the activation key and ash hacking device to start the proto core meltdown procedure.
 
-proto-core-announcement-sender = Eidos Empire
+proto-core-announcement-sender = VISH
 proto-core-announcement-unauthorized-connection = SECURITY BREACH CONFIRMED. Proto core command seal broken. External control lock acquired.
 proto-core-announcement-meltdown-started = DELTA PROTOCOL ENFORCED. Proto core switched to meltdown mode. Total collapse in {$time}.
 proto-core-announcement-stabilized = Stabilization complete. The proto core has returned to emergency energy accumulation mode.

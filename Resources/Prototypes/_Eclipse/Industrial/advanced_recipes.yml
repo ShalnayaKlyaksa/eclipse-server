@@ -1,0 +1,736 @@
+# Advanced industrial production. Basic station supply keeps its existing recipes.
+- type: industrialRecipe
+  id: Advanced02WashQuartz
+  requireDataDisk: true
+  requiredTechnology: IndustrialOreEnrichment
+  processor: OreWasher
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    CrushedQuartz: 2
+  outputs:
+    IndustrialWashedQuartz: 2
+  fluidInputs:
+    Water: 10
+  fluidOutputs:
+    IndustrialDirtyWater: 10
+- type: industrialRecipe
+  id: Advanced03SeparateQuartz
+  requireDataDisk: true
+  requiredTechnology: IndustrialOreEnrichment
+  processor: Separator
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    IndustrialWashedQuartz: 2
+  outputs:
+    QuartzConcentrate: 2
+    IronDust: 1
+- type: industrialRecipe
+  id: Advanced04GrindQuartz
+  requireDataDisk: true
+  requiredTechnology: IndustrialOreEnrichment
+  processor: Grinder
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    QuartzConcentrate: 2
+  outputs:
+    IndustrialFineSilica: 2
+- type: industrialRecipe
+  id: Advanced05MakeSlurry
+  requireDataDisk: true
+  requiredTechnology: IndustrialSiliconPurification
+  processor: Mixer
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    IndustrialFineSilica: 2
+  fluidInputs:
+    Water: 10
+  fluidOutputs:
+    IndustrialQuartzSlurry: 20
+- type: industrialRecipe
+  id: Advanced06LeachSilica
+  requireDataDisk: true
+  requiredTechnology: IndustrialSiliconPurification
+  processor: ChemicalReactor
+  minimumTier: Industrial
+  time: 8
+  fluidInputs:
+    IndustrialQuartzSlurry: 20
+    SulfuricAcid: 10
+  fluidOutputs:
+    IndustrialSilicaLeachate: 25
+- type: industrialRecipe
+  id: Advanced07FilterSilica
+  requireDataDisk: true
+  requiredTechnology: IndustrialSiliconPurification
+  processor: FilterPress
+  minimumTier: Industrial
+  time: 8
+  outputs:
+    IndustrialSilicaCake: 2
+  fluidInputs:
+    IndustrialSilicaLeachate: 25
+  fluidOutputs:
+    IndustrialSpentLeachate: 20
+- type: industrialRecipe
+  id: Advanced08DrySilica
+  requireDataDisk: true
+  requiredTechnology: IndustrialSiliconPurification
+  processor: Dryer
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    IndustrialSilicaCake: 2
+  outputs:
+    IndustrialDriedSilica: 2
+- type: industrialRecipe
+  id: Advanced09PurifySilica
+  requireDataDisk: true
+  requiredTechnology: IndustrialSiliconPurification
+  processor: ThermalCentrifuge
+  minimumTier: Basic
+  time: 8
+  inputs:
+    IndustrialDriedSilica: 2
+  outputs:
+    IndustrialPurifiedSilica: 2
+  heat: 250000
+- type: industrialRecipe
+  id: Advanced10ReduceSilica
+  requireDataDisk: true
+  requiredTechnology: IndustrialVacuumProcessing
+  processor: BlastFurnace
+  minimumTier: Industrial
+  time: 12
+  inputs:
+    IndustrialPurifiedSilica: 2
+  outputs:
+    IndustrialCrudeSilicon: 2
+  fluidInputs:
+    Hydrogen: 20
+  fluidOutputs:
+    Water: 10
+- type: industrialRecipe
+  id: Advanced11ChlorinateSilicon
+  requireDataDisk: true
+  requiredTechnology: IndustrialVacuumProcessing
+  processor: ChemicalReactor
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    IndustrialCrudeSilicon: 2
+  fluidInputs:
+    IndustrialChlorinatingAgent: 10
+  fluidOutputs:
+    IndustrialChlorosilane: 20
+- type: industrialRecipe
+  id: Advanced12DistillSilane
+  requireDataDisk: true
+  requiredTechnology: IndustrialVacuumProcessing
+  processor: Distillation
+  minimumTier: Industrial
+  time: 12
+  fluidInputs:
+    IndustrialChlorosilane: 20
+  fluidOutputs:
+    IndustrialPureChlorosilane: 18
+- type: industrialRecipe
+  id: Advanced13DepositSilicon
+  requireDataDisk: true
+  requiredTechnology: IndustrialVacuumProcessing
+  processor: ChemicalReactor
+  minimumTier: Industrial
+  time: 12
+  outputs:
+    IndustrialPolySilicon: 2
+  fluidInputs:
+    IndustrialPureChlorosilane: 18
+    Hydrogen: 10
+  fluidOutputs:
+    IndustrialProcessLiquor: 10
+- type: industrialRecipe
+  id: Advanced14ZoneRefining
+  requireDataDisk: true
+  requiredTechnology: IndustrialVacuumProcessing
+  processor: VacuumFurnace
+  minimumTier: Industrial
+  time: 12
+  inputs:
+    IndustrialPolySilicon: 2
+  outputs:
+    IndustrialZoneSilicon: 2
+- type: industrialRecipe
+  id: Advanced15GrowCrystal
+  requireDataDisk: true
+  requiredTechnology: IndustrialCrystalGrowth
+  processor: Crystallizer
+  minimumTier: Industrial
+  time: 18
+  inputs:
+    IndustrialZoneSilicon: 2
+  outputs:
+    IndustrialSiliconBoule: 1
+  bath:
+    IndustrialCrystalMedium: 25
+- type: industrialRecipe
+  id: Advanced16SliceCrystal
+  requireDataDisk: true
+  requiredTechnology: IndustrialCrystalGrowth
+  processor: Cutter
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    IndustrialSiliconBoule: 1
+  outputs:
+    IndustrialWaferBlank: 4
+- type: industrialRecipe
+  id: Advanced17LapWafer
+  requireDataDisk: true
+  requiredTechnology: IndustrialCrystalGrowth
+  processor: Grinder
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    IndustrialWaferBlank: 1
+  outputs:
+    IndustrialLappedWafer: 1
+- type: industrialRecipe
+  id: Advanced18CleanWafer
+  requireDataDisk: true
+  cleanroomGrade: 1
+  requiredTechnology: IndustrialWaferProcessing
+  processor: ChemicalBath
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    IndustrialLappedWafer: 1
+  outputs:
+    IndustrialCleanWafer: 1
+  fluidInputs:
+    Water: 5
+  fluidOutputs:
+    IndustrialDirtyWater: 5
+- type: industrialRecipe
+  id: Advanced19OxidizeWafer
+  requireDataDisk: true
+  cleanroomGrade: 1
+  requiredTechnology: IndustrialWaferProcessing
+  processor: Coater
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    IndustrialCleanWafer: 1
+  outputs:
+    IndustrialOxidizedWafer: 1
+  fluidInputs:
+    IndustrialOxidizer: 5
+  fluidOutputs:
+    IndustrialSpentOxidizer: 5
+- type: industrialRecipe
+  id: Advanced20DopeWafer
+  requireDataDisk: true
+  cleanroomGrade: 1
+  requiredTechnology: IndustrialWaferProcessing
+  processor: ChemicalBath
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    IndustrialOxidizedWafer: 1
+  outputs:
+    IndustrialDopedWafer: 1
+  fluidInputs:
+    IndustrialDopant: 5
+  fluidOutputs:
+    IndustrialSpentDopant: 5
+- type: industrialRecipe
+  id: Advanced21AnnealWafer
+  requireDataDisk: true
+  cleanroomGrade: 1
+  requiredTechnology: IndustrialWaferProcessing
+  processor: VacuumFurnace
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    IndustrialDopedWafer: 1
+  outputs:
+    IndustrialAnnealedWafer: 1
+- type: industrialRecipe
+  id: Advanced22ApplyResist
+  requireDataDisk: true
+  cleanroomGrade: 1
+  requiredTechnology: IndustrialPhotolithography
+  processor: Coater
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    IndustrialAnnealedWafer: 1
+  outputs:
+    IndustrialResistWafer: 1
+  fluidInputs:
+    IndustrialPhotoresist: 5
+  fluidOutputs:
+    IndustrialSpentSolvent: 2
+- type: industrialRecipe
+  id: Advanced23ExposeCircuit
+  requireDataDisk: true
+  cleanroomGrade: 1
+  requiredTechnology: IndustrialPhotolithography
+  processor: LaserEngraver
+  minimumTier: Industrial
+  time: 12
+  inputs:
+    IndustrialResistWafer: 1
+  outputs:
+    IndustrialExposedWafer: 1
+- type: industrialRecipe
+  id: Advanced24DevelopCircuit
+  requireDataDisk: true
+  cleanroomGrade: 1
+  requiredTechnology: IndustrialPhotolithography
+  processor: ChemicalBath
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    IndustrialExposedWafer: 1
+  outputs:
+    IndustrialDevelopedWafer: 1
+  fluidInputs:
+    IndustrialDeveloper: 5
+  fluidOutputs:
+    IndustrialSpentDeveloper: 5
+- type: industrialRecipe
+  id: Advanced25EtchCircuit
+  requireDataDisk: true
+  cleanroomGrade: 1
+  requiredTechnology: IndustrialPhotolithography
+  processor: ChemicalBath
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    IndustrialDevelopedWafer: 1
+  outputs:
+    IndustrialEtchedWafer: 1
+  fluidInputs:
+    IndustrialEtchant: 5
+  fluidOutputs:
+    IndustrialSpentEtchant: 5
+- type: industrialRecipe
+  id: Advanced26StripResist
+  requireDataDisk: true
+  cleanroomGrade: 1
+  requiredTechnology: IndustrialPhotolithography
+  processor: ChemicalBath
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    IndustrialEtchedWafer: 1
+  outputs:
+    IndustrialStrippedWafer: 1
+  fluidInputs:
+    IndustrialSolvent: 5
+  fluidOutputs:
+    IndustrialSpentSolvent: 5
+- type: industrialRecipe
+  id: Advanced27RinseCircuit
+  requireDataDisk: true
+  cleanroomGrade: 1
+  requiredTechnology: IndustrialPhotolithography
+  processor: OreWasher
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    IndustrialStrippedWafer: 1
+  outputs:
+    IndustrialRinsedWafer: 1
+  fluidInputs:
+    Water: 5
+  fluidOutputs:
+    IndustrialDirtyWater: 5
+- type: industrialRecipe
+  id: Advanced28DryCircuit
+  requireDataDisk: true
+  cleanroomGrade: 1
+  requiredTechnology: IndustrialPhotolithography
+  processor: Dryer
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    IndustrialRinsedWafer: 1
+  outputs:
+    IndustrialDryWafer: 1
+- type: industrialRecipe
+  id: Advanced29MetallizeCircuit
+  requireDataDisk: true
+  cleanroomGrade: 1
+  requiredTechnology: IndustrialPhotolithography
+  processor: Electrolyzer
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    IndustrialDryWafer: 1
+  outputs:
+    IndustrialMetallizedWafer: 1
+  fluidInputs:
+    IndustrialCopperElectrolyte: 5
+  fluidOutputs:
+    IndustrialDepletedElectrolyte: 5
+- type: industrialRecipe
+  id: Advanced30BondMetallization
+  requireDataDisk: true
+  cleanroomGrade: 1
+  requiredTechnology: IndustrialPhotolithography
+  processor: VacuumFurnace
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    IndustrialMetallizedWafer: 1
+  outputs:
+    IndustrialBondedWafer: 1
+- type: industrialRecipe
+  id: Advanced31DiceWafer
+  requireDataDisk: true
+  cleanroomGrade: 1
+  requiredTechnology: IndustrialChipPackaging
+  processor: Cutter
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    IndustrialBondedWafer: 1
+  outputs:
+    IndustrialBareDie: 2
+- type: industrialRecipe
+  id: Advanced32BondDie
+  requireDataDisk: true
+  cleanroomGrade: 1
+  requiredTechnology: IndustrialChipPackaging
+  processor: Assembler
+  minimumTier: Basic
+  time: 8
+  inputs:
+    IndustrialBareDie: 1
+    IndustrialBondingWire: 2
+    IndustrialChipFrame: 1
+  outputs:
+    IndustrialBondedDie: 1
+- type: industrialRecipe
+  id: Advanced33EncapsulateDie
+  requireDataDisk: true
+  cleanroomGrade: 1
+  requiredTechnology: IndustrialChipPackaging
+  processor: Coater
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    IndustrialBondedDie: 1
+  outputs:
+    IndustrialEncapsulatedChip: 1
+  fluidInputs:
+    IndustrialEncapsulant: 5
+  fluidOutputs:
+    IndustrialSpentSolvent: 1
+- type: industrialRecipe
+  id: Advanced34PackageProcessor
+  requireDataDisk: true
+  cleanroomGrade: 1
+  requiredTechnology: IndustrialChipPackaging
+  processor: Assembler
+  minimumTier: Basic
+  time: 8
+  inputs:
+    IndustrialEncapsulatedChip: 1
+    IndustrialHeatSpreader: 1
+    IndustrialChipContacts: 1
+  outputs:
+    IndustrialUntestedProcessor: 1
+- type: industrialRecipe
+  id: Advanced35TestProcessor
+  requireDataDisk: true
+  cleanroomGrade: 1
+  requiredTechnology: IndustrialChipPackaging
+  processor: CircuitTester
+  minimumTier: Industrial
+  time: 10
+  inputs:
+    IndustrialUntestedProcessor: 1
+  outputs:
+    IndustrialAdvancedProcessor: 1
+- type: industrialRecipe
+  id: IndustrialMakeChlorinatingAgent
+  requireDataDisk: true
+  requiredTechnology: IndustrialChemicalSynthesis
+  processor: Mixer
+  minimumTier: Industrial
+  time: 8
+  fluidInputs:
+    Chlorine: 5
+    Water: 5
+  fluidOutputs:
+    IndustrialChlorinatingAgent: 10
+- type: industrialRecipe
+  id: IndustrialMakeCrystalMedium
+  requireDataDisk: true
+  requiredTechnology: IndustrialChemicalSynthesis
+  processor: Mixer
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    QuartzDust: 1
+  fluidInputs:
+    Water: 20
+    SulfuricAcid: 5
+  fluidOutputs:
+    IndustrialCrystalMedium: 25
+- type: industrialRecipe
+  id: IndustrialMakeOxidizer
+  requireDataDisk: true
+  requiredTechnology: IndustrialChemicalSynthesis
+  processor: ChemicalReactor
+  minimumTier: Industrial
+  time: 8
+  fluidInputs:
+    Oxygen: 5
+    Water: 5
+  fluidOutputs:
+    IndustrialOxidizer: 10
+- type: industrialRecipe
+  id: IndustrialMakeDopant
+  requireDataDisk: true
+  requiredTechnology: IndustrialChemicalSynthesis
+  processor: Mixer
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    SilverDust: 1
+  fluidInputs:
+    Water: 10
+    SulfuricAcid: 5
+  fluidOutputs:
+    IndustrialDopant: 15
+- type: industrialRecipe
+  id: IndustrialMakeSolvent
+  requireDataDisk: true
+  requiredTechnology: IndustrialChemicalSynthesis
+  processor: Distillation
+  minimumTier: Industrial
+  time: 8
+  fluidInputs:
+    Ethanol: 10
+    Acetone: 10
+  fluidOutputs:
+    IndustrialSolvent: 18
+- type: industrialRecipe
+  id: IndustrialMakePhotoresist
+  requireDataDisk: true
+  requiredTechnology: IndustrialSurfaceChemistry
+  processor: ChemicalReactor
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    PlasmaDust: 1
+  fluidInputs:
+    IndustrialSolvent: 10
+  fluidOutputs:
+    IndustrialPhotoresist: 10
+- type: industrialRecipe
+  id: IndustrialMakeDeveloper
+  requireDataDisk: true
+  requiredTechnology: IndustrialSurfaceChemistry
+  processor: Mixer
+  minimumTier: Industrial
+  time: 8
+  fluidInputs:
+    SodiumHydroxide: 5
+    Water: 5
+  fluidOutputs:
+    IndustrialDeveloper: 10
+- type: industrialRecipe
+  id: IndustrialMakeEtchant
+  requireDataDisk: true
+  requiredTechnology: IndustrialChemicalSynthesis
+  processor: ChemicalReactor
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    IronDust: 1
+  fluidInputs:
+    Chlorine: 5
+    Water: 5
+  fluidOutputs:
+    IndustrialEtchant: 10
+- type: industrialRecipe
+  id: IndustrialMakeCopperElectrolyte
+  requireDataDisk: true
+  requiredTechnology: IndustrialSurfaceChemistry
+  processor: Electrolyzer
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    CopperDust: 1
+  fluidInputs:
+    SulfuricAcid: 5
+    Water: 5
+  fluidOutputs:
+    IndustrialCopperElectrolyte: 10
+- type: industrialRecipe
+  id: IndustrialMakeEncapsulant
+  requireDataDisk: true
+  requiredTechnology: IndustrialSurfaceChemistry
+  processor: ChemicalReactor
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    PlasmaDust: 1
+    QuartzDust: 1
+  fluidInputs:
+    IndustrialSolvent: 10
+  fluidOutputs:
+    IndustrialEncapsulant: 10
+- type: industrialRecipe
+  id: IndustrialDrawBondingWire
+  processor: WireMill
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    IngotGold: 1
+  outputs:
+    IndustrialBondingWire: 16
+- type: industrialRecipe
+  id: IndustrialStampChipFrames
+  processor: Cutter
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    SheetSteel: 1
+  outputs:
+    IndustrialChipFrame: 8
+    IndustrialScrap1: 1
+
+- type: industrialRecipe
+  id: IndustrialCutHeatSpreaders
+  processor: Cutter
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    SheetCopper: 1
+  outputs:
+    IndustrialHeatSpreader: 4
+    IndustrialScrap1: 1
+
+- type: industrialRecipe
+  id: IndustrialFormContacts
+  processor: WireMill
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    SheetCopper: 1
+  outputs:
+    IndustrialChipContacts: 8
+- type: industrialRecipe
+  id: IndustrialRecoverWater
+  requireDataDisk: true
+  requiredTechnology: IndustrialRecycling
+  processor: FilterPress
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    Coal: 1
+  fluidInputs:
+    IndustrialDirtyWater: 20
+  fluidOutputs:
+    Water: 16
+
+- type: industrialRecipe
+  id: IndustrialRecoverLeachAcid
+  requireDataDisk: true
+  requiredTechnology: IndustrialRecycling
+  processor: Distillation
+  minimumTier: Industrial
+  time: 8
+  fluidInputs:
+    IndustrialSpentLeachate: 20
+  fluidOutputs:
+    SulfuricAcid: 6
+- type: industrialRecipe
+  id: IndustrialRecoverSolvent
+  requireDataDisk: true
+  requiredTechnology: IndustrialRecycling
+  processor: Distillation
+  minimumTier: Industrial
+  time: 8
+  fluidInputs:
+    IndustrialSpentSolvent: 10
+  fluidOutputs:
+    IndustrialSolvent: 7
+- type: industrialRecipe
+  id: IndustrialRechargeCopperElectrolyte
+  requireDataDisk: true
+  requiredTechnology: IndustrialProcessChemistry
+  processor: Electrolyzer
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    CopperDust: 1
+  fluidInputs:
+    IndustrialDepletedElectrolyte: 10
+  fluidOutputs:
+    IndustrialCopperElectrolyte: 8
+- type: industrialRecipe
+  id: IndustrialRecoverEtchant
+  requireDataDisk: true
+  requiredTechnology: IndustrialRecycling
+  processor: ChemicalReactor
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    IronDust: 1
+  fluidInputs:
+    IndustrialSpentEtchant: 10
+    Chlorine: 2
+  fluidOutputs:
+    IndustrialEtchant: 8
+- type: industrialRecipe
+  id: IndustrialSiliconControlCores
+  requireDataDisk: true
+  requiredTechnology: IndustrialSiliconPurification
+  processor: Assembler
+  minimumTier: Basic
+  time: 8
+  inputs:
+    IndustrialZoneSilicon: 1
+    SheetSteel: 2
+    SheetCopper: 1
+  outputs:
+    IndustrialCircuitCore: 4
+
+- type: industrialRecipe
+  id: IndustrialProcessorControlCores
+  requireDataDisk: true
+  requiredTechnology: IndustrialAdvancedAutomation
+  processor: Assembler
+  minimumTier: Industrial
+  time: 8
+  inputs:
+    IndustrialAdvancedProcessor: 1
+    SheetSteel: 2
+    SheetCopper: 1
+  outputs:
+    IndustrialCircuitCore: 12
+
+- type: industrialRecipe
+  id: IndustrialEfficientHighPowerCells
+  requireDataDisk: true
+  processor: Assembler
+  minimumTier: Industrial
+  time: 12
+  inputs:
+    IndustrialAdvancedProcessor: 1
+    SheetSteel: 2
+    SheetGlass: 1
+    SheetCopper: 2
+  outputs:
+    PowerCellHighPrinted: 2
+  requiredTechnology: IndustrialEnergyStorage
+

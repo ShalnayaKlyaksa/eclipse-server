@@ -148,6 +148,9 @@ public sealed class PlantHolderSystem : EntitySystem
             if (component.PestLevel >= 5)
                 args.PushMarkup(Loc.GetString("plant-holder-component-pest-high-level-message"));
 
+            if (component.BeePollinated)
+                args.PushMarkup(Loc.GetString("garden-pollinated"));
+
             args.PushMarkup(Loc.GetString($"plant-holder-component-water-level-message",
                 ("waterLevel", (int)component.WaterLevel)));
             args.PushMarkup(Loc.GetString($"plant-holder-component-nutrient-level-message",
@@ -727,7 +730,7 @@ public sealed class PlantHolderSystem : EntitySystem
                 return false;
             }
 
-            _botany.Harvest(component.Seed, user, component.YieldMod);
+            _botany.Harvest(component.Seed, user, component.YieldMod, component.BeePollinated ? 1 : 0);
             AfterHarvest(plantholder, component);
             return true;
         }
@@ -761,7 +764,7 @@ public sealed class PlantHolderSystem : EntitySystem
         if (component.Seed == null || !component.Harvest)
             return;
 
-        _botany.AutoHarvest(component.Seed, Transform(uid).Coordinates);
+        _botany.AutoHarvest(component.Seed, Transform(uid).Coordinates, component.YieldMod, component.BeePollinated ? 1 : 0);
         AfterHarvest(uid, component);
     }
 
@@ -772,6 +775,8 @@ public sealed class PlantHolderSystem : EntitySystem
 
         component.Harvest = false;
         component.LastProduce = component.Age;
+        component.CrossPollinated = false;
+        component.BeePollinated = false;
 
         DoScream(uid, component.Seed);
 
@@ -824,6 +829,8 @@ public sealed class PlantHolderSystem : EntitySystem
         component.Age = 0;
         component.LastProduce = 0;
         component.Sampled = false;
+        component.CrossPollinated = false;
+        component.BeePollinated = false;
         component.Harvest = false;
         component.ImproperLight = false;
         component.ImproperPressure = false;

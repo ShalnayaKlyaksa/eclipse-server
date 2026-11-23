@@ -28,6 +28,7 @@ public sealed class HumanoidMarkingModifierBoundUserInterface : BoundUserInterfa
         _window.RespectGroupSex.OnPressed += args => _markingsModel.EnforceGroupAndSexRestrictions = args.Button.Pressed;
 
         _markingsModel.MarkingsChanged += (_, _) => SendMarkingSet();
+        _markingsModel.MarkingColorsChanged += (_, _) => SendMarkingSet();
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)

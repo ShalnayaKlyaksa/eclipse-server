@@ -1,39 +1,54 @@
-<controls:FancyWindow xmlns="https://spacestation14.io"
-                xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
-                xmlns:fancyTree="clr-namespace:Content.Client.UserInterface.Controls.FancyTree"
-                xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
-                SetSize="900 700"
-                MinSize="100 200"
-                Resizable="True"
-                Title="{Loc 'guidebook-window-title'}">
-    <SplitContainer Orientation="Horizontal" HorizontalExpand="True" Name="Split">
-        <!-- Guide select -->
-        <BoxContainer Orientation="Horizontal" Name="TreeBox">
-            <fancyTree:FancyTree Name="Tree" VerticalExpand="True" HorizontalExpand="True" Access="Public"/>
-            <cc:VSeparator StyleClasses="LowDivider" Margin="0 -2"/>
-        </BoxContainer>
-        <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
-            <BoxContainer Name="SearchContainer" Visible="False" HorizontalExpand="True">
-                <LineEdit
-                    Name="SearchBar"
-                    PlaceHolder="{Loc 'guidebook-filter-placeholder-text'}"
-                    HorizontalExpand="True"
-                    Margin="0 5 10 5">
-                </LineEdit>
+<guide:GuidebookWindow xmlns="https://spacestation14.io"
+                   xmlns:guide="clr-namespace:Content.Client.Guidebook.Controls"
+                   SetSize="1100 800" MinSize="640 440" MouseFilter="Stop" Resizable="True">
+    <PanelContainer StyleClasses="GuidebookShell"/>
+    <BoxContainer Orientation="Vertical" SeparationOverride="0" Margin="1">
+        <PanelContainer StyleClasses="GuidebookHeader">
+            <BoxContainer SeparationOverride="18">
+                <BoxContainer Orientation="Vertical" MinWidth="225" SeparationOverride="2">
+                    <Label Text="{Loc 'guidebook-station-library'}" StyleClasses="GuidebookMuted"/>
+                    <Label Text="{Loc 'guidebook-crew-handbook'}" StyleClasses="GuidebookBrand"/>
+                </BoxContainer>
+                <LineEdit Name="SearchBar" HorizontalExpand="True" VerticalAlignment="Center" PlaceHolder="{Loc 'guidebook-global-search'}"/>
+                <Button Name="ClearSearchButton" Text="×" ToolTip="{Loc 'guidebook-clear-search'}" VerticalAlignment="Center" Visible="False"/>
+                <Button Name="ExpandButton" Text="□" ToolTip="{Loc 'guidebook-expand'}" VerticalAlignment="Center"/>
+                <Button Name="CloseButton" Text="×" ToolTip="{Loc 'guidebook-close'}" VerticalAlignment="Center"/>
             </BoxContainer>
-            <BoxContainer Access="Internal" Name="ReturnContainer" Orientation="Horizontal" HorizontalAlignment="Right" Visible="False">
-                <Button Name="HomeButton" Text="{Loc 'ui-rules-button-home'}" Margin="0 0 10 0"/>
+        </PanelContainer>
+        <BoxContainer VerticalExpand="True" SeparationOverride="0">
+            <PanelContainer StyleClasses="GuidebookSidebar" Name="Sidebar" MinWidth="210" MaxWidth="210">
+                <BoxContainer Orientation="Vertical" SeparationOverride="12">
+                    <BoxContainer SeparationOverride="6">
+                        <Button Name="CatalogButton" Text="{Loc 'guidebook-catalog'}" HorizontalExpand="True"/>
+                        <Button Name="BookmarksButton" Text="{Loc 'guidebook-bookmarks'}" HorizontalExpand="True"/>
+                    </BoxContainer>
+                    <Button Name="UpButton" Text="{Loc 'guidebook-up'}" StyleClasses="GuidebookLink"/>
+                    <Label Name="BranchTitle" StyleClasses="GuidebookMuted" ClipText="True"/>
+                    <ScrollContainer HScrollEnabled="False" VerticalExpand="True">
+                        <BoxContainer Name="BranchList" Orientation="Vertical" SeparationOverride="3"/>
+                    </ScrollContainer>
+                    <Label Name="EntryCount" StyleClasses="GuidebookMuted"/>
+                </BoxContainer>
+            </PanelContainer>
+            <BoxContainer Orientation="Vertical" HorizontalExpand="True" SeparationOverride="0">
+                <PanelContainer StyleClasses="GuidebookToolbar">
+                    <BoxContainer SeparationOverride="6">
+                        <Button Name="BackButton" Text="←" ToolTip="{Loc 'guidebook-back'}"/>
+                        <Button Name="ForwardButton" Text="→" ToolTip="{Loc 'guidebook-forward'}"/>
+                        <BoxContainer Name="Breadcrumbs" HorizontalExpand="True" SeparationOverride="5"/>
+                        <Button Name="BookmarkButton" Text="{Loc 'guidebook-add-bookmark'}" ToggleMode="True"/>
+                    </BoxContainer>
+                </PanelContainer>
+                <BoxContainer Name="FilterContainer" Margin="18 8 18 0" Visible="False">
+                    <LineEdit Name="ArticleFilter" PlaceHolder="{Loc 'guidebook-article-filter'}" HorizontalExpand="True"/>
+                </BoxContainer>
+                <ScrollContainer Name="Scroll" HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
+                    <BoxContainer Name="EntryContainer" Orientation="Vertical" Margin="22 18 22 22" SeparationOverride="12"/>
+                </ScrollContainer>
+                <PanelContainer StyleClasses="GuidebookFooter">
+                    <Label Name="Footer" Text="{Loc 'guidebook-single-article'}" StyleClasses="GuidebookMuted"/>
+                </PanelContainer>
             </BoxContainer>
-            <ScrollContainer Name="Scroll" HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
-                <Control>
-                    <BoxContainer Orientation="Vertical" Name="EntryContainer" Margin="5 5 5 5" Visible="False">
-                    </BoxContainer>
-                    <BoxContainer Orientation="Vertical" Name="Placeholder" Margin="5 5 5 5">
-                        <Label HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Loc 'guidebook-placeholder-text'}"/>
-                        <Label HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Loc 'guidebook-placeholder-text-2'}"/>
-                    </BoxContainer>
-                </Control>
-            </ScrollContainer>
         </BoxContainer>
-    </SplitContainer>
-</controls:FancyWindow>
+    </BoxContainer>
+</guide:GuidebookWindow>

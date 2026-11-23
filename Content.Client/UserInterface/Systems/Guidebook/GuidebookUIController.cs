@@ -144,7 +144,6 @@ public sealed class GuidebookUIController : UIController, IOnStateEntered<LobbyS
 
         if (_guideWindow != null)
         {
-            _guideWindow.ReturnContainer.Visible = false;
             _lastEntry = _guideWindow.LastEntry;
         }
     }
@@ -180,6 +179,7 @@ public sealed class GuidebookUIController : UIController, IOnStateEntered<LobbyS
         if (GuidebookButton != null)
             GuidebookButton.SetClickPressed(!_guideWindow.IsOpen);
 
+        var resume = guides == null && selected == null;
         if (guides == null)
         {
             guides = _prototypeManager.EnumeratePrototypes<GuideEntryPrototype>()
@@ -206,13 +206,8 @@ public sealed class GuidebookUIController : UIController, IOnStateEntered<LobbyS
                 selected = _configuration.GetCVar(CCVars.DefaultGuide);
             }
         }
-        _guideWindow.UpdateGuides(guides, rootEntries, forceRoot, selected);
-
-        // Expand up to depth-2.
-        _guideWindow.Tree.SetAllExpanded(false);
-        _guideWindow.Tree.SetAllExpanded(true, 1);
-
-        _guideWindow.OpenCenteredRight();
+        _guideWindow.UpdateGuides(guides, rootEntries, forceRoot, selected, resume);
+        _guideWindow.OpenGuide();
     }
 
     public void OpenGuidebook(

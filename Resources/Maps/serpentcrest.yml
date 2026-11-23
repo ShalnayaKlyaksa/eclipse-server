@@ -74454,8 +74454,8 @@ entities:
   - uid: 4120
     components:
     - type: MetaData
-      desc: a crate painted NT blue with Nanotrasen symboling
-      name: Nanotrasen Crate
+      desc: a crate painted VISH blue with VISH symboling
+      name: VISH Crate
     - type: Transform
       pos: 23.5,14.5
       parent: 2
@@ -74630,7 +74630,7 @@ entities:
     components:
     - type: MetaData
       desc: this would have been considered full of illegal contraband....when this was a legion station.
-      name: Nanotrasen crate
+      name: VISH crate
     - type: Transform
       pos: -33.5,-62.5
       parent: 2
@@ -133502,7 +133502,7 @@ entities:
   - uid: 8144
     components:
     - type: MetaData
-      desc: a nuclear authentication disk, used as the standard to activate the emergency self-destruction mechanism on NT stations. this one is deformed and warped, looking like it withstood extreme heat.
+      desc: a nuclear authentication disk, used as the standard to activate the emergency self-destruction mechanism on VISH stations. this one is deformed and warped, looking like it withstood extreme heat.
       name: Warped nuclear authentication disk
     - type: Transform
       rot: -1.5707963267948966 rad
@@ -134029,7 +134029,7 @@ entities:
       parent: 2
     - type: Paper
       content: >-
-        The legionjuice machine is still coded to only accept legion access cards, to use it, youll need to snip the 'acc' wire. cargo should be getting an NT-coded model soon, be sure to check with them
+        The legionjuice machine is still coded to only accept legion access cards, to use it, youll need to snip the 'acc' wire. cargo should be getting an VISH-coded model soon, be sure to check with them
 
 
 
@@ -134041,7 +134041,7 @@ entities:
       parent: 2
     - type: Paper
       content: >-
-        The bruise-o-mat is still coded to only accept legion access cards, to use it, youll need to snip the 'acc' wire. cargo should be getting an NT-coded model soon, be sure to check with them
+        The bruise-o-mat is still coded to only accept legion access cards, to use it, youll need to snip the 'acc' wire. cargo should be getting an VISH-coded model soon, be sure to check with them
 
 
 
@@ -152257,7 +152257,7 @@ entities:
   - uid: 8132
     components:
     - type: MetaData
-      desc: a display claiming to be the remains and nuke disc of an NT station allegedly destroyed by Gorlex operatives. surely just a fake and an empty boast...
+      desc: a display claiming to be the remains and nuke disc of an VISH station allegedly destroyed by Gorlex operatives. surely just a fake and an empty boast...
       name: Successful nuclear operation showcase
     - type: Transform
       pos: 13.5,50.5
@@ -152277,7 +152277,7 @@ entities:
   - uid: 8134
     components:
     - type: MetaData
-      desc: a display claiming to be items looted from a fallen NT executive.
+      desc: a display claiming to be items looted from a fallen VISH executive.
       name: Grisly trophy showcase
     - type: Transform
       pos: 11.5,52.5
@@ -152534,7 +152534,7 @@ entities:
   - uid: 8585
     components:
     - type: MetaData
-      desc: Cybersun's telecrystal and illegal data mining servers. looks like the NT killsquad fucked this place up pretty bad
+      desc: Cybersun's telecrystal and illegal data mining servers. looks like the VISH killsquad fucked this place up pretty bad
       name: mining server room
     - type: Transform
       rot: -1.5707963267948966 rad
@@ -183663,7 +183663,7 @@ entities:
   - uid: 8146
     components:
     - type: MetaData
-      desc: or at least Gorlex claims its damaged, more likely its just a replica. surely they couldnt take down a prestigeous NT executive...
+      desc: or at least Gorlex claims its damaged, more likely its just a replica. surely they couldnt take down a prestigeous VISH executive...
       name: damaged N1984
     - type: Transform
       pos: 12.480796,51.55176

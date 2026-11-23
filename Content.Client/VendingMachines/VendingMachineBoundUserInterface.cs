@@ -4,6 +4,8 @@ using Content.Shared.VendingMachines;
 using Robust.Client.UserInterface;
 using Robust.Shared.Input;
 using System.Linq;
+using Content.Shared.PDA;
+using Robust.Shared.Prototypes;
 
 namespace Content.Client.VendingMachines
 {
@@ -36,6 +38,7 @@ namespace Content.Client.VendingMachines
             var system = EntMan.System<VendingMachineSystem>();
             _cachedInventory = system.GetAllInventory(Owner);
 
+            _menu?.SetPrice(bendy == null ? 0 : IoCManager.Resolve<IPrototypeManager>().Index<PersonalEconomyPrototype>("StationPersonalEconomy").VendorPrices.GetValueOrDefault(bendy.PackPrototypeId));
             _menu?.Populate(_cachedInventory, enabled);
         }
 

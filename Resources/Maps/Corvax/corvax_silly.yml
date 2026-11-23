@@ -4581,7 +4581,7 @@ entities:
   - uid: 6350
     components:
     - type: MetaData
-      name: NT-██-███-██
+      name: VISH-██-███-██
     - type: Transform
       pos: -268.47223,503.45834
       parent: 1
@@ -39106,7 +39106,7 @@ entities:
 
         [color=#1b487e]░██░████░░░██░░░░[/color]      [head=3]Бланк документа[/head]
 
-        [color=#1b487e]░░█░██░██░░██░█░░[/color]               [head=3]NanoTrasen[/head]
+        [color=#1b487e]░░█░██░██░░██░█░░[/color]               [head=3]VISH[/head]
 
         [color=#1b487e]░░░░██░░██░██░██░[/color] [bold]Killy_Island Station СБ[/bold]
 

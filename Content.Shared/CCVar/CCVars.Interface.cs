@@ -4,6 +4,10 @@ namespace Content.Shared.CCVar;
 
 public sealed partial class CCVars
 {
+    /// <summary>Expand supported redesigned interfaces to the application window.</summary>
+    public static readonly CVarDef<bool> ImmersiveInterfaces =
+        CVarDef.Create("ui.immersive_interfaces", false, CVar.CLIENTONLY | CVar.ARCHIVE);
+
     /// <summary>
     /// The sound played when clicking a UI button
     /// </summary>

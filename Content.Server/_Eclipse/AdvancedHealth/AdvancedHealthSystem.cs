@@ -1,3 +1,4 @@
+using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Alert;
 using Content.Shared._Eclipse.AdvancedHealth;
 using System.Linq;
@@ -25,6 +26,7 @@ using Content.Shared.Tag;
 using Content.Shared.Temperature.Components;
 using Content.Shared.Verbs;
 using Robust.Shared.Random;
+using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using Content.Shared.FixedPoint;
 using Content.Shared.Humanoid;
@@ -37,6 +39,7 @@ public sealed class AdvancedHealthSystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _prototypes = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly AlertsSystem _alerts = default!;
 
     /// <summary>Anatomy used when the entity's species has no anatomy prototype of its own.</summary>
     private static readonly ProtoId<AdvancedHealthAnatomyPrototype> FallbackAnatomy = "Human";
@@ -63,19 +66,29 @@ public sealed class AdvancedHealthSystem : EntitySystem
             part.Conditions.Clear();
             part.IsDestroyed = part.IsBleeding = part.IsBandaged = part.IsSplinted = part.HasTourniquet = false;
             part.ForeignBodyCount = 0;
+            part.IsSurgicalOpen = part.IsSurgicalSitePrepared = false;
+            part.LocalAnesthesia = 0f;
+            part.ClinicalProcedures.Clear();
+            part.DirtyExposure = 0f;
+            part.OpenSurgicalExposure = 0f;
+            part.PostoperativeRecovery = false;
         }
         health.BloodVolume = health.MaxBloodVolume;
         health.Oxygenation = health.Consciousness = health.ImmuneDefense = 100f;
         health.OxygenCarryingCapacity = health.Perfusion = 1f;
+        health.TransfusionReaction = 0;
         health.HeartRate = health.RestingHeartRate;
         health.MeanArterialPressure = health.BaselinePressure;
         health.RespiratoryRate = health.NeedsOxygen ? health.RestingRespiratoryRate : 0f;
         health.BodyTemperature = health.NormalBodyTemperature;
         health.IsUnconscious = health.IsHeartStopped = health.IsInAgonalState = health.IsSuffocating = false;
+        health.ArrestTrigger = CardiacArrestTrigger.Unknown;
         health.TimeSinceHeartStopped = health.TimeBelowLethalOxygen = health.HypoxiaExposure = 0f;
         health.Pain = health.Shock = health.TraumaLoad = health.InfectionLoad = health.ToxinLoad = health.RadiationLoad = 0f;
         health.AdrenalineDrive = health.CprSupport = health.SmoothedConditionBadness = 0f;
         health.CachedAlertSeverity = 0;
+        EntityManager.System<AdvancedOrganHealthSystem>().RejuvenateBody(ent);
+        EntityManager.System<AdvancedDiseaseSystem>().Rejuvenate(ent);
         Dirty(ent);
         EntityManager.System<SharedMedicalConditionSystem>().Refresh((ent.Owner, ent.Comp));
     }
@@ -107,7 +120,8 @@ public sealed class AdvancedHealthSystem : EntitySystem
         return BadnessToSeverity(badness + margin) < current ? raw : current;
     }
 
-    public static float ComputeInstantBadness(AdvancedHealthComponent h)
+    public static float ComputeInstantBadness(AdvancedHealthComponent h, AdvancedNutritionComponent? nutrition = null,
+        AdvancedExertionComponent? exertion = null, AdvancedDiseaseComponent? disease = null)
     {
         var bloodLoss = h.HasBlood
             ? 1f - Math.Clamp(h.BloodVolume / Math.Max(1f, h.MaxBloodVolume), 0f, 1f)
@@ -118,7 +132,49 @@ public sealed class AdvancedHealthSystem : EntitySystem
             ? 1f - Math.Clamp(h.Oxygenation / 100f, 0f, 1f)
             : 0f;
 
-        return (bloodLoss + consciousnessLoss + painLevel + oxygenLoss) / 4f;
+        // Healthy systems cannot average away a dangerous failure elsewhere in the body.
+        var badness = Math.Max(Math.Max(bloodLoss, consciousnessLoss), Math.Max(painLevel * 0.7f, oxygenLoss));
+        badness = Math.Max(badness, Math.Max(h.Shock / 100f, 1 - h.Perfusion));
+        badness = Math.Max(badness, Math.Max(h.SystemicWeakness, Math.Max(h.ToxinLoad, h.RadiationLoad) / 125f));
+        badness = Math.Max(badness, Math.Clamp(h.TraumaLoad / Math.Max(1, h.InstantDeathTraumaThreshold), 0, 1));
+        badness = Math.Max(badness, Math.Clamp((Math.Abs(h.BodyTemperature - h.NormalBodyTemperature) - 1) / 8, 0, 1));
+        foreach (var part in h.BodyParts.Values)
+            badness = Math.Max(badness, Math.Max(1 - part.GetFunction(h.HasBlood, h.CanFracture), part.GetConditionStage() * 0.22f));
+        if (h.HasOrganDysfunction) badness = Math.Max(badness, 0.25f);
+        if (nutrition != null)
+        {
+            badness = Math.Max(badness, Math.Max(nutrition.Malnutrition, nutrition.DehydrationStrain) * 0.85f);
+            if (nutrition.FoodDepleted || nutrition.WaterDepleted) badness = Math.Max(badness, 0.35f);
+        }
+        if (exertion != null)
+            badness = Math.Max(badness, Math.Max(exertion.SleepDebt * 0.004f, exertion.Exhausted ? 0.25f : 0));
+        if (disease != null)
+        {
+            if (disease.Symptoms != ClinicalSymptoms.None) badness = Math.Max(badness, 0.22f);
+            foreach (var severity in disease.Severity.Values) badness = Math.Max(badness, severity * 0.75f);
+        }
+        if (h.IsUnconscious || h.IsInAgonalState) badness = Math.Max(badness, 0.8f);
+        return h.IsHeartStopped ? 1 : Math.Clamp(badness, 0, 1);
+    }
+
+    public void RefreshConditionAlert(Entity<AdvancedHealthComponent> ent, float elapsed)
+    {
+        TryComp<AdvancedNutritionComponent>(ent, out var nutrition);
+        TryComp<AdvancedExertionComponent>(ent, out var exertion);
+        TryComp<AdvancedDiseaseComponent>(ent, out var disease);
+        var instant = ComputeInstantBadness(ent.Comp, nutrition, exertion, disease);
+        var previous = ent.Comp.SmoothedConditionBadness;
+        var alpha = 1 - MathF.Exp(-elapsed / (instant > previous ? 1f : 5f));
+        ent.Comp.SmoothedConditionBadness = MathHelper.Lerp(previous, instant, alpha);
+        var severity = SeverityWithHysteresis(ent.Comp.SmoothedConditionBadness, ent.Comp.CachedAlertSeverity);
+        if (Math.Abs(previous - ent.Comp.SmoothedConditionBadness) > 0.001f || ent.Comp.CachedAlertSeverity != severity)
+        {
+            ent.Comp.CachedAlertSeverity = severity;
+            Dirty(ent);
+        }
+        // Physiological deterioration need not produce a DamageChangedEvent.
+        // Update the live health alert directly without replacing the crit/death alert.
+        if (_alerts.IsShowingAlert(ent.Owner, "HumanHealth")) _alerts.ShowAlert(ent.Owner, "HumanHealth", severity);
     }
 
     public static short BadnessToSeverity(float badness)
@@ -135,6 +191,7 @@ public sealed class AdvancedHealthSystem : EntitySystem
 
     private void OnInit(Entity<AdvancedHealthComponent> ent, ref ComponentInit args)
     {
+        EnsureComp<Content.Shared._Eclipse.Industrial.RoomSanitationComponent>(ent);
         foreach (var slot in Enum.GetValues<BodyPartSlot>())
         {
             if (!ent.Comp.BodyParts.ContainsKey(slot))
@@ -206,6 +263,20 @@ public sealed class AdvancedHealthSystem : EntitySystem
             ent.Comp.BloodType = _random.Pick(ent.Comp.BloodTypes);
         }
 
+        ent.Comp.MedicalIdentity = Guid.NewGuid().ToString("N");
+        if (BloodCompatibility.TryParse(ent.Comp.BloodType, out var group, out var rh))
+        {
+            ent.Comp.BloodGroup = group;
+            ent.Comp.RhPositive = rh;
+        }
+        if (TryComp<BloodstreamComponent>(ent, out var stream))
+        {
+            var bloodSystem = EntityManager.System<SharedBloodstreamSystem>();
+            var currentReference = stream.BloodReferenceSolution;
+            var reference = currentReference.Clone();
+            reference.SetReagentData(bloodSystem.GetEntityBloodData(ent.Owner));
+            bloodSystem.ChangeBloodReagents((ent.Owner, stream), reference);
+        }
         ent.Comp.SmoothedConditionBadness = ComputeInstantBadness(ent.Comp);
         Dirty(ent);
     }
@@ -278,6 +349,7 @@ public sealed class AdvancedHealthSystem : EntitySystem
 
 public sealed class DamageToWoundSystem : EntitySystem
 {
+    [Dependency] private readonly TagSystem _woundTags = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
 
     private const float MinWoundDamage = 4f;
@@ -357,8 +429,13 @@ public sealed class DamageToWoundSystem : EntitySystem
 
         var slot = isStepDamage ? PickFootSlot() : SelectSlot(ent.Comp, source);
         string damageType = hitCtx?.DominantDamageType ?? traumatic.MaxBy(x => x.Value).Key;
+        var isGlass = args.Origin is { } origin && (_woundTags.HasTag(origin, "GlassShard") || _woundTags.HasTag(origin, "ReinforcedGlassShard"));
         var baseType = GetWoundType(damageType);
+        if (baseType == WoundType.Gunshot && (isGlass || args.Origin is not { } projectileOrigin || !HasComp<ProjectileComponent>(projectileOrigin)))
+            baseType = WoundType.Puncture;
+        var foreignBody = isGlass ? ForeignBodyKind.Glass : baseType == WoundType.Gunshot ? ForeignBodyKind.Bullet : ForeignBodyKind.Unknown;
         var (type, amount) = ResolveArmoredWound(baseType, penetration, original, residual);
+        if (type is not (WoundType.Gunshot or WoundType.Puncture or WoundType.Shrapnel or WoundType.Cut)) foreignBody = ForeignBodyKind.Unknown;
         if (amount < minDamage)
             return;
 
@@ -373,7 +450,7 @@ public sealed class DamageToWoundSystem : EntitySystem
         if (type is WoundType.Gunshot or WoundType.Puncture or WoundType.Shrapnel && penetration < 0.7f)
             severity = (WoundSeverity) Math.Max(0, (int) severity - 1);
 
-        CreateWound(ent, slot, type, severity, amount);
+        CreateWound(ent, slot, type, severity, amount, foreignBody);
     }
 
     private static float GetPenetrationFactor(AdvancedHealthHitContextComponent? ctx)
@@ -458,7 +535,7 @@ public sealed class DamageToWoundSystem : EntitySystem
     }
 
     private void CreateWound(Entity<AdvancedHealthComponent> ent, BodyPartSlot slot, WoundType type,
-        WoundSeverity severity, float amount)
+        WoundSeverity severity, float amount, ForeignBodyKind foreignBody)
     {
         slot = slot switch
         {
@@ -468,6 +545,8 @@ public sealed class DamageToWoundSystem : EntitySystem
         };
 
         var part = ent.Comp.BodyParts[slot];
+        part.IsSurgicalSitePrepared = false;
+        part.PostoperativeRecovery = false;
         var severityScale = 1f + (int) severity * 0.45f;
         var isPenetrating = type is WoundType.Puncture or WoundType.Gunshot or WoundType.Shrapnel;
         var external = ent.Comp.HasBlood
@@ -488,7 +567,15 @@ public sealed class DamageToWoundSystem : EntitySystem
                 (type is WoundType.Fracture or WoundType.Gunshot ? 0.75f : 0.15f));
         part.NerveIntegrity = Math.Max(0, part.NerveIntegrity - amount * (isPenetrating ? 0.35f : 0.1f));
         if (slot.IsCore())
+        {
             part.OrganIntegrity = Math.Max(0, part.OrganIntegrity - amount * (isPenetrating ? 0.75f : 0.25f));
+            EntityManager.System<AdvancedOrganHealthSystem>().DamageRegion(ent.Owner, slot,
+                amount * (isPenetrating ? 0.75f : 0.25f) * 100f / Math.Max(1f, part.MaxOrganIntegrity));
+            if (slot == BodyPartSlot.Chest && isPenetrating && amount >= 8f && _random.Prob(0.2f))
+                EntityManager.System<AdvancedDiseaseSystem>().ApplyCondition(ent.Owner, "ClinicalPneumothorax", 0.4f);
+            if (slot == BodyPartSlot.Chest && internalBleeding > 0 && amount >= 15f && _random.Prob(0.15f))
+                EntityManager.System<AdvancedDiseaseSystem>().ApplyCondition(ent.Owner, "ClinicalHemothorax", 0.3f);
+        }
 
         var wound = new Wound
         {
@@ -502,21 +589,24 @@ public sealed class DamageToWoundSystem : EntitySystem
                 : 0f,
             Trauma = trauma,
             InfectionRisk = isPenetrating ? 0.15f * severityScale : 0.05f,
-            IsDirty = type is WoundType.Gunshot or WoundType.Shrapnel,
-            HasForeignBody = type is WoundType.Gunshot or WoundType.Shrapnel,
+            IsDirty = foreignBody == ForeignBodyKind.Glass || type is WoundType.Gunshot or WoundType.Shrapnel,
+            HasForeignBody = foreignBody == ForeignBodyKind.Glass || type is WoundType.Gunshot or WoundType.Shrapnel,
+            ForeignBody = foreignBody == ForeignBodyKind.Unknown && type == WoundType.Shrapnel ? ForeignBodyKind.Fragment : foreignBody,
         };
 
         if (wound.HasForeignBody)
             part.ForeignBodyCount = (byte) Math.Min(99, part.ForeignBodyCount + 1);
 
-        var existing = part.Wounds.FirstOrDefault(w => w.Type == type && w.Severity == severity);
+        var existing = part.Wounds.FirstOrDefault(w => !w.IsSurgicalIncision && w.Type == type && w.Severity == severity);
         if (existing != null)
         {
             MergeWound(existing, wound);
         }
-        else if (part.Wounds.Count >= MaxWoundsPerPart)
+        else if (part.Wounds.Count(w => !w.IsSurgicalIncision) >= MaxWoundsPerPart)
         {
-            var target = part.Wounds.FirstOrDefault(w => w.Type == type) ?? part.Wounds[0];
+            var target = part.Wounds.FirstOrDefault(w => !w.IsSurgicalIncision && w.Type == type && w.ForeignBody == wound.ForeignBody)
+                ?? part.Wounds.FirstOrDefault(w => !w.IsSurgicalIncision && !w.HasForeignBody)
+                ?? part.Wounds.First(w => !w.IsSurgicalIncision);
             MergeWound(target, wound);
         }
         else
@@ -540,7 +630,12 @@ public sealed class DamageToWoundSystem : EntitySystem
         into.Pain += from.Pain;
         into.Trauma += from.Trauma;
         into.Severity = (WoundSeverity) Math.Max((int) into.Severity, (int) from.Severity);
+        if (!into.HasForeignBody) into.ForeignBody = from.ForeignBody;
         into.HasForeignBody |= from.HasForeignBody;
+        into.IsDirty |= from.IsDirty;
+        into.IsSutured = into.IsBandaged = false;
+        into.IsBoneFixed = false;
+        into.HealingProgress = 0f;
         into.IsDirty |= from.IsDirty;
         into.InfectionRisk = Math.Max(into.InfectionRisk, from.InfectionRisk);
     }
@@ -619,10 +714,15 @@ public sealed class DamageToWoundSystem : EntitySystem
 public sealed class AdvancedHealthTickSystem : EntitySystem
 {
     [Dependency] private readonly IGameTiming _physiologyTime = default!;
+    [Dependency] private readonly SharedAdvancedExertionSystem _exertion = default!;
     [Dependency] private readonly SharedMedicalConditionSystem _functions = default!;
     [Dependency] private readonly SharedBloodstreamSystem _bloodstream = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly AdvancedNutritionSystem _nutrition = default!;
+    [Dependency] private readonly AdvancedOrganHealthSystem _organs = default!;
+    [Dependency] private readonly AdvancedDiseaseSystem _clinical = default!;
+    [Dependency] private readonly AdvancedHealthSystem _healthStatus = default!;
 
     private const float TickInterval = 1f;
     private float _accumulator;
@@ -639,6 +739,23 @@ public sealed class AdvancedHealthTickSystem : EntitySystem
         var query = EntityQueryEnumerator<AdvancedHealthComponent>();
         while (query.MoveNext(out var uid, out var health))
         {
+            var temperatureDirty = false;
+            // TemperatureComponent represents gameplay heat and can change abruptly. The medical
+            // reading is core temperature, which approaches it at a physiological rate. This runs
+            // before the simulation gate so healthy bodies walking into heat or cold are tracked too.
+            if (TryComp<TemperatureComponent>(uid, out var temperature))
+            {
+                var difference = temperature.CurrentTemperature + health.ClinicalFever - health.BodyTemperature;
+                var maxChange = health.BodyTemperatureChangeRate * elapsed;
+                var change = Math.Clamp(difference, -maxChange, maxChange);
+                if (Math.Abs(change) > 0.001f)
+                {
+                    health.BodyTemperature += change;
+                    temperatureDirty = true;
+                }
+            }
+
+
             if (TryComp<MobStateComponent>(uid, out var actualState) && actualState.CurrentState == MobState.Dead)
             {
                 if (!health.IsHeartStopped || !health.IsUnconscious || health.HeartRate != 0
@@ -648,27 +765,12 @@ public sealed class AdvancedHealthTickSystem : EntitySystem
                     health.HeartRate = health.RespiratoryRate = health.Consciousness = 0;
                     Dirty(uid, health);
                 }
+                if (temperatureDirty) Dirty(uid, health);
+                _exertion.PublishHeartRate(uid, 0);
                 continue;
             }
-            var instant = AdvancedHealthSystem.ComputeInstantBadness(health);
-            var prevBadness = health.SmoothedConditionBadness;
-            health.SmoothedConditionBadness = MathHelper.Lerp(prevBadness, instant, 0.05f);
-            var badnessDirty = Math.Abs(health.SmoothedConditionBadness - prevBadness) > 0.008f;
-
-            // TemperatureComponent represents gameplay heat and can change abruptly. The medical
-            // reading is core temperature, which approaches it at a physiological rate. This runs
-            // before the simulation gate so healthy bodies walking into heat or cold are tracked too.
-            if (TryComp<TemperatureComponent>(uid, out var temperature))
-            {
-                var difference = temperature.CurrentTemperature - health.BodyTemperature;
-                var maxChange = health.BodyTemperatureChangeRate * elapsed;
-                var change = Math.Clamp(difference, -maxChange, maxChange);
-                if (Math.Abs(change) > 0.001f)
-                {
-                    health.BodyTemperature += change;
-                    badnessDirty = true;
-                }
-            }
+            _clinical.Advance((uid, health), elapsed);
+            var badnessDirty = temperatureDirty;
 
             // RespiratorComponent is the authoritative result of atmos/lung gas exchange. Previously
             // AdvancedHealth never read it, so a healthy mob in vacuum hit the simulation early-out
@@ -689,6 +791,12 @@ public sealed class AdvancedHealthTickSystem : EntitySystem
             }
 
             TryComp<AdvancedExertionComponent>(uid, out var exertion);
+            _nutrition.Advance((uid, health), elapsed);
+            TryComp<AdvancedNutritionComponent>(uid, out var nutrition);
+            var dehydrationStress = _nutrition.GetCirculatoryDehydration(uid, nutrition);
+            var terminalDehydration = Math.Clamp((dehydrationStress - 0.65f) / 0.35f, 0, 1);
+            var dehydrationPressureLoss = dehydrationStress * 0.25f + terminalDehydration * terminalDehydration * 0.72f;
+            _healthStatus.RefreshConditionAlert((uid, health), elapsed);
             var effort = exertion?.Effort ?? 0f;
             var recoveryLoad = exertion?.RecoveryLoad ?? 0f;
             var pulseVariation = SharedAdvancedExertionSystem.RestingPulseVariation(_physiologyTime.CurTime.TotalSeconds, uid.GetHashCode());
@@ -696,13 +804,9 @@ public sealed class AdvancedHealthTickSystem : EntitySystem
             {
                 var restPulse = health.RestingHeartRate + pulseVariation;
                 var nextPulse = MoveTowards(health.HeartRate, restPulse, elapsed * 2f);
-                if (Math.Abs(nextPulse - health.HeartRate) > 0.1f)
-                {
-                    health.HeartRate = nextPulse;
-                    badnessDirty = true;
-                }
-                if (badnessDirty)
-                    Dirty(uid, health);
+                if (Math.Abs(nextPulse - health.HeartRate) > 0.1f) health.HeartRate = nextPulse;
+                _exertion.PublishHeartRate(uid, health.HeartRate);
+                if (badnessDirty) Dirty(uid, health);
                 continue;
             }
 
@@ -711,6 +815,7 @@ public sealed class AdvancedHealthTickSystem : EntitySystem
 
             foreach (var part in health.BodyParts.Values)
             {
+                dirty |= AdvancedTraumaRecovery.Advance(part, elapsed, health.Perfusion, health.FractureHealingTime);
                 var partLoss = health.GetBloodLossRate(part);
 
                 var bleeding = partLoss > 0.01f;
@@ -736,10 +841,10 @@ public sealed class AdvancedHealthTickSystem : EntitySystem
 
             if (health.HasPain)
             {
-                var rawPain = health.BodyParts.Values
-                    .SelectMany(x => x.Wounds)
-                    .Sum(wound => wound.Pain * (wound.IsBandaged ? 0.85f : 1f));
-                var newPain = Math.Clamp(rawPain, 0, 100);
+                var rawPain = health.BodyParts.Values.Sum(part =>
+                    part.Wounds.Sum(wound => wound.Pain * (wound.IsBandaged ? 0.85f : 1f))
+                    * (part.LocalAnesthesia > 0f ? 0.15f : 1f));
+                var newPain = Math.Clamp((rawPain + health.ClinicalPain) * (1f - health.Analgesia), 0, 100);
                 if (Math.Abs(newPain - health.Pain) > 0.05f)
                 {
                     health.Pain = newPain;
@@ -756,7 +861,8 @@ public sealed class AdvancedHealthTickSystem : EntitySystem
                 : 0f;
             var newShock = Math.Clamp(
                 health.Pain * 0.45f + bloodShock + health.TraumaLoad * 0.18f + hypoxicShock
-                    + health.ToxinLoad * 0.35f + health.RadiationLoad * 0.2f,
+                    + health.ToxinLoad * 0.35f + health.RadiationLoad * 0.2f + health.ClinicalShock
+                    + dehydrationStress * 45f,
                 0,
                 100);
 
@@ -779,7 +885,8 @@ public sealed class AdvancedHealthTickSystem : EntitySystem
             var bloodRatio = health.HasBlood ? health.BloodVolume / Math.Max(1, health.MaxBloodVolume) : 1f;
             // Fractions are relative to each anatomy profile's own healthy maximum, so races whose
             // organs do not use a literal 100-point maximum still breathe normally when uninjured.
-            var chestIntegrity = health.BodyParts[BodyPartSlot.Chest].OrganFraction;
+            var chestIntegrity = _organs.Function(uid, "Lungs", health.BodyParts[BodyPartSlot.Chest].OrganFraction)
+                * (1f - health.ClinicalLungImpairment);
             var neckIntegrity = health.BodyParts[BodyPartSlot.Neck].OrganFraction;
 
             // --- Cardiovascular loop: sympathetic drive → heart rate & tone → pressure → perfusion ---
@@ -808,7 +915,8 @@ public sealed class AdvancedHealthTickSystem : EntitySystem
 
             var heartRateTarget = health.IsHeartStopped
                 ? 0f
-                : Math.Clamp((health.RestingHeartRate + pulseVariation + sympathetic * 55f + effort * 45f + recoveryLoad * 15f) * (1f - decompensation), 0f, 220f);
+                : Math.Clamp((health.RestingHeartRate + pulseVariation + sympathetic * 55f + effort * 45f
+                    + recoveryLoad * 15f + health.ClinicalPulseDrive * 25f) * (1f - decompensation), 0f, 220f);
             var newHeartRate = MoveTowards(health.HeartRate, heartRateTarget, elapsed * 35f);
             if (Math.Abs(newHeartRate - health.HeartRate) > 0.1f)
             {
@@ -825,7 +933,9 @@ public sealed class AdvancedHealthTickSystem : EntitySystem
                 cardiacFactor *= Math.Clamp(health.HeartRate / 40f, 0f, 1f);
             var mapTarget = health.IsHeartStopped
                 ? health.BaselinePressure * 0.28f * health.CprSupport
-                : Math.Clamp(health.BaselinePressure * bloodRatio * cardiacFactor * health.VascularTone, 0f, 150f);
+                : Math.Clamp(health.BaselinePressure * bloodRatio * cardiacFactor * health.VascularTone
+                    * _organs.Function(uid, "Heart") * (1f - health.ClinicalPressureLoss)
+                    * (1f - dehydrationPressureLoss), 0f, 150f);
             var newMap = MoveTowards(health.MeanArterialPressure, mapTarget, elapsed * 30f);
             if (Math.Abs(newMap - health.MeanArterialPressure) > 0.1f)
             {
@@ -846,6 +956,9 @@ public sealed class AdvancedHealthTickSystem : EntitySystem
                  health.TraumaLoad >= health.InstantDeathTraumaThreshold ||
                  health.HeartRate <= health.BradyArrestHeartRate))
             {
+                health.ArrestTrigger = health.Shock >= health.ShockHeartStopThreshold ? CardiacArrestTrigger.Shock
+                    : health.TraumaLoad >= health.InstantDeathTraumaThreshold ? CardiacArrestTrigger.Trauma
+                    : health.Oxygenation < 25 ? CardiacArrestTrigger.Hypoxia : CardiacArrestTrigger.Bradycardia;
                 health.IsHeartStopped = true;
                 dirty = true;
             }
@@ -862,7 +975,8 @@ public sealed class AdvancedHealthTickSystem : EntitySystem
                 : 1f;
             var oxygenTarget = health.NeedsOxygen
                 ? Math.Clamp(
-                    pulmonarySupply * lungCapacity * Math.Min(deliverable, volumeFactor) * carrying * 100f,
+                    pulmonarySupply * lungCapacity * (1f - health.RespiratoryDepression)
+                    * Math.Min(deliverable, volumeFactor) * carrying * 100f,
                     0f,
                     100f)
                 : 100f;
@@ -894,7 +1008,7 @@ public sealed class AdvancedHealthTickSystem : EntitySystem
                 respiratoryTarget *= Math.Clamp(respiratoryBrain.OrganFraction * 1.5f, 0.15f, 1f);
             if (health.IsHeartStopped)
                 respiratoryTarget = 0f;
-            respiratoryTarget = Math.Clamp(respiratoryTarget, 0f, health.MaxRespiratoryRate);
+            respiratoryTarget = Math.Clamp(respiratoryTarget * (1f - health.RespiratoryDepression), 0f, health.MaxRespiratoryRate);
             var newRespiratoryRate = MoveTowards(health.RespiratoryRate, respiratoryTarget, elapsed * 6f);
             if (Math.Abs(newRespiratoryRate - health.RespiratoryRate) > 0.05f)
             {
@@ -928,6 +1042,9 @@ public sealed class AdvancedHealthTickSystem : EntitySystem
                 if (Math.Abs(newIntegrity - hypoxicBrain.OrganIntegrity) > 0.001f)
                 {
                     hypoxicBrain.OrganIntegrity = newIntegrity;
+                    foreach (var organ in _organs.Organs(uid))
+                        if (Comp<Content.Shared.Body.OrganComponent>(organ).Category?.Id == "Brain")
+                            _organs.Damage(organ, damage * 100f / Math.Max(1f, hypoxicBrain.MaxOrganIntegrity));
                     hypoxicBrain.IsDestroyed = hypoxicBrain.OrganIntegrity <= 0f || hypoxicBrain.MuscleIntegrity <= 0f;
                     dirty = true;
                 }
@@ -944,11 +1061,12 @@ public sealed class AdvancedHealthTickSystem : EntitySystem
             // Consciousness from cerebral perfusion (pressure × oxygen), minus pain/trauma insult.
             // Consciousness requires pressure, oxygen and viable brain tissue simultaneously.
             var brainFunction = health.BodyParts.TryGetValue(BodyPartSlot.Head, out var brain)
-                ? brain.OrganFraction
+                ? _organs.Function(uid, "Brain", brain.OrganFraction)
                 : 1f;
             var cerebral = health.Perfusion * (health.Oxygenation / 100f) * brainFunction;
             var consciousnessTarget = Math.Clamp(cerebral * 100f - health.Shock * 0.2f -
                 Math.Max(0, health.TraumaLoad - health.CriticalTraumaThreshold), 0, 100);
+            consciousnessTarget *= 1f - health.Sedation;
             var newConsciousness = MoveTowards(health.Consciousness, consciousnessTarget, elapsed * 8f);
             if (Math.Abs(newConsciousness - health.Consciousness) > 0.05f)
             {
@@ -987,7 +1105,7 @@ public sealed class AdvancedHealthTickSystem : EntitySystem
             var immuneDelta = health.InfectionLoad > 1f
                 ? -health.InfectionLoad * 0.01f * elapsed
                 : health.ImmuneRegen * elapsed;
-            var newImmune = Math.Clamp(health.ImmuneDefense + immuneDelta, 0f, 100f);
+            var newImmune = Math.Clamp(health.ImmuneDefense + immuneDelta, 0f, 100f * (1f - (nutrition?.Malnutrition ?? 0f) * 0.4f));
             if (Math.Abs(newImmune - health.ImmuneDefense) > 0.02f)
             {
                 health.ImmuneDefense = newImmune;
@@ -995,6 +1113,7 @@ public sealed class AdvancedHealthTickSystem : EntitySystem
             }
 
             // AdvancedHealth is authoritative: drive the mob state and mirror the vanilla bloodstream.
+            _exertion.PublishHeartRate(uid, health.HeartRate);
             UpdateMobState(uid, health, bloodRatio);
             SyncBloodstream(uid, health, bloodRatio);
 
@@ -1038,6 +1157,11 @@ public sealed class AdvancedHealthTickSystem : EntitySystem
 
     private static bool NeedsSimulation(AdvancedHealthComponent health)
     {
+        if (health.ClinicalPain > 0 || health.ClinicalShock > 0 || health.ClinicalLungImpairment > 0
+            || health.ClinicalPressureLoss > 0 || health.ClinicalFever > 0 || health.Analgesia > 0
+            || health.Sedation > 0 || health.RespiratoryDepression > 0 || health.ClinicalPulseDrive != 0
+            || Math.Abs(health.BloodGlucose - 5f) > 0.01f) return true;
+        if (health.HasOrganDysfunction) return true;
         if (health.TraumaLoad > 0.1f || health.Pain > 0.5f || health.Shock > 0.5f
             || health.ToxinLoad > 0.1f || health.RadiationLoad > 0.1f)
             return true;
@@ -1045,6 +1169,7 @@ public sealed class AdvancedHealthTickSystem : EntitySystem
             return true;
         if (health.IsSuffocating || health.HypoxiaExposure > 0.01f)
             return true;
+        if (health.TransfusionReaction > 0) return true;
         if (health.HasBlood && health.BloodVolume < health.MaxBloodVolume - 1f)
             return true;
         if (health.Oxygenation < 99.5f || health.Consciousness < 99.5f)
@@ -1063,7 +1188,7 @@ public sealed class AdvancedHealthTickSystem : EntitySystem
 
         foreach (var part in health.BodyParts.Values)
         {
-            if (part.Wounds.Count > 0 || part.IsBleeding)
+            if (part.Wounds.Count > 0 || part.IsBleeding || part.LocalAnesthesia > 0f || part.IsSurgicalOpen)
                 return true;
         }
 
@@ -1179,6 +1304,8 @@ public sealed class AdvancedTreatmentSystem : EntitySystem
         SubscribeLocalEvent<AdvancedHealthComponent, AdvancedTargetedTreatmentDoAfterEvent>(OnTargetedDoAfter);
         SubscribeNetworkEvent<AdvancedHealthTreatmentCompleteEvent>(OnTreatmentComplete);
         SubscribeNetworkEvent<AdvancedHealthTransfusionEvent>(OnTransfusion);
+        SubscribeNetworkEvent<AdvancedHealthUseItemOnPartEvent>(OnUseItemOnPart);
+        SubscribeLocalEvent<AfterInteractEvent>(OnAnyItemInteract);
     }
 
     private void OnTransfusion(AdvancedHealthTransfusionEvent ev, EntitySessionEventArgs args)
@@ -1186,104 +1313,7 @@ public sealed class AdvancedTreatmentSystem : EntitySystem
         if (args.SenderSession.AttachedEntity is not { } user)
             return;
 
-        var target = GetEntity(ev.Target);
-        var pack = GetEntity(ev.Pack);
-        if (!Exists(target) || !Exists(pack) ||
-            !TryComp<AdvancedHealthComponent>(target, out var health) ||
-            !TryComp<BloodProductComponent>(pack, out var product))
-            return;
-
-        if (!CanTreat(user, pack) || !_actionBlocker.CanInteract(user, target))
-            return;
-
-        if (user != target && !_interaction.InRangeUnobstructed(user, target))
-        {
-            _popup.PopupEntity(Loc.GetString("advanced-health-treatment-too-far"), target, user);
-            return;
-        }
-
-        if (!health.HasBlood || product.Charges <= 0)
-            return;
-
-        ApplyTransfusion(target, health, product);
-
-        product.Charges--;
-        Dirty(pack, product);
-        if (product.Charges <= 0)
-            QueueDel(pack);
-        Dirty(target, health);
-    }
-
-    private void ApplyTransfusion(EntityUid target, AdvancedHealthComponent health, BloodProductComponent product)
-    {
-        var oldVol = health.BloodVolume;
-        var maxVol = health.MaxBloodVolume;
-
-        switch (product.ProductType)
-        {
-            case BloodProductType.WholeBlood:
-            case BloodProductType.PackedCells:
-            {
-                var compatibility = GetCompatibility(health.BloodType, product.BloodType);
-                if (compatibility == null)
-                {
-                    ApplyIncompatibleTransfusion(health);
-                    health.BloodVolume = Math.Min(maxVol, oldVol + product.Volume * 0.5f);
-                    _popup.PopupEntity(Loc.GetString(health.IncompatibleTransfusionPopup),
-                        target, target, PopupType.LargeCaution);
-                    return;
-                }
-
-                var donorCarry = product.OxygenCarryFactor * compatibility.Value;
-                if (product.ProductType == BloodProductType.PackedCells)
-                    donorCarry *= 1.2f;
-                var newVol = Math.Min(maxVol, oldVol + product.Volume);
-                var added = newVol - oldVol;
-                if (added > 0f)
-                    health.OxygenCarryingCapacity = Math.Clamp(
-                        (health.OxygenCarryingCapacity * oldVol + donorCarry * added) / newVol, 0f, 1f);
-                health.BloodVolume = newVol;
-                _popup.PopupEntity(Loc.GetString("advanced-health-transfusion-ok"), target, target);
-                break;
-            }
-            case BloodProductType.Ringers:
-            case BloodProductType.Saline:
-            {
-                // Crystalloid restores volume but dilutes the oxygen-carrying fraction.
-                var newVol = Math.Min(maxVol, oldVol + product.Volume);
-                if (newVol > 0f)
-                    health.OxygenCarryingCapacity =
-                        Math.Clamp(health.OxygenCarryingCapacity * oldVol / newVol, 0f, 1f);
-                health.BloodVolume = newVol;
-                _popup.PopupEntity(Loc.GetString("advanced-health-transfusion-fluid"), target, target);
-                break;
-            }
-        }
-    }
-
-    private float? GetCompatibility(string recipientType, string donorType)
-    {
-        if (!_prototypes.TryIndex<AdvancedHealthBloodCompatibilityPrototype>(recipientType, out var compatibility))
-            return recipientType == donorType ? 1f : null;
-
-        if (compatibility.CompatibleDonors.Contains(donorType))
-            return 1f;
-
-        if (compatibility.EmergencyDonors.Contains(donorType))
-            return compatibility.EmergencyOxygenCarryFactor;
-
-        return null;
-    }
-
-    private static void ApplyIncompatibleTransfusion(AdvancedHealthComponent health)
-    {
-        health.OxygenCarryingCapacity = Math.Max(0.1f, health.OxygenCarryingCapacity - 0.3f);
-        health.Shock = Math.Clamp(health.Shock + 25f, 0f, 100f);
-        if (health.HasPain)
-            health.Pain = Math.Clamp(health.Pain + 20f, 0f, 100f);
-        health.TraumaLoad += 15f;
-        health.Oxygenation = Math.Max(0f, health.Oxygenation - 8f);
-        health.ImmuneDefense = Math.Max(0f, health.ImmuneDefense - 10f);
+        EntityManager.System<AdvancedBloodSystem>().BeginTransfusion(user, GetEntity(ev.Pack), GetEntity(ev.Target));
     }
 
     private void OnBandageExamined(Entity<AdvancedBandageRollComponent> ent, ref ExaminedEvent args)
@@ -1295,14 +1325,83 @@ public sealed class AdvancedTreatmentSystem : EntitySystem
     private void OnInteract(Entity<AdvancedTreatmentComponent> ent, ref AfterInteractEvent args)
     {
         if (args.Handled || !args.CanReach || args.Target is not { } target ||
-            !HasComp<AdvancedHealthComponent>(target))
+            !TryComp<AdvancedHealthComponent>(target, out var health))
             return;
 
-        args.Handled = _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User,
-            ent.Comp.Delay, new AdvancedTreatmentDoAfterEvent(), ent, target: target, used: ent)
+        var slot = TryComp<AimTargetComponent>(args.User, out var aim) && aim.CurrentTarget != BodyPartTarget.Auto
+            ? aim.CurrentTarget.ToSlot() : BodyPartSlot.Chest;
+        args.Handled = UseItemOnPart(args.User, target, ent, slot);
+    }
+
+    private void OnAnyItemInteract(AfterInteractEvent args)
+    {
+        if (args.Handled || !args.CanReach || args.Target is not { } target
+            || HasComp<AdvancedTreatmentComponent>(args.Used) || HasComp<Content.Shared.Chemistry.Components.InjectorComponent>(args.Used)
+            || !HasComp<AdvancedHealthComponent>(target)) return;
+        var slot = TryComp<AimTargetComponent>(args.User, out var aim) && aim.CurrentTarget != BodyPartTarget.Auto
+            ? aim.CurrentTarget.ToSlot() : BodyPartSlot.Chest;
+        args.Handled = UseItemOnPart(args.User, target, args.Used, slot);
+    }
+
+    private void OnUseItemOnPart(AdvancedHealthUseItemOnPartEvent ev, EntitySessionEventArgs args)
+    {
+        if (args.SenderSession.AttachedEntity is not { } user) return;
+        UseItemOnPart(user, GetEntity(ev.Target), GetEntity(ev.Tool), ev.Slot);
+    }
+
+    private bool UseItemOnPart(EntityUid user, EntityUid target, EntityUid tool, BodyPartSlot slot)
+    {
+        if (!Exists(target) || !Exists(tool) || !_hands.IsHolding(user, tool) || !CanTreat(user, tool)
+            || !_actionBlocker.CanInteract(user, target) || user != target && !_interaction.InRangeUnobstructed(user, target)
+            || !TryComp<AdvancedHealthComponent>(target, out var health) || !health.BodyParts.TryGetValue(slot, out var part)) return false;
+        if (HasComp<Content.Shared.Chemistry.Components.InjectorComponent>(tool))
+        {
+            var injectors = EntityManager.System<InjectorSystem>();
+            if (!injectors.TryGetInjectionVolume(tool, out _))
+                return injectors.TryStartTreatmentBloodDraw(tool, user, target, slot);
+            if (!PartNeedsTreatment(part, AdvancedTreatmentType.Injection) || !TryComp<ActorComponent>(user, out var actor)) return false;
+            RaiseNetworkEvent(new AdvancedHealthOpenTreatmentEvent(GetNetEntity(target), GetNetEntity(tool), slot), Filter.SinglePlayer(actor.PlayerSession));
+            return true;
+        }
+        foreach (var treatment in Enum.GetValues<AdvancedTreatmentType>())
+        {
+            if (treatment == AdvancedTreatmentType.Injection || !MatchesTreatmentItem(tool, treatment) || !PartNeedsTreatment(part, treatment)) continue;
+            if (!EntityManager.System<SurgicalEquipmentSystem>().CanOperate(user, tool, treatment)) return false;
+            if (TryComp<ActorComponent>(user, out var actor))
+            {
+                RaiseNetworkEvent(new AdvancedHealthOpenTreatmentEvent(GetNetEntity(target), GetNetEntity(tool), slot, treatment), Filter.SinglePlayer(actor.PlayerSession));
+                return true;
+            }
+            return BeginTargetedTreatment(target, user, tool, slot, treatment, 1);
+        }
+        return false;
+    }
+
+    private bool BeginTargetedTreatment(EntityUid target, EntityUid user, EntityUid tool,
+        BodyPartSlot slot, AdvancedTreatmentType treatment, float effectiveness)
+    {
+        if (!EntityManager.System<SurgicalEquipmentSystem>().CanOperate(user, tool, treatment)) return false;
+        if (treatment == AdvancedTreatmentType.BloodTest && !EntityManager.System<AdvancedBloodSystem>().CanSample(target))
+            return false;
+        if (!TryComp<AdvancedHealthComponent>(target, out var health)
+            || !health.BodyParts.TryGetValue(slot, out var part) || !PartNeedsTreatment(part, treatment)
+            || !CanTreat(user, tool) || !_actionBlocker.CanInteract(user, target)
+            || !MatchesTreatmentItem(tool, treatment) || !_interaction.InRangeUnobstructed(user, target))
+            return false;
+        if (AdvancedTreatmentRules.IsOperative(treatment) && user == target)
+        {
+            _popup.PopupEntity(Loc.GetString("advanced-health-surgery-needs-operator"), target, user);
+            return false;
+        }
+        return _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user,
+            GetTreatmentDelay(tool, treatment), new AdvancedTargetedTreatmentDoAfterEvent
+            {
+                Slot = slot, Treatment = treatment, Effectiveness = effectiveness,
+            }, target, target: target, used: tool)
         {
             NeedHand = true,
             BreakOnMove = true,
+            BreakOnDamage = true,
             WorkClass = PhysicalWorkClass.Medium,
             WorkingHands = 1,
         });
@@ -1401,11 +1500,25 @@ public sealed class AdvancedTreatmentSystem : EntitySystem
             return;
         }
 
+        if (ev.Treatment == AdvancedTreatmentType.Injection)
+        {
+            // Syringe doses are transferred continuously by AdvancedSyringeInjectionSystem.
+            return;
+        }
+
         var baseEffectiveness = tool != null && TryComp<AdvancedTreatmentComponent>(tool.Value, out var advanced)
             ? advanced.Effectiveness
             : ev.Treatment == AdvancedTreatmentType.ForeignBodyRemoval ? 0.55f : 1f;
 
         var effectiveness = baseEffectiveness * Math.Clamp(ev.Quality, 0.35f, 1f);
+        // New clinical procedures always complete a server-timed, interruptible action. A client
+        // claiming a perfect minigame cannot instantly perform or repeat an operation.
+        if (ev.Treatment >= AdvancedTreatmentType.WoundCleaning)
+        {
+            if (tool is { } held)
+                BeginTargetedTreatment(target, user, held, ev.Slot, ev.Treatment, effectiveness);
+            return;
+        }
         TryApplyTreatment(target, user, tool ?? EntityUid.Invalid, ev.Slot, ev.Treatment, effectiveness);
     }
 
@@ -1458,7 +1571,18 @@ public sealed class AdvancedTreatmentSystem : EntitySystem
             ("percent", (int) MathF.Round(roll.Durability))), target, user);
 
         if (roll.Durability <= 0.5f)
-            QueueDel(toolUid);
+        {
+            if (TryComp<StackComponent>(toolUid, out var stack))
+            {
+                _stacks.ReduceCount((toolUid, stack), 1);
+                if (_stacks.GetCount((toolUid, stack)) > 0)
+                {
+                    roll.Durability = roll.MaxDurability;
+                    Dirty(toolUid, roll);
+                }
+            }
+            else QueueDel(toolUid);
+        }
 
         return true;
     }
@@ -1496,8 +1620,11 @@ public sealed class AdvancedTreatmentSystem : EntitySystem
         return false;
     }
 
-    private bool MatchesTreatmentItem(EntityUid item, AdvancedTreatmentType treatment)
+    internal bool MatchesTreatmentItem(EntityUid item, AdvancedTreatmentType treatment)
     {
+        if (treatment == AdvancedTreatmentType.Injection)
+            return EntityManager.System<InjectorSystem>().TryGetInjectionVolume(item, out _);
+
         if (TryComp<AdvancedTreatmentComponent>(item, out var advanced))
             return advanced.Treatment == treatment;
 
@@ -1514,6 +1641,7 @@ public sealed class AdvancedTreatmentSystem : EntitySystem
             AdvancedTreatmentType.Hemostatic => _tags.HasTag(item, OintmentTag),
             AdvancedTreatmentType.Suture => id is "MedicatedSuture" or "MedicatedSuture1" or "BrutepackAdvanced1",
             AdvancedTreatmentType.ForeignBodyRemoval => id is "AdvancedForcepsPack",
+            AdvancedTreatmentType.ClinicalExamination => id is "HandheldHealthAnalyzer" or "BasicMedScanner",
             _ => false,
         };
     }
@@ -1538,6 +1666,8 @@ public sealed class AdvancedTreatmentSystem : EntitySystem
     private bool TryApplyTreatment(EntityUid target, EntityUid user, EntityUid tool, BodyPartSlot slot,
         AdvancedTreatmentType treatment, float effectiveness, bool chargeCompletedWork = true)
     {
+        if (treatment == AdvancedTreatmentType.BloodTest && !EntityManager.System<AdvancedBloodSystem>().CanSample(target))
+            return false;
         if (!TryComp<AdvancedHealthComponent>(target, out var health))
             return false;
 
@@ -1552,7 +1682,13 @@ public sealed class AdvancedTreatmentSystem : EntitySystem
             return false;
         }
 
-        if (!health.BodyParts.TryGetValue(slot, out var part))
+        if (!health.BodyParts.TryGetValue(slot, out var part) || !PartNeedsTreatment(part, treatment))
+            return false;
+        if (AdvancedTreatmentRules.IsOperative(treatment) && user == target)
+            return false;
+
+        if (!EntityManager.System<SurgicalEquipmentSystem>().CanOperate(user, tool, treatment)
+            || treatment == AdvancedTreatmentType.Electrocardiogram && !health.ExpectedInternalOrgans.Contains("Heart"))
             return false;
 
         // Direct in-world use has no wrap minigame, so wind on as much as the roll and wound allow.
@@ -1563,8 +1699,33 @@ public sealed class AdvancedTreatmentSystem : EntitySystem
         if (chargeCompletedWork && !EntityManager.System<SharedAdvancedExertionSystem>().SpendWork(user, PhysicalWorkClass.Medium, 2f, 1))
             return false;
         ApplyTreatment(health, part, treatment, effectiveness);
+        EntityManager.System<MedicalDiagnosticsSystem>().RecordExamination(target, slot, treatment, user);
+        if (AdvancedTreatmentRules.IsOperative(treatment))
+            EntityManager.System<SurgicalEquipmentSystem>().Contaminate(tool);
+        var clinical = EntityManager.System<AdvancedDiseaseSystem>();
+        var test = treatment switch
+        {
+            AdvancedTreatmentType.ClinicalExamination => ClinicalTest.Examination,
+            AdvancedTreatmentType.BloodTest => ClinicalTest.Blood,
+            AdvancedTreatmentType.MedicalImaging => ClinicalTest.Imaging,
+            AdvancedTreatmentType.MicrobiologyTest => ClinicalTest.Microbiology,
+            _ => (ClinicalTest?) null,
+        };
+        if (test is { } diagnostic) clinical.Diagnose(target, diagnostic);
+        if (treatment == AdvancedTreatmentType.BloodTest) EntityManager.System<AdvancedBloodSystem>().Sample(target);
+        if (treatment is AdvancedTreatmentType.ThoracicDrain or AdvancedTreatmentType.SourceControl or AdvancedTreatmentType.OrganRepair)
+            clinical.CompleteProcedure(target, slot, treatment);
 
-        if (tool != EntityUid.Invalid)
+        if (treatment == AdvancedTreatmentType.SurgicalAccess)
+        {
+            var organs = EntityManager.System<AdvancedOrganHealthSystem>();
+            foreach (var organ in organs.Organs(target))
+                if (organ.Comp.Region == slot) organs.Examine(organ, MedicalDetection.Surgery);
+            clinical.RefreshIndications(target);
+        }
+
+        if (tool != EntityUid.Invalid && treatment != AdvancedTreatmentType.ClinicalExamination
+            && !(TryComp<AdvancedTreatmentComponent>(tool, out var reusable) && reusable.Reusable))
         {
             if (TryComp<StackComponent>(tool, out var stack))
                 _stacks.ReduceCount((tool, stack), 1);
@@ -1573,6 +1734,8 @@ public sealed class AdvancedTreatmentSystem : EntitySystem
         }
 
         Dirty(target, health);
+
+        _functions.Refresh((target, health));
 
         _popup.PopupEntity(Loc.GetString("advanced-health-treatment-applied", ("part",
             Loc.GetString($"advanced-health-part-{slot.ToString().ToLowerInvariant()}"))), target, user);
@@ -1583,7 +1746,7 @@ public sealed class AdvancedTreatmentSystem : EntitySystem
         BodyPartSlot slot, EntityUid user)
         => TryApplyTreatment(target, user, ent, slot, ent.Comp.Treatment, ent.Comp.Effectiveness, false);
 
-    private bool CanTreat(EntityUid user, EntityUid? tool)
+    internal bool CanTreat(EntityUid user, EntityUid? tool)
     {
         if (!_actionBlocker.CanConsciouslyPerformAction(user))
             return false;
@@ -1633,7 +1796,9 @@ public sealed class AdvancedTreatmentSystem : EntitySystem
                 part.IsBandaged = true;
                 foreach (var wound in part.Wounds)
                 {
-                    if (wound.HasForeignBody)
+                    if (wound.HasForeignBody || wound.IsDirty || wound.IsSutured
+                        || wound.InternalBleedingRate > 0.001f
+                        || wound.Type is not (WoundType.Cut or WoundType.Puncture or WoundType.Gunshot or WoundType.Shrapnel))
                         continue;
                     wound.IsSutured = true;
                     wound.ExternalBleedingRate *= 1f - 0.95f * effectiveness;
@@ -1650,13 +1815,55 @@ public sealed class AdvancedTreatmentSystem : EntitySystem
                     if (!wound.HasForeignBody)
                         continue;
                     wound.HasForeignBody = false;
-                    wound.IsDirty = false;
+                    wound.ForeignBody = ForeignBodyKind.Unknown;
                     wound.InfectionRisk *= 0.4f;
                     wound.Pain *= 0.85f;
                     break;
                 }
                 break;
             }
+            case AdvancedTreatmentType.WoundCleaning:
+                foreach (var wound in part.Wounds)
+                {
+                    wound.IsDirty = false;
+                    wound.InfectionRisk *= 0.1f;
+                }
+                part.IsSurgicalSitePrepared = true;
+                part.OpenSurgicalExposure = 0;
+                break;
+            case AdvancedTreatmentType.LocalAnesthesia:
+                part.LocalAnesthesia = 120f * effectiveness;
+                break;
+            case AdvancedTreatmentType.SurgicalAccess:
+                part.IsSurgicalOpen = true;
+                part.SkinIntegrity = Math.Max(0f, part.SkinIntegrity - 2f);
+                part.Wounds.Add(new Wound
+                {
+                    Type = WoundType.Cut, Severity = WoundSeverity.Minor, BodyPart = part.Slot,
+                    IsSurgicalIncision = true, ExternalBleedingRate = health.HasBlood ? 0.3f : 0f,
+                    Pain = health.HasPain ? 4f : 0f,
+                });
+                break;
+            case AdvancedTreatmentType.InternalHemostasis:
+                foreach (var wound in part.Wounds)
+                    wound.InternalBleedingRate = 0f;
+                break;
+            case AdvancedTreatmentType.BoneFixation:
+                foreach (var wound in part.Wounds.Where(wound => wound.Type == WoundType.Fracture))
+                    wound.IsBoneFixed = true;
+                break;
+            case AdvancedTreatmentType.SurgicalClosure:
+                part.IsSurgicalOpen = false;
+                part.IsSurgicalSitePrepared = false;
+                foreach (var wound in part.Wounds.Where(wound => wound.IsSurgicalIncision))
+                {
+                    wound.IsSutured = true;
+                    wound.ExternalBleedingRate = 0f;
+                }
+                break;
+            case AdvancedTreatmentType.TourniquetRemoval:
+                part.HasTourniquet = false;
+                break;
         }
 
         part.IsBleeding = part.Wounds.Sum(w => w.ExternalBleedingRate + w.InternalBleedingRate) > 0.01f;
@@ -1669,8 +1876,9 @@ public sealed class AdvancedTreatmentSystem : EntitySystem
             return aim.CurrentTarget.ToSlot();
 
         return health.BodyParts.Values
+            .Where(x => PartNeedsTreatment(x, treatment))
             .Where(x => treatment != AdvancedTreatmentType.Tourniquet || x.Slot.IsLimb())
             .OrderByDescending(x => x.Wounds.Sum(w => w.ExternalBleedingRate + w.InternalBleedingRate + w.Pain * 0.05f))
-            .First().Slot;
+            .Select(x => x.Slot).FirstOrDefault();
     }
 }

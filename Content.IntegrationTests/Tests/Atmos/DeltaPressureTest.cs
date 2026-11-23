@@ -1,9 +1,13 @@
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Numerics;
 using Content.Server.Atmos;
 using Content.Server.Atmos.Components;
 using Content.Server.Atmos.EntitySystems;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
+using Content.Shared.Atmos.EntitySystems;
+using Content.Shared.CCVar;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Utility;
@@ -18,6 +22,130 @@ namespace Content.IntegrationTests.Tests.Atmos;
 [TestOf(typeof(DeltaPressureSystem))]
 public sealed class DeltaPressureTest : AtmosTest
 {
+    [Test]
+    public async Task ZeroDamageChanceClearsPreviousStateAboveThreshold()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            SAtmos.SetAtmosphereSimulation(ProcessEnt, false);
+            var uid = SEntMan.SpawnAtPosition("DeltaPressureSolidTest", new EntityCoordinates(ProcessEnt, Vector2.Zero));
+            var component = SEntMan.GetComponent<DeltaPressureComponent>(uid);
+#pragma warning disable RA0002 // Configure the previous state and probability for this regression.
+            component.IsTakingDamage = true;
+            component.RandomDamageChance = 0f;
+#pragma warning restore RA0002
+            var offset = Transform.GetGridOrMapTilePosition(uid).Offset(AtmosDirection.North);
+            var air = ProcessEnt.Comp1.Tiles[offset].Air;
+            Assert.That(air, Is.Not.Null);
+            var pressure = component.MinPressureDelta + 100;
+            air.AdjustMoles(Gas.Nitrogen, pressure * air.Volume / (Atmospherics.R * air.Temperature));
+
+            var config = Server.CfgMan;
+            var oldLimit = config.GetCVar(CCVars.AtmosMaxProcessTime);
+            try
+            {
+                config.SetCVar(CCVars.AtmosMaxProcessTime, float.MaxValue);
+                Assert.That(SAtmos.RunProcessingStage(ProcessEnt, AtmosphereProcessingState.DeltaPressure), Is.True);
+                Assert.That(SEntMan.Deleted(uid), Is.False);
+                Assert.That(component.IsTakingDamage, Is.False);
+                Assert.That(ProcessEnt.Comp1.DeltaPressureDamageResults, Is.Empty);
+            }
+            finally
+            {
+                config.SetCVar(CCVars.AtmosMaxProcessTime, oldLimit);
+            }
+        });
+    }
+
+    [Test]
+    public async Task PressureStateChangesStayOnSimulationThread()
+    {
+        var tracked = new HashSet<EntityUid>();
+        await Server.WaitPost(() =>
+        {
+            SAtmos.SetAtmosphereSimulation(ProcessEnt, false);
+            for (var i = 0; i < 4; i++)
+            {
+                var uid = SEntMan.SpawnAtPosition("DeltaPressureSolidTest", new EntityCoordinates(ProcessEnt, Vector2.Zero));
+                // Seed the previous damage state without notifying the replication system yet.
+#pragma warning disable RA0002
+                SEntMan.GetComponent<DeltaPressureComponent>(uid).IsTakingDamage = true;
+#pragma warning restore RA0002
+                tracked.Add(uid);
+            }
+        });
+        await Server.WaitRunTicks(2);
+
+        await Server.WaitAssertion(() =>
+        {
+            var threads = new ConcurrentQueue<int>();
+            var simulationThread = Environment.CurrentManagedThreadId;
+            void OnDirty(Entity<MetaDataComponent> ent)
+            {
+                if (tracked.Contains(ent.Owner))
+                    threads.Enqueue(Environment.CurrentManagedThreadId);
+            }
+
+            var config = Server.CfgMan;
+            var oldBatch = config.GetCVar(CCVars.DeltaPressureParallelBatchSize);
+            var oldLimit = config.GetCVar(CCVars.AtmosMaxProcessTime);
+            var oldThreads = config.GetCVar(Robust.Shared.CVars.ThreadParallelCount);
+            SEntMan.EntityDirtied += OnDirty;
+            try
+            {
+                config.SetCVar(CCVars.DeltaPressureParallelBatchSize, 1);
+                config.SetCVar(CCVars.AtmosMaxProcessTime, float.MaxValue);
+                config.SetCVar(Robust.Shared.CVars.ThreadParallelCount, 2);
+                Assert.That(SAtmos.RunProcessingStage(ProcessEnt, AtmosphereProcessingState.DeltaPressure), Is.True);
+                foreach (var uid in tracked)
+                    Assert.That(SEntMan.GetComponent<DeltaPressureComponent>(uid).IsTakingDamage, Is.False);
+                Assert.That(threads, Is.Not.Empty, "The regression must exercise actual dirty notifications.");
+                Assert.That(threads, Has.All.EqualTo(simulationThread), "Workers must not mutate the PVS dirty set.");
+            }
+            finally
+            {
+                SEntMan.EntityDirtied -= OnDirty;
+                config.SetCVar(CCVars.DeltaPressureParallelBatchSize, oldBatch);
+                config.SetCVar(CCVars.AtmosMaxProcessTime, oldLimit);
+                config.SetCVar(Robust.Shared.CVars.ThreadParallelCount, oldThreads);
+            }
+        });
+    }
+
+    [Test]
+    public async Task ProcessingStopsAtBatchDeadlineAndResumes()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            SAtmos.SetAtmosphereSimulation(ProcessEnt, false);
+            for (var i = 0; i < 3; i++)
+                SEntMan.SpawnAtPosition("DeltaPressureSolidTest", new EntityCoordinates(ProcessEnt, Vector2.Zero));
+
+            var config = Server.CfgMan;
+            var oldLimit = config.GetCVar(CCVars.AtmosMaxProcessTime);
+            var oldBatch = config.GetCVar(CCVars.DeltaPressureParallelToProcessPerIteration);
+            try
+            {
+                config.SetCVar(CCVars.DeltaPressureParallelToProcessPerIteration, 1);
+                config.SetCVar(CCVars.AtmosMaxProcessTime, 0f);
+
+                Assert.That(SAtmos.RunProcessingStage(ProcessEnt, AtmosphereProcessingState.DeltaPressure), Is.False);
+                Assert.That(ProcessEnt.Comp1.DeltaPressureCursor, Is.EqualTo(1),
+                    "The time budget must be checked after each submitted batch.");
+
+                config.SetCVar(CCVars.AtmosMaxProcessTime, float.MaxValue);
+                Assert.That(SAtmos.RunProcessingStage(ProcessEnt, AtmosphereProcessingState.DeltaPressure), Is.True);
+                Assert.That(ProcessEnt.Comp1.DeltaPressureCursor, Is.EqualTo(ProcessEnt.Comp1.DeltaPressureEntities.Count));
+                Assert.That(ProcessEnt.Comp1.DeltaPressureDamageResults, Is.Empty);
+            }
+            finally
+            {
+                config.SetCVar(CCVars.AtmosMaxProcessTime, oldLimit);
+                config.SetCVar(CCVars.DeltaPressureParallelToProcessPerIteration, oldBatch);
+            }
+        });
+    }
+
     #region Prototypes
 
     [TestPrototypes]

@@ -1,7 +1,13 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Shared.Body.Events;
+using Content.Shared._Eclipse.MedicalChemistry;
+using Content.Shared.Forensics.Components;
+using Content.Shared.Damage;
+using Content.Shared.EntityEffects.Effects.Damage;
 using Content.Shared.Body;
+using Content.Shared.Body.Components;
+using Content.Shared._Eclipse.AdvancedHealth;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
@@ -33,6 +39,11 @@ public sealed class MetabolizerSystem : EntitySystem
 
     [Dependency] private readonly EntityQuery<OrganComponent> _organQuery = default!;
     [Dependency] private readonly EntityQuery<SolutionContainerManagerComponent> _solutionQuery = default!;
+
+    private readonly HealthChange _boundImpurities = new()
+    {
+        Damage = new DamageSpecifier { DamageDict = new() { ["Poison"] = FixedPoint2.New(1.5f) } },
+    };
 
     public override void Initialize()
     {
@@ -138,10 +149,21 @@ public sealed class MetabolizerSystem : EntitySystem
         if (solution.Contents.Count == 0)
             return;
 
+        // A mixed meal must not empty faster just because it contains more reagent types.
+        FixedPoint2? emptyingBudget = null;
+        if (stage == "Digestion" && TryComp<StomachComponent>(ent.Owner, out var stomach))
+        {
+            var function = TryComp<AdvancedOrganHealthComponent>(ent.Owner, out var health) ? health.Function : 1f;
+            emptyingBudget = FixedPoint2.New(stomach.EmptyingRate * Math.Clamp(function, 0.1f, 1f));
+        }
+
         LookupSolution(ent, solutionData, true, out var transferSolution, out var transferSolutionEntity, out _);
 
         // Copy the solution do not edit the original solution list
         var list = solution.Contents.ToList();
+        var batchMedicines = list.Where(reagent => MedicalBatch.IsBatch(reagent.Reagent))
+            .Select(reagent => reagent.Reagent.Prototype).ToHashSet();
+        var processedBatches = new HashSet<string>();
 
         // Collecting blood reagent for filtering
         var ev = new MetabolismExclusionEvent();
@@ -157,6 +179,8 @@ public sealed class MetabolizerSystem : EntitySystem
         int reagents = 0;
         foreach (var (reagent, quantity) in list)
         {
+            if (emptyingBudget is { } remaining && remaining <= 0)
+                break;
             if (!_prototypeManager.TryIndex<ReagentPrototype>(reagent.Prototype, out var proto))
                 continue;
 
@@ -167,6 +191,7 @@ public sealed class MetabolizerSystem : EntitySystem
             if (proto.Metabolisms is null || !proto.Metabolisms.Metabolisms.TryGetValue(stage, out var entry))
             {
                 var mostToTransfer = FixedPoint2.Clamp(solutionData.TransferRate, 0, quantity);
+                if (emptyingBudget is { } budget) mostToTransfer = FixedPoint2.Min(mostToTransfer, budget);
 
                 if (transferSolution is not null)
                 {
@@ -175,23 +200,31 @@ public sealed class MetabolizerSystem : EntitySystem
                 }
                 else
                 {
-                    solution.RemoveReagent(reagent, FixedPoint2.New(1));
+                    mostToTransfer = emptyingBudget is { } discardBudget ? FixedPoint2.Min(quantity, discardBudget) : FixedPoint2.Min(quantity, FixedPoint2.New(1));
+                    solution.RemoveReagent(reagent, mostToTransfer);
                 }
+
+                if (emptyingBudget != null) emptyingBudget -= mostToTransfer;
 
                 continue;
             }
 
-            var rate = solutionData.MetabolizeAll ? quantity : entry.MetabolismRate;
+            var isBatch = batchMedicines.Contains(reagent.Prototype);
+            if (isBatch && !processedBatches.Add(reagent.Prototype))
+                continue;
+            var available = isBatch ? solution.GetTotalPrototypeQuantity(reagent.Prototype) : quantity;
+            var rate = solutionData.MetabolizeAll ? available : entry.MetabolismRate;
 
             // Remove $rate, as long as there's enough reagent there to actually remove that much
-            var mostToRemove = FixedPoint2.Clamp(rate, 0, quantity);
+            var mostToRemove = FixedPoint2.Clamp(rate, 0, available);
+            if (emptyingBudget is { } budgetToRemove) mostToRemove = FixedPoint2.Min(mostToRemove, budgetToRemove);
 
             // we're done here entirely if this is true
             if (reagents >= ent.Comp1.MaxReagentsProcessable)
                 return;
 
             var scale = (float) mostToRemove;
-            if (!solutionData.MetabolizeAll)
+            if (!solutionData.MetabolizeAll || emptyingBudget != null)
                 scale /= (float) rate;
 
             // if it's possible for them to be dead, and they are,
@@ -201,6 +234,13 @@ public sealed class MetabolizerSystem : EntitySystem
                 continue;
 
             var actualEntity = ent.Comp2?.Body ?? solutionOwner.Value;
+            var patientDna = CompOrNull<DnaComponent>(actualEntity)?.DNA;
+            var purity = isBatch ? MedicalBatch.GetPurity(solution, reagent.Prototype) : 1f;
+            var potency = isBatch && available > 0 ? MedicalBatch.GetActivity(solution, reagent.Prototype, patientDna) / available.Float() : 1f;
+            var mismatch = isBatch ? MedicalBatch.GetMismatch(solution, reagent.Prototype, patientDna) : 0f;
+
+            if (isBatch && stage == "Bloodstream" && (purity < 1f || mismatch > 0f))
+                _entityEffects.ApplyEffect(actualEntity, _boundImpurities, (1f - purity + mismatch * 0.2f) * scale);
 
             // do all effects, if conditions apply
             foreach (var effect in entry.Effects)
@@ -222,16 +262,22 @@ public sealed class MetabolizerSystem : EntitySystem
             // TODO: We should have to do this with metabolism. ReagentEffect struct needs refactoring and so does metabolism!
             void ApplyEffect(EntityEffect effect)
             {
+                // Impurities weaken healing while overdose and other adverse effects retain their strength.
+                var effectScale = scale;
+                if (effect is HealthChange health && health.Damage.DamageDict.Values.All(value => value <= 0)
+                    || effect is EvenHealthChange even && even.Damage.Values.All(value => value <= 0)
+                    || effect is DistributedHealthChange distributed && distributed.Damage.Values.All(value => value <= 0))
+                    effectScale *= potency;
                 switch (effect)
                 {
                     case ModifyLungGas:
-                        _entityEffects.ApplyEffect(ent, effect, scale);
+                        _entityEffects.ApplyEffect(ent, effect, effectScale);
                         break;
                     case AdjustReagent:
-                        _entityEffects.ApplyEffect(solutionEntity.Value, effect, scale);
+                        _entityEffects.ApplyEffect(solutionEntity.Value, effect, effectScale);
                         break;
                     default:
-                        _entityEffects.ApplyEffect(actualEntity, effect, scale);
+                        _entityEffects.ApplyEffect(actualEntity, effect, effectScale);
                         break;
                 }
             }
@@ -239,7 +285,12 @@ public sealed class MetabolizerSystem : EntitySystem
             // remove a certain amount of reagent
             if (mostToRemove > FixedPoint2.Zero)
             {
-                solution.RemoveReagent(reagent, mostToRemove);
+                if (isBatch)
+                    MedicalBatch.Take(solution, reagent.Prototype, mostToRemove);
+                else
+                    solution.RemoveReagent(reagent, mostToRemove);
+
+                if (emptyingBudget != null) emptyingBudget -= mostToRemove;
 
                 // We have processed a reagant, so count it towards the cap
                 reagents += 1;

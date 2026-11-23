@@ -171,6 +171,8 @@ public sealed class MarkingsViewModel
     /// </summary>
     public event Action<ProtoId<OrganCategoryPrototype>, HumanoidVisualLayers>? MarkingsChanged;
 
+    public event Action<ProtoId<OrganCategoryPrototype>, HumanoidVisualLayers>? MarkingColorsChanged;
+
     private Dictionary<ProtoId<OrganCategoryPrototype>, OrganMarkingData> _organData = new();
 
     /// <summary>
@@ -186,7 +188,7 @@ public sealed class MarkingsViewModel
                 return;
 
             _organData = value;
-            _previousColors.Clear();
+            _previousMarkings.Clear();
             OrganDataChanged?.Invoke();
         }
     }
@@ -196,7 +198,7 @@ public sealed class MarkingsViewModel
     /// </summary>
     public event Action? OrganDataChanged;
 
-    private readonly Dictionary<ProtoId<MarkingPrototype>, List<Color>> _previousColors = new();
+    private readonly Dictionary<ProtoId<MarkingPrototype>, Marking> _previousMarkings = new();
 
     public MarkingsViewModel()
     {
@@ -291,9 +293,12 @@ public sealed class MarkingsViewModel
         organMarkings[layer] = organMarkings.GetValueOrDefault(layer) ?? [];
         var layerMarkings = organMarkings[layer];
 
-        var colors = _previousColors.GetValueOrDefault(markingId) ??
-                     MarkingColoring.GetMarkingLayerColors(markingProto, profileData.SkinColor, profileData.EyeColor, layerMarkings);
-        var newMarking = new Marking(markingId, colors) { Forced = AnyEnforcementsLifted };
+        if (!_previousMarkings.TryGetValue(markingId, out var newMarking))
+        {
+            var colors = MarkingColoring.GetMarkingLayerColors(markingProto, profileData.SkinColor, profileData.EyeColor, layerMarkings);
+            newMarking = new Marking(markingId, colors);
+        }
+        newMarking.Forced = AnyEnforcementsLifted;
 
         var limits = groupPrototype.Limits.GetValueOrDefault(layer);
         if (limits is null || !EnforceLimits)
@@ -305,6 +310,7 @@ public sealed class MarkingsViewModel
 
         if (limits.Limit == 1 && layerMarkings.Count == 1)
         {
+            _previousMarkings[layerMarkings[0].MarkingId] = layerMarkings[0];
             layerMarkings.Clear();
             layerMarkings.Add(newMarking);
             MarkingsChanged?.Invoke(organ, layer);
@@ -369,7 +375,7 @@ public sealed class MarkingsViewModel
 
         if (layerMarkings.Find(marking => marking.MarkingId == markingId) is { } removingMarking)
         {
-            _previousColors[removingMarking.MarkingId] = removingMarking.MarkingColors.ToList();
+            _previousMarkings[removingMarking.MarkingId] = removingMarking;
         }
         layerMarkings.RemoveAll(marking => marking.MarkingId == markingId);
         MarkingsChanged?.Invoke(organ, layer);
@@ -389,18 +395,30 @@ public sealed class MarkingsViewModel
         int colorIndex,
         Color color)
     {
-        if (!_markings.TryGetValue(organ, out var markingSet))
+        if (GetMarking(organ, layer, markingId) is not { } marking ||
+            colorIndex < 0 || colorIndex >= marking.MarkingColors.Count || marking.MarkingColors[colorIndex] == color)
             return;
 
-        if (!markingSet.TryGetValue(layer, out var markings))
+        SetMarkingColors(organ, layer, marking.WithColorAt(colorIndex, color));
+    }
+
+    public void TrySetMarkingGradient(ProtoId<OrganCategoryPrototype> organ,
+        HumanoidVisualLayers layer,
+        ProtoId<MarkingPrototype> markingId,
+        MarkingGradient? gradient)
+    {
+        if (GetMarking(organ, layer, markingId) is { } marking && marking.Gradient != gradient)
+            SetMarkingColors(organ, layer, marking with { Gradient = gradient });
+    }
+
+    private void SetMarkingColors(ProtoId<OrganCategoryPrototype> organ, HumanoidVisualLayers layer, Marking marking)
+    {
+        if (!IsMarkingColorCustomizable(organ, layer, marking.MarkingId))
             return;
 
-        var markingIdx = markings.FindIndex(it => it.MarkingId == markingId);
-        if (markingIdx == -1)
-            return;
-
-        markings[markingIdx] = markings[markingIdx].WithColorAt(colorIndex, color);
-        MarkingsChanged?.Invoke(organ, layer);
+        var markings = _markings[organ][layer];
+        markings[markings.FindIndex(it => it.MarkingId == marking.MarkingId)] = marking;
+        MarkingColorsChanged?.Invoke(organ, layer);
     }
 
     /// <summary>

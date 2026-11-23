@@ -28,6 +28,7 @@ namespace Content.Server.Research.Systems
             base.Initialize();
             InitializeClient();
             InitializeConsole();
+            InitializeTerminal();
             InitializeSource();
             InitializeServer();
 
@@ -90,6 +91,7 @@ namespace Content.Server.Research.Systems
 
         public override void Update(float frameTime)
         {
+            UpdateAccountDelivery(frameTime);
             var query = EntityQueryEnumerator<ResearchServerComponent>();
             while (query.MoveNext(out var uid, out var server))
             {

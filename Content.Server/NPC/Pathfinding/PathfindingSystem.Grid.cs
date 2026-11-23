@@ -34,6 +34,9 @@ public sealed partial class PathfindingSystem
 
     private readonly Stopwatch _stopwatch = new();
 
+    private readonly List<GridPathfindingChunk> _dirtyGridChunks = new();
+    private readonly List<GridPathfindingChunk>[] _dirtyChunkGroups = [new(), new(), new(), new()];
+
     // Probably can't pool polys as there might be old pathfinding refs to them.
 
     private void InitializeGrid()
@@ -106,14 +109,17 @@ public sealed partial class PathfindingSystem
 
             // TODO: Often we invalidate the entire chunk when it might be something as simple as an airlock change
             // Would be better to handle that though this was safer and max it's taking is like 1-2ms every half-second.
-            var dirt = new GridPathfindingChunk[comp.DirtyChunks.Count];
-            var idx = 0;
+            var dirt = _dirtyGridChunks;
+            dirt.Clear();
+            foreach (var group in _dirtyChunkGroups)
+                group.Clear();
 
             foreach (var origin in comp.DirtyChunks)
             {
                 var chunk = GetChunk(origin, uid, pathfinding);
-                dirt[idx] = chunk;
-                idx++;
+                dirt.Add(chunk);
+                var parity = Math.Abs(chunk.Origin.X % 2) * 2 + Math.Abs(chunk.Origin.Y % 2);
+                _dirtyChunkGroups[parity].Add(chunk);
             }
 
             // We force clear portals in a single-threaded context to be safe
@@ -137,12 +143,10 @@ public sealed partial class PathfindingSystem
             // This is for map <> grid pathfinding
 
             // Without parallel this is roughly 3x slower on my desktop.
-            Parallel.For(0, dirt.Length, options, i =>
+            Parallel.For(0, dirt.Count, options, i =>
             {
                 BuildBreadcrumbs(dirt[i], (uid, mapGridComp));
             });
-
-            const int Division = 4;
 
             // You can safely do this in parallel as long as no neighbor chunks are being touched in the same iteration.
             // You essentially do bottom left, bottom right, top left, top right in quadrants.
@@ -152,42 +156,26 @@ public sealed partial class PathfindingSystem
             // second iteration: 1,0; 3,0; 1;2
             // third iteration: 0,1; 2,1; 0,3 etc
 
-            for (var it = 0; it < Division; it++)
+            foreach (var group in _dirtyChunkGroups)
             {
-                var it1 = it;
+                if (group.Count == 0)
+                    continue;
 
-                Parallel.For(0, dirt.Length, options, j =>
+                Parallel.For(0, group.Count, options, j =>
                 {
-                    var chunk = dirt[j];
-                    // Check if the chunk is safe on this iteration.
-                    var x = Math.Abs(chunk.Origin.X % 2);
-                    var y = Math.Abs(chunk.Origin.Y % 2);
-                    var index = x * 2 + y;
-
-                    if (index != it1)
-                        return;
-
-                    ClearOldPolys(chunk);
+                    ClearOldPolys(group[j]);
                 });
             }
 
             // TODO: You can probably skimp on some neighbor chunk caches
-            for (var it = 0; it < Division; it++)
+            foreach (var group in _dirtyChunkGroups)
             {
-                var it1 = it;
+                if (group.Count == 0)
+                    continue;
 
-                Parallel.For(0, dirt.Length, options, j =>
+                Parallel.For(0, group.Count, options, j =>
                 {
-                    var chunk = dirt[j];
-                    // Check if the chunk is safe on this iteration.
-                    var x = Math.Abs(chunk.Origin.X % 2);
-                    var y = Math.Abs(chunk.Origin.Y % 2);
-                    var index = x * 2 + y;
-
-                    if (index != it1)
-                        return;
-
-                    BuildNavmesh(chunk, pathfinding);
+                    BuildNavmesh(group[j], pathfinding);
 #if DEBUG
                     Interlocked.Increment(ref updateCount);
 #endif
@@ -215,6 +203,9 @@ public sealed partial class PathfindingSystem
             }
 
             comp.DirtyChunks.Clear();
+            dirt.Clear();
+            foreach (var group in _dirtyChunkGroups)
+                group.Clear();
         }
     }
 

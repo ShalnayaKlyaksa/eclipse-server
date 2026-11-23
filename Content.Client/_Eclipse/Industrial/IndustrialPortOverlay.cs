@@ -3,6 +3,7 @@ using Content.Client.Hands.Systems;
 using Content.Shared._Eclipse.Industrial;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Client.Input;
 using Robust.Client.Player;
 using Robust.Shared.Enums;
 using Robust.Shared.Maths;
@@ -13,111 +14,103 @@ public sealed class IndustrialPortOverlay : Overlay
 {
     [Dependency] private readonly IEntityManager _entMan = default!;
     [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private readonly IEyeManager _eye = default!;
+    [Dependency] private readonly IInputManager _input = default!;
 
     private TransformSystem _transform = default!;
     private HandsSystem _hands = default!;
     private IndustrialProcessorSystem _processor = default!;
+    private readonly Vector2[] _arrowShaft = new Vector2[4];
+    private readonly Vector2[] _arrowHead = new Vector2[3];
 
-    private static readonly Color ZoneFill = Color.White.WithAlpha(0.06f);
-    private static readonly Color ZoneBorder = Color.White.WithAlpha(0.22f);
+    private static readonly Color Backplate = Color.FromHex("#10161DEB");
+    private static readonly Color Closed = Color.FromHex("#7F8B97");
+    private static readonly Color Input = Color.FromHex("#8DBAA6");
+    private static readonly Color Output = Color.FromHex("#D8B774");
+    private static readonly Color Liquid = Color.FromHex("#7EADD7");
+    private static readonly Color Heat = Color.FromHex("#DC9A78");
 
     public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowFOV;
 
-    public IndustrialPortOverlay()
-    {
-        IoCManager.InjectDependencies(this);
-    }
+    public IndustrialPortOverlay() => IoCManager.InjectDependencies(this);
 
     protected override void Draw(in OverlayDrawArgs args)
     {
         if (_player.LocalEntity is not { } player)
             return;
-
         _transform ??= _entMan.System<TransformSystem>();
         _hands ??= _entMan.System<HandsSystem>();
         _processor ??= _entMan.System<IndustrialProcessorSystem>();
-
-        var held = _hands.GetActiveItem(player);
-        if (held == null || !_processor.IsPortConfigurator(held.Value))
+        if (_hands.GetActiveItem(player) is not { } held || !_processor.IsPortConfigurator(held))
             return;
 
         var handle = args.WorldHandle;
-        var eyeRot = args.Viewport.Eye?.Rotation ?? Angle.Zero;
-        var rotationMatrix = Matrix3Helpers.CreateRotation(-eyeRot);
-
+        var mouse = _eye.PixelToMap(_input.MouseScreenPosition);
         var query = _entMan.AllEntityQueryEnumerator<IndustrialProcessorComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var comp, out var xform))
+        while (query.MoveNext(out var uid, out var processor, out var xform))
         {
-            if (xform.MapID != args.MapId)
+            if (xform.MapID != args.MapId || !args.WorldBounds.Contains(_transform.GetWorldPosition(xform)))
                 continue;
-
-            var worldPos = _transform.GetWorldPosition(xform);
-            if (!args.WorldBounds.Contains(worldPos))
-                continue;
-
-            var worldMatrix = Matrix3Helpers.CreateTranslation(worldPos);
-            var matty = Matrix3x2.Multiply(rotationMatrix, worldMatrix);
-            handle.SetTransform(matty);
-
-            foreach (var (_, localBounds) in IndustrialPortClickZones.GetFaceZones(uid, _entMan))
+            var matrix = IndustrialPortClickZones.GetPortWorldMatrix(xform, _transform);
+            handle.SetTransform(matrix);
+            Direction? hover = null;
+            if (mouse.MapId == args.MapId && Matrix3x2.Invert(matrix, out var inverse) &&
+                IndustrialPortClickZones.TryGetLocalFace(Vector2.Transform(mouse.Position, inverse), out var hovered))
+                hover = hovered;
+            var faces = IndustrialPortClickZones.GetFaceZones(uid, _entMan);
+            for (var i = 0; i < faces.Count; i++)
             {
-                handle.DrawRect(localBounds, ZoneFill, filled: true);
-                handle.DrawRect(localBounds, ZoneBorder, filled: false);
+                var (face, bounds) = faces[i];
+                DrawPort(handle, face, bounds, processor.GetFacePort(face), hover == face);
             }
-
-            DrawFacePort(handle, Direction.North, comp.NorthFacePort);
-            DrawFacePort(handle, Direction.South, comp.SouthFacePort);
-            DrawFacePort(handle, Direction.East, comp.EastFacePort);
-            DrawFacePort(handle, Direction.West, comp.WestFacePort);
         }
+        handle.SetTransform(Matrix3x2.Identity);
     }
 
-    private static void DrawFacePort(DrawingHandleWorld handle, Direction direction, FacePortState state)
+    private void DrawPort(DrawingHandleWorld handle, Direction face, Box2 bounds, FacePortState state, bool hovered)
     {
-        var offset = IndustrialPortClickZones.GetFaceZoneCenter(direction);
-
-        switch (state)
+        var color = state switch
         {
-            case FacePortState.Disabled:
-                DrawCross(handle, offset, Color.Gray.WithAlpha(0.45f));
-                break;
-            case FacePortState.ItemInput:
-                DrawArrow(handle, offset, direction, inward: true, Color.Orange.WithAlpha(0.7f));
-                break;
-            case FacePortState.ItemOutput:
-                DrawArrow(handle, offset, direction, inward: false, Color.Orange.WithAlpha(0.7f));
-                break;
-            case FacePortState.LiquidInput:
-                DrawArrow(handle, offset, direction, inward: true, Color.CornflowerBlue.WithAlpha(0.7f));
-                break;
-            case FacePortState.LiquidOutput:
-                DrawArrow(handle, offset, direction, inward: false, Color.CornflowerBlue.WithAlpha(0.7f));
-                break;
-            case FacePortState.HeatInput:
-                DrawArrow(handle, offset, direction, inward: true, Color.OrangeRed.WithAlpha(0.75f));
-                break;
+            FacePortState.ItemInput => Input,
+            FacePortState.ItemOutput => Output,
+            FacePortState.LiquidInput or FacePortState.LiquidOutput => Liquid,
+            FacePortState.HeatInput => Heat,
+            _ => Closed,
+        };
+        var center = IndustrialPortClickZones.GetFaceZoneCenter(face);
+        handle.DrawRect(bounds, color.WithAlpha(hovered ? 0.25f : 0.07f));
+        handle.DrawRect(bounds, hovered ? Color.White : color.WithAlpha(0.35f), filled: false);
+        var badge = new Box2(center - new Vector2(0.115f), center + new Vector2(0.115f));
+        handle.DrawRect(badge, Backplate);
+        handle.DrawRect(badge, color.WithAlpha(0.9f), filled: false);
+        if (state == FacePortState.Disabled)
+        {
+            const float radius = 0.045f;
+            handle.DrawLine(center - new Vector2(radius), center + new Vector2(radius), color);
+            handle.DrawLine(center + new Vector2(-radius, radius), center + new Vector2(radius, -radius), color);
+            return;
         }
-    }
-
-    private static void DrawCross(DrawingHandleWorld handle, Vector2 center, Color color)
-    {
-        const float size = 0.08f;
-        handle.DrawLine(center + new Vector2(-size, -size), center + new Vector2(size, size), color);
-        handle.DrawLine(center + new Vector2(-size, size), center + new Vector2(size, -size), color);
-    }
-
-    private static void DrawArrow(DrawingHandleWorld handle, Vector2 center, Direction direction, bool inward, Color color)
-    {
-        var dirVec = direction.ToVec();
-        if (inward)
-            dirVec = -dirVec;
-
-        var tip = center + dirVec * 0.12f;
-        var baseCenter = center - dirVec * 0.03f;
-        var side = new Vector2(-dirVec.Y, dirVec.X) * 0.055f;
-
-        handle.DrawLine(baseCenter - side, tip, color);
-        handle.DrawLine(baseCenter + side, tip, color);
-        handle.DrawLine(baseCenter - side, baseCenter + side, color);
+        var normal = face.ToVec();
+        var tangent = new Vector2(-normal.Y, normal.X);
+        if (state == FacePortState.HeatInput)
+        {
+            for (var i = -1; i <= 1; i++)
+            {
+                var bar = center + tangent * (i * 0.08f);
+                handle.DrawLine(bar - normal * 0.065f, bar + normal * 0.065f, color);
+            }
+            return;
+        }
+        if (state is FacePortState.ItemInput or FacePortState.LiquidInput)
+            normal = -normal;
+        _arrowShaft[0] = center - normal * 0.075f - tangent * 0.022f;
+        _arrowShaft[1] = center - normal * 0.075f + tangent * 0.022f;
+        _arrowShaft[2] = center + tangent * 0.022f;
+        _arrowShaft[3] = center - tangent * 0.022f;
+        _arrowHead[0] = center + normal * 0.085f;
+        _arrowHead[1] = center - normal * 0.005f + tangent * 0.065f;
+        _arrowHead[2] = center - normal * 0.005f - tangent * 0.065f;
+        handle.DrawPrimitives(DrawPrimitiveTopology.TriangleFan, _arrowShaft, color);
+        handle.DrawPrimitives(DrawPrimitiveTopology.TriangleFan, _arrowHead, color);
     }
 }

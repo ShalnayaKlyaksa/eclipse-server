@@ -39,6 +39,8 @@ public sealed class SharedAdvancedMedicineSystem : EntitySystem
             {
                 case "Poison": ent.Comp.ToxinLoad = Math.Max(0f, ent.Comp.ToxinLoad - amount); break;
                 case "Radiation": ent.Comp.RadiationLoad = Math.Max(0f, ent.Comp.RadiationLoad - amount); break;
+                // Oxygen-support drugs buy time; they do not replace blood, reopen airways or repair lungs.
+                case "Asphyxiation": ent.Comp.Oxygenation = Math.Min(100f, ent.Comp.Oxygenation + amount); break;
                 case "Blunt": case "Slash": case "Piercing": case "Heat": case "Cold": case "Caustic":
                     repair += amount;
                     break;
@@ -51,7 +53,7 @@ public sealed class SharedAdvancedMedicineSystem : EntitySystem
         {
             if (repair <= 0f)
                 break;
-            if (part.IsDestroyed || part.ForeignBodyCount > 0)
+            if (part.IsDestroyed || part.IsSurgicalOpen || part.ForeignBodyCount > 0)
                 continue;
             var protectedWounds = true;
             foreach (var wound in part.Wounds)

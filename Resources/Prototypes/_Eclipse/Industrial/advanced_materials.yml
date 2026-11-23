@@ -1,0 +1,793 @@
+# Advanced industrial production. Basic station supply keeps its existing recipes.
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialWashedQuartz
+  name: washed quartz
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ore.rsi
+    state: spacequartz
+    color: '#CADACD'
+  - type: Item
+    sprite: Objects/Materials/ore.rsi
+  - type: Stack
+    stackType: IndustrialWashedQuartz
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialWashedQuartz
+  name: stack-IndustrialWashedQuartz
+  icon:
+    sprite: /Textures/Objects/Materials/ore.rsi
+    state: spacequartz
+  spawn: IndustrialWashedQuartz
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialFineSilica
+  name: fine quartz powder
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ore.rsi
+    state: spacequartz
+    color: '#D8DFE3'
+  - type: Item
+    sprite: Objects/Materials/ore.rsi
+  - type: Stack
+    stackType: IndustrialFineSilica
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialFineSilica
+  name: stack-IndustrialFineSilica
+  icon:
+    sprite: /Textures/Objects/Materials/ore.rsi
+    state: spacequartz
+  spawn: IndustrialFineSilica
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialSilicaCake
+  name: silica filter cake
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ore.rsi
+    state: spacequartz
+    color: '#A6B6BB'
+  - type: Item
+    sprite: Objects/Materials/ore.rsi
+  - type: Stack
+    stackType: IndustrialSilicaCake
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialSilicaCake
+  name: stack-IndustrialSilicaCake
+  icon:
+    sprite: /Textures/Objects/Materials/ore.rsi
+    state: spacequartz
+  spawn: IndustrialSilicaCake
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialDriedSilica
+  name: dried silica
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ore.rsi
+    state: spacequartz
+    color: '#CED8DD'
+  - type: Item
+    sprite: Objects/Materials/ore.rsi
+  - type: Stack
+    stackType: IndustrialDriedSilica
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialDriedSilica
+  name: stack-IndustrialDriedSilica
+  icon:
+    sprite: /Textures/Objects/Materials/ore.rsi
+    state: spacequartz
+  spawn: IndustrialDriedSilica
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialPurifiedSilica
+  name: purified silica
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ore.rsi
+    state: spacequartz
+    color: '#E4EDF0'
+  - type: Item
+    sprite: Objects/Materials/ore.rsi
+  - type: Stack
+    stackType: IndustrialPurifiedSilica
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialPurifiedSilica
+  name: stack-IndustrialPurifiedSilica
+  icon:
+    sprite: /Textures/Objects/Materials/ore.rsi
+    state: spacequartz
+  spawn: IndustrialPurifiedSilica
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialCrudeSilicon
+  name: crude silicon
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+    state: silver
+    color: '#8796A5'
+  - type: Item
+    sprite: Objects/Materials/ingots.rsi
+  - type: Stack
+    stackType: IndustrialCrudeSilicon
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialCrudeSilicon
+  name: stack-IndustrialCrudeSilicon
+  icon:
+    sprite: /Textures/Objects/Materials/ingots.rsi
+    state: silver
+  spawn: IndustrialCrudeSilicon
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialPolySilicon
+  name: polycrystalline silicon
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+    state: silver
+    color: '#ACBED1'
+  - type: Item
+    sprite: Objects/Materials/ingots.rsi
+  - type: Stack
+    stackType: IndustrialPolySilicon
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialPolySilicon
+  name: stack-IndustrialPolySilicon
+  icon:
+    sprite: /Textures/Objects/Materials/ingots.rsi
+    state: silver
+  spawn: IndustrialPolySilicon
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialZoneSilicon
+  name: zone-refined silicon
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+    state: silver
+    color: '#CCDBE9'
+  - type: Item
+    sprite: Objects/Materials/ingots.rsi
+  - type: Stack
+    stackType: IndustrialZoneSilicon
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialZoneSilicon
+  name: stack-IndustrialZoneSilicon
+  icon:
+    sprite: /Textures/Objects/Materials/ingots.rsi
+    state: silver
+  spawn: IndustrialZoneSilicon
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialSiliconBoule
+  name: silicon monocrystal
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+    state: silver
+    color: '#B4C8DF'
+  - type: Item
+    sprite: Objects/Materials/ingots.rsi
+  - type: Stack
+    stackType: IndustrialSiliconBoule
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialSiliconBoule
+  name: stack-IndustrialSiliconBoule
+  icon:
+    sprite: /Textures/Objects/Materials/ingots.rsi
+    state: silver
+  spawn: IndustrialSiliconBoule
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialWaferBlank
+  name: silicon wafer blank
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+    state: silver
+    color: '#8EABCC'
+  - type: Item
+    sprite: Objects/Materials/ingots.rsi
+  - type: Stack
+    stackType: IndustrialWaferBlank
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialWaferBlank
+  name: stack-IndustrialWaferBlank
+  icon:
+    sprite: /Textures/Objects/Materials/ingots.rsi
+    state: silver
+  spawn: IndustrialWaferBlank
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialLappedWafer
+  name: lapped silicon wafer
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+    state: silver
+    color: '#A0BAD9'
+  - type: Item
+    sprite: Objects/Materials/ingots.rsi
+  - type: Stack
+    stackType: IndustrialLappedWafer
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialLappedWafer
+  name: stack-IndustrialLappedWafer
+  icon:
+    sprite: /Textures/Objects/Materials/ingots.rsi
+    state: silver
+  spawn: IndustrialLappedWafer
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialCleanWafer
+  name: clean silicon wafer
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+    state: silver
+    color: '#BBCDE2'
+  - type: Item
+    sprite: Objects/Materials/ingots.rsi
+  - type: Stack
+    stackType: IndustrialCleanWafer
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialCleanWafer
+  name: stack-IndustrialCleanWafer
+  icon:
+    sprite: /Textures/Objects/Materials/ingots.rsi
+    state: silver
+  spawn: IndustrialCleanWafer
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialOxidizedWafer
+  name: oxidized wafer
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+    state: silver
+    color: '#A3A3D1'
+  - type: Item
+    sprite: Objects/Materials/ingots.rsi
+  - type: Stack
+    stackType: IndustrialOxidizedWafer
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialOxidizedWafer
+  name: stack-IndustrialOxidizedWafer
+  icon:
+    sprite: /Textures/Objects/Materials/ingots.rsi
+    state: silver
+  spawn: IndustrialOxidizedWafer
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialDopedWafer
+  name: doped wafer
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+    state: silver
+    color: '#A18DBF'
+  - type: Item
+    sprite: Objects/Materials/ingots.rsi
+  - type: Stack
+    stackType: IndustrialDopedWafer
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialDopedWafer
+  name: stack-IndustrialDopedWafer
+  icon:
+    sprite: /Textures/Objects/Materials/ingots.rsi
+    state: silver
+  spawn: IndustrialDopedWafer
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialAnnealedWafer
+  name: annealed wafer
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+    state: silver
+    color: '#B3A2CA'
+  - type: Item
+    sprite: Objects/Materials/ingots.rsi
+  - type: Stack
+    stackType: IndustrialAnnealedWafer
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialAnnealedWafer
+  name: stack-IndustrialAnnealedWafer
+  icon:
+    sprite: /Textures/Objects/Materials/ingots.rsi
+    state: silver
+  spawn: IndustrialAnnealedWafer
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialResistWafer
+  name: resist-coated wafer
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+    state: silver
+    color: '#D0AC77'
+  - type: Item
+    sprite: Objects/Materials/ingots.rsi
+  - type: Stack
+    stackType: IndustrialResistWafer
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialResistWafer
+  name: stack-IndustrialResistWafer
+  icon:
+    sprite: /Textures/Objects/Materials/ingots.rsi
+    state: silver
+  spawn: IndustrialResistWafer
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialExposedWafer
+  name: exposed wafer
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+    state: silver
+    color: '#D7BC8C'
+  - type: Item
+    sprite: Objects/Materials/ingots.rsi
+  - type: Stack
+    stackType: IndustrialExposedWafer
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialExposedWafer
+  name: stack-IndustrialExposedWafer
+  icon:
+    sprite: /Textures/Objects/Materials/ingots.rsi
+    state: silver
+  spawn: IndustrialExposedWafer
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialDevelopedWafer
+  name: developed wafer
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+    state: silver
+    color: '#B8B397'
+  - type: Item
+    sprite: Objects/Materials/ingots.rsi
+  - type: Stack
+    stackType: IndustrialDevelopedWafer
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialDevelopedWafer
+  name: stack-IndustrialDevelopedWafer
+  icon:
+    sprite: /Textures/Objects/Materials/ingots.rsi
+    state: silver
+  spawn: IndustrialDevelopedWafer
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialEtchedWafer
+  name: etched wafer
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+    state: silver
+    color: '#86B1B7'
+  - type: Item
+    sprite: Objects/Materials/ingots.rsi
+  - type: Stack
+    stackType: IndustrialEtchedWafer
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialEtchedWafer
+  name: stack-IndustrialEtchedWafer
+  icon:
+    sprite: /Textures/Objects/Materials/ingots.rsi
+    state: silver
+  spawn: IndustrialEtchedWafer
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialStrippedWafer
+  name: stripped wafer
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+    state: silver
+    color: '#82A0C2'
+  - type: Item
+    sprite: Objects/Materials/ingots.rsi
+  - type: Stack
+    stackType: IndustrialStrippedWafer
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialStrippedWafer
+  name: stack-IndustrialStrippedWafer
+  icon:
+    sprite: /Textures/Objects/Materials/ingots.rsi
+    state: silver
+  spawn: IndustrialStrippedWafer
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialRinsedWafer
+  name: rinsed patterned wafer
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+    state: silver
+    color: '#95B2C6'
+  - type: Item
+    sprite: Objects/Materials/ingots.rsi
+  - type: Stack
+    stackType: IndustrialRinsedWafer
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialRinsedWafer
+  name: stack-IndustrialRinsedWafer
+  icon:
+    sprite: /Textures/Objects/Materials/ingots.rsi
+    state: silver
+  spawn: IndustrialRinsedWafer
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialDryWafer
+  name: dry patterned wafer
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+    state: silver
+    color: '#A5B4CE'
+  - type: Item
+    sprite: Objects/Materials/ingots.rsi
+  - type: Stack
+    stackType: IndustrialDryWafer
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialDryWafer
+  name: stack-IndustrialDryWafer
+  icon:
+    sprite: /Textures/Objects/Materials/ingots.rsi
+    state: silver
+  spawn: IndustrialDryWafer
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialMetallizedWafer
+  name: metallized wafer
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+    state: copper
+    color: '#DFCCB4'
+  - type: Item
+    sprite: Objects/Materials/ingots.rsi
+  - type: Stack
+    stackType: IndustrialMetallizedWafer
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialMetallizedWafer
+  name: stack-IndustrialMetallizedWafer
+  icon:
+    sprite: /Textures/Objects/Materials/ingots.rsi
+    state: copper
+  spawn: IndustrialMetallizedWafer
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialBondedWafer
+  name: annealed metallized wafer
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+    state: copper
+    color: '#E2D4C0'
+  - type: Item
+    sprite: Objects/Materials/ingots.rsi
+  - type: Stack
+    stackType: IndustrialBondedWafer
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialBondedWafer
+  name: stack-IndustrialBondedWafer
+  icon:
+    sprite: /Textures/Objects/Materials/ingots.rsi
+    state: copper
+  spawn: IndustrialBondedWafer
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialBareDie
+  name: unpackaged silicon die
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/stock_parts.rsi
+    state: scan_module
+    color: '#B5C2D3'
+  - type: Item
+    sprite: Objects/Misc/stock_parts.rsi
+  - type: Stack
+    stackType: IndustrialBareDie
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialBareDie
+  name: stack-IndustrialBareDie
+  icon:
+    sprite: /Textures/Objects/Misc/stock_parts.rsi
+    state: scan_module
+  spawn: IndustrialBareDie
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialBondedDie
+  name: wire-bonded die
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/stock_parts.rsi
+    state: adv_scan_module
+    color: '#D1C1A2'
+  - type: Item
+    sprite: Objects/Misc/stock_parts.rsi
+  - type: Stack
+    stackType: IndustrialBondedDie
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialBondedDie
+  name: stack-IndustrialBondedDie
+  icon:
+    sprite: /Textures/Objects/Misc/stock_parts.rsi
+    state: adv_scan_module
+  spawn: IndustrialBondedDie
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialEncapsulatedChip
+  name: encapsulated chip
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/stock_parts.rsi
+    state: scan_module
+    color: '#8795A4'
+  - type: Item
+    sprite: Objects/Misc/stock_parts.rsi
+  - type: Stack
+    stackType: IndustrialEncapsulatedChip
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialEncapsulatedChip
+  name: stack-IndustrialEncapsulatedChip
+  icon:
+    sprite: /Textures/Objects/Misc/stock_parts.rsi
+    state: scan_module
+  spawn: IndustrialEncapsulatedChip
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialUntestedProcessor
+  name: untested processor
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/stock_parts.rsi
+    state: adv_scan_module
+    color: '#C9B780'
+  - type: Item
+    sprite: Objects/Misc/stock_parts.rsi
+  - type: Stack
+    stackType: IndustrialUntestedProcessor
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialUntestedProcessor
+  name: stack-IndustrialUntestedProcessor
+  icon:
+    sprite: /Textures/Objects/Misc/stock_parts.rsi
+    state: adv_scan_module
+  spawn: IndustrialUntestedProcessor
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialAdvancedProcessor
+  name: industrial processor
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/stock_parts.rsi
+    state: adv_scan_module
+    color: '#B5DBB1'
+  - type: Item
+    sprite: Objects/Misc/stock_parts.rsi
+  - type: Stack
+    stackType: IndustrialAdvancedProcessor
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialAdvancedProcessor
+  name: stack-IndustrialAdvancedProcessor
+  icon:
+    sprite: /Textures/Objects/Misc/stock_parts.rsi
+    state: adv_scan_module
+  spawn: IndustrialAdvancedProcessor
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialBondingWire
+  name: gold bonding wire
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/stock_parts.rsi
+    state: micro_mani
+    color: '#E5C275'
+  - type: Item
+    sprite: Objects/Misc/stock_parts.rsi
+  - type: Stack
+    stackType: IndustrialBondingWire
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialBondingWire
+  name: stack-IndustrialBondingWire
+  icon:
+    sprite: /Textures/Objects/Misc/stock_parts.rsi
+    state: micro_mani
+  spawn: IndustrialBondingWire
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialChipFrame
+  name: chip lead frame
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/stock_parts.rsi
+    state: micro_mani
+    color: '#B6BEC8'
+  - type: Item
+    sprite: Objects/Misc/stock_parts.rsi
+  - type: Stack
+    stackType: IndustrialChipFrame
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialChipFrame
+  name: stack-IndustrialChipFrame
+  icon:
+    sprite: /Textures/Objects/Misc/stock_parts.rsi
+    state: micro_mani
+  spawn: IndustrialChipFrame
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialHeatSpreader
+  name: copper heat spreader
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/ingots.rsi
+    state: copper
+    color: '#DEC29F'
+  - type: Item
+    sprite: Objects/Materials/ingots.rsi
+  - type: Stack
+    stackType: IndustrialHeatSpreader
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialHeatSpreader
+  name: stack-IndustrialHeatSpreader
+  icon:
+    sprite: /Textures/Objects/Materials/ingots.rsi
+    state: copper
+  spawn: IndustrialHeatSpreader
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialChipContacts
+  name: chip contacts
+  description: An intermediate for advanced industrial processing. Consult the production reference for the next
+    operation.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/stock_parts.rsi
+    state: micro_mani
+    color: '#DCCB8C'
+  - type: Item
+    sprite: Objects/Misc/stock_parts.rsi
+  - type: Stack
+    stackType: IndustrialChipContacts
+    count: 1
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialChipContacts
+  name: stack-IndustrialChipContacts
+  icon:
+    sprite: /Textures/Objects/Misc/stock_parts.rsi
+    state: micro_mani
+  spawn: IndustrialChipContacts

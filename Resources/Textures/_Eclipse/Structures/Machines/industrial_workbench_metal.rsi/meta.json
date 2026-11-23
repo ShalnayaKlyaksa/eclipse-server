@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "license": "CC0-1.0",
+  "copyright": "Generated with OpenAI image generation for Eclipse; formatted as a two-tile 64x40 preview, 2026.",
+  "size": {
+    "x": 64,
+    "y": 40
+  },
+  "states": [
+    {
+      "name": "icon",
+      "directions": 1
+    }
+  ]
+}

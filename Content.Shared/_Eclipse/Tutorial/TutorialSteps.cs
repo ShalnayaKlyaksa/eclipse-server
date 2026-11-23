@@ -70,6 +70,31 @@ public sealed partial class TutorialClearHandsStep : TutorialStep
 {
 }
 
+/// <summary>Offers the next lesson or a return to the lobby. Ordinary advance clicks cannot skip it.</summary>
+public sealed partial class TutorialChoiceStep : TutorialStep
+{
+    [DataField] public string Speaker = "Ави";
+    [DataField] public string Text = string.Empty;
+    [DataField] public string? Portrait;
+    [DataField(required: true)] public ProtoId<TutorialLessonPrototype> Lesson;
+}
+
+/// <summary>Tasks checked against the player's real body on the server.</summary>
+public sealed partial class TutorialPracticeStep : TutorialStep
+{
+    [DataField] public string Objective = string.Empty;
+    [DataField] public TutorialPracticeAction Action;
+    [DataField] public float Distance = 2f;
+}
+
+public enum TutorialPracticeAction : byte
+{
+    Move,
+    DropItem,
+    PickUpItem,
+    ActivateLight,
+}
+
 [Serializable, NetSerializable]
 public enum TutorialSide : byte
 {

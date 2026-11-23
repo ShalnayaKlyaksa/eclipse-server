@@ -115,6 +115,11 @@ public sealed partial class SleepingSystem : EntitySystem
     /// </summary>
     private void OnSleepStateChanged(Entity<MobStateComponent> ent, ref SleepStateChangedEvent args)
     {
+        // These components arrive in the same authoritative snapshot as SleepingComponent.
+        // Adding/removing them again while applying it corrupts the replicated sleep state.
+        if (_gameTiming.ApplyingState)
+            return;
+
         if (args.FellAsleep)
         {
             // Just in case we're not using the sleeping status
@@ -153,6 +158,9 @@ public sealed partial class SleepingSystem : EntitySystem
 
     private void OnComponentRemoved(Entity<SleepingComponent> ent, ref ComponentRemove args)
     {
+        if (TerminatingOrDeleted(ent.Owner))
+            return;
+
         _actionsSystem.RemoveAction(ent.Owner, ent.Comp.WakeAction);
 
         var ev = new SleepStateChangedEvent(false);

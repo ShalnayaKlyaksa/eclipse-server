@@ -263,6 +263,7 @@
   id: FillWardrobeChapel
   table: !type:AllSelector
     children:
+    - id: PoltergeistDetector
     # todo chaplain backpack
     - id: ClothingUniformJumpsuitChaplain
     - id: ClothingShoesColorBlack

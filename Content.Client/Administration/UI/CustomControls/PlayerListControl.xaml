@@ -12,7 +12,7 @@
                     HorizontalExpand="True">
         <PanelContainer.PanelOverride>
             <gfx:StyleBoxFlat BackgroundColor="#120600F0"
-                              BorderColor="#D47D1B88"
+                              BorderColor="#70707088"
                               BorderThickness="1"
                               ContentMarginLeftOverride="3"
                               ContentMarginRightOverride="3"

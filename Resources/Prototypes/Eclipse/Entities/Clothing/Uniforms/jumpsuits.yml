@@ -155,7 +155,7 @@
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitNTNavyCaptain
-  name: nanotrasen navy captain jumpsuit
+  name: VISH navy captain jumpsuit
   description:
   components:
   - type: Sprite
@@ -166,7 +166,7 @@
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitNTNavyCapFormal
-  name: nanotrasen navy captain formal suit
+  name: VISH navy captain formal suit
   description:
   components:
   - type: Sprite
@@ -177,7 +177,7 @@
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitNTNavyOfficer
-  name: nanotrasen navy officer jumpsuit
+  name: VISH navy officer jumpsuit
   description:
   components:
   - type: Sprite
@@ -188,7 +188,7 @@
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitNTNavySailor
-  name: nanotrasen navy sailor jumpsuit
+  name: VISH navy sailor jumpsuit
   description:
   components:
   - type: Sprite
@@ -200,7 +200,7 @@
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitNTNavyWOEngi
   suffix: Engineering
-  name: nanotrasen navy warrant officer jumpsuit
+  name: VISH navy warrant officer jumpsuit
   description:
   components:
   - type: Sprite
@@ -211,7 +211,7 @@
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitNTNavyEngi
-  name: nanotrasen navy engineer jumpsuit
+  name: VISH navy engineer jumpsuit
   description:
   components:
   - type: Sprite
@@ -222,7 +222,7 @@
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitNTNavyWOMed
-  name: nanotrasen navy medical warrant officer jumpsuit
+  name: VISH navy medical warrant officer jumpsuit
   description:
   components:
   - type: Sprite
@@ -233,7 +233,7 @@
 - type: entity
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitNTNavyMed
-  name: nanotrasen navy medical jumpsuit
+  name: VISH navy medical jumpsuit
   description:
   components:
   - type: Sprite

@@ -1,98 +1,111 @@
-<pda:PdaWindow  xmlns="https://spacestation14.io"
-                xmlns:pda="clr-namespace:Content.Client.PDA"
-                xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
-                MinSize="576 450"
-                SetSize="576 450">
-    <!-- This: (Margin="1 1 3 0") is necessary so the navigation bar doesn't sticks into the black content border. -->
-    <BoxContainer Name="NavigationBar" HorizontalExpand="True" MinHeight="32" Margin="1 1 3 0">
-        <pda:PdaNavigationButton Name="HomeButton" SetWidth="32" CurrentTabBorderThickness="0 0 2 0" IsCurrent="True"/>
-        <pda:PdaNavigationButton Name="ProgramListButton" Access="Public" MinWidth="100" LabelText="{Loc 'comp-pda-io-program-list-button'}"/>
-        <pda:PdaNavigationButton Name="SettingsButton" MinWidth="100" LabelText="{Loc 'comp-pda-io-settings-button'}"/>
-
-        <pda:PdaNavigationButton Name="ProgramTitle" Access="Public" BorderThickness="0 0 0 2" CurrentTabBorderThickness="2 0 0 2"
-                                 ActiveBgColor="#202023" Visible="False"/>
-
-        <pda:PdaNavigationButton HorizontalExpand="True"/>
-
-        <pda:PdaNavigationButton Name="ProgramCloseButton" Access="Public" IconScale="0.5 0.5" BorderThickness="0 0 2 2"
-                                 Visible="False" IsActive="False" SetWidth="32"/>
-
-        <pda:PdaNavigationButton Name="FlashLightToggleButton" Access="Public" ToggleMode="True" ActiveFgColor="#EAEFBB" SetWidth="32"/>
-        <pda:PdaNavigationButton Name="EjectPenButton" Access="Public" SetWidth="32"/>
-        <pda:PdaNavigationButton Name="EjectIdButton" Access="Public" SetWidth="32"/>
-        <pda:PdaNavigationButton Name="EjectPaiButton" Access="Public" SetWidth="32"/>
-    </BoxContainer>
-    <BoxContainer Name="ViewContainer" HorizontalExpand="True" VerticalExpand="True" Access="Public">
-        <BoxContainer Orientation="Vertical"
-                      VerticalExpand="True"
-                      HorizontalExpand="True"
-                      MinSize="50 50"
-                      Margin="8">
-            <ContainerButton Name="PdaOwnerButton">
-                <RichTextLabel Name="PdaOwnerLabel" Access="Public"/>
-            </ContainerButton>
-            <ContainerButton Name="IdInfoButton">
-                <RichTextLabel Name="IdInfoLabel" Access="Public"/>
-            </ContainerButton>
-            <ContainerButton Name="StationNameButton">
-                <RichTextLabel Name="StationNameLabel" Access="Public"/>
-            </ContainerButton>
-            <ContainerButton Name="StationAlertLevelButton">
-                <RichTextLabel Name="StationAlertLevelLabel" Access="Public"/>
-            </ContainerButton>
-            <ContainerButton Name="StationTimeButton">
-                <RichTextLabel Name="StationTimeLabel" Access="Public"/>
-            </ContainerButton>
-            <ContainerButton Name="StationAlertLevelInstructionsButton">
-                <RichTextLabel Name="StationAlertLevelInstructions" Access="Public"/>
-            </ContainerButton>
+<pda:PdaWindow xmlns="https://spacestation14.io" xmlns:pda="clr-namespace:Content.Client.PDA"
+               MinSize="720 460" SetSize="840 500">
+    <BoxContainer HorizontalExpand="True" VerticalExpand="True" SeparationOverride="6">
+        <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="0">
+    <PanelContainer Name="ProgramHeader" StyleClasses="pda-header" Visible="False">
+        <BoxContainer Margin="4 2" SeparationOverride="4">
+            <Button Name="AppearanceBackButton" Visible="False" Text="←" ToolTip="{Loc 'comp-pda-io-settings-button'}"/>
+            <Label Name="ProgramTitleLabel" HorizontalExpand="True" VerticalAlignment="Center" StyleClasses="pda-caption"/>
+            <Button Name="MinimizeButton" Text="—" ToolTip="{Loc 'pda-os-minimize'}"/>
+            <Button Name="ProgramCloseButton" Access="Public" Text="×" ToolTip="{Loc 'pda-terminal-close-program'}"/>
         </BoxContainer>
-        <ScrollContainer HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="True">
-            <BoxContainer Orientation="Vertical"
-                          VerticalExpand="True"
-                          HorizontalExpand="True"
-                          MinSize="50 50"
-                          Name="ProgramList"
-                          Margin="4"/>
+    </PanelContainer>
+    <BoxContainer Name="ViewContainer" HorizontalExpand="True" VerticalExpand="True" Access="Public">
+        <pda:PdaDesktopCanvas Name="Desktop" HorizontalExpand="True" VerticalExpand="True"/>
+        <ScrollContainer HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="False">
+            <BoxContainer Orientation="Vertical" HorizontalExpand="True" Name="ProgramList" Margin="4" SeparationOverride="4"/>
         </ScrollContainer>
-        <ScrollContainer HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="True">
-            <BoxContainer Orientation="Vertical"
-                          VerticalExpand="True"
-                          HorizontalExpand="True"
-                          MinSize="50 50"
-                          Name="Settings">
-                <pda:PdaSettingsButton Name="AccessRingtoneButton"
-                                       Access="Public"
-                                       Text="{Loc 'comp-pda-ui-ringtone-button'}"
-                                       Description="{Loc 'comp-pda-ui-ringtone-button-description'}"/>
-                <pda:PdaSettingsButton Name="ActivateMusicButton"
-                                       Access="Public"
-                                       Visible="False"
-                                       Text="{Loc 'pda-bound-user-interface-music-button'}"
-                                       Description="{Loc 'pda-bound-user-interface-music-button-description'}"/>
-                <pda:PdaSettingsButton Name="ShowUplinkButton"
-                                       Access="Public"
-                                       Visible="False"
-                                       Text="{Loc 'pda-bound-user-interface-show-uplink-title'}"
-                                       Description="{Loc 'pda-bound-user-interface-show-uplink-description'}"/>
-                <pda:PdaSettingsButton Name="LockUplinkButton"
-                                       Access="Public"
-                                       Visible="False"
-                                       Text="{Loc 'pda-bound-user-interface-lock-uplink-title'}"
-                                       Description="{Loc 'pda-bound-user-interface-lock-uplink-description'}"/>
+        <ScrollContainer HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="False">
+            <BoxContainer Name="Settings" Orientation="Vertical" HorizontalExpand="True"
+                          MaxWidth="600" Margin="12 10" SeparationOverride="8">
+                <BoxContainer SeparationOverride="8">
+                    <PanelContainer StyleClasses="pda-editor" HorizontalExpand="True">
+                        <BoxContainer Orientation="Vertical" Margin="10 8" SeparationOverride="5">
+                            <Label Text="{Loc 'pda-os-settings-display'}" StyleClasses="pda-caption"/>
+                            <pda:PdaSettingsButton Name="AppearanceButton" Text="{Loc 'pda-os-app-appearance'}"
+                                                   Description="{Loc 'pda-os-settings-appearance-description'}"/>
+                            <CheckBox Name="CrtEffects" Text="{Loc 'pda-os-display-effects'}" LeftAlign="False"
+                                      MinHeight="28" Margin="8 2 8 0"/>
+                            <Label Text="{Loc 'pda-os-display-effects-hint'}" StyleClasses="terminal-muted" Margin="8 0 8 2"/>
+                        </BoxContainer>
+                    </PanelContainer>
+                    <PanelContainer StyleClasses="pda-editor" HorizontalExpand="True">
+                        <BoxContainer Orientation="Vertical" Margin="10 8" SeparationOverride="5">
+                            <Label Text="{Loc 'pda-os-settings-sound'}" StyleClasses="pda-caption"/>
+                            <pda:PdaSettingsButton Name="AccessRingtoneButton" Access="Public" Text="{Loc 'comp-pda-ui-ringtone-button'}"
+                                                   Description="{Loc 'comp-pda-ui-ringtone-button-description'}"/>
+                            <pda:PdaSettingsButton Name="ActivateMusicButton" Access="Public" Visible="False" Text="{Loc 'pda-bound-user-interface-music-button'}"
+                                                   Description="{Loc 'pda-bound-user-interface-music-button-description'}"/>
+                        </BoxContainer>
+                    </PanelContainer>
+                </BoxContainer>
+                <PanelContainer Name="DeviceSettings" StyleClasses="pda-editor" Visible="False">
+                    <BoxContainer Orientation="Vertical" Margin="10 8" SeparationOverride="5">
+                        <Label Text="{Loc 'pda-os-settings-device'}" StyleClasses="pda-caption"/>
+                        <Button Name="EjectPaiButton" Access="Public" Visible="False" Text="{Loc 'pda-terminal-eject-pai'}"
+                                MinHeight="28" HorizontalAlignment="Left"/>
+                        <pda:PdaSettingsButton Name="ShowUplinkButton" Access="Public" Visible="False" Text="{Loc 'pda-bound-user-interface-show-uplink-title'}"
+                                               Description="{Loc 'pda-bound-user-interface-show-uplink-description'}"/>
+                        <pda:PdaSettingsButton Name="LockUplinkButton" Access="Public" Visible="False" Text="{Loc 'pda-bound-user-interface-lock-uplink-title'}"
+                                               Description="{Loc 'pda-bound-user-interface-lock-uplink-description'}"/>
+                    </BoxContainer>
+                </PanelContainer>
             </BoxContainer>
         </ScrollContainer>
-        <BoxContainer Orientation="Vertical"
-                      VerticalExpand="True"
-                      HorizontalExpand="True"
-                      Name="ProgramView"
-                      Access="Public">
-        </BoxContainer>
+        <BoxContainer Name="ProgramView" Access="Public" Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" Margin="4"/>
+        <ScrollContainer HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="False">
+            <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="4" SeparationOverride="5">
+                <BoxContainer SeparationOverride="5">
+                    <PanelContainer StyleClasses="pda-editor" HorizontalExpand="True">
+                        <BoxContainer Orientation="Vertical" Margin="6" SeparationOverride="5" HorizontalExpand="True">
+                            <Label Text="{Loc 'pda-terminal-personal'}" StyleClasses="pda-caption"/>
+                            <ContainerButton Name="PdaOwnerButton" StyleClasses="button pda-copy"><RichTextLabel Name="PdaOwnerLabel" Access="Public" HorizontalExpand="True"/></ContainerButton>
+                            <ContainerButton Name="IdInfoButton" StyleClasses="button pda-copy"><RichTextLabel Name="IdInfoLabel" Access="Public" HorizontalExpand="True"/></ContainerButton>
+                        </BoxContainer>
+                    </PanelContainer>
+                    <PanelContainer StyleClasses="pda-editor" HorizontalExpand="True">
+                        <BoxContainer Orientation="Vertical" Margin="6" SeparationOverride="5" HorizontalExpand="True">
+                            <Label Text="{Loc 'pda-terminal-station'}" StyleClasses="pda-caption"/>
+                            <ContainerButton Name="StationNameButton" StyleClasses="button pda-copy"><RichTextLabel Name="StationNameLabel" Access="Public" HorizontalExpand="True"/></ContainerButton>
+                            <ContainerButton Name="StationTimeButton" StyleClasses="button pda-copy"><RichTextLabel Name="StationTimeLabel" Access="Public" HorizontalExpand="True"/></ContainerButton>
+                        </BoxContainer>
+                    </PanelContainer>
+                </BoxContainer>
+                <PanelContainer StyleClasses="pda-editor">
+                    <BoxContainer Orientation="Vertical" Margin="6" SeparationOverride="5" HorizontalExpand="True">
+                        <ContainerButton Name="StationAlertLevelButton" StyleClasses="button pda-copy"><RichTextLabel Name="StationAlertLevelLabel" Access="Public" HorizontalExpand="True"/></ContainerButton>
+                        <PanelContainer MinHeight="1" StyleClasses="pda-divider"/>
+                        <ContainerButton Name="StationAlertLevelInstructionsButton" StyleClasses="button pda-copy"><RichTextLabel Name="StationAlertLevelInstructions" Access="Public" HorizontalExpand="True"/></ContainerButton>
+                    </BoxContainer>
+                </PanelContainer>
+            </BoxContainer>
+        </ScrollContainer>
+        <BoxContainer Name="BuiltinView" Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" Margin="4"/>
+        <ScrollContainer HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="False">
+            <BoxContainer Name="AppearancePage" Orientation="Vertical" HorizontalExpand="True"
+                          MaxWidth="600" Margin="12 10" SeparationOverride="8"/>
+        </ScrollContainer>
     </BoxContainer>
-    <BoxContainer Name="ContentFooter" HorizontalExpand="True" SetHeight="28" Margin="1 0 2 1">
-        <controls:StripeBack HasBottomEdge="False" HasMargins="False" HorizontalExpand="True">
-            <Label Text="Robust#OS ™" VerticalAlignment="Center" Margin="6 0" StyleClasses="PdaContentFooterText"/>
-            <Label Name="AddressLabel" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="6 0" StyleClasses="PdaContentFooterText"/>
-        </controls:StripeBack>
+            <PanelContainer Name="Taskbar" StyleClasses="pda-taskbar" Margin="0 4 0 0" Visible="False">
+                <BoxContainer Margin="5 3" SeparationOverride="6" MinHeight="25">
+                    <Button Name="TaskButton" Visible="False" MinWidth="120" MaxWidth="200" RectClipContent="True"/>
+                    <Label Name="TaskLabel" HorizontalExpand="True" ClipText="True" VerticalAlignment="Center" StyleClasses="terminal-muted"/>
+                </BoxContainer>
+            </PanelContainer>
+        </BoxContainer>
+        <PanelContainer StyleClasses="pda-header" SetWidth="34">
+            <BoxContainer Orientation="Vertical" Margin="3" SeparationOverride="3">
+                <pda:PdaNavigationButton Name="DesktopButton" SetSize="28 26" ToolTip="{Loc 'pda-os-desktop'}"/>
+                <pda:PdaNavigationButton Name="ApplicationsButton" SetSize="28 26" ToolTip="{Loc 'pda-os-app-apps'}"/>
+                <pda:PdaNavigationButton Name="SystemButton" SetSize="28 26" ToolTip="{Loc 'pda-os-system'}"/>
+                <PanelContainer MinHeight="1" StyleClasses="pda-divider" Margin="0 2"/>
+                <BoxContainer Name="RunningTasks" Orientation="Vertical" SeparationOverride="2" VerticalExpand="True"/>
+                <PanelContainer MinHeight="1" StyleClasses="pda-divider" Margin="0 2"/>
+                <pda:PdaNavigationButton Name="FlashLightToggleButton" Access="Public" ToggleMode="True" SetSize="28 24" ToolTip="{Loc 'comp-pda-ui-toggle-flashlight-button'}"/>
+                <PanelContainer MinHeight="1" StyleClasses="pda-divider"/>
+                <pda:PdaNavigationButton Name="EjectIdButton" Access="Public" SetSize="28 24" ToolTip="{Loc 'comp-pda-ui-eject-id-button'}"/>
+                <pda:PdaNavigationButton Name="EjectPenButton" Access="Public" SetSize="28 24" ToolTip="{Loc 'comp-pda-ui-eject-pen-button'}"/>
+            </BoxContainer>
+        </PanelContainer>
     </BoxContainer>
 </pda:PdaWindow>

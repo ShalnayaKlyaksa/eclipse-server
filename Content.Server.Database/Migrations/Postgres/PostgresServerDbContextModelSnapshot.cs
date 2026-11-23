@@ -1051,6 +1051,10 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("text")
                         .HasColumnName("char_name");
 
+                    b.Property<string>("CharacterCustomization")
+                        .HasColumnType("text")
+                        .HasColumnName("character_customization");
+
                     b.Property<string>("CustomSpecies")
                         .IsRequired()
                         .HasColumnType("text")

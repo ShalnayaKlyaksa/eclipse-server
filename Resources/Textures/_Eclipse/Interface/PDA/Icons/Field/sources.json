@@ -1,0 +1,82 @@
+[
+  {
+    "name": "personal",
+    "url": "https://raw.githubusercontent.com/microsoft/fluentui-system-icons/main/assets/Person/SVG/ic_fluent_person_24_regular.svg"
+  },
+  {
+    "name": "bank",
+    "url": "https://raw.githubusercontent.com/microsoft/fluentui-system-icons/main/assets/Building%20Bank/SVG/ic_fluent_building_bank_24_regular.svg"
+  },
+  {
+    "name": "flappy",
+    "url": "https://raw.githubusercontent.com/microsoft/fluentui-system-icons/main/assets/Rocket/SVG/ic_fluent_rocket_24_regular.svg"
+  },
+  {
+    "name": "blocks",
+    "url": "https://raw.githubusercontent.com/microsoft/fluentui-system-icons/main/assets/Puzzle%20Piece/SVG/ic_fluent_puzzle_piece_24_regular.svg"
+  },
+  {
+    "name": "calculator",
+    "url": "https://raw.githubusercontent.com/microsoft/fluentui-system-icons/main/assets/Calculator/SVG/ic_fluent_calculator_24_regular.svg"
+  },
+  {
+    "name": "appearance",
+    "url": "https://raw.githubusercontent.com/microsoft/fluentui-system-icons/main/assets/Image/SVG/ic_fluent_image_24_regular.svg"
+  },
+  {
+    "name": "mail",
+    "url": "https://raw.githubusercontent.com/microsoft/fluentui-system-icons/main/assets/Mail/SVG/ic_fluent_mail_24_regular.svg"
+  },
+  {
+    "name": "crew",
+    "url": "https://raw.githubusercontent.com/microsoft/fluentui-system-icons/main/assets/People%20Team/SVG/ic_fluent_people_team_24_regular.svg"
+  },
+  {
+    "name": "notes",
+    "url": "https://raw.githubusercontent.com/microsoft/fluentui-system-icons/main/assets/Notepad/SVG/ic_fluent_notepad_24_regular.svg"
+  },
+  {
+    "name": "news",
+    "url": "https://raw.githubusercontent.com/microsoft/fluentui-system-icons/main/assets/News/SVG/ic_fluent_news_24_regular.svg"
+  },
+  {
+    "name": "settings",
+    "url": "https://raw.githubusercontent.com/microsoft/fluentui-system-icons/main/assets/Settings/SVG/ic_fluent_settings_24_regular.svg"
+  },
+  {
+    "name": "apps",
+    "url": "https://raw.githubusercontent.com/microsoft/fluentui-system-icons/main/assets/Apps/SVG/ic_fluent_apps_24_regular.svg"
+  },
+  {
+    "name": "fallback",
+    "url": "https://raw.githubusercontent.com/microsoft/fluentui-system-icons/main/assets/Shield/SVG/ic_fluent_shield_24_regular.svg"
+  },
+  {
+    "name": "timer",
+    "url": "https://raw.githubusercontent.com/microsoft/fluentui-system-icons/main/assets/Timer/SVG/ic_fluent_timer_24_regular.svg"
+  },
+  {
+    "name": "home",
+    "url": "https://raw.githubusercontent.com/microsoft/fluentui-system-icons/main/assets/Home/SVG/ic_fluent_home_24_regular.svg"
+  },
+  {
+    "name": "flashlight",
+    "url": "https://raw.githubusercontent.com/microsoft/fluentui-system-icons/main/assets/Flashlight/SVG/ic_fluent_flashlight_24_regular.svg"
+  },
+  {
+    "name": "pen",
+    "url": "https://raw.githubusercontent.com/microsoft/fluentui-system-icons/main/assets/Pen/SVG/ic_fluent_pen_24_regular.svg"
+  },
+  {
+    "name": "pai",
+    "url": "https://raw.githubusercontent.com/microsoft/fluentui-system-icons/main/assets/Bot/SVG/ic_fluent_bot_24_regular.svg"
+  },
+  {
+    "name": "tasks",
+    "url": "https://raw.githubusercontent.com/microsoft/fluentui-system-icons/main/assets/Clipboard%20Task/SVG/ic_fluent_clipboard_task_24_regular.svg"
+  },
+  {
+    "name": "id",
+    "url": "https://raw.githubusercontent.com/microsoft/fluentui-system-icons/main/assets/Contact%20Card/SVG/ic_fluent_contact_card_24_regular.svg"
+  }
+]

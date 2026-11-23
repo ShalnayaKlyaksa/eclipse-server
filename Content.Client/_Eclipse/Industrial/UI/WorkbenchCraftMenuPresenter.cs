@@ -7,17 +7,20 @@ using Content.Shared.Stacks;
 using Content.Shared.Storage;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Client.UserInterface;
+using Robust.Shared.Timing;
 using Robust.Client.Player;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client._Eclipse.Industrial.UI;
 
-public sealed class WorkbenchCraftMenuPresenter : IDisposable
+public sealed partial class WorkbenchCraftMenuPresenter : IDisposable
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly IPlayerManager _playerManager = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
 
+    private readonly IndustrialResourceSystem _resources;
     private readonly SpriteSystem _spriteSystem;
     private readonly HandsSystem _hands;
 
@@ -28,6 +31,8 @@ public sealed class WorkbenchCraftMenuPresenter : IDisposable
     private readonly List<IndustrialFabricationRecipePrototype> _recipes = [];
     private IndustrialFabricationRecipePrototype? _selected;
     private string _selectedCategory = string.Empty;
+    private string _search = string.Empty;
+    private int _inventoryHash;
 
     private const string ForAllCategoryName = "construction-category-all";
     private const string ComponentsCategoryName = "industrial-workbench-category-components";
@@ -39,6 +44,7 @@ public sealed class WorkbenchCraftMenuPresenter : IDisposable
         _bui = bui;
         _workbench = workbench;
         _view = new ConstructionMenu();
+        _resources = _entManager.System<IndustrialResourceSystem>();
         _spriteSystem = _entManager.System<SpriteSystem>();
         _hands = _entManager.System<HandsSystem>();
 
@@ -51,6 +57,7 @@ public sealed class WorkbenchCraftMenuPresenter : IDisposable
         _view.RecipeSelected += OnRecipeSelected;
         _view.CraftRequested += (_, _) => OnCraftRequested();
 
+        _view.ContentsContainer.AddChild(new InventoryRefreshControl(RefreshInventory));
         ReloadRecipes();
         RefreshAll();
     }
@@ -65,14 +72,22 @@ public sealed class WorkbenchCraftMenuPresenter : IDisposable
 
     public void Dispose() => _view.Dispose();
 
+    private string RecipeName(IndustrialFabricationRecipePrototype recipe)
+        => recipe.Name != null ? Loc.GetString(recipe.Name) : _prototypeManager.Index(recipe.Result).Name;
+
     private void ReloadRecipes()
     {
         _recipes.Clear();
         _recipes.AddRange(_prototypeManager.EnumeratePrototypes<IndustrialFabricationRecipePrototype>());
+        if (_entManager.TryGetComponent<IndustrialWorkbenchComponent>(_workbench, out var workbench))
+            _recipes.RemoveAll(recipe => recipe.MinimumWorkbenchTier > workbench.Tier);
+        _entManager.TryGetComponent<IndustrialMachineKnowledgeComponent>(_workbench, out var knowledge);
+        _recipes.RemoveAll(recipe => recipe.RequiredTechnology is { } technology &&
+            (knowledge == null || !knowledge.Technologies.Contains(technology)));
         _recipes.Sort((a, b) =>
         {
-            var nameA = a.Name != null ? Loc.GetString(a.Name) : a.ID;
-            var nameB = b.Name != null ? Loc.GetString(b.Name) : b.ID;
+            var nameA = RecipeName(a);
+            var nameB = RecipeName(b);
             return string.Compare(nameA, nameB, StringComparison.InvariantCulture);
         });
     }
@@ -81,6 +96,7 @@ public sealed class WorkbenchCraftMenuPresenter : IDisposable
     {
         var rows = new List<ConstructionMenu.RecipeRowData>();
         var (search, category) = args;
+        _search = search;
         var isEmptyCategory = string.IsNullOrEmpty(category) || category == ForAllCategoryName;
 
         foreach (var recipe in _recipes)
@@ -89,7 +105,7 @@ public sealed class WorkbenchCraftMenuPresenter : IDisposable
             if (!isEmptyCategory && recipeCategory != category)
                 continue;
 
-            var name = recipe.Name != null ? Loc.GetString(recipe.Name) : recipe.ID;
+            var name = RecipeName(recipe);
             if (!string.IsNullOrEmpty(search)
                 && !name.Contains(search.Trim(), StringComparison.InvariantCultureIgnoreCase))
                 continue;
@@ -170,14 +186,15 @@ public sealed class WorkbenchCraftMenuPresenter : IDisposable
         if (!_prototypeManager.TryIndex(recipe.Result, out var resultProto))
             return;
 
-        var name = recipe.Name != null ? Loc.GetString(recipe.Name) : recipe.ID;
+        var name = RecipeName(recipe);
         var description = resultProto.Description ?? string.Empty;
 
         _view.SetRecipeInfo(name, description, resultProto, isStructure: false, isFavorite: false);
 
         _view.SetTargetStats(Loc.GetString(
             "industrial-workbench-craft-duration",
-            ("seconds", (int) recipe.Duration)));
+            ("seconds", (int) MathF.Ceiling(recipe.Duration * Math.Clamp(_view.Quantity, 1, 10) /
+                (_entManager.GetComponent<IndustrialWorkbenchComponent>(_workbench).CraftSpeed)))));
 
         var stepList = _view.RecipeStepList;
         foreach (var (protoId, amount) in recipe.Ingredients)
@@ -189,7 +206,7 @@ public sealed class WorkbenchCraftMenuPresenter : IDisposable
             var text = Loc.GetString(
                 "industrial-workbench-ingredient-line",
                 ("have", have),
-                ("need", amount),
+                ("need", amount * Math.Clamp(_view.Quantity, 1, 10)),
                 ("name", ingredientProto.Name));
 
             var icon = _spriteSystem.Frame0(ingredientProto);
@@ -197,35 +214,21 @@ public sealed class WorkbenchCraftMenuPresenter : IDisposable
         }
     }
 
-    private int CountAvailable(string protoId)
+    private IEnumerable<EntityUid> Ingredients()
     {
-        var total = 0;
-
         if (_entManager.TryGetComponent<StorageComponent>(_workbench, out var storage))
         {
             foreach (var item in storage.Container.ContainedEntities)
-                total += GetItemCount(item, protoId);
+                yield return item;
         }
-
         if (_playerManager.LocalEntity is { } player)
         {
-            foreach (var hand in _hands.EnumerateHeld(player))
-                total += GetItemCount(hand, protoId);
+            foreach (var item in _hands.EnumerateHeld(player))
+                yield return item;
         }
-
-        return total;
     }
 
-    private int GetItemCount(EntityUid item, string protoId)
-    {
-        if (_entManager.GetComponent<MetaDataComponent>(item).EntityPrototype?.ID != protoId)
-            return 0;
-
-        if (_entManager.TryGetComponent<StackComponent>(item, out var stack))
-            return stack.Count;
-
-        return 1;
-    }
+    private int CountAvailable(string protoId) => _resources.Count(Ingredients(), protoId);
 
     private void OnCraftRequested()
     {
@@ -238,58 +241,43 @@ public sealed class WorkbenchCraftMenuPresenter : IDisposable
 
     private void RefreshAll()
     {
-        OnPopulateRecipes(_view, (string.Empty, _selectedCategory));
+        OnPopulateRecipes(_view, (_search, _selectedCategory));
     }
 
     private bool CanAfford(IndustrialFabricationRecipePrototype recipe)
+        => _resources.CanAfford(Ingredients(), recipe.Ingredients, Math.Clamp(_view.Quantity, 1, 10));
+    private void RefreshInventory()
     {
-        if (_playerManager.LocalEntity is not { } player)
-            return false;
-
-        var remaining = new Dictionary<string, int>(recipe.Ingredients);
-        CountFromStorage(_workbench, remaining);
-
-        if (remaining.Count == 0)
-            return true;
-
-        foreach (var hand in _hands.EnumerateHeld(player))
-            CountFromItem(hand, remaining);
-
-        return remaining.Count == 0;
-    }
-
-    private void CountFromStorage(EntityUid workbench, Dictionary<string, int> remaining)
-    {
-        if (!_entManager.TryGetComponent<StorageComponent>(workbench, out var storage))
-            return;
-
-        foreach (var item in storage.Container.ContainedEntities)
-            CountFromItem(item, remaining);
-    }
-
-    private void CountFromItem(EntityUid item, Dictionary<string, int> remaining)
-    {
-        if (remaining.Count == 0)
-            return;
-
-        var protoId = _entManager.GetComponent<MetaDataComponent>(item).EntityPrototype?.ID;
-        if (protoId == null || !remaining.TryGetValue(protoId, out var needed))
-            return;
-
-        if (_entManager.TryGetComponent<StackComponent>(item, out var stack))
+        var hash = new HashCode();
+        hash.Add(_view.Quantity);
+        hash.Add(_entManager.TryGetComponent<IndustrialMachineKnowledgeComponent>(_workbench, out var knowledge) ? knowledge.Technologies.Count : 0);
+        foreach (var item in Ingredients())
         {
-            if (stack.Count < needed)
-                return;
-
-            remaining[protoId] = needed - stack.Count;
-            if (remaining[protoId] <= 0)
-                remaining.Remove(protoId);
-
-            return;
+            hash.Add(item);
+            hash.Add(_resources.Count(item));
         }
-
-        remaining[protoId] = needed - 1;
-        if (remaining[protoId] <= 0)
-            remaining.Remove(protoId);
+        var current = hash.ToHashCode();
+        if (_inventoryHash == current)
+            return;
+        _inventoryHash = current;
+        ReloadRecipes();
+        RefreshAll();
+        if (_selected != null)
+            PopulateInfo(_selected);
     }
+
+    private sealed class InventoryRefreshControl(Action refresh) : Control
+    {
+        private float _elapsed;
+        protected override void FrameUpdate(FrameEventArgs args)
+        {
+            base.FrameUpdate(args);
+            _elapsed += args.DeltaSeconds;
+            if (_elapsed < 0.5f)
+                return;
+            _elapsed %= 0.5f;
+            refresh();
+        }
+    }
+
 }

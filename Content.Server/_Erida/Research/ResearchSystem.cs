@@ -20,7 +20,14 @@ public sealed partial class ResearchSystem
         if (!Resolve(uid, ref component, ref clientComponent, false))
             return;
 
-        var allTechs = PrototypeManager.EnumeratePrototypes<TechnologyPrototype>().ToList();
+        var terminal = GetTerminalState(uid, component);
+        if (terminal.Username == null)
+        {
+            _uiSystem.SetUiState(uid, ResearchConsoleUiKey.Key,
+                new ResearchConsoleBoundInterfaceState(0, new()) { Terminal = terminal });
+            return;
+        }
+        var allTechs = PrototypeManager.EnumeratePrototypes<TechnologyPrototype>().Where(x => !x.Hidden).ToList();
         Dictionary<string, ResearchAvailability> techList;
         var points = 0;
 
@@ -52,7 +59,7 @@ public sealed partial class ResearchSystem
 
         _uiSystem.SetUiState(uid,
             ResearchConsoleUiKey.Key,
-            new ResearchConsoleBoundInterfaceState(points, techList));
+            new ResearchConsoleBoundInterfaceState(points, techList) { Terminal = terminal });
     }
 
     private void OnServerInit(Entity<ResearchServerComponent> ent, ref MapInitEvent args)

@@ -47,7 +47,7 @@
 - type: entity
   parent: [ClothingBeltBase, ClothingSlotBase, BaseCommandContraband]
   id: ClothingBeltNTNavySheath
-  name: nanotrasen navy sabre sheath
+  name: VISH navy sabre sheath
   description:
   components:
   - type: Sprite

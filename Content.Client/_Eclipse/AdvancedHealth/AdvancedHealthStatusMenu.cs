@@ -50,10 +50,11 @@ internal static class HealthMenuStyle
 
     // Matches AdvancedHealthBodyDollControl.GetColor so the legend is truthful.
     public static readonly Color SeverityHealthy = Color.FromHex("#57574e");
-    public static readonly Color SeverityMinor = Color.FromHex("#e0a3a3");
-    public static readonly Color SeverityModerate = Color.FromHex("#ef6a6a");
-    public static readonly Color SeveritySevere = Color.FromHex("#d81b2a");
-    public static readonly Color SeverityCritical = Color.FromHex("#8a0f18");
+    public static readonly Color SeverityMinor = Color.FromHex("#95635c");
+    public static readonly Color SeverityModerate = Color.FromHex("#bf503b");
+    public static readonly Color SeveritySevere = Color.FromHex("#b52332");
+    public static readonly Color SeverityCritical = Color.FromHex("#f44250");
+    public static readonly Color SystemicWeakness = Color.FromHex("#607d94");
 
     public static Font Mono(int size, bool bold = false)
     {
@@ -192,7 +193,7 @@ public sealed class HealthMenuProgressBar : Control
     }
 }
 
-/// <summary>Brain integrity shown on a large anatomical symbol, not a stretched bar.</summary>
+/// <summary>Brain integrity with a calibrated vertical meter and an anatomical symbol.</summary>
 public sealed class HealthChipBrainGauge : Control
 {
     private readonly Texture _brain = HealthMenuStyle.Tex("Lucide/brain");
@@ -201,10 +202,23 @@ public sealed class HealthChipBrainGauge : Control
     protected override void Draw(DrawingHandleScreen handle)
     {
         var box = PixelSizeBox;
-        var side = Math.Min(box.Width, box.Height);
-        var square = UIBox2.FromDimensions(box.Center - new Vector2(side / 2), new Vector2(side));
-        handle.DrawTextureRect(_brain, square, HealthMenuStyle.AmberDim.WithAlpha(0.25f));
+        var meterWidth = Math.Min(22 * UIScale, box.Width * 0.28f);
+        var meter = new UIBox2(2 * UIScale, 4 * UIScale, meterWidth, box.Bottom - 4 * UIScale);
+        handle.DrawRect(meter, HealthMenuStyle.BarBg);
+        handle.DrawRect(meter, HealthMenuStyle.AmberBorder, false);
         var fill = Math.Clamp(Fraction, 0, 1);
+        var inset = 3 * UIScale;
+        handle.DrawRect(new UIBox2(meter.Left + inset,
+            meter.Bottom - inset - (meter.Height - inset * 2) * fill,
+            meter.Right - inset, meter.Bottom - inset), FillColor);
+        for (var i = 1; i < 10; i++)
+        {
+            var y = meter.Bottom - meter.Height * i / 10;
+            handle.DrawLine(new Vector2(meter.Left, y), new Vector2(meter.Left + 5 * UIScale, y), HealthMenuStyle.BarBg);
+        }
+        var side = Math.Min(box.Width - meterWidth - 8 * UIScale, box.Height);
+        var square = UIBox2.FromDimensions(new Vector2(meterWidth + 8 * UIScale, (box.Height - side) / 2), new Vector2(side));
+        handle.DrawTextureRect(_brain, square, HealthMenuStyle.AmberDim.WithAlpha(0.25f));
         if (fill <= 0) return;
         handle.DrawTextureRectRegion(_brain,
             new UIBox2(square.Left, square.Bottom - side * fill, square.Right, square.Bottom),
@@ -223,15 +237,15 @@ public sealed class HealthMenuThermometer : Control
     public Font ReadingFont = HealthMenuStyle.Mono(15, true);
     protected override void Draw(DrawingHandleScreen handle)
     {
-        var box = PixelSizeBox;
+        var textHeight = ReadingFont.GetHeight(UIScale) + 4 * UIScale;
+        var size = Math.Max(0, Math.Min(PixelSize.X, PixelSize.Y - textHeight));
+        var box = new UIBox2((PixelSize.X - size) / 2, textHeight, (PixelSize.X + size) / 2, textHeight + size);
+        handle.DrawString(ReadingFont, new Vector2(2 * UIScale, 0), Reading, UIScale, ReadingColor);
         handle.DrawTextureRect(_empty, box);
         var cut = 0.667f - Math.Clamp(Fraction, 0, 1) * (0.667f - 0.146f);
         handle.DrawTextureRectRegion(_full,
             new UIBox2(box.Left, box.Top + box.Height * cut, box.Right, box.Bottom),
             new UIBox2(0, _full.Height * cut, _full.Width, _full.Height));
-        // The authored callout lies on row 22 of the 48px image. Text uses that exact baseline.
-        handle.DrawString(ReadingFont, new Vector2(box.Left + 2 * UIScale, box.Top + box.Height * 22f / 48f),
-            Reading, UIScale, ReadingColor);
     }
 }
 
@@ -761,7 +775,7 @@ public sealed class HealthMenuToolbelt : Control
 /// Implanted medical chip: organism-wide vitals, interactive anatomical map and per-part
 /// conditions/treatments. Local visual effects never change authoritative medical state.
 /// </summary>
-public sealed class AdvancedHealthStatusWindow : BaseWindow
+public sealed partial class AdvancedHealthStatusWindow : BaseWindow
 {
     private readonly IEntityManager _entities;
     private readonly IClyde _clyde;
@@ -783,6 +797,7 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
     private float _maxDollSide;
     private LayoutContainer _overlayLayer = default!;
     private Button _extractButton = default!;
+    private float _partActionLinger;
     private BodyPartSlot? _extractSlot;
 
     private Label _brainLabel = default!;
@@ -792,6 +807,7 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
     private HealthMenuThermometer _thermometer = default!;
     private SpriteView _heldCursor = default!;
     private RichTextLabel _zoneEquipment = default!;
+    private BoxContainer _zoneEquipmentSection = default!;
     private BoxContainer _regionalSelector = default!;
     private Button _primaryRegionButton = default!;
     private Button _secondaryRegionButton = default!;
@@ -801,12 +817,14 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
     private Label _bloodLabel = default!;
     private BoxContainer _bleedRow = default!;
     private Label _bleedLabel = default!;
+    private TextureRect _bleedIcon = default!;
     private Label _consciousnessValue = default!;
     private Label _painValue = default!;
     private Label _immunityLabel = default!;
     private HealthChipLungGauge _lungsIcon = default!;
     private Label _respLabel = default!;
     private Label _radLabel = default!;
+    private HealthMenuProgressBar _radBar = default!;
     private BoxContainer _radRow = default!;
     private Control _tempColumn = default!;
     private HealthMenuProgressBar _thirstBar = default!;
@@ -839,14 +857,20 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
     private BoxContainer _zoneBottom = default!;
     private Label _zoneBleeding = default!;
     private Control _zoneBleedingCell = default!;
+    private TextureRect _zoneBleedingIcon = default!;
     private RichTextLabel _patientLabel = default!;
     private RichTextLabel _summaryLabel = default!;
+    private RichTextLabel _arrestReason = default!;
     private HealthChipIndicator _shockIndicator = default!;
     private HealthChipIndicator _perfusionIndicator = default!;
     private HealthChipIndicator _reserveIndicator = default!;
     private HealthChipIndicator _sleepIndicator = default!;
+    private HealthChipIndicator _nutritionIndicator = default!;
+    private HealthChipIndicator _dehydrationIndicator = default!;
+    private HealthChipIndicator _stomachIndicator = default!;
+    private BoxContainer _systemicConditionsList = default!;
+    private string _systemicConditionSignature = "";
     private RichTextLabel _functionDetails = default!;
-    private BoxContainer _treatmentActions = default!;
     private HealthChipAlarmControl _chipAlarm = default!;
     private string _conditionSignature = "";
     private readonly List<(string Key, string Text, string Description, Color Color)> _conditionRows = new();
@@ -985,29 +1009,34 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
         gauges.SeparationOverride = Math.Max(4, (int) (8 * _s));
         body.AddChild(gauges);
         var brain = VCol();
-        brain.MinWidth = 96 * _s;
+        brain.MinWidth = brain.MaxWidth = 80 * _s;
         var brainTitle = SText(Loc.GetString("advanced-health-chip-brain"), 12, HealthMenuStyle.AmberDim);
         brainTitle.HorizontalAlignment = HAlignment.Center;
         brain.AddChild(brainTitle);
         _brainGauge = new HealthChipBrainGauge
         {
-            Name = "MedicalChipBrainGauge", SetSize = Sz(88, 112), HorizontalAlignment = HAlignment.Center,
+            Name = "MedicalChipBrainGauge", SetSize = Sz(74, 164), HorizontalAlignment = HAlignment.Center,
         };
         brain.AddChild(_brainGauge);
         _brainLabel = SText("", 17, HealthMenuStyle.AmberBright, true);
         _brainLabel.HorizontalAlignment = HAlignment.Center;
         brain.AddChild(_brainLabel);
-        brain.VerticalAlignment = VAlignment.Center;
+        brain.VerticalAlignment = VAlignment.Top;
         gauges.AddChild(brain);
-        gauges.AddChild(new Control { HorizontalExpand = true });
+        var neural = VCol();
+        neural.Name = "MedicalChipNeuralReadouts";
+        neural.HorizontalExpand = true;
+        neural.VerticalAlignment = VAlignment.Center;
+        neural.SeparationOverride = Math.Max(4, (int) (12 * _s));
+        gauges.AddChild(neural);
         var temperature = VCol();
-        temperature.MinWidth = 204 * _s;
+        temperature.MinWidth = 192 * _s;
         var temperatureTitle = SText(Loc.GetString("advanced-health-vital-temperature"), 12, HealthMenuStyle.AmberDim);
         temperatureTitle.HorizontalAlignment = HAlignment.Center;
         temperature.AddChild(temperatureTitle);
         _thermometer = new HealthMenuThermometer
         {
-            Name = "MedicalChipThermometer", SetSize = Sz(204, 204),
+            Name = "MedicalChipThermometer", SetSize = Sz(192, 192),
             ReadingFont = HealthMenuStyle.Mono(Math.Max(12, (int) (16 * _s)), true),
         };
         temperature.AddChild(_thermometer);
@@ -1016,26 +1045,25 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
         gauges.AddChild(temperature);
         _brainGauge.ToolTip = Loc.GetString("advanced-health-vital-brain-tooltip");
 
-        var neural = new GridContainer { Columns = 2, HorizontalExpand = true, HSeparationOverride = Math.Max(6, (int) (12 * _s)) };
-        var consciousness = new HealthChipIndicator(Loc.GetString("advanced-health-vital-consciousness"), _s);
+        var consciousness = new HealthChipIndicator(Loc.GetString("advanced-health-vital-consciousness"), _s, stackedHeading: true);
         _consciousnessGauge = consciousness.Gauge;
         _consciousnessValue = consciousness.Value;
         consciousness.ToolTip = Loc.GetString("advanced-health-vital-consciousness-tooltip");
         neural.AddChild(consciousness);
-        var pain = new HealthChipIndicator(Loc.GetString("advanced-health-vital-pain"), _s);
+        var pain = new HealthChipIndicator(Loc.GetString("advanced-health-vital-pain"), _s, stackedHeading: true);
         _painGauge = pain.Gauge;
         _painValue = pain.Value;
         pain.ToolTip = Loc.GetString("advanced-health-vital-pain-tooltip");
         neural.AddChild(pain);
-        body.AddChild(neural);
-        var immunity = HRow();
-        immunity.AddChild(SIcon("Lucide/shield-plus", 32, HealthMenuStyle.Amber));
-        immunity.AddChild(SText(Loc.GetString("advanced-health-vital-immunity"), 12, HealthMenuStyle.AmberDim));
-        immunity.AddChild(new Control { HorizontalExpand = true });
+        var immunity = VCol();
+        immunity.AddChild(SText(Loc.GetString("advanced-health-vital-immunity"), 11, HealthMenuStyle.AmberDim));
+        var immuneValue = HRow();
+        immuneValue.AddChild(SIcon("Lucide/shield-plus", 26, HealthMenuStyle.Amber));
         _immunityLabel = SText("", 15, HealthMenuStyle.AmberBright, true);
-        immunity.AddChild(_immunityLabel);
+        immuneValue.AddChild(_immunityLabel);
+        immunity.AddChild(immuneValue);
         immunity.ToolTip = Loc.GetString("advanced-health-vital-immunity-tooltip");
-        body.AddChild(immunity);
+        neural.AddChild(immunity);
         body.AddChild(HealthMenuStyle.Separator(2));
         var blood = new HealthChipIndicator(Loc.GetString("advanced-health-vital-blood"), _s);
         _bloodBar = blood.Gauge;
@@ -1045,7 +1073,8 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
 
         _bleedRow = HRow();
         _bleedRow.ToolTip = Loc.GetString("advanced-health-vital-bleeding-tooltip");
-        _bleedRow.AddChild(SIcon("Lucide/droplet", 30, HealthMenuStyle.Red));
+        _bleedIcon = SIcon("blood_s", 30);
+        _bleedRow.AddChild(_bleedIcon);
         _bleedRow.AddChild(SText(Loc.GetString("advanced-health-chip-blood-loss"), 12, HealthMenuStyle.Red));
         _bleedLabel = SText("", 13, HealthMenuStyle.Red, true);
         _bleedRow.AddChild(_bleedLabel);
@@ -1068,12 +1097,16 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
         _hungerRow = ResourceRow("hunger", "advanced-health-chip-nutrition", out _hungerBar, out _hungerValue);
         reserves.AddChild(_thirstRow);
         reserves.AddChild(_hungerRow);
+        _stomachIndicator = new HealthChipIndicator(Loc.GetString("advanced-nutrition-stomach"), _s);
+        body.AddChild(_stomachIndicator);
         _radRow = HRow();
+        _radRow.Name = "MedicalChipRadiation";
         _radRow.ToolTip = Loc.GetString("advanced-health-vital-radiation-tooltip");
-        _radRow.AddChild(SIcon("rad", 24));
-        _radRow.AddChild(SText(Loc.GetString("advanced-health-chip-radiation"), 12, HealthMenuStyle.AmberDim));
-        _radLabel = SText("", 13, HealthMenuStyle.Amber);
-        _radRow.AddChild(_radLabel);
+        _radRow.AddChild(SIcon("rad", 30));
+        var radiation = new HealthChipIndicator(Loc.GetString("advanced-health-chip-radiation"), _s);
+        _radBar = radiation.Gauge;
+        _radLabel = radiation.Value;
+        _radRow.AddChild(radiation);
         body.AddChild(_radRow);
 
         // ECG panel with a dashed inner frame.
@@ -1127,6 +1160,8 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
         statusPanel.AddChild(statusBox);
         _summaryLabel = WrappedText("", 16, HealthMenuStyle.AmberBright, true);
         statusBox.AddChild(_summaryLabel);
+        _arrestReason = WrappedText("", 12, HealthMenuStyle.Red);
+        statusBox.AddChild(_arrestReason);
         statusBox.AddChild(HealthMenuStyle.Separator());
         var systemic = new GridContainer
         {
@@ -1142,6 +1177,15 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
         systemic.AddChild(_perfusionIndicator);
         systemic.AddChild(_reserveIndicator);
         systemic.AddChild(_sleepIndicator);
+        _nutritionIndicator = new HealthChipIndicator(Loc.GetString("advanced-nutrition-malnutrition"), _s) { Visible = false };
+        _dehydrationIndicator = new HealthChipIndicator(Loc.GetString("advanced-nutrition-dehydration"), _s) { Visible = false };
+        systemic.AddChild(_nutritionIndicator);
+        systemic.AddChild(_dehydrationIndicator);
+        statusBox.AddChild(HealthMenuStyle.Separator());
+        statusBox.AddChild(SText(Loc.GetString("advanced-health-systemic-conditions"), 13, HealthMenuStyle.AmberBright, true));
+        _systemicConditionsList = VCol();
+        _systemicConditionsList.Name = "MedicalChipSystemicConditions";
+        statusBox.AddChild(_systemicConditionsList);
 
         // Selected zone panel.
         var zonePanel = new PanelContainer
@@ -1247,8 +1291,6 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
         };
         woundsScroll.AddChild(_woundsList);
 
-        _treatmentActions = VCol();
-        zone.AddChild(_treatmentActions);
 
         // Bottom cells: protection (shield) and bleeding (blood drop) — icon + value, not text.
         _zoneBottom = new BoxContainer
@@ -1260,10 +1302,13 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
         };
         zone.AddChild(_zoneBottom);
         _zoneEquipment = WrappedText("", 12, HealthMenuStyle.AmberDim);
-        zone.AddChild(HealthMenuStyle.Separator());
-        zone.AddChild(SText(Loc.GetString("advanced-health-chip-zone-equipment"), 13, HealthMenuStyle.AmberBright, true));
-        zone.AddChild(_zoneEquipment);
-        _zoneBleedingCell = MakeZoneCell(SIcon("blood_full", 26), "advanced-health-chip-blood-loss", out _zoneBleeding, _s);
+        _zoneEquipmentSection = VCol();
+        _zoneEquipmentSection.AddChild(HealthMenuStyle.Separator());
+        _zoneEquipmentSection.AddChild(SText(Loc.GetString("advanced-health-chip-zone-equipment"), 13, HealthMenuStyle.AmberBright, true));
+        _zoneEquipmentSection.AddChild(_zoneEquipment);
+        zone.AddChild(_zoneEquipmentSection);
+        _zoneBleedingIcon = SIcon("blood_s", 26);
+        _zoneBleedingCell = MakeZoneCell(_zoneBleedingIcon, "advanced-health-chip-blood-loss", out _zoneBleeding, _s);
         _zoneBleedingCell.ToolTip = Loc.GetString("advanced-health-vital-bleeding-tooltip");
         _zoneBottom.AddChild(_zoneBleedingCell);
 
@@ -1300,8 +1345,33 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
         right.AddChild(mapCaption);
 
         var legendCaption = WrappedText(Loc.GetString("advanced-health-chip-body-hint"), 12, HealthMenuStyle.AmberDim);
+        _mapHint = legendCaption;
         legendCaption.Margin = new Thickness(0, 4 * _s, 0, 0);
         right.AddChild(legendCaption);
+        var severityKey = new GridContainer
+        {
+            Name = "MedicalChipSeverityLegend", Columns = _s < 0.7f ? 2 : 5,
+            HSeparationOverride = Math.Max(4, (int) (12 * _s)),
+            VSeparationOverride = 3, HorizontalAlignment = HAlignment.Left,
+        };
+        _severityLegend = severityKey;
+        foreach (var (key, color) in new[]
+        {
+            ("minor", HealthMenuStyle.SeverityMinor), ("moderate", HealthMenuStyle.SeverityModerate),
+            ("severe", HealthMenuStyle.SeveritySevere), ("critical", HealthMenuStyle.SeverityCritical),
+            ("weakness", HealthMenuStyle.SystemicWeakness),
+        })
+        {
+            var item = HRow();
+            item.AddChild(new PanelContainer
+            {
+                MinSize = Sz(9, 9), MaxSize = Sz(9, 9), VerticalAlignment = VAlignment.Center,
+                PanelOverride = new StyleBoxFlat(color), MouseFilter = MouseFilterMode.Ignore,
+            });
+            item.AddChild(SText(Loc.GetString("advanced-health-severity-" + key), 11, HealthMenuStyle.AmberDim));
+            severityKey.AddChild(item);
+        }
+        right.AddChild(_severityLegend);
 
         legendCaption.Text = Loc.GetString("advanced-health-chip-body-hint");
 
@@ -1311,7 +1381,11 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
             HorizontalExpand = true,
             VerticalExpand = true,
         };
-        right.AddChild(_dollArea);
+        var mapRow = HRow();
+        mapRow.VerticalExpand = true;
+        mapRow.AddChild(BuildViewModes());
+        mapRow.AddChild(_dollArea);
+        right.AddChild(mapRow);
         _bodyDoll = new AdvancedHealthBodyDollControl
         {
             HorizontalAlignment = HAlignment.Center,
@@ -1323,6 +1397,7 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
             GroupNeckWithHead = true,
         };
         _bodyDoll.OnPartSelected += OnPartSelected;
+        _bodyDoll.OnOrganSelected += SelectOrgan;
         _bodyDoll.OnPartActivated += OnPartActivated;
         _dollArea.AddChild(_bodyDoll);
         main.AddChild(zonePanel);
@@ -1573,13 +1648,7 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
             return;
         }
 
-        if (!client.TryGetHeldTreatment(player, out var treatment, out var tool) ||
-            !PartNeedsTreatment(part, treatment))
-            return;
-
-        var window = new AdvancedHealthTreatmentMinigameWindow(_target, slot, treatment, tool, MedicPain());
-        IoCManager.Resolve<IUserInterfaceManager>().WindowRoot.AddChild(window);
-        window.OpenCentered();
+        client.UseHeldItemOnPart(player, _target, slot);
     }
 
     /// <summary>
@@ -1596,55 +1665,29 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
     /// <summary>Shows an "Extract" button above the hovered limb when it holds a foreign body.</summary>
     private void UpdateExtractButton()
     {
-        // Foreign-body slot currently under the cursor, if any.
-        BodyPartSlot? foreignSlot = null;
-        if (_bodyDoll.HoveredSlot is { } slot &&
-            _entities.TryGetComponent<AdvancedHealthComponent>(_target, out var health) &&
-            health.BodyParts.TryGetValue(slot, out var part) &&
-            (part.ForeignBodyCount > 0 || part.Wounds.Any(w => w.HasForeignBody)))
+        if (_viewMode != MedicalBodyViewMode.General) { _extractButton.Visible = false; return; }
+        var client = _entities.System<AdvancedHealthClientSystem>();
+        var overButton = _extractButton.Visible && new UIBox2(_extractButton.GlobalPosition,
+            _extractButton.GlobalPosition + _extractButton.Size).Contains(UserInterfaceManager.MousePositionScaled.Position);
+        if (_bodyDoll.HoveredSlot is { } slot && client.TryGetPartAction(_equipmentOwner, _target, slot, out _, out var label))
         {
-            foreignSlot = slot;
+            _extractSlot = slot;
+            _partActionLinger = 0.3f;
+            _extractButton.Text = label;
         }
-
-        // Keep the button up while the cursor is on it, so it can actually be reached and clicked.
-        var overButton = _extractButton.Visible && new UIBox2(
-            _extractButton.GlobalPosition, _extractButton.GlobalPosition + _extractButton.Size)
-            .Contains(UserInterfaceManager.MousePositionScaled.Position);
-
-        if (foreignSlot is { } fs)
-            _extractSlot = fs;
-        else if (!overButton)
-        {
-            _extractButton.Visible = false;
-            _extractSlot = null;
-            return;
-        }
-
-        if (_extractSlot is { } target)
-        {
-            var centroid = _bodyDoll.GlobalPosition - GlobalPosition + _bodyDoll.GetSlotCentroidLocal(target);
-            var size = _extractButton.DesiredSize;
-            LayoutContainer.SetPosition(_extractButton, centroid - new Vector2(size.X / 2f, size.Y + 6f));
-            _extractButton.Visible = true;
-        }
+        else if (!overButton && _partActionLinger <= 0) { _extractButton.Visible = false; _extractSlot = null; return; }
+        if (_extractSlot is not { } target) return;
+        var centroid = _bodyDoll.GlobalPosition - GlobalPosition + _bodyDoll.GetSlotCentroidLocal(target);
+        _extractButton.Measure(Vector2Helpers.Infinity);
+        var size = _extractButton.DesiredSize;
+        LayoutContainer.SetPosition(_extractButton, centroid - new Vector2(size.X / 2f, size.Y + 4f));
+        _extractButton.Visible = true;
     }
 
     private void TriggerExtract()
     {
-        var player = _equipmentOwner;
-        if (_extractSlot is not { } slot ||
-            !_entities.EntityExists(player) ||
-            !_entities.TryGetComponent<AdvancedHealthComponent>(_target, out var health))
-            return;
-
-        var client = _entities.System<AdvancedHealthClientSystem>();
-        // Forceps are optional; foreign-body removal is allowed bare-handed.
-        client.TryFindLocalTool(player, AdvancedTreatmentType.ForeignBodyRemoval, out var tool);
-
-        var window = new AdvancedHealthTreatmentMinigameWindow(
-            _target, slot, AdvancedTreatmentType.ForeignBodyRemoval, tool, MedicPain());
-        IoCManager.Resolve<IUserInterfaceManager>().WindowRoot.AddChild(window);
-        window.OpenCentered();
+        if (_extractSlot is { } slot)
+            _entities.System<AdvancedHealthClientSystem>().UseHeldItemOnPart(_equipmentOwner, _target, slot);
     }
 
     /// <summary>A framed cell with an icon on top and a value below (for the bottom zone stats).</summary>
@@ -1706,6 +1749,7 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
     protected override void FrameUpdate(FrameEventArgs args)
     {
         base.FrameUpdate(args);
+        _partActionLinger -= args.DeltaSeconds;
 
         // Blink the blood-loss text red at a critical bleed rate.
         _blinkTimer += args.DeltaSeconds;
@@ -1768,6 +1812,8 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
         }
 
         _bodyDoll.SetState(AdvancedHealthHudData.GetBodyParts(health));
+        _bodyDoll.SystemicWeakness = health.SystemicWeakness;
+        RefreshBodyLayer(health);
         var functions = _entities.System<SharedMedicalConditionSystem>();
         foreach (var slot in health.BodyParts.Keys)
             _bodyDoll.SetFunction(slot, functions.GetFunction(health, slot));
@@ -1777,10 +1823,10 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
 
         _patientLabel.SetMessage(FormattedMessage.FromUnformatted(Loc.GetString("advanced-health-chip-patient",
             ("name", _entities.GetComponent<MetaDataComponent>(_target).EntityName))), HealthMenuStyle.AmberBright);
-        var alarm = health.IsHeartStopped ? 1f : Math.Max(
+        var alarm = health.IsHeartStopped ? 1f : Math.Max(health.SmoothedConditionBadness, Math.Max(
             health.HasBlood ? 1f - health.BloodVolume / Math.Max(1f, health.MaxBloodVolume) : 0f,
             Math.Max(health.NeedsOxygen ? 1f - health.Oxygenation / 100f : 0f,
-                Math.Max(health.Shock / 100f, 1f - health.Consciousness / 100f)));
+                Math.Max(health.Shock / 100f, 1f - health.Consciousness / 100f))));
         _chipAlarm.Severity = alarm;
         _chipAlarm.Enabled = !IsTargetDead;
         _summaryLabel.SetMessage(FormattedMessage.FromUnformatted(Loc.GetString(IsTargetDead ? "advanced-health-chip-dead" : health.IsHeartStopped ? "advanced-health-chip-arrest"
@@ -1788,6 +1834,10 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
             : health.IsSuffocating ? "advanced-health-chip-suffocating"
             : alarm >= 0.4f ? "advanced-health-chip-unstable" : "advanced-health-chip-stable")),
             alarm >= 0.4f ? HealthMenuStyle.Red : HealthMenuStyle.AmberBright);
+        _arrestReason.Visible = health.IsHeartStopped && health.ArrestTrigger != CardiacArrestTrigger.Unknown;
+        if (_arrestReason.Visible)
+            _arrestReason.SetMessage(FormattedMessage.FromUnformatted(Loc.GetString("advanced-health-arrest-trigger-"
+                + health.ArrestTrigger.ToString().ToLowerInvariant())), HealthMenuStyle.Red);
         var shockKey = health.Shock < 10 ? "advanced-health-chip-shock-none"
             : health.Shock >= 50 ? "advanced-health-chip-shock-high" : "advanced-health-chip-shock-low";
         _shockIndicator.SetReading(health.Shock / 100f, $"{MathF.Round(health.Shock)}%",
@@ -1807,7 +1857,8 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
             _sleepIndicator.SetReading(exertion.SleepDebt / 100f, $"{MathF.Round(exertion.SleepDebt)}%",
                 Loc.GetString(exertion.SleepDebt >= 35 ? "advanced-exertion-sleepy-name" : "advanced-exertion-rested"),
                 exertion.SleepDebt >= 75);
-            _reserveIndicator.ToolTip = Loc.GetString("advanced-exertion-reserve-hint");
+            _reserveIndicator.ToolTip = Loc.GetString("advanced-exertion-reserve-hint") + "\n"
+                + Loc.GetString("advanced-exertion-reserve-limit", ("value", MathF.Round(exertion.ReserveCapacity)));
             _sleepIndicator.ToolTip = Loc.GetString("advanced-exertion-sleep-hint");
         }
         else
@@ -1816,6 +1867,30 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
             _sleepIndicator.SetReading(0, "—", "", false);
         }
 
+        var nutrition = _entities.TryGetComponent<AdvancedNutritionComponent>(_target, out var nutritional) ? nutritional : null;
+        _nutritionIndicator.Visible = nutrition is { Malnutrition: > 0.001f };
+        _dehydrationIndicator.Visible = nutrition is { DehydrationStrain: > 0.001f };
+        if (nutrition != null)
+        {
+            _nutritionIndicator.SetReading(nutrition.Malnutrition, $"{MathF.Round(nutrition.Malnutrition * 100)}%",
+                Loc.GetString("advanced-nutrition-recovery"), nutrition.Malnutrition >= 0.7f);
+            _dehydrationIndicator.SetReading(nutrition.DehydrationStrain, $"{MathF.Round(nutrition.DehydrationStrain * 100)}%",
+                Loc.GetString("advanced-nutrition-recovery"), nutrition.DehydrationStrain >= 0.7f);
+            _nutritionIndicator.ToolTip = Loc.GetString("advanced-nutrition-malnutrition-hint");
+            _dehydrationIndicator.ToolTip = Loc.GetString("advanced-nutrition-dehydration-hint");
+        }
+        _stomachIndicator.Visible = health.StomachCapacity > 0;
+        if (health.StomachCapacity > 0)
+        {
+            var fullness = Math.Clamp(health.StomachVolume / health.StomachCapacity, 0, 1);
+            _stomachIndicator.SetReading(fullness, $"{MathF.Round(fullness * 100)}%",
+                Loc.GetString(fullness < 0.01f ? "advanced-nutrition-stomach-empty"
+                    : fullness > 0.9f ? "advanced-nutrition-stomach-full" : "advanced-nutrition-stomach-digesting"), false);
+            _stomachIndicator.ToolTip = Loc.GetString("advanced-nutrition-stomach-hint");
+        }
+        _conditionRows.Clear();
+        AppendClinicalConditions(health);
+        RenderConditionCards(_systemicConditionsList, "systemic", ref _systemicConditionSignature);
         RefreshVitals(health);
         RefreshSelectedZone(health);
     }
@@ -1823,13 +1898,13 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
     private void RefreshVitals(AdvancedHealthComponent health)
     {
         var brain = health.BodyParts.TryGetValue(BodyPartSlot.Head, out var head) && head.MaxOrganIntegrity > 0f
-            ? (int) MathF.Round(head.OrganFraction * 100f)
+            ? (int) MathF.Round(health.BrainFunction * 100f)
             : 0;
         _brainLabel.Text = head is { MaxOrganIntegrity: > 0f } ? $"{brain}%" : "—";
         _brainLabel.FontColorOverride = brain > 50 ? HealthMenuStyle.AmberBright : HealthMenuStyle.Red;
         _brainGauge.Fraction = brain / 100f;
         _brainGauge.FillColor = brain > 50 ? HealthMenuStyle.Amber : HealthMenuStyle.Red;
-        _consciousnessGauge.Fraction = health.Consciousness / 100f;
+        _consciousnessGauge.Fraction = IsTargetDead ? 0 : health.Consciousness / 100f;
         _consciousnessGauge.FillTint = health.Consciousness > 25 ? Color.White : HealthMenuStyle.Red;
         _painGauge.Fraction = health.Pain / 100f;
         _painGauge.FillTint = health.Pain > 50 ? HealthMenuStyle.Red : Color.White;
@@ -1848,6 +1923,7 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
 
         // Blood loss: hidden when none, blinking red at critical rate (>= 0.3 L/m).
         var bleedPerMinute = health.BodyParts.Values.Sum(health.GetBloodLossRate) * 60f / 1000f;
+        UpdateBleedingIcon(_bleedIcon, bleedPerMinute);
         _bleedRow.Visible = health.HasBlood && bleedPerMinute >= 0.005f;
         if (bleedPerMinute < 0.005f)
         {
@@ -1865,7 +1941,7 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
         }
 
         _consciousnessValue.Text = Loc.GetString("advanced-health-vital-percent",
-            ("value", MathF.Round(health.Consciousness)));
+            ("value", IsTargetDead ? 0 : MathF.Round(health.Consciousness)));
         _consciousnessValue.FontColorOverride = health.Consciousness < 25f
             ? HealthMenuStyle.Red
             : HealthMenuStyle.Amber;
@@ -1879,10 +1955,10 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
             : immune < 70 ? Color.FromHex("#e07b26")
             : HealthMenuStyle.Amber;
 
-        _respLabel.Text = health.NeedsOxygen ? Loc.GetString("advanced-health-menu-liters-per-minute",
+        _respLabel.Text = !IsTargetDead && health.NeedsOxygen ? Loc.GetString("advanced-health-menu-liters-per-minute",
             ("value", health.MinuteVentilation.ToString("0.0", CultureInfo.InvariantCulture))) : "—";
         _lungsIcon.Oxygenation = health.NeedsOxygen ? health.Oxygenation / 100f : 0f;
-        _lungsIcon.RespiratoryRate = health.RespiratoryRate;
+        _lungsIcon.RespiratoryRate = IsTargetDead ? 0 : health.RespiratoryRate;
         _lungsIcon.ToolTip = Loc.GetString("advanced-health-chip-breathing",
             ("oxygen", MathF.Round(health.Oxygenation)), ("rate", MathF.Round(health.RespiratoryRate)));
         var respiratoryColor = health.IsSuffocating || health.Oxygenation < health.CriticalOxygenation
@@ -1894,9 +1970,13 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
         // The texture is authored amber, so white preserves it while danger states tint it.
         _lungsIcon.Modulate = Color.White;
 
-        _radRow.Visible = health.RadiationLoad > 0f;
+        var radiationLoad = Math.Clamp(health.RadiationLoad, 0f, 100f);
+        _radRow.Visible = true;
+        _radBar.Fraction = radiationLoad / 100f;
+        _radBar.FillTint = Color.InterpolateBetween(Color.White, HealthMenuStyle.Red, _radBar.Fraction);
+        _radLabel.FontColorOverride = Color.InterpolateBetween(HealthMenuStyle.Amber, HealthMenuStyle.Red, _radBar.Fraction);
         _radLabel.Text = Loc.GetString("advanced-health-chip-radiation-load",
-            ("value", MathF.Round(health.RadiationLoad)));
+            ("value", radiationLoad.ToString("0.#", CultureInfo.InvariantCulture)));
 
         {
             // BodyTemperature (Kelvin) is mirrored into AdvancedHealth on the server because the core
@@ -1981,7 +2061,7 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
             _bpLabel.FontColorOverride = HealthMenuStyle.Amber;
         // (critical case is animated in FrameUpdate)
 
-        _o2Label.Text = $"{MathF.Round(health.Oxygenation)}%";
+        _o2Label.Text = IsTargetDead ? "—" : $"{MathF.Round(health.Oxygenation)}%";
         _o2Label.Visible = health.NeedsOxygen;
         _o2Label.FontColorOverride = health.Oxygenation < health.CriticalOxygenation
             ? HealthMenuStyle.Red
@@ -1993,6 +2073,13 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
 
     private void RefreshSelectedZone(AdvancedHealthComponent health)
     {
+        if (_viewMode == MedicalBodyViewMode.Organs)
+        {
+            RefreshSelectedOrgan();
+            return;
+        }
+        _zoneEquipmentSection.Visible = true;
+        _zoneSkinBar.Visible = true;
         if (_selectedSlot is not { } slot || !health.BodyParts.TryGetValue(slot, out var part))
         {
             _partName.Text = Loc.GetString("advanced-health-ui-select-part");
@@ -2007,7 +2094,8 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
         var grouped = abdominal || cephalic;
         _partName.Text = Loc.GetString($"advanced-health-part-{_bodyDoll.DisplaySlot(slot).ToString().ToLowerInvariant()}").ToUpperInvariant();
         var hasSecondary = health.BodyParts.TryGetValue(_secondaryRegion, out var secondaryPart);
-        _regionalSelector.Visible = grouped && hasSecondary && (abdominal || HasPartDetails(secondaryPart!));
+        _regionalSelector.Visible = _viewMode != MedicalBodyViewMode.Protection && grouped && hasSecondary
+            && (abdominal || HasPartDetails(secondaryPart!));
         _primaryRegionButton.Text = Loc.GetString($"advanced-health-part-{_primaryRegion.ToString().ToLowerInvariant()}");
         _secondaryRegionButton.Text = Loc.GetString($"advanced-health-part-{_secondaryRegion.ToString().ToLowerInvariant()}");
         _primaryRegionButton.Pressed = slot == _primaryRegion;
@@ -2022,10 +2110,27 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
         var (severityText, severityColor) = PartSeverity(displayPart);
         _partSeverity.Text = Capitalize(severityText);
         _partSeverity.FontColorOverride = severityColor;
+        if (displayPart.GetConditionStage() == 0 && health.SystemicWeakness > 0.05f)
+        {
+            _partSeverity.Text = Loc.GetString("advanced-health-systemic-weakened");
+            _partSeverity.FontColorOverride = HealthMenuStyle.Amber;
+        }
+        if (_viewMode != MedicalBodyViewMode.General)
+        {
+            var layerValue = _bodyDoll.GetLayerValue(slot);
+            _partSeverity.Text = layerValue is { } fraction ? Loc.GetString("advanced-health-vital-percent",
+                ("value", MathF.Round(fraction * 100))) : "—";
+            _partSeverity.FontColorOverride = _viewMode != MedicalBodyViewMode.Protection && layerValue < 0.45f
+                ? HealthMenuStyle.Red : HealthMenuStyle.AmberBright;
+        }
         RefreshZoneBars(health, slot, part);
-        _zoneStats.Visible = _zoneBottom.Visible = _woundsCaption.Visible = _woundsSeparator.Visible = true;
+        _zoneStats.Visible = _zoneBottom.Visible = _functionDetails.Visible = _viewMode == MedicalBodyViewMode.General;
+        _woundsCaption.Visible = _woundsSeparator.Visible = true;
+        _woundsCaption.Text = Loc.GetString(_viewMode == MedicalBodyViewMode.General
+            ? "advanced-health-chip-conditions" : "advanced-health-layer-" + _viewMode.ToString().ToLowerInvariant());
         RefreshEquipment(slot);
         var bleed = health.GetBloodLossRate(part) * 0.06f;
+        UpdateBleedingIcon(_zoneBleedingIcon, bleed);
         _zoneBleeding.Text = Loc.GetString("advanced-health-menu-liters-per-minute",
             ("value", bleed.ToString("0.00", CultureInfo.InvariantCulture)));
         _zoneBleedingCell.Visible = bleed >= 0.005f;
@@ -2050,15 +2155,37 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
             AppendPartConditions(health, slot, part, false);
 
         // Only rebuild cards when their content changes; scrolling/focus survive physiological updates.
-        var signature = _bodyDoll.DisplaySlot(slot) + string.Join("\n", _conditionRows.Select(row => row.Key + row.Text + row.Description + row.Color));
-        if (signature != _conditionSignature)
+        AppendDiagnosticReports();
+        RenderConditionCards(_viewMode + ":" + _bodyDoll.DisplaySlot(slot));
+    }
+
+    private static void UpdateBleedingIcon(TextureRect icon, float litresPerMinute)
+    {
+        var level = BodyPartState.GetBleedingLevel(litresPerMinute / 0.06f);
+        icon.Texture = HealthMenuStyle.Tex(level switch
         {
-            _conditionSignature = signature;
-            _woundsList.RemoveAllChildren();
+            BleedingLevel.Heavy => "blood_b",
+            BleedingLevel.Moderate => "blood",
+            _ => "blood_s",
+        });
+        icon.ToolTip = Loc.GetString("advanced-health-bleeding-level-" + level.ToString().ToLowerInvariant());
+    }
+
+    private void RenderConditionCards(string selection)
+        => RenderConditionCards(_woundsList, selection, ref _conditionSignature);
+
+    private void RenderConditionCards(BoxContainer list, string selection, ref string previousSignature)
+    {
+        var signature = selection + string.Join("\n", _conditionRows.Select(row => row.Key + row.Text + row.Description + row.Color));
+        if (signature != previousSignature)
+        {
+            previousSignature = signature;
+            list.RemoveAllChildren();
             if (_conditionRows.Count == 0)
             {
-                var empty = WrappedText(Loc.GetString("advanced-health-chip-no-conditions"), 13, HealthMenuStyle.AmberDim);
-                _woundsList.AddChild(empty);
+                var empty = WrappedText(Loc.GetString(list == _systemicConditionsList
+                    ? "advanced-health-systemic-none" : "advanced-health-chip-no-conditions"), 13, HealthMenuStyle.AmberDim);
+                list.AddChild(empty);
             }
             foreach (var row in _conditionRows)
             {
@@ -2079,10 +2206,9 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
                 content.AddChild(title);
                 content.AddChild(description);
                 frame.AddChild(content);
-                _woundsList.AddChild(frame);
+                list.AddChild(frame);
             }
         }
-        RefreshTreatmentActions(part);
     }
 
     private static bool HasPartDetails(BodyPartState part)
@@ -2090,6 +2216,11 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
 
     private void AppendPartConditions(AdvancedHealthComponent health, BodyPartSlot slot, BodyPartState part, bool section)
     {
+        if (_viewMode != MedicalBodyViewMode.General)
+        {
+            AppendLayerConditions(health, slot, part, section);
+            return;
+        }
         var beneficial = HealthMenuStyle.AmberBright;
         var severityColor = PartSeverity(part).Color;
         var bleed = health.GetBloodLossRate(part) * 0.06f;
@@ -2131,6 +2262,14 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
             Condition("splint", "advanced-health-window-status-splinted", "advanced-health-chip-splint-detail", beneficial);
         if (part.HasTourniquet)
             Condition("tourniquet", "advanced-health-window-status-tourniquet", "advanced-health-chip-tourniquet-detail", HealthMenuStyle.Amber);
+        if (part.IsSurgicalOpen)
+            Condition("surgical-open", "advanced-health-surgical-open", "advanced-health-surgical-open-desc", HealthMenuStyle.Red);
+        if (part.IsSurgicalSitePrepared)
+            Condition("surgical-prepared", "advanced-health-surgical-prepared", "advanced-health-surgical-prepared-desc", beneficial);
+        if (part.LocalAnesthesia > 0f)
+            Condition("local-anesthesia", "advanced-health-local-anesthesia", "advanced-health-local-anesthesia-desc", beneficial);
+        if (part.Wounds.Any(wound => wound.Type == WoundType.Fracture && wound.IsBoneFixed))
+            Condition("bone-fixed", "advanced-health-bone-fixed", "advanced-health-bone-fixed-desc", beneficial);
 
         var prototypes = IoCManager.Resolve<IPrototypeManager>();
         foreach (var state in part.Conditions)
@@ -2144,41 +2283,6 @@ public sealed class AdvancedHealthStatusWindow : BaseWindow
 
     private void Condition(string key, string title, string description, Color color)
         => _conditionRows.Add((key, Loc.GetString(title), Loc.GetString(description), color));
-
-    private readonly Dictionary<AdvancedTreatmentType, Button> _treatmentButtons = new();
-
-    private void RefreshTreatmentActions(BodyPartState part)
-    {
-        var client = _entities.System<AdvancedHealthClientSystem>();
-        foreach (var treatment in Enum.GetValues<AdvancedTreatmentType>())
-        {
-            if (!_treatmentButtons.TryGetValue(treatment, out var button) || button.Parent != _treatmentActions)
-            {
-                button = MedicalButton(Loc.GetString($"advanced-health-action-{treatment.ToString().ToLowerInvariant()}"));
-                button.OnPressed += _ => StartTreatment(treatment);
-                _treatmentButtons[treatment] = button;
-                _treatmentActions.AddChild(button);
-            }
-            button.Visible = PartNeedsTreatment(part, treatment);
-            button.Disabled = !client.TryFindLocalTool(_equipmentOwner, treatment, out _);
-            button.Label.FontColorOverride = button.Disabled ? HealthMenuStyle.AmberDim.WithAlpha(0.5f) : HealthMenuStyle.AmberBright;
-            button.ToolTip = button.Disabled ? Loc.GetString("advanced-health-chip-needs-tool")
-                : Loc.GetString("advanced-health-chip-treatment-hint");
-        }
-    }
-
-    private void StartTreatment(AdvancedTreatmentType treatment)
-    {
-        if (_selectedSlot is not { } slot || !_entities.TryGetComponent<AdvancedHealthComponent>(_target, out var health)
-            || !health.BodyParts.TryGetValue(slot, out var part) || !PartNeedsTreatment(part, treatment))
-            return;
-        var client = _entities.System<AdvancedHealthClientSystem>();
-        if (!client.TryFindLocalTool(_equipmentOwner, treatment, out var tool))
-            return;
-        var window = new AdvancedHealthTreatmentMinigameWindow(_target, slot, treatment, tool, MedicPain());
-        IoCManager.Resolve<IUserInterfaceManager>().WindowRoot.AddChild(window);
-        window.OpenCentered();
-    }
 
     private void RefreshZoneBars(AdvancedHealthComponent health, BodyPartSlot slot, BodyPartState part)
     {

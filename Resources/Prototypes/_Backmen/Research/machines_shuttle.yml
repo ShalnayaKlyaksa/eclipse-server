@@ -11,7 +11,7 @@
   - ShuttleGunKineticCircuitboard
   technologyPrerequisites:
   - SalvageWeapons
-  position: 10,-1
+  position: 26, 17
 
 - type: technology
   id: ShuttleWeaponMachines
@@ -23,14 +23,14 @@
   tier: 1
   cost: 7500
   recipeUnlocks:
-   - PowerCageRechargerCircuitboard
-   - ShuttleGunSvalinnMachineGunCircuitboard
-   - ShuttleGunPerforatorCircuitboard
-   - ShuttleGunFriendshipCircuitboard
+  - PowerCageRechargerCircuitboard
+  - ShuttleGunSvalinnMachineGunCircuitboard
+  - ShuttleGunPerforatorCircuitboard
+  - ShuttleGunFriendshipCircuitboard
   technologyPrerequisites:
   - SalvageWeapons
   - ShuttleWeapon
-  position: 11,-1
+  position: 38, 19
 
 - type: technology
   id: ShuttleWeaponAdvancedMachines
@@ -46,7 +46,7 @@
   technologyPrerequisites:
   - ShuttleWeaponMachines
   - ShuttleWeaponAdvanced
-  position: 11,-2
+  position: 40, 16
 
 - type: technology
   id: ShuttlecraftMachines
@@ -64,4 +64,4 @@
   - MiniGravityGeneratorCircuitboard
   technologyPrerequisites:
   - PowerGenerationMachines
-  position: -2,5
+  position: 16, 0

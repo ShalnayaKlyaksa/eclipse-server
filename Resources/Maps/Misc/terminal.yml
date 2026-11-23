@@ -32,7 +32,7 @@ entities:
   - uid: 818
     components:
     - type: MetaData
-      name: NT-EM Terminal
+      name: VISH-EM Terminal
     - type: Transform
       parent: invalid
     - type: MapGrid

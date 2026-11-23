@@ -14,6 +14,8 @@ namespace Content.Shared.Power.Generator;
 [Access(typeof(SharedPortableGeneratorSystem))]
 public sealed partial class PortableGeneratorComponent : Component
 {
+    [DataField] public string? StartSuccessMessage;
+    [DataField] public string? StartFailureMessage;
     /// <summary>
     /// Chance that this generator will start. If it fails, the user has to try again.
     /// </summary>
@@ -96,6 +98,7 @@ public sealed class PortableGeneratorEjectFuelMessage : BoundUserInterfaceMessag
 [Serializable, NetSerializable]
 public sealed class PortableGeneratorComponentBuiState : BoundUserInterfaceState
 {
+    public bool CanEjectFuel = true;
     public float RemainingFuel;
     public bool Clogged;
     public (float Load, float Supply)? NetworkStats;
@@ -103,6 +106,7 @@ public sealed class PortableGeneratorComponentBuiState : BoundUserInterfaceState
     public float MaximumPower;
     public float OptimalPower;
     public bool On;
+    public Content.Shared._Eclipse.Power.PowerPlantOperatingState? Operating;
 
     public PortableGeneratorComponentBuiState(
         FuelGeneratorComponent component,

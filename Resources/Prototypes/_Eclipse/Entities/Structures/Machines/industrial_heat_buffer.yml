@@ -9,25 +9,25 @@
     mode: SnapgridCenter
   components:
   - type: Transform
+    anchored: false
     noRot: false
+  - type: Physics
+    bodyType: Dynamic
   - type: Sprite
-  # TODO: Dedicated _Eclipse heat buffer sprite.
-    sprite: Structures/Power/Generation/teg.rsi
+    sprite: _Eclipse/Structures/Machines/industrial_heat_buffer.rsi
     layers:
-    - state: circ-0
-    - state: circ-0-light
-      shader: unshaded
+    - state: icon
       map: ["enum.IndustrialHeatBufferVisualLayers.Light"]
   - type: Icon
-    sprite: Structures/Power/Generation/teg.rsi
-    state: circ-0
+    sprite: _Eclipse/Structures/Machines/industrial_heat_buffer.rsi
+    state: icon
   - type: Appearance
   - type: GenericVisualizer
     visuals:
       enum.IndustrialHeatBufferVisuals.PlasmaFlowing:
         enum.IndustrialHeatBufferVisualLayers.Light:
-          True: { visible: true }
-          False: { visible: false }
+          True: { state: building }
+          False: { state: icon }
   - type: Anchorable
   - type: Pullable
   - type: Rotatable
@@ -50,7 +50,7 @@
   - type: IndustrialHeatBuffer
     operatingTemperature: 1200
     minPlasmaMoles: 0.25
-    heatTransferRate: 1200
+    heatTransferRate: 500000
   - type: Temperature
     currentTemperature: 293.15
     specificHeat: 500

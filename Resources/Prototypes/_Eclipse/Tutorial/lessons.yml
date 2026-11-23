@@ -1,5 +1,49 @@
 # Tutorial lessons shown in the lobby "Обучение" window.
-# Step sequences (dialogue / spotlight / tasks) are added on top of these in later stages.
+# Welcome scene and practical lessons share the dialogue system.
+
+- type: tutorialLesson
+  id: TutorialWelcome
+  name: Знакомство с Ави
+  description: Приветствие экипажа исследовательской программы «Затмение».
+  order: -2
+  lobbyOnly: true
+  steps:
+    - !type:TutorialDialogueStep
+      speaker: Ави
+      portrait: /Textures/_Eclipse/Tutorial/Portraits/Avi/talking.png
+      animation: Bounce
+      text: "С пробуждением! Добро пожаловать в экипаж. Если у вас проблемы с памятью, не бойтесь — они пройдут со временем."
+    - !type:TutorialDialogueStep
+      speaker: Ави
+      portrait: /Textures/_Eclipse/Tutorial/Portraits/Avi/tablet.png
+      text: "[italic]Ави постукивает пальцем по планшету, сверяясь с записями.[/italic]\nТа-ак…"
+    - !type:TutorialDialogueStep
+      speaker: Ави
+      portrait: /Textures/_Eclipse/Tutorial/Portraits/Avi/surprised.png
+      animation: Bounce
+      text: "Ой, где же мои манеры! Я — ИИ исследовательской программы «Затмение»."
+    - !type:TutorialDialogueStep
+      speaker: Ави
+      portrait: /Textures/_Eclipse/Tutorial/Portraits/Avi/eyes_closed.png
+      animation: Nod
+      text: "Вы, кстати, довольно удачливы, раз смогли получить место в этой экспедиции! [italic]Ави самодовольно улыбается.[/italic]"
+    - !type:TutorialDialogueStep
+      speaker: Ави
+      portrait: /Textures/_Eclipse/Tutorial/Portraits/Avi/neutral.png
+      text: "Меня зовут Ави. Я помогу вам освоиться, пока мы направляемся в распределительный центр «Арес». Там вы сможете отдохнуть и получить направление на космические станции."
+    - !type:TutorialDialogueStep
+      speaker: Ави
+      portrait: /Textures/_Eclipse/Tutorial/Portraits/Avi/pointing.png
+      text: "Пока построены только станции типа «Прометей», но не бойтесь: в планах Империи — развёртывание станций более серьёзного масштаба и улучшение условий жизни."
+    - !type:TutorialDialogueStep
+      speaker: Ави
+      portrait: /Textures/_Eclipse/Tutorial/Portraits/Avi/tablet.png
+      text: "[italic]Ави улыбается и что-то нажимает на экране планшета.[/italic]\nТак, всё готово!"
+    - !type:TutorialChoiceStep
+      speaker: Ави
+      portrait: /Textures/_Eclipse/Tutorial/Portraits/Avi/neutral.png
+      lesson: TutorialIntro
+      text: "Хотите пройти базовое обучение движению и взаимодействию с оборудованием? Думаю, вам будет приятно снова почувствовать землю под ногами после такого долгого криосна."
 
 - type: tutorialLesson
   id: TutorialIntro
@@ -7,7 +51,54 @@
   description: Знакомство с интерфейсом, управлением и основами станции.
   icon: /Textures/Interface/VerbIcons/examine.svg.192dpi.png
   order: 0
-  enabled: false
+  practiceRoom: true
+  steps:
+    - !type:TutorialDialogueStep
+      speaker: Ави
+      portrait: /Textures/_Eclipse/Tutorial/Portraits/Avi/neutral.png
+      text: "Добро пожаловать в учебный отсек! Здесь можно спокойно вспомнить основы. Обучение можно прервать кнопкой «Вернуться в лобби», а позже запустить снова из раздела «Обучение»."
+    - !type:TutorialDialogueStep
+      speaker: Ави
+      portrait: /Textures/_Eclipse/Tutorial/Portraits/Avi/pointing.png
+      text: "Для движения по умолчанию используются [bold]W, A, S, D[/bold]. Пройдите несколько шагов в любую сторону. Если вы меняли клавиши, используйте свои настройки управления."
+    - !type:TutorialPracticeStep
+      action: Move
+      distance: 2
+      objective: "Пройдите две клетки в любую сторону (по умолчанию W, A, S, D)."
+    - !type:TutorialDialogueStep
+      speaker: Ави
+      portrait: /Textures/_Eclipse/Tutorial/Portraits/Avi/talking.png
+      text: "Отлично! Теперь — оборудование. Я выдам вам фонарик. Активная рука выделена на панели внизу; переключить руку можно клавишей [bold]X[/bold] или нажатием на нужную руку."
+    - !type:TutorialSpawnInHandStep
+      item: FlashlightLantern
+    - !type:TutorialDialogueStep
+      speaker: Ави
+      portrait: /Textures/_Eclipse/Tutorial/Portraits/Avi/tablet.png
+      text: "Выберите руку с фонариком и положите его на пол: по умолчанию это клавиша [bold]Q[/bold]. Не бросайте далеко — он нам ещё понадобится!"
+    - !type:TutorialPracticeStep
+      action: DropItem
+      objective: "Выберите руку с фонариком и положите его на пол (по умолчанию Q)."
+    - !type:TutorialPracticeStep
+      action: PickUpItem
+      objective: "Подойдите к фонарику и нажмите на него левой кнопкой мыши, чтобы взять в свободную руку."
+    - !type:TutorialDialogueStep
+      speaker: Ави
+      portrait: /Textures/_Eclipse/Tutorial/Portraits/Avi/pointing.png
+      text: "Теперь включите фонарик. Выберите руку, в которой он находится, и нажмите [bold]Z[/bold] — использовать предмет в активной руке. Можно также нажать на сам предмет в выбранной руке."
+    - !type:TutorialPracticeStep
+      action: ActivateLight
+      objective: "Включите фонарик в активной руке (по умолчанию Z)."
+    - !type:TutorialDialogueStep
+      speaker: Ави
+      portrait: /Textures/_Eclipse/Tutorial/Portraits/Avi/pointing.png
+      text: "Последнее: ваше состояние отображается на панели здоровья. Нажмите на её значок, чтобы открыть подробности."
+    - !type:TutorialClickHealthStep
+      objective: "Нажмите на значок здоровья внизу справа."
+    - !type:TutorialDialogueStep
+      speaker: Ави
+      portrait: /Textures/_Eclipse/Tutorial/Portraits/Avi/eyes_closed.png
+      animation: Nod
+      text: "Прекрасно! Вы вспомнили движение, обращение с предметами и проверку здоровья. На «Аресе» вас уже ждут. Увидимся, член экипажа!"
 
 - type: tutorialLesson
   id: TutorialMedicine

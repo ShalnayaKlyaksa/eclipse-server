@@ -18,9 +18,6 @@ public sealed partial class ItemPipeComponent : Component
     [DataField]
     public float ThroughputPerSecond = 1f;
 
-    [DataField]
-    public float TransferDelay = 1f;
-
     [DataField, AutoNetworkedField]
     public PipeTransferMode TransferMode = PipeTransferMode.Transit;
 
@@ -29,4 +26,10 @@ public sealed partial class ItemPipeComponent : Component
 
     [DataField, AutoNetworkedField]
     public PipeDirection ConnectedDirections = PipeDirection.None;
+
+    [DataField, AutoNetworkedField]
+    public PipeDirection MachineInputDirections;
+
+    [DataField, AutoNetworkedField]
+    public PipeDirection MachineOutputDirections;
 }

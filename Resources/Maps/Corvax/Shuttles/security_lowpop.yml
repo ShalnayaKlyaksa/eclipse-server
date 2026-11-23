@@ -99,7 +99,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: NT-SEC "Клещ"
+      name: ВИШ-SEC "Клещ"
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: -34.544407,32.552032

@@ -82,6 +82,8 @@ public sealed class SliceableFoodSystem : EntitySystem
         if (!TryComp<UtensilComponent>(usedItem, out var utensil) || (utensil.Types & UtensilType.Knife) == 0)
             return false;
 
+        var preparing = new BeforeFoodSlicedEvent();
+        RaiseLocalEvent(entity, ref preparing);
         var sliceVolume = solution.Volume / FixedPoint2.New(entity.Comp2.TotalCount);
         for (int i = 0; i < entity.Comp2.TotalCount; i++)
         {

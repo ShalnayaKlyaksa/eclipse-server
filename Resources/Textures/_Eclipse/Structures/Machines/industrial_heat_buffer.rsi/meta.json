@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "license": "AGPL-3.0-or-later",
+  "copyright": "Original sprites from https://github.com/discordia-space/CEV-Eris/blob/master/icons/obj/machines/mining_machines.dmi. CEV Eris/Baystation12/tgstation contributors. Selected DMI states repacked into RSI for Eclipse without repainting. Original files and licensing notes: art/industrial-sprite-candidates/.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon",
+      "directions": 1
+    },
+    {
+      "name": "building",
+      "directions": 1,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    }
+  ]
+}

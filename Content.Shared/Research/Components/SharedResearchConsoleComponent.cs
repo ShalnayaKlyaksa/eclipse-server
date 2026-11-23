@@ -30,6 +30,7 @@ namespace Content.Shared.Research.Components
     public sealed class ResearchConsoleBoundInterfaceState : BoundUserInterfaceState
     {
         public int Points;
+        public ResearchTerminalState Terminal = new();
         /// <summary>
         /// Goobstation field - all researches and their availablities
         /// </summary>

@@ -16,7 +16,11 @@ public sealed partial class MedicalConditionPrototype : IPrototype
     [DataField] public bool Beneficial;
     /// <summary>Multiplier at full severity. A severity of zero has no effect.</summary>
     [DataField] public float FunctionMultiplier = 1f;
+    [DataField] public MedicalDetection Detection = MedicalDetection.Chip;
 }
+
+[Serializable, NetSerializable]
+public enum MedicalDetection : byte { Chip, Examination, Surgery }
 
 [DataDefinition, Serializable, NetSerializable]
 public sealed partial class MedicalCondition

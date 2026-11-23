@@ -1,5 +1,7 @@
+using System;
 using Content.Client.Alerts;
 using Content.Shared._Eclipse.Tutorial;
+using Robust.Client;
 using Robust.Client.UserInterface;
 
 namespace Content.Client._Eclipse.Tutorial;
@@ -12,9 +14,12 @@ namespace Content.Client._Eclipse.Tutorial;
 public sealed class TutorialSystem : EntitySystem
 {
     [Dependency] private readonly IUserInterfaceManager _ui = default!;
+    [Dependency] private readonly IBaseClient _client = default!;
 
     private TutorialDialogueControl? _overlay;
     private bool _waitingForHealth;
+    private Guid _stepId;
+    private bool _waitingForServer;
 
     public override void Initialize()
     {
@@ -22,6 +27,7 @@ public sealed class TutorialSystem : EntitySystem
         SubscribeNetworkEvent<TutorialShowDialogueEvent>(OnShow);
         SubscribeNetworkEvent<TutorialHideEvent>(OnHide);
         SubscribeLocalEvent<AlertHudPressedEvent>(OnAlertPressed);
+        _client.RunLevelChanged += OnRunLevelChanged;
     }
 
     public void RequestLesson(string lessonId)
@@ -31,25 +37,34 @@ public sealed class TutorialSystem : EntitySystem
 
     private void Advance()
     {
-        RaiseNetworkEvent(new TutorialAdvanceEvent());
+        if (_waitingForServer)
+            return;
+        _waitingForServer = true;
+        RaiseNetworkEvent(new TutorialAdvanceEvent { StepId = _stepId });
     }
 
     private void OnShow(TutorialShowDialogueEvent ev)
     {
         if (_overlay == null)
         {
-            _overlay = new TutorialDialogueControl(Advance);
+            _overlay = new TutorialDialogueControl(Advance,
+                start => RaiseNetworkEvent(new TutorialChoiceEvent { StepId = _stepId, StartLesson = start }),
+                () => RaiseNetworkEvent(new TutorialExitEvent()));
             _ui.WindowRoot.AddChild(_overlay);
         }
 
-        if (ev.CanAdvance)
+        _overlay.SetSize = _ui.WindowRoot.Size;
+        _overlay.SetCanExit(ev.CanExit);
+        _stepId = ev.StepId;
+        _waitingForServer = false;
+        if (ev.CanAdvance || ev.ShowChoice)
         {
-            _overlay.ShowDialogue(ev.Speaker, ev.Text, ev.Portrait, ev.Side, ev.Animation);
+            _overlay.ShowDialogue(ev.Speaker, ev.Text, ev.Portrait, ev.Side, ev.Animation, ev.ShowChoice);
             _waitingForHealth = false;
         }
         else
         {
-            _overlay.ShowHealthTask(ev.Speaker, ev.Text);
+            _overlay.ShowTask(ev.Text, ev.SpotlightHealthAlert);
             _waitingForHealth = ev.SpotlightHealthAlert;
         }
     }
@@ -65,8 +80,27 @@ public sealed class TutorialSystem : EntitySystem
 
     private void OnHide(TutorialHideEvent ev)
     {
-        _overlay?.Orphan();
+        ClearOverlay();
+    }
+
+    private void OnRunLevelChanged(object? sender, RunLevelChangedEventArgs ev)
+    {
+        if (ev.NewLevel != ClientRunLevel.InGame)
+            ClearOverlay();
+    }
+
+    private void ClearOverlay()
+    {
+        _overlay?.Dispose();
         _overlay = null;
         _waitingForHealth = false;
+        _waitingForServer = false;
+    }
+
+    public override void Shutdown()
+    {
+        _client.RunLevelChanged -= OnRunLevelChanged;
+        ClearOverlay();
+        base.Shutdown();
     }
 }

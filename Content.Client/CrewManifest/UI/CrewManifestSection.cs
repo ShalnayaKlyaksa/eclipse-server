@@ -26,7 +26,7 @@ public sealed class CrewManifestSection : BoxContainer
         AddChild(new PanelContainer
         {
             Margin = new Thickness(0, 0, 0, 6),
-            PanelOverride = EclipsePanel("#251600D8", "#A85E1270", 5f, 8f, 4f),
+            PanelOverride = EclipsePanel("#251600D8", "#50505070", 5f, 8f, 4f),
             Children =
             {
                 new Label

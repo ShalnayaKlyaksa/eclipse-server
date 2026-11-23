@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Shared.CCVar;
 using Content.Shared.Singularity.Components;
+using Content.Shared._Eclipse.Power;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Configuration;
@@ -62,30 +63,34 @@ namespace Content.Client.Singularity
             var query = _entMan.EntityQueryEnumerator<SingularityDistortionComponent, TransformComponent>();
             while (query.MoveNext(out var uid, out var distortion, out var xform))
             {
-                if (xform.MapID != args.MapId)
-                    continue;
-
-                var mapPos = _xformSystem.GetWorldPosition(uid);
-
-                // is the distortion in range?
-                if ((mapPos - args.WorldAABB.ClosestPoint(mapPos)).LengthSquared() > MaxDistance * MaxDistance)
-                    continue;
-
-                // To be clear, this needs to use "inside-viewport" pixels.
-                // In other words, specifically NOT IViewportControl.WorldToScreen (which uses outer coordinates).
-                var tempCoords = args.Viewport.WorldToLocal(mapPos);
-                tempCoords.Y = args.Viewport.Size.Y - tempCoords.Y; // Local space to fragment space.
-
-                _positions[_count] = tempCoords;
-                _intensities[_count] = distortion.Intensity;
-                _falloffPowers[_count] = distortion.FalloffPower;
-                _count++;
-
+                AddDistortion(args, uid, xform, distortion.Intensity, distortion.FalloffPower);
                 if (_count == MaxCount)
                     break;
             }
 
+            // Contained micro holes share the ordinary singularity lens and its cursor projection.
+            var microQuery = _entMan.EntityQueryEnumerator<MicroBlackHoleVisualComponent, TransformComponent>();
+            while (_count < MaxCount && microQuery.MoveNext(out var uid, out var visual, out var xform))
+            {
+                if (visual.Activity <= .001f) continue;
+                var strength = (18 + 24 * Math.Clamp(visual.Activity, 0, 1) + 40 * Math.Clamp(visual.Instability, 0, 1)) *
+                    MathF.Pow(Math.Clamp(visual.Radius, .5f, 4) / 2.5f * MathF.Sqrt(Math.Clamp(visual.Activity, 0, 1)), MathF.Sqrt(2));
+                AddDistortion(args, uid, xform, strength, MathF.Sqrt(2));
+            }
+
             return (_count > 0);
+        }
+
+        private void AddDistortion(in OverlayDrawArgs args, EntityUid uid, TransformComponent xform, float intensity, float falloff)
+        {
+            if (xform.MapID != args.MapId) return;
+            var mapPos = _xformSystem!.GetWorldPosition(uid);
+            if ((mapPos - args.WorldAABB.ClosestPoint(mapPos)).LengthSquared() > MaxDistance * MaxDistance) return;
+            var coords = args.Viewport.WorldToLocal(mapPos);
+            coords.Y = args.Viewport.Size.Y - coords.Y;
+            _positions[_count] = coords;
+            _intensities[_count] = intensity;
+            _falloffPowers[_count++] = falloff;
         }
 
         protected override void Draw(in OverlayDrawArgs args)

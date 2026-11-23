@@ -6,6 +6,7 @@ namespace Content.Shared._Eclipse.Industrial;
 public enum IndustrialProcessorVisuals : byte
 {
     State,
+    Powered,
 }
 
 [Serializable, NetSerializable]

@@ -13,7 +13,7 @@
 - type: entity
   parent: ClothingShoesBootsMagBase
   id: ClothingShoesBootsMagNTNavy
-  name: nanotrasen navy magboots
+  name: VISH navy magboots
   description:
   components:
   - type: Sprite

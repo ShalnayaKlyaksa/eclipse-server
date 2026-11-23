@@ -49,6 +49,20 @@ public abstract class SharedScaleVisualsSystem : EntitySystem
         RaiseLocalEvent(uid, ref ev);
     }
 
+    internal void SetProfileScale(EntityUid uid, Vector2 factor)
+    {
+        if (!TryComp<ScaleVisualsComponent>(uid, out var comp) && factor == Vector2.One)
+            return;
+
+        comp ??= EnsureComp<ScaleVisualsComponent>(uid);
+        if (comp.ProfileScale == factor)
+            return;
+
+        var scale = comp.Scale / comp.ProfileScale * factor;
+        comp.ProfileScale = factor;
+        SetSpriteScale(uid, scale);
+    }
+
     /// <summary>
     /// Gets the current scale set by <see cref="SetSpriteScale"/>.
     /// This does not include any direct changes made to the SpriteComponent.

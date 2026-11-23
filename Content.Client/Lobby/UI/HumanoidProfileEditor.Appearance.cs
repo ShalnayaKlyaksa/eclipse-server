@@ -69,6 +69,8 @@ public sealed partial class HumanoidProfileEditor
             {
                 sexes.Add(sex);
             }
+            if (speciesProto.AllowsIntersex)
+                sexes.Add(Sex.Intersex);
         }
         else
         {
@@ -184,7 +186,13 @@ public sealed partial class HumanoidProfileEditor
 
     private void SetSpecies(string newSpecies)
     {
-        Profile = Profile?.WithSpecies(newSpecies);
+        if (Profile == null)
+            return;
+
+        var species = _prototypeManager.Index<SpeciesPrototype>(newSpecies);
+        Profile = Profile.WithSpecies(newSpecies).WithCustomization(Profile.Customization.Validated(species));
+        if (!species.Sexes.Contains(Profile.Sex) && (Profile.Sex != Sex.Intersex || !species.AllowsIntersex))
+            Profile = Profile.WithSex(species.Sexes[0]);
         OnSkinColorOnValueChanged(); // Species may have special color prefs, make sure to update it.
         _markingsModel.Species = newSpecies;
         _markingsModel.OrganData = _markingManager.GetMarkingData(newSpecies);
@@ -194,27 +202,10 @@ public sealed partial class HumanoidProfileEditor
         // In case there's species restrictions for loadouts
         RefreshLoadouts();
         UpdateSexControls(); // update sex for new species
+        UpdateCustomizationControls();
+        UpdateTTSVoicesControls();
         UpdateSpeciesGuidebookIcon();
         ReloadPreview();
-    }
-
-    private void SetCustomSpecies(string newSpecies)
-    {
-        Profile = Profile?.WithCustomSpecies(newSpecies);
-        SetDirty();
-    }
-
-    private void UpdateCustomSpeciesEdit()
-    {
-        IsCustomSpecies.Pressed = false;
-        CustomSpeciesContainer.Visible = false;
-        CustomSpeciesEdit.Text = Profile?.CustomSpecies ?? string.Empty;
-
-        if (string.IsNullOrEmpty(Profile?.CustomSpecies))
-            return;
-
-        IsCustomSpecies.Pressed = true;
-        CustomSpeciesContainer.Visible = true;
     }
 
     private void SetAge(int newAge)
@@ -242,7 +233,7 @@ public sealed partial class HumanoidProfileEditor
 
         UpdateGenderControls();
         UpdateTTSVoicesControls(); // Corvax-TTS
-        _markingsModel.SetOrganSexes(newSex);
+        _markingsModel.SetOrganSexes(newSex.PresentationSex());
         ReloadPreview();
     }
 

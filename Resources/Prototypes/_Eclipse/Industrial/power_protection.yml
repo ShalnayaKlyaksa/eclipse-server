@@ -1,0 +1,85 @@
+- type: entity
+  parent: BaseMachine
+  id: IndustrialSurgeProtector
+  name: industrial surge protector
+  description: A passive transient suppressor. Anchor it on power cables and replace its cartridge when depleted.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    sprite: Structures/Power/cable_terminal.rsi
+    state: term
+  - type: Icon
+    sprite: Structures/Power/cable_terminal.rsi
+    state: term
+  - type: Anchorable
+  - type: Pullable
+  - type: IndustrialSurgeProtector
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      hv:
+        !type:CableDeviceNode
+        nodeGroupID: HVPower
+      mv:
+        !type:CableDeviceNode
+        nodeGroupID: MVPower
+      lv:
+        !type:CableDeviceNode
+        nodeGroupID: Apc
+  - type: GuideHelp
+    guides: [EclipseIndustrialPower]
+
+- type: entity
+  parent: BaseItem
+  id: IndustrialSurgeFuse
+  name: surge suppression cartridge
+  description: A replacement 200 kJ cartridge for an industrial surge protector.
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/stock_parts.rsi
+    state: capacitor
+  - type: Item
+    size: Small
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialSurgeProtector
+  result: IndustrialSurgeProtector
+  duration: 35
+  ingredients:
+    SheetSteel: 6
+    SheetGlass: 2
+    IndustrialCircuitCore: 2
+    IngotSilver: 1
+
+- type: industrialRecipe
+  id: AssembleIndustrialSurgeProtector
+  processor: Assembler
+  time: 12
+  inputs:
+    SheetSteel: 6
+    SheetGlass: 2
+    IndustrialCircuitCore: 2
+    IngotSilver: 1
+  outputs:
+    IndustrialSurgeProtectorFlatpack: 1
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialSurgeFuse
+  result: IndustrialSurgeFuse
+  duration: 15
+  ingredients:
+    SheetGlass: 2
+    IngotSilver: 1
+
+- type: industrialRecipe
+  id: AssembleIndustrialSurgeFuse
+  processor: Assembler
+  time: 5
+  inputs:
+    SheetGlass: 2
+    IngotSilver: 1
+  outputs:
+    IndustrialSurgeFuse: 1

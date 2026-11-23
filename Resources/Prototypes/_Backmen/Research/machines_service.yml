@@ -15,7 +15,7 @@
   - BiogeneratorMachineCircuitboard
   technologyPrerequisites:
   - Hydroponics
-  position: 3,7
+  position: 52, 6
 
 - type: technology
   id: EntertainmentMachines
@@ -32,8 +32,8 @@
   - MassMediaCircuitboard
   - JukeboxCircuitBoard
   technologyPrerequisites:
-   - Entertainment
-  position: 3,11
+  - Entertainment
+  position: 52, 8
 
 - type: technology
   id: KitchenMachines
@@ -53,8 +53,8 @@
   - ReagentGrinderMachineCircuitboard
   - ElectricGrillMachineCircuitboard
   technologyPrerequisites:
-   - Kitchen
-  position: 5,9
+  - Kitchen
+  position: 52, 10
 
 - type: technology
   id: BarMachines
@@ -70,8 +70,8 @@
   - SodaDispenserMachineCircuitboard
   - SmartFridgeCircuitboard
   technologyPrerequisites:
-   - Bootlegging
-  position: 1,9
+  - Bootlegging
+  position: 52, 2
 
 - type: technology
   id: ServiceMachines
@@ -88,4 +88,6 @@
   - BoxFolderClipboardEmpty
   - BoxFolderPlasticClipboardEmpty
   - SmartFridgeCircuitboard
-  position: 3,9
+  position: 48, 2
+  technologyPrerequisites:
+  - IndustrialAutomation

@@ -1,5 +1,8 @@
 using Content.Client.Corvax.TTS;
 using Content.Shared.Corvax.CCCVars;
+using Content.Shared.Corvax.TTS;
+using Content.Shared.Humanoid;
+using Content.Shared.Preferences;
 using Robust.Client.UserInterface;
 
 namespace Content.Client.Lobby.UI;
@@ -30,11 +33,17 @@ public sealed partial class HumanoidProfileEditor
         }
 
         TabContainer.SetTabTitle(1, Loc.GetString("humanoid-profile-editor-voice-tab"));
+        TtsVoiceRow.Visible = true;
+        TtsVoiceButton.OnPressed += _ => TabContainer.CurrentTab = _ttsTab.GetPositionInParent();
+        TtsPreviewButton.OnPressed += _ =>
+        {
+            if (Profile != null)
+                _entManager.System<TTSSystem>().RequestPreviewTTS(Profile.Voice);
+        };
 
         _ttsTab.OnVoiceSelected += voiceId =>
         {
             SetVoice(voiceId);
-            _ttsTab.SetSelectedVoice(voiceId);
         };
 
         _ttsTab.OnPreviewRequested += voiceId =>
@@ -48,12 +57,25 @@ public sealed partial class HumanoidProfileEditor
         if (Profile is null || _ttsTab is null)
             return;
 
-        _ttsTab.UpdateControls(Profile, Profile.Sex);
-        _ttsTab.SetSelectedVoice(Profile.Voice);
+        var sex = Profile.Customization.GetVocalSex(Profile.Sex);
+        if (!_prototypeManager.TryIndex<TTSVoicePrototype>(Profile.Voice, out var voice) || !voice.RoundStart ||
+            !HumanoidCharacterProfile.CanHaveVoice(voice, sex))
+            Profile = Profile.WithVoice(HumanoidProfileSystem.DefaultSexVoice[sex]);
+
+        _ttsTab.UpdateControls(Profile, sex);
+        UpdateTtsVoiceLabel();
     }
     private void SetVoice(string newVoice)
     {
         Profile = Profile?.WithVoice(newVoice);
-        IsDirty = true;
+        _ttsTab?.SetSelectedVoice(newVoice);
+        UpdateTtsVoiceLabel();
+        SetDirty();
+    }
+
+    private void UpdateTtsVoiceLabel()
+    {
+        if (Profile != null && _prototypeManager.TryIndex<TTSVoicePrototype>(Profile.Voice, out var voice))
+            TtsVoiceButton.Text = Loc.GetString(voice.Name);
     }
 }

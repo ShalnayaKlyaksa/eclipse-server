@@ -95,6 +95,43 @@ namespace Content.Client.Clickable
             return SampleClickMap(rsiData.ClickMap, pos, rsi.Size, offset);
         }
 
+        public (int Top, int Bottom)? GetVerticalBounds(RSI rsi, RSI.StateId state)
+        {
+            if (!_rsiMaps.TryGetValue(rsi, out var data) || !data.Offsets.TryGetValue(state, out var offsets))
+                return null;
+
+            if (data.VerticalBounds.TryGetValue(state, out var cached))
+                return cached;
+
+            var top = rsi.Size.Y;
+            var bottom = -1;
+            foreach (var frames in offsets)
+            {
+                foreach (var offset in frames)
+                {
+                    for (var y = 0; y < rsi.Size.Y; y++)
+                    {
+                        if (y >= top && y <= bottom)
+                            continue;
+
+                        for (var x = 0; x < rsi.Size.X; x++)
+                        {
+                            if (!data.ClickMap.IsOccluded(offset.X + x, offset.Y + y))
+                                continue;
+
+                            top = Math.Min(top, y);
+                            bottom = Math.Max(bottom, y);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            (int Top, int Bottom)? bounds = bottom >= top ? (top, bottom) : null;
+            data.VerticalBounds.Add(state, bounds);
+            return bounds;
+        }
+
         private static bool SampleClickMap(ClickMap map, Vector2i pos, Vector2i bounds, Vector2i offset)
         {
             var (width, height) = bounds;
@@ -131,6 +168,7 @@ namespace Content.Client.Clickable
         {
             public readonly ClickMap ClickMap;
             public readonly Dictionary<RSI.StateId, Vector2i[][]> Offsets;
+            public readonly Dictionary<RSI.StateId, (int Top, int Bottom)?> VerticalBounds = new();
 
             public RsiClickMapData(ClickMap clickMap, Dictionary<RSI.StateId, Vector2i[][]> offsets)
             {
@@ -213,5 +251,7 @@ namespace Content.Client.Clickable
         public bool IsOccluding(Texture texture, Vector2i pos);
 
         public bool IsOccluding(RSI rsi, RSI.StateId state, RsiDirection dir, int frame, Vector2i pos);
+
+        public (int Top, int Bottom)? GetVerticalBounds(RSI rsi, RSI.StateId state);
     }
 }

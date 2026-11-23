@@ -1,0 +1,83 @@
+- type: entity
+  parent: Scalpel
+  id: AdvancedSterileScalpel
+  name: surgical scalpel
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Objects/Medical/Surgery/scalpel.rsi
+    state: scalpel
+  - type: Item
+    sprite: _Eclipse/Objects/Medical/Surgery/scalpel.rsi
+    heldPrefix: null
+
+- type: entity
+  parent: Hemostat
+  id: AdvancedSterileHemostat
+  name: vascular hemostat
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Objects/Medical/Surgery/hemostat.rsi
+    state: hemostat
+  - type: Item
+    sprite: _Eclipse/Objects/Medical/Surgery/hemostat.rsi
+    heldPrefix: null
+
+- type: entity
+  parent: BaseItem
+  id: AdvancedInstrumentSterilizationKit
+  name: sterile instrument reprocessing pack
+  description: Apply to a contaminated surgical instrument. Contains a single-use cleaning agent and sterile wrap.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Objects/Medical/Surgery/drapes.rsi
+    state: drapes
+  - type: Item
+    sprite: _Eclipse/Objects/Medical/Surgery/drapes.rsi
+    size: Small
+  - type: InstrumentSterilization
+    delay: 5
+
+- type: entity
+  parent: BaseItem
+  id: AdvancedClinicalBloodAnalyzer
+  name: portable blood analyzer
+  description: Apply to an identified blood sample to print a dated biochemical profile.
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Medical/healthanalyzer.rsi
+    state: icon
+    color: "#b4d7ec"
+  - type: Item
+    size: Small
+  - type: ClinicalBloodAnalyzer
+    delay: 8
+
+- type: entity
+  parent: AdvancedMedicalImager
+  id: AdvancedPortableXRay
+  name: portable X-ray scanner
+  description: Examines the selected region for fractures, fixation and foreign bodies. Does not diagnose soft-tissue diseases.
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Medical/healthanalyzer.rsi
+    state: icon
+    color: "#bab7de"
+  - type: AdvancedTreatment
+    treatment: XRay
+    delay: 7
+    reusable: true
+
+- type: entity
+  parent: AdvancedMedicalImager
+  id: AdvancedElectrocardiograph
+  name: portable electrocardiograph
+  description: Records the heart rate in the chest region. Compares it with the patient's baseline.
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Medical/healthanalyzer.rsi
+    state: icon
+    color: "#a2d4b2"
+  - type: AdvancedTreatment
+    treatment: Electrocardiogram
+    delay: 5
+    reusable: true

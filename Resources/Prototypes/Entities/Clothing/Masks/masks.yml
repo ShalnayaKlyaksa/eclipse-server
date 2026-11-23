@@ -79,7 +79,7 @@
   parent: [ClothingMaskGasAtmos, BaseCommandContraband]
   id: ClothingMaskGasCaptain
   name: captain's gas mask
-  description: Nanotrasen cut corners and repainted a spare atmospheric gas mask, but don't tell anyone.
+  description: VISH cut corners and repainted a spare atmospheric gas mask, but don't tell anyone.
   components:
   - type: Sprite
     sprite: Clothing/Mask/gascaptain.rsi
@@ -475,7 +475,7 @@
   parent: ClothingMaskGasERT
   id: ClothingMaskGasDeathSquad
   name: death squad gas mask
-  description: A unique gas mask for the NT's most elite squad.
+  description: A unique gas mask for the VISH's most elite squad.
   components:
   - type: Sprite
     sprite: Clothing/Mask/squadron.rsi

@@ -9,8 +9,9 @@
   cost: 5000
   recipeUnlocks:
   - WeaponProtoKineticAccelerator
-  position: 11,1
-
+  position: 24, 22
+  technologyPrerequisites:
+  - IndustrialAutomation
 - type: technology
   id: KineticModifications
   name: research-technology-kinetic-modifications
@@ -26,7 +27,8 @@
   - PKAUpgradeFireRate
   technologyPrerequisites:
   - SalvageWeapons
-  position: 12,1
+  - IndustrialSalvageEquipment
+  position: 26, 21
 
 - type: technology
   id: SalvageEquipment
@@ -37,13 +39,9 @@
   discipline: Shaft
   tier: 1
   cost: 7500
-  recipeUnlocks:
-  - MiningDrill
-  - Pickaxe
-  - MineralScannerEmpty
-  - ClothingMaskWeldingGas
+  recipeUnlocks: []
   position: 10,1
-
+  hidden: true
 - type: technology
   id: SalvageEquipmentAdvanced
   name: research-technology-salvage-equipment-advanced
@@ -53,15 +51,11 @@
   discipline: Shaft
   tier: 1
   cost: 15000
-  recipeUnlocks:
-   - OreBagOfHolding
-   - AdvancedMineralScannerEmpty
-   - MiningDrillDiamond
-   - ClothingShoesBootsJump
+  recipeUnlocks: []
   technologyPrerequisites:
   - SalvageEquipment
   position: 10,4
-
+  hidden: true
 - type: technology
   id: Fulton
   name: research-technology-fulton
@@ -75,8 +69,8 @@
   - Fulton
   - FultonBeacon
   technologyPrerequisites:
-  - SalvageEquipment
-  position: 9,1
+  - IndustrialAutomation
+  position: 24, 18
 
 - type: technology
   id: Grappling
@@ -88,10 +82,10 @@
   tier: 1
   cost: 5000
   recipeUnlocks:
-   - WeaponGrapplingGun
+  - WeaponGrapplingGun
   technologyPrerequisites:
-  - SalvageEquipment
-  position: 9,3
+  - IndustrialAutomation
+  position: 24, 20
 
 - type: technology
   id: SpaceScanning
@@ -103,8 +97,8 @@
   tier: 1
   cost: 5000
   recipeUnlocks:
-   - HandheldGPSBasic
-   - HandHeldMassScanner
+  - HandheldGPSBasic
+  - HandHeldMassScanner
   technologyPrerequisites:
   - SpaceScanningMachines
-  position: 12,3
+  position: 26, 19

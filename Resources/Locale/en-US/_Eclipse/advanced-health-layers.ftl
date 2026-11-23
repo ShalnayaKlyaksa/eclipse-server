@@ -1,0 +1,11 @@
+advanced-health-layer-general = Overview
+advanced-health-layer-organs = Organs
+advanced-health-layer-protection = Protection
+advanced-health-layer-hint-organs = Internal organs: brightness reflects function. Tissue damage requires examination.
+advanced-health-layer-hint-protection = Body labels show equipment reduction of piercing and bullet damage. Current armour affects the whole body; separate regional resistance is not defined yet.
+advanced-health-layer-no-organs = Separate internal organs are not modelled in this region.
+advanced-health-layer-organ-tissue = Regional organ tissue integrity: {$value}%. Individual organ diagnosis requires an examination.
+advanced-health-layer-present-organs = Organs in this region
+advanced-health-layer-resistance = Equipment damage reduction: {$value}%.
+advanced-health-layer-current-armor = Current armour model
+advanced-health-layer-flat-reduction = Additional flat damage reduction: {$values}.

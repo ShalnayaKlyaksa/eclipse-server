@@ -35,11 +35,12 @@ public sealed class HumanoidProfileSystem : EntitySystem
         if (!Resolve(ent, ref ent.Comp))
             return;
 
+        var previousSex = ent.Comp.Sex;
         ent.Comp.Gender = profile.Gender;
         ent.Comp.Age = profile.Age;
         ent.Comp.Species = profile.Species;
-        ent.Comp.CustomSpecies = profile.CustomSpecies;
         ent.Comp.Sex = profile.Sex;
+        ent.Comp.VocalSex = profile.Customization.GetVocalSex(profile.Sex);
         // Corvax-TTS-start
         ent.Comp.Voice = profile.Voice;
         if (TryComp<TTSComponent>(ent, out var _TTSComponent) && _TTSComponent.VoicePrototypeId == "Taskmaster")
@@ -49,7 +50,7 @@ public sealed class HumanoidProfileSystem : EntitySystem
         // Corvax-TTS-end
         Dirty(ent);
 
-        var sexChanged = new SexChangedEvent(ent.Comp.Sex, profile.Sex);
+        var sexChanged = new SexChangedEvent(previousSex, profile.Sex);
         RaiseLocalEvent(ent, ref sexChanged);
 
         if (TryComp<GrammarComponent>(ent, out var grammar))
@@ -61,9 +62,7 @@ public sealed class HumanoidProfileSystem : EntitySystem
     private void OnExamined(Entity<HumanoidProfileComponent> ent, ref ExaminedEvent args)
     {
         var identity = Identity.Entity(ent, EntityManager);
-        var species = string.IsNullOrEmpty(ent.Comp.CustomSpecies)
-            ? GetSpeciesRepresentation(ent.Comp.Species).ToLower()
-            : ent.Comp.CustomSpecies;
+        var species = GetSpeciesRepresentation(ent.Comp.Species).ToLower();
         var age = GetAgeRepresentation(ent.Comp.Species, ent.Comp.Age);
 
         args.PushText(Loc.GetString("humanoid-appearance-component-examine", ("user", identity), ("age", age), ("species", species)));

@@ -5,7 +5,6 @@ using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Atmos.EntitySystems;
 using Content.Shared.Damage;
-using Robust.Shared.Random;
 using Robust.Shared.Threading;
 
 namespace Content.Server.Atmos.EntitySystems;
@@ -166,14 +165,6 @@ public sealed partial class AtmosphereSystem
             for (var i = 0; i < len; i++)
             {
                 var ent = entList[start + i];
-                // It is genuinely a massive pain in the ass to handle skipping in the beginning than it is to get that
-                // microboost from skipping work. As such, just skip at the very end.
-                if (!_random.Prob(ent.Comp.RandomDamageChance))
-                {
-                    SetIsTakingDamageState(ent, false);
-                    continue;
-                }
-
                 var pairBase = i * DeltaPressurePairCount;
                 var maxPressure = 0f;
                 var maxDelta = 0f;
@@ -217,11 +208,10 @@ public sealed partial class AtmosphereSystem
     {
         var aboveMinPressure = pressure > ent.Comp.MinPressure;
         var aboveMinDeltaPressure = delta > ent.Comp.MinPressureDelta;
-        if (!aboveMinPressure && !aboveMinDeltaPressure)
-        {
-            SetIsTakingDamageState(ent, false);
+        // Workers only read components. Both RNG and Dirty() belong to the simulation thread.
+        // Stable, undamaged entities need no result; previously damaged ones must clear their state.
+        if (!aboveMinPressure && !aboveMinDeltaPressure && !ent.Comp.IsTakingDamage)
             return;
-        }
 
         gridAtmosComp.DeltaPressureDamageResults.Enqueue(new DeltaPressureDamageResult(ent,
             pressure,

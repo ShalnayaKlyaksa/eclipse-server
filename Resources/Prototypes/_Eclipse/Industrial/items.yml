@@ -41,8 +41,7 @@
   - type: Material
   - type: PhysicalComposition
     materialComposition:
-      RawIron: 100
-    # TODO: Add RawCopper material when copper material chain is added.
+      RawCopper: 100
   - type: Item
     heldPrefix: iron
   - type: Tag
@@ -66,7 +65,8 @@
   - type: Stack
     stackType: CrushedIronOre
   - type: Sprite
-    state: iron
+    sprite: _Eclipse/Objects/Materials/processed_ore.rsi
+    state: crushed_iron
 
 - type: entity
   parent: CrushedIronOre
@@ -157,7 +157,8 @@
   - type: Stack
     stackType: CrushedCopperOre
   - type: Sprite
-    state: iron
+    sprite: _Eclipse/Objects/Materials/processed_ore.rsi
+    state: crushed_copper
 
 - type: entity
   parent: CrushedCopperOre
@@ -248,8 +249,8 @@
   - type: Stack
     stackType: CrushedQuartz
   - type: Sprite
-    sprite: Objects/Materials/ore.rsi
-    state: spacequartz
+    sprite: _Eclipse/Objects/Materials/processed_ore.rsi
+    state: crushed_quartz
   - type: Item
     sprite: Objects/Materials/ore.rsi
     heldPrefix: spacequartz
@@ -356,7 +357,9 @@
   - type: Stack
     stackType: StoneDust
   - type: Sprite
-    state: iron
+    sprite: Objects/Misc/reagent_fillings.rsi
+    state: powderpile
+    color: "#9BA0A1"
 
 - type: entity
   parent: StoneDust
@@ -432,7 +435,9 @@
   - type: Stack
     stackType: MetalDust
   - type: Sprite
-    state: iron
+    sprite: Objects/Misc/reagent_fillings.rsi
+    state: powderpile
+    color: "#9BA0A1"
 
 - type: entity
   parent: MetalDust
@@ -473,7 +478,7 @@
   parent: BaseMediumStack
   id: CrushedIronOre
   name: stack-crushed-iron-ore
-  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: iron }
+  icon: { sprite: /Textures/_Eclipse/Objects/Materials/processed_ore.rsi, state: crushed_iron }
   spawn: CrushedIronOre1
 
 - type: stack
@@ -508,7 +513,7 @@
   parent: BaseMediumStack
   id: CrushedCopperOre
   name: stack-crushed-copper-ore
-  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: iron }
+  icon: { sprite: /Textures/_Eclipse/Objects/Materials/processed_ore.rsi, state: crushed_copper }
   spawn: CrushedCopperOre1
 
 - type: stack
@@ -543,7 +548,7 @@
   parent: BaseMediumStack
   id: CrushedQuartz
   name: stack-crushed-quartz
-  icon: { sprite: /Textures/Objects/Materials/ore.rsi, state: spacequartz }
+  icon: { sprite: /Textures/_Eclipse/Objects/Materials/processed_ore.rsi, state: crushed_quartz }
   spawn: CrushedQuartz1
 
 - type: stack

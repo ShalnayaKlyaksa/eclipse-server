@@ -94,6 +94,19 @@ public sealed partial class SpeciesPrototype : IPrototype
     [DataField]
     public List<Sex> Sexes { get; private set; } = new() { Sex.Male, Sex.Female };
 
+    public bool AllowsIntersex => Sexes.Contains(Sex.Male) && Sexes.Contains(Sex.Female);
+
+    [DataField]
+    public int DefaultHeight { get; private set; } = 175;
+
+    [DataField]
+    public int DefaultWeight { get; private set; } = 75;
+
+    public int MinHeight => DefaultHeight * 85 / 100;
+    public int MaxHeight => DefaultHeight * 115 / 100;
+    public int MinWeight => DefaultWeight * 65 / 100;
+    public int MaxWeight => DefaultWeight * 140 / 100;
+
     /// <summary>
     ///     Characters younger than this are too young to be hired by Nanotrasen.
     /// </summary>

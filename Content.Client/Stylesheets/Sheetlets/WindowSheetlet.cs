@@ -1,4 +1,4 @@
-﻿using Content.Client.Resources;
+using Content.Client.Resources;
 using Content.Client.Stylesheets.Fonts;
 using Content.Client.Stylesheets.Palette;
 using Content.Client.Stylesheets.SheetletConfigs;
@@ -18,44 +18,13 @@ public sealed class WindowSheetlet<T> : Sheetlet<T>
 {
     public override StyleRule[] GetRules(T sheet, object config)
     {
-        IButtonConfig buttonCfg = sheet;
-        IWindowConfig windowCfg = sheet;
         IIconConfig iconCfg = sheet;
 
-        var headerStylebox = new StyleBoxTexture
-        {
-            Texture = sheet.GetTextureOr(windowCfg.WindowHeaderTexturePath, NanotrasenStylesheet.TextureRoot),
-            PatchMarginBottom = 3,
-            ExpandMarginBottom = 3,
-            ContentMarginBottomOverride = 0,
-        };
-        // TODO: This would probably be better palette-based but we can leave it for now.
-        var headerAlertStylebox = new StyleBoxTexture
-        {
-            Texture = sheet.GetTextureOr(windowCfg.WindowHeaderAlertTexturePath, NanotrasenStylesheet.TextureRoot),
-            PatchMarginBottom = 3,
-            ExpandMarginBottom = 3,
-            ContentMarginBottomOverride = 0,
-        };
-        var backgroundBox = new StyleBoxTexture()
-        {
-            Texture = sheet.GetTextureOr(windowCfg.WindowBackgroundPath, NanotrasenStylesheet.TextureRoot),
-        };
-        backgroundBox.SetPatchMargin(StyleBox.Margin.Horizontal | StyleBox.Margin.Bottom, 2);
-        backgroundBox.SetExpandMargin(StyleBox.Margin.Horizontal | StyleBox.Margin.Bottom, 2);
-        var borderedBackgroundBox = new StyleBoxTexture
-        {
-            Texture = sheet.GetTextureOr(windowCfg.WindowBackgroundBorderedPath, NanotrasenStylesheet.TextureRoot),
-        };
-        borderedBackgroundBox.SetPatchMargin(StyleBox.Margin.All, 2);
         var closeButtonTex = sheet.GetTextureOr(iconCfg.CrossIconPath, NanotrasenStylesheet.TextureRoot);
-        var eclipseHeader = EclipsePanel("#1A0900E8", "#A85E12CC", 6, 1);
-        var eclipseHeaderAlert = EclipsePanel("#260408EE", "#D43B3BCC", 6, 1);
-        var eclipseBackground = EclipsePanel("#070300F4", "#A85E1290", 0, 0);
-        var eclipseBorderedBackground = EclipsePanel("#070300F4", "#A85E1290", 8, 8);
-
-        var leftPanel = StyleBoxHelpers.OpenLeftStyleBox(sheet);
-        leftPanel.SetPadding(StyleBox.Margin.All, 0.0f);
+        var eclipseHeader = ForgeStyle.Panel(ForgeStyle.Surface, ForgeStyle.Border, 6, 1);
+        var eclipseHeaderAlert = ForgeStyle.Panel(Color.FromHex("#260408EE"), Color.FromHex("#D43B3BCC"), 6, 1);
+        var eclipseBackground = ForgeStyle.Panel(ForgeStyle.Background, ForgeStyle.Border);
+        var eclipseBorderedBackground = ForgeStyle.Panel(ForgeStyle.Background, ForgeStyle.Border, 8, 8);
 
         // TODO: maybe also change everything here to `NanoWindow` or something
         return
@@ -76,6 +45,8 @@ public sealed class WindowSheetlet<T> : Sheetlet<T>
             E()
                 .Class(DefaultWindow.StyleClassWindowHeader)
                 .Panel(eclipseHeader),
+            E<PanelContainer>().Class("WindowHeadingBackground")
+                .Panel(eclipseHeader).Modulate(Color.White),
             E()
                 .Class(StyleClass.AlertWindowHeader)
                 .Panel(eclipseHeaderAlert),
@@ -108,7 +79,7 @@ public sealed class WindowSheetlet<T> : Sheetlet<T>
             // Title
             E<Label>()
                 .Class("FancyWindowTitle") // TODO: hardcoding class name
-                .Font(ResCache.GetFont("/Fonts/Boxfont-round/Boxfont Round.ttf", 13)) // TODO: hardcoding font
+                .Font(sheet.BaseFont.GetFont(14, FontKind.Bold))
                 .FontColor(sheet.HighlightPalette.Text),
 
             // Help Button
@@ -116,15 +87,15 @@ public sealed class WindowSheetlet<T> : Sheetlet<T>
                 .Class(FancyWindow.StyleClassWindowHelpButton)
                 .Prop(TextureButton.StylePropertyTexture,
                     sheet.GetTextureOr(iconCfg.HelpIconPath, NanotrasenStylesheet.TextureRoot))
-                .Prop(Control.StylePropertyModulateSelf, sheet.PrimaryPalette.Element),
+                .Prop(Control.StylePropertyModulateSelf, ForgeStyle.Muted),
             E<TextureButton>()
                 .Class(FancyWindow.StyleClassWindowHelpButton)
                 .Pseudo(ContainerButton.StylePseudoClassHover)
-                .Prop(Control.StylePropertyModulateSelf, sheet.PrimaryPalette.HoveredElement),
+                .Prop(Control.StylePropertyModulateSelf, ForgeStyle.Text),
             E<TextureButton>()
                 .Class(FancyWindow.StyleClassWindowHelpButton)
                 .Pseudo(ContainerButton.StylePseudoClassPressed)
-                .Prop(Control.StylePropertyModulateSelf, sheet.PrimaryPalette.PressedElement),
+                .Prop(Control.StylePropertyModulateSelf, ForgeStyle.Accent),
 
             // Footer
             E<Label>()
@@ -134,17 +105,4 @@ public sealed class WindowSheetlet<T> : Sheetlet<T>
         ];
     }
 
-    private static StyleBoxFlat EclipsePanel(string background, string border, float horizontalPadding, float verticalPadding)
-    {
-        var style = new StyleBoxFlat
-        {
-            BackgroundColor = Color.FromHex(background),
-            BorderColor = Color.FromHex(border),
-            BorderThickness = new Thickness(1),
-        };
-
-        style.SetContentMarginOverride(StyleBox.Margin.Horizontal, horizontalPadding);
-        style.SetContentMarginOverride(StyleBox.Margin.Vertical, verticalPadding);
-        return style;
-    }
 }

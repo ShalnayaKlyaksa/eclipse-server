@@ -1,0 +1,108 @@
+- type: industrialRecipe
+  id: AssembleNuclearReactorCore
+  processor: Assembler
+  time: 20
+  minimumTier: Industrial
+  requiredTechnology: EnergyFission
+  requireDataDisk: true
+  inputs:
+    SheetPlasteel: 12
+    IndustrialAdvancedBoard: 4
+    IndustrialHeatConduitAssembly: 4
+  outputs:
+    NuclearReactorCoreFlatpack: 1
+
+- type: industrialRecipe
+  id: AssembleNuclearReactorShield
+  processor: Assembler
+  time: 20
+  minimumTier: Industrial
+  requiredTechnology: EnergyFission
+  requireDataDisk: true
+  inputs:
+    SheetSteel: 8
+    SheetUranium: 2
+  outputs:
+    NuclearReactorShieldFlatpack: 1
+
+- type: industrialRecipe
+  id: AssembleNuclearReactorFuelChannel
+  processor: Assembler
+  time: 20
+  minimumTier: Industrial
+  requiredTechnology: EnergyFission
+  requireDataDisk: true
+  inputs:
+    UraniumDust: 8
+    SheetPlasteel: 4
+    IndustrialHeatConduitAssembly: 1
+  outputs:
+    NuclearReactorFuelChannelFlatpack: 1
+
+- type: industrialRecipe
+  id: AssembleNuclearReactorGraphite
+  processor: Assembler
+  time: 20
+  minimumTier: Industrial
+  requiredTechnology: EnergyFission
+  requireDataDisk: true
+  inputs:
+    Coal: 8
+    SheetSteel: 2
+  outputs:
+    NuclearReactorGraphiteFlatpack: 1
+
+- type: industrialRecipe
+  id: AssembleNuclearReactorControlChannel
+  processor: Assembler
+  time: 20
+  minimumTier: Industrial
+  requiredTechnology: EnergyFission
+  requireDataDisk: true
+  inputs:
+    SheetPlasteel: 4
+    IndustrialAdvancedBoard: 1
+    IngotSilver: 2
+  outputs:
+    NuclearReactorControlChannelFlatpack: 1
+
+- type: industrialRecipe
+  id: AssembleNuclearReactorInlet
+  processor: Assembler
+  time: 20
+  minimumTier: Industrial
+  requiredTechnology: EnergyFission
+  requireDataDisk: true
+  inputs:
+    SheetPlasteel: 6
+    IndustrialHeatConduitAssembly: 3
+  outputs:
+    NuclearReactorInletFlatpack: 1
+
+- type: industrialRecipe
+  id: AssembleNuclearReactorOutlet
+  processor: Assembler
+  time: 20
+  minimumTier: Industrial
+  requiredTechnology: EnergyFission
+  requireDataDisk: true
+  inputs:
+    SheetPlasteel: 6
+    IndustrialHeatConduitAssembly: 3
+  outputs:
+    NuclearReactorOutletFlatpack: 1
+
+- type: industrialRecipe
+  id: AssembleNuclearReactorConsole
+  processor: Assembler
+  time: 20
+  minimumTier: Industrial
+  requiredTechnology: EnergyFission
+  requireDataDisk: true
+  inputs:
+    SheetSteel: 8
+    SheetGlass: 4
+    IndustrialAdvancedBoard: 3
+  outputs:
+    NuclearReactorConsoleFlatpack: 1
+

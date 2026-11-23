@@ -1,0 +1,132 @@
+- type: entity
+  parent: [BaseMachinePowered, SmallConstructibleMachine]
+  id: EclipseCulinaryStation
+  name: kitchen range
+  description: Boils, simmers and reduces mixtures. Use separate utensils and appliances for other preparation steps.
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/electric_grill.rsi
+    state: icon
+  - type: CulinaryStation
+    allowedMethods: [Boil, Simmer, Reduce]
+  - type: ApcPowerReceiver
+    powerLoad: 1200
+  - type: Machine
+    board: EclipseCulinaryStationCircuitboard
+  - type: ActivatableUI
+    key: enum.CulinaryUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.CulinaryUiKey.Key:
+        type: CulinaryBoundUserInterface
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 300
+        canReact: false
+  - type: Edible
+    solution: food
+    destroyOnEmpty: false
+    transferAmount: 1
+    utensil: Spoon
+    utensilRequired: true
+  - type: ContainerContainer
+    containers:
+      culinary-ingredients: !type:Container
+      machine_board: !type:Container
+      machine_parts: !type:Container
+  - type: EmptyOnMachineDeconstruct
+    containers:
+    - culinary-ingredients
+  - type: GuideHelp
+    guides:
+    - EclipseExperimentalCooking
+
+- type: entity
+  parent: BaseMachineCircuitboard
+  id: EclipseCulinaryStationCircuitboard
+  name: experimental kitchen range machine board
+  components:
+  - type: MachineBoard
+    prototype: EclipseCulinaryStation
+    stackRequirements:
+      Steel: 5
+      Cable: 2
+      Glass: 2
+
+- type: entity
+  parent: FoodBowlBase
+  id: EclipseCulinarySoup
+  name: experimental soup
+  description: A custom dish. Examine it to learn its culinary properties.
+  components:
+  - type: Sprite
+    layers:
+    - state: bowl
+    - state: alpha-filling
+      color: "#BF7947"
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 20
+        reagents: []
+
+- type: entity
+  parent: EclipseCulinarySoup
+  id: EclipseCulinaryStew
+  name: experimental stew
+  components:
+  - type: Sprite
+    layers:
+    - state: bowl
+    - state: alpha-filling
+      color: "#875C39"
+
+- type: entity
+  parent: EclipseCulinarySoup
+  id: EclipseCulinaryStirFry
+  name: experimental stir-fry
+  components:
+  - type: Sprite
+    layers:
+    - state: bowl
+    - state: alpha-filling
+      color: "#A58B42"
+
+- type: entity
+  parent: EclipseCulinarySoup
+  id: EclipseCulinaryBake
+  name: experimental baked dish
+  components:
+  - type: Sprite
+    layers:
+    - state: bowl
+    - state: alpha-filling
+      color: "#C09C59"
+
+- type: entity
+  parent: EclipseCulinarySoup
+  id: EclipseCulinarySteamed
+  name: experimental steamed dish
+  components:
+  - type: Sprite
+    layers:
+    - state: bowl
+    - state: alpha-filling
+      color: "#A8BF79"
+
+- type: entity
+  parent: EclipseCulinarySoup
+  id: EclipseCulinaryPrepared
+  name: culinary preparation
+  components:
+  - type: Sprite
+    layers:
+    - state: bowl
+    - state: alpha-filling
+      color: "#83A66B"
+
+- type: guideEntry
+  id: EclipseExperimentalCooking
+  name: guide-entry-eclipse-experimental-cooking
+  text: "/ServerInfo/Guidebook/Service/EclipseExperimentalCooking.xml"

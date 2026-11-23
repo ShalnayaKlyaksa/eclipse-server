@@ -17,7 +17,7 @@ public static class AdvancedHealthHudData
         return health.BodyParts.Values
             .Where(part => health.BodyPartHitWeights.GetValueOrDefault(part.Slot, 1f) > 0)
             .OrderBy(part => part.Slot)
-            .Select(part => part.ToUiState())
+            .Select(part => part.ToUiState(health.HasBlood ? health.GetBloodLossRate(part) : 0f))
             .ToArray();
     }
 

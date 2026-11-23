@@ -31,7 +31,7 @@ entities:
   - uid: 2
     components:
     - type: MetaData
-      name: NT Evac Exo
+      name: VISH Evac Exo
     - type: Transform
       pos: -0.515625,-0.5078182
       parent: invalid
@@ -2978,7 +2978,7 @@ entities:
   - uid: 513
     components:
     - type: MetaData
-      desc: Glory to NanoTrasen!
+      desc: Glory to VISH!
       name: beer dispenser
     - type: Transform
       rot: 3.141592653589793 rad

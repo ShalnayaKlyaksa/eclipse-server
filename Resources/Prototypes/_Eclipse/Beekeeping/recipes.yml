@@ -1,0 +1,59 @@
+- type: industrialRecipe
+  id: EclipseBuildApiaryFrame
+  processor: Assembler
+  time: 8
+  inputs:
+    MaterialWoodPlank1: 2
+  outputs:
+    EclipseApiaryFrame: 1
+- type: industrialRecipe
+  id: EclipseBuildAdvancedApiaryBoard
+  processor: Assembler
+  minimumTier: Industrial
+  time: 30
+  inputs:
+    IndustrialAdvancedProcessor: 2
+    SheetSteel1: 4
+    SheetGlass1: 2
+  outputs:
+    EclipseAdvancedApiaryCircuitboard: 1
+- type: industrialRecipe
+  id: EclipsePressOrdinaryHoneycomb
+  processor: FilterPress
+  time: 15
+  inputs:
+    EclipseFoodHoneycomb: 1
+  fluidOutputs:
+    EclipseHoney: 8
+  outputs:
+    EclipseBeeswax: 1
+- type: industrialRecipe
+  id: EclipsePressHerbalHoneycomb
+  processor: FilterPress
+  time: 15
+  inputs:
+    EclipseFoodHerbalHoneycomb: 1
+  fluidOutputs:
+    EclipseHoney: 8
+  outputs:
+    EclipseBeeswax: 1
+- type: industrialRecipe
+  id: EclipsePressEnergeticHoneycomb
+  processor: FilterPress
+  time: 15
+  inputs:
+    EclipseFoodEnergeticHoneycomb: 1
+  fluidOutputs:
+    EclipseHoney: 8
+  outputs:
+    EclipseBeeswax: 1
+- type: industrialRecipe
+  id: EclipsePressRoyalHoneycomb
+  processor: FilterPress
+  time: 15
+  inputs:
+    EclipseFoodRoyalHoneycomb: 1
+  fluidOutputs:
+    EclipseHoney: 8
+  outputs:
+    EclipseBeeswax: 1

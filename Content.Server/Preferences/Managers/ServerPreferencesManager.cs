@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Content.Corvax.Interfaces.Shared;
 using Content.Server.Database;
+using Content.Server.Eclipse.Economy;
 using Content.Shared.Body;
 using Content.Shared.CCVar;
 using Content.Shared.Construction.Prototypes;
@@ -42,6 +43,7 @@ namespace Content.Server.Preferences.Managers
         [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
         [Dependency] private readonly MarkingManager _marking = default!;
         [Dependency] private readonly ISerializationManager _serialization = default!;
+        [Dependency] private readonly IEntityManager _entityManager = default!;
         private ISharedSponsorsManager? _sponsors;
 
         // Cache player prefs on the server so we don't need as much async hell related to them.
@@ -111,7 +113,7 @@ namespace Content.Server.Preferences.Managers
             // Corvax-TTS-Start
             var voice = profile.Voice;
             if (voice == String.Empty)
-                voice = HumanoidProfileSystem.DefaultSexVoice[sex];
+                voice = HumanoidProfileSystem.DefaultSexVoice[sex.PresentationSex()];
             // Corvax-TTS-End
 
             var markings =
@@ -179,7 +181,6 @@ namespace Content.Server.Preferences.Managers
                 profile.CharacterName,
                 profile.FlavorText,
                 species,
-                profile.CustomSpecies,
                 voice, // Corvax-TTS
                 profile.Age,
                 sex,
@@ -196,7 +197,22 @@ namespace Content.Server.Preferences.Managers
                 antags.ToHashSet(),
                 traits.ToHashSet(),
                 loadouts
-            );
+            ) { Customization = ReadCharacterCustomization(profile.CharacterCustomization) };
+        }
+
+        private static CharacterCustomization ReadCharacterCustomization(string? value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return default;
+
+            try
+            {
+                return JsonSerializer.Deserialize<CharacterCustomization>(value);
+            }
+            catch (JsonException)
+            {
+                return default;
+            }
         }
 
         private async void HandleSelectCharacterMessage(MsgSelectCharacter message)
@@ -268,7 +284,7 @@ namespace Content.Server.Preferences.Managers
                 [slot] = profile
             };
 
-            prefsData.Prefs = new PlayerPreferences(profiles, slot, curPrefs.AdminOOCColor, curPrefs.ConstructionFavorites);
+            prefsData.Prefs = new PlayerPreferences(profiles, curPrefs.SelectedCharacterIndex, curPrefs.AdminOOCColor, curPrefs.ConstructionFavorites);
 
             if (ShouldStorePrefs(session.Channel.AuthType))
                 await _db.SaveCharacterSlotAsync(userId, profile, slot);
@@ -323,6 +339,9 @@ namespace Content.Server.Preferences.Managers
 
                 nextSlot = ns;
             }
+
+            if (!_entityManager.System<EclipseCurrencyManager>().RemovePdaPublicId(userId, slot))
+                return;
 
             var arr = new Dictionary<int, HumanoidCharacterProfile>(curPrefs.Characters);
             arr.Remove(slot);
@@ -418,6 +437,8 @@ namespace Content.Server.Preferences.Managers
             prefsData.Prefs = SanitizePreferences(session, prefsData.Prefs, _dependencies);
 
             prefsData.PrefsLoaded = true;
+            _entityManager.System<EclipseCurrencyManager>()
+                .MigratePdaPublicId(session.UserId, prefsData.Prefs.SelectedCharacterIndex);
 
             // Corvax-Sponsors-Start: Remove sponsor markings from expired sponsors
             var collection = IoCManager.Instance!;

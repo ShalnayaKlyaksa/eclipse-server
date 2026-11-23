@@ -1,0 +1,101 @@
+research-discipline-energy = Power engineering
+research-terminal-energy-tab = Power engineering
+research-map-short-energy = Power
+research-energyfoundations = Power controls
+research-energycombustion = Solid-fuel generation
+research-energythermal = Thermal loops
+research-energysolar = Solar power
+research-energyliquidfuel = Liquid fuels
+research-energycooling = Industrial cooling
+research-energygasfuel = Gas engines
+research-energyheatrecovery = Waste-heat recovery
+research-energyadvancedsolar = High-efficiency photovoltaics
+research-energybiomass = Biomass energy
+research-energygeothermal = Geothermal power
+research-energyadvancedthermal = High-temperature alternators
+research-energyradioisotopes = Radioisotope sources
+research-energyfuelcells = Fuel cells
+research-energystabilization = High-power stabilization
+research-energyfission = Controlled fission
+research-energyantimatter = Antimatter plants
+research-energysolarite = Solarite supermatter
+research-energytesla = Resonant discharge plants
+research-energywormhole = Stabilized wormholes
+research-energysingularity = Microsingularity containment
+
+guide-entry-eclipse-nuclear-reactor = Graphite reactor
+nuclear-ui-title = Reactor control station
+nuclear-ui-core-map = ACTIVE ZONE / PLAN VIEW
+nuclear-ui-instruments = OPERATING CONDITIONS
+nuclear-ui-rods = Absorber rod insertion
+nuclear-ui-scram = SCRAM — insert rods
+nuclear-ui-reset = Reset interlock
+nuclear-ui-heat-warning = Keep core cooling running after shutdown.
+nuclear-ui-thermal = Temperature: { $temperature } K
+    Thermal power: { $power } kW
+    Decay heat: { $decay } kW
+nuclear-ui-coolant = Pressure: { $pressure } kPa
+    Flow: { $flow } mol/s
+    Heat removal: { $cooling } kW
+nuclear-ui-rod-position = Rod insertion: { $actual }%
+    Target: { $target }%
+nuclear-ui-physics = Reactivity: { $reactivity }%
+    Xenon: { $xenon }
+nuclear-status-no-core = Instrumentation spine not found
+nuclear-status-incomplete = Core assembly fault
+nuclear-status-power-loss = Auxiliary power lost — reactor scrammed
+nuclear-status-no-flow = Insufficient coolant flow
+nuclear-status-pressure = Primary circuit overpressure
+nuclear-status-overheat = Core overtemperature — reactor scrammed
+nuclear-status-failed = Core failure
+nuclear-status-scram = Reactor scrammed
+nuclear-status-starting = Startup range
+nuclear-status-running = Reactor operating
+nuclear-part-missing = Missing section
+nuclear-part-shield = Biological shield
+nuclear-part-fuel = Fuel channel
+nuclear-part-graphite = Graphite moderator
+nuclear-part-control = Absorber rod drive
+nuclear-part-inlet = Coolant inlet header
+nuclear-part-outlet = Coolant outlet header
+nuclear-part-console = Control station
+nuclear-part-core = Instrumentation spine
+nuclear-part-conflict = Overlapping sections
+nuclear-part-examine = Reactor section: { $kind }.
+nuclear-fuel-examine = Fuel remaining: { $percent }%.
+power-plant-fuel-economy = Fuel economy
+power-plant-reset = Reset interlock
+power-plant-thermal-target = Thermal power
+power-plant-thermal-output = Thermal power: { $power } kW
+power-plant-electric-output = Electrical output: { $power } kW
+power-plant-temperature = Temperature: { $temperature } / { $limit } K
+power-plant-cooling = Heat removal: { $power } kW
+power-plant-decay = Decay heat: { $power } kW
+power-plant-fields = Stabilizers: { $count } / { $required }
+power-plant-condition-stopped = Stopped
+power-plant-condition-warming = Warming up
+power-plant-condition-running = Running
+power-plant-condition-overheated = Overtemperature trip
+power-plant-condition-missingfield = Containment field lost
+power-plant-condition-cooling = Cooling after shutdown
+power-plant-condition-failed = Plant damaged
+power-plant-trip-overheated = Thermal protection tripped!
+power-plant-trip-missingfield = Containment field lost!
+power-plant-examine = Temperature: { $temperature } K. Limit: { $limit } K. Heat removal: { $cooling } kW.
+
+power-plant-start-success = Startup sequence accepted.
+power-plant-start-failure = Startup unavailable. Check fuel and interlocks.
+nuclear-ui-legend = F — fuel; G — graphite
+    R — absorber; # — shield
+reagent-name-industrial-biofuel = biofuel
+reagent-desc-industrial-biofuel = A combustible mixture refined from wood.
+power-plant-gravity-target = Gravity source power
+power-plant-gravity-output = Available mechanical power: { $power } kW
+power-plant-gravity-network = Electrical output is supplied by the kinetic generators
+power-plant-kinetics = Kinetic generators: { $count }. Available to the grid: { $power } kW.
+gravity-kinetic-examine = Flywheel: { $speed }%. Available output: { $power } kW.
+ent-GravitationalKineticGenerator = gravitational kinetic generator
+    .desc = A braced rotor driven by the gravity gradient of a contained micro black hole. Install 3–7 tiles from the source and connect to high-voltage cable.
+ent-GravitationalKineticGeneratorFlatpack = gravitational kinetic generator flatpack
+    .desc = Unpack with a wrench outside the containment field.
+ent-ResidualMicroBlackHole = collapsing micro black hole

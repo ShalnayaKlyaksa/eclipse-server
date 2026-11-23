@@ -87,6 +87,13 @@ public sealed partial class PlantHolderComponent : Component
     [DataField]
     public bool Sampled;
 
+    /// <summary>One cross per harvest prevents rerolling rare hybrids with repeated clicks.</summary>
+    [DataField]
+    public bool CrossPollinated;
+
+    [DataField]
+    public bool BeePollinated;
+
     /// <summary>
     /// Multiplier for the number of entities produced at harvest.
     /// </summary>

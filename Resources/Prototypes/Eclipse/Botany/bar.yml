@@ -1,0 +1,354 @@
+- type: mixingCategory
+  id: Muddle
+  verbText: garden-mixing-muddle
+  icon:
+    sprite: Objects/Consumable/Drinks/shaker.rsi
+    state: icon
+- type: mixingCategory
+  id: Infuse
+  verbText: garden-mixing-infuse
+  icon:
+    sprite: Objects/Consumable/Drinks/shaker.rsi
+    state: icon
+- type: reagent
+  id: GardenMintExtract
+  parent: BaseDrink
+  name: reagent-name-gardenmintextract
+  desc: reagent-desc-gardenmintextract
+  physicalDesc: reagent-physical-desc-aromatic
+  flavor: minty
+  color: '#72B584'
+  recognizable: true
+- type: reagent
+  id: FlowerNectar
+  parent: BaseDrink
+  name: reagent-name-flowernectar
+  desc: reagent-desc-flowernectar
+  physicalDesc: reagent-physical-desc-aromatic
+  flavor: sweet
+  color: '#F3DA7A'
+  recognizable: true
+- type: reagent
+  id: InfernalJuice
+  parent: BaseDrink
+  name: reagent-name-infernaljuice
+  desc: reagent-desc-infernaljuice
+  physicalDesc: reagent-physical-desc-aromatic
+  flavor: spicy
+  color: '#B22250'
+  recognizable: true
+- type: reagent
+  id: FloralNectar
+  parent: BaseDrink
+  name: reagent-name-floralnectar
+  desc: reagent-desc-floralnectar
+  physicalDesc: reagent-physical-desc-aromatic
+  flavor: sweet
+  color: '#EDB45E'
+  recognizable: true
+- type: reagent
+  id: GardenBerrySyrup
+  parent: BaseDrink
+  name: reagent-name-gardenberrysyrup
+  desc: reagent-desc-gardenberrysyrup
+  physicalDesc: reagent-physical-desc-aromatic
+  flavor: berry
+  color: '#B74371'
+  recognizable: true
+- type: reagent
+  id: GardenMintCordial
+  parent: BaseDrink
+  name: reagent-name-gardenmintcordial
+  desc: reagent-desc-gardenmintcordial
+  physicalDesc: reagent-physical-desc-aromatic
+  flavor: minty
+  color: '#8CD4A3'
+  recognizable: true
+- type: reagent
+  id: GardenFizz
+  parent: BaseDrink
+  name: reagent-name-gardenfizz
+  desc: reagent-desc-gardenfizz
+  physicalDesc: reagent-physical-desc-aromatic
+  flavor: minty
+  color: '#B3E2A9'
+  recognizable: true
+- type: reagent
+  id: BotanistSunrise
+  parent: BaseDrink
+  name: reagent-name-botanistsunrise
+  desc: reagent-desc-botanistsunrise
+  physicalDesc: reagent-physical-desc-aromatic
+  flavor: sweet
+  color: '#F5B752'
+  recognizable: true
+- type: reagent
+  id: InfernalCup
+  parent: BaseAlcohol
+  name: reagent-name-infernalcup
+  desc: reagent-desc-infernalcup
+  physicalDesc: reagent-physical-desc-aromatic
+  flavor: spicy
+  color: '#C24163'
+  recognizable: true
+- type: reagent
+  id: GardenBramble
+  parent: BaseAlcohol
+  name: reagent-name-gardenbramble
+  desc: reagent-desc-gardenbramble
+  physicalDesc: reagent-physical-desc-aromatic
+  flavor: berry
+  color: '#8D417C'
+  recognizable: true
+- type: reagent
+  id: GardenMintTea
+  parent: BaseDrink
+  name: reagent-name-gardenminttea
+  desc: reagent-desc-gardenminttea
+  physicalDesc: reagent-physical-desc-aromatic
+  flavor: minty
+  color: '#7BA66C'
+  recognizable: true
+- type: reaction
+  id: GardenBerrySyrup
+  reactants:
+    JuiceBerry:
+      amount: 2
+    Sugar:
+      amount: 1
+    Water:
+      amount: 1
+  products:
+    GardenBerrySyrup: 4
+  requiredMixerCategories:
+  - Muddle
+- type: reaction
+  id: GardenMintCordial
+  reactants:
+    GardenMintExtract:
+      amount: 1
+    Sugar:
+      amount: 1
+    Water:
+      amount: 1
+  products:
+    GardenMintCordial: 3
+  requiredMixerCategories:
+  - Infuse
+- type: reaction
+  id: GardenFizz
+  reactants:
+    GardenMintCordial:
+      amount: 1
+    JuiceLime:
+      amount: 1
+    SodaWater:
+      amount: 2
+  products:
+    GardenFizz: 4
+  requiredMixerCategories:
+  - Stir
+- type: reaction
+  id: BotanistSunrise
+  reactants:
+    GardenBerrySyrup:
+      amount: 1
+    FlowerNectar:
+      amount: 1
+    JuiceOrange:
+      amount: 2
+    Ice:
+      amount: 1
+  products:
+    BotanistSunrise: 5
+  requiredMixerCategories:
+  - Shake
+- type: reaction
+  id: InfernalCup
+  reactants:
+    InfernalJuice:
+      amount: 2
+    Rum:
+      amount: 1
+    GardenBerrySyrup:
+      amount: 1
+    Ice:
+      amount: 1
+  products:
+    InfernalCup: 5
+  requiredMixerCategories:
+  - Shake
+- type: reaction
+  id: GardenBramble
+  reactants:
+    GardenBerrySyrup:
+      amount: 1
+    Gin:
+      amount: 2
+    JuiceLemon:
+      amount: 1
+    Ice:
+      amount: 1
+  products:
+    GardenBramble: 5
+  requiredMixerCategories:
+  - Shake
+- type: reaction
+  id: GardenMintTea
+  reactants:
+    GardenMintExtract:
+      amount: 1
+    Tea:
+      amount: 3
+  products:
+    GardenMintTea: 4
+  requiredMixerCategories:
+  - Infuse
+- type: entity
+  parent: BarSpoon
+  id: BarMuddler
+  name: bar muddler
+  description: Crushes and blends fruit preparations. Use on a container; the whole batch takes one second.
+  components:
+  - type: ReactionMixer
+    reactionTypes:
+    - Muddle
+    mixerType: Machine
+    timeToMix: 1
+- type: entity
+  parent: DrinkShaker
+  id: BarInfuser
+  name: botanical infusion jug
+  description: A reusable infusion jug. Fill with ingredients and activate in hand to prepare a batch in three seconds.
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 200
+  - type: ReactionMixer
+    reactionTypes:
+    - Infuse
+    mixerType: Handheld
+    timeToMix: 3
+- type: reagent
+  id: ApiaryBlossom
+  parent: BaseDrink
+  name: reagent-name-apiaryblossom
+  desc: reagent-desc-apiaryblossom
+  physicalDesc: reagent-physical-desc-aromatic
+  flavor: sweet
+  color: '#E3B967'
+  recognizable: true
+- type: reaction
+  id: ApiaryBlossom
+  requiredMixerCategories:
+  - Stir
+  reactants:
+    FloralNectar:
+      amount: 1
+    EclipseHoney:
+      amount: 1
+    SodaWater:
+      amount: 2
+  products:
+    ApiaryBlossom: 4
+- type: reagent
+  id: MeadowSour
+  parent: BaseAlcohol
+  name: reagent-name-meadowsour
+  desc: reagent-desc-meadowsour
+  physicalDesc: reagent-physical-desc-aromatic
+  flavor: sweet
+  color: '#E3B967'
+  recognizable: true
+- type: reaction
+  id: MeadowSour
+  requiredMixerCategories:
+  - Shake
+  reactants:
+    EclipseHoney:
+      amount: 1
+    Gin:
+      amount: 2
+    JuiceLemon:
+      amount: 1
+    Ice:
+      amount: 1
+  products:
+    MeadowSour: 5
+- type: reagent
+  id: ChargedHoneyFizz
+  parent: BaseDrink
+  name: reagent-name-chargedhoneyfizz
+  desc: reagent-desc-chargedhoneyfizz
+  physicalDesc: reagent-physical-desc-aromatic
+  flavor: sweet
+  color: '#E3B967'
+  recognizable: true
+- type: reaction
+  id: ChargedHoneyFizz
+  requiredMixerCategories:
+  - Stir
+  reactants:
+    FlowerNectar:
+      amount: 1
+    EclipseHoney:
+      amount: 1
+    SodaWater:
+      amount: 2
+  products:
+    ChargedHoneyFizz: 4
+- type: entity
+  id: GardenChargedHoneycomb
+  parent: EclipseFoodHoneycomb
+  name: GardenChargedHoneycomb
+  components:
+  - type: Sprite
+    color: '#F0DE79'
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 12
+        reagents:
+        - ReagentId: EclipseHoney
+          Quantity: 8
+        - ReagentId: FlowerNectar
+          Quantity: 4
+  - type: Extractable
+    grindableSolutionName: food
+- type: entity
+  id: GardenSpicedHoneycomb
+  parent: EclipseFoodHoneycomb
+  name: GardenSpicedHoneycomb
+  components:
+  - type: Sprite
+    color: '#C96871'
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 12
+        reagents:
+        - ReagentId: EclipseHoney
+          Quantity: 8
+        - ReagentId: InfernalJuice
+          Quantity: 4
+  - type: Extractable
+    grindableSolutionName: food
+- type: entity
+  id: GardenNectarHoneycomb
+  parent: EclipseFoodHoneycomb
+  name: GardenNectarHoneycomb
+  components:
+  - type: Sprite
+    color: '#EDBE77'
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 12
+        reagents:
+        - ReagentId: EclipseHoney
+          Quantity: 8
+        - ReagentId: FloralNectar
+          Quantity: 4
+  - type: Extractable
+    grindableSolutionName: food

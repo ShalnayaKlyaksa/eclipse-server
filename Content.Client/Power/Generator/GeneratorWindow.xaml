@@ -1,48 +1,47 @@
-<controls:FancyWindow xmlns="https://spacestation14.io"
-                xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
-                xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
-                MinSize="450 250"
-                SetSize="450 250"
-                Resizable="False"
-                Title="{Loc 'portable-generator-ui-title'}">
-    <BoxContainer Margin="4 0" Orientation="Horizontal">
-        <BoxContainer Orientation="Vertical" HorizontalExpand="True" SizeFlagsStretchRatio="2" VerticalAlignment="Top" Margin="5">
-            <GridContainer Margin="2 0 0 0" Columns="2" HorizontalExpand="True">
-                <Label Name="StatusLabel" Text="{Loc 'portable-generator-ui-power-switch'}" HorizontalExpand="True" />
-                <Control MinWidth="120">
-                    <Button Name="StartButton" Text="{Loc 'portable-generator-ui-start'}" />
-                    <Button Name="StopButton" Text="{Loc 'portable-generator-ui-stop'}" />
-                    <ProgressBar Name="StartProgress" MaxValue="1" />
-                    <Label Name="LabelUnanchored" Text="{Loc 'portable-generator-ui-unanchored'}" />
-                </Control>
-                <!-- Power -->
-                <Label Text="{Loc 'portable-generator-ui-target-power-label'}"/>
-                <SpinBox Name="TargetPower" HorizontalExpand="True"/>
-                <Label Text="{Loc 'portable-generator-ui-efficiency-label'}"/>
-                <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
-                    <Label Name="Efficiency" Text="???%" />
-                    <Label Name="Eta" HorizontalExpand="True" Margin="4 0 0 0" />
-                </BoxContainer>
-                <Label Text="{Loc 'portable-generator-ui-fuel-use-label'}"/>
-                <ProgressBar Name="FuelFraction" MinValue="0" MaxValue="1" HorizontalExpand="True"/>
-                <Label Text="{Loc 'portable-generator-ui-fuel-left-label'}"/>
-                <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
-                    <Label Name="FuelLeft" Text="0" HorizontalExpand="True"/>
-                    <Button Name="FuelEject" Text="{Loc 'portable-generator-ui-eject'}" />
-                </BoxContainer>
-                <Label Name="OutputSwitchLabel" Text="{Loc 'portable-generator-ui-switch'}" Visible="False" />
-                <Button Name="OutputSwitchButton" Visible="False" />
-                <!-- Network stats menu -->
-                <Label Text="{Loc 'portable-generator-ui-network-stats'}"/>
-                <Control>
-                    <Label Name="NetworkStats" />
-                </Control>
-            </GridContainer>
-            <Label Margin="2 0 0 0" Name="CloggedLabel" FontColorOverride="Red" Text="{Loc 'portable-generator-ui-clogged'}" />
+<controls:ImmersiveFancyWindow xmlns="https://spacestation14.io"
+    xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+    xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+    MinSize="620 480" SetSize="660 520" Title="{Loc 'portable-generator-ui-title'}">
+    <BoxContainer Margin="12 8" Orientation="Vertical" SeparationOverride="12">
+        <BoxContainer SeparationOverride="16">
+            <SpriteView Name="EntityView" SetSize="64 64" Scale="2 2" OverrideDirection="South"/>
+            <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalAlignment="Center">
+                <Label Name="PlantName" StyleClasses="terminal-heading" ClipText="True"/>
+                <Label Name="StatusLabel" StyleClasses="terminal-muted"/>
+                <Label Name="NetworkStats" StyleClasses="terminal-muted" ClipText="True"/>
+            </BoxContainer>
+            <Control MinWidth="140" VerticalAlignment="Center">
+                <Button Name="StartButton" Text="{Loc 'portable-generator-ui-start'}" HorizontalExpand="True"/>
+                <Button Name="StopButton" Text="{Loc 'portable-generator-ui-stop'}" HorizontalExpand="True"/>
+                <ProgressBar Name="StartProgress" MaxValue="1"/>
+                <Label Name="LabelUnanchored" Text="{Loc 'portable-generator-ui-unanchored'}"/>
+            </Control>
         </BoxContainer>
-        <cc:VSeparator StyleClasses="LowDivider"/>
-        <PanelContainer Margin="12 0 0 0" StyleClasses="BackgroundPanelDark" VerticalAlignment="Center">
-            <SpriteView Name="EntityView" SetSize="64 64" Scale="2 2" OverrideDirection="South" Margin="15"/>
+        <GridContainer Columns="2" HorizontalExpand="True" HSeparationOverride="16" VSeparationOverride="8">
+            <Label Name="TargetLabel" Text="{Loc 'portable-generator-ui-target-power-label'}"/>
+            <SpinBox Name="TargetPower" HorizontalExpand="True"/>
+            <Label Text="{Loc 'power-plant-fuel-economy'}"/>
+            <BoxContainer SeparationOverride="10"><Label Name="Efficiency"/><Label Name="Eta" HorizontalExpand="True"/></BoxContainer>
+            <Label Text="{Loc 'portable-generator-ui-fuel-left-label'}"/>
+            <BoxContainer SeparationOverride="10"><Label Name="FuelLeft"/><ProgressBar Name="FuelFraction" MaxValue="1" MinWidth="80" HorizontalExpand="True"/><Button Name="FuelEject" Text="{Loc 'portable-generator-ui-eject'}"/></BoxContainer>
+            <Label Name="OutputSwitchLabel"/>
+            <Button Name="OutputSwitchButton"/>
+        </GridContainer>
+        <PanelContainer Name="OperatingPanel" Visible="False" VerticalExpand="True">
+            <PanelContainer.PanelOverride><gfx:StyleBoxFlat BackgroundColor="#161616" BorderColor="#505050" BorderThickness="1"/></PanelContainer.PanelOverride>
+            <BoxContainer Orientation="Vertical" Margin="12" SeparationOverride="7">
+                <Label Name="OperatingCondition" StyleClasses="terminal-heading"/>
+                <Label Name="OperatingOutput"/>
+                <Label Name="OperatingTemperature"/>
+                <ProgressBar Name="TemperatureBar" MaxValue="1"/>
+                <Label Name="OperatingCooling" StyleClasses="terminal-muted"/>
+                <Label Name="OperatingDecay" StyleClasses="terminal-muted"/>
+                <Label Name="OperatingFields" StyleClasses="terminal-muted"/>
+                <Label Name="OperatingKinetics" Visible="False" StyleClasses="terminal-muted"/>
+                <ProgressBar Name="WarmupBar" MaxValue="1"/>
+                <Button Name="ResetButton" Text="{Loc 'power-plant-reset'}" HorizontalAlignment="Right"/>
+            </BoxContainer>
         </PanelContainer>
+        <Label Name="CloggedLabel" Text="{Loc 'portable-generator-ui-clogged'}" ClipText="True"/>
     </BoxContainer>
-</controls:FancyWindow>
+</controls:ImmersiveFancyWindow>

@@ -277,6 +277,8 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
             DrawDocks(handle, gUid, curGridToView);
         }
 
+        DrawIncomingStrike(handle, xform.MapID, ourGridId, worldToShuttle * shuttleToView);
+
         // If we've set the controlling console, and it's on a different grid
         // to the shuttle itself, then draw an additional marker to help the
         // player determine where they are relative to the shuttle.

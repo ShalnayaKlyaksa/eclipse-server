@@ -1,4 +1,6 @@
 using Content.Client.Stylesheets;
+using Content.Client._Eclipse.MedicalChemistry;
+using Content.Shared._Eclipse.MedicalChemistry;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.Chemistry;
 using Content.Shared.Chemistry.Reagent;
@@ -30,6 +32,8 @@ namespace Content.Client.Chemistry.UI
 
         public event Action<BaseButton.ButtonEventArgs, ReagentButton>? OnReagentButtonPressed;
         public readonly Button[] PillTypeButtons;
+        public readonly MedicalSynthesizerControl Medical = new();
+        private ChemMasterBoundUserInterfaceState? _lastState;
 
         private const string PillsRsiPath = "/Textures/Objects/Specific/Chemistry/pills.rsi";
 
@@ -93,6 +97,8 @@ namespace Content.Client.Chemistry.UI
 
             Tabs.SetTabTitle(0, Loc.GetString("chem-master-window-input-tab"));
             Tabs.SetTabTitle(1, Loc.GetString("chem-master-window-output-tab"));
+            Tabs.AddChild(Medical);
+            Tabs.SetTabTitle(2, Loc.GetString("medical-chemistry-tab"));
         }
 
         private ReagentButton MakeReagentButton(string text, ChemMasterReagentAmount amount, ReagentId id, bool isBuffer, string styleClass)
@@ -143,6 +149,20 @@ namespace Content.Client.Chemistry.UI
         public void UpdateState(BoundUserInterfaceState state)
         {
             var castState = (ChemMasterBoundUserInterfaceState)state;
+            Medical.Apply(castState.Medical, castState.InputContainerInfo?.CurrentVolume.Float() ?? 0);
+            Tabs.SetTabTitle(2, Loc.GetString(castState.Medical?.AnalysisOnly == true ? "medical-chemistry-analyzer-tab" : "medical-chemistry-tab"));
+
+            // Reactor telemetry must not reset a user's pill count/dose or rebuild unchanged reagent controls.
+            var previous = _lastState;
+            _lastState = castState;
+            if (previous != null && !castState.UpdateLabel && previous.Mode == castState.Mode
+                && previous.SortingType == castState.SortingType && previous.DrawSource == castState.DrawSource
+                && previous.SelectedPillType == castState.SelectedPillType && previous.PillDosageLimit == castState.PillDosageLimit
+                && previous.BufferCurrentVolume == castState.BufferCurrentVolume
+                && SameList(previous.BufferReagents, castState.BufferReagents)
+                && SameContainer(previous.InputContainerInfo, castState.InputContainerInfo)
+                && SameContainer(previous.OutputContainerInfo, castState.OutputContainerInfo))
+                return;
 
             if (castState.UpdateLabel)
                 LabelLine = GenerateLabel(castState);
@@ -169,6 +189,14 @@ namespace Content.Client.Chemistry.UI
 
             UpdateDosageFields(castState);
         }
+
+        private static bool SameList<T>(IReadOnlyList<T>? first, IReadOnlyList<T>? second) =>
+            first == null ? second == null : second != null && first.SequenceEqual(second);
+
+        private static bool SameContainer(ContainerInfo? first, ContainerInfo? second) =>
+            first == null || second == null ? first == second : first.DisplayName == second.DisplayName
+                && first.CurrentVolume == second.CurrentVolume && first.MaxVolume == second.MaxVolume
+                && SameList(first.Reagents, second.Reagents) && SameList(first.Entities, second.Entities);
 
         //assign default values for pill and bottle fields.
         private void UpdateDosageFields(ChemMasterBoundUserInterfaceState castState)
@@ -219,19 +247,31 @@ namespace Content.Client.Chemistry.UI
             if (
                 state.BufferCurrentVolume == 0 && state.DrawSource == ChemMasterDrawSource.Internal ||
                 state.InputContainerInfo?.CurrentVolume == 0 && state.DrawSource == ChemMasterDrawSource.External ||
-                state.InputContainerInfo?.Reagents == null
+                state.DrawSource == ChemMasterDrawSource.External && state.InputContainerInfo?.Reagents == null
             )
                 return "";
 
-            var reagent = (state.DrawSource switch
+            var contents = state.DrawSource switch
                 {
                     ChemMasterDrawSource.Internal => state.BufferReagents,
-                    ChemMasterDrawSource.External => state.InputContainerInfo.Reagents ?? [],
+                    ChemMasterDrawSource.External => state.InputContainerInfo?.Reagents ?? [],
                     _ => throw new($"Chemmaster {state.OutputContainerInfo} draw source is not set"),
-                }).MinBy(r => r.Quantity)
-                .Reagent;
+                };
+            if (contents.Count == 0)
+                return "";
+            var reagent = contents.MaxBy(r => r.Quantity).Reagent;
             _prototypeManager.TryIndex(reagent.Prototype, out ReagentPrototype? proto);
-            return proto?.LocalizedName ?? "";
+            var name = proto?.LocalizedName ?? "";
+            if (contents.Any(entry => entry.Reagent.Prototype == reagent.Prototype && MedicalBatch.IsBatch(entry.Reagent)))
+            {
+                name = Loc.GetString("medical-chemistry-batch-name", ("name", name),
+                    ("purity", MathF.Round(MedicalBatch.GetPurity(contents, reagent.Prototype) * 100)));
+                var profiles = contents.Where(entry => entry.Reagent.Prototype == reagent.Prototype)
+                    .Select(entry => MedicalBatch.GetPatientDna(entry.Reagent)).Distinct().ToArray();
+                if (profiles.Length == 1 && profiles[0] is { } profile)
+                    name += " " + MedicalBatch.ProfileCode(profile);
+            }
+            return name.Length > SharedChemMaster.LabelMaxLength ? name[..(int) SharedChemMaster.LabelMaxLength] : name;
         }
 
         /// <summary>
@@ -382,8 +422,14 @@ namespace Content.Client.Chemistry.UI
         /// </summary>
         private Control BuildReagentRow(Color reagentColor, int rowCount, string name, ReagentId reagent, FixedPoint2 quantity, bool isBuffer, bool addReagentButtons)
         {
+            if (MedicalBatch.IsBatch(reagent))
+            {
+                name = Loc.GetString("medical-chemistry-batch-name", ("name", name), ("purity", MathF.Round(MedicalBatch.GetPurity(reagent) * 100)));
+                if (MedicalBatch.GetPatientDna(reagent) is { } profile)
+                    name += " " + Loc.GetString("medical-chemistry-personalized", ("profile", MedicalBatch.ProfileCode(profile)));
+            }
             //Colors rows and sets fallback for reagentcolor to the same as background, this will hide colorPanel for entities hopefully
-            var rowColor1 = Color.FromHex("#1B1B1E");
+            var rowColor1 = Color.FromHex("#202020");
             var rowColor2 = Color.FromHex("#202025");
             var currentRowColor = (rowCount % 2 == 1) ? rowColor1 : rowColor2;
             if ((reagentColor == default(Color))|(!addReagentButtons))
@@ -399,7 +445,7 @@ namespace Content.Client.Chemistry.UI
                 Orientation = LayoutOrientation.Horizontal,
                 Children =
                 {
-                    new Label { Text = $"{name}: " },
+                    new Label { Text = $"{name}: ", MaxWidth = 180, ClipText = true, ToolTip = name },
                     new Label
                     {
                         Text = $"{quantity}u",

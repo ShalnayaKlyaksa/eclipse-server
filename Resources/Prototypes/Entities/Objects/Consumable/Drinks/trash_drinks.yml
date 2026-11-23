@@ -94,7 +94,7 @@
 
 # todo make a real cahors bottle
 - type: entity
-  name: nt cahors bottle
+  name: VISH cahors bottle
   parent: [DrinkBottleBaseEmpty, DrinkBottleGlassBaseFull]
   id: DrinkBottleNTCahors
   components:

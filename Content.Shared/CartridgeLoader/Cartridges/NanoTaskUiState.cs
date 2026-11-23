@@ -22,7 +22,7 @@ public sealed partial class NanoTaskItem
     /// <summary>
     ///     The maximum length of the Description and TaskIsFor fields
     /// </summary>
-    public static int MaximumStringLength = 30;
+    public const int MaximumStringLength = 256;
 
     /// <summary>
     ///     The task description, i.e. "Bake a cake"
@@ -53,7 +53,8 @@ public sealed partial class NanoTaskItem
     }
     public bool Validate()
     {
-        return Description.Length <= MaximumStringLength && TaskIsFor.Length <= MaximumStringLength;
+        return !string.IsNullOrWhiteSpace(Description) && Description.Length <= MaximumStringLength &&
+               TaskIsFor is { Length: <= MaximumStringLength } && Enum.IsDefined(Priority);
     }
 };
 

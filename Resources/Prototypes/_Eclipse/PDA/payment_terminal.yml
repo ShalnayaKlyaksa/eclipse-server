@@ -1,0 +1,50 @@
+- type: entity
+  parent: BaseItem
+  id: ImperialPaymentTerminal
+  name: payment terminal
+  description: A portable register for goods and services. Revenue can go to a personal account or a department budget. Management requires the owner's ID card.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Objects/Devices/payment_terminal_adt.rsi
+    noRot: true
+    layers:
+    - state: eftpos
+    - state: eftpos-screen
+      shader: unshaded
+  - type: Rotatable
+  - type: Item
+    size: Small
+  - type: PaymentTerminal
+  - type: ActivatableUI
+    key: enum.PaymentTerminalUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.PaymentTerminalUiKey.Key:
+        type: PaymentTerminalBoundUserInterface
+
+- type: entity
+  parent: ImperialPaymentTerminal
+  id: ImperialBarPaymentTerminal
+  name: bar register
+  components:
+  - type: PaymentTerminal
+    ownerJob: Bartender
+    price: 25
+
+- type: entity
+  parent: ImperialPaymentTerminal
+  id: ImperialKitchenPaymentTerminal
+  name: kitchen register
+  components:
+  - type: PaymentTerminal
+    ownerJob: Chef
+    price: 40
+
+- type: latheRecipe
+  id: ImperialPaymentTerminal
+  result: ImperialPaymentTerminal
+  completetime: 3
+  materials:
+    Steel: 200
+    Plastic: 200
+    Glass: 100

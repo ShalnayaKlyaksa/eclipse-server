@@ -18,12 +18,12 @@ public sealed partial class CrewManifestUi : DefaultWindow
         RobustXamlLoader.Load(this);
 
         ContentsContainer.Margin = new Thickness(0);
-        WindowHeader.PanelOverride = EclipsePanel("#07111AEF", "#A85E12CC", 8f, 8f, 3f);
+        WindowHeader.PanelOverride = EclipsePanel("#07111AEF", "#505050CC", 8f, 8f, 3f);
         TitleLabel.StyleIdentifier = MainMenuControl.StyleIdentifierHeaderGold;
-        CloseButton.ModulateSelfOverride = Color.FromHex("#E6A11A");
+        CloseButton.ModulateSelfOverride = Color.FromHex("#FF861F");
 
-        RootPanel.PanelOverride = EclipsePanel("#02070CF4", "#A85E1270", 8f, 0f, 0f);
-        StationNameContainer.PanelOverride = EclipsePanel("#251600D8", "#A85E1270", 5f, 8f, 4f);
+        RootPanel.PanelOverride = EclipsePanel("#02070CF4", "#50505070", 8f, 0f, 0f);
+        StationNameContainer.PanelOverride = EclipsePanel("#251600D8", "#50505070", 5f, 8f, 4f);
         StationName.StyleIdentifier = MainMenuControl.StyleIdentifierHeaderGold;
     }
 

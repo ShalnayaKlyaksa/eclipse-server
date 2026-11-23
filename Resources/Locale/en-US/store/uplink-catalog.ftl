@@ -507,7 +507,7 @@ uplink-business-card-name = Legion Business Card
 uplink-business-card-desc = A business card that you can give to someone to demonstrate your involvement in the legion or leave at the crime scene in order to make fun of the detective. You can buy no more than three of them.
 
 uplink-fake-mindshield-name = Fake Mindshield
-uplink-fake-mindshield-desc = A togglable implant capable of mimicking the same transmissions a real mindshield puts out when on, tricking capable Heads-up displays into thinking you have a mindshield (Nanotrasen brand implanter not provided.)
+uplink-fake-mindshield-desc = A togglable implant capable of mimicking the same transmissions a real mindshield puts out when on, tricking capable Heads-up displays into thinking you have a mindshield (VISH brand implanter not provided.)
 
 uplink-contraband-lighter-name = Contraband Lighter box
 uplink-contraband-lighter-desc = A mystery box guaranteed to contain a legion branded lighter. No fuel required
@@ -526,4 +526,4 @@ uplink-energycrossbow-desc = The go-to sidearm of any operative who prefers thei
 
 #Objective items
 uplink-hijack-beacon-name = Hijack Beacon
-uplink-hijack-beacon-desc = A legion-brand hijack beacon designed to get around the firewalls of Nanotrasen-brand Automated Trade Stations. They take 200 seconds to work and Trade Stations will announce they are being hacked, so prepare accordingly.
+uplink-hijack-beacon-desc = A legion-brand hijack beacon designed to get around the firewalls of VISH-brand Automated Trade Stations. They take 200 seconds to work and Trade Stations will announce they are being hacked, so prepare accordingly.

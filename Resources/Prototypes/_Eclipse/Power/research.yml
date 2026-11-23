@@ -1,0 +1,313 @@
+- type: techDiscipline
+  id: Energy
+  name: research-discipline-energy
+  color: '#91BAA0'
+  icon:
+    sprite: Interface/Misc/research_disciplines.rsi
+    state: industrial
+  tierPrerequisites:
+    1: 0
+    2: 0
+    3: 0
+    4: 0
+  uiName: PWR
+- type: technology
+  id: EnergyFoundations
+  name: research-energyfoundations
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: blank_mod
+  discipline: Energy
+  tier: 1
+  cost: 800
+  technologyPrerequisites:
+  - IndustrialElectronics
+  recipeUnlocks: []
+  position: 24, -30
+- type: technology
+  id: EnergyCombustion
+  name: research-energycombustion
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: blank_mod
+  discipline: Energy
+  tier: 1
+  cost: 1200
+  technologyPrerequisites:
+  - EnergyFoundations
+  recipeUnlocks:
+  - PortableGeneratorPacmanMachineCircuitboard
+  - PortableGeneratorJrPacmanMachineCircuitboard
+  position: 25, -29
+- type: technology
+  id: EnergyThermal
+  name: research-energythermal
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: blank_mod
+  discipline: Energy
+  tier: 1
+  cost: 1800
+  technologyPrerequisites:
+  - EnergyFoundations
+  recipeUnlocks: []
+  position: 25, -30
+- type: technology
+  id: EnergySolar
+  name: research-energysolar
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: blank_mod
+  discipline: Energy
+  tier: 1
+  cost: 1500
+  technologyPrerequisites:
+  - EnergyFoundations
+  recipeUnlocks:
+  - SolarControlComputerCircuitboard
+  - SolarTrackerElectronics
+  position: 25, -31
+- type: technology
+  id: EnergyLiquidFuel
+  name: research-energyliquidfuel
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: blank_mod
+  discipline: Energy
+  tier: 1
+  cost: 2500
+  technologyPrerequisites:
+  - EnergyCombustion
+  - IndustrialAutomation
+  recipeUnlocks: []
+  position: 26, -29
+- type: technology
+  id: EnergyCooling
+  name: research-energycooling
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: blank_mod
+  discipline: Energy
+  tier: 1
+  cost: 3000
+  technologyPrerequisites:
+  - EnergyThermal
+  - IndustrialProcessChemistry
+  recipeUnlocks: []
+  position: 26, -30
+- type: technology
+  id: EnergyGasFuel
+  name: research-energygasfuel
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: blank_mod
+  discipline: Energy
+  tier: 2
+  cost: 3500
+  technologyPrerequisites:
+  - EnergyLiquidFuel
+  - IndustrialProcessChemistry
+  recipeUnlocks: []
+  position: 27, -29
+- type: technology
+  id: EnergyHeatRecovery
+  name: research-energyheatrecovery
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: blank_mod
+  discipline: Energy
+  tier: 1
+  cost: 3000
+  technologyPrerequisites:
+  - EnergyThermal
+  recipeUnlocks: []
+  position: 27, -31
+- type: technology
+  id: EnergyAdvancedSolar
+  name: research-energyadvancedsolar
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: blank_mod
+  discipline: Energy
+  tier: 2
+  cost: 5000
+  technologyPrerequisites:
+  - EnergySolar
+  - IndustrialPrecisionElectronics
+  recipeUnlocks: []
+  position: 27, -32
+- type: technology
+  id: EnergyBiomass
+  name: research-energybiomass
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: blank_mod
+  discipline: Energy
+  tier: 2
+  cost: 3500
+  technologyPrerequisites:
+  - EnergyLiquidFuel
+  - IndustrialProcessChemistry
+  recipeUnlocks: []
+  position: 27, -28
+- type: technology
+  id: EnergyGeothermal
+  name: research-energygeothermal
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: blank_mod
+  discipline: Energy
+  tier: 2
+  cost: 4000
+  technologyPrerequisites:
+  - EnergyThermal
+  - IndustrialAutomation
+  recipeUnlocks: []
+  position: 27, -27
+- type: technology
+  id: EnergyAdvancedThermal
+  name: research-energyadvancedthermal
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: blank_mod
+  discipline: Energy
+  tier: 2
+  cost: 6500
+  technologyPrerequisites:
+  - EnergyCooling
+  - EnergyHeatRecovery
+  - IndustrialMetallurgy
+  recipeUnlocks: []
+  position: 28, -31
+- type: technology
+  id: EnergyRadioisotopes
+  name: research-energyradioisotopes
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: blank_mod
+  discipline: Energy
+  tier: 2
+  cost: 4500
+  technologyPrerequisites:
+  - EnergyCooling
+  recipeUnlocks:
+  - PortableGeneratorSuperPacmanMachineCircuitboard
+  - PowerCellMicroreactor
+  position: 28, -30
+- type: technology
+  id: EnergyFuelCells
+  name: research-energyfuelcells
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: blank_mod
+  discipline: Energy
+  tier: 2
+  cost: 4500
+  technologyPrerequisites:
+  - EnergyLiquidFuel
+  - IndustrialProcessChemistry
+  recipeUnlocks: []
+  position: 28, -28
+- type: technology
+  id: EnergyStabilization
+  name: research-energystabilization
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: blank_mod
+  discipline: Energy
+  tier: 2
+  cost: 5500
+  technologyPrerequisites:
+  - EnergyAdvancedThermal
+  - IndustrialAdvancedAutomation
+  recipeUnlocks:
+  - SMESAdvancedMachineCircuitboard
+  - TurboItemRechargerCircuitboard
+  - EmitterCircuitboard
+  position: 29, -27
+- type: technology
+  id: EnergyFission
+  name: research-energyfission
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: blank_mod
+  discipline: Energy
+  tier: 3
+  cost: 8000
+  technologyPrerequisites:
+  - EnergyCooling
+  - IndustrialPrecisionElectronics
+  - IndustrialMetallurgy
+  recipeUnlocks: []
+  position: 29, -30
+- type: technology
+  id: EnergyAntimatter
+  name: research-energyantimatter
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: blank_mod
+  discipline: Energy
+  tier: 3
+  cost: 9000
+  technologyPrerequisites:
+  - EnergyGasFuel
+  - IndustrialPrecisionElectronics
+  recipeUnlocks: []
+  position: 29, -28
+- type: technology
+  id: EnergySolarite
+  name: research-energysolarite
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: blank_mod
+  discipline: Energy
+  tier: 3
+  cost: 12000
+  technologyPrerequisites:
+  - EnergyAdvancedThermal
+  - IndustrialScienceEquipment
+  recipeUnlocks: []
+  position: 30, -30
+- type: technology
+  id: EnergyTesla
+  name: research-energytesla
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: blank_mod
+  discipline: Energy
+  tier: 3
+  cost: 12000
+  technologyPrerequisites:
+  - EnergyAntimatter
+  - EnergyStabilization
+  recipeUnlocks: []
+  position: 30, -29
+- type: technology
+  id: EnergyWormhole
+  name: research-energywormhole
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: blank_mod
+  discipline: Energy
+  tier: 4
+  cost: 25000
+  technologyPrerequisites:
+  - EnergyTesla
+  - IndustrialPerfectAutomation
+  recipeUnlocks: []
+  position: 31, -28
+- type: technology
+  id: EnergySingularity
+  name: research-energysingularity
+  icon:
+    sprite: Objects/Misc/module.rsi
+    state: blank_mod
+  discipline: Energy
+  tier: 4
+  cost: 30000
+  technologyPrerequisites:
+  - EnergySolarite
+  - EnergyStabilization
+  - IndustrialPerfectMaterials
+  recipeUnlocks: []
+  position: 31, -30

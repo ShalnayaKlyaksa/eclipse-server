@@ -1,0 +1,96 @@
+- type: entity
+  abstract: true
+  parent: ChemistryEmptyVial
+  id: AdvancedMedicineVialBase
+  name: medicine vial
+  description: A labelled 30-unit medicine vial. Draw the solution with a syringe.
+
+- type: entity
+  parent: AdvancedMedicineVialBase
+  id: AdvancedMedicineVialInaprovaline
+  name: Inaprovaline vial
+  components:
+  - type: Label
+    currentLabel: reagent-name-inaprovaline
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: Inaprovaline
+          Quantity: 30
+
+- type: entity
+  parent: AdvancedMedicineVialBase
+  id: AdvancedMedicineVialTranexamicAcid
+  name: TranexamicAcid vial
+  components:
+  - type: Label
+    currentLabel: reagent-name-tranexamic-acid
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: TranexamicAcid
+          Quantity: 30
+
+- type: entity
+  parent: AdvancedMedicineVialBase
+  id: AdvancedMedicineVialBicaridine
+  name: Bicaridine vial
+  components:
+  - type: Label
+    currentLabel: reagent-name-bicaridine
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: Bicaridine
+          Quantity: 30
+
+- type: entity
+  parent: AdvancedMedicineVialBase
+  id: AdvancedMedicineVialEpinephrine
+  name: Epinephrine vial
+  components:
+  - type: Label
+    currentLabel: reagent-name-epinephrine
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: Epinephrine
+          Quantity: 30
+
+- type: entity
+  parent: AdvancedMedicineVialBase
+  id: AdvancedMedicineVialClinicalOpioid
+  name: ClinicalOpioid vial
+  components:
+  - type: Label
+    currentLabel: reagent-name-clinical-opioid
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: ClinicalOpioid
+          Quantity: 30
+
+- type: entity
+  parent: AdvancedMedicineVialBase
+  id: AdvancedMedicineVialClinicalNaloxone
+  name: ClinicalNaloxone vial
+  components:
+  - type: Label
+    currentLabel: reagent-name-clinical-naloxone
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: ClinicalNaloxone
+          Quantity: 30

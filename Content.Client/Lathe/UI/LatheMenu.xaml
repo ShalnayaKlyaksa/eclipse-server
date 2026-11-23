@@ -21,6 +21,7 @@
                 VerticalExpand="True"
                 HorizontalExpand="True"
                 SeparationOverride="5">
+                <RichTextLabel Name="CommercePrice" Visible="False" />
                 <BoxContainer Orientation="Horizontal"
                     HorizontalExpand="True">
                     <LineEdit
@@ -40,7 +41,7 @@
                     SizeFlagsStretchRatio="4">
                     <PanelContainer VerticalExpand="True">
                         <PanelContainer.PanelOverride>
-                            <gfx:StyleBoxFlat BackgroundColor="#1B1B1E" />
+                            <gfx:StyleBoxFlat BackgroundColor="#202020" />
                         </PanelContainer.PanelOverride>
                         <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
                             <BoxContainer
@@ -143,7 +144,7 @@
             <Label Text="{Loc 'lathe-menu-materials-title'}" Margin="5 5 5 5" HorizontalAlignment="Center"/>
             <PanelContainer VerticalExpand="True">
                 <PanelContainer.PanelOverride>
-                    <gfx:StyleBoxFlat BackgroundColor="#1B1B1E" />
+                    <gfx:StyleBoxFlat BackgroundColor="#202020" />
                 </PanelContainer.PanelOverride>
                 <BoxContainer
                     Orientation="Vertical"

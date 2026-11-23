@@ -1,0 +1,40 @@
+- type: entity
+  parent: [BaseMachinePowered, ConstructibleMachine]
+  id: ImperialPersonalATM
+  name: imperial ATM
+  description: A personal banking terminal. Accepts the same credit notes as station supply consoles.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/personal_atm.rsi
+    state: atm
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/personal_atm.rsi
+    state: atm
+  - type: PdaAtm
+  - type: ApcPowerReceiver
+    powerLoad: 50
+  - type: ActivatableUI
+    key: enum.PdaAtmUiKey.Key
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.PdaAtmUiKey.Key:
+        type: PdaAtmBoundUserInterface
+  - type: Machine
+    board: ImperialPersonalATMCircuitboard
+
+- type: entity
+  parent: BaseMachineCircuitboard
+  id: ImperialPersonalATMCircuitboard
+  name: imperial ATM machine board
+  components:
+  - type: MachineBoard
+    prototype: ImperialPersonalATM
+    requirements:
+      Manipulator: 1
+      Capacitor: 1
+
+- type: latheRecipe
+  parent: [BaseCircuitboardRecipe, BaseMachineRecipeCategory]
+  id: ImperialPersonalATMCircuitboard
+  result: ImperialPersonalATMCircuitboard

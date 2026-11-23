@@ -164,10 +164,13 @@ public sealed class MarkingManager
                     continue;
                 }
 
-                if (marking.Sprites.Count != markings[i].MarkingColors.Count)
+                var current = markings[i];
+                if (marking.Sprites.Count != current.MarkingColors.Count)
                 {
-                    markings[i] = new Marking(marking.ID, marking.Sprites.Count);
+                    current = new Marking(marking.ID, marking.Sprites.Count);
                 }
+
+                markings[i] = current with { Gradient = marking.ForcedColoring ? null : current.Gradient?.Normalized() };
             }
         }
     }

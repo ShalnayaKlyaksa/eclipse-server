@@ -1,80 +1,123 @@
-<controls:FancyWindow xmlns="https://spacestation14.io"
-                      xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
-                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
-                      xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls"
-                      xmlns:goob="clr-namespace:Content.Client._Erida.Research.UI"
-                      Title="{Loc 'research-console-menu-title'}"
-                      SetSize="1270 850">
-    <BoxContainer Orientation="Vertical"
-                  HorizontalExpand="True"
-                  VerticalExpand="True">
-        <BoxContainer Orientation="Horizontal"
-                      HorizontalExpand="True"
-                      VerticalExpand="False"
-                      MinHeight="30"
-                      Margin="10">
-            <BoxContainer Orientation="Vertical"
-                          VerticalExpand="True"
-                          VerticalAlignment="Center"
-                          HorizontalExpand="True">
-                <RichTextLabel Name="ResearchAmountLabel"/>
-                <Control VerticalExpand="True"/>
-                <BoxContainer Name="TierDisplayContainer"
-                              Orientation="Horizontal"
-                              VerticalAlignment="Bottom"/>
-                <!-- This is where we put all of the little graphics that display discipline tiers!-->
-            </BoxContainer>
-            <BoxContainer Orientation="Vertical"
-                          VerticalExpand="True"
-                          HorizontalAlignment="Right">
-                <Button Name="RecenterButton"
-                        Text="{Loc 'research-console-menu-recenter-button'}"
-                        Margin="0 0 0 2"
-                        MinHeight="30"/>
-                <Button Name="ServerButton"
-                        Text="{Loc 'research-console-menu-server-selection-button'}"
-                        MinHeight="30"/>
-            </BoxContainer>
-        </BoxContainer>
-        <BoxContainer Orientation="Horizontal"
-                      HorizontalExpand="True"
-                      VerticalExpand="True">
-            <BoxContainer Orientation="Vertical"
-                          VerticalExpand="True"
-                          HorizontalExpand="True"
-                          SizeFlagsStretchRatio="3"
-                          Margin="0 0 0 10">
-                <PanelContainer Name="ResearchesContainer"
-                                VerticalExpand="True"
-                                HorizontalExpand="True">
+<controls:ImmersiveFancyWindow xmlns="https://spacestation14.io"
+    xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+    xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+    xmlns:goob="clr-namespace:Content.Client._Erida.Research.UI"
+    Title="{Loc 'research-console-menu-title'}" SetSize="1180 780" MinSize="1000 620">
+    <PanelContainer Margin="8 4 8 8">
+        <PanelContainer.PanelOverride>
+            <gfx:StyleBoxFlat BackgroundColor="#141414" BorderColor="#505050" BorderThickness="1"/>
+        </PanelContainer.PanelOverride>
+        <goob:ResearchTerminalSurface Name="TerminalScreen" HorizontalExpand="True" VerticalExpand="True">
+            <BoxContainer Orientation="Vertical" SeparationOverride="0">
+                <PanelContainer>
                     <PanelContainer.PanelOverride>
-                        <gfx:StyleBoxFlat BackgroundColor="#000000FF"/>
+                        <gfx:StyleBoxFlat BackgroundColor="#202020" BorderColor="#505050" BorderThickness="0 0 0 1"/>
                     </PanelContainer.PanelOverride>
-                    <AnimatedTextureRect Name="StaticSprite"
-                                         HorizontalExpand="True"
-                                         VerticalExpand="True">
-                        <goob:ResearchesContainerPanel
-                            HorizontalExpand="True"
-                            VerticalExpand="True"
-                            Name="DragContainer"
-                            MouseFilter="Pass"
-                            RectClipContent="True">
-                            <!-- There lives all of technologies -->
-                        </goob:ResearchesContainerPanel>
-                    </AnimatedTextureRect>
+                    <BoxContainer Margin="14 10" SeparationOverride="16">
+                        <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+                            <Label Text="{Loc 'industrial-research-terminal-title'}" StyleClasses="terminal-heading" ClipText="True"/>
+                            <Label Name="SessionCaption" Text="{Loc 'industrial-research-terminal-subtitle'}" ClipText="True" StyleClasses="terminal-muted"/>
+                        </BoxContainer>
+                        <BoxContainer Orientation="Vertical" VerticalAlignment="Center">
+                            <RichTextLabel Name="ResearchAmountLabel"/>
+                        </BoxContainer>
+                        <Button Name="ServerButton" Text="{Loc 'industrial-research-server'}" VerticalAlignment="Center"/>
+                    </BoxContainer>
+                </PanelContainer>
+                <BoxContainer Name="AuthenticationPage" Orientation="Vertical" VerticalExpand="True" HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="410" MaxWidth="480" SeparationOverride="10">
+                    <Label Text="{Loc 'research-terminal-login-title'}" StyleClasses="terminal-heading"/>
+                    <Label Text="{Loc 'research-terminal-username'}" StyleClasses="terminal-muted"/>
+                    <LineEdit Name="LoginName" HorizontalExpand="True"/>
+                    <Label Text="{Loc 'research-terminal-password'}" StyleClasses="terminal-muted"/>
+                    <goob:ResearchPasswordEdit Name="LoginPassword" HorizontalExpand="True"/>
+                    <BoxContainer SeparationOverride="8">
+                        <Button Name="LoginButton" Text="{Loc 'research-terminal-sign-in'}" HorizontalExpand="True"/>
+                    </BoxContainer>
+                    <RichTextLabel Name="LoginHelp"/>
+                    <RichTextLabel Name="LoginFeedback"/>
+                </BoxContainer>
+                <BoxContainer Name="AuthenticatedPage" Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" Visible="False">
+                    <BoxContainer Margin="12 8 12 0" SeparationOverride="6">
+                        <Button Name="GraphTab" Text="{Loc 'research-terminal-graph-tab'}" ToggleMode="True" Pressed="True"/>
+                        <Button Name="EnergyTab" Text="{Loc 'research-terminal-energy-tab'}" ToggleMode="True"/>
+                        <Button Name="CommandTab" Text="{Loc 'research-terminal-command-tab'}" ToggleMode="True"/>
+                        <Label Text="{Loc 'research-terminal-session-hint'}" StyleClasses="terminal-node" HorizontalExpand="True" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    </BoxContainer>
+                    <BoxContainer Name="GraphPage" Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
+                <BoxContainer Margin="12 10" SeparationOverride="6">
+                    <OptionButton Name="SectionFilter" MinWidth="190"/>
+                    <LineEdit Name="Search" PlaceHolder="{Loc 'industrial-research-search'}" HorizontalExpand="True"/>
+                    <OptionButton Name="AvailabilityFilter" MinWidth="148"/>
+                    <Button Name="WriteDisk" Text="{Loc 'industrial-research-write'}"/>
+                </BoxContainer>
+                <BoxContainer HorizontalExpand="True" VerticalExpand="True" SeparationOverride="0">
+                    <BoxContainer Orientation="Vertical" MinWidth="224" MaxWidth="224" Margin="12 0 8 10" SeparationOverride="8">
+                        <Label Text="{Loc 'research-browser-catalog'}" StyleClasses="terminal-heading"/>
+                        <Label Name="CatalogCount" StyleClasses="terminal-muted"/>
+                        <ScrollContainer HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
+                            <BoxContainer Name="ResearchCatalog" Orientation="Vertical" HorizontalExpand="True" SeparationOverride="4"/>
+                        </ScrollContainer>
+                        <Button Name="GoalButton" Text="{Loc 'research-browser-goal'}" ToggleMode="True"/>
+                        <RichTextLabel Name="GoalSummary" StyleClasses="terminal-node" HorizontalExpand="True"/>
+                        <Button Name="QueueGoalButton" Text="{Loc 'research-browser-queue'}" ToolTip="{Loc 'research-browser-queue-hint'}"/>
+                        <Label Name="BrowserQueueStatus" StyleClasses="terminal-muted" ClipText="True"/>
+                    </BoxContainer>
+                    <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
+                        <BoxContainer Orientation="Vertical" Margin="14 0 12 8" SeparationOverride="4">
+                            <Label Name="MapHeading" ClipText="True" Text="{Loc 'industrial-research-map'}" StyleClasses="terminal-muted" HorizontalExpand="True"/>
+                            <BoxContainer SeparationOverride="4">
+                                <Button Name="RecenterButton" Text="{Loc 'industrial-research-focus'}"/>
+                                <Button Name="OverviewButton" Text="{Loc 'industrial-research-overview'}"/>
+                                <Control HorizontalExpand="True"/>
+                                <Button Name="ZoomOut" Text="−" MinWidth="28"/>
+                                <Label Name="ZoomText" Text="85%" VerticalAlignment="Center" MinWidth="36" StyleClasses="terminal-node"/>
+                                <Button Name="ZoomIn" Text="+" MinWidth="28"/>
+                            </BoxContainer>
+                        </BoxContainer>
+                        <PanelContainer Name="ResearchesContainer" HorizontalExpand="True" VerticalExpand="True" Margin="8 0 0 0">
+                            <goob:ResearchesContainerPanel Name="DragContainer" HorizontalExpand="True" VerticalExpand="True" MouseFilter="Pass" RectClipContent="True"/>
+                        </PanelContainer>
+                        <Label Text="{Loc 'industrial-research-navigation'}" ToolTip="{Loc 'industrial-research-navigation'}" ClipText="True" HorizontalExpand="True" StyleClasses="terminal-node" Margin="14 10"/>
+                    </BoxContainer>
+                    <PanelContainer MinWidth="296" MaxWidth="312" Margin="8 0 10 10">
+                        <PanelContainer.PanelOverride>
+                            <gfx:StyleBoxFlat BackgroundColor="#161616" BorderColor="#505050" BorderThickness="1 0 0 0"/>
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Name="InfoContainer" Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True"/>
+                    </PanelContainer>
+                </BoxContainer>
+                    </BoxContainer>
+                    <BoxContainer Name="CommandPage" Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" Visible="False" Margin="14 10" SeparationOverride="10">
+                        <Label Name="QueueSummary" StyleClasses="terminal-muted"/>
+                        <BoxContainer HorizontalExpand="True" VerticalExpand="True" SeparationOverride="16">
+                            <BoxContainer Name="CommandReference" Orientation="Vertical" MinWidth="180" MaxWidth="200" SeparationOverride="8">
+                                <Label Text="{Loc 'research-terminal-reference-title'}" StyleClasses="terminal-muted"/>
+                                <BoxContainer Name="CommandHelpButtons" Orientation="Vertical" SeparationOverride="6"/>
+                                <RichTextLabel Name="CommandReferenceHint"/>
+                            </BoxContainer>
+                            <ScrollContainer Name="TerminalScroll" HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="False">
+                                <RichTextLabel Name="CommandOutput" HorizontalExpand="True"/>
+                            </ScrollContainer>
+                        </BoxContainer>
+                        <RichTextLabel Name="CommandUsage"/>
+                        <BoxContainer SeparationOverride="8">
+                            <Label Name="CommandPrompt" Text="&gt;" VerticalAlignment="Center"/>
+                            <HistoryLineEdit Name="CommandInput" HorizontalExpand="True" PlaceHolder="{Loc 'research-terminal-command-placeholder'}"/>
+                            <Button Name="CommandSend" Text="{Loc 'research-terminal-send'}"/>
+                        </BoxContainer>
+                    </BoxContainer>
+                </BoxContainer>
+                <PanelContainer>
+                    <PanelContainer.PanelOverride>
+                        <gfx:StyleBoxFlat BackgroundColor="#161616" BorderColor="#505050" BorderThickness="0 1 0 0"/>
+                    </PanelContainer.PanelOverride>
+                    <BoxContainer Margin="14 5">
+                        <Label Text="{Loc 'industrial-research-link-status'}" StyleClasses="terminal-node" HorizontalExpand="True"/>
+                        <Label Name="DiskHint" Text="{Loc 'industrial-research-disk-hint'}" StyleClasses="terminal-node" VerticalAlignment="Center" Margin="0 0 12 0"/>
+                        <Button Name="CrtEffects" ToggleMode="True" Pressed="True" Text="CRT" ToolTip="{Loc 'industrial-research-crt-hint'}"/>
+                    </BoxContainer>
                 </PanelContainer>
             </BoxContainer>
-            <PanelContainer SizeFlagsStretchRatio="2">
-                <PanelContainer.PanelOverride>
-                    <gfx:StyleBoxFlat BackgroundColor="#1B1B1E"/>
-                </PanelContainer.PanelOverride>
-                <BoxContainer Name="InfoContainer"
-                              Orientation="Vertical"
-                              VerticalExpand="True"
-                              HorizontalExpand="True"
-                              SizeFlagsStretchRatio="1"
-                              Margin="0"/>
-            </PanelContainer>
-        </BoxContainer>
-    </BoxContainer>
-</controls:FancyWindow>
+        </goob:ResearchTerminalSurface>
+    </PanelContainer>
+</controls:ImmersiveFancyWindow>

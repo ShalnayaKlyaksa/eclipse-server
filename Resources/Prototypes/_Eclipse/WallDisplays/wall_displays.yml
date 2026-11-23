@@ -1,0 +1,205 @@
+- type: entity
+  abstract: true
+  parent: BaseWallmount
+  id: EclipseWallBoardBase
+  name: editable wall board
+  description: A reusable wall board for menus, prices and announcements. Open it to edit the text.
+  components:
+  - type: EditableWallBoard
+  - type: Fixtures
+    fixtures:
+      board:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        hard: false
+  - type: Pullable
+  - type: ActivatableUI
+    key: enum.EditableWallBoardUiKey.Key
+  - type: ActivatableUIRequiresVision
+  - type: UserInterface
+    interfaces:
+      enum.EditableWallBoardUiKey.Key:
+        type: EditableWallBoardBoundUserInterface
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Wood
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 60
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WoodDestroy
+      - !type:DoActsBehavior
+        acts: [Destruction]
+
+- type: entity
+  parent: EclipseWallBoardBase
+  id: EclipseWallBoard1
+  suffix: 1 tile
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Wallmounts/board_1.rsi
+    state: board
+  - type: Construction
+    graph: EclipseWallBoard1
+    node: board
+
+- type: entity
+  parent: EclipseWallBoardBase
+  id: EclipseWallBoard2
+  suffix: 2 tiles
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Wallmounts/board_2.rsi
+    state: board
+    offset: 0.5,0
+  - type: Fixtures
+    fixtures:
+      board:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,1.5,0.5"
+        hard: false
+  - type: EditableWallBoard
+    width: 2
+  - type: Construction
+    graph: EclipseWallBoard2
+    node: board
+
+- type: entity
+  parent: EclipseWallBoardBase
+  id: EclipseWallBoard3
+  suffix: 3 tiles
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Wallmounts/board_3.rsi
+    state: board
+  - type: Fixtures
+    fixtures:
+      board:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.5,-0.5,1.5,0.5"
+        hard: false
+  - type: EditableWallBoard
+    width: 3
+  - type: Construction
+    graph: EclipseWallBoard3
+    node: board
+
+# Public broadcasts and arcade games share a new widescreen television.
+- type: entity
+  parent: BaseWallmountMachine
+  id: EclipseWallTelevision
+  name: wall television
+  description: A widescreen television for live public broadcasts and arcade games. Use a reporter camera to start a broadcast.
+  components:
+  - type: Pullable
+  - type: Sprite
+    sprite: _Eclipse/Structures/Wallmounts/television_broadcast.rsi
+    state: frame
+    offset: 0.5,0
+  - type: Fixtures
+    fixtures:
+      television:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,1.5,0.5"
+        hard: false
+  - type: Television
+  - type: ActivatableUI
+    key: enum.TelevisionUiKey.Key
+  - type: ActivatableUIRequiresPower
+  - type: ActivatableUIRequiresVision
+  - type: UserInterface
+    interfaces:
+      enum.TelevisionUiKey.Key:
+        type: TelevisionBoundUserInterface
+        interactionRange: 12
+  - type: Speech
+  - type: SurveillanceCameraSpeaker
+  - type: PowerSwitch
+  - type: ApcPowerReceiver
+    powerLoad: 50
+  - type: Construction
+    graph: EclipseWallTelevision
+    node: television
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalGlassBreak
+      - !type:DoActsBehavior
+        acts: [Destruction]
+
+- type: entity
+  parent: BaseFlatpack
+  id: EclipseWallTelevisionFlatpack
+  name: wall television flatpack
+  components:
+  - type: Flatpack
+    entity: EclipseWallTelevision
+
+- type: entity
+  parent: CrateGenericSteel
+  id: CrateEclipseWallTelevision
+  name: wall television crate
+  components:
+  - type: StorageFill
+    contents:
+    - id: EclipseWallTelevisionFlatpack
+    - id: EclipseReporterCamera
+
+- type: cargoProduct
+  id: ServiceEclipseWallTelevision
+  icon:
+    sprite: _Eclipse/Structures/Wallmounts/television_broadcast.rsi
+    state: frame
+  product: CrateEclipseWallTelevision
+  cost: 750
+  category: cargoproduct-category-name-service
+  group: market
+
+- type: entity
+  parent: BaseItem
+  id: EclipseReporterCamera
+  name: reporter camera
+  description: A portable public broadcast camera. Activate it in your hand to start or stop a live broadcast to station televisions.
+  components:
+  - type: Sprite
+    sprite: Objects/Devices/travel_camera.rsi
+    state: icon
+  - type: Item
+    sprite: Objects/Devices/travel_camera.rsi
+    size: Small
+  - type: Clothing
+    slots: [NECK]
+    sprite: Objects/Devices/travel_camera.rsi
+  - type: Eye
+  - type: PublicBroadcastCamera
+  - type: SurveillanceCamera
+    active: false
+    nameSet: true
+    networkSet: true
+  - type: SurveillanceCameraMicrophone
+    enabled: false
+    range: 7
+    blacklist:
+      components:
+      - SurveillanceCameraSpeaker
+      - RadioSpeaker
+
+- type: latheRecipe
+  id: EclipseReporterCamera
+  result: EclipseReporterCamera
+  completetime: 3
+  materials:
+    Steel: 200
+    Glass: 200
+    Plastic: 200

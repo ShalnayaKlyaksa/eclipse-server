@@ -1,4 +1,4 @@
-# Item pipes — cable-style auto-connect (16 directional sprites per tier).
+# Closed industrial item ducts — one frame for each of the 16 connection masks.
 # All tiers currently share the LP sprite set.
 
 - type: entity
@@ -10,6 +10,8 @@
   placement:
     mode: SnapgridCenter
   components:
+  - type: Item
+    size: Small
   - type: Transform
     anchored: true
     noRot: true
@@ -42,18 +44,6 @@
     layers:
     - state: lp0
       map: ["enum.ItemPipeVisualLayers.Hub"]
-    - state: lp1
-      map: ["enum.ItemPipeVisualLayers.North"]
-      visible: false
-    - state: lp2
-      map: ["enum.ItemPipeVisualLayers.West"]
-      visible: false
-    - state: lp3
-      map: ["enum.ItemPipeVisualLayers.South"]
-      visible: false
-    - state: lp4
-      map: ["enum.ItemPipeVisualLayers.East"]
-      visible: false
   - type: Icon
     sprite: _Eclipse/Structures/Piping/item_lp_pipe.rsi
     state: lp0

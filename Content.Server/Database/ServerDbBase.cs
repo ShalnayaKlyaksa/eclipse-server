@@ -212,7 +212,7 @@ namespace Content.Server.Database
             profile.CharacterName = humanoid.Name;
             profile.FlavorText = humanoid.FlavorText;
             profile.Species = humanoid.Species;
-            profile.CustomSpecies = humanoid.CustomSpecies;
+            profile.CharacterCustomization = JsonSerializer.Serialize(humanoid.Customization);
             profile.Voice = humanoid.Voice; // Corvax-TTS
             profile.Age = humanoid.Age;
             profile.Sex = humanoid.Sex.ToString();

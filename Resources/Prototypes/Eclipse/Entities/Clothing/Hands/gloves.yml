@@ -35,7 +35,7 @@
 - type: entity
   parent: ClothingHandsGlovesCaptain
   id: ClothingHandsGlovesNTNavyCaptain
-  name: nanotrasen navy captain gloves
+  name: VISH navy captain gloves
   description:
   components:
   - type: Sprite

@@ -37,7 +37,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: NT Emergency Pilgrim
+      name: VISH Emergency Pilgrim
     - type: Transform
       pos: -0.525084,-0.47491384
       parent: invalid

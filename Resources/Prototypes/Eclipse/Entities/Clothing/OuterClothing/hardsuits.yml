@@ -3,8 +3,8 @@
 - type: entity
   parent: [ BaseCentcommContraband, ClothingOuterHardsuitLegionCommander ]
   id: ClothingOuterHardsuitNTNavyCaptain
-  name: nanotrasen navy captain hardsuit
-  description: Hermetic high-level protection suit, custom-designed for NT Naval Command staff. It integrates reinforced armor plates with navy-blue heavy-duty synthetic fabric. Features ceremonial golden epaulettes and lateral gold piping.
+  name: VISH navy captain hardsuit
+  description: Hermetic high-level protection suit, custom-designed for VISH Naval Command staff. It integrates reinforced armor plates with navy-blue heavy-duty synthetic fabric. Features ceremonial golden epaulettes and lateral gold piping.
   components:
   - type: Sprite
     sprite: Eclipse/Clothing/OuterClothing/Hardsuits/nanotrasen_navy_captain.rsi
@@ -17,8 +17,8 @@
 - type: entity
   parent: [ BaseCentcommContraband, ClothingOuterHardsuitLegion ]
   id: ClothingOuterHardsuitNTNavy
-  name: nanotrasen navy hardsuit
-  description: A protective hardsuit worn by crew members of an NanoTrasen naval vessels.
+  name: VISH navy hardsuit
+  description: A protective hardsuit worn by crew members of an VISH naval vessels.
   components:
   - type: Sprite
     sprite: Eclipse/Clothing/OuterClothing/Hardsuits/nanotrasen_navy.rsi
@@ -35,8 +35,8 @@
 - type: entity
   parent: ClothingOuterHardsuitERTEngineer
   id: ClothingOuterHardsuitNTNavyEngineering
-  name: nanotrasen navy engineer hardsuit
-  description: A protective hardsuit worn by crew members of an NanoTrasen naval vessels.
+  name: VISH navy engineer hardsuit
+  description: A protective hardsuit worn by crew members of an VISH naval vessels.
   components:
   - type: Sprite
     sprite: Eclipse/Clothing/OuterClothing/Hardsuits/nanotrasen_navy_engineering.rsi
@@ -51,8 +51,8 @@
 - type: entity
   parent: [ BaseCentcommContraband, ClothingOuterHardsuitLegionMedic ]
   id: ClothingOuterHardsuitNTNavyMedical
-  name: nanotrasen navy medical hardsuit
-  description: A protective hardsuit worn by crew members of an NanoTrasen naval vessels.
+  name: VISH navy medical hardsuit
+  description: A protective hardsuit worn by crew members of an VISH naval vessels.
   components:
   - type: Sprite
     sprite: Eclipse/Clothing/OuterClothing/Hardsuits/nanotrasen_navy_medical.rsi

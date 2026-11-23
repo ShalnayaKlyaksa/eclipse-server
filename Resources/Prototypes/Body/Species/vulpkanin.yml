@@ -273,6 +273,7 @@
   abstract: true
   components:
   - type: VisualOrgan
+    vulpkaninBodyVariant: true
     data:
       sprite: _Eclipse/Mobs/Species/VulpkaninLustCompat/parts.rsi
   - type: VisualOrganMarkings

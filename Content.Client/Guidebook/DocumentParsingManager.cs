@@ -110,9 +110,10 @@ public sealed partial class DocumentParsingManager
                             return new GuidebookError(args.ToString() ?? tagId, $"Failed to parse {tagId} args");
                         }
 
+                        var contents = control is GuideFoldout foldout ? foldout.BodyContents : control;
                         foreach (var child in controls)
                         {
-                            control.AddChild(child);
+                            contents.AddChild(child);
                         }
 
                         return control;

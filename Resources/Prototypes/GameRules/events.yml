@@ -3,6 +3,8 @@
   table: !type:AllSelector # we need to pass a list of rules, since rules have further restrictions to consider via StationEventComp
     children:
     - id: AnomalySpawn
+    - id: ClinicalIllnessIncident
+    - id: ClinicalEmergencyIncident
     - id: BluespaceArtifact
     - id: BluespaceLocker
     - id: BreakerFlip
@@ -24,6 +26,8 @@
     - id: SpiderClownSpawnHorde
     - id: SpiderSpawnHorde
     - id: VentClog
+    - !type:NestedSelector
+      tableId: EclipseEnvironmentalEventsTable
 
 - type: entityTable
   id: BasicAntagEventsTable
@@ -31,7 +35,7 @@
     children:
     - id: ClosetSkeleton
     - id: KingRatMigration
-    - id: RevenantSpawn
+    - id: PoltergeistSpawn
     - !type:NestedSelector
       tableId: DerelictBorgEventTable
 
@@ -306,16 +310,9 @@
     cost: 50
 
 - type: entity
-  parent: BaseGameRule
+  parent: PoltergeistSpawn
   id: RevenantSpawn
-  components:
-  - type: StationEvent
-    weight: 7.5
-    duration: 1
-    earliestStart: 45
-    minimumPlayers: 20
-  - type: RandomSpawnRule
-    prototype: MobRevenant
+  # Compatibility for saved/admin event references. Random tables use PoltergeistSpawn.
 
 - type: entity
   parent: BaseWizardRule

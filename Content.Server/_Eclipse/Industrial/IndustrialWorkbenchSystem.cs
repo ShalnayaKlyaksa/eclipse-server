@@ -14,15 +14,16 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._Eclipse.Industrial;
 
-public sealed class IndustrialWorkbenchSystem : EntitySystem
+public sealed partial class IndustrialWorkbenchSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly StackSystem _stack = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IndustrialResourceSystem _resources = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private StackSystem _stack = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {
@@ -55,21 +56,29 @@ public sealed class IndustrialWorkbenchSystem : EntitySystem
 
     private void OnCraftMessage(Entity<IndustrialWorkbenchComponent> ent, ref IndustrialWorkbenchCraftBuiMessage args)
     {
-        TryStartFabrication(ent, args.Actor, args.RecipeId);
+        TryStartFabrication(ent, args.Actor, args.RecipeId, args.Amount);
     }
 
-    private bool TryStartFabrication(Entity<IndustrialWorkbenchComponent> ent, EntityUid user, string recipeId)
+    private bool TryStartFabrication(Entity<IndustrialWorkbenchComponent> ent, EntityUid user, string recipeId, int amount)
     {
-        if (!_proto.TryIndex(recipeId, out IndustrialFabricationRecipePrototype? recipe))
+        if (amount < 1 || amount > 10 || !_proto.TryIndex(recipeId, out IndustrialFabricationRecipePrototype? recipe))
             return false;
 
-        if (!CanAfford(user, ent, recipe))
+        if (ent.Comp.Tier < recipe.MinimumWorkbenchTier)
+            return false;
+        if (recipe.CleanroomGrade > 0 && (!TryComp<RoomSanitationComponent>(ent, out var room) || room.Grade < recipe.CleanroomGrade))
+            return false;
+        if (recipe.RequiredTechnology is { } technology &&
+            (!TryComp<IndustrialMachineKnowledgeComponent>(ent, out var knowledge) || !knowledge.Technologies.Contains(technology)))
+            return false;
+
+        if (!_resources.CanAfford(Ingredients(user, ent), recipe.Ingredients, amount))
         {
             _popup.PopupCursor(Loc.GetString("industrial-workbench-missing-materials"), user);
             return false;
         }
 
-        var doAfter = new DoAfterArgs(EntityManager, user, TimeSpan.FromSeconds(recipe.Duration), new IndustrialFabricationDoAfterEvent(recipeId), ent, ent)
+        var doAfter = new DoAfterArgs(EntityManager, user, TimeSpan.FromSeconds(recipe.Duration * amount / ent.Comp.CraftSpeed), new IndustrialFabricationDoAfterEvent(recipeId, amount), ent, ent)
         {
             BreakOnMove = true,
             NeedHand = false,
@@ -91,142 +100,45 @@ public sealed class IndustrialWorkbenchSystem : EntitySystem
         if (!_proto.TryIndex(args.RecipeId, out IndustrialFabricationRecipePrototype? recipe))
             return;
 
-        if (!CanAfford(args.User, ent, recipe))
+        if (ent.Comp.Tier < recipe.MinimumWorkbenchTier)
+            return;
+        if (recipe.CleanroomGrade > 0 && (!TryComp<RoomSanitationComponent>(ent, out var room) || room.Grade < recipe.CleanroomGrade))
+            return;
+        if (recipe.RequiredTechnology is { } technology &&
+            (!TryComp<IndustrialMachineKnowledgeComponent>(ent, out var knowledge) || !knowledge.Technologies.Contains(technology)))
+            return;
+
+        if (args.Amount < 1 || args.Amount > 10 ||
+            !_resources.TryPlan(Ingredients(args.User, ent), recipe.Ingredients, out var plan, args.Amount))
         {
             _popup.PopupCursor(Loc.GetString("industrial-workbench-missing-materials"), args.User);
             return;
         }
-
-        if (!TryConsumeIngredients(args.User, ent, recipe))
+        foreach (var (item, count) in plan)
         {
-            _popup.PopupCursor(Loc.GetString("industrial-workbench-missing-materials"), args.User);
-            return;
+            if (TryComp<StackComponent>(item, out var stack))
+                _stack.TryUse((item, stack), count);
+            else
+                Del(item);
         }
 
         args.Handled = true;
 
-        var coords = _transform.GetMapCoordinates(ent);
-        for (var i = 0; i < recipe.ResultCount; i++)
+        var coords = _transform.GetMapCoordinates(args.User);
+        for (var i = 0; i < recipe.ResultCount * args.Amount; i++)
             Spawn(recipe.Result, coords);
 
         _popup.PopupPredicted(Loc.GetString("industrial-workbench-fabricated"), args.User, ent);
     }
 
-    private bool CanAfford(EntityUid user, EntityUid workbench, IndustrialFabricationRecipePrototype recipe)
+    private IEnumerable<EntityUid> Ingredients(EntityUid user, EntityUid workbench)
     {
-        var remaining = new Dictionary<string, int>(recipe.Ingredients);
-        CountFromStorage(workbench, remaining);
-        if (remaining.Count == 0)
-            return true;
-
-        foreach (var hand in _hands.EnumerateHeld(user))
-            CountFromItem(hand, remaining);
-
-        return remaining.Count == 0;
-    }
-
-    private bool TryConsumeIngredients(EntityUid user, EntityUid workbench, IndustrialFabricationRecipePrototype recipe)
-    {
-        var remaining = new Dictionary<string, int>(recipe.Ingredients);
-
         if (TryComp<StorageComponent>(workbench, out var storage))
         {
-            foreach (var item in storage.Container.ContainedEntities.ToArray())
-            {
-                if (!TryTakeFromItem(item, remaining, out var deleteItem))
-                    continue;
-
-                if (deleteItem)
-                    Del(item);
-
-                if (remaining.Count == 0)
-                    return true;
-            }
+            foreach (var item in storage.Container.ContainedEntities)
+                yield return item;
         }
-
-        foreach (var hand in _hands.EnumerateHeld(user).ToArray())
-        {
-            if (!TryTakeFromItem(hand, remaining, out var deleteItem))
-                continue;
-
-            if (deleteItem)
-                Del(hand);
-
-            if (remaining.Count == 0)
-                return true;
-        }
-
-        return remaining.Count == 0;
-    }
-
-    private void CountFromStorage(EntityUid workbench, Dictionary<string, int> remaining)
-    {
-        if (!TryComp<StorageComponent>(workbench, out var storage))
-            return;
-
-        foreach (var item in storage.Container.ContainedEntities)
-            CountFromItem(item, remaining);
-    }
-
-    private void CountFromItem(EntityUid item, Dictionary<string, int> remaining)
-    {
-        if (remaining.Count == 0)
-            return;
-
-        var protoId = MetaData(item).EntityPrototype?.ID;
-        if (protoId == null || !remaining.TryGetValue(protoId, out var needed))
-            return;
-
-        if (TryComp<StackComponent>(item, out var stack))
-        {
-            if (stack.Count < needed)
-                return;
-
-            remaining[protoId] = needed - stack.Count;
-            if (remaining[protoId] <= 0)
-                remaining.Remove(protoId);
-
-            return;
-        }
-
-        remaining[protoId] = needed - 1;
-        if (remaining[protoId] <= 0)
-            remaining.Remove(protoId);
-    }
-
-    private bool TryTakeFromItem(EntityUid item, Dictionary<string, int> remaining, out bool deleteItem)
-    {
-        deleteItem = false;
-
-        if (remaining.Count == 0)
-            return false;
-
-        var protoId = MetaData(item).EntityPrototype?.ID;
-        if (protoId == null || !remaining.TryGetValue(protoId, out var needed))
-            return false;
-
-        if (TryComp<StackComponent>(item, out var stack))
-        {
-            if (stack.Count <= needed)
-            {
-                remaining[protoId] = needed - stack.Count;
-                if (remaining[protoId] <= 0)
-                    remaining.Remove(protoId);
-
-                deleteItem = true;
-                return true;
-            }
-
-            _stack.SetCount(item, stack.Count - needed, stack);
-            remaining.Remove(protoId);
-            return true;
-        }
-
-        remaining[protoId] = needed - 1;
-        if (remaining[protoId] <= 0)
-            remaining.Remove(protoId);
-
-        deleteItem = true;
-        return true;
+        foreach (var item in _hands.EnumerateHeld(user))
+            yield return item;
     }
 }

@@ -1,0 +1,115 @@
+- type: material
+  id: Copper
+  stackEntity: SheetCopper1
+  name: materials-copper
+  icon: { sprite: Objects/Materials/Sheets/metal.rsi, state: steel }
+  color: "#C77C48"
+  price: 0.20
+
+- type: stack
+  parent: BaseMediumStack
+  id: Copper
+  name: stack-copper
+  icon: { sprite: /Textures/Objects/Materials/Sheets/metal.rsi, state: steel }
+  spawn: SheetCopper1
+
+- type: entity
+  parent: SheetMetalBase
+  id: SheetCopper
+  name: copper sheets
+  suffix: Full
+  components:
+  - type: Stack
+    stackType: Copper
+  - type: Sprite
+    state: steel
+    color: "#C77C48"
+  - type: Item
+    heldPrefix: steel
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      Copper: 100
+
+- type: entity
+  parent: SheetCopper
+  id: SheetCopper1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: material
+  id: RawCopper
+  stackEntity: CopperOre1
+  name: materials-raw-copper
+  icon: { sprite: Objects/Materials/ore.rsi, state: iron }
+  color: "#C77C48"
+  price: 0.10
+
+- type: stack
+  parent: BaseMediumStack
+  id: CopperIngot
+  name: stack-copper-ingot
+  icon: { sprite: /Textures/Objects/Materials/ingots.rsi, state: copper }
+  spawn: IngotCopper1
+
+- type: entity
+  parent: IngotBase
+  id: IngotCopper
+  name: copper ingots
+  suffix: Full
+  components:
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      Copper: 100
+  - type: Stack
+    stackType: CopperIngot
+    baseLayer: base
+    layerStates:
+    - copper
+    - copper_2
+    - copper_3
+  - type: Sprite
+    state: copper_3
+    layers:
+    - state: copper_3
+      map: ["base"]
+  - type: Item
+    heldPrefix: copper
+  - type: Appearance
+
+- type: entity
+  parent: IngotCopper
+  id: IngotCopper1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: industrialRecipe
+  id: IndustrialFormCopperSheets
+  processor: Assembler
+  time: 4
+  inputs:
+    IngotCopper: 1
+  outputs:
+    SheetCopper1: 1
+
+- type: industrialRecipe
+  id: IndustrialRemeltCopperSheets
+  processor: Smelter
+  time: 5
+  inputs:
+    SheetCopper: 1
+  outputs:
+    IngotCopper1: 1
+
+- type: industrialFabricationRecipe
+  id: FabricateCopperSheets
+  name: industrial-fabrication-copper-sheets
+  result: SheetCopper1
+  duration: 8
+  ingredients:
+    IngotCopper: 1

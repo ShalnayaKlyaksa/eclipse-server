@@ -988,6 +988,10 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("TEXT")
                         .HasColumnName("char_name");
 
+                    b.Property<string>("CharacterCustomization")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("character_customization");
+
                     b.Property<string>("CustomSpecies")
                         .IsRequired()
                         .HasColumnType("TEXT")

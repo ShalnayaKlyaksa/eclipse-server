@@ -52,8 +52,8 @@ namespace Content.Client.RoundEnd
 
         #region Eclipse shift summary
 
-        private static readonly Color EclipsePanelBg = Color.FromHex("#070300F2");
-        private static readonly Color EclipseBorder = Color.FromHex("#A85E1268");
+        private static readonly Color EclipsePanelBg = Color.FromHex("#161616F2");
+        private static readonly Color EclipseBorder = Color.FromHex("#50505068");
 
         private Control MakeShiftStatsTab(EclipseRoundEndStatsEvent stats)
         {
@@ -214,7 +214,7 @@ namespace Content.Client.RoundEnd
         private Control TaskRow(string title)
         {
             var label = new RichTextLabel { HorizontalExpand = true };
-            label.SetMarkup($"[color=#E6A11A]•[/color] {FormattedMessage.EscapeText(title)}");
+            label.SetMarkup($"[color=#FF861F]•[/color] {FormattedMessage.EscapeText(title)}");
             return label;
         }
 
@@ -237,7 +237,7 @@ namespace Content.Client.RoundEnd
         {
             var label = new RichTextLabel { HorizontalExpand = true };
             var inner = FormattedMessage.EscapeText(text);
-            label.SetMarkup(bold ? $"[color=#E6A11A][bold]{inner}[/bold][/color]" : $"[color=#E6A11A]{inner}[/color]");
+            label.SetMarkup(bold ? $"[color=#FF861F][bold]{inner}[/bold][/color]" : $"[color=#FF861F]{inner}[/color]");
             return label;
         }
 

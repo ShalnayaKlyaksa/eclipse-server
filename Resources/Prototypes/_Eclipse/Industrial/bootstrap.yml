@@ -1,0 +1,23 @@
+- type: construction
+  id: IndustrialKey
+  graph: IndustrialKey
+  startNode: start
+  targetNode: key
+  category: construction-category-tools
+  objectType: Item
+
+- type: constructionGraph
+  id: IndustrialKey
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: key
+      steps:
+      - material: Steel
+        amount: 2
+        doAfter: 3
+      - tool: Screwing
+        doAfter: 2
+  - node: key
+    entity: IndustrialKey

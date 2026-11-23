@@ -50,7 +50,7 @@ steal-target-groups-captain-sword = сабля капитана
 # Thief structures
 steal-target-groups-teg = часть термоэлектрического генератора
 steal-target-groups-freezer-heater = нагреватель или охладитель
-steal-target-groups-altar-nanotrasen = алтарь Nanotrasen (любой)
+steal-target-groups-altar-nanotrasen = алтарь ВИШ (любой)
 
 steal-target-groups-nuclear-bomb = ядерная боеголовка
 steal-target-groups-fax-machine-captain = факс дальнего действия капитана

@@ -1,5 +1,6 @@
 bwoink-user-title = Сообщение от администратора
-bwoink-admin-title = Админ помощь
+bwoink-admin-title = Админская помощь
+bwoink-player-list-title = Игроки
 
 bwoink-system-starmute-message-no-other-users = *Система: Никто не доступен для получения вашего сообщения. Попробуйте обратиться к администраторам игры в Discord.
 
@@ -18,11 +19,11 @@ bwoink-system-typing-indicator = { $players } { $count ->
     *[other] печатают
 }...
 
-admin-ahelp-admin-only = Только Админ
+admin-ahelp-admin-only = Только для администраторов
 admin-ahelp-admin-only-tooltip = Если отмечено, сообщение не будет видно игроку,
     но будет видно админам и будет отправлено в Дискорд.
 
-admin-bwoink-play-sound = Бвоинк?
+admin-bwoink-play-sound = Звуковое уведомление
 
 bwoink-title-none-selected = Ничего не выбрано
 

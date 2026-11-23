@@ -1,4 +1,4 @@
-﻿using Content.Client.Stylesheets.SheetletConfigs;
+using Content.Client.Stylesheets.SheetletConfigs;
 using Content.Client.Stylesheets.Stylesheets;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
@@ -12,8 +12,8 @@ public sealed class LineEditSheetlet<T> : Sheetlet<T> where T : PalettedStyleshe
 {
     public override StyleRule[] GetRules(T sheet, object config)
     {
-        var lineEditStylebox = SearchStyle("#20202B", "#7A5A46", "#A45B12");
-        var lineEditNotEditable = SearchStyle("#17161D", "#4A3B33", "#00000000");
+        var lineEditStylebox = ForgeStyle.Panel(ForgeStyle.Input, ForgeStyle.Border, 7, 4);
+        var lineEditNotEditable = ForgeStyle.Panel(ForgeStyle.Background, ForgeStyle.Border, 7, 4);
 
         return
         [
@@ -22,34 +22,14 @@ public sealed class LineEditSheetlet<T> : Sheetlet<T> where T : PalettedStyleshe
             E<LineEdit>()
                 .Class(LineEdit.StyleClassLineEditNotEditable)
                 .Prop(LineEdit.StylePropertyStyleBox, lineEditNotEditable)
-                .Prop("font-color", Color.FromHex("#9F948D")),
+                .Prop("font-color", ForgeStyle.Muted),
             E<LineEdit>()
                 .Pseudo(LineEdit.StylePseudoClassPlaceholder)
-                .Prop("font-color", Color.FromHex("#9F948D")),
+                .Prop("font-color", ForgeStyle.Muted),
             E<TextEdit>()
                 .Pseudo(TextEdit.StylePseudoClassPlaceholder)
-                .Prop("font-color", Color.FromHex("#9F948D")),
+                .Prop("font-color", ForgeStyle.Muted),
         ];
     }
 
-    private static StyleBoxFlat SearchStyle(string background, string border, string accent)
-    {
-        var style = new StyleBoxFlat
-        {
-            BackgroundColor = Color.FromHex(background),
-            BorderColor = Color.FromHex(border),
-            BorderThickness = new Thickness(1),
-        };
-
-        var accentColor = Color.FromHex(accent);
-        if (accentColor.A > 0)
-        {
-            style.BorderThickness = new Thickness(1, 1, 1, 2);
-            style.BorderColor = accentColor;
-        }
-
-        style.SetContentMarginOverride(StyleBox.Margin.Horizontal, 7);
-        style.SetContentMarginOverride(StyleBox.Margin.Vertical, 4);
-        return style;
-    }
 }

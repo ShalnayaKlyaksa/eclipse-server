@@ -6,8 +6,8 @@
     <PanelContainer HorizontalExpand="True"
                     VerticalExpand="True">
         <PanelContainer.PanelOverride>
-            <eclipse:EclipseStyleBoxRounded BackgroundColor="#070300E8"
-                                            BorderColor="#A85E1258"
+            <eclipse:EclipseStyleBoxRounded BackgroundColor="#1C1C1C"
+                                            BorderColor="#383838"
                                             BorderThickness="1"
                                             Radius="8" />
         </PanelContainer.PanelOverride>
@@ -30,8 +30,8 @@
                                 RectClipContent="True"
                                 HorizontalExpand="True">
                     <PanelContainer.PanelOverride>
-                        <gfx:StyleBoxFlat BackgroundColor="#050200A8"
-                                          BorderColor="#2C221A66"
+                        <gfx:StyleBoxFlat BackgroundColor="#101010"
+                                          BorderColor="#292929"
                                           BorderThickness="1" />
                     </PanelContainer.PanelOverride>
                     <BoxContainer Name="ViewBox"

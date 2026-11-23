@@ -1,4 +1,8 @@
 using System.Linq;
+using Content.Shared._Eclipse.AdvancedHealth;
+using Content.Shared.Examine;
+using Content.Shared.ActionBlocker;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Body.Components;
 using Content.Shared.Chemistry.Components;
@@ -46,10 +50,79 @@ public sealed partial class InjectorSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<InjectorComponent, UseInHandEvent>(OnInjectorUse);
+        SubscribeLocalEvent<InjectorComponent, ExaminedEvent>((EntityUid uid, InjectorComponent injector, ExaminedEvent ev) =>
+        {
+            if (!injector.IgnoreMobs && _prototypeManager.Resolve(injector.ActiveModeProtoId, out var mode) && !mode.InjectOnUse)
+                ev.PushMarkup(Loc.GetString(injector.NeedleBroken ? "advanced-health-syringe-broken"
+                    : injector.Sterile ? "advanced-health-syringe-sterile" : "advanced-health-syringe-used"));
+        });
         SubscribeLocalEvent<InjectorComponent, AfterInteractEvent>(OnInjectorAfterInteract);
         SubscribeLocalEvent<InjectorComponent, InjectorDoAfterEvent>(OnInjectDoAfter);
         SubscribeLocalEvent<InjectorComponent, MeleeHitEvent>(OnAttack);
         SubscribeLocalEvent<InjectorComponent, GetVerbsEvent<AlternativeVerb>>(AddVerbs);
+    }
+
+    /// <summary>Returns all remaining solution in a loaded, manually operated injection syringe.</summary>
+    public bool TryGetInjectionVolume(EntityUid syringe, out FixedPoint2 amount)
+    {
+        amount = FixedPoint2.Zero;
+        if (!TryComp<InjectorComponent>(syringe, out var injector) || injector.NeedleBroken || injector.IgnoreMobs
+            || !_prototypeManager.Resolve(injector.ActiveModeProtoId, out var mode)
+            || !injector.AllowedModes.Contains(injector.ActiveModeProtoId)
+            || mode.InjectOnUse || mode.Behavior != InjectorBehavior.Inject
+            || !_solutionContainer.ResolveSolution(syringe, injector.SolutionName, ref injector.Solution, out var solution))
+            return false;
+        amount = solution.Volume;
+        return amount > FixedPoint2.Zero;
+    }
+
+    public bool TryBreakNeedle(EntityUid syringe)
+    {
+        if (!TryComp<InjectorComponent>(syringe, out var injector) || injector.NeedleBroken || injector.IgnoreMobs) return false;
+        injector.NeedleBroken = true;
+        injector.Sterile = false;
+        Dirty(syringe, injector);
+        return true;
+    }
+
+    /// <summary>Transfers a server-timed part of a syringe, retaining injection hooks and real chemistry.</summary>
+    public bool TryInjectTreatmentAmount(EntityUid syringe, EntityUid user, EntityUid target, FixedPoint2 amount, out FixedPoint2 transferred)
+    {
+        transferred = FixedPoint2.Zero;
+        if (amount <= 0 || !TryGetInjectionVolume(syringe, out var before) || !HasComp<BloodstreamComponent>(target)
+            || !EntityManager.System<SharedHandsSystem>().IsHolding(user, syringe)
+            || !EntityManager.System<ActionBlockerSystem>().CanInteract(user, target)
+            || !EntityManager.System<ActionBlockerSystem>().CanUseHeldEntity(user, syringe)
+            || user != target && !EntityManager.System<SharedInteractionSystem>().InRangeUnobstructed(user, target)
+            || !_solutionContainer.TryGetInjectableSolution(target, out var targetSolution, out _))
+            return false;
+        TryInject((syringe, Comp<InjectorComponent>(syringe)), user, target, targetSolution.Value, false, amount, true);
+        TryGetInjectionVolume(syringe, out var after);
+        transferred = FixedPoint2.Max(0, before - after);
+        return transferred > 0;
+    }
+
+    public bool TryGetBloodDrawCapacity(EntityUid syringe, out FixedPoint2 capacity)
+    {
+        capacity = FixedPoint2.Zero;
+        if (!TryComp<InjectorComponent>(syringe, out var injector) || injector.NeedleBroken || !injector.Sterile || injector.IgnoreMobs
+            || !_prototypeManager.Resolve(injector.ActiveModeProtoId, out var mode) || mode.InjectOnUse
+            || mode.Behavior != InjectorBehavior.Draw
+            || !_solutionContainer.ResolveSolution(syringe, injector.SolutionName, ref injector.Solution, out var solution)
+            || solution.Volume != 0) return false;
+        capacity = solution.AvailableVolume;
+        return capacity > 0;
+    }
+
+    public bool TryStartTreatmentBloodDraw(EntityUid syringe, EntityUid user, EntityUid target, BodyPartSlot slot)
+    {
+        if (slot is not (BodyPartSlot.LeftForearm or BodyPartSlot.RightForearm)
+            || !TryGetBloodDrawCapacity(syringe, out _) || !HasComp<BloodstreamComponent>(target)
+            || !EntityManager.System<SharedHandsSystem>().IsHolding(user, syringe)
+            || !EntityManager.System<ActionBlockerSystem>().CanInteract(user, target)
+            || !EntityManager.System<ActionBlockerSystem>().CanUseHeldEntity(user, syringe)
+            || user != target && !EntityManager.System<SharedInteractionSystem>().InRangeUnobstructed(user, target)) return false;
+        return TryMobsDoAfter((syringe, Comp<InjectorComponent>(syringe)), user, target, slot);
     }
 
     #region Events Handling
@@ -73,6 +146,13 @@ public sealed partial class InjectorSystem : EntitySystem
         if (args.Handled || !args.CanReach || args.Target is not { Valid: true } target)
             return;
 
+        if (injector.Comp.NeedleBroken)
+        {
+            args.Handled = true;
+            _popup.PopupClient(Loc.GetString("advanced-health-syringe-broken"), injector, args.User);
+            return;
+        }
+
         // Is the target a mob? If yes, use a do-after to give them time to respond.
         if (HasComp<BloodstreamComponent>(target))
         {
@@ -83,6 +163,24 @@ public sealed partial class InjectorSystem : EntitySystem
                 return;
             }
 
+            if (HasComp<AdvancedHealthComponent>(target) && TryGetInjectionVolume(injector, out _))
+            {
+                var treatment = new AdvancedHealthSyringeUseEvent(args.User, target);
+                RaiseLocalEvent(injector, ref treatment);
+                args.Handled = true;
+                return;
+            }
+            if (HasComp<AdvancedHealthComponent>(target)
+                && _prototypeManager.Resolve(injector.Comp.ActiveModeProtoId, out var drawMode)
+                && !drawMode.InjectOnUse && drawMode.Behavior == InjectorBehavior.Draw)
+            {
+                var slot = TryComp<AimTargetComponent>(args.User, out var aim) && aim.CurrentTarget != BodyPartTarget.Auto
+                    ? aim.CurrentTarget.ToSlot() : BodyPartSlot.Chest;
+                args.Handled = true;
+                if (!TryStartTreatmentBloodDraw(injector, args.User, target, slot))
+                    _popup.PopupClient(Loc.GetString("advanced-health-blood-draw-requirements"), target, args.User);
+                return;
+            }
             args.Handled |= TryMobsDoAfter(injector, args.User, target);
             return;
         }
@@ -96,6 +194,7 @@ public sealed partial class InjectorSystem : EntitySystem
         if (args.Cancelled || args.Handled || args.Args.Target == null)
             return;
 
+        if (args.DrawPart != null && !TryGetBloodDrawCapacity(injector, out _)) return;
         args.Handled |= TryUseInjector(injector, args.Args.User, args.Args.Target.Value);
     }
 
@@ -104,7 +203,15 @@ public sealed partial class InjectorSystem : EntitySystem
         if (args.HitEntities is [])
             return;
 
-        TryMobsDoAfter(injector, args.User, args.HitEntities[0]);
+        var target = args.HitEntities[0];
+        if (HasComp<AdvancedHealthComponent>(target))
+        {
+            var interact = new AfterInteractEvent(args.User, injector, target,
+                new Robust.Shared.Map.EntityCoordinates(target, System.Numerics.Vector2.Zero), true);
+            OnInjectorAfterInteract(injector, ref interact);
+            return;
+        }
+        TryMobsDoAfter(injector, args.User, target);
     }
 
     /// <summary>
@@ -192,13 +299,14 @@ public sealed partial class InjectorSystem : EntitySystem
     /// <summary>
     /// Send informative pop-up messages and wait for a do-after to complete.
     /// </summary>
-    private bool TryMobsDoAfter(Entity<InjectorComponent> injector, EntityUid user, EntityUid target)
+    private bool TryMobsDoAfter(Entity<InjectorComponent> injector, EntityUid user, EntityUid target, BodyPartSlot? drawPart = null)
     {
+        if (injector.Comp.NeedleBroken) return false;
         if (_useDelay.IsDelayed(injector.Owner) // Check for Delay.
             || !GetMobsDoAfterTime(injector, user, target, out var doAfterTime, out var amount)) // Get the DoAfter time.
             return false;
 
-        if (!_doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, doAfterTime, new InjectorDoAfterEvent(), injector.Owner, target: target, used: injector.Owner)
+        if (!_doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, doAfterTime, new InjectorDoAfterEvent { DrawPart = drawPart }, injector.Owner, target: target, used: injector.Owner)
         {
             BreakOnMove = true,
             BreakOnWeightlessMove = false,
@@ -448,8 +556,9 @@ public sealed partial class InjectorSystem : EntitySystem
     /// <param name="targetSolution">The solution of the target.</param>
     /// <param name="asRefill">Whether or not the solution is refillable or injectable.</param>
     /// <returns>True if the injection was successful, false if not.</returns>
-    private bool TryInject(Entity<InjectorComponent> injector, EntityUid user, EntityUid target, Entity<SolutionComponent> targetSolution, bool asRefill)
+    private bool TryInject(Entity<InjectorComponent> injector, EntityUid user, EntityUid target, Entity<SolutionComponent> targetSolution, bool asRefill, FixedPoint2? amountOverride = null, bool quiet = false)
     {
+        if (injector.Comp.NeedleBroken) return false;
         if (!_solutionContainer.ResolveSolution(injector.Owner,
                 injector.Comp.SolutionName,
                 ref injector.Comp.Solution,
@@ -489,7 +598,7 @@ public sealed partial class InjectorSystem : EntitySystem
         }
 
         // Get transfer amount. It may be smaller than _transferAmount if not enough room
-        var plannedTransferAmount = FixedPoint2.Min(injector.Comp.CurrentTransferAmount ?? injectorSolution.Volume, injectorSolution.Volume);
+        var plannedTransferAmount = FixedPoint2.Min(amountOverride ?? injector.Comp.CurrentTransferAmount ?? injectorSolution.Volume, injectorSolution.Volume);
         var realTransferAmount = FixedPoint2.Min(plannedTransferAmount, targetSolution.Comp.Solution.AvailableVolume);
 
         if (realTransferAmount <= 0)
@@ -524,19 +633,25 @@ public sealed partial class InjectorSystem : EntitySystem
         else if (ev.OverrideMessage != null)
             msgSuccess = ev.OverrideMessage;
 
-        _popup.PopupClient(Loc.GetString(msgSuccess, ("amount", removedSolution.Volume), ("target", Identity.Entity(target, EntityManager))), target, user);
+        if (!quiet)
+            _popup.PopupClient(Loc.GetString(msgSuccess, ("amount", removedSolution.Volume), ("target", Identity.Entity(target, EntityManager))), target, user);
 
         // it is IMPERATIVE that when an injector is instant, that it has a pop-up.
-        if (activeMode.InjectPopupTarget != null && target != user)
+        if (!quiet && activeMode.InjectPopupTarget != null && target != user)
             _popup.PopupClient(Loc.GetString(activeMode.InjectPopupTarget), target, target);
 
         // Some injectors like hyposprays have sound, some like syringes have not.
-        if (activeMode.InjectSound != null)
+        if (!quiet && activeMode.InjectSound != null)
             _audio.PlayPredicted(activeMode.InjectSound, injector, user);
 
         // Log what happened.
         _adminLogger.Add(LogType.ForceFeed, $"{ToPrettyString(user):user} injected {ToPrettyString(target):target} with a solution {SharedSolutionContainerSystem.ToPrettyString(removedSolution):removedSolution} using a {ToPrettyString(injector):using}");
 
+        if (HasComp<BloodstreamComponent>(target))
+        {
+            injector.Comp.Sterile = false;
+            Dirty(injector);
+        }
         AfterInject(injector, user, target);
         return true;
     }
@@ -551,6 +666,7 @@ public sealed partial class InjectorSystem : EntitySystem
     /// <returns>True if the drawing was successful, false if not.</returns>
     private bool TryDraw(Entity<InjectorComponent> injector, EntityUid user, Entity<BloodstreamComponent?> target, Entity<SolutionComponent> targetSolution)
     {
+        if (injector.Comp.NeedleBroken) return false;
         if (!_solutionContainer.ResolveSolution(injector.Owner, injector.Comp.SolutionName, ref injector.Comp.Solution, out var solution) || solution.AvailableVolume == 0)
         {
             _popup.PopupClient("injector-component-cannot-toggle-draw-message", user, user);
@@ -626,7 +742,11 @@ public sealed partial class InjectorSystem : EntitySystem
         if (_solutionContainer.ResolveSolution(target.Owner, target.Comp.BloodSolutionName, ref target.Comp.BloodSolution))
         {
             var bloodTemp = _solutionContainer.SplitSolution(target.Comp.BloodSolution.Value, transferAmount);
+            var bloodEvent = new Content.Shared._Eclipse.AdvancedHealth.AdvancedBloodTransferEvent(bloodTemp, true);
+            RaiseLocalEvent(target.Owner, ref bloodEvent);
             _solutionContainer.TryAddSolution(injectorSolution, bloodTemp);
+            injector.Comp.Sterile = false;
+            Dirty(injector);
         }
 
         LocId msg = target.Owner == user ? "injector-component-draw-success-message-self" : "injector-component-draw-success-message";

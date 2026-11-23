@@ -70,6 +70,7 @@ public sealed partial class LayerMarkingItem : BoxContainer, ISearchableControl
 
         _markingsModel.MarkingsReset += UpdateSelection;
         _markingsModel.MarkingsChanged += MarkingsChanged;
+        _markingsModel.MarkingColorsChanged += MarkingsChanged;
     }
 
     protected override void ExitedTree()
@@ -78,6 +79,7 @@ public sealed partial class LayerMarkingItem : BoxContainer, ISearchableControl
 
         _markingsModel.MarkingsReset -= UpdateSelection;
         _markingsModel.MarkingsChanged -= MarkingsChanged;
+        _markingsModel.MarkingColorsChanged -= MarkingsChanged;
     }
 
     private void MarkingsChanged(ProtoId<OrganCategoryPrototype> organ, HumanoidVisualLayers layer)

@@ -1,4 +1,4 @@
-﻿using Content.Client.UserInterface.Controls.FancyTree;
+using Content.Client.UserInterface.Controls.FancyTree;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
@@ -25,7 +25,7 @@ public sealed class FancyTreeSheetlet : Sheetlet<PalettedStylesheet>
             E<ContainerButton>()
                 .Identifier(TreeItem.StyleIdentifierTreeButton)
                 .Class(TreeItem.StyleClassSelected)
-                .Prop(ContainerButton.StylePropertyStyleBox, new StyleBoxFlat(sheet.PrimaryPalette.Element)),
+                .Prop(ContainerButton.StylePropertyStyleBox, ForgeStyle.Panel(ForgeStyle.Selection, ForgeStyle.Accent)),
 
             E<ContainerButton>()
                 .Identifier(TreeItem.StyleIdentifierTreeButton)

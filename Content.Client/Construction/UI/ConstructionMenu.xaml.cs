@@ -72,10 +72,9 @@ public enum ConstructionMenuMode
 [GenerateTypedNameReferences]
 public sealed partial class ConstructionMenu : FancyWindow, IConstructionMenuView
 {
-    private static readonly Color AccentColor = Color.FromHex("#FFB52A");
-    private static readonly Color AccentDark = Color.FromHex("#A85E12");
-    private static readonly Color PanelBg = Color.FromHex("#1A0900");
-    private static readonly Color SelectedBorder = Color.FromHex("#FFB52A");
+    private static readonly Color AccentColor = ForgeStyle.Accent;
+    private static readonly Color PanelBg = ForgeStyle.Surface;
+    private static readonly Color SelectedBorder = ForgeStyle.Accent;
     private static readonly Color AvailableGreen = Color.FromHex("#31843E");
     private static readonly Color UnavailableRed = Color.FromHex("#BB3232");
 
@@ -346,7 +345,7 @@ public sealed partial class ConstructionMenu : FancyWindow, IConstructionMenuVie
             panel.PanelOverride = new StyleBoxFlat
             {
                 BackgroundColor = PanelBg,
-                BorderColor = Color.FromHex("#A85E1266"),
+                BorderColor = Color.FromHex("#50505066"),
                 BorderThickness = new Thickness(1),
             };
 
@@ -454,21 +453,21 @@ public sealed partial class ConstructionMenu : FancyWindow, IConstructionMenuVie
     {
         button.StyleBoxOverride = new StyleBoxFlat
         {
-            BackgroundColor = active ? AccentColor : PanelBg,
-            BorderColor = active ? AccentDark : Color.FromHex("#A85E124D"),
+            BackgroundColor = active ? ForgeStyle.Selection : PanelBg,
+            BorderColor = active ? AccentColor : ForgeStyle.Border,
             BorderThickness = new Thickness(1),
             ContentMarginLeftOverride = 12,
             ContentMarginRightOverride = 12,
         };
         if (button.Children.FirstOrDefault() is Label label)
-            label.Modulate = active ? Color.Black : AccentColor;
+            label.Modulate = active ? AccentColor : ForgeStyle.Muted;
     }
 
     private static void StyleCategoryButton(ContainerButton button, bool selected)
     {
         button.StyleBoxOverride = new StyleBoxFlat
         {
-            BackgroundColor = selected ? Color.FromHex("#2A1200") : Color.Transparent,
+            BackgroundColor = selected ? Color.FromHex("#33251B") : Color.Transparent,
             BorderColor = selected ? SelectedBorder : Color.Transparent,
             BorderThickness = new Thickness(1),
             ContentMarginLeftOverride = 8,
@@ -482,8 +481,8 @@ public sealed partial class ConstructionMenu : FancyWindow, IConstructionMenuVie
     {
         panel.PanelOverride = new StyleBoxFlat
         {
-            BackgroundColor = selected ? Color.FromHex("#2A1200") : Color.FromHex("#0A0400"),
-            BorderColor = selected ? SelectedBorder : Color.FromHex("#A85E1233"),
+            BackgroundColor = selected ? Color.FromHex("#33251B") : Color.FromHex("#202020"),
+            BorderColor = selected ? SelectedBorder : Color.FromHex("#50505033"),
             BorderThickness = new Thickness(1),
         };
     }

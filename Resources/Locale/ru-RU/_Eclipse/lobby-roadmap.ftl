@@ -1,0 +1,18 @@
+eclipse-roadmap-title = Дорожная карта
+eclipse-roadmap-progress = Выполнено { $done } из { $total }
+eclipse-roadmap-available = Уже доступно
+eclipse-roadmap-in-progress = В разработке
+eclipse-roadmap-planned = Запланировано
+eclipse-roadmap-long-term = Долгосрочный план
+eclipse-roadmap-previous = Предыдущий этап — { $title }
+
+eclipse-roadmap-lobby-title = Лобби и персонаж
+eclipse-roadmap-lobby-description = Фоны лобби, выбор персонажа и настройка внешности.
+eclipse-roadmap-profile-title = Профиль игрока
+eclipse-roadmap-profile-description = Страница аккаунта с аватаром, статистикой и прогрессом.
+eclipse-roadmap-store-title = Витрины магазина
+eclipse-roadmap-store-description = Новые витрины, наборы косметики и редкие предметы.
+eclipse-roadmap-ranks-title = Ранги и награды
+eclipse-roadmap-ranks-description = Система заслуг, служебные ранги и награды за достижения.
+eclipse-roadmap-events-title = Режимы и события
+eclipse-roadmap-events-description = Сезонные события и особые миссии на станции.

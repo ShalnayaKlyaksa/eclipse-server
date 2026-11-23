@@ -10,7 +10,7 @@
   recipeUnlocks:
   - ResearchAndDevelopmentServerMachineCircuitboard
   position: 2,0
-
+  hidden: true
 - type: technology
   id: AnomalousResearchMachines
   name: research-technology-anomalous-research-machines
@@ -24,9 +24,8 @@
   - APECircuitboard
   - AnomalyVesselCircuitboard
   technologyPrerequisites:
-  - ComprehensiveResearchDevelopmentSystem
   - AnomalousResearch
-  position: 1,0
+  position: 26, -15
 
 - type: technology
   id: AnomalyResearchAdvancedMachines
@@ -43,7 +42,7 @@
   technologyPrerequisites:
   - AnomalousResearchMachines
   - AnomalousResearchAdvanced
-  position: 0,0
+  position: 28, -12
 
 - type: technology
   id: XenoArcheologyMachines
@@ -58,9 +57,8 @@
   - AnalysisComputerCircuitboard
   - ArtifactAnalyzerMachineCircuitboard
   technologyPrerequisites:
-  - ComprehensiveResearchDevelopmentSystem
   - XenoarchaeologyResearch
-  position: 3,0
+  position: 26, -13
 
 - type: technology
   id: AlternativeResearchMachines
@@ -73,8 +71,9 @@
   cost: 5000
   recipeUnlocks:
   - TechDiskComputerCircuitboard
-  position: 4,1
-
+  position: 24, -10
+  technologyPrerequisites:
+  - IndustrialElectronics
 - type: technology
   id: AbnormalArtifactManipulationMachines
   name: research-technology-abnormal-artifact-manipulation-machines
@@ -88,4 +87,4 @@
   - ArtifactCrusherMachineCircuitboard
   technologyPrerequisites:
   - XenoArcheologyMachines
-  position: 4,0
+  position: 28, -16

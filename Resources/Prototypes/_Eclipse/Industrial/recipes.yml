@@ -1,10 +1,5 @@
-# Ore processing chain:
-# Ore -> Crusher -> Crushed ore
-# Crushed ore -> Thermal Centrifuge -> Sieved ore
-# Sieved ore -> Crusher -> Dust
-# Dust -> Smelter -> Ingot/Sheet
-
-# --- Iron ---
+# Direct smelting gives one sheet; crushing doubles the primary yield.
+# Thermal separation processes two units and recovers a useful impurity.
 - type: industrialRecipe
   id: CrushSteelOre
   processor: Crusher
@@ -12,17 +7,17 @@
   inputs:
     SteelOre: 1
   outputs:
-    CrushedIronOre: 1
-
+    CrushedIronOre: 2
 - type: industrialRecipe
   id: ThermalCentrifugeCrushedIronOre
   processor: ThermalCentrifuge
   time: 6
   inputs:
-    CrushedIronOre: 1
+    CrushedIronOre: 2
   outputs:
-    SievedIronOre: 1
-
+    SievedIronOre: 2
+    QuartzDust: 1
+  heat: 250000
 - type: industrialRecipe
   id: CrushSievedIronOre
   processor: Crusher
@@ -31,7 +26,6 @@
     SievedIronOre: 1
   outputs:
     IronDust: 1
-
 - type: industrialRecipe
   id: SmeltIronDust
   processor: Smelter
@@ -39,9 +33,7 @@
   inputs:
     IronDust: 1
   outputs:
-    SheetSteel1: 1
-
-# --- Copper ---
+    IndustrialIronIngot1: 1
 - type: industrialRecipe
   id: CrushCopperOre
   processor: Crusher
@@ -49,17 +41,17 @@
   inputs:
     CopperOre: 1
   outputs:
-    CrushedCopperOre: 1
-
+    CrushedCopperOre: 2
 - type: industrialRecipe
   id: ThermalCentrifugeCrushedCopperOre
   processor: ThermalCentrifuge
   time: 6
   inputs:
-    CrushedCopperOre: 1
+    CrushedCopperOre: 2
   outputs:
-    SievedCopperOre: 1
-
+    SievedCopperOre: 2
+    IronDust: 1
+  heat: 250000
 - type: industrialRecipe
   id: CrushSievedCopperOre
   processor: Crusher
@@ -68,7 +60,6 @@
     SievedCopperOre: 1
   outputs:
     CopperDust: 1
-
 - type: industrialRecipe
   id: SmeltCopperDust
   processor: Smelter
@@ -76,9 +67,7 @@
   inputs:
     CopperDust: 1
   outputs:
-    SheetBrass1: 1
-
-# --- Quartz / glass ---
+    IngotCopper1: 1
 - type: industrialRecipe
   id: CrushQuartzOre
   processor: Crusher
@@ -86,17 +75,17 @@
   inputs:
     SpaceQuartz: 1
   outputs:
-    CrushedQuartz: 1
-
+    CrushedQuartz: 2
 - type: industrialRecipe
   id: ThermalCentrifugeCrushedQuartz
   processor: ThermalCentrifuge
   time: 6
   inputs:
-    CrushedQuartz: 1
+    CrushedQuartz: 2
   outputs:
-    SievedQuartz: 1
-
+    SievedQuartz: 2
+    IronDust: 1
+  heat: 250000
 - type: industrialRecipe
   id: CrushSievedQuartz
   processor: Crusher
@@ -105,7 +94,6 @@
     SievedQuartz: 1
   outputs:
     QuartzDust: 1
-
 - type: industrialRecipe
   id: SmeltQuartzDust
   processor: Smelter
@@ -114,8 +102,6 @@
     QuartzDust: 1
   outputs:
     SheetGlass1: 1
-
-# --- Gold ---
 - type: industrialRecipe
   id: CrushGoldOre
   processor: Crusher
@@ -123,17 +109,17 @@
   inputs:
     GoldOre: 1
   outputs:
-    CrushedGoldOre: 1
-
+    CrushedGoldOre: 2
 - type: industrialRecipe
   id: ThermalCentrifugeCrushedGoldOre
   processor: ThermalCentrifuge
   time: 6
   inputs:
-    CrushedGoldOre: 1
+    CrushedGoldOre: 2
   outputs:
-    SievedGoldOre: 1
-
+    SievedGoldOre: 2
+    IronDust: 1
+  heat: 250000
 - type: industrialRecipe
   id: CrushSievedGoldOre
   processor: Crusher
@@ -142,7 +128,6 @@
     SievedGoldOre: 1
   outputs:
     GoldDust: 1
-
 - type: industrialRecipe
   id: SmeltGoldDust
   processor: Smelter
@@ -151,8 +136,6 @@
     GoldDust: 1
   outputs:
     IngotGold1: 1
-
-# --- Silver ---
 - type: industrialRecipe
   id: CrushSilverOre
   processor: Crusher
@@ -160,17 +143,17 @@
   inputs:
     SilverOre: 1
   outputs:
-    CrushedSilverOre: 1
-
+    CrushedSilverOre: 2
 - type: industrialRecipe
   id: ThermalCentrifugeCrushedSilverOre
   processor: ThermalCentrifuge
   time: 6
   inputs:
-    CrushedSilverOre: 1
+    CrushedSilverOre: 2
   outputs:
-    SievedSilverOre: 1
-
+    SievedSilverOre: 2
+    IronDust: 1
+  heat: 250000
 - type: industrialRecipe
   id: CrushSievedSilverOre
   processor: Crusher
@@ -179,7 +162,6 @@
     SievedSilverOre: 1
   outputs:
     SilverDust: 1
-
 - type: industrialRecipe
   id: SmeltSilverDust
   processor: Smelter
@@ -188,8 +170,6 @@
     SilverDust: 1
   outputs:
     IngotSilver1: 1
-
-# --- Plasma ---
 - type: industrialRecipe
   id: CrushPlasmaOre
   processor: Crusher
@@ -197,17 +177,17 @@
   inputs:
     PlasmaOre: 1
   outputs:
-    CrushedPlasmaOre: 1
-
+    CrushedPlasmaOre: 2
 - type: industrialRecipe
   id: ThermalCentrifugeCrushedPlasmaOre
   processor: ThermalCentrifuge
   time: 6
   inputs:
-    CrushedPlasmaOre: 1
+    CrushedPlasmaOre: 2
   outputs:
-    SievedPlasmaOre: 1
-
+    SievedPlasmaOre: 2
+    IronDust: 1
+  heat: 250000
 - type: industrialRecipe
   id: CrushSievedPlasmaOre
   processor: Crusher
@@ -216,7 +196,6 @@
     SievedPlasmaOre: 1
   outputs:
     PlasmaDust: 1
-
 - type: industrialRecipe
   id: SmeltPlasmaDust
   processor: Smelter
@@ -225,8 +204,6 @@
     PlasmaDust: 1
   outputs:
     SheetPlasma1: 1
-
-# --- Uranium ---
 - type: industrialRecipe
   id: CrushUraniumOre
   processor: Crusher
@@ -234,17 +211,17 @@
   inputs:
     UraniumOre: 1
   outputs:
-    CrushedUraniumOre: 1
-
+    CrushedUraniumOre: 2
 - type: industrialRecipe
   id: ThermalCentrifugeCrushedUraniumOre
   processor: ThermalCentrifuge
   time: 6
   inputs:
-    CrushedUraniumOre: 1
+    CrushedUraniumOre: 2
   outputs:
-    SievedUraniumOre: 1
-
+    SievedUraniumOre: 2
+    IronDust: 1
+  heat: 250000
 - type: industrialRecipe
   id: CrushSievedUraniumOre
   processor: Crusher
@@ -253,7 +230,6 @@
     SievedUraniumOre: 1
   outputs:
     UraniumDust: 1
-
 - type: industrialRecipe
   id: SmeltUraniumDust
   processor: Smelter
@@ -262,3 +238,71 @@
     UraniumDust: 1
   outputs:
     SheetUranium1: 1
+- type: industrialRecipe
+  id: DirectSmeltIron
+  processor: Smelter
+  time: 5
+  inputs:
+    SteelOre: 1
+  outputs:
+    IndustrialIronIngot1: 1
+- type: industrialRecipe
+  id: DirectSmeltCopper
+  processor: Smelter
+  time: 5
+  inputs:
+    CopperOre: 1
+  outputs:
+    IngotCopper1: 1
+- type: industrialRecipe
+  id: DirectSmeltQuartz
+  processor: Smelter
+  time: 5
+  inputs:
+    SpaceQuartz: 1
+  outputs:
+    SheetGlass1: 1
+- type: industrialRecipe
+  id: DirectSmeltGold
+  processor: Smelter
+  time: 5
+  inputs:
+    GoldOre: 1
+  outputs:
+    IngotGold1: 1
+- type: industrialRecipe
+  id: DirectSmeltSilver
+  processor: Smelter
+  time: 5
+  inputs:
+    SilverOre: 1
+  outputs:
+    IngotSilver1: 1
+- type: industrialRecipe
+  id: DirectSmeltPlasma
+  processor: Smelter
+  time: 5
+  inputs:
+    PlasmaOre: 1
+  outputs:
+    SheetPlasma1: 1
+- type: industrialRecipe
+  id: DirectSmeltUranium
+  processor: Smelter
+  time: 5
+  inputs:
+    UraniumOre: 1
+  outputs:
+    SheetUranium1: 1
+- type: industrialRecipe
+  id: IndustrialSmeltPlasteel
+  processor: BlastFurnace
+  minimumTier: Industrial
+  requiredTechnology: IndustrialMetallurgy
+  requireDataDisk: true
+  time: 8
+  inputs:
+    SheetSteel: 2
+    SheetPlasma: 1
+  outputs:
+    SheetPlasteel1: 2

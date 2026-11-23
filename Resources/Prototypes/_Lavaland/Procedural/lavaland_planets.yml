@@ -38,6 +38,16 @@
   markers:
   - RandomTendrilLavaland
   - RandomMobLavaland
+  - IndustrialSurfaceVeinsIron
+  - IndustrialSurfaceVeinsCopper
+  - IndustrialSurfaceVeinsQuartz
+  - IndustrialSurfaceVeinsCoal
+  - IndustrialSurfaceVeinsGold
+  - IndustrialSurfaceVeinsSilver
+  - IndustrialSurfaceVeinsPlasma
+  - IndustrialSurfaceVeinsUranium
+  - IndustrialSurfaceVeinsDiamond
+  - IndustrialGeothermalSurfaceDeposits
   - OreIron
   - OreCoal
   - OreQuartz

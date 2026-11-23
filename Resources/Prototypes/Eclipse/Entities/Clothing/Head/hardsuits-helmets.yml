@@ -3,8 +3,8 @@
 - type: entity
   parent: [ BaseCentcommContraband, ClothingHeadHelmetHardsuitLegionCommander ]
   id: ClothingHeadHelmetHardsuitNTNavyCaptain
-  name: nanotrasen navy captain hardsuit helmet
-  description: A reinforced pressure helmet designed for NanoTrasen Naval Command officers. Gold decorative elements are applied to the sides, emphasizing the wearer's status. Heavy, reliable, and very expensive...
+  name: VISH navy captain hardsuit helmet
+  description: A reinforced pressure helmet designed for VISH Naval Command officers. Gold decorative elements are applied to the sides, emphasizing the wearer's status. Heavy, reliable, and very expensive...
   components:
   - type: Sprite
     sprite: Eclipse/Clothing/Head/Hardsuits/nanotrasen_navy_captain.rsi
@@ -26,8 +26,8 @@
 - type: entity
   parent: [ BaseCentcommContraband, ClothingHeadHelmetHardsuitLegion ]
   id: ClothingHeadHelmetHardsuitNTNavy
-  name: nanotrasen navy hardsuit helmet
-  description: A special hardsuit helmet worn by crew members of an NanoTrasen naval vessels.
+  name: VISH navy hardsuit helmet
+  description: A special hardsuit helmet worn by crew members of an VISH naval vessels.
   components:
   - type: Sprite
     sprite: Eclipse/Clothing/Head/Hardsuits/nanotrasen_navy.rsi
@@ -49,8 +49,8 @@
 - type: entity
   parent: [ BaseCentcommContraband, ClothingHeadHelmetHardsuitLegion ]
   id: ClothingHeadHelmetHardsuitNTNavyEngineering
-  name: nanotrasen navy engineer hardsuit helmet
-  description: A special hardsuit helmet worn by crew members of an NanoTrasen naval vessels.
+  name: VISH navy engineer hardsuit helmet
+  description: A special hardsuit helmet worn by crew members of an VISH naval vessels.
   components:
   - type: Sprite
     sprite: Eclipse/Clothing/Head/Hardsuits/nanotrasen_navy_engineering.rsi
@@ -74,8 +74,8 @@
 - type: entity
   parent: [ BaseCentcommContraband, ClothingHeadHelmetHardsuitLegionElite ]
   id: ClothingHeadHelmetHardsuitNTNavyMedical
-  name: nanotrasen navy medical hardsuit helmet
-  description: A special hardsuit helmet worn by crew members of an NanoTrasen naval vessels.
+  name: VISH navy medical hardsuit helmet
+  description: A special hardsuit helmet worn by crew members of an VISH naval vessels.
   components:
   - type: Sprite
     sprite: Eclipse/Clothing/Head/Hardsuits/nanotrasen_navy_medical.rsi

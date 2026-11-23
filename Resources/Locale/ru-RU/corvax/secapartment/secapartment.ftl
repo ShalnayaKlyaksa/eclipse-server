@@ -6,7 +6,7 @@ sec-apartment-ui-squads-create = Создать
 sec-apartment-ui-squads-placeholder = Введите название отряда...
 sec-apartment-ui-squads = Отряды
 sec-apartment-ui-os = SecApartment#OS ™ v1.12
-sec-apartment-ui-footer = NanoTrasen™ все права защищены
+sec-apartment-ui-footer = ВИШ™ все права защищены
 
 sec-apartment-ui-squads-nameedit-placeholder = Название отряда...
 sec-apartment-ui-squads-rename = ✎

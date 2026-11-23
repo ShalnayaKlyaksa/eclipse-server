@@ -118,6 +118,10 @@ public sealed class HealthAnalyzerSystem : EntitySystem
         if (_uiSystem.HasUi(uid.Owner, HealthAnalyzerUiKey.Key))
             _uiSystem.ServerSendUiMessage(uid.Owner, HealthAnalyzerUiKey.Key, new HealthAnalyzerScanStartedMessage());
         BeginAnalyzingEntity(uid, args.Target.Value);
+        EntityManager.System<Content.Server._Eclipse.AdvancedHealth.AdvancedDiseaseSystem>()
+            .Diagnose(args.Target.Value, ClinicalTest.Examination);
+        EntityManager.System<Content.Server._Eclipse.AdvancedHealth.AdvancedOrganHealthSystem>()
+            .ExamineBody(args.Target.Value, MedicalDetection.Examination);
         args.Handled = true;
     }
 

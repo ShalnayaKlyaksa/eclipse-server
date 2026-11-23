@@ -27,6 +27,7 @@
     supportedDisciplines:
      # Backmen-Edit-START
     - Industrial
+    - Energy
     - Arsenal
     - Security
     - Cargo
@@ -36,7 +37,6 @@
     - Medical
     - CivilianServices
     roundstartTechs:
-    - Powercells
     - EngineeringTools
     - Lightning
     - NonlethalAmmunition

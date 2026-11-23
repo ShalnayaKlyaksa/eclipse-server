@@ -1,0 +1,148 @@
+- type: entityTable
+  id: EclipseEnvironmentalEventsTable
+  table: !type:AllSelector
+    children:
+    - id: EclipseDistressVesselEvent
+    - id: EclipseOtherShiftEvent
+    - id: EclipseZeroPointEvent
+    - id: EclipseLivingHullEvent
+    - id: EclipseBlackTideEvent
+
+- type: entityTable
+  id: EclipseSiegeEventsTable
+  table: !type:AllSelector
+    children:
+    - id: EclipseGungnirEvent
+    - id: EclipseHammerEvent
+    - id: EclipseDamoclesEvent
+
+- type: entity
+  parent: BaseGameRule
+  id: BaseEclipseIncident
+  abstract: true
+  components:
+  - type: StationEvent
+    duration: null
+    earliestStart: 25
+    minimumPlayers: 15
+    maxOccurrences: 1
+    reoccurrenceDelay: 45
+    occursDuringRoundEnd: false
+    startAudio:
+      path: /Audio/Announcements/attention.ogg
+
+- type: entity
+  parent: BaseEclipseIncident
+  id: EclipseGungnirEvent
+  components:
+  - type: StationEvent
+    weight: 0.5
+    earliestStart: 60
+    minimumPlayers: 40
+    startAnnouncement: eclipse-incident-gungnir-warning
+  - type: EclipseIncident
+    kind: Gungnir
+    warning: 30
+    intensity: 120
+    strikeWidth: 3
+
+- type: entity
+  parent: BaseEclipseIncident
+  id: EclipseHammerEvent
+  components:
+  - type: StationEvent
+    weight: 1.5
+    earliestStart: 40
+    minimumPlayers: 30
+    startAnnouncement: eclipse-incident-hammer-warning
+  - type: EclipseIncident
+    kind: Hammer
+    warning: 30
+    intensity: 1200
+    salvos: 4
+    interval: 10
+
+- type: entity
+  parent: BaseEclipseIncident
+  id: EclipseDamoclesEvent
+  components:
+  - type: StationEvent
+    weight: 1.5
+    earliestStart: 35
+    minimumPlayers: 25
+    startAnnouncement: eclipse-incident-damocles-warning
+  - type: EclipseIncident
+    kind: Damocles
+    warning: 5
+
+- type: entity
+  parent: BaseEclipseIncident
+  id: EclipseDistressVesselEvent
+  components:
+  - type: StationEvent
+    weight: 4
+    earliestStart: 15
+    minimumPlayers: 10
+    startAnnouncement: eclipse-incident-vessel-warning
+  - type: EclipseIncident
+    kind: DistressVessel
+    warning: 15
+
+- type: entity
+  parent: BaseEclipseIncident
+  id: EclipseOtherShiftEvent
+  components:
+  - type: StationEvent
+    weight: 1
+    earliestStart: 40
+    minimumPlayers: 20
+    startAnnouncement: eclipse-incident-shift-warning
+  - type: EclipseIncident
+    kind: OtherShift
+    warning: 20
+
+- type: entity
+  parent: BaseEclipseIncident
+  id: EclipseZeroPointEvent
+  components:
+  - type: StationEvent
+    weight: 3
+    startAnnouncement: eclipse-incident-zero-warning
+  - type: EclipseIncident
+    kind: ZeroPoint
+    warning: 0
+
+- type: entity
+  parent: BaseEclipseIncident
+  id: EclipseLivingHullEvent
+  components:
+  - type: StationEvent
+    weight: 3
+    startAnnouncement: eclipse-incident-living-warning
+  - type: EclipseIncident
+    kind: LivingHull
+    warning: 0
+    identificationDelay: 90
+
+- type: entity
+  parent: BaseEclipseIncident
+  id: EclipseBlackTideEvent
+  components:
+  - type: StationEvent
+    weight: 2
+    earliestStart: 30
+    minimumPlayers: 20
+    startAnnouncement: eclipse-incident-tide-warning
+  - type: EclipseIncident
+    kind: BlackTide
+    warning: 30
+
+- type: edgeSpreader
+  id: EclipseLivingHull
+  updatesPerSecond: 12
+
+- type: tile
+  parent: FloorGrassJungle
+  id: EclipseLivingFloor
+  name: eclipse-living-floor
+  weather: false

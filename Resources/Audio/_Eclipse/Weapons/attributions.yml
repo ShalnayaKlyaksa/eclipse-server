@@ -1,0 +1,10 @@
+- files:
+  - gungnir_passage.wav
+  - hull_rupture.wav
+  - hammer_incoming.wav
+  - siege_impact.wav
+  - damocles_engine.wav
+  - damocles_armed.wav
+  copyright: Original procedural synthesis for Eclipse. No external samples used.
+  license: CC0-1.0
+  source: ../../../../Tools/station-incidents/generate_audio.py

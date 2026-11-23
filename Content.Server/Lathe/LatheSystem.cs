@@ -170,7 +170,7 @@ namespace Content.Server.Lathe
             return ev.Recipes.ToList();
         }
 
-        public bool TryAddToQueue(EntityUid uid, LatheRecipePrototype recipe, int quantity, LatheComponent? component = null)
+        public bool TryAddToQueue(EntityUid uid, LatheRecipePrototype recipe, int quantity, LatheComponent? component = null, EntityUid? actor = null, int expectedPrice = 0)
         {
             if (!Resolve(uid, ref component))
                 return false;
@@ -182,13 +182,16 @@ namespace Content.Server.Lathe
             if (!CanProduce(uid, recipe, quantity, component))
                 return false;
 
+            if (!EntityManager.System<Content.Server.PDA.StationCommerceSystem>().ReservePrint(uid, actor, quantity, expectedPrice, out var receipt))
+                return false;
+
             foreach (var (mat, amount) in GetAdjustedAmount(component, recipe))
                 _materialStorage.TryChangeMaterialAmount(uid, mat, -amount * quantity);
 
-            if (component.Queue.Last is { } node && node.ValueRef.Recipe == recipe.ID)
+            if (receipt == Guid.Empty && component.Queue.Last is { } node && node.ValueRef.Recipe == recipe.ID && node.ValueRef.PaymentReceipt == Guid.Empty)
                 node.ValueRef.ItemsRequested += quantity;
             else
-                component.Queue.AddLast(new LatheRecipeBatch(recipe.ID, 0, quantity));
+                component.Queue.AddLast(new LatheRecipeBatch(recipe.ID, 0, quantity) { PaymentReceipt = receipt });
 
             return true;
         }
@@ -201,6 +204,7 @@ namespace Content.Server.Lathe
                 return false;
 
             var batch = component.Queue.First();
+            component.PaymentReceipt = batch.PaymentReceipt;
             batch.ItemsPrinted++;
             if (batch.ItemsPrinted >= batch.ItemsRequested || batch.ItemsPrinted < 0) // Rollover sanity check
                 component.Queue.RemoveFirst();
@@ -235,7 +239,14 @@ namespace Content.Server.Lathe
             if (comp.CurrentRecipe != null)
             {
                 var currentRecipe = _proto.Index(comp.CurrentRecipe.Value);
-                if (currentRecipe.Result is { } resultProto)
+                var commerce = EntityManager.System<Content.Server.PDA.StationCommerceSystem>();
+                var paid = commerce.Complete(comp.PaymentReceipt);
+                if (!paid)
+                {
+                    commerce.Refund(comp.PaymentReceipt, 1);
+                    RefundCurrentRecipe(uid, comp);
+                }
+                if (paid && currentRecipe.Result is { } resultProto)
                 {
                     var result = Spawn(resultProto, Transform(uid).Coordinates);
                     //Corvax
@@ -244,7 +255,7 @@ namespace Content.Server.Lathe
                     _stack.TryMergeToContacts(result);
                 }
 
-                if (currentRecipe.ResultReagents is { } resultReagents &&
+                if (paid && currentRecipe.ResultReagents is { } resultReagents &&
                     comp.ReagentOutputSlotId is { } slotId)
                 {
                     var toAdd = new Solution(
@@ -266,6 +277,7 @@ namespace Content.Server.Lathe
             }
 
             comp.CurrentRecipe = null;
+            comp.PaymentReceipt = Guid.Empty;
             prodComp.StartTime = _timing.CurTime;
 
             if (!TryStartProducing(uid, comp))
@@ -286,6 +298,7 @@ namespace Content.Server.Lathe
                 producing = node.Value.Recipe;
 
             var state = new LatheUpdateState(GetAvailableRecipes(uid, component), component.Queue.ToArray(), producing);
+            state.UnitPrice = EntityManager.System<Content.Server.PDA.StationCommerceSystem>().DocumentPrice(uid);
             _uiSys.SetUiState(uid, LatheUiKey.Key, state);
         }
 
@@ -460,6 +473,7 @@ namespace Content.Server.Lathe
         private void RefundBatch(EntityUid uid, LatheComponent lathe, LatheRecipeBatch batch)
         {
             var delta = batch.ItemsRequested - batch.ItemsPrinted;
+            EntityManager.System<Content.Server.PDA.StationCommerceSystem>().Refund(batch.PaymentReceipt, delta);
 
             _proto.Resolve(batch.Recipe, out var recipe);
 
@@ -474,7 +488,12 @@ namespace Content.Server.Lathe
 
             if (component.CurrentRecipe != null)
             {
-                if (component.Queue.Count > 0)
+                if (component.PaymentReceipt != Guid.Empty)
+                {
+                    EntityManager.System<Content.Server.PDA.StationCommerceSystem>().Refund(component.PaymentReceipt, 1);
+                    component.PaymentReceipt = Guid.Empty;
+                }
+                else if (component.Queue.Count > 0)
                 {
                     // Batch abandoned while printing last item, need to create a one-item batch
                     var batch = component.Queue.First();
@@ -503,12 +522,14 @@ namespace Content.Server.Lathe
         {
             if (_proto.TryIndex(args.ID, out LatheRecipePrototype? recipe))
             {
-                if (TryAddToQueue(uid, recipe, args.Quantity, component))
+                if (TryAddToQueue(uid, recipe, args.Quantity, component, args.Actor, args.ExpectedPrice))
                 {
                     _adminLogger.Add(LogType.Action,
                         LogImpact.Low,
                         $"{ToPrettyString(args.Actor):player} queued {args.Quantity} {GetRecipeName(recipe)} at {ToPrettyString(uid):lathe}");
                 }
+                else if (EntityManager.System<Content.Server.PDA.StationCommerceSystem>().DocumentPrice(uid) > 0)
+                    _popup.PopupEntity(Loc.GetString("commerce-print-failed"), uid, args.Actor);
             }
             TryStartProducing(uid, component);
             UpdateUserInterfaceState(uid, component);
@@ -603,6 +624,8 @@ namespace Content.Server.Lathe
                 $"{ToPrettyString(args.Actor):player} aborted printing {GetRecipeName(component.CurrentRecipe.Value)} at {ToPrettyString(uid):lathe}");
 
             RefundCurrentRecipe(uid, component);
+            EntityManager.System<Content.Server.PDA.StationCommerceSystem>().Refund(component.PaymentReceipt, 1);
+            component.PaymentReceipt = Guid.Empty;
             component.CurrentRecipe = null;
             FinishProducing(uid, component);
         }

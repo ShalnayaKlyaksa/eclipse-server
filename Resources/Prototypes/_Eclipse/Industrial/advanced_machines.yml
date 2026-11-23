@@ -1,0 +1,1683 @@
+# Advanced industrial production. Basic station supply keeps its existing recipes.
+- type: entity
+  abstract: true
+  parent: IndustrialTierIndustrialProcessor
+  id: BaseIndustrialFluidProcessor
+  components:
+  - type: IndustrialFluidProcessor
+  - type: UserInterface
+    interfaces:
+      enum.IndustrialProcessorUiKey.Key:
+        type: IndustrialProcessorBoundUserInterface
+      enum.IndustrialProcessorUiKey.Fluid:
+        type: IndustrialFluidSelectionBoundUserInterface
+  - type: SolutionContainerManager
+    solutions:
+      industrial_fluid_input:
+        maxVol: 250
+        canReact: false
+      industrial_fluid_output:
+        maxVol: 250
+        canReact: false
+  - type: RefillableSolution
+    solution: industrial_fluid_input
+  - type: DrainableSolution
+    solution: industrial_fluid_output
+  - type: ExaminableSolution
+    solution: industrial_fluid_input
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:SpillBehavior
+        solution: industrial_fluid_input
+      - !type:SpillBehavior
+        solution: industrial_fluid_output
+      - !type:DoActsBehavior
+        acts: [Destruction]
+- type: entity
+  parent: BaseIndustrialFluidProcessor
+  id: IndustrialOreWasher
+  name: ore washer
+  description: Washes solids with supplied process water.
+  components:
+  - type: IndustrialProcessor
+    processorType: OreWasher
+    tier: Industrial
+    northFacePort: LiquidInput
+    southFacePort: LiquidOutput
+    westFacePort: ItemInput
+    eastFacePort: ItemOutput
+  - type: ApcPowerReceiver
+    powerLoad: 2400
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_centrifuge.rsi
+    layers:
+    - state: icon
+      map:
+      - enum.IndustrialProcessorVisualLayers.Base
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_centrifuge.rsi
+    state: icon
+- type: entity
+  parent: IndustrialOreWasher
+  id: PerfectIndustrialOreWasher
+  name: perfect ore washer
+  components:
+  - type: IndustrialProcessor
+    tier: Perfect
+- type: entity
+  parent: IndustrialTierIndustrialProcessor
+  id: IndustrialSeparator
+  name: magnetic separator
+  description: Separates mineral fractions before chemical purification.
+  components:
+  - type: IndustrialProcessor
+    processorType: Separator
+    tier: Industrial
+    northFacePort: Disabled
+    southFacePort: Disabled
+    westFacePort: ItemInput
+    eastFacePort: ItemOutput
+  - type: ApcPowerReceiver
+    powerLoad: 3200
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_centrifuge.rsi
+    layers:
+    - state: icon
+      map:
+      - enum.IndustrialProcessorVisualLayers.Base
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_centrifuge.rsi
+    state: icon
+- type: entity
+  parent: IndustrialSeparator
+  id: PerfectIndustrialSeparator
+  name: perfect magnetic separator
+  components:
+  - type: IndustrialProcessor
+    tier: Perfect
+- type: entity
+  parent: BaseIndustrialFluidProcessor
+  id: IndustrialMixer
+  name: industrial mixer
+  description: Makes slurries and process solutions from measured ingredients.
+  components:
+  - type: IndustrialProcessor
+    processorType: Mixer
+    tier: Industrial
+    northFacePort: LiquidInput
+    southFacePort: LiquidOutput
+    westFacePort: ItemInput
+    eastFacePort: ItemOutput
+  - type: ApcPowerReceiver
+    powerLoad: 2000
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_assembler.rsi
+    layers:
+    - state: icon
+      map:
+      - enum.IndustrialProcessorVisualLayers.Base
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_assembler.rsi
+    state: icon
+- type: entity
+  parent: IndustrialMixer
+  id: PerfectIndustrialMixer
+  name: perfect industrial mixer
+  components:
+  - type: IndustrialProcessor
+    tier: Perfect
+- type: entity
+  parent: [IndustrialSmelterVisuals, BaseIndustrialFluidProcessor]
+  id: IndustrialChemicalReactor
+  name: chemical reactor
+  description: Processes solids and fluids into industrial chemical feedstocks.
+  components:
+  - type: IndustrialProcessor
+    processorType: ChemicalReactor
+    tier: Industrial
+    northFacePort: LiquidInput
+    southFacePort: LiquidOutput
+    westFacePort: ItemInput
+    eastFacePort: ItemOutput
+  - type: ApcPowerReceiver
+    powerLoad: 6000
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_smelter.rsi
+    layers:
+    - state: paused
+      map:
+      - enum.IndustrialProcessorVisualLayers.Base
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_smelter.rsi
+    state: paused
+- type: entity
+  parent: IndustrialChemicalReactor
+  id: PerfectIndustrialChemicalReactor
+  name: perfect chemical reactor
+  components:
+  - type: IndustrialProcessor
+    tier: Perfect
+- type: entity
+  parent: BaseIndustrialFluidProcessor
+  id: IndustrialFilterPress
+  name: filter press
+  description: Separates a slurry into filter cake and spent liquor.
+  components:
+  - type: IndustrialProcessor
+    processorType: FilterPress
+    tier: Industrial
+    northFacePort: LiquidInput
+    southFacePort: LiquidOutput
+    westFacePort: ItemInput
+    eastFacePort: ItemOutput
+  - type: ApcPowerReceiver
+    powerLoad: 2800
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_buffer.rsi
+    layers:
+    - state: icon
+      map:
+      - enum.IndustrialProcessorVisualLayers.Base
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_buffer.rsi
+    state: icon
+- type: entity
+  parent: IndustrialFilterPress
+  id: PerfectIndustrialFilterPress
+  name: perfect filter press
+  components:
+  - type: IndustrialProcessor
+    tier: Perfect
+- type: entity
+  parent: [IndustrialSmelterVisuals, IndustrialTierIndustrialProcessor]
+  id: IndustrialDryer
+  name: industrial dryer
+  description: Dries filter cakes and rinsed precision parts.
+  components:
+  - type: IndustrialProcessor
+    processorType: Dryer
+    tier: Industrial
+    northFacePort: Disabled
+    southFacePort: Disabled
+    westFacePort: ItemInput
+    eastFacePort: ItemOutput
+  - type: ApcPowerReceiver
+    powerLoad: 4200
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_smelter.rsi
+    layers:
+    - state: paused
+      map:
+      - enum.IndustrialProcessorVisualLayers.Base
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_smelter.rsi
+    state: paused
+- type: entity
+  parent: IndustrialDryer
+  id: PerfectIndustrialDryer
+  name: perfect industrial dryer
+  components:
+  - type: IndustrialProcessor
+    tier: Perfect
+- type: entity
+  parent: BaseIndustrialFluidProcessor
+  id: IndustrialDistillation
+  name: distillation column
+  description: Purifies liquid feedstocks and recovers usable solvents.
+  components:
+  - type: IndustrialProcessor
+    processorType: Distillation
+    tier: Industrial
+    northFacePort: LiquidInput
+    southFacePort: LiquidOutput
+    westFacePort: ItemInput
+    eastFacePort: ItemOutput
+  - type: ApcPowerReceiver
+    powerLoad: 7000
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_centrifuge.rsi
+    layers:
+    - state: icon
+      map:
+      - enum.IndustrialProcessorVisualLayers.Base
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_centrifuge.rsi
+    state: icon
+- type: entity
+  parent: IndustrialDistillation
+  id: PerfectIndustrialDistillation
+  name: perfect distillation column
+  components:
+  - type: IndustrialProcessor
+    tier: Perfect
+- type: entity
+  parent: BaseIndustrialFluidProcessor
+  id: IndustrialCrystallizer
+  name: crystal grower
+  description: Grows monocrystals in a retained process medium.
+  components:
+  - type: IndustrialProcessor
+    processorType: Crystallizer
+    tier: Industrial
+    northFacePort: LiquidInput
+    southFacePort: LiquidOutput
+    westFacePort: ItemInput
+    eastFacePort: ItemOutput
+  - type: ApcPowerReceiver
+    powerLoad: 8000
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_centrifuge.rsi
+    layers:
+    - state: icon
+      map:
+      - enum.IndustrialProcessorVisualLayers.Base
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_centrifuge.rsi
+    state: icon
+- type: entity
+  parent: IndustrialCrystallizer
+  id: PerfectIndustrialCrystallizer
+  name: perfect crystal grower
+  components:
+  - type: IndustrialProcessor
+    tier: Perfect
+- type: entity
+  parent: [IndustrialSmelterVisuals, BaseIndustrialFluidProcessor]
+  id: IndustrialBlastFurnace
+  name: electric reduction furnace
+  description: Reduces purified feedstocks with a supplied reducing reagent.
+  components:
+  - type: IndustrialProcessor
+    processorType: BlastFurnace
+    tier: Industrial
+    northFacePort: LiquidInput
+    southFacePort: LiquidOutput
+    westFacePort: ItemInput
+    eastFacePort: ItemOutput
+  - type: ApcPowerReceiver
+    powerLoad: 14000
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_smelter.rsi
+    layers:
+    - state: paused
+      map:
+      - enum.IndustrialProcessorVisualLayers.Base
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_smelter.rsi
+    state: paused
+- type: entity
+  parent: IndustrialBlastFurnace
+  id: PerfectIndustrialBlastFurnace
+  name: perfect electric reduction furnace
+  components:
+  - type: IndustrialProcessor
+    tier: Perfect
+- type: entity
+  parent: [IndustrialSmelterVisuals, IndustrialTierIndustrialProcessor]
+  id: IndustrialVacuumFurnace
+  name: vacuum furnace
+  description: Refines silicon and anneals precision electronic parts.
+  components:
+  - type: IndustrialProcessor
+    processorType: VacuumFurnace
+    tier: Industrial
+    northFacePort: Disabled
+    southFacePort: Disabled
+    westFacePort: ItemInput
+    eastFacePort: ItemOutput
+  - type: ApcPowerReceiver
+    powerLoad: 11000
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_smelter.rsi
+    layers:
+    - state: paused
+      map:
+      - enum.IndustrialProcessorVisualLayers.Base
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_smelter.rsi
+    state: paused
+- type: entity
+  parent: IndustrialVacuumFurnace
+  id: PerfectIndustrialVacuumFurnace
+  name: perfect vacuum furnace
+  components:
+  - type: IndustrialProcessor
+    tier: Perfect
+- type: entity
+  parent: [IndustrialCrusherVisuals, IndustrialTierIndustrialProcessor]
+  id: IndustrialCutter
+  name: precision cutter
+  description: Slices crystal boules and separates finished dies.
+  components:
+  - type: IndustrialProcessor
+    processorType: Cutter
+    tier: Industrial
+    northFacePort: Disabled
+    southFacePort: Disabled
+    westFacePort: ItemInput
+    eastFacePort: ItemOutput
+  - type: ApcPowerReceiver
+    powerLoad: 2800
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_crusher.rsi
+    layers:
+    - state: paused
+      map:
+      - enum.IndustrialProcessorVisualLayers.Base
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_crusher.rsi
+    state: paused
+- type: entity
+  parent: IndustrialCutter
+  id: PerfectIndustrialCutter
+  name: perfect precision cutter
+  components:
+  - type: IndustrialProcessor
+    tier: Perfect
+- type: entity
+  parent: [IndustrialCrusherVisuals, IndustrialTierIndustrialProcessor]
+  id: IndustrialGrinder
+  name: precision grinder
+  description: Grinds mineral concentrates and laps silicon wafers.
+  components:
+  - type: IndustrialProcessor
+    processorType: Grinder
+    tier: Industrial
+    northFacePort: Disabled
+    southFacePort: Disabled
+    westFacePort: ItemInput
+    eastFacePort: ItemOutput
+  - type: ApcPowerReceiver
+    powerLoad: 3500
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_crusher.rsi
+    layers:
+    - state: paused
+      map:
+      - enum.IndustrialProcessorVisualLayers.Base
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_crusher.rsi
+    state: paused
+- type: entity
+  parent: IndustrialGrinder
+  id: PerfectIndustrialGrinder
+  name: perfect precision grinder
+  components:
+  - type: IndustrialProcessor
+    tier: Perfect
+- type: entity
+  parent: BaseIndustrialFluidProcessor
+  id: IndustrialChemicalBath
+  name: chemical treatment bath
+  description: Cleans, develops and etches parts using supplied solutions.
+  components:
+  - type: IndustrialProcessor
+    processorType: ChemicalBath
+    tier: Industrial
+    northFacePort: LiquidInput
+    southFacePort: LiquidOutput
+    westFacePort: ItemInput
+    eastFacePort: ItemOutput
+  - type: ApcPowerReceiver
+    powerLoad: 2500
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_buffer.rsi
+    layers:
+    - state: icon
+      map:
+      - enum.IndustrialProcessorVisualLayers.Base
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_buffer.rsi
+    state: icon
+- type: entity
+  parent: IndustrialChemicalBath
+  id: PerfectIndustrialChemicalBath
+  name: perfect chemical treatment bath
+  components:
+  - type: IndustrialProcessor
+    tier: Perfect
+- type: entity
+  parent: BaseIndustrialFluidProcessor
+  id: IndustrialCoater
+  name: industrial coating machine
+  description: Applies functional layers and protective encapsulants.
+  components:
+  - type: IndustrialProcessor
+    processorType: Coater
+    tier: Industrial
+    northFacePort: LiquidInput
+    southFacePort: LiquidOutput
+    westFacePort: ItemInput
+    eastFacePort: ItemOutput
+  - type: ApcPowerReceiver
+    powerLoad: 4500
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_assembler.rsi
+    layers:
+    - state: icon
+      map:
+      - enum.IndustrialProcessorVisualLayers.Base
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_assembler.rsi
+    state: icon
+- type: entity
+  parent: IndustrialCoater
+  id: PerfectIndustrialCoater
+  name: perfect industrial coating machine
+  components:
+  - type: IndustrialProcessor
+    tier: Perfect
+- type: entity
+  parent: IndustrialTierIndustrialProcessor
+  id: IndustrialLaserEngraver
+  name: laser lithography machine
+  description: Transfers circuit patterns onto resist-coated wafers.
+  components:
+  - type: IndustrialProcessor
+    processorType: LaserEngraver
+    tier: Industrial
+    northFacePort: Disabled
+    southFacePort: Disabled
+    westFacePort: ItemInput
+    eastFacePort: ItemOutput
+  - type: ApcPowerReceiver
+    powerLoad: 9000
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_assembler.rsi
+    layers:
+    - state: icon
+      map:
+      - enum.IndustrialProcessorVisualLayers.Base
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_assembler.rsi
+    state: icon
+- type: entity
+  parent: IndustrialLaserEngraver
+  id: PerfectIndustrialLaserEngraver
+  name: perfect laser lithography machine
+  components:
+  - type: IndustrialProcessor
+    tier: Perfect
+- type: entity
+  parent: BaseIndustrialFluidProcessor
+  id: IndustrialElectrolyzer
+  name: electrochemical processor
+  description: Prepares electrolytes and deposits conductive metal layers.
+  components:
+  - type: IndustrialProcessor
+    processorType: Electrolyzer
+    tier: Industrial
+    northFacePort: LiquidInput
+    southFacePort: LiquidOutput
+    westFacePort: ItemInput
+    eastFacePort: ItemOutput
+  - type: ApcPowerReceiver
+    powerLoad: 8500
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_centrifuge.rsi
+    layers:
+    - state: icon
+      map:
+      - enum.IndustrialProcessorVisualLayers.Base
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_centrifuge.rsi
+    state: icon
+- type: entity
+  parent: IndustrialElectrolyzer
+  id: PerfectIndustrialElectrolyzer
+  name: perfect electrochemical processor
+  components:
+  - type: IndustrialProcessor
+    tier: Perfect
+- type: entity
+  parent: [IndustrialCrusherVisuals, IndustrialTierIndustrialProcessor]
+  id: IndustrialWireMill
+  name: precision wire mill
+  description: Draws bonding wire and shapes electronic contacts.
+  components:
+  - type: IndustrialProcessor
+    processorType: WireMill
+    tier: Industrial
+    northFacePort: Disabled
+    southFacePort: Disabled
+    westFacePort: ItemInput
+    eastFacePort: ItemOutput
+  - type: ApcPowerReceiver
+    powerLoad: 3000
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_crusher.rsi
+    layers:
+    - state: paused
+      map:
+      - enum.IndustrialProcessorVisualLayers.Base
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_crusher.rsi
+    state: paused
+- type: entity
+  parent: IndustrialWireMill
+  id: PerfectIndustrialWireMill
+  name: perfect precision wire mill
+  components:
+  - type: IndustrialProcessor
+    tier: Perfect
+- type: entity
+  parent: IndustrialTierIndustrialProcessor
+  id: IndustrialCircuitTester
+  name: circuit tester
+  description: Tests assembled processors before they can control advanced equipment.
+  components:
+  - type: IndustrialProcessor
+    processorType: CircuitTester
+    tier: Industrial
+    northFacePort: Disabled
+    southFacePort: Disabled
+    westFacePort: ItemInput
+    eastFacePort: ItemOutput
+  - type: ApcPowerReceiver
+    powerLoad: 2000
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_assembler.rsi
+    layers:
+    - state: icon
+      map:
+      - enum.IndustrialProcessorVisualLayers.Base
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_assembler.rsi
+    state: icon
+- type: entity
+  parent: IndustrialCircuitTester
+  id: PerfectIndustrialCircuitTester
+  name: perfect circuit tester
+  components:
+  - type: IndustrialProcessor
+    tier: Perfect
+- type: entity
+  parent: BaseIndustrialFluidProcessor
+  id: IndustrialFluidReservoir
+  name: industrial fluid reservoir
+  description: A 1000-unit process tank. Configure liquid ports with an industrial key.
+  components:
+  - type: IndustrialProcessor
+    processorType: FluidTank
+    canWorkWithoutPower: true
+    northFacePort: LiquidInput
+    southFacePort: LiquidOutput
+  - type: IndustrialFluidProcessor
+    outputSolution: industrial_fluid_input
+  - type: SolutionContainerManager
+    solutions:
+      industrial_fluid_input:
+        maxVol: 1000
+        canReact: false
+      industrial_fluid_output:
+        maxVol: 0
+        canReact: false
+  - type: DrainableSolution
+    solution: industrial_fluid_input
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_heat_buffer.rsi
+    layers:
+    - state: icon
+      map:
+      - enum.IndustrialProcessorVisualLayers.Base
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_heat_buffer.rsi
+    state: icon
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleOreWasher
+  name: ore washer module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: OreWasher
+    tier: Industrial
+    resultMachine: IndustrialOreWasher
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleOreWasherPerfect
+  name: perfect ore washer module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: OreWasher
+    tier: Perfect
+    resultMachine: PerfectIndustrialOreWasher
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleSeparator
+  name: magnetic separator module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Separator
+    tier: Industrial
+    resultMachine: IndustrialSeparator
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleSeparatorPerfect
+  name: perfect magnetic separator module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Separator
+    tier: Perfect
+    resultMachine: PerfectIndustrialSeparator
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleMixer
+  name: industrial mixer module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Mixer
+    tier: Industrial
+    resultMachine: IndustrialMixer
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleMixerPerfect
+  name: perfect industrial mixer module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Mixer
+    tier: Perfect
+    resultMachine: PerfectIndustrialMixer
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleChemicalReactor
+  name: chemical reactor module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: ChemicalReactor
+    tier: Industrial
+    resultMachine: IndustrialChemicalReactor
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleChemicalReactorPerfect
+  name: perfect chemical reactor module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: ChemicalReactor
+    tier: Perfect
+    resultMachine: PerfectIndustrialChemicalReactor
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleFilterPress
+  name: filter press module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: FilterPress
+    tier: Industrial
+    resultMachine: IndustrialFilterPress
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleFilterPressPerfect
+  name: perfect filter press module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: FilterPress
+    tier: Perfect
+    resultMachine: PerfectIndustrialFilterPress
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleDryer
+  name: industrial dryer module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Dryer
+    tier: Industrial
+    resultMachine: IndustrialDryer
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleDryerPerfect
+  name: perfect industrial dryer module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Dryer
+    tier: Perfect
+    resultMachine: PerfectIndustrialDryer
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleDistillation
+  name: distillation column module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Distillation
+    tier: Industrial
+    resultMachine: IndustrialDistillation
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleDistillationPerfect
+  name: perfect distillation column module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Distillation
+    tier: Perfect
+    resultMachine: PerfectIndustrialDistillation
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleCrystallizer
+  name: crystal grower module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Crystallizer
+    tier: Industrial
+    resultMachine: IndustrialCrystallizer
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleCrystallizerPerfect
+  name: perfect crystal grower module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Crystallizer
+    tier: Perfect
+    resultMachine: PerfectIndustrialCrystallizer
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleBlastFurnace
+  name: electric reduction furnace module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: BlastFurnace
+    tier: Industrial
+    resultMachine: IndustrialBlastFurnace
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleBlastFurnacePerfect
+  name: perfect electric reduction furnace module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: BlastFurnace
+    tier: Perfect
+    resultMachine: PerfectIndustrialBlastFurnace
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleVacuumFurnace
+  name: vacuum furnace module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: VacuumFurnace
+    tier: Industrial
+    resultMachine: IndustrialVacuumFurnace
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleVacuumFurnacePerfect
+  name: perfect vacuum furnace module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: VacuumFurnace
+    tier: Perfect
+    resultMachine: PerfectIndustrialVacuumFurnace
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleCutter
+  name: precision cutter module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Cutter
+    tier: Industrial
+    resultMachine: IndustrialCutter
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleCutterPerfect
+  name: perfect precision cutter module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Cutter
+    tier: Perfect
+    resultMachine: PerfectIndustrialCutter
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleGrinder
+  name: precision grinder module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Grinder
+    tier: Industrial
+    resultMachine: IndustrialGrinder
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleGrinderPerfect
+  name: perfect precision grinder module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Grinder
+    tier: Perfect
+    resultMachine: PerfectIndustrialGrinder
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleChemicalBath
+  name: chemical treatment bath module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: ChemicalBath
+    tier: Industrial
+    resultMachine: IndustrialChemicalBath
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleChemicalBathPerfect
+  name: perfect chemical treatment bath module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: ChemicalBath
+    tier: Perfect
+    resultMachine: PerfectIndustrialChemicalBath
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleCoater
+  name: industrial coating machine module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Coater
+    tier: Industrial
+    resultMachine: IndustrialCoater
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleCoaterPerfect
+  name: perfect industrial coating machine module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Coater
+    tier: Perfect
+    resultMachine: PerfectIndustrialCoater
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleLaserEngraver
+  name: laser lithography machine module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: LaserEngraver
+    tier: Industrial
+    resultMachine: IndustrialLaserEngraver
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleLaserEngraverPerfect
+  name: perfect laser lithography machine module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: LaserEngraver
+    tier: Perfect
+    resultMachine: PerfectIndustrialLaserEngraver
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleElectrolyzer
+  name: electrochemical processor module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Electrolyzer
+    tier: Industrial
+    resultMachine: IndustrialElectrolyzer
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleElectrolyzerPerfect
+  name: perfect electrochemical processor module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: Electrolyzer
+    tier: Perfect
+    resultMachine: PerfectIndustrialElectrolyzer
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleWireMill
+  name: precision wire mill module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: WireMill
+    tier: Industrial
+    resultMachine: IndustrialWireMill
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleWireMillPerfect
+  name: perfect precision wire mill module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: WireMill
+    tier: Perfect
+    resultMachine: PerfectIndustrialWireMill
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleCircuitTester
+  name: circuit tester module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: CircuitTester
+    tier: Industrial
+    resultMachine: IndustrialCircuitTester
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleCircuitTesterPerfect
+  name: perfect circuit tester module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: CircuitTester
+    tier: Perfect
+    resultMachine: PerfectIndustrialCircuitTester
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleFluidTank
+  name: fluid reservoir module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: FluidTank
+    tier: Industrial
+    resultMachine: IndustrialFluidReservoir
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialUpgradeModuleOreWasher
+  requiredTechnology: IndustrialOreEnrichment
+  result: IndustrialUpgradeModuleOreWasher
+  duration: 35
+  ingredients:
+    IndustrialMechanicalCore: 1
+    IndustrialCircuitCore: 1
+    SheetSteel: 6
+    SheetGlass: 4
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialUpgradeModuleSeparator
+  requiredTechnology: IndustrialOreEnrichment
+  result: IndustrialUpgradeModuleSeparator
+  duration: 40
+  ingredients:
+    IndustrialMechanicalCore: 2
+    IndustrialCircuitCore: 1
+    SheetSteel: 8
+    SheetCopper: 1
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialUpgradeModuleMixer
+  requiredTechnology: IndustrialProcessChemistry
+  result: IndustrialUpgradeModuleMixer
+  duration: 35
+  ingredients:
+    IndustrialMechanicalCore: 2
+    IndustrialCircuitCore: 1
+    SheetSteel: 6
+    IndustrialIronRod: 4
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialUpgradeModuleChemicalReactor
+  requiredTechnology: IndustrialProcessChemistry
+  result: IndustrialUpgradeModuleChemicalReactor
+  duration: 50
+  ingredients:
+    IndustrialCircuitCore: 2
+    IndustrialHeatConduitAssembly: 1
+    SheetSteel: 8
+    SheetGlass: 4
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialUpgradeModuleFilterPress
+  requiredTechnology: IndustrialSiliconPurification
+  result: IndustrialUpgradeModuleFilterPress
+  duration: 35
+  ingredients:
+    IndustrialMechanicalCore: 2
+    IndustrialCircuitCore: 1
+    SheetSteel: 6
+    MaterialCloth: 2
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialUpgradeModuleDryer
+  requiredTechnology: IndustrialSiliconPurification
+  result: IndustrialUpgradeModuleDryer
+  duration: 35
+  ingredients:
+    IndustrialMechanicalCore: 1
+    IndustrialCircuitCore: 1
+    IndustrialHeatConduitAssembly: 1
+    SheetSteel: 6
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialUpgradeModuleDistillation
+  requiredTechnology: IndustrialVacuumProcessing
+  result: IndustrialUpgradeModuleDistillation
+  duration: 60
+  ingredients:
+    IndustrialCircuitCore: 2
+    IndustrialHeatConduitAssembly: 2
+    SheetSteel: 10
+    SheetGlass: 6
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialUpgradeModuleCrystallizer
+  requiredTechnology: IndustrialCrystalGrowth
+  result: IndustrialUpgradeModuleCrystallizer
+  duration: 50
+  ingredients:
+    IndustrialCircuitCore: 2
+    IndustrialHeatConduitAssembly: 1
+    SheetSteel: 8
+    SheetGlass: 6
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialUpgradeModuleBlastFurnace
+  requiredTechnology: IndustrialProcessChemistry
+  result: IndustrialUpgradeModuleBlastFurnace
+  duration: 60
+  ingredients:
+    IndustrialMechanicalCore: 2
+    IndustrialCircuitCore: 1
+    IndustrialHeatConduitAssembly: 3
+    SheetSteel: 12
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialUpgradeModuleVacuumFurnace
+  requiredTechnology: IndustrialVacuumProcessing
+  result: IndustrialUpgradeModuleVacuumFurnace
+  duration: 60
+  ingredients:
+    IndustrialMechanicalCore: 2
+    IndustrialCircuitCore: 2
+    IndustrialHeatConduitAssembly: 2
+    SheetGlass: 4
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialUpgradeModuleCutter
+  requiredTechnology: IndustrialBulkProcessing
+  result: IndustrialUpgradeModuleCutter
+  duration: 40
+  ingredients:
+    IndustrialMechanicalCore: 2
+    IndustrialCircuitCore: 1
+    SheetSteel: 8
+    IndustrialIronRod: 4
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialUpgradeModuleGrinder
+  requiredTechnology: IndustrialBulkProcessing
+  result: IndustrialUpgradeModuleGrinder
+  duration: 40
+  ingredients:
+    IndustrialMechanicalCore: 3
+    IndustrialCircuitCore: 1
+    SheetSteel: 8
+    IndustrialIronRod: 4
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialUpgradeModuleChemicalBath
+  requiredTechnology: IndustrialCleanroomEngineering
+  result: IndustrialUpgradeModuleChemicalBath
+  duration: 35
+  ingredients:
+    IndustrialMechanicalCore: 1
+    IndustrialCircuitCore: 1
+    SheetSteel: 6
+    SheetGlass: 6
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialUpgradeModuleCoater
+  requiredTechnology: IndustrialSurfaceChemistry
+  result: IndustrialUpgradeModuleCoater
+  duration: 45
+  ingredients:
+    IndustrialMechanicalCore: 2
+    IndustrialCircuitCore: 2
+    SheetSteel: 6
+    SheetGlass: 4
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialUpgradeModuleLaserEngraver
+  requiredTechnology: IndustrialPhotolithography
+  result: IndustrialUpgradeModuleLaserEngraver
+  duration: 65
+  ingredients:
+    IndustrialMechanicalCore: 1
+    IndustrialCircuitCore: 3
+    SheetGlass: 6
+    IngotGold: 1
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialUpgradeModuleElectrolyzer
+  requiredTechnology: IndustrialProcessChemistry
+  result: IndustrialUpgradeModuleElectrolyzer
+  duration: 50
+  ingredients:
+    IndustrialCircuitCore: 2
+    SheetSteel: 8
+    SheetGlass: 4
+    SheetCopper: 2
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialUpgradeModuleWireMill
+  requiredTechnology: IndustrialAutomation
+  result: IndustrialUpgradeModuleWireMill
+  duration: 35
+  ingredients:
+    IndustrialMechanicalCore: 3
+    IndustrialCircuitCore: 1
+    SheetSteel: 6
+    IndustrialIronRod: 4
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialUpgradeModuleCircuitTester
+  requiredTechnology: IndustrialChipPackaging
+  result: IndustrialUpgradeModuleCircuitTester
+  duration: 45
+  ingredients:
+    IndustrialCircuitCore: 3
+    IndustrialPrintedBoard: 2
+    SheetSteel: 4
+    SheetCopper: 2
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialFluidTank
+  result: IndustrialUpgradeModuleFluidTank
+  duration: 35
+  ingredients:
+    SheetSteel: 8
+    SheetGlass: 4
+    IndustrialMechanicalCore: 1
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleOreWasher
+  requireDataDisk: true
+  requiredTechnology: IndustrialOreEnrichment
+  processor: Assembler
+  minimumTier: Basic
+  time: 12
+  inputs:
+    IndustrialMechanicalCore: 1
+    IndustrialCircuitCore: 1
+    SheetSteel: 6
+    SheetGlass: 4
+  outputs:
+    IndustrialUpgradeModuleOreWasher: 1
+
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleOreWasherPerfect
+  requireDataDisk: true
+  requiredTechnology: IndustrialPerfectAutomation
+  processor: Assembler
+  minimumTier: Perfect
+  time: 20
+  inputs:
+    IndustrialUpgradeModuleOreWasher: 1
+    IndustrialPerfectBoard: 2
+    SheetPlasteel: 8
+  outputs:
+    IndustrialUpgradeModuleOreWasherPerfect: 1
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleSeparator
+  requireDataDisk: true
+  requiredTechnology: IndustrialOreEnrichment
+  processor: Assembler
+  minimumTier: Basic
+  time: 13
+  inputs:
+    IndustrialMechanicalCore: 2
+    IndustrialCircuitCore: 1
+    SheetSteel: 8
+    SheetCopper: 1
+  outputs:
+    IndustrialUpgradeModuleSeparator: 1
+
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleSeparatorPerfect
+  requireDataDisk: true
+  requiredTechnology: IndustrialPerfectAutomation
+  processor: Assembler
+  minimumTier: Perfect
+  time: 20
+  inputs:
+    IndustrialUpgradeModuleSeparator: 1
+    IndustrialPerfectBoard: 2
+    SheetPlasteel: 8
+  outputs:
+    IndustrialUpgradeModuleSeparatorPerfect: 1
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleMixer
+  requireDataDisk: true
+  requiredTechnology: IndustrialProcessChemistry
+  processor: Assembler
+  minimumTier: Basic
+  time: 12
+  inputs:
+    IndustrialMechanicalCore: 2
+    IndustrialCircuitCore: 1
+    SheetSteel: 6
+    IndustrialIronRod: 4
+  outputs:
+    IndustrialUpgradeModuleMixer: 1
+
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleMixerPerfect
+  requireDataDisk: true
+  requiredTechnology: IndustrialPerfectAutomation
+  processor: Assembler
+  minimumTier: Perfect
+  time: 20
+  inputs:
+    IndustrialUpgradeModuleMixer: 1
+    IndustrialPerfectBoard: 2
+    SheetPlasteel: 8
+  outputs:
+    IndustrialUpgradeModuleMixerPerfect: 1
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleChemicalReactor
+  requireDataDisk: true
+  requiredTechnology: IndustrialProcessChemistry
+  processor: Assembler
+  minimumTier: Basic
+  time: 17
+  inputs:
+    IndustrialCircuitCore: 2
+    IndustrialHeatConduitAssembly: 1
+    SheetSteel: 8
+    SheetGlass: 4
+  outputs:
+    IndustrialUpgradeModuleChemicalReactor: 1
+
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleChemicalReactorPerfect
+  requireDataDisk: true
+  requiredTechnology: IndustrialPerfectAutomation
+  processor: Assembler
+  minimumTier: Perfect
+  time: 20
+  inputs:
+    IndustrialUpgradeModuleChemicalReactor: 1
+    IndustrialPerfectBoard: 2
+    SheetPlasteel: 8
+  outputs:
+    IndustrialUpgradeModuleChemicalReactorPerfect: 1
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleFilterPress
+  requireDataDisk: true
+  requiredTechnology: IndustrialSiliconPurification
+  processor: Assembler
+  minimumTier: Basic
+  time: 12
+  inputs:
+    IndustrialMechanicalCore: 2
+    IndustrialCircuitCore: 1
+    SheetSteel: 6
+    MaterialCloth: 2
+  outputs:
+    IndustrialUpgradeModuleFilterPress: 1
+
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleFilterPressPerfect
+  requireDataDisk: true
+  requiredTechnology: IndustrialPerfectAutomation
+  processor: Assembler
+  minimumTier: Perfect
+  time: 20
+  inputs:
+    IndustrialUpgradeModuleFilterPress: 1
+    IndustrialPerfectBoard: 2
+    SheetPlasteel: 8
+  outputs:
+    IndustrialUpgradeModuleFilterPressPerfect: 1
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleDryer
+  requireDataDisk: true
+  requiredTechnology: IndustrialSiliconPurification
+  processor: Assembler
+  minimumTier: Basic
+  time: 12
+  inputs:
+    IndustrialMechanicalCore: 1
+    IndustrialCircuitCore: 1
+    IndustrialHeatConduitAssembly: 1
+    SheetSteel: 6
+  outputs:
+    IndustrialUpgradeModuleDryer: 1
+
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleDryerPerfect
+  requireDataDisk: true
+  requiredTechnology: IndustrialPerfectAutomation
+  processor: Assembler
+  minimumTier: Perfect
+  time: 20
+  inputs:
+    IndustrialUpgradeModuleDryer: 1
+    IndustrialPerfectBoard: 2
+    SheetPlasteel: 8
+  outputs:
+    IndustrialUpgradeModuleDryerPerfect: 1
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleDistillation
+  requireDataDisk: true
+  requiredTechnology: IndustrialVacuumProcessing
+  processor: Assembler
+  minimumTier: Basic
+  time: 20
+  inputs:
+    IndustrialCircuitCore: 2
+    IndustrialHeatConduitAssembly: 2
+    SheetSteel: 10
+    SheetGlass: 6
+  outputs:
+    IndustrialUpgradeModuleDistillation: 1
+
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleDistillationPerfect
+  requireDataDisk: true
+  requiredTechnology: IndustrialPerfectAutomation
+  processor: Assembler
+  minimumTier: Perfect
+  time: 20
+  inputs:
+    IndustrialUpgradeModuleDistillation: 1
+    IndustrialPerfectBoard: 2
+    SheetPlasteel: 8
+  outputs:
+    IndustrialUpgradeModuleDistillationPerfect: 1
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleCrystallizer
+  requireDataDisk: true
+  requiredTechnology: IndustrialCrystalGrowth
+  processor: Assembler
+  minimumTier: Basic
+  time: 17
+  inputs:
+    IndustrialCircuitCore: 2
+    IndustrialHeatConduitAssembly: 1
+    SheetSteel: 8
+    SheetGlass: 6
+  outputs:
+    IndustrialUpgradeModuleCrystallizer: 1
+
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleCrystallizerPerfect
+  requireDataDisk: true
+  requiredTechnology: IndustrialPerfectAutomation
+  processor: Assembler
+  minimumTier: Perfect
+  time: 20
+  inputs:
+    IndustrialUpgradeModuleCrystallizer: 1
+    IndustrialPerfectBoard: 2
+    SheetPlasteel: 8
+  outputs:
+    IndustrialUpgradeModuleCrystallizerPerfect: 1
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleBlastFurnace
+  requireDataDisk: true
+  requiredTechnology: IndustrialProcessChemistry
+  processor: Assembler
+  minimumTier: Basic
+  time: 20
+  inputs:
+    IndustrialMechanicalCore: 2
+    IndustrialCircuitCore: 1
+    IndustrialHeatConduitAssembly: 3
+    SheetSteel: 12
+  outputs:
+    IndustrialUpgradeModuleBlastFurnace: 1
+
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleBlastFurnacePerfect
+  requireDataDisk: true
+  requiredTechnology: IndustrialPerfectAutomation
+  processor: Assembler
+  minimumTier: Perfect
+  time: 20
+  inputs:
+    IndustrialUpgradeModuleBlastFurnace: 1
+    IndustrialPerfectBoard: 2
+    SheetPlasteel: 8
+  outputs:
+    IndustrialUpgradeModuleBlastFurnacePerfect: 1
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleVacuumFurnace
+  requireDataDisk: true
+  requiredTechnology: IndustrialVacuumProcessing
+  processor: Assembler
+  minimumTier: Basic
+  time: 20
+  inputs:
+    IndustrialMechanicalCore: 2
+    IndustrialCircuitCore: 2
+    IndustrialHeatConduitAssembly: 2
+    SheetGlass: 4
+  outputs:
+    IndustrialUpgradeModuleVacuumFurnace: 1
+
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleVacuumFurnacePerfect
+  requireDataDisk: true
+  requiredTechnology: IndustrialPerfectAutomation
+  processor: Assembler
+  minimumTier: Perfect
+  time: 20
+  inputs:
+    IndustrialUpgradeModuleVacuumFurnace: 1
+    IndustrialPerfectBoard: 2
+    SheetPlasteel: 8
+  outputs:
+    IndustrialUpgradeModuleVacuumFurnacePerfect: 1
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleCutter
+  requireDataDisk: true
+  requiredTechnology: IndustrialBulkProcessing
+  processor: Assembler
+  minimumTier: Basic
+  time: 13
+  inputs:
+    IndustrialMechanicalCore: 2
+    IndustrialCircuitCore: 1
+    SheetSteel: 8
+    IndustrialIronRod: 4
+  outputs:
+    IndustrialUpgradeModuleCutter: 1
+
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleCutterPerfect
+  requireDataDisk: true
+  requiredTechnology: IndustrialPerfectAutomation
+  processor: Assembler
+  minimumTier: Perfect
+  time: 20
+  inputs:
+    IndustrialUpgradeModuleCutter: 1
+    IndustrialPerfectBoard: 2
+    SheetPlasteel: 8
+  outputs:
+    IndustrialUpgradeModuleCutterPerfect: 1
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleGrinder
+  requireDataDisk: true
+  requiredTechnology: IndustrialBulkProcessing
+  processor: Assembler
+  minimumTier: Basic
+  time: 13
+  inputs:
+    IndustrialMechanicalCore: 3
+    IndustrialCircuitCore: 1
+    SheetSteel: 8
+    IndustrialIronRod: 4
+  outputs:
+    IndustrialUpgradeModuleGrinder: 1
+
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleGrinderPerfect
+  requireDataDisk: true
+  requiredTechnology: IndustrialPerfectAutomation
+  processor: Assembler
+  minimumTier: Perfect
+  time: 20
+  inputs:
+    IndustrialUpgradeModuleGrinder: 1
+    IndustrialPerfectBoard: 2
+    SheetPlasteel: 8
+  outputs:
+    IndustrialUpgradeModuleGrinderPerfect: 1
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleChemicalBath
+  requireDataDisk: true
+  requiredTechnology: IndustrialCleanroomEngineering
+  processor: Assembler
+  minimumTier: Basic
+  time: 12
+  inputs:
+    IndustrialMechanicalCore: 1
+    IndustrialCircuitCore: 1
+    SheetSteel: 6
+    SheetGlass: 6
+  outputs:
+    IndustrialUpgradeModuleChemicalBath: 1
+
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleChemicalBathPerfect
+  requireDataDisk: true
+  requiredTechnology: IndustrialPerfectAutomation
+  processor: Assembler
+  minimumTier: Perfect
+  time: 20
+  inputs:
+    IndustrialUpgradeModuleChemicalBath: 1
+    IndustrialPerfectBoard: 2
+    SheetPlasteel: 8
+  outputs:
+    IndustrialUpgradeModuleChemicalBathPerfect: 1
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleCoater
+  requireDataDisk: true
+  requiredTechnology: IndustrialSurfaceChemistry
+  processor: Assembler
+  minimumTier: Basic
+  time: 15
+  inputs:
+    IndustrialMechanicalCore: 2
+    IndustrialCircuitCore: 2
+    SheetSteel: 6
+    SheetGlass: 4
+  outputs:
+    IndustrialUpgradeModuleCoater: 1
+
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleCoaterPerfect
+  requireDataDisk: true
+  requiredTechnology: IndustrialPerfectAutomation
+  processor: Assembler
+  minimumTier: Perfect
+  time: 20
+  inputs:
+    IndustrialUpgradeModuleCoater: 1
+    IndustrialPerfectBoard: 2
+    SheetPlasteel: 8
+  outputs:
+    IndustrialUpgradeModuleCoaterPerfect: 1
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleLaserEngraver
+  requireDataDisk: true
+  requiredTechnology: IndustrialPhotolithography
+  processor: Assembler
+  minimumTier: Basic
+  time: 22
+  inputs:
+    IndustrialMechanicalCore: 1
+    IndustrialCircuitCore: 3
+    SheetGlass: 6
+    IngotGold: 1
+  outputs:
+    IndustrialUpgradeModuleLaserEngraver: 1
+
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleLaserEngraverPerfect
+  requireDataDisk: true
+  requiredTechnology: IndustrialPerfectAutomation
+  processor: Assembler
+  minimumTier: Perfect
+  time: 20
+  inputs:
+    IndustrialUpgradeModuleLaserEngraver: 1
+    IndustrialPerfectBoard: 2
+    SheetPlasteel: 8
+  outputs:
+    IndustrialUpgradeModuleLaserEngraverPerfect: 1
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleElectrolyzer
+  requireDataDisk: true
+  requiredTechnology: IndustrialProcessChemistry
+  processor: Assembler
+  minimumTier: Basic
+  time: 17
+  inputs:
+    IndustrialCircuitCore: 2
+    SheetSteel: 8
+    SheetGlass: 4
+    SheetCopper: 2
+  outputs:
+    IndustrialUpgradeModuleElectrolyzer: 1
+
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleElectrolyzerPerfect
+  requireDataDisk: true
+  requiredTechnology: IndustrialPerfectAutomation
+  processor: Assembler
+  minimumTier: Perfect
+  time: 20
+  inputs:
+    IndustrialUpgradeModuleElectrolyzer: 1
+    IndustrialPerfectBoard: 2
+    SheetPlasteel: 8
+  outputs:
+    IndustrialUpgradeModuleElectrolyzerPerfect: 1
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleWireMill
+  requireDataDisk: true
+  requiredTechnology: IndustrialAutomation
+  processor: Assembler
+  minimumTier: Basic
+  time: 12
+  inputs:
+    IndustrialMechanicalCore: 3
+    IndustrialCircuitCore: 1
+    SheetSteel: 6
+    IndustrialIronRod: 4
+  outputs:
+    IndustrialUpgradeModuleWireMill: 1
+
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleWireMillPerfect
+  requireDataDisk: true
+  requiredTechnology: IndustrialPerfectAutomation
+  processor: Assembler
+  minimumTier: Perfect
+  time: 20
+  inputs:
+    IndustrialUpgradeModuleWireMill: 1
+    IndustrialPerfectBoard: 2
+    SheetPlasteel: 8
+  outputs:
+    IndustrialUpgradeModuleWireMillPerfect: 1
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleCircuitTester
+  requireDataDisk: true
+  requiredTechnology: IndustrialChipPackaging
+  processor: Assembler
+  minimumTier: Basic
+  time: 15
+  inputs:
+    IndustrialCircuitCore: 3
+    IndustrialPrintedBoard: 2
+    SheetSteel: 4
+    SheetCopper: 2
+  outputs:
+    IndustrialUpgradeModuleCircuitTester: 1
+
+- type: industrialRecipe
+  id: AutoFabricateIndustrialUpgradeModuleCircuitTesterPerfect
+  requireDataDisk: true
+  requiredTechnology: IndustrialPerfectAutomation
+  processor: Assembler
+  minimumTier: Perfect
+  time: 20
+  inputs:
+    IndustrialUpgradeModuleCircuitTester: 1
+    IndustrialPerfectBoard: 2
+    SheetPlasteel: 8
+  outputs:
+    IndustrialUpgradeModuleCircuitTesterPerfect: 1
+- type: industrialRecipe
+  id: AutoFabricateIndustrialFluidTank
+  requireDataDisk: true
+  requiredTechnology: IndustrialAutomation
+  processor: Assembler
+  time: 10
+  inputs:
+    SheetSteel: 8
+    SheetGlass: 4
+    IndustrialMechanicalCore: 1
+  outputs:
+    IndustrialUpgradeModuleFluidTank: 1

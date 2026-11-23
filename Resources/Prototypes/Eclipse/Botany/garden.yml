@@ -1,0 +1,430 @@
+- type: seed
+  id: gardenMint
+  name: seeds-garden-mint-name
+  noun: seeds-noun-seeds
+  displayName: seeds-garden-mint-display-name
+  plantRsi: Objects/Specific/Hydroponics/tea_plant.rsi
+  packetPrototype: GardenMintSeeds
+  productPrototypes:
+  - FoodGardenMint
+  harvestRepeat: Repeat
+  lifespan: 40
+  maturation: 8
+  production: 5
+  yield: 3
+  potency: 15
+  waterConsumption: 0.5
+  nutrientConsumption: 0.5
+  chemicals:
+    GardenMintExtract:
+      Min: 2
+      Max: 12
+      PotencyDivisor: 5
+    Nutriment:
+      Min: 1
+      Max: 3
+      PotencyDivisor: 30
+  growthStages: 5
+- type: entity
+  parent: SeedBase
+  id: GardenMintSeeds
+  name: garden-mint seeds
+  components:
+  - type: Seed
+    seedId: gardenMint
+  - type: Sprite
+    sprite: Objects/Specific/Hydroponics/tea_plant.rsi
+- type: seed
+  id: energyFlower
+  name: seeds-energy-flower-name
+  noun: seeds-noun-seeds
+  displayName: seeds-energy-flower-display-name
+  plantRsi: Objects/Specific/Hydroponics/lemoon.rsi
+  packetPrototype: EnergyFlowerSeeds
+  productPrototypes:
+  - FoodEnergyFlower
+  harvestRepeat: Repeat
+  lifespan: 40
+  maturation: 8
+  production: 5
+  yield: 2
+  potency: 30
+  waterConsumption: 0.5
+  nutrientConsumption: 0.5
+  chemicals:
+    FlowerNectar:
+      Min: 2
+      Max: 12
+      PotencyDivisor: 5
+    Nutriment:
+      Min: 1
+      Max: 3
+      PotencyDivisor: 30
+  powerProduction: 150
+  growthStages: 6
+- type: entity
+  parent: SeedBase
+  id: EnergyFlowerSeeds
+  name: energy-flower seeds
+  components:
+  - type: Seed
+    seedId: energyFlower
+  - type: Sprite
+    sprite: Objects/Specific/Hydroponics/lemoon.rsi
+- type: seed
+  id: bombomato
+  name: seeds-bombomato-name
+  noun: seeds-noun-seeds
+  displayName: seeds-bombomato-display-name
+  plantRsi: Objects/Specific/Hydroponics/tomato.rsi
+  packetPrototype: BombomatoSeeds
+  productPrototypes:
+  - FoodBombomato
+  harvestRepeat: NoRepeat
+  lifespan: 40
+  maturation: 12
+  production: 5
+  yield: 1
+  potency: 10
+  waterConsumption: 0.5
+  nutrientConsumption: 0.5
+  chemicals:
+    Nutriment:
+      Min: 1
+      Max: 3
+      PotencyDivisor: 20
+  plantLogImpact: High
+  harvestLogImpact: High
+  growthStages: 6
+- type: entity
+  parent: SeedBase
+  id: BombomatoSeeds
+  name: bombomato seeds
+  components:
+  - type: Seed
+    seedId: bombomato
+  - type: Sprite
+    sprite: Objects/Specific/Hydroponics/tomato.rsi
+- type: seed
+  id: demonicWatermelon
+  name: seeds-demonic-watermelon-name
+  noun: seeds-noun-seeds
+  displayName: seeds-demonic-watermelon-display-name
+  plantRsi: Objects/Specific/Hydroponics/watermelon.rsi
+  packetPrototype: DemonicWatermelonSeeds
+  productPrototypes:
+  - FoodDemonicWatermelon
+  harvestRepeat: Repeat
+  lifespan: 40
+  maturation: 8
+  production: 5
+  yield: 1
+  potency: 20
+  waterConsumption: 0.5
+  nutrientConsumption: 0.5
+  chemicals:
+    InfernalJuice:
+      Min: 3
+      Max: 15
+      PotencyDivisor: 4
+    CapsaicinOil:
+      Min: 1
+      Max: 3
+      PotencyDivisor: 20
+    Nutriment:
+      Min: 1
+      Max: 6
+      PotencyDivisor: 10
+  growthStages: 6
+- type: entity
+  parent: SeedBase
+  id: DemonicWatermelonSeeds
+  name: demonic-watermelon seeds
+  components:
+  - type: Seed
+    seedId: demonicWatermelon
+  - type: Sprite
+    sprite: Objects/Specific/Hydroponics/watermelon.rsi
+- type: seed
+  id: nectarBerry
+  name: seeds-nectar-berry-name
+  noun: seeds-noun-seeds
+  displayName: seeds-nectar-berry-display-name
+  plantRsi: Objects/Specific/Hydroponics/berries.rsi
+  packetPrototype: NectarBerrySeeds
+  productPrototypes:
+  - FoodNectarBerry
+  harvestRepeat: Repeat
+  lifespan: 40
+  maturation: 8
+  production: 5
+  yield: 3
+  potency: 20
+  waterConsumption: 0.5
+  nutrientConsumption: 0.5
+  chemicals:
+    FloralNectar:
+      Min: 3
+      Max: 15
+      PotencyDivisor: 4
+    Nutriment:
+      Min: 1
+      Max: 4
+      PotencyDivisor: 20
+  growthStages: 6
+- type: entity
+  parent: SeedBase
+  id: NectarBerrySeeds
+  name: nectar-berry seeds
+  components:
+  - type: Seed
+    seedId: nectarBerry
+  - type: Sprite
+    sprite: Objects/Specific/Hydroponics/berries.rsi
+- type: plantHybrid
+  id: GardenEnergyFlower
+  parentA: poppy
+  parentB: galaxythistle
+  result: energyFlower
+  chance: 0.2
+- type: plantHybrid
+  id: GardenBombomato
+  parentA: tomato
+  parentB: chili
+  result: bombomato
+  chance: 0.005
+- type: plantHybrid
+  id: GardenDemonicMelon
+  parentA: watermelon
+  parentB: bloodTomato
+  result: demonicWatermelon
+  chance: 0.12
+- type: plantHybrid
+  id: GardenBloodTomato
+  parentA: tomato
+  parentB: poppy
+  result: bloodTomato
+  chance: 0.3
+- type: plantHybrid
+  id: GardenHolyMelon
+  parentA: watermelon
+  parentB: ambrosiaVulgaris
+  result: holymelon
+  chance: 0.2
+- type: plantHybrid
+  id: GardenMoonLemon
+  parentA: lemon
+  parentB: galaxythistle
+  result: lemoon
+  chance: 0.2
+- type: plantHybrid
+  id: GardenColdChili
+  parentA: chili
+  parentB: aloe
+  result: chilly
+  chance: 0.25
+- type: plantHybrid
+  id: GardenNectarBerry
+  parentA: berries
+  parentB: gardenMint
+  result: nectarBerry
+  chance: 0.25
+- type: entity
+  parent: FoodProduceBase
+  id: FoodGardenMint
+  name: garden-mint
+  description: Fresh experimental produce, grown by a botanist.
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Hydroponics/tea_plant.rsi
+    state: produce
+    color: '#95E7AB'
+  - type: Produce
+    seedId: gardenMint
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 40
+        reagents:
+        - ReagentId: GardenMintExtract
+          Quantity: 2
+        - ReagentId: Nutriment
+          Quantity: 1
+  - type: Extractable
+    grindableSolutionName: food
+  - type: FlavorProfile
+    flavors:
+    - minty
+  - type: Tag
+    tags:
+    - CocktailGarnish
+- type: entity
+  parent: FoodProduceBase
+  id: FoodEnergyFlower
+  name: energy-flower
+  description: A bioelectric flower. While rooted and mature it powers small machines within two and a half tiles.
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Hydroponics/lemoon.rsi
+    state: produce
+    color: '#FFF08A'
+  - type: Produce
+    seedId: energyFlower
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 40
+        reagents:
+        - ReagentId: FlowerNectar
+          Quantity: 2
+        - ReagentId: Nutriment
+          Quantity: 1
+  - type: Extractable
+    grindableSolutionName: food
+  - type: PointLight
+    color: '#FAEA86'
+    radius: 1.5
+    energy: 1
+- type: entity
+  parent: ProduceBase
+  id: FoodBombomato
+  name: bombomato
+  description: A rare explosive tomato. Activate in hand to start its three-second fuse.
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Hydroponics/tomato.rsi
+    state: produce
+    color: '#CC612D'
+  - type: Produce
+    seedId: bombomato
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 40
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 1
+  - type: Extractable
+    grindableSolutionName: food
+  - type: TriggerOnUse
+  - type: TimerTrigger
+    delay: 3
+    beepSound:
+      path: /Audio/Effects/beep1.ogg
+    initialBeepDelay: 0
+    beepInterval: 1
+    popup: garden-bombomato-armed
+  - type: ExplodeOnTrigger
+    keysIn:
+    - timer
+  - type: Explosive
+    explosionType: Default
+    totalIntensity: 30
+    maxIntensity: 5
+    intensitySlope: 4
+    canCreateVacuum: false
+- type: entity
+  parent: FoodWatermelon
+  id: FoodDemonicWatermelon
+  name: demonic-watermelon
+  description: Fresh experimental produce, grown by a botanist.
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Hydroponics/watermelon.rsi
+    state: produce
+    color: '#B75C97'
+  - type: Produce
+    seedId: demonicWatermelon
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 40
+        reagents:
+        - ReagentId: InfernalJuice
+          Quantity: 3
+        - ReagentId: CapsaicinOil
+          Quantity: 1
+        - ReagentId: Nutriment
+          Quantity: 1
+  - type: SliceableFood
+    count: 5
+    slice: FoodDemonicWatermelonSlice
+  - type: Extractable
+    grindableSolutionName: food
+    juiceSolution:
+      reagents:
+      - ReagentId: InfernalJuice
+        Quantity: 20
+  - type: PointLight
+    color: '#C72952'
+    radius: 1.5
+    energy: 0.7
+- type: entity
+  parent: FoodProduceBase
+  id: FoodNectarBerry
+  name: nectar-berry
+  description: Fresh experimental produce, grown by a botanist.
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Hydroponics/berries.rsi
+    state: produce
+    color: '#F5CD74'
+  - type: Produce
+    seedId: nectarBerry
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 40
+        reagents:
+        - ReagentId: FloralNectar
+          Quantity: 3
+        - ReagentId: Nutriment
+          Quantity: 1
+  - type: Extractable
+    grindableSolutionName: food
+  - type: FlavorProfile
+    flavors:
+    - sweet
+    - berry
+  - type: Tag
+    tags:
+    - Fruit
+- type: entity
+  parent: FoodWatermelonSlice
+  id: FoodDemonicWatermelonSlice
+  name: demonic watermelon slice
+  components:
+  - type: Sprite
+    color: '#B75C97'
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 8
+        reagents:
+        - ReagentId: InfernalJuice
+          Quantity: 3
+        - ReagentId: CapsaicinOil
+          Quantity: 1
+        - ReagentId: Nutriment
+          Quantity: 1
+  - type: Extractable
+    grindableSolutionName: food
+    juiceSolution:
+      reagents:
+      - ReagentId: InfernalJuice
+        Quantity: 4
+- type: Tag
+  id: CocktailGarnish
+- type: entity
+  parent: BaseFlatpack
+  id: GardenSoilBag
+  name: garden soil bag
+  description: Unpack on a free tile to make a ready-to-plant soil bed.
+  components:
+  - type: Flatpack
+    entity: hydroponicsSoil
+    qualityNeeded: Anchoring
+  - type: StaticPrice
+    price: 15
+  - type: Item
+    size: Normal

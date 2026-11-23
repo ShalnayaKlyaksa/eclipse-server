@@ -31,6 +31,45 @@
 - type: vendingMachineInventory
   id: NanoMedPlusInventory
   startingInventory:
+    AdvancedMedicineVialInaprovaline: 2
+    AdvancedMedicineVialTranexamicAcid: 2
+    AdvancedMedicineVialBicaridine: 2
+    AdvancedMedicineVialEpinephrine: 2
+    AdvancedMedicineVialClinicalOpioid: 2
+    AdvancedMedicineVialClinicalNaloxone: 2
+    AdvancedEmptyBloodBag: 8
+    EclipsePackedCellsONeg: 4
+    AdvancedBloodTestKit: 8
+    AdvancedClinicalBloodAnalyzer: 2
+    AdvancedPortableXRay: 2
+    AdvancedElectrocardiograph: 2
+    AdvancedInstrumentSterilizationKit: 16
+    AdvancedSterileScalpel: 2
+    AdvancedSterileHemostat: 2
+    AdvancedMedicalImager: 2
+    AdvancedCultureTestKit: 8
+    AdvancedThoracicDrainKit: 4
+    AdvancedSourceControlKit: 4
+    AdvancedOrganRepairKit: 4
+    ChemistryBottleClinicalAntibiotic: 2
+    ChemistryBottleClinicalAntifungal: 1
+    ChemistryBottleClinicalAntiviral: 1
+    ChemistryBottleClinicalOpioid: 2
+    ChemistryBottleClinicalSedative: 1
+    ChemistryBottleClinicalBronchodilator: 2
+    ChemistryBottleClinicalAntihistamine: 2
+    ChemistryBottleClinicalAnticonvulsant: 1
+    ChemistryBottleClinicalAntiInflammatory: 2
+    ChemistryBottleClinicalInsulin: 1
+    ChemistryBottleClinicalGlucose: 2
+    ChemistryBottleClinicalNaloxone: 2
+    AdvancedWoundIrrigationKit: 8
+    AdvancedRegionalAnesthetic: 6
+    AdvancedBoneFixationKit: 4
+    AdvancedSurgicalClosureKit: 6
+    AdvancedTraumaShears: 2
+    Scalpel: 2
+    Hemostat: 2
     # Medical Essential Gear
     ClothingBeltMedicalFilled: 2
     # Shared Essential

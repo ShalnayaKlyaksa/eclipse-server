@@ -1,0 +1,21 @@
+- type: entity
+  parent: BasePDACartridge
+  id: ResearchMailCartridge
+  name: station mail cartridge
+  components:
+  - type: Sprite
+    state: cart-y
+  - type: UIFragment
+    ui: !type:ResearchMailUi
+  - type: Cartridge
+    programName: research-mail-program
+    icon:
+      sprite: Objects/Storage/boxes.rsi
+      state: envelope
+  - type: ResearchMailCartridge
+
+- type: entity
+  parent: Paper
+  id: ResearchCredentialsReport
+  name: employee account register
+  description: A confidential copy issued to the research director.

@@ -214657,7 +214657,7 @@ entities:
 
         [color=#57a343]░██░████░░░██░░░░[/color]      [head=3]Бланк документа[/head]
 
-        [color=#57a343]░░█░██░██░░██░█░░[/color]               [head=3]NanoTrasen[/head]
+        [color=#57a343]░░█░██░██░░██░█░░[/color]               [head=3]VISH[/head]
 
         [color=#57a343]░░░░██░░██░██░██░[/color] [bold]     Station Payback ЭИ-КОМ[/bold]
 
@@ -214794,7 +214794,7 @@ entities:
       content: >-
         Первый, кто получит травму на экспедиции, удостоится увеличения зарплаты в 0,75 раз.
 
-        [bold]Слава НТ![/bold]
+        [bold]Слава ВИШ![/bold]
   - uid: 33715
     components:
     - type: Transform
@@ -214817,7 +214817,7 @@ entities:
 
         [color=#57a343]░██░████░░░██░░░░[/color]      [head=3]Бланк документа[/head]
 
-        [color=#57a343]░░█░██░██░░██░█░░[/color]               [head=3]NanoTrasen[/head]
+        [color=#57a343]░░█░██░██░░██░█░░[/color]               [head=3]VISH[/head]
 
         [color=#57a343]░░░░██░░██░██░██░[/color] [bold]     Station Mayhen ЭИ-КОМ[/bold]
 
@@ -214901,7 +214901,7 @@ entities:
 
         [color=#57a343]░██░████░░░██░░░░[/color]      [head=3]Бланк документа[/head]
 
-        [color=#57a343]░░█░██░██░░██░█░░[/color]               [head=3]NanoTrasen[/head]
+        [color=#57a343]░░█░██░██░░██░█░░[/color]               [head=3]VISH[/head]
 
         [color=#57a343]░░░░██░░██░██░██░[/color] [bold]      Station Lumber ЭИ-КОМ[/bold]
 
@@ -214987,7 +214987,7 @@ entities:
 
         [color=#57a343]░██░████░░░██░░░░[/color]      [head=3]Бланк документа[/head]
 
-        [color=#57a343]░░█░██░██░░██░█░░[/color]               [head=3]NanoTrasen[/head]
+        [color=#57a343]░░█░██░██░░██░█░░[/color]               [head=3]VISH[/head]
 
         [color=#57a343]░░░░██░░██░██░██░[/color] [bold]           Mayhen ЭИ-НИО[/bold]
 
@@ -215043,7 +215043,7 @@ entities:
 
         [color=#57a343]░██░████░░░██░░░░[/color]      [head=3]Бланк документа[/head]
 
-        [color=#57a343]░░█░██░██░░██░█░░[/color]               [head=3]NanoTrasen[/head]
+        [color=#57a343]░░█░██░██░░██░█░░[/color]               [head=3]VISH[/head]
 
         [color=#57a343]░░░░██░░██░██░██░[/color] [bold]           Mayhen ЭИ-СНБ[/bold]
 
@@ -215102,7 +215102,7 @@ entities:
 
         [color=#57a343]░██░████░░░██░░░░[/color]      [head=3]Бланк документа[/head]
 
-        [color=#57a343]░░█░██░██░░██░█░░[/color]               [head=3]NanoTrasen[/head]
+        [color=#57a343]░░█░██░██░░██░█░░[/color]               [head=3]VISH[/head]
 
         [color=#57a343]░░░░██░░██░██░██░[/color] [bold]           Lamber ЭИ-СНБ[/bold]
 
@@ -215159,7 +215159,7 @@ entities:
 
         [color=#57a343]░██░████░░░██░░░░[/color]      [head=3]Бланк документа[/head]
 
-        [color=#57a343]░░█░██░██░░██░█░░[/color]               [head=3]NanoTrasen[/head]
+        [color=#57a343]░░█░██░██░░██░█░░[/color]               [head=3]VISH[/head]
 
         [color=#57a343]░░░░██░░██░██░██░[/color] [bold]         Station Payback ЭИ-СБ[/bold]
 
@@ -225124,7 +225124,7 @@ entities:
 
         ⠀[color=#1b487e]░██░████░░░██░░░░[/color]      [head=3]Бланк документа[/head]
 
-        ⠀[color=#1b487e]░░█░██░██░░██░█░░[/color]               [head=3]NanoTrasen[/head]
+        ⠀[color=#1b487e]░░█░██░██░░██░█░░[/color]               [head=3]VISH[/head]
 
         ⠀[color=#1b487e]░░░░██░░██░██░██░[/color] [bold]                    Payback СБ[/bold]
 

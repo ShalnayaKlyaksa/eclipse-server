@@ -1,9 +1,9 @@
 id-card-access-level-ashlegion = Легион пепла
-id-card-access-level-nanotrasen-navy-captain = Капитан ВКФ NT
-id-card-access-level-nanotrasen-navy-officer = Офицер ВКФ NT
-id-card-access-level-nanotrasen-navy-wo-engineering = УО инженер ВКФ NT
-id-card-access-level-nanotrasen-navy-wo-medical = УО врач ВКФ NT
-id-card-access-level-nanotrasen-navy = ВКФ NT
-id-card-access-level-nanotrasen-navy-engineering = Инженерный ВКФ NT
-id-card-access-level-nanotrasen-navy-medical = Медициский ВКФ NT
-id-card-access-level-nanotrasen-navy-armory = Оружейный ВКФ NT
+id-card-access-level-nanotrasen-navy-captain = Капитан ВКФ ВИШ
+id-card-access-level-nanotrasen-navy-officer = Офицер ВКФ ВИШ
+id-card-access-level-nanotrasen-navy-wo-engineering = УО инженер ВКФ ВИШ
+id-card-access-level-nanotrasen-navy-wo-medical = УО врач ВКФ ВИШ
+id-card-access-level-nanotrasen-navy = ВКФ ВИШ
+id-card-access-level-nanotrasen-navy-engineering = Инженерный ВКФ ВИШ
+id-card-access-level-nanotrasen-navy-medical = Медициский ВКФ ВИШ
+id-card-access-level-nanotrasen-navy-armory = Оружейный ВКФ ВИШ

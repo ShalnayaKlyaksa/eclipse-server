@@ -22,18 +22,9 @@
         - MachineMask
         layer:
         - MachineLayer
-  - type: Sprite
-    # TODO: Replace with dedicated _Eclipse/Structures/Machines/industrial_*.rsi sprites.
-    sprite: Structures/Machines/ore_processor.rsi
-    layers:
-    - state: icon
-      map: ["enum.IndustrialProcessorVisualLayers.Base"]
-    - state: unlit
-      shader: unshaded
-      map: ["enum.PowerDeviceVisualLayers.Powered"]
-  - type: Icon
-    sprite: Structures/Machines/ore_processor.rsi
-    state: icon
+  - type: Pullable
+  - type: RoomSanitation
+  - type: IndustrialMachineKnowledge
   - type: Appearance
   - type: GenericVisualizer
     visuals:
@@ -44,10 +35,8 @@
           Blocked: { state: icon }
           Unpowered: { state: icon }
           Unheated: { state: icon }
-      enum.PowerDeviceVisuals.Powered:
-        enum.PowerDeviceVisualLayers.Powered:
-          True: { visible: true }
-          False: { visible: false }
+          Paused: { state: paused }
+          Unresearched: { state: icon }
   - type: IndustrialProcessor
     inputContainerId: industrial_input
     outputContainerId: industrial_output
@@ -63,6 +52,7 @@
     - industrial_output
   - type: GuideHelp
     guides:
+    - EclipseIndustrial
     - Salvage
   - type: InteractionOutline
   - type: ActivatableUI
@@ -73,6 +63,48 @@
       enum.IndustrialProcessorUiKey.Key:
         type: IndustrialProcessorBoundUserInterface
 
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_crusher.rsi
+    layers:
+    - state: icon
+      map: ["enum.IndustrialProcessorVisualLayers.Base"]
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_crusher.rsi
+    state: icon
+
+- type: entity
+  abstract: true
+  id: IndustrialSmelterVisuals
+  components:
+  - type: GenericVisualizer
+    visuals:
+      enum.IndustrialProcessorVisuals.State:
+        enum.IndustrialProcessorVisualLayers.Base:
+          Idle: { state: paused }
+          Working: { state: power_on }
+          Blocked: { state: paused }
+          Unpowered: { state: paused }
+          Unheated: { state: paused }
+          Paused: { state: paused }
+          Unresearched: { state: paused }
+
+- type: entity
+  abstract: true
+  id: IndustrialCrusherVisuals
+  components:
+  - type: IndustrialCrusherVisuals
+  - type: GenericVisualizer
+    visuals:
+      enum.IndustrialProcessorVisuals.State:
+        enum.IndustrialProcessorVisualLayers.Base:
+          Idle: { state: paused }
+          Working: { state: power_on }
+          Blocked: { state: paused }
+          Unpowered: { state: paused }
+          Unheated: { state: paused }
+          Paused: { state: paused }
+          Unresearched: { state: paused }
+
 - type: entity
   abstract: true
   parent: BaseIndustrialProcessor
@@ -80,18 +112,6 @@
   components:
   - type: IndustrialProcessor
     tier: Basic
-  - type: Sprite
-    # TODO: Replace with dedicated basic-tier industrial machine RSI.
-    sprite: Structures/Machines/ore_processor.rsi
-    layers:
-    - state: icon
-      map: ["enum.IndustrialProcessorVisualLayers.Base"]
-    - state: unlit
-      shader: unshaded
-      map: ["enum.PowerDeviceVisualLayers.Powered"]
-  - type: Icon
-    sprite: Structures/Machines/ore_processor.rsi
-    state: icon
 
 - type: entity
   abstract: true
@@ -100,18 +120,6 @@
   components:
   - type: IndustrialProcessor
     tier: Industrial
-  - type: Sprite
-    # TODO: Replace with dedicated industrial-tier machine RSI.
-    sprite: Structures/Machines/autolathe.rsi
-    layers:
-    - state: icon
-      map: ["enum.IndustrialProcessorVisualLayers.Base"]
-    - state: unlit
-      shader: unshaded
-      map: ["enum.PowerDeviceVisualLayers.Powered"]
-  - type: Icon
-    sprite: Structures/Machines/autolathe.rsi
-    state: icon
 
 - type: entity
   abstract: true
@@ -120,18 +128,6 @@
   components:
   - type: IndustrialProcessor
     tier: Perfect
-  - type: Sprite
-    # TODO: Replace with dedicated perfect-tier machine RSI.
-    sprite: Structures/Machines/ore_processor_industrial.rsi
-    layers:
-    - state: icon
-      map: ["enum.IndustrialProcessorVisualLayers.Base"]
-    - state: unlit
-      shader: unshaded
-      map: ["enum.PowerDeviceVisualLayers.Powered"]
-  - type: Icon
-    sprite: Structures/Machines/ore_processor_industrial.rsi
-    state: icon
 
 - type: entity
   abstract: true
@@ -150,7 +146,7 @@
 # Basic tier machines
 
 - type: entity
-  parent: BasicTierIndustrialProcessor
+  parent: [IndustrialCrusherVisuals, BasicTierIndustrialProcessor]
   id: BasicIndustrialCrusher
   name: basic industrial crusher
   description: Grinds raw ore into crushed ore, or sieved ore into dust.
@@ -159,7 +155,15 @@
     processorType: Crusher
   - type: ApcPowerReceiver
     powerLoad: 2000
-  - type: ActivatableUIRequiresPower
+
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_crusher.rsi
+    layers:
+    - state: paused
+      map: ["enum.IndustrialProcessorVisualLayers.Base"]
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_crusher.rsi
+    state: paused
 
 - type: entity
   parent: BaseThermalCentrifugeProcessor
@@ -170,8 +174,17 @@
   - type: IndustrialProcessor
     tier: Basic
 
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_centrifuge.rsi
+    layers:
+    - state: icon
+      map: ["enum.IndustrialProcessorVisualLayers.Base"]
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_centrifuge.rsi
+    state: icon
+
 - type: entity
-  parent: BasicTierIndustrialProcessor
+  parent: [IndustrialSmelterVisuals, BasicTierIndustrialProcessor]
   id: BasicIndustrialSmelter
   name: basic industrial smelter
   description: Smelts metal dust into ingots and sheets.
@@ -180,12 +193,20 @@
     processorType: Smelter
   - type: ApcPowerReceiver
     powerLoad: 5000
-  - type: ActivatableUIRequiresPower
 
 # Industrial tier machines
 
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_smelter.rsi
+    layers:
+    - state: paused
+      map: ["enum.IndustrialProcessorVisualLayers.Base"]
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_smelter.rsi
+    state: paused
+
 - type: entity
-  parent: IndustrialTierIndustrialProcessor
+  parent: [IndustrialCrusherVisuals, IndustrialTierIndustrialProcessor]
   id: IndustrialCrusher
   name: industrial crusher
   description: Grinds raw ore into crushed ore, or sieved ore into dust.
@@ -194,7 +215,15 @@
     processorType: Crusher
   - type: ApcPowerReceiver
     powerLoad: 2000
-  - type: ActivatableUIRequiresPower
+
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_crusher.rsi
+    layers:
+    - state: paused
+      map: ["enum.IndustrialProcessorVisualLayers.Base"]
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_crusher.rsi
+    state: paused
 
 - type: entity
   parent: BaseThermalCentrifugeProcessor
@@ -205,19 +234,16 @@
   - type: IndustrialProcessor
     tier: Industrial
   - type: Sprite
-    sprite: Structures/Machines/autolathe.rsi
+    sprite: _Eclipse/Structures/Machines/industrial_centrifuge.rsi
     layers:
     - state: icon
       map: ["enum.IndustrialProcessorVisualLayers.Base"]
-    - state: unlit
-      shader: unshaded
-      map: ["enum.PowerDeviceVisualLayers.Powered"]
   - type: Icon
-    sprite: Structures/Machines/autolathe.rsi
+    sprite: _Eclipse/Structures/Machines/industrial_centrifuge.rsi
     state: icon
 
 - type: entity
-  parent: IndustrialTierIndustrialProcessor
+  parent: [IndustrialSmelterVisuals, IndustrialTierIndustrialProcessor]
   id: IndustrialSmelter
   name: industrial smelter
   description: Smelts metal dust into ingots and sheets.
@@ -226,12 +252,20 @@
     processorType: Smelter
   - type: ApcPowerReceiver
     powerLoad: 5000
-  - type: ActivatableUIRequiresPower
 
 # Perfect tier machines
 
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_smelter.rsi
+    layers:
+    - state: paused
+      map: ["enum.IndustrialProcessorVisualLayers.Base"]
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_smelter.rsi
+    state: paused
+
 - type: entity
-  parent: PerfectTierIndustrialProcessor
+  parent: [IndustrialCrusherVisuals, PerfectTierIndustrialProcessor]
   id: PerfectIndustrialCrusher
   name: perfect industrial crusher
   description: Grinds raw ore into crushed ore, or sieved ore into dust.
@@ -240,7 +274,15 @@
     processorType: Crusher
   - type: ApcPowerReceiver
     powerLoad: 2000
-  - type: ActivatableUIRequiresPower
+
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_crusher.rsi
+    layers:
+    - state: paused
+      map: ["enum.IndustrialProcessorVisualLayers.Base"]
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_crusher.rsi
+    state: paused
 
 - type: entity
   parent: BaseThermalCentrifugeProcessor
@@ -251,19 +293,16 @@
   - type: IndustrialProcessor
     tier: Perfect
   - type: Sprite
-    sprite: Structures/Machines/ore_processor_industrial.rsi
+    sprite: _Eclipse/Structures/Machines/industrial_centrifuge.rsi
     layers:
     - state: icon
       map: ["enum.IndustrialProcessorVisualLayers.Base"]
-    - state: unlit
-      shader: unshaded
-      map: ["enum.PowerDeviceVisualLayers.Powered"]
   - type: Icon
-    sprite: Structures/Machines/ore_processor_industrial.rsi
+    sprite: _Eclipse/Structures/Machines/industrial_centrifuge.rsi
     state: icon
 
 - type: entity
-  parent: PerfectTierIndustrialProcessor
+  parent: [IndustrialSmelterVisuals, PerfectTierIndustrialProcessor]
   id: PerfectIndustrialSmelter
   name: perfect industrial smelter
   description: Smelts metal dust into ingots and sheets.
@@ -272,4 +311,116 @@
     processorType: Smelter
   - type: ApcPowerReceiver
     powerLoad: 5000
-  - type: ActivatableUIRequiresPower
+
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_smelter.rsi
+    layers:
+    - state: paused
+      map: ["enum.IndustrialProcessorVisualLayers.Base"]
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_smelter.rsi
+    state: paused
+
+- type: entity
+  parent: BasicTierIndustrialProcessor
+  id: BasicIndustrialAssembler
+  name: basic industrial assembler
+  description: Automatically assembles physical components into finished products. Select a recipe to dedicate a production line.
+  components:
+  - type: IndustrialProcessor
+    processorType: Assembler
+  - type: ApcPowerReceiver
+    powerLoad: 3000
+  - type: TechnologyDatabase
+  - type: ResearchClient
+  - type: UserInterface
+    interfaces:
+      enum.IndustrialProcessorUiKey.Key:
+        type: IndustrialProcessorBoundUserInterface
+      enum.ResearchClientUiKey.Key:
+        type: ResearchClientBoundUserInterface
+
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_assembler.rsi
+    layers:
+    - state: icon
+      map: ["enum.IndustrialProcessorVisualLayers.Base"]
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_assembler.rsi
+    state: icon
+
+- type: entity
+  parent: IndustrialTierIndustrialProcessor
+  id: IndustrialAssembler
+  name: industrial assembler
+  description: Automatically assembles physical components into finished products. Select a recipe to dedicate a production line.
+  components:
+  - type: IndustrialProcessor
+    processorType: Assembler
+  - type: ApcPowerReceiver
+    powerLoad: 3000
+  - type: TechnologyDatabase
+  - type: ResearchClient
+  - type: UserInterface
+    interfaces:
+      enum.IndustrialProcessorUiKey.Key:
+        type: IndustrialProcessorBoundUserInterface
+      enum.ResearchClientUiKey.Key:
+        type: ResearchClientBoundUserInterface
+
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_assembler.rsi
+    layers:
+    - state: icon
+      map: ["enum.IndustrialProcessorVisualLayers.Base"]
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_assembler.rsi
+    state: icon
+
+- type: entity
+  parent: PerfectTierIndustrialProcessor
+  id: PerfectIndustrialAssembler
+  name: perfect industrial assembler
+  description: Automatically assembles physical components into finished products. Select a recipe to dedicate a production line.
+  components:
+  - type: IndustrialProcessor
+    processorType: Assembler
+  - type: ApcPowerReceiver
+    powerLoad: 3000
+  - type: TechnologyDatabase
+  - type: ResearchClient
+  - type: UserInterface
+    interfaces:
+      enum.IndustrialProcessorUiKey.Key:
+        type: IndustrialProcessorBoundUserInterface
+      enum.ResearchClientUiKey.Key:
+        type: ResearchClientBoundUserInterface
+
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_assembler.rsi
+    layers:
+    - state: icon
+      map: ["enum.IndustrialProcessorVisualLayers.Base"]
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_assembler.rsi
+    state: icon
+
+- type: entity
+  parent: IndustrialTierIndustrialProcessor
+  id: IndustrialBuffer
+  name: industrial buffer
+  description: A physical goods buffer. Configure an input and output face to connect it to a production line.
+  components:
+  - type: IndustrialProcessor
+    processorType: Buffer
+    inputContainerId: industrial_input
+    outputContainerId: industrial_input
+    canWorkWithoutPower: true
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_buffer.rsi
+    layers:
+    - state: icon
+      map: ["enum.IndustrialProcessorVisualLayers.Base"]
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_buffer.rsi
+    state: icon

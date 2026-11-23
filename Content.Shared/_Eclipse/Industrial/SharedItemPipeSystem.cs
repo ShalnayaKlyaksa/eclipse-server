@@ -50,6 +50,7 @@ public abstract partial class SharedItemPipeSystem : EntitySystem
 
         UpdateConnections(ent);
         UpdateAdjacentConnections(ent);
+        OnPipeTopologyChanged(ent);
     }
 
     private void OnAnchorAttempt(Entity<ItemPipeComponent> ent, ref AnchorAttemptEvent args)
@@ -156,16 +157,19 @@ public abstract partial class SharedItemPipeSystem : EntitySystem
     {
         var specs = PipeTierHelper.GetSpecs(ent.Comp.Tier);
         ent.Comp.ThroughputPerSecond = specs.ThroughputPerSecond;
-        ent.Comp.TransferDelay = specs.TransferDelay;
         Dirty(ent);
     }
 
     public void UpdateConnections(Entity<ItemPipeComponent> ent)
     {
         var connected = ItemPipeConnectionHelper.GetConnectedDirections(ent, EntityManager, Map);
-        if (ent.Comp.ConnectedDirections != connected)
+        var (inputs, outputs) = ItemPipeConnectionHelper.GetMachineDirections(ent, EntityManager, Map);
+        if (ent.Comp.ConnectedDirections != connected || ent.Comp.MachineInputDirections != inputs ||
+            ent.Comp.MachineOutputDirections != outputs)
         {
             ent.Comp.ConnectedDirections = connected;
+            ent.Comp.MachineInputDirections = inputs;
+            ent.Comp.MachineOutputDirections = outputs;
             Dirty(ent);
         }
 
@@ -263,9 +267,12 @@ public abstract partial class SharedItemPipeSystem : EntitySystem
         };
 
         Dirty(ent);
+        OnTransferModeChanged(ent);
         _popup.PopupClient(Loc.GetString("industrial-pipe-mode-switched",
             ("mode", GetTransferModeName(ent.Comp.TransferMode))), ent, user);
     }
+
+    protected virtual void OnTransferModeChanged(Entity<ItemPipeComponent> ent) { }
 
     public string GetTransferModeName(PipeTransferMode mode)
     {

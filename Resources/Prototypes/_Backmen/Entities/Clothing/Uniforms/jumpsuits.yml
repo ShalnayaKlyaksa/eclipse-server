@@ -23,7 +23,7 @@
 - type: entity
   parent: ClothingUniformBase
   id: ElPresidenteNanotrasenSuit
-  name: Костюм Президента Nanotrasen
+  name: Костюм Президента ВИШ
   description: Великолепно опрятный, элегантный и очень дорогой президента корпорации.
   components:
   - type: Sprite
@@ -34,7 +34,7 @@
 - type: entity
   parent: ClothingUniformBase
   id: PredstavitelNanotrasenSuit
-  name: Костюм Представителя корпорации NT
+  name: Костюм Представителя ВИШ
   description: Великолепный костюм корпорационной шишки
   components:
   - type: Sprite

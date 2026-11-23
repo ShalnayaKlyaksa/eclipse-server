@@ -18,7 +18,7 @@ public sealed partial class IndustrialHeatBufferComponent : Component
     public string OutletNodeName = "outlet";
 
     /// <summary>
-    /// Target operating temperature when plasma is flowing (Kelvin).
+    /// Maximum delivery temperature (Kelvin); the buffer must be heated by an external source.
     /// </summary>
     [DataField]
     public float OperatingTemperature = 1200f;
@@ -33,7 +33,7 @@ public sealed partial class IndustrialHeatBufferComponent : Component
     /// Heat transferred per second to each linked machine (joules-scale units).
     /// </summary>
     [DataField]
-    public float HeatTransferRate = 800f;
+    public float HeatTransferRate = 500000f;
 
     [ViewVariables]
     public bool PlasmaFlowing;

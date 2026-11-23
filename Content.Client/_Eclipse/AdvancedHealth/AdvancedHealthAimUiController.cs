@@ -24,6 +24,7 @@ public sealed class AdvancedHealthAimUiController : UIController, IOnStateEntere
     private bool _wasDown;
     private float _downTime;
     private bool _menuOpen;
+    private bool _suppressUntilRelease;
 
     private const float HoldThreshold = 0.18f;
 
@@ -51,6 +52,11 @@ public sealed class AdvancedHealthAimUiController : UIController, IOnStateEntere
         }
 
         var down = _input.DownKeyFunctions.Contains(ContentKeyFunctions.AdvancedHealthAimTarget);
+        if (_suppressUntilRelease)
+        {
+            if (!down) { _suppressUntilRelease = false; _wasDown = false; }
+            return;
+        }
 
         if (down && !_wasDown)
             _downTime = (float) _timing.RealTime.TotalSeconds;
@@ -95,6 +101,11 @@ public sealed class AdvancedHealthAimUiController : UIController, IOnStateEntere
         }
 
         _popup = new AdvancedHealthAimSelectorPopup(initial);
+        _popup.OnTreatmentStarted += () =>
+        {
+            _suppressUntilRelease = true;
+            CloseMenu();
+        };
         _popup.OpenAtCursor(UIManager.MousePositionScaled.Position);
         _menuOpen = true;
     }

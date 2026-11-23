@@ -1,1 +1,1 @@
-department-nanotrasen-navy = ВКФ NanoTrasen
+department-nanotrasen-navy = ВКФ ВИШ

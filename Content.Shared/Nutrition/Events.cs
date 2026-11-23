@@ -63,6 +63,10 @@ public sealed partial class VapeDoAfterEvent : DoAfterEvent
 [ByRefEvent]
 public record struct SliceFoodEvent();
 
+/// <summary>Raised after slicing finishes, before the original solution is divided between slices.</summary>
+[ByRefEvent]
+public record struct BeforeFoodSlicedEvent();
+
 /// <summary>
 /// is called after a successful attempt at slicing food.
 /// </summary>

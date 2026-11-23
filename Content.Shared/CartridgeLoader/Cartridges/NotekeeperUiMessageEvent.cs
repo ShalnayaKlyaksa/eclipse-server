@@ -7,11 +7,16 @@ public sealed class NotekeeperUiMessageEvent : CartridgeMessageEvent
 {
     public readonly NotekeeperUiAction Action;
     public readonly string Note;
+    public readonly string Title;
+    public readonly Guid Id;
+    public readonly int Revision;
+    public readonly Guid Request;
 
-    public NotekeeperUiMessageEvent(NotekeeperUiAction action, string note)
+    public NotekeeperUiMessageEvent(NotekeeperUiAction action, string note, string title = "", Guid id = default, int revision = 0, Guid request = default)
     {
         Action = action;
         Note = note;
+        Title = title; Id = id; Revision = revision; Request = request;
     }
 }
 
@@ -19,5 +24,6 @@ public sealed class NotekeeperUiMessageEvent : CartridgeMessageEvent
 public enum NotekeeperUiAction
 {
     Add,
-    Remove
+    Remove,
+    Edit
 }

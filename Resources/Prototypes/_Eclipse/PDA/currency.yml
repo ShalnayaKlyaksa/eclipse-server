@@ -1,0 +1,5 @@
+# Personal banking currency. Separate from the lobby's Merits and Shards.
+- type: currency
+  id: Credits
+  displayName: pda-os-bank-currency
+  canWithdraw: false

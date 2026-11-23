@@ -1,4 +1,5 @@
 using Content.Shared.Damage.Components;
+using Content.Shared._Eclipse.AdvancedHealth;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
@@ -22,7 +23,8 @@ public sealed class HealthExaminableSystem : EntitySystem
 
     private void OnGetExamineVerbs(EntityUid uid, HealthExaminableComponent component, GetVerbsEvent<ExamineVerb> args)
     {
-        if (!TryComp<DamageableComponent>(uid, out var damage))
+        // The advanced medical client supplies an interactive health overview instead.
+        if (HasComp<AdvancedHealthComponent>(uid) || !TryComp<DamageableComponent>(uid, out var damage))
             return;
 
         var detailsRange = _examineSystem.IsInDetailsRange(args.User, uid);

@@ -39,8 +39,8 @@ namespace Content.Client.Lobby.UI
 
             var back = new EclipseStyleBoxRounded
             {
-                BackgroundColor = Color.FromHex("#070300F8"),
-                BorderColor = Color.FromHex("#A85E1268"),
+                BackgroundColor = Color.FromHex("#161616F8"),
+                BorderColor = Color.FromHex("#50505068"),
                 BorderThickness = new Thickness(1),
                 Radius = 8f,
             };

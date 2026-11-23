@@ -1,6 +1,10 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
+using Content.Shared.DoAfter;
+using Content.Shared.Chemistry.Reagent;
+using Content.Shared.Chemistry.Components;
+using Robust.Shared.Localization;
 
 namespace Content.Shared._Eclipse.AdvancedHealth;
 
@@ -18,9 +22,9 @@ public enum AboGroup : byte
 [Serializable, NetSerializable]
 public enum BloodProductType : byte
 {
-    /// <summary>Whole blood — restores volume and oxygen-carrying capacity, but must be ABO/Rh compatible.</summary>
+    /// <summary>Whole blood contains both cells and plasma; human ABO groups must match.</summary>
     WholeBlood,
-    /// <summary>Packed red cells — same compatibility rules, denser oxygen carriers.</summary>
+    /// <summary>Packed red cells use donor-cell ABO/Rh compatibility and denser oxygen carriers.</summary>
     PackedCells,
     /// <summary>Ringer's lactate — universal crystalloid, restores volume but carries no oxygen (dilutes).</summary>
     Ringers,
@@ -30,6 +34,39 @@ public enum BloodProductType : byte
 
 public static class BloodCompatibility
 {
+    /// <summary>The species blood-type label is authoritative. Nonhuman types are not ABO groups.</summary>
+    public static bool TryParse(string type, out AboGroup group, out bool rh)
+    {
+        rh = type.EndsWith('+');
+        group = AboGroup.O;
+        if (type.Length < 2 || type[^1] is not ('+' or '-')) return false;
+        switch (type[..^1])
+        {
+            case "O": group = AboGroup.O; return true;
+            case "A": group = AboGroup.A; return true;
+            case "B": group = AboGroup.B; return true;
+            case "AB": group = AboGroup.AB; return true;
+            default: return false;
+        }
+    }
+
+    public static float? OxygenFactor(IPrototypeManager prototypes, string recipientFluid, string recipientType,
+        BloodProductComponent donor)
+    {
+        if (donor.ProductType is BloodProductType.Saline or BloodProductType.Ringers) return 0f;
+        if (recipientFluid != donor.BodyFluid) return null;
+        if (TryParse(recipientType, out var recipient, out var rh)
+            && TryParse(donor.BloodType, out var group, out var donorRh))
+        {
+            // Whole blood also contains donor plasma: ordinary group O whole blood is not universal.
+            if (donor.ProductType == BloodProductType.WholeBlood && recipient != group) return null;
+            return IsCompatible(recipient, rh, group, donorRh) ? 1f : null;
+        }
+        if (!prototypes.TryIndex<AdvancedHealthBloodCompatibilityPrototype>(recipientType, out var compatibility))
+            return recipientType == donor.BloodType ? 1f : null;
+        if (compatibility.CompatibleDonors.Contains(donor.BloodType)) return 1f;
+        return compatibility.EmergencyDonors.Contains(donor.BloodType) ? compatibility.EmergencyOxygenCarryFactor : null;
+    }
     /// <summary>Whether a recipient can safely receive red cells from a donor of the given group/Rh.</summary>
     public static bool IsCompatible(AboGroup recipient, bool recipientRh, AboGroup donor, bool donorRh)
     {
@@ -64,7 +101,9 @@ public static class BloodCompatibility
 
     public static string Format(string fluid, string type)
     {
-        return string.IsNullOrWhiteSpace(fluid) ? type : $"{fluid}: {type}";
+        if (string.IsNullOrWhiteSpace(fluid)) return type;
+        var label = Loc.TryGetString($"clinical-fluid-{fluid.ToLowerInvariant()}", out var localized) ? localized : fluid;
+        return $"{label}: {type}";
     }
 }
 
@@ -99,4 +138,60 @@ public sealed partial class BloodProductComponent : Component
 
     /// <summary>Uses remaining in the pack.</summary>
     [DataField, AutoNetworkedField] public int Charges = 1;
+    [DataField, AutoNetworkedField] public string DonorName = "";
+    [DataField, AutoNetworkedField] public string CrossmatchedIdentity = "";
+    [DataField, AutoNetworkedField] public string CrossmatchedName = "";
+    [DataField, AutoNetworkedField] public bool CrossmatchCompatible;
+    [DataField] public List<string> BloodborneConditions = new();
 }
+
+/// <summary>A physical, identified snapshot. Pharmacy can consume this profile without reading hidden illnesses.</summary>
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+public sealed partial class ClinicalBloodSampleComponent : Component
+{
+    [DataField, AutoNetworkedField] public string PatientIdentity = "";
+    [DataField, AutoNetworkedField] public string PatientName = "";
+    [DataField, AutoNetworkedField] public string BodyFluid = "";
+    [DataField, AutoNetworkedField] public string BloodType = "";
+    [DataField, AutoNetworkedField] public float Glucose;
+    [DataField, AutoNetworkedField] public float OxygenCarryingCapacity;
+    [DataField, AutoNetworkedField] public float ToxinLoad;
+    [DataField, AutoNetworkedField] public float KidneyFunction;
+    [DataField, AutoNetworkedField] public float LiverFunction;
+    [DataField, AutoNetworkedField] public Dictionary<string, float> Medications = new();
+    [DataField, AutoNetworkedField] public TimeSpan CollectedAt;
+    [DataField] public EntityUid? Patient;
+    /// <summary>Server-only observations at collection time, revealed by a completed laboratory analysis.</summary>
+    [DataField] public Dictionary<string, float> LaboratoryReadings = new();
+}
+
+[RegisterComponent]
+public sealed partial class EmptyBloodBagComponent : Component;
+
+[Serializable, NetSerializable]
+public sealed partial class ClinicalBloodDoAfterEvent : SimpleDoAfterEvent
+{
+    [DataField] public bool Crossmatch;
+}
+
+[Serializable, NetSerializable]
+public sealed partial class ClinicalTransfusionDoAfterEvent : SimpleDoAfterEvent;
+
+/// <summary>Blood typing follows an actual reagent through syringes and chemistry equipment.</summary>
+[Serializable, NetSerializable]
+public sealed partial class ClinicalBloodData : ReagentData
+{
+    [DataField] public string BodyFluid = "";
+    [DataField] public string BloodType = "";
+    [DataField] public string PatientIdentity = "";
+    [DataField] public float OxygenCarryFactor = 1f;
+    public override ReagentData Clone() => new ClinicalBloodData
+        { BodyFluid = BodyFluid, BloodType = BloodType, PatientIdentity = PatientIdentity, OxygenCarryFactor = OxygenCarryFactor };
+    public override bool Equals(ReagentData? other) => other is ClinicalBloodData blood
+        && blood.BodyFluid == BodyFluid && blood.BloodType == BloodType && blood.PatientIdentity == PatientIdentity
+        && blood.OxygenCarryFactor == OxygenCarryFactor;
+    public override int GetHashCode() => HashCode.Combine(BodyFluid, BloodType, PatientIdentity, OxygenCarryFactor);
+}
+
+[ByRefEvent]
+public readonly record struct AdvancedBloodTransferEvent(Solution Solution, bool Drawn);

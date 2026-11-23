@@ -116,7 +116,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: NT Emergency VENUS
+      name: VISH Emergency VENUS
     - type: Transform
       pos: 0,0
       parent: invalid

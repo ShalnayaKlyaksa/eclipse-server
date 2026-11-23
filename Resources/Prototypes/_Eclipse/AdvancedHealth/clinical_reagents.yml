@@ -1,0 +1,169 @@
+# Fictional pharmaceutical chemistry; quantities and temperatures are gameplay values.
+- type: reagent
+  id: ClinicalPrecursor
+  name: reagent-name-clinical-precursor
+  desc: reagent-desc-clinical-precursor
+  group: Medicine
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#B9CEE5"
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.1
+      effects: []
+
+- type: reagent
+  id: ClinicalAntibiotic
+  name: reagent-name-clinical-antibiotic
+  desc: reagent-desc-clinical-antibiotic
+  group: Medicine
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#97BED9"
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.1
+      effects: []
+
+- type: reagent
+  id: ClinicalAntifungal
+  name: reagent-name-clinical-antifungal
+  desc: reagent-desc-clinical-antifungal
+  group: Medicine
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#97BED9"
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.1
+      effects: []
+
+- type: reagent
+  id: ClinicalAntiviral
+  name: reagent-name-clinical-antiviral
+  desc: reagent-desc-clinical-antiviral
+  group: Medicine
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#97BED9"
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.1
+      effects: []
+
+- type: reagent
+  id: ClinicalOpioid
+  name: reagent-name-clinical-opioid
+  desc: reagent-desc-clinical-opioid
+  group: Medicine
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#97BED9"
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.1
+      effects: []
+
+- type: reagent
+  id: ClinicalSedative
+  name: reagent-name-clinical-sedative
+  desc: reagent-desc-clinical-sedative
+  group: Medicine
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#97BED9"
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.1
+      effects: []
+
+- type: reagent
+  id: ClinicalBronchodilator
+  name: reagent-name-clinical-bronchodilator
+  desc: reagent-desc-clinical-bronchodilator
+  group: Medicine
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#97BED9"
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.1
+      effects: []
+
+- type: reagent
+  id: ClinicalAntihistamine
+  name: reagent-name-clinical-antihistamine
+  desc: reagent-desc-clinical-antihistamine
+  group: Medicine
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#97BED9"
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.1
+      effects: []
+
+- type: reagent
+  id: ClinicalAnticonvulsant
+  name: reagent-name-clinical-anticonvulsant
+  desc: reagent-desc-clinical-anticonvulsant
+  group: Medicine
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#97BED9"
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.1
+      effects: []
+
+- type: reagent
+  id: ClinicalAntiInflammatory
+  name: reagent-name-clinical-anti-inflammatory
+  desc: reagent-desc-clinical-anti-inflammatory
+  group: Medicine
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#97BED9"
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.1
+      effects: []
+
+- type: reagent
+  id: ClinicalInsulin
+  name: reagent-name-clinical-insulin
+  desc: reagent-desc-clinical-insulin
+  group: Medicine
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#97BED9"
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.1
+      effects: []
+
+- type: reagent
+  id: ClinicalGlucose
+  name: reagent-name-clinical-glucose
+  desc: reagent-desc-clinical-glucose
+  group: Medicine
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#97BED9"
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.1
+      effects: []
+
+- type: reagent
+  id: ClinicalNaloxone
+  name: reagent-name-clinical-naloxone
+  desc: reagent-desc-clinical-naloxone
+  group: Medicine
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#97BED9"
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.1
+      effects: []

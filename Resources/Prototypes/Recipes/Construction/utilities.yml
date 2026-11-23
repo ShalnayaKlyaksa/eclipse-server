@@ -313,6 +313,7 @@
   id: GasPipeHalf
   name: construction-recipe-gas-pipe-half
   graph: GasPipe
+  hide: true
   startNode: start
   targetNode: half
   category: construction-category-utilities
@@ -322,6 +323,9 @@
   - GasPipeHalf
   - GasPipeHalfAlt1
   - GasPipeHalfAlt2
+
+  conditions:
+  - !type:IndustrialManufacturedOnly
 
 - type: construction
   id: GasPipeHalfAlt1
@@ -337,6 +341,9 @@
   - GasPipeHalfAlt1
   - GasPipeHalfAlt2
 
+  conditions:
+  - !type:IndustrialManufacturedOnly
+
 - type: construction
   id: GasPipeHalfAlt2
   hide: true
@@ -351,9 +358,13 @@
   - GasPipeHalfAlt1
   - GasPipeHalfAlt2
 
+  conditions:
+  - !type:IndustrialManufacturedOnly
+
 - type: construction
   id: GasPipeStraight
   graph: GasPipe
+  hide: true
   startNode: start
   targetNode: straight
   category: construction-category-utilities
@@ -363,6 +374,9 @@
   - GasPipeStraight
   - GasPipeStraightAlt1
   - GasPipeStraightAlt2
+
+  conditions:
+  - !type:IndustrialManufacturedOnly
 
 - type: construction
   id: GasPipeStraightAlt1
@@ -378,6 +392,9 @@
   - GasPipeStraightAlt1
   - GasPipeStraightAlt2
 
+  conditions:
+  - !type:IndustrialManufacturedOnly
+
 - type: construction
   id: GasPipeStraightAlt2
   hide: true
@@ -392,10 +409,14 @@
   - GasPipeStraightAlt1
   - GasPipeStraightAlt2
 
+  conditions:
+  - !type:IndustrialManufacturedOnly
+
 - type: construction
   id: GasPipeBend
   name: construction-recipe-gas-pipe-bend
   graph: GasPipe
+  hide: true
   startNode: start
   targetNode: bend
   category: construction-category-utilities
@@ -405,6 +426,9 @@
   - GasPipeBend
   - GasPipeBendAlt1
   - GasPipeBendAlt2
+
+  conditions:
+  - !type:IndustrialManufacturedOnly
 
 - type: construction
   id: GasPipeBendAlt1
@@ -420,6 +444,9 @@
   - GasPipeBendAlt1
   - GasPipeBendAlt2
 
+  conditions:
+  - !type:IndustrialManufacturedOnly
+
 - type: construction
   id: GasPipeBendAlt2
   hide: true
@@ -434,10 +461,14 @@
   - GasPipeBendAlt1
   - GasPipeBendAlt2
 
+  conditions:
+  - !type:IndustrialManufacturedOnly
+
 - type: construction
   id: GasPipeTJunction
   name: construction-recipe-gas-pipe-t-junction
   graph: GasPipe
+  hide: true
   startNode: start
   targetNode: tjunction
   category: construction-category-utilities
@@ -447,6 +478,9 @@
   - GasPipeTJunction
   - GasPipeTJunctionAlt1
   - GasPipeTJunctionAlt2
+
+  conditions:
+  - !type:IndustrialManufacturedOnly
 
 - type: construction
   id: GasPipeTJunctionAlt1
@@ -462,6 +496,9 @@
   - GasPipeTJunctionAlt1
   - GasPipeTJunctionAlt2
 
+  conditions:
+  - !type:IndustrialManufacturedOnly
+
 - type: construction
   id: GasPipeTJunctionAlt2
   hide: true
@@ -476,10 +513,14 @@
   - GasPipeTJunctionAlt1
   - GasPipeTJunctionAlt2
 
+  conditions:
+  - !type:IndustrialManufacturedOnly
+
 - type: construction
   id: GasPipeFourway
   name: construction-recipe-gas-pipe-fourway
   graph: GasPipe
+  hide: true
   startNode: start
   targetNode: fourway
   category: construction-category-utilities
@@ -489,6 +530,9 @@
   - GasPipeFourway
   - GasPipeFourwayAlt1
   - GasPipeFourwayAlt2
+
+  conditions:
+  - !type:IndustrialManufacturedOnly
 
 - type: construction
   id: GasPipeFourwayAlt1
@@ -504,6 +548,9 @@
   - GasPipeFourwayAlt1
   - GasPipeFourwayAlt2
 
+  conditions:
+  - !type:IndustrialManufacturedOnly
+
 - type: construction
   id: GasPipeFourwayAlt2
   hide: true
@@ -518,9 +565,13 @@
   - GasPipeFourwayAlt1
   - GasPipeFourwayAlt2
 
+  conditions:
+  - !type:IndustrialManufacturedOnly
+
 - type: construction
   id: GasPipeManifold
   graph: GasPipe
+  hide: true
   startNode: start
   targetNode: manifold
   category: construction-category-utilities
@@ -528,6 +579,9 @@
   canBuildInImpassable: true
 
 # ATMOS UNARY
+  conditions:
+  - !type:IndustrialManufacturedOnly
+
 - type: construction
   id: GasVentPump
   graph: GasUnary

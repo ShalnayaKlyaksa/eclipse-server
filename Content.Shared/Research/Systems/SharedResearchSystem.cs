@@ -47,6 +47,9 @@ public abstract class SharedResearchSystem : EntitySystem
         Dirty(uid, component);
     }
 
+    public bool HasTechnology(EntityUid uid, ProtoId<TechnologyPrototype> technology)
+        => TryComp<TechnologyDatabaseComponent>(uid, out var database) && database.UnlockedTechnologies.Contains(technology);
+
     public List<TechnologyPrototype> GetAvailableTechnologies(EntityUid uid, TechnologyDatabaseComponent? component = null)
     {
         if (!Resolve(uid, ref component, false))

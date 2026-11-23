@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Client.MainMenu.UI;
+using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.Chat.Controls;
 using Content.Shared.Chat;
 using Content.Shared.Input;
@@ -22,13 +23,6 @@ namespace Content.Client.UserInterface.Systems.Chat.Widgets;
 [Virtual]
 public partial class ChatBox : UIWidget
 {
-    private static readonly Color EclipseChatBackground = Color.FromHex("#080100F2");
-    private static readonly Color EclipseChatSurface = Color.FromHex("#080100F2");
-    private static readonly Color EclipseChatInput = Color.FromHex("#070100F4");
-    private static readonly Color EclipseChatButton = Color.FromHex("#090200F4");
-    private static readonly Color EclipseChatBorder = Color.FromHex("#8A2F12AA");
-    private static readonly Color EclipseChatAccent = Color.FromHex("#A84B00CC");
-
     [Dependency] private readonly IEntityManager _entManager = default!;
     [Dependency] private readonly ILogManager _log = default!;
 
@@ -36,6 +30,9 @@ public partial class ChatBox : UIWidget
     private readonly ChatUIController _controller;
 
     public bool Main { get; set; }
+    public bool UseLobbyMessageColors { get; set; }
+
+    private static readonly Color LobbyServerColor = Color.FromHex("#D6C8B5");
 
     public ChatSelectChannel SelectedChannel => ChatInput.ChannelSelector.SelectedChannel;
 
@@ -57,10 +54,10 @@ public partial class ChatBox : UIWidget
         _controller.HighlightsUpdated += OnHighlightsUpdated;
         _controller.RegisterChat(this);
 
-        ApplyEclipseChatStyle();
+        ApplyForgeChatLayout();
     }
 
-    public void ApplyEclipseChatStyle()
+    public void ApplyForgeChatLayout()
     {
         MinSize = Vector2.Zero;
         HorizontalExpand = true;
@@ -69,52 +66,27 @@ public partial class ChatBox : UIWidget
         ChatWindowPanel.MinSize = Vector2.Zero;
         ChatWindowPanel.HorizontalExpand = true;
         ChatWindowPanel.VerticalExpand = true;
-        ChatWindowPanel.PanelOverride = Rounded(EclipseChatBackground, EclipseChatBorder, 6f);
 
+        Contents.AddStyleClass("ForgeChatOutput");
         Contents.Margin = new Thickness(9, 9, 9, 5);
         Contents.HorizontalExpand = true;
         Contents.VerticalExpand = true;
-        Contents.StyleBoxOverride = Rounded(EclipseChatSurface, Color.FromHex("#8A2F1233"), 4f);
 
         ChatInput.Margin = new Thickness(9, 0, 9, 9);
         ChatInput.MinHeight = 28f;
         ChatInput.HorizontalExpand = true;
-        ChatInput.PanelOverride = Rounded(EclipseChatBackground, Color.FromHex("#00000000"), 4f);
 
         ChatInput.ChannelSelector.MinWidth = 72f;
         ChatInput.ChannelSelector.MaxWidth = 72f;
         ChatInput.ChannelSelector.MinHeight = 24f;
-        ChatInput.ChannelSelector.StyleBoxOverride = Rounded(EclipseChatButton, Color.FromHex("#A84B0066"), 4f);
 
         ChatInput.Input.MinWidth = 0f;
         ChatInput.Input.MinHeight = 24f;
         ChatInput.Input.HorizontalExpand = true;
-        ChatInput.Input.StyleBoxOverride = Rounded(EclipseChatInput, EclipseChatAccent, 3f, 7f, 4f);
 
         ChatInput.FilterButton.MinWidth = 30f;
         ChatInput.FilterButton.MaxWidth = 30f;
         ChatInput.FilterButton.MinHeight = 24f;
-        ChatInput.FilterButton.StyleBoxOverride = Rounded(EclipseChatButton, Color.FromHex("#A84B0088"), 4f);
-    }
-
-    private static EclipseStyleBoxRounded Rounded(
-        Color background,
-        Color border,
-        float radius,
-        float horizontalPadding = 0f,
-        float verticalPadding = 0f)
-    {
-        var style = new EclipseStyleBoxRounded
-        {
-            BackgroundColor = background,
-            BorderColor = border,
-            BorderThickness = border.A > 0 ? new Thickness(1) : new Thickness(0),
-            Radius = radius,
-        };
-
-        style.SetContentMarginOverride(StyleBox.Margin.Horizontal, horizontalPadding);
-        style.SetContentMarginOverride(StyleBox.Margin.Vertical, verticalPadding);
-        return style;
     }
 
     private void OnTextEntered(LineEditEventArgs args)
@@ -135,7 +107,9 @@ public partial class ChatBox : UIWidget
 
         msg.Read = true;
 
-        var color = msg.MessageColorOverride ?? msg.Channel.TextColor();
+        var color = msg.MessageColorOverride ?? (UseLobbyMessageColors && msg.Channel == ChatChannel.Server
+            ? LobbyServerColor
+            : msg.Channel.TextColor());
 
         AddLine(msg.WrappedMessage, color);
     }

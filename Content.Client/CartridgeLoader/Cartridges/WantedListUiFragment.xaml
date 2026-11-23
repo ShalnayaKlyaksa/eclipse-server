@@ -3,22 +3,23 @@
         xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
         Orientation="Vertical"
         VerticalExpand="True"
-        HorizontalExpand="True">
+        HorizontalExpand="True" SeparationOverride="4">
 
-    <LineEdit Name="SearchBar" PlaceHolder="{Loc 'wanted-list-search-placeholder'}"/>
+    <LineEdit Name="SearchBar" MinHeight="26" PlaceHolder="{Loc 'wanted-list-search-placeholder'}"/>
 
-    <BoxContainer Name="MainContainer" Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">
+    <BoxContainer Name="MainContainer" Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="5">
         <Label Name="NoRecords" Text="{Loc 'wanted-list-label-no-records'}" Align="Center" VAlign="Center" HorizontalExpand="True" FontColorOverride="DarkGray"/>
 
-        <!-- Any attempts to set dimensions for ListContainer breaks the renderer, I have to roughly set sizes and margins in other controllers. -->
-        <controls:ListContainer
+        <ScrollContainer
             Name="RecordsList"
             HorizontalAlignment="Left"
             VerticalExpand="True"
             Visible="False"
-            Toggle="True"
-            Group="True"
-            SetWidth="192" />
+            HScrollEnabled="False"
+            SetWidth="200">
+            <BoxContainer Name="RecordButtons" Orientation="Vertical" HorizontalExpand="True" SeparationOverride="3"/>
+        </ScrollContainer>
+        <PanelContainer Name="ListDivider" MinWidth="1" StyleClasses="pda-divider" Visible="False"/>
 
         <Label Name="RecordUnselected"
                Text="{Loc 'criminal-records-console-select-record-info'}"
@@ -26,23 +27,23 @@
                FontColorOverride="DarkGray"
                Visible="False"
                HorizontalExpand="True" />
-        <BoxContainer Name="PersonContainer" Orientation="Vertical" HorizontalExpand="True" SetWidth="334" Margin="5 0 77 0">
+        <BoxContainer Name="PersonContainer" Orientation="Vertical" HorizontalExpand="True" Visible="False" SeparationOverride="4">
             <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
-                <Label Name="PersonName" StyleClasses="LabelBig" />
+                <Label Name="PersonName" StyleClasses="pda-caption" ClipText="True" HorizontalExpand="True"/>
                 <RichTextLabel Name="PersonState" HorizontalAlignment="Right" HorizontalExpand="True" />
             </BoxContainer>
-            <PanelContainer StyleClasses="LowDivider" Margin="0 5 0 5"/>
+            <PanelContainer StyleClasses="pda-divider" MinHeight="1"/>
             <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
-                <BoxContainer Name="DataContainer" Orientation="Vertical">
+                <BoxContainer Name="DataContainer" Orientation="Vertical" HorizontalExpand="True" SeparationOverride="4">
                     <RichTextLabel Name="TargetAge" />
                     <RichTextLabel Name="TargetJob" />
                     <RichTextLabel Name="TargetSpecies" />
                     <RichTextLabel Name="TargetGender" />
-                    <PanelContainer StyleClasses="LowDivider" Margin="0 5 0 5"/>
+                    <PanelContainer StyleClasses="pda-divider" MinHeight="1"/>
                     <RichTextLabel Name="InitiatorName" VerticalAlignment="Stretch"/>
                     <RichTextLabel Name="WantedReason" VerticalAlignment="Stretch"/>
-                    <PanelContainer StyleClasses="LowDivider" Margin="0 5 0 5" />
-                    <controls:TableContainer Name="HistoryTable" Columns="3" Visible="False" HorizontalAlignment="Stretch" />
+                    <PanelContainer StyleClasses="pda-divider" MinHeight="1"/>
+                    <BoxContainer Name="HistoryTable" Orientation="Vertical" HorizontalExpand="True" SeparationOverride="4" Visible="False"/>
                 </BoxContainer>
             </ScrollContainer>
         </BoxContainer>

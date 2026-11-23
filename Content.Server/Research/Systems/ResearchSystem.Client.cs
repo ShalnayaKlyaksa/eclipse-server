@@ -33,8 +33,17 @@ public sealed partial class ResearchSystem
         if (!GetServers(uid).Contains((serveruid.Value, serverComponent)))
             return;
 
+        var console = CompOrNull<Content.Server.Research.Components.ResearchConsoleComponent>(uid);
+        var username = console?.Username;
+        var sameDomain = console?.AccountServer is { } previous && AccountDomain(previous) == AccountDomain(serveruid.Value);
         UnregisterClient(uid, component);
         RegisterClient(uid, serveruid.Value, component, serverComponent);
+        if (console != null && sameDomain && username != null)
+        {
+            console.Username = username;
+            console.AccountServer = serveruid.Value;
+            UpdateConsoleInterface(uid, console);
+        }
     }
 
     private void OnClientDeselected(EntityUid uid, ResearchClientComponent component, ResearchClientServerDeselectedMessage args)

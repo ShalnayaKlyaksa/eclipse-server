@@ -53,3 +53,15 @@ public sealed class AdvancedHealthTransfusionEvent : EntityEventArgs
         Pack = pack;
     }
 }
+
+/// <summary>A damaging manipulation. The server validates the tool, body part and rate, and decides the injury.</summary>
+[Serializable, NetSerializable]
+public sealed class AdvancedHealthTreatmentInjuryEvent(NetEntity target, BodyPartSlot slot, AdvancedTreatmentType treatment,
+    NetEntity? tool, float severity) : EntityEventArgs
+{
+    public NetEntity Target = target;
+    public BodyPartSlot Slot = slot;
+    public AdvancedTreatmentType Treatment = treatment;
+    public NetEntity? Tool = tool;
+    public float Severity = severity;
+}

@@ -2,6 +2,7 @@ using System.Linq;
 using System.Numerics;
 using System.Threading;
 using Content.Client.Verbs;
+using Content.Shared.CombatMode;
 using Content.Shared.Examine;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Input;
@@ -116,6 +117,7 @@ namespace Content.Client.Examine
             }
 
             if (_playerManager.LocalEntity is not { } player ||
+                TryComp<CombatModeComponent>(player, out var combat) && combat.IsInCombatMode ||
                 !CanExamine(player, entity))
             {
                 return false;

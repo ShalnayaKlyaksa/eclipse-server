@@ -2,6 +2,7 @@ using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Forensics;
+using Content.Shared._Eclipse.AdvancedHealth;
 
 namespace Content.Server.Body.Systems;
 
@@ -49,12 +50,15 @@ public sealed class BloodstreamSystem : SharedBloodstreamSystem
         if (SolutionContainer.ResolveSolution(entity.Owner, entity.Comp.BloodSolutionName, ref entity.Comp.BloodSolution, out var bloodSolution))
         {
             var data = NewEntityBloodData(entity);
+            if (TryComp<AdvancedHealthComponent>(entity, out var health))
+                data.Add(new ClinicalBloodData { BodyFluid = health.BodyFluid, BloodType = health.BloodType,
+                    PatientIdentity = health.MedicalIdentity, OxygenCarryFactor = health.OxygenCarryingCapacity });
             entity.Comp.BloodReferenceSolution.SetReagentData(data);
 
             foreach (var reagent in bloodSolution.Contents)
             {
                 List<ReagentData> reagentData = reagent.Reagent.EnsureReagentData();
-                reagentData.RemoveAll(x => x is DnaData);
+                reagentData.RemoveAll(x => x is DnaData or ClinicalBloodData);
                 reagentData.AddRange(data);
             }
         }

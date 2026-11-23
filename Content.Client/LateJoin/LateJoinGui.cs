@@ -74,7 +74,7 @@ namespace Content.Client.LateJoin
             {
                 VerticalExpand = true,
                 HorizontalExpand = true,
-                PanelOverride = EclipsePanel("#00000000", "#A85E1270", 6f, 0f, 0f),
+                PanelOverride = EclipsePanel("#00000000", "#50505070", 6f, 0f, 0f),
                 Children =
                 {
                     _base
@@ -255,7 +255,7 @@ namespace Content.Client.LateJoin
                     category.AddChild(new PanelContainer
                     {
                         Margin = new Thickness(0, 0, 0, 4),
-                        PanelOverride = EclipsePanel("#251600D8", "#A85E1270", 4f, 6f, 3f),
+                        PanelOverride = EclipsePanel("#251600D8", "#50505070", 4f, 6f, 3f),
                         Children =
                         {
                             new Label
@@ -442,10 +442,10 @@ namespace Content.Client.LateJoin
             if (windowPanel != null)
                 windowPanel.PanelOverride = new StyleBoxEmpty();
 
-            WindowHeader.PanelOverride = EclipsePanel("#160500D8", "#A85E12CC", 6f, 6f, 1f);
+            WindowHeader.PanelOverride = EclipsePanel("#160500D8", "#505050CC", 6f, 6f, 1f);
             TitleLabel.StyleIdentifier = MainMenuControl.StyleIdentifierGoldSmall;
             CloseButton.MinSize = new Vector2(22, 22);
-            CloseButton.ModulateSelfOverride = Color.FromHex("#E6A11A");
+            CloseButton.ModulateSelfOverride = Color.FromHex("#FF861F");
         }
 
         private static EclipseStyleBoxRounded EclipsePanel(

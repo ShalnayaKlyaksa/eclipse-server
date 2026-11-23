@@ -29,7 +29,7 @@ roles-antag-ash-legion-medic-name = медик Легиона Пепла
 roles-antag-ash-legion-commander-name = командир Легиона Пепла
 roles-antag-ash-legion-objective = Используйте ключ активации и пепельный взламывающий аппарат, чтобы запустить процедуру плавления Протоядра.
 
-proto-core-announcement-sender = Эйдосская империя
+proto-core-announcement-sender = ВИШ
 proto-core-announcement-unauthorized-connection = ПОДТВЕРЖДЁН ПРОЛОМ БЕЗОПАСНОСТИ. Гарантийная печать Протоядра сорвана. Внешняя консоль управления недоступна.
 proto-core-announcement-meltdown-started = ПРОТОКОЛ MD-111 ВВЕДЁН ПРИНУДИТЕЛЬНО. Протоядро переведено в режим плавления. Полный распад через {$time}.
 proto-core-announcement-stabilized = Стабилизация завершена. Протоядро возвращено в режим стационарной работы.

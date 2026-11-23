@@ -13,6 +13,7 @@ namespace Content.Client.CartridgeLoader.Cartridges;
 [GenerateTypedNameReferences]
 public sealed partial class NewsReaderUiFragment : BoxContainer
 {
+    private (string? Title, string? Content, int Number) _shown;
     public event Action? OnNextButtonPressed;
     public event Action? OnPrevButtonPressed;
 
@@ -34,18 +35,24 @@ public sealed partial class NewsReaderUiFragment : BoxContainer
         ShareTime.Visible = true;
         Author.Visible = true;
 
-        PageName.Text = article.Title;
-        PageText.SetMessage(FormattedMessage.FromMarkupPermissive(article.Content), UserFormattableTags.BaseAllowedTags);
+        var articleChanged = _shown != (article.Title, article.Content, targetNum);
+        if (articleChanged)
+        {
+            PageName.SetMessage(FormattedMessage.FromUnformatted(article.Title));
+            PageText.SetMessage(FormattedMessage.FromMarkupPermissive(article.Content), UserFormattableTags.BaseAllowedTags);
+            PageTextScroll.VScroll = 0;
+            _shown = (article.Title, article.Content, targetNum);
+        }
 
         PageNum.Text = $"{targetNum}/{totalNum}";
 
-        NotificationSwitch.Text = Loc.GetString(notificationOn ? "news-read-ui-notification-on" : "news-read-ui-notification-off");
+        NotificationSwitch.Text = Loc.GetString(notificationOn ? "pda-news-notifications-on" : "pda-news-notifications-off");
 
         var shareTime = article.ShareTime.ToString(@"hh\:mm\:ss");
         ShareTime.SetMarkup(Loc.GetString("news-read-ui-time-prefix-text") + " " + shareTime);
 
         var author = Loc.GetString("news-read-ui-author-prefix") + " " + (article.Author ?? Loc.GetString("news-read-ui-no-author"));
-        Author.SetMessage(FormattedMessage.FromMarkupPermissive(author), UserFormattableTags.BaseAllowedTags);
+        Author.SetMessage(FormattedMessage.FromUnformatted(author));
 
         Prev.Disabled = targetNum <= 1;
         Next.Disabled = targetNum >= totalNum;
@@ -58,8 +65,9 @@ public sealed partial class NewsReaderUiFragment : BoxContainer
         ShareTime.Visible = false;
         Author.Visible = false;
 
-        PageName.Text = Loc.GetString("news-read-ui-not-found-text");
+        PageName.SetMessage(FormattedMessage.FromUnformatted(Loc.GetString("news-read-ui-not-found-text")));
+        _shown = default; Prev.Disabled = Next.Disabled = true;
 
-        NotificationSwitch.Text = Loc.GetString(notificationOn ? "news-read-ui-notification-on" : "news-read-ui-notification-off");
+        NotificationSwitch.Text = Loc.GetString(notificationOn ? "pda-news-notifications-on" : "pda-news-notifications-off");
     }
 }

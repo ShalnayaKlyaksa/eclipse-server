@@ -10,8 +10,9 @@
   recipeUnlocks:
   - AnomalyScanner
   - AnomalyLocator
-  position: 1,1
-
+  position: 24, -16
+  technologyPrerequisites:
+  - IndustrialElectronics
 - type: technology
   id: XenoarchaeologyResearch
   name: research-technology-xenoarcheology-research
@@ -23,8 +24,9 @@
   cost: 2500
   recipeUnlocks:
   - NodeScanner
-  position: 3,1
-
+  position: 24, -12
+  technologyPrerequisites:
+  - IndustrialElectronics
 - type: technology
   id: AnomalousResearchAdvanced
   name: research-technology-anomalous-research-advanced
@@ -39,7 +41,8 @@
   - WeaponPistolCHIMP
   technologyPrerequisites:
   - AnomalousResearch
-  position: 0,1
+  - IndustrialScienceEquipment
+  position: 26, -11
 
 - type: technology
   id: IntegratedHUDs
@@ -51,12 +54,13 @@
   tier: 1
   cost: 2500
   recipeUnlocks:
-   - ClothingEyesHudSecurity
-   - ClothingEyesGlassesChemical
-   - ClothingEyesHudDiagnostic
-   - ClothingEyesHudMedical # Erida add
-  position: 4,2
-
+  - ClothingEyesHudSecurity
+  - ClothingEyesGlassesChemical
+  - ClothingEyesHudDiagnostic
+  - ClothingEyesHudMedical
+  position: 24, -14
+  technologyPrerequisites:
+  - IndustrialPrecisionElectronics
 - type: technology
   id: GravityManipulation
   name: research-technology-gravity-manipulation
@@ -72,7 +76,7 @@
   technologyPrerequisites:
   - MagneticBoots
   - QuantumLeaping
-  position: 2,2
+  position: 30, -13
 
 - type: technology
   id: AnomalyCoreHarnessing
@@ -87,7 +91,8 @@
   - WeaponGauntletGorilla
   technologyPrerequisites:
   - AnomalousResearchAdvanced
-  position: 0,3
+  - IndustrialPerfectAutomation
+  position: 28, -14
 
 - type: technology
   id: MeansEliminatingCatastrophicThreats
@@ -102,7 +107,7 @@
   - WeaponParticleDecelerator
   technologyPrerequisites:
   - QuantumLeaping
-  position: 1,3
+  position: 30, -15
 
 - type: technology
   id: QuantumLeaping
@@ -117,7 +122,8 @@
   - DeviceQuantumSpinInverter
   technologyPrerequisites:
   - AnomalousResearchAdvanced
-  position: 1,2
+  - IndustrialPrecisionElectronics
+  position: 28, -10
 
 - type: technology
   id: DeviceDesynchronizerу
@@ -132,7 +138,7 @@
   - DeviceDesynchronizer
   technologyPrerequisites:
   - QuantumMagneticBoots
-  position: 4,4
+  position: 34, -15
 
 - type: technology
   id: MagneticBoots
@@ -146,8 +152,9 @@
   recipeUnlocks:
   - ClothingShoesBootsMagSci
   - ClothingShoesBootsMoon
-  position: 3,2
-
+  position: 24, -8
+  technologyPrerequisites:
+  - IndustrialElectronics
 - type: technology
   id: QuantumMagneticBoots
   name: research-technology-quantum-magnetic-boots
@@ -160,9 +167,9 @@
   recipeUnlocks:
   - ClothingShoesBootsSpeed
   technologyPrerequisites:
-  - PowercellsAdvanced
+  - IndustrialEnergyStorage
   - GravityManipulation
-  position: 2,4
+  position: 32, -16
 
 - type: technology
   id: BluespaceStorage
@@ -180,5 +187,5 @@
   technologyPrerequisites:
   - PortableFission
   - DeviceDesynchronizerу
-  - SalvageEquipmentAdvanced
-  position: 5,5
+  - IndustrialSalvageEquipment
+  position: 36, -16

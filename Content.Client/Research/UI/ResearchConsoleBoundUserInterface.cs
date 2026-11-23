@@ -32,6 +32,11 @@ public sealed class ResearchConsoleBoundUserInterface : BoundUserInterface
             SendMessage(new ConsoleUnlockTechnologyMessage(id));
         };
 
+        _consoleMenu.OnAuthenticate += (username, password, register) => SendMessage(new ResearchTerminalAuthMessage(username, password, register));
+        _consoleMenu.OnCommand += command => SendMessage(new ResearchTerminalCommandMessage(command));
+
+        _consoleMenu.OnWriteDiskPressed += () => SendMessage(new Content.Shared._Eclipse.Industrial.IndustrialOpenDiskWriterMessage());
+
         _consoleMenu.OnServerButtonPressed += () =>
         {
             SendMessage(new ConsoleServerSelectionMessage());
@@ -62,6 +67,7 @@ public sealed class ResearchConsoleBoundUserInterface : BoundUserInterface
         // Goobstation R&D Console rework start
         if (_consoleMenu == null)
             return;
+        _consoleMenu.UpdateTerminalState(castState.Terminal);
         if (!_consoleMenu.List.SequenceEqual(castState.Researches))
             _consoleMenu.UpdatePanels(castState.Researches);
         if (_consoleMenu.Points != castState.Points)

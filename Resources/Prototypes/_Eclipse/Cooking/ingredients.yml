@@ -1,0 +1,532 @@
+# Strength per unit of essence; see docs/experimental-cooking.ru.md.
+- type: culinaryIngredient
+  id: EclipseCulinaryBread
+  foods:
+  - FoodBreadPlain
+  - FoodBreadPlainSlice
+  traits:
+    Satiety: 3
+    Starch: 4
+- type: culinaryIngredient
+  id: EclipseCulinaryMeat
+  foods:
+  - FoodMeat
+  - FoodMeatCooked
+  - FoodMeatCutlet
+  - FoodMeatCutletCooked
+  - FoodMeatPatty
+  - FoodMeatMeatball
+  traits:
+    Recovery: 3
+    Heaviness: 2
+    Satiety: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryChicken
+  foods:
+  - FoodMeatChicken
+  - FoodMeatChickenCooked
+  traits:
+    Recovery: 2
+    Rapid: 2
+    Heaviness: 0.5
+- type: culinaryIngredient
+  id: EclipseCulinaryDuck
+  foods:
+  - FoodMeatDuck
+  - FoodMeatDuckCooked
+  traits:
+    Recovery: 2
+    Fat: 2
+    Starch: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryFish
+  foods:
+  - FoodMeatFish
+  traits:
+    Efficiency: 2
+    Recovery: 1
+    Rapid: 2
+- type: culinaryIngredient
+  id: EclipseCulinaryCrab
+  foods:
+  - FoodMeatCrab
+  - FoodMeatCrabCooked
+  traits:
+    Recovery: 2
+    Rapid: 3
+    Thirst: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryBacon
+  foods:
+  - FoodMeatBacon
+  - FoodMeatBaconCooked
+  traits:
+    Warmth: 2
+    Fat: 2
+    Heaviness: 2
+    Thirst: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryEgg
+  foods:
+  - FoodEgg
+  - FoodEggBoiled
+  reagents:
+  - Egg
+  traits:
+    Stability: 3
+    Recovery: 1
+    Heaviness: 0.5
+- type: culinaryIngredient
+  id: EclipseCulinaryMilk
+  reagents:
+  - Milk
+  traits:
+    Fat: 1
+    Calm: 1
+    Hydration: 2
+- type: culinaryIngredient
+  id: EclipseCulinaryCream
+  reagents:
+  - Cream
+  traits:
+    Fat: 3
+    Heaviness: 2
+- type: culinaryIngredient
+  id: EclipseCulinaryCheese
+  foods:
+  - FoodCheese
+  - FoodCheeseSlice
+  - FoodChevre
+  - FoodChevreSlice
+  traits:
+    Satiety: 3
+    Recovery: 1
+    Fat: 1
+    Heaviness: 2
+- type: culinaryIngredient
+  id: EclipseCulinaryButter
+  foods:
+  - FoodButter
+  - FoodButterSlice
+  reagents:
+  - Fat
+  traits:
+    Fat: 4
+    Heaviness: 2
+- type: culinaryIngredient
+  id: EclipseCulinaryTofu
+  foods:
+  - FoodTofu
+  - FoodTofuSlice
+  traits:
+    Recovery: 1
+    Satiety: 2
+    Stability: 2
+- type: culinaryIngredient
+  id: EclipseCulinaryPotato
+  foods:
+  - FoodPotato
+  traits:
+    Satiety: 3
+    Starch: 3
+- type: culinaryIngredient
+  id: EclipseCulinaryRice
+  foods:
+  - RiceBushel
+  reagents:
+  - Rice
+  traits:
+    Satiety: 2
+    Starch: 4
+- type: culinaryIngredient
+  id: EclipseCulinaryOat
+  foods:
+  - OatBushel
+  reagents:
+  - Oats
+  traits:
+    Satiety: 3
+    Efficiency: 1
+    Starch: 2
+- type: culinaryIngredient
+  id: EclipseCulinaryCorn
+  foods:
+  - FoodCorn
+  reagents:
+  - Cornmeal
+  traits:
+    Recovery: 1
+    Rapid: 3
+    Satiety: 1
+- type: culinaryIngredient
+  id: EclipseCulinarySoy
+  foods:
+  - FoodSoybeans
+  reagents:
+  - MilkSoy
+  traits:
+    Recovery: 2
+    Starch: 2
+    Nausea: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryPea
+  foods:
+  - FoodPeaPod
+  traits:
+    Efficiency: 2
+    Satiety: 2
+    Starch: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryCabbage
+  foods:
+  - FoodCabbage
+  traits:
+    Satiety: 2
+    Hydration: 2
+    Starch: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryCarrot
+  foods:
+  - FoodCarrot
+  traits:
+    Calm: 2
+    Satiety: 1
+    Starch: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryPumpkin
+  foods:
+  - FoodPumpkin
+  traits:
+    Satiety: 3
+    Calm: 1
+    Starch: 3
+- type: culinaryIngredient
+  id: EclipseCulinaryEggplant
+  foods:
+  - FoodEggplant
+  traits:
+    Stability: 3
+    Satiety: 1
+    Calm: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryTomato
+  foods:
+  - FoodTomato
+  traits:
+    Acid: 2
+    Hydration: 2
+    Rapid: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryOnion
+  foods:
+  - FoodOnion
+  - FoodOnionSlice
+  traits:
+    Rapid: 3
+    Warmth: 1
+    Thirst: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryRedOnion
+  foods:
+  - FoodOnionRed
+  - FoodOnionRedSlice
+  traits:
+    Stimulation: 2
+    Rapid: 2
+    Thirst: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryGarlic
+  foods:
+  - FoodGarlic
+  traits:
+    Stability: 3
+    Warmth: 1
+    Thirst: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryChili
+  foods:
+  - FoodChiliPepper
+  traits:
+    Warmth: 4
+    Thirst: 3
+    Stimulation: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryMushroom
+  foods:
+  - FoodMushroom
+  traits:
+    Recovery: 2
+    Starch: 2
+    Calm: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryBanana
+  foods:
+  - FoodBanana
+  traits:
+    Calm: 2
+    Satiety: 2
+    Starch: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryApple
+  foods:
+  - FoodApple
+  traits:
+    Stability: 3
+    Hydration: 1
+    Satiety: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryOrange
+  foods:
+  - FoodOrange
+  traits:
+    Stimulation: 2
+    Rapid: 2
+    Acid: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryLemon
+  foods:
+  - FoodLemon
+  traits:
+    Acid: 4
+    Rapid: 1
+    Nausea: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryLime
+  foods:
+  - FoodLime
+  traits:
+    Acid: 2
+    Cooling: 2
+    Rapid: 2
+- type: culinaryIngredient
+  id: EclipseCulinaryPineapple
+  foods:
+  - FoodPineapple
+  - FoodPineappleSlice
+  traits:
+    Acid: 3
+    Recovery: 1
+    Hydration: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryWatermelon
+  foods:
+  - FoodWatermelon
+  - FoodWatermelonSlice
+  traits:
+    Cooling: 2
+    Hydration: 4
+- type: culinaryIngredient
+  id: EclipseCulinaryGrape
+  foods:
+  - FoodGrape
+  traits:
+    Calm: 2
+    Starch: 1
+    Hydration: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryBerries
+  foods:
+  - FoodBerries
+  traits:
+    Stimulation: 1
+    Stability: 2
+    Acid: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryCherry
+  foods:
+  - FoodCherry
+  traits:
+    Calm: 3
+    Hydration: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryCocoa
+  foods:
+  - FoodCocoaBeans
+  - FoodCocoaPod
+  traits:
+    Stimulation: 2
+    Calm: 0.5
+    Heaviness: 1
+- type: culinaryIngredient
+  id: EclipseCulinarySugar
+  reagents:
+  - Sugar
+  traits:
+    Rapid: 4
+    Stimulation: 1
+- type: culinaryIngredient
+  id: EclipseCulinarySalt
+  reagents:
+  - TableSalt
+  traits:
+    Stability: 1
+    Thirst: 4
+- type: culinaryIngredient
+  id: EclipseCulinaryOliveOil
+  reagents:
+  - OilOlive
+  traits:
+    Fat: 3
+    Stability: 2
+    Heaviness: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryGoliath
+  foods:
+  - FoodMeatGoliath
+  - FoodMeatGoliathCooked
+  traits:
+    Efficiency: 3
+    Recovery: 2
+    Heaviness: 3
+- type: culinaryIngredient
+  id: EclipseCulinaryDragon
+  foods:
+  - FoodMeatDragon
+  - FoodMeatDragonCooked
+  traits:
+    Warmth: 5
+    Recovery: 2
+    Thirst: 4
+- type: culinaryIngredient
+  id: EclipseCulinarySpider
+  foods:
+  - FoodMeatSpider
+  - FoodMeatSpiderLeg
+  traits:
+    Efficiency: 3
+    Nausea: 2
+    Recovery: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryChilly
+  foods:
+  - FoodChillyPepper
+  traits:
+    Cooling: 4
+    Thirst: 2
+- type: culinaryIngredient
+  id: EclipseCulinaryBlueTomato
+  foods:
+  - FoodBlueTomato
+  traits:
+    Rapid: 5
+    Stimulation: 2
+    Nausea: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryBloodTomato
+  foods:
+  - FoodBloodTomato
+  traits:
+    Blood: 3
+    Acid: 1
+    Nausea: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryBluePumpkin
+  foods:
+  - FoodBluePumpkin
+  traits:
+    Starch: 5
+    Satiety: 2
+    Calm: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryGoldenApple
+  foods:
+  - FoodGoldenApple
+  traits:
+    Healing: 2
+    Stability: 2
+    Hydration: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryCucumber
+  foods:
+  - EclipseFoodCucumber
+  traits:
+    Cooling: 2
+    Hydration: 3
+    Stability: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryPeanut
+  foods:
+  - EclipseFoodPeanut
+  traits:
+    Recovery: 2
+    Fat: 3
+    Heaviness: 2
+- type: culinaryIngredient
+  id: EclipseCulinaryOlive
+  foods:
+  - EclipseFoodOlive
+  traits:
+    Fat: 3
+    Stability: 2
+    Thirst: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryGreenBean
+  foods:
+  - EclipseFoodGreenBean
+  traits:
+    Efficiency: 2
+    Satiety: 2
+    Starch: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryBellPepper
+  foods:
+  - EclipseFoodBellPepper
+  traits:
+    Stimulation: 1
+    Hydration: 2
+    Stability: 2
+- type: culinaryIngredient
+  id: EclipseCulinaryParsnip
+  foods:
+  - EclipseFoodParsnip
+  traits:
+    Satiety: 2
+    Warmth: 2
+    Starch: 2
+- type: culinaryIngredient
+  id: EclipseCulinarySweetPotato
+  foods:
+  - EclipseFoodSweetPotato
+  traits:
+    Satiety: 3
+    Recovery: 1
+    Starch: 2
+- type: culinaryIngredient
+  id: EclipseCulinaryWhiteBeet
+  foods:
+  - EclipseFoodWhiteBeet
+  traits:
+    Rapid: 3
+    Satiety: 2
+    Starch: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryRedBeet
+  foods:
+  - EclipseFoodRedBeet
+  traits:
+    Blood: 2
+    Satiety: 2
+    Starch: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryPlum
+  foods:
+  - EclipseFoodPlum
+  traits:
+    Calm: 2
+    Acid: 2
+    Hydration: 1
+- type: culinaryIngredient
+  id: EclipseCulinaryVanillaPod
+  foods:
+  - EclipseFoodVanillaPod
+  traits:
+    Calm: 2
+    Stability: 4
+- type: culinaryIngredient
+  id: EclipseCulinaryHoneycomb
+  foods:
+  - EclipseFoodHoneycomb
+  traits:
+    Stimulation: 1
+    Rapid: 2
+    Stability: 3

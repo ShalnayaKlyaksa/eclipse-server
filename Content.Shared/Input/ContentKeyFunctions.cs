@@ -14,6 +14,7 @@ namespace Content.Shared.Input
         public static readonly BoundKeyFunction ExamineEntity = "ExamineEntity";
         public static readonly BoundKeyFunction AdvancedHealthAimTarget = "AdvancedHealthAimTarget";
         public static readonly BoundKeyFunction AdvancedCalmWalk = "AdvancedCalmWalk";
+        public static readonly BoundKeyFunction GroundJump = "GroundJump";
         public static readonly BoundKeyFunction FocusChat = "FocusChatInputWindow";
         public static readonly BoundKeyFunction FocusLocalChat = "FocusLocalChatWindow";
         public static readonly BoundKeyFunction FocusEmote = "FocusEmote";

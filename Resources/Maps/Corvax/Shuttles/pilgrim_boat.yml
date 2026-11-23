@@ -126,7 +126,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: NT-PD "Лодка"
+      name: ВИШ-PD "Лодка"
     - type: Transform
       pos: -144.74475,-29.423176
       parent: invalid
