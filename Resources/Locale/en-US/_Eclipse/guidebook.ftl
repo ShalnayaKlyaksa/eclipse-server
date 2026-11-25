@@ -1,5 +1,7 @@
 guidebook-station-library = ECLIPSE / STATION KNOWLEDGE BASE
 guidebook-crew-handbook = Crew handbook
+guide-entry-eclipse-research-terminal = R&D terminal
+guide-entry-eclipse-clinical-recipes = Clinical drug recipes
 guidebook-global-search = Title, item or problem…
 guidebook-clear-search = Clear search
 guidebook-expand = Expand / restore size

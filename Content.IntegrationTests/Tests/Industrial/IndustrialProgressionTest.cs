@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Content.Client.Construction.UI;
 using IndustrialDiskWriterBoundUserInterface = Content.Client._Eclipse.Industrial.IndustrialDiskWriterBoundUserInterface;
 using Content.IntegrationTests.Fixtures;
 using Content.Server._Eclipse.Industrial;
@@ -18,8 +19,11 @@ using Content.Shared.Research.Components;
 using Content.Shared.Research.Prototypes;
 using Content.Shared.Access.Components;
 using Content.Shared.Access;
+using Robust.Client.UserInterface;
+using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Localization;
 using Robust.Shared.Map;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
@@ -227,6 +231,46 @@ public sealed class IndustrialProgressionTest : GameTest
         SEntMan.EnsureComponent<TagComponent>(actor);
         Server.System<TagSystem>().AddTag(actor, new ProtoId<TagPrototype>("InstantDoAfters"));
         return actor;
+    }
+
+    [Test]
+    public async Task WorkbenchSearchShowsMachineModulesBeforeTheirRequirementsAreMet()
+    {
+        EntProtoId blueprint = "IndustrialChassisBlueprint";
+        EntProtoId assembler = "IndustrialAssembler";
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var actor = InstantActor(map.GridCoords);
+            Server.PlayerMan.SetAttachedEntity(ServerSession!, actor);
+            var bench = SEntMan.SpawnEntity("IndustrialWorkbench", map.GridCoords);
+            Assert.That(Server.System<SharedUserInterfaceSystem>().TryOpenUi(bench, IndustrialWorkbenchUiKey.Craft, actor), Is.True);
+        });
+
+        await Pair.RunTicksSync(20);
+        await Client.WaitAssertion(() =>
+        {
+            var root = Client.ResolveDependency<IUserInterfaceManager>().WindowRoot;
+            var window = root.Children.OfType<ConstructionMenu>().Single();
+            Assert.That(window.ShowAvailableOnly, Is.False);
+            var search = window.FindControl<LineEdit>("SearchBar");
+            var list = window.FindControl<BoxContainer>("RecipeList");
+
+            search.SetText(CProtoMan.Index(blueprint).Name, true);
+            Assert.That(list.ChildCount, Is.EqualTo(1), "The chassis blueprint should be listed with empty hands.");
+
+            search.SetText(CProtoMan.Index(assembler).Name, true);
+            var tierRequirement = Loc.GetString("industrial-workbench-requires-tier", ("tier", 2));
+            Assert.That(list.Children.SelectMany(row => row.Children).OfType<ContainerButton>()
+                .Any(row => row.ToolTip == tierRequirement), Is.True,
+                "Searching for the finished assembler should find the locked tier 2 module and show its requirement.");
+        });
+
+        await Server.WaitAssertion(() =>
+        {
+            Server.PlayerMan.SetAttachedEntity(ServerSession!, null);
+            SEntMan.DeleteEntity(map.MapUid);
+        });
     }
 
     [Test]

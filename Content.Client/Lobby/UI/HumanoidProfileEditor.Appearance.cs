@@ -17,25 +17,13 @@ public sealed partial class HumanoidProfileEditor
 
     private ColorSelectorSliders _rgbSkinColorSelector;
     private List<SpeciesPrototype> _species = new();
+    private readonly List<SpeciesPrototype> _speciesVariants = new();
     private static readonly ProtoId<GuideEntryPrototype> DefaultSpeciesGuidebook = "Species";
 
     public void UpdateSpeciesGuidebookIcon()
     {
-        SpeciesInfoButton.StyleClasses.Clear();
-
-        var species = Profile?.Species;
-        if (species is null)
-            return;
-
-        if (!_prototypeManager.Resolve<SpeciesPrototype>(species, out var speciesProto))
-            return;
-
-        // Don't display the info button if no guide entry is found
-        if (!_prototypeManager.HasIndex<GuideEntryPrototype>(species))
-            return;
-
-        const string style = "SpeciesInfoDefault";
-        SpeciesInfoButton.StyleIdentifier = style;
+        SpeciesInfoButton.Visible = Profile != null;
+        SpeciesInfoButton.StyleIdentifier = "SpeciesInfoDefault";
     }
 
     private void UpdateGenderControls()
@@ -155,9 +143,8 @@ public sealed partial class HumanoidProfileEditor
         SpeciesButton.Clear();
         _species.Clear();
 
-        _species.AddRange(_prototypeManager.EnumeratePrototypes<SpeciesPrototype>().Where(o => o.RoundStart));
+        _species.AddRange(_prototypeManager.EnumeratePrototypes<SpeciesPrototype>().Where(o => o.RoundStart && o.VariantOf == null));
         _species.Sort((a, b) => string.Compare(a.Name, b.Name, StringComparison.CurrentCultureIgnoreCase));
-        var speciesIds = _species.Select(o => o.ID).ToList();
 
         for (var i = 0; i < _species.Count; i++)
         {
@@ -167,20 +154,55 @@ public sealed partial class HumanoidProfileEditor
                 name += GetSponsorOnlySuffix();
 
             SpeciesButton.AddItem(name, i);
-
-            if (Profile?.Species.Equals(_species[i].ID) == true)
-            {
-                SpeciesButton.SelectId(i);
-            }
         }
 
-        // If our species isn't available then reset it to default.
         if (Profile != null)
         {
-            if (!speciesIds.Contains(Profile.Species))
-            {
-                SetSpecies(HumanoidCharacterProfile.DefaultSpecies);
-            }
+            var species = HumanoidCharacterProfile.MigratePlayableSpecies(Profile.Species);
+            if (!_prototypeManager.TryIndex(species, out var prototype) || !prototype.RoundStart)
+                species = HumanoidCharacterProfile.DefaultPlayableSpecies;
+
+            if (species != Profile.Species)
+                SetSpecies(species.Id);
+            else
+                RefreshSpeciesVariant(prototype!);
+        }
+    }
+
+    private void RefreshSpeciesVariant(SpeciesPrototype selected)
+    {
+        var groupId = selected.VariantOf?.Id ?? selected.ID;
+        var index = _species.FindIndex(species => species.ID == groupId);
+        if (index >= 0)
+            SpeciesButton.SelectId(index);
+
+        _speciesVariants.Clear();
+        SpeciesVariantButton.Clear();
+        SpeciesVariantRow.Visible = selected.VariantName != null;
+        SpeciesPaletteRow.Visible = selected.AppearancePresets.Count > 0;
+        SpeciesPaletteButton.Clear();
+        if (SpeciesPaletteRow.Visible)
+        {
+            SpeciesPaletteButton.AddItem(Loc.GetString("species-appearance-palette-select"), 0);
+            SpeciesPaletteButton.SetItemDisabled(0, true);
+            for (var i = 0; i < selected.AppearancePresets.Count; i++)
+                SpeciesPaletteButton.AddItem(Loc.GetString(selected.AppearancePresets[i].Name), i + 1);
+            SpeciesPaletteButton.SelectId(0);
+        }
+
+        if (!SpeciesVariantRow.Visible)
+            return;
+
+        _speciesVariants.Add(_prototypeManager.Index<SpeciesPrototype>(groupId));
+        _speciesVariants.AddRange(_prototypeManager.EnumeratePrototypes<SpeciesPrototype>()
+            .Where(species => species.RoundStart && species.VariantOf?.Id == groupId)
+            .OrderBy(species => species.ID, StringComparer.Ordinal));
+        for (var i = 0; i < _speciesVariants.Count; i++)
+        {
+            var variant = _speciesVariants[i];
+            SpeciesVariantButton.AddItem(Loc.GetString(variant.VariantName?.Id ?? variant.Name), i);
+            if (variant.ID == selected.ID)
+                SpeciesVariantButton.SelectId(i);
         }
     }
 
@@ -190,9 +212,16 @@ public sealed partial class HumanoidProfileEditor
             return;
 
         var species = _prototypeManager.Index<SpeciesPrototype>(newSpecies);
+        var useSpeciesTone = Profile.Species.Id != newSpecies && species.AppearancePresets.Count > 0;
         Profile = Profile.WithSpecies(newSpecies).WithCustomization(Profile.Customization.Validated(species));
+        RefreshSpeciesVariant(species);
         if (!species.Sexes.Contains(Profile.Sex) && (Profile.Sex != Sex.Intersex || !species.AllowsIntersex))
             Profile = Profile.WithSex(species.Sexes[0]);
+        if (useSpeciesTone)
+        {
+            Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithSkinColor(species.DefaultSkinTone));
+            UpdateSkinColor();
+        }
         OnSkinColorOnValueChanged(); // Species may have special color prefs, make sure to update it.
         _markingsModel.Species = newSpecies;
         _markingsModel.OrganData = _markingManager.GetMarkingData(newSpecies);
@@ -203,9 +232,21 @@ public sealed partial class HumanoidProfileEditor
         RefreshLoadouts();
         UpdateSexControls(); // update sex for new species
         UpdateCustomizationControls();
-        UpdateTTSVoicesControls();
         UpdateSpeciesGuidebookIcon();
         ReloadPreview();
+    }
+
+    private void ApplySpeciesPalette(int index)
+    {
+        if (Profile == null || !_prototypeManager.TryIndex(Profile.Species, out var species)
+            || index < 0 || index >= species.AppearancePresets.Count)
+            return;
+
+        var appearance = Profile.Appearance.WithMarkings(_markingsModel.Markings);
+        Profile = Profile.WithCharacterAppearance(appearance.WithColorPreset(species.AppearancePresets[index]));
+        UpdateSkinColor();
+        UpdateMarkings();
+        ReloadProfilePreview();
     }
 
     private void SetAge(int newAge)
@@ -232,7 +273,6 @@ public sealed partial class HumanoidProfileEditor
         }
 
         UpdateGenderControls();
-        UpdateTTSVoicesControls(); // Corvax-TTS
         _markingsModel.SetOrganSexes(newSex.PresentationSex());
         ReloadPreview();
     }
@@ -251,15 +291,14 @@ public sealed partial class HumanoidProfileEditor
 
     private void OnSpeciesInfoButtonPressed(BaseButton.ButtonEventArgs args)
     {
-        // TODO GUIDEBOOK
-        // make the species guide book a field on the species prototype.
-        // I.e., do what jobs/antags do.
-
         var guidebookController = UserInterfaceManager.GetUIController<GuidebookUIController>();
-        var species = Profile?.Species ?? HumanoidCharacterProfile.DefaultSpecies;
         var page = DefaultSpeciesGuidebook;
-        if (_prototypeManager.HasIndex<GuideEntryPrototype>(species))
-            page = new ProtoId<GuideEntryPrototype>(species.Id); // Gross. See above todo comment.
+        if (Profile != null && _prototypeManager.TryIndex(Profile.Species, out var species))
+        {
+            var entry = new ProtoId<GuideEntryPrototype>(species.VariantOf?.Id ?? species.ID);
+            if (_prototypeManager.HasIndex(entry))
+                page = entry;
+        }
 
         if (_prototypeManager.Resolve(DefaultSpeciesGuidebook, out var guideRoot))
         {

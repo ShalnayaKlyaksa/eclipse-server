@@ -1,0 +1,119 @@
+- type: entity
+  parent: IndustrialFilterPress
+  id: EclipseManualHoneyPress
+  name: hand-cranked honey press
+  description: Presses food-grade combs into honey and beeswax without electricity.
+  components:
+  - type: IndustrialManualProcessor
+  - type: IndustrialProcessor
+    tier: Basic
+    autoStart: false
+    canWorkWithoutPower: true
+    northFacePort: Disabled
+    southFacePort: Disabled
+    westFacePort: Disabled
+    eastFacePort: Disabled
+  - type: ApcPowerReceiver
+    needsPower: false
+    powerLoad: 0
+  - type: Sprite
+    color: '#DFB887'
+  - type: Construction
+    graph: EclipseManualHoneyPress
+    node: press
+  - type: GuideHelp
+    guides: [EclipseBeekeeping]
+
+- type: construction
+  id: EclipseManualHoneyPress
+  graph: EclipseManualHoneyPress
+  startNode: start
+  targetNode: press
+  category: construction-category-industrial-mechanisms
+  placementMode: SnapgridCenter
+  objectType: Structure
+  canBuildInImpassable: false
+
+- type: constructionGraph
+  id: EclipseManualHoneyPress
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: press
+      steps:
+      - material: WoodPlank
+        amount: 4
+        doAfter: 2
+      - material: Steel
+        amount: 2
+        doAfter: 2
+      - tool: Screwing
+        doAfter: 2
+  - node: press
+    entity: EclipseManualHoneyPress
+
+- type: entity
+  parent: EclipseApiaryFrame
+  id: EclipseApiaryForageFrame
+  name: forage frame
+  description: Doubles nectar gathered from nearby plants and their special comb harvest. Lasts eight cycles.
+  components:
+  - type: Sprite
+    color: '#E5B286'
+  - type: ApiaryFrame
+    kind: Forage
+    durability: 8
+
+- type: industrialRecipe
+  id: EclipseBuildForageFrame
+  processor: Assembler
+  time: 12
+  inputs:
+    MaterialWoodPlank1: 1
+    EclipseBeeswax: 1
+    MaterialCloth1: 1
+  outputs:
+    EclipseApiaryForageFrame: 1
+
+- type: entity
+  parent: Candle
+  id: EclipseBeeswaxCandle
+  name: beeswax candle
+  description: A cotton wick in a candle made from apiary wax.
+
+- type: industrialRecipe
+  id: EclipseMakeBeeswaxCandles
+  processor: Assembler
+  time: 8
+  inputs:
+    EclipseBeeswax: 1
+    MaterialCloth1: 1
+  outputs:
+    EclipseBeeswaxCandle: 2
+
+- type: entity
+  parent: BaseHealingItem
+  id: EclipsePropolisBalm
+  name: propolis balm
+  description: A single application of wax and propolis for heat and cold burns.
+  components:
+  - type: Sprite
+    state: ointment
+    color: '#EFCB94'
+  - type: Healing
+    damageContainers: [Biological]
+    damage:
+      types:
+        Heat: -8
+        Cold: -5
+
+- type: industrialRecipe
+  id: EclipseMakePropolisBalm
+  processor: Assembler
+  time: 10
+  inputs:
+    EclipseBeeswax: 1
+    EclipsePropolis: 1
+  outputs:
+    EclipsePropolisBalm: 1

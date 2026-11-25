@@ -14,17 +14,14 @@ humanoid-profile-editor-sex-unsexed-text = Отсутствует
 humanoid-profile-editor-age-label = Возраст:
 humanoid-profile-editor-skin-color-label = Цвет кожи:
 humanoid-profile-editor-species-label = Вид:
-humanoid-profile-editor-sex-intersex-text = Интерсекс
+humanoid-profile-editor-sex-intersex-text = Футанари
+humanoid-profile-editor-voice-none = Нет доступного голоса
 humanoid-profile-editor-body-type = Телосложение
 humanoid-profile-editor-body-type-default = Стандартное
 humanoid-profile-editor-body-type-curvedshortmuzzle = Изогнутые ноги, короткая морда
 humanoid-profile-editor-body-type-curvedlongmuzzle = Изогнутые ноги, длинная морда
 humanoid-profile-editor-body-type-straightshortmuzzle = Прямые ноги, короткая морда
 humanoid-profile-editor-body-type-straightlongmuzzle = Прямые ноги, длинная морда
-humanoid-profile-editor-vocal-style = Голос
-humanoid-profile-editor-vocal-style-default = По умолчанию
-humanoid-profile-editor-vocal-style-masculine = Мужской
-humanoid-profile-editor-vocal-style-feminine = Женский
 humanoid-profile-editor-tts-voice = Голос TTS
 humanoid-profile-editor-height = Рост {$value} см
 humanoid-profile-editor-weight = Вес {$value} кг
@@ -81,15 +78,35 @@ humanoid-profile-editor-markings-tab = Черты внешности
 humanoid-profile-editor-flavortext-tab = Описание
 
 marking-colors-button = Цвет
+marking-colors-close = Закрыть
 marking-color-base = Основной цвет
 marking-color-layer = Слой { $layer }
 marking-gradient-tip = Цвет кончиков
 marking-gradient-off = Без градиента
-marking-gradient-steps = Градиент · { $steps } оттенков
+marking-gradient-steps =
+    { $steps ->
+        [few] Градиент · { $steps } оттенка на переход
+       *[other] Градиент · { $steps } оттенков на переход
+    }
+marking-gradient-shape-contour = По контуру
+marking-gradient-shape-linear = Линейный
+marking-gradient-shape-radial = Из центра
+marking-gradient-start = Начало (%)
+marking-gradient-length = Длина (%)
+marking-gradient-angle = Угол (°)
+marking-gradient-angle-hint = 0° вправо, 90° вниз, 180° влево, 270° вверх
+marking-gradient-center-x = Центр по X (%)
+marking-gradient-center-y = Центр по Y (%)
+marking-gradient-add-color = Добавить цвет
+marking-gradient-remove-color = Удалить этот цвет
+marking-gradient-color-stop = Цвет на { $position }%
+marking-gradient-stop-position = Позиция в переходе (%)
 
 # Traits
 humanoid-profile-editor-traits-tab = Черты персонажа
 humanoid-profile-editor-no-traits = Нет доступных черт
+humanoid-profile-editor-trait-search = Поиск по чертам
+humanoid-profile-editor-trait-selected-only = Только выбранные
 
 humanoid-profile-editor-trait-count-hint = Доступно очков: [{ $current }/{ $max }]
 humanoid-profile-editor-trait-balance = Очки черт: { $balance } / { $max }
@@ -98,11 +115,11 @@ humanoid-profile-editor-trait-balance = Очки черт: { $balance } / { $max
 humanoid-profile-editor-trait-conflict = Несовместимо с чертой «{ $trait }».
 humanoid-profile-editor-trait-gain-limit = Превышен лимит очков от недостатков: { $current }/{ $max }.
 humanoid-profile-editor-trait-negative-balance = Недостаточно очков: потрачено { $spent }, получено { $gained }.
-humanoid-profile-editor-language-count-hint = Первый язык бесплатный. Дополнительные языки стоят 2, затем 3, затем 4 очка черт и так далее.
+humanoid-profile-editor-language-count-hint = Укажите языки персонажа для отыгрыша. Этот выбор не влияет на речь в игре.
 
 trait-category-disadvantages = Недостатки
 trait-category-advantages = Преимущества
-trait-category-neutral = Нейтральные
+trait-category-neutral = Ролевые
 trait-category-speech = Речь
 trait-category-languages = Языки
 trait-category-disabilities = Ограничения

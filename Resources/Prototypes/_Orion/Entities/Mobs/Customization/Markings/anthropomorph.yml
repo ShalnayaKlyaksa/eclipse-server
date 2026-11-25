@@ -784,7 +784,7 @@
 - type: marking
   id: AnthropomorphHeadSideElf
   bodyPart: HeadSide
-  speciesRestriction: [Anthropomorph, Tajaran, Dwarf, Human]
+  speciesRestriction: [Anthropomorph, Tajaran, Dwarf, Human, Elir]
   sprites:
   - sprite: _Orion/Mobs/Customization/Anthropomorph/mam_ears.rsi
     state: ears_elf

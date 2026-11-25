@@ -16,7 +16,7 @@ public partial record struct CharacterCustomization
     [DataField] public CharacterHistory Virginity { get; set; }
     [DataField] public CharacterHistory AnalVirginity { get; set; }
 
-    public static bool HasBodyTypes(ProtoId<SpeciesPrototype> species) => species == "Vulpkanin";
+    public static bool HasBodyTypes(ProtoId<SpeciesPrototype> species) => species == "TherianCanine" || species == "Vulpkanin";
 
     public CharacterCustomization Validated(SpeciesPrototype species) => this with
     {

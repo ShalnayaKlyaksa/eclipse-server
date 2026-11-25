@@ -4,6 +4,7 @@
   cycleSeconds: 150
   branch: Food
   comb: EclipseFoodHoneycomb
+  combBonus: 1
   needsMinerals: false
 - type: beeSpecies
   id: Citrus
@@ -43,6 +44,7 @@
   cycleSeconds: 240
   branch: Food
   comb: EclipseFoodCoolingHoneycomb
+  waterMultiplier: 0.75
   needsMinerals: false
   minTemperature: 273
   maxTemperature: 290
@@ -123,7 +125,7 @@
   tier: 3
   cycleSeconds: 240
   branch: Industry
-  comb: EclipseFoodHoneycomb
+  comb: EclipseSilkenHoneycomb
   needsMinerals: true
   rareProduct: MaterialCloth1
   rareChance: 0.08
@@ -134,7 +136,7 @@
   tier: 3
   cycleSeconds: 240
   branch: Industry
-  comb: EclipseFoodHoneycomb
+  comb: EclipseMetallicHoneycomb
   needsMinerals: true
   rareProduct: SheetSteel1
   rareChance: 0.06
@@ -145,7 +147,7 @@
   tier: 4
   cycleSeconds: 300
   branch: Industry
-  comb: EclipseFoodHoneycomb
+  comb: EclipseConductiveHoneycomb
   needsMinerals: true
   rareProduct: IngotSilver1
   rareChance: 0.04
@@ -156,7 +158,8 @@
   tier: 5
   cycleSeconds: 420
   branch: Exotic
-  comb: EclipseFoodHoneycomb
+  comb: EclipseRadiantHoneycomb
+  stingChance: 0.55
   needsMinerals: true
   rareProduct: UraniumOre1
   rareChance: 0.005

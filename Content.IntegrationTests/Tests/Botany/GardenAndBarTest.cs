@@ -7,16 +7,24 @@ using Content.Server.Eclipse.Botany.Systems;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Server._Eclipse.Beekeeping;
+using Content.Server._Eclipse.Industrial;
 using Content.Shared._Eclipse.Beekeeping;
+using Content.Shared._Eclipse.Industrial;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reaction;
 using Content.Shared.Containers.ItemSlots;
+using Content.Shared.DoAfter;
 using Content.Shared.Eclipse.Botany.SeedDna.Components;
 using Content.Shared.FixedPoint;
+using Content.Shared.Hands.Components;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Kitchen.Components;
+using Content.Shared.Tag;
+using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Maths;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
 
@@ -152,6 +160,80 @@ public sealed class GardenAndBarTest : GameTest
             plant.Harvest = true;
             Server.System<PlantHolderSystem>().AutoHarvest(bed, plant);
             Assert.That(plant.BeePollinated, Is.False);
+            SEntMan.DeleteEntity(map.MapUid);
+        });
+    }
+
+    [Test]
+    public async Task FlowerChoiceAndForageFrameSupplyTheHandPressAndBar()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var maps = Server.System<SharedMapSystem>();
+            EntityCoordinates At(int x) => new(map.Grid.Owner, x + .5f, .5f);
+            for (var x = 0; x <= 4; x++)
+                maps.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(x, 0), map.Tile.Tile);
+            for (var x = 0; x < 3; x++)
+            {
+                var bed = SEntMan.SpawnEntity("hydroponicsSoil", At(x));
+                var plant = SEntMan.GetComponent<PlantHolderComponent>(bed);
+                plant.Seed = SProtoMan.Index<SeedPrototype>(x == 2 ? "poppy" : "lily").Clone();
+                plant.Age = 20;
+                plant.Health = 100;
+            }
+
+            var hive = SEntMan.SpawnEntity("EclipseApiary", At(3));
+            var colony = SEntMan.GetComponent<ApiaryComponent>(hive);
+            colony.Mother = new BeeGenome();
+            colony.Father = new BeeGenome();
+            colony.Enabled = true;
+            colony.Status = "apiary-status-working";
+            colony.CycleSeconds = 120;
+            colony.Nectar = colony.Water = 100;
+            colony.FrameKind = "Forage";
+            colony.FrameDurability = 1;
+            Server.System<GardenPollinationSystem>().Pollinate();
+            Assert.That(colony.Nectar, Is.EqualTo(102.4f).Within(0.01f));
+            Assert.That(GardenPollinationSystem.PredictComb(colony)?.Id, Is.EqualTo("GardenLilyHoneycomb"));
+            Server.System<ApiarySystem>().AdvanceActive((hive, colony), 120);
+            var resources = Server.System<IndustrialResourceSystem>();
+            var lilies = colony.Output.ContainedEntities.Where(item => resources.Matches(item, "GardenLilyHoneycomb")).ToArray();
+            Assert.That(lilies, Has.Length.EqualTo(2), "The last use of the frame must still double the dominant comb.");
+            Assert.That(colony.ForageSamples, Is.Empty);
+            Assert.That(colony.FrameDurability, Is.Zero);
+
+            var press = SEntMan.SpawnEntity("EclipseManualHoneyPress", At(4));
+            var machine = SEntMan.GetComponent<IndustrialProcessorComponent>(press);
+            var containers = Server.System<SharedContainerSystem>();
+            var input = containers.GetContainer(press, machine.InputContainerId);
+            Assert.That(containers.Insert(lilies[0], input), Is.True);
+            var processors = Server.System<IndustrialProcessorSystem>();
+            processors.Update(30);
+            Assert.That(input.Count, Is.EqualTo(1), "The hand press must wait for an operator.");
+            var actor = SEntMan.SpawnEntity(null, At(4));
+            SEntMan.EnsureComponent<DoAfterComponent>(actor);
+            var hands = SEntMan.EnsureComponent<HandsComponent>(actor);
+            Server.System<SharedHandsSystem>().AddHand((actor, hands), "right", HandLocation.Right);
+            Server.System<TagSystem>().AddTag(actor, new ProtoId<TagPrototype>("InstantDoAfters"));
+            var manual = SEntMan.GetComponent<IndustrialManualProcessorComponent>(press);
+            Assert.That(processors.StartManual((press, manual), actor), Is.True);
+            Assert.That(input.Count, Is.Zero);
+            var output = containers.GetContainer(press, machine.OutputContainerId);
+            Assert.That(resources.Count(output.ContainedEntities, "EclipseBeeswax"), Is.EqualTo(1));
+
+            var solutions = Server.System<SharedSolutionContainerSystem>();
+            var fluid = SEntMan.GetComponent<IndustrialFluidProcessorComponent>(press);
+            Assert.That(solutions.TryGetSolution(press, fluid.OutputSolution, out _, out var liquid), Is.True);
+            Assert.That(liquid!.GetTotalPrototypeQuantity("EclipseLilyHoney"), Is.EqualTo(FixedPoint2.New(8)));
+            var glass = SEntMan.SpawnEntity("DrinkGlass", At(4));
+            Assert.That(solutions.TryGetSolution(glass, "drink", out var drink, out var mixed), Is.True);
+            Assert.That(solutions.TryTransferSolution(drink!.Value, liquid!, FixedPoint2.New(1)), Is.True);
+            solutions.TryAddReagent(drink.Value, "JuiceLemon", FixedPoint2.New(1));
+            solutions.TryAddReagent(drink.Value, "SodaWater", FixedPoint2.New(2));
+            var spoon = SEntMan.SpawnEntity("BarSpoon", At(4));
+            Server.System<ReactionMixerSystem>().TryMix(spoon, glass);
+            Assert.That(mixed!.GetTotalPrototypeQuantity("LilyHoneyLemonade"), Is.EqualTo(FixedPoint2.New(4)));
             SEntMan.DeleteEntity(map.MapUid);
         });
     }

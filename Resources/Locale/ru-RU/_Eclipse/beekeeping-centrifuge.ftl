@@ -1,0 +1,26 @@
+ent-EclipseCopperHoneycomb = медные соты
+    .desc = Из этих сот термоцентрифуга извлекает воск и промышленные материалы.
+ent-EclipseSilkenHoneycomb = шелковистые соты
+    .desc = Из этих сот термоцентрифуга извлекает воск и промышленные материалы.
+ent-EclipseMetallicHoneycomb = металлические соты
+    .desc = Из этих сот термоцентрифуга извлекает воск и промышленные материалы.
+ent-EclipseAuricHoneycomb = золотистые соты
+    .desc = Из этих сот термоцентрифуга извлекает воск и промышленные материалы.
+ent-EclipseCrystallineHoneycomb = кристаллические соты
+    .desc = Из этих сот термоцентрифуга извлекает воск и промышленные материалы.
+ent-EclipseConductiveHoneycomb = проводящие соты
+    .desc = Из этих сот термоцентрифуга извлекает воск и промышленные материалы.
+ent-EclipseRadiantHoneycomb = радиантные соты
+    .desc = Из этих сот термоцентрифуга извлекает воск и промышленные материалы.
+ent-EclipseResonantHoneycomb = резонансные соты
+    .desc = Из этих сот термоцентрифуга извлекает воск и промышленные материалы.
+ent-EclipseQuantumHoneycomb = квантовые соты
+    .desc = Из этих сот термоцентрифуга извлекает воск и промышленные материалы.
+
+bee-species-copper = медная
+apiary-ui-separation = Термоцентрифуга: соты ×{ $count } → { $products }
+apiary-ui-recipe-output = { $product } ×{ $count }
+apiary-ui-species-food = Расход корма: { $percent }% от обычного.
+apiary-ui-species-water = Расход воды: { $percent }% от обычного.
+apiary-ui-species-combs = Соты за цикл: +{ $count }.
+apiary-ui-species-sting = Шанс укуса при обслуживании: { $percent }%.

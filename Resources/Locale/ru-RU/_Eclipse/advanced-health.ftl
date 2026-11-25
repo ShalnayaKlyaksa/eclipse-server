@@ -125,7 +125,7 @@ advanced-health-slot-interact-hint = {$slot}
     ЛКМ — взять / сменить руку · ПКМ — действия · E — открыть · Shift+E — альтернативное действие
 
 advanced-health-vital-immunity = Иммунозащита
-advanced-health-vital-brain-tooltip = Целостность тканей мозга. При 50% и ниже обычная дефибрилляция невозможна — требуется маннитол.
+advanced-health-vital-brain-tooltip = Целостность тканей мозга. Перед дефибрилляцией восстановите её нейрорегеном выше 50%.
 advanced-health-vital-consciousness-tooltip = Уровень сознания. У здорового персонажа равен 100%; падает из-за гипоксии, шока и плохого кровоснабжения мозга.
 advanced-health-vital-pain-tooltip = Уровень боли. Влияет на шок, потерю сознания и точность медицинских процедур.
 advanced-health-vital-immunity-tooltip = Иммунная защита организма. Сдерживает заражение открытых и загрязнённых ран.

@@ -2,6 +2,7 @@ using Content.Server.Administration.Logs;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Body.Components;
 using Content.Server.Chat.Systems;
+using Content.Shared._Eclipse.AdvancedHealth;
 using Content.Shared.Body.Systems;
 using Content.Shared.Alert;
 using Content.Shared.Atmos;
@@ -20,6 +21,7 @@ using Content.Shared.EntityEffects;
 using Content.Shared.EntityEffects.Effects.Body;
 using Content.Shared.EntityEffects.Effects.Damage;
 using Content.Shared.Metabolism;
+using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
@@ -53,6 +55,7 @@ public sealed class RespiratorSystem : EntitySystem
         UpdatesAfter.Add(typeof(MetabolizerSystem));
         SubscribeLocalEvent<RespiratorComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<RespiratorComponent, ApplyMetabolicMultiplierEvent>(OnApplyMetabolicMultiplier);
+        SubscribeLocalEvent<RespiratorComponent, MobStateChangedEvent>(OnRevived);
 
         // BodyComp stuff
         SubscribeLocalEvent<BodyComponent, InhaledGasEvent>(_body.RelayEvent);
@@ -73,6 +76,19 @@ public sealed class RespiratorSystem : EntitySystem
         ent.Comp.NextUpdate = _gameTiming.CurTime + ent.Comp.AdjustedUpdateInterval;
     }
 
+    private void OnRevived(Entity<RespiratorComponent> ent, ref MobStateChangedEvent args)
+    {
+        if (args.OldMobState != MobState.Dead || args.NewMobState is not (MobState.Critical or MobState.Alive)
+            || !TryComp<AdvancedHealthComponent>(ent, out var health) || !health.NeedsOxygen || health.IsHeartStopped)
+            return;
+
+        // Take a fresh breath as circulation resumes so oxygen delivery can recover immediately.
+        Exhale(ent);
+        Inhale(ent.AsNullable());
+        ent.Comp.Status = RespiratorStatus.Exhaling;
+        ent.Comp.NextUpdate = _gameTiming.CurTime + ent.Comp.AdjustedUpdateInterval;
+    }
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
@@ -90,7 +106,7 @@ public sealed class RespiratorSystem : EntitySystem
 
             UpdateSaturation(uid, -(float)respirator.UpdateInterval.TotalSeconds, respirator);
 
-            if (!_mobState.IsIncapacitated(uid)) // cannot breathe in crit.
+            if (CanBreathe(uid))
             {
                 switch (respirator.Status)
                 {
@@ -184,11 +200,11 @@ public sealed class RespiratorSystem : EntitySystem
     }
 
     /// <summary>
-    /// Returns true if the entity is above their SuffocationThreshold and alive.
+    /// Returns true if the entity can breathe and is above their suffocation threshold.
     /// </summary>
     public bool IsBreathing(Entity<RespiratorComponent?> ent)
     {
-        if (_mobState.IsIncapacitated(ent))
+        if (!CanBreathe(ent))
             return false;
 
         if (!Resolve(ent, ref ent.Comp))
@@ -196,6 +212,11 @@ public sealed class RespiratorSystem : EntitySystem
 
         return (ent.Comp.Saturation > ent.Comp.SuffocationThreshold);
     }
+
+    private bool CanBreathe(EntityUid uid)
+        => TryComp<AdvancedHealthComponent>(uid, out var health)
+            ? !_mobState.IsDead(uid) && health.NeedsOxygen && !health.IsHeartStopped && health.RespiratoryRate > 0f
+            : !_mobState.IsIncapacitated(uid);
 
     /// <summary>
     /// Checks if it's safe for a given entity to breathe the air from the environment it is currently situated in.
@@ -324,7 +345,7 @@ public sealed class RespiratorSystem : EntitySystem
         if (ent.Comp.SuffocationCycles == 2)
             _adminLogger.Add(LogType.Asphyxiation, $"{ToPrettyString(ent):entity} started suffocating");
 
-        if (!HasComp<Content.Shared._Eclipse.AdvancedHealth.AdvancedHealthComponent>(ent))
+        if (!HasComp<AdvancedHealthComponent>(ent))
             _damageableSys.ChangeDamage(ent.Owner, ent.Comp.Damage, interruptsDoAfters: false, ignoreResistances: true);
 
         if (ent.Comp.SuffocationCycles < ent.Comp.SuffocationCycleThreshold)
@@ -339,7 +360,7 @@ public sealed class RespiratorSystem : EntitySystem
         if (ent.Comp.SuffocationCycles >= 2)
             _adminLogger.Add(LogType.Asphyxiation, $"{ToPrettyString(ent):entity} stopped suffocating");
 
-        if (!HasComp<Content.Shared._Eclipse.AdvancedHealth.AdvancedHealthComponent>(ent))
+        if (!HasComp<AdvancedHealthComponent>(ent))
             _damageableSys.ChangeDamage(ent.Owner, ent.Comp.DamageRecovery);
 
         var ev = new StopSuffocatingEvent();

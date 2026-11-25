@@ -1,0 +1,7 @@
+#include "/Textures/Shaders/marking_gradient_shared.swsl"
+
+highp vec4 sampleDisplacedSprite(highp vec2 uv) {
+    return sampleBakedMarking(uv);
+}
+
+#include "/Textures/Shaders/displacement_shared.swsl"

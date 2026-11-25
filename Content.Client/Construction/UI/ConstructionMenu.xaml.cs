@@ -94,6 +94,7 @@ public sealed partial class ConstructionMenu : FancyWindow, IConstructionMenuVie
         if (mode == ConstructionMenuMode.CraftOnly)
         {
             ActiveTab = ConstructionMenuTab.Craft;
+            ShowAvailableOnlyCheck.Pressed = false;
             UpdateActionPanels();
         }
     }
@@ -247,6 +248,7 @@ public sealed partial class ConstructionMenu : FancyWindow, IConstructionMenuVie
                 HorizontalExpand = true,
                 ToggleMode = true,
                 Pressed = row.Id == _selectedRecipeId,
+                ToolTip = row.StatusText,
             };
 
             var content = new BoxContainer
@@ -280,9 +282,10 @@ public sealed partial class ConstructionMenu : FancyWindow, IConstructionMenuVie
 
             var statusLabel = new Label
             {
-                Text = row.Available
+                Text = row.StatusText ?? (row.Available
                     ? Loc.GetString("construction-menu-status-available")
-                    : Loc.GetString("construction-menu-status-unavailable"),
+                    : Loc.GetString("construction-menu-status-unavailable")),
+                ClipText = true,
                 Modulate = row.Available ? AvailableGreen : UnavailableRed,
                 StyleClasses = { StyleNano.StyleClassLabelSmall },
             };
@@ -371,6 +374,8 @@ public sealed partial class ConstructionMenu : FancyWindow, IConstructionMenuVie
     {
         TargetStats.Text = text;
     }
+
+    public void SetCraftAvailable(bool available) => CraftButton.Disabled = !available;
 
     public void ClearRecipeInfo()
     {
@@ -498,5 +503,6 @@ public sealed partial class ConstructionMenu : FancyWindow, IConstructionMenuVie
         string Name,
         EntityPrototype TargetPrototype,
         bool Available,
-        bool IsFavorite);
+        bool IsFavorite,
+        string? StatusText = null);
 }

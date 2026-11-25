@@ -24,9 +24,27 @@
   name: species-name-lavrite
   roundStart: true
   prototype: MobLavrite
-  defaultSkinTone: "#8a4b3f"
+  defaultSkinTone: "#E58A43"
+  defaultHairColor: "#C14422"
   dollPrototype: AppearanceLavrite
   skinColoration: EclipseLavriteSkin
+  appearancePresets:
+  - name: species-appearance-lavrite-amber
+    skin: "#E58A43"
+    hair: { fallback: HumanHairMessy, root: "#701E24", middle: "#E13A19", tip: "#FFCA62" }
+    tail: { fallback: LavriteTailFlame, root: "#A03A21", middle: "#ED6A24", tip: "#FFD073" }
+  - name: species-appearance-lavrite-copper
+    skin: "#BF6B43"
+    hair: { fallback: HumanHairMessy, root: "#4B1E23", middle: "#B5492E", tip: "#F49B4B" }
+    tail: { fallback: LavriteTailFlame, root: "#703525", middle: "#BD482A", tip: "#FFA451" }
+  - name: species-appearance-lavrite-ember
+    skin: "#9F4637"
+    hair: { fallback: HumanHairMessy, root: "#24191C", middle: "#762529", tip: "#EF5826" }
+    tail: { fallback: LavriteTailFlame, root: "#47252A", middle: "#AC3529", tip: "#F46B32" }
+  - name: species-appearance-lavrite-ash
+    skin: "#AD8C82"
+    hair: { fallback: HumanHairMessy, root: "#352F37", middle: "#91574B", tip: "#FF8B3F" }
+    tail: { fallback: LavriteTailFlame, root: "#493D40", middle: "#955045", tip: "#FF933D" }
 
 - type: species
   id: Kobold
@@ -50,9 +68,43 @@
   id: Therian
   name: species-name-therian
   roundStart: true
+  variantName: species-variant-therian-feline
+  markingSpecies: Anthropomorph
   prototype: MobTherian
   defaultSkinTone: "#b8794e"
   dollPrototype: AppearanceTherian
+  skinColoration: EclipseTherianFur
+
+- type: species
+  id: TherianCanine
+  name: species-name-therian
+  roundStart: true
+  variantOf: Therian
+  variantName: species-variant-therian-canine
+  markingSpecies: Vulpkanin
+  prototype: MobTherianCanine
+  dollPrototype: AppearanceTherianCanine
+  defaultHeight: 178
+  defaultWeight: 77
+  defaultSkinTone: "#eb943d"
+  skinColoration: Hues
+  maleFirstNames: NamesVulpFirstMale
+  femaleFirstNames: NamesVulpFirstFemale
+  maleLastNames: NamesVulpLast
+  femaleLastNames: NamesVulpLast
+
+- type: species
+  id: TherianSmall
+  name: species-name-therian
+  roundStart: true
+  variantOf: Therian
+  variantName: species-variant-therian-small
+  markingSpecies: Anthropomorph
+  prototype: MobTherianSmall
+  dollPrototype: AppearanceTherianSmall
+  defaultHeight: 150
+  defaultWeight: 55
+  defaultSkinTone: "#9d887d"
   skinColoration: EclipseTherianFur
 
 - type: species

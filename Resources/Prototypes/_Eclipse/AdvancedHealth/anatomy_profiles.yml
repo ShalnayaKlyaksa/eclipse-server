@@ -6,10 +6,6 @@
 
 - type: advancedHealthAnatomy
   id: Imperial
-  bodyFluid: Blood
-  fluidColor: "#c60000"
-  bloodTypes: [ "O-", "O+", "A-", "A+", "B-", "B+", "AB-", "AB+" ]
-  incompatibleTransfusionPopup: advanced-health-transfusion-incompatible-imperial
 
 - type: advancedHealthAnatomy
   id: Dwarf
@@ -94,6 +90,25 @@
   incompatibleTransfusionPopup: advanced-health-transfusion-incompatible-therian
 
 - type: advancedHealthAnatomy
+  id: TherianCanine
+  maxBloodVolume: 4800
+  bleedingModifier: 1.02
+  bodyFluid: Blood
+  fluidColor: "#d05a18"
+  bloodTypes: [ "T-A", "T-B", "T-O" ]
+  incompatibleTransfusionPopup: advanced-health-transfusion-incompatible-therian
+
+- type: advancedHealthAnatomy
+  id: TherianSmall
+  maxBloodVolume: 4200
+  bleedingModifier: 1.08
+  defaultBoneIntegrity: 90
+  bodyFluid: Blood
+  fluidColor: "#d05a18"
+  bloodTypes: [ "T-A", "T-B", "T-O" ]
+  incompatibleTransfusionPopup: advanced-health-transfusion-incompatible-therian
+
+- type: advancedHealthAnatomy
   id: Arkane
   maxBloodVolume: 4700
   bleedingModifier: 1.05
@@ -150,6 +165,7 @@
   fluidColor: "#70d5ff"
   bloodTypes: [ "P-Neutral", "P-Cryo", "P-Electro", "P-Acid", "P-Neuro" ]
   incompatibleTransfusionPopup: advanced-health-transfusion-incompatible-slimefolk
+  needsOxygen: false
   canFracture: false
   defaultSkinIntegrity: 82
   defaultMuscleIntegrity: 125

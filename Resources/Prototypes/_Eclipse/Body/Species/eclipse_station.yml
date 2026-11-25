@@ -10,7 +10,7 @@
     species: Imperial
 
 - type: entity
-  parent: [ AppearanceImperial, BaseSpeciesMobOrganic ]
+  parent: [ AppearanceImperial, MobHuman ]
   id: MobImperial
   name: Urist McImperial
 
@@ -27,6 +27,9 @@
   parent: [ AppearanceMolei, MobMoth ]
   id: MobMolei
   name: Urist McMolei
+  components:
+  - type: ActionGrant
+    actions: [ ActionMoleiSilk ]
 
 - type: entity
   parent: AppearanceHuman
@@ -36,11 +39,72 @@
   components:
   - type: HumanoidProfile
     species: Lavrite
+  - type: InitialBody
+    organs:
+      Torso: OrganLavriteTorso
+      Head: OrganHumanHead
+      ArmLeft: OrganHumanArmLeft
+      ArmRight: OrganHumanArmRight
+      HandRight: OrganHumanHandRight
+      HandLeft: OrganHumanHandLeft
+      LegLeft: OrganHumanLegLeft
+      LegRight: OrganHumanLegRight
+      FootLeft: OrganHumanFootLeft
+      FootRight: OrganHumanFootRight
+      Brain: OrganHumanBrain
+      Eyes: OrganHumanEyes
+      Tongue: OrganHumanTongue
+      Appendix: OrganHumanAppendix
+      Ears: OrganHumanEars
+      Lungs: OrganHumanLungs
+      Heart: OrganHumanHeart
+      Stomach: OrganHumanStomach
+      Liver: OrganHumanLiver
+      Kidneys: OrganHumanKidneys
+
+- type: entity
+  parent: OrganHumanTorso
+  id: OrganLavriteTorso
+  components:
+  - type: VisualOrganMarkings
+    markingData:
+      group: Lavrite
+
+- type: markingsGroup
+  parent: Human
+  id: Lavrite
+  limits:
+    enum.HumanoidVisualLayers.Tail:
+      limit: 1
+      required: true
+      onlyGroupWhitelisted: true
+      default: [ LavriteTailFlame ]
 
 - type: entity
   parent: [ AppearanceLavrite, BaseSpeciesMobOrganic ]
   id: MobLavrite
   name: Urist McLavrite
+  components:
+  - type: Temperature
+    currentTemperature: 323.15
+  - type: ThermalRegulator
+    normalBodyTemperature: 323.15
+    metabolismHeat: 1150
+    radiatedHeat: 220
+  - type: TemperatureDamage
+    heatDamageThreshold: 380
+    coldDamageThreshold: 285
+    coldDamage:
+      types:
+        Cold: 0.22
+  - type: TemperatureSpeed
+    thresholds:
+      303: 0.9
+      294: 0.75
+      285: 0.6
+  - type: LavriteHeat
+  - type: ActionGrant
+    actions: [ ActionLavriteVentHeat, ActionLavriteCoolTouch ]
 
 - type: entity
   parent: AppearanceReptilian
@@ -58,6 +122,16 @@
   id: MobEclipseKobold
   name: Urist McKobold
   components:
+  - type: Puller
+    heavyPullMassThreshold: 65
+    heavyPullSpeedMultiplier: 0.25
+  - type: AdvancedExertion
+    sprintCost: 1.9
+    restRecovery: 0.95
+    heavyWorkCostMultiplier: 2
+  - type: JumpAbility
+    action: ActionKoboldScurry
+    jumpDistance: 3.4
   - type: Fixtures
     fixtures:
       fix1:
@@ -86,6 +160,15 @@
   parent: [ AppearanceSaurian, MobReptilian ]
   id: MobSaurian
   name: Urist McSaurian
+  components:
+  - type: Puller
+    heavyPullMassThreshold: 65
+    heavyPullSpeedMultiplier: 1.16
+  - type: AdvancedExertion
+    heavyWorkCostMultiplier: 0.7
+    sprintCost: 3.5
+  - type: ActionGrant
+    actions: [ ActionSaurianTailSweep ]
 
 - type: entity
   parent: AppearanceAnthropomorph
@@ -100,10 +183,48 @@
   parent: [ AppearanceTherian, MobAnthropomorph ]
   id: MobTherian
   name: Urist McTherian
+  components:
+  - type: JumpAbility
+    action: ActionTherianPounce
+    jumpDistance: 4.2
+    canCollide: true
+    collideKnockdown: 0.6
 
-# Arkanes are no longer a reskinned human: their body, organs and marking group live in arkane.yml.
+- type: entity
+  parent: AppearanceVulpkanin
+  id: AppearanceTherianCanine
+  categories: [ HideSpawnMenu ]
+  name: canine therian appearance
+  components:
+  - type: HumanoidProfile
+    species: TherianCanine
 
-# The Avian body and its mandatory harpy wings live in avian.yml.
+- type: entity
+  parent: [ AppearanceTherianCanine, MobVulpkanin ]
+  id: MobTherianCanine
+  name: Urist McHowl
+  components:
+  - type: ActionGrant
+    actions: [ ActionTherianScent ]
+
+- type: entity
+  parent: AppearanceTherian
+  id: AppearanceTherianSmall
+  categories: [ HideSpawnMenu ]
+  name: small therian appearance
+  components:
+  - type: HumanoidProfile
+    species: TherianSmall
+  - type: ScaleVisuals
+    scale: 0.87, 0.87
+
+- type: entity
+  parent: [ AppearanceTherianSmall, MobAnthropomorph ]
+  id: MobTherianSmall
+  name: Urist McScamper
+  components:
+  - type: ActionGrant
+    actions: [ ActionTherianScurry ]
 
 - type: entity
   parent: AppearanceHuman
@@ -118,6 +239,9 @@
   parent: [ AppearanceElir, BaseSpeciesMobOrganic ]
   id: MobElir
   name: Urist McElir
+  components:
+  - type: ActionGrant
+    actions: [ ActionElirReadPulse ]
 
 - type: entity
   parent: AppearanceSlimePerson
@@ -127,8 +251,48 @@
   components:
   - type: HumanoidProfile
     species: Slimefolk
+  - type: InitialBody
+    organs:
+      Torso: OrganSlimePersonTorso
+      Head: OrganSlimePersonHead
+      ArmLeft: OrganSlimePersonArmLeft
+      ArmRight: OrganSlimePersonArmRight
+      HandRight: OrganSlimePersonHandRight
+      HandLeft: OrganSlimePersonHandLeft
+      LegLeft: OrganSlimePersonLegLeft
+      LegRight: OrganSlimePersonLegRight
+      FootLeft: OrganSlimePersonFootLeft
+      FootRight: OrganSlimePersonFootRight
+      Brain: OrganSlimePersonCore
 
 - type: entity
-  parent: [ AppearanceSlimefolk, MobSlimePerson ]
+  parent: [ AppearanceSlimefolk, BaseSpeciesMobOrganic ]
   id: MobSlimefolk
   name: Urist McSlimefolk
+  components:
+  - type: Damageable
+    damageModifierSet: EclipseSlimefolk
+  - type: Bloodstream
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: Slime
+        Quantity: 300
+  - type: Speech
+    speechSounds: Slime
+    speechVerb: Slime
+    allowedEmotes: [ Squish ]
+  - type: Vocal
+    sounds:
+      Male: MaleSlime
+      Female: FemaleSlime
+      Unsexed: MaleSlime
+  - type: ActionGrant
+    actions: [ ActionSlimeReform, ActionSlimeAdhesive ]
+
+- type: damageModifierSet
+  id: EclipseSlimefolk
+  coefficients:
+    Blunt: 0.6
+    Piercing: 0.8
+    Heat: 1.4
+    Cold: 1.4

@@ -9,6 +9,7 @@ using Content.Server.Eclipse.Economy;
 using Content.Shared.Body;
 using Content.Shared.CCVar;
 using Content.Shared.Construction.Prototypes;
+using Content.Shared.Corvax.TTS;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid.Prototypes;
@@ -113,7 +114,7 @@ namespace Content.Server.Preferences.Managers
             // Corvax-TTS-Start
             var voice = profile.Voice;
             if (voice == String.Empty)
-                voice = HumanoidProfileSystem.DefaultSexVoice[sex.PresentationSex()];
+                voice = HumanoidProfileSystem.DefaultVoice;
             // Corvax-TTS-End
 
             var markings =
@@ -442,11 +443,11 @@ namespace Content.Server.Preferences.Managers
 
             // Corvax-Sponsors-Start: Remove sponsor markings from expired sponsors
             var collection = IoCManager.Instance!;
+            var sponsorPrototypes = _sponsors != null && _sponsors.TryGetServerPrototypes(session.UserId, out var prototypes)
+                ? prototypes.ToArray()
+                : [];
             foreach (var (_, profile) in prefsData.Prefs.Characters)
             {
-                var sponsorPrototypes = _sponsors != null && _sponsors.TryGetServerPrototypes(session.UserId, out var prototypes)
-                    ? prototypes.ToArray()
-                    : [];
                 profile.EnsureValid(session, collection, sponsorPrototypes);
             }
             // Corvax-Sponsors-End
@@ -455,9 +456,23 @@ namespace Content.Server.Preferences.Managers
             msg.Preferences = prefsData.Prefs;
             msg.Settings = new GameSettings
             {
-                MaxCharacterSlots = GetMaxUserCharacterSlots(session.UserId) // Corvax-Sponsors
+                MaxCharacterSlots = GetMaxUserCharacterSlots(session.UserId), // Corvax-Sponsors
+                TtsVoices = GetTtsVoices(sponsorPrototypes.ToHashSet()),
             };
             _netManager.ServerSendMessage(msg, session.Channel);
+        }
+
+        private TTSVoiceOption[] GetTtsVoices(IReadOnlySet<string> sponsorPrototypes)
+        {
+            var localization = _dependencies.Resolve<ILocalizationManager>();
+            return _prototypeManager.EnumeratePrototypes<TTSVoicePrototype>()
+                .Where(voice => voice.RoundStart)
+                .Select(voice => new TTSVoiceOption(voice.ID, voice.Name,
+                    localization.TryGetString(voice.Name, out var localized) ? localized :
+                    string.IsNullOrWhiteSpace(voice.Name) || voice.Name.StartsWith("tts-voice-name-", StringComparison.Ordinal)
+                        ? voice.ID : voice.Name,
+                    voice.CanSelect(sponsorPrototypes)))
+                .ToArray();
         }
 
         public void OnClientDisconnected(ICommonSession session)

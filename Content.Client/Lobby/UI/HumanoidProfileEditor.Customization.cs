@@ -12,8 +12,6 @@ public sealed partial class HumanoidProfileEditor
     {
         BindOption<VulpkaninBodyType>(BodyTypeButton, "body-type", (values, bodyType) => values with { BodyType = bodyType },
             ReloadProfilePreview);
-        BindOption<VocalStyle>(VocalStyleButton, "vocal-style", (values, style) => values with { VocalStyle = style },
-            UpdateTTSVoicesControls);
         BindOption<ErpPreference>(ErpButton, "erp", (values, erp) => values with { Erp = erp });
         BindOption<CharacterHistory>(VirginityButton, "history", (values, history) => values with { Virginity = history });
         BindOption<CharacterHistory>(AnalVirginityButton, "history", (values, history) => values with { AnalVirginity = history });
@@ -53,7 +51,6 @@ public sealed partial class HumanoidProfileEditor
         var customization = Profile.Customization;
         BodyTypeRow.Visible = CharacterCustomization.HasBodyTypes(Profile.Species);
         BodyTypeButton.SelectId((int) customization.BodyType);
-        VocalStyleButton.SelectId((int) customization.VocalStyle);
         ErpButton.SelectId((int) customization.Erp);
         VirginityButton.SelectId((int) customization.Virginity);
         AnalVirginityButton.SelectId((int) customization.AnalVirginity);

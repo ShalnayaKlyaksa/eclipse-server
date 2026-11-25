@@ -1,0 +1,224 @@
+- type: Tag
+  id: EclipseNuclearFuelCell
+
+- type: entity
+  id: NuclearUraniumCell
+  parent: BaseItem
+  name: uranium fuel cartridge
+  description: A removable radioactive fuel cartridge for steady operation.
+  components:
+  - type: NuclearFuelCell
+  - type: RadiationSource
+    intensity: 3
+    slope: 1.2
+  - type: Tag
+    tags: [EclipseNuclearFuelCell]
+  - type: Sprite
+    sprite: _Eclipse/Structures/Power/nuclear_sections.rsi
+    state: cell_uranium
+  - type: Item
+    size: Normal
+
+- type: entity
+  id: NuclearMoxCell
+  parent: NuclearUraniumCell
+  name: MOX fuel cartridge
+  description: A high-output fuel cell that peaks just below the reactor's thermal limit.
+  components:
+  - type: NuclearFuelCell
+    kind: Mox
+    energy: 3200000000
+    initialEnergy: 3200000000
+  - type: RadiationSource
+    intensity: 5
+  - type: Sprite
+    state: cell_mox
+
+- type: entity
+  id: NuclearThoriumCell
+  parent: NuclearUraniumCell
+  name: thorium fuel cartridge
+  description: A low-output fuel cell for long reactor runs.
+  components:
+  - type: NuclearFuelCell
+    kind: Thorium
+    energy: 4900000000
+    initialEnergy: 4900000000
+  - type: Sprite
+    state: cell_thorium
+
+- type: entity
+  id: NuclearPulseCell
+  parent: NuclearUraniumCell
+  name: pulse fuel cartridge
+  description: Produces more heat for each occupied fuel hatch directly adjacent to it.
+  components:
+  - type: NuclearFuelCell
+    kind: Pulse
+    energy: 1450000000
+    initialEnergy: 1450000000
+  - type: RadiationSource
+    intensity: 4
+  - type: Sprite
+    state: cell_pulse
+
+- type: entity
+  id: NuclearReactorHeatSink
+  parent: BaseNuclearFloorSection
+  name: reactor heat transfer plate
+  description: Place next to fuel hatches to improve heat removal through the conditioning station.
+  components:
+  - type: NuclearReactorPart
+    kind: HeatSink
+  - type: Sprite
+    state: heat_sink
+  - type: Icon
+    state: heat_sink
+
+- type: entity
+  id: NuclearReactorHeatSinkFlatpack
+  parent: BaseFlatpack
+  name: reactor heat transfer plate flatpack
+  components:
+  - type: Flatpack
+    entity: NuclearReactorHeatSink
+    qualityNeeded: Anchoring
+
+- type: entity
+  id: NuclearThoriumCrate
+  parent: CrateEngineering
+  name: thorium feedstock crate
+  components:
+  - type: RadiationBlocker
+    resistance: 8
+  - type: StorageFill
+    contents:
+    - id: NuclearThoriumFeed
+      amount: 4
+
+- type: cargoProduct
+  id: NuclearThoriumSupply
+  icon:
+    sprite: _Eclipse/Structures/Power/nuclear_sections.rsi
+    state: cell_thorium
+  product: NuclearThoriumCrate
+  cost: 2600
+  category: cargoproduct-category-name-engineering
+  group: market
+
+- type: entity
+  id: NuclearReactorConditioner
+  parent: BaseNuclearSection
+  name: reactor conditioning station
+  description: Mount south of a shield tile that borders the active zone. Connect reagents from the west, cold gas from the south and warm gas return to the east.
+  components:
+  - type: NuclearReactorConditioner
+  - type: Sprite
+    state: conditioner
+  - type: Icon
+    state: conditioner
+  - type: SolutionContainerManager
+    solutions:
+      conditioning:
+        maxVol: 160
+        canReact: false
+  - type: RefillableSolution
+    solution: conditioning
+  - type: ExaminableSolution
+    solution: conditioning
+    exactVolume: true
+  - type: LiquidPipeEndpoint
+    inputSolution: conditioning
+    inputFace: West
+    allowedInputs: [IndustrialOxidizer, IndustrialSolvent]
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      coolant_in:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: South
+        volume: 300
+      coolant_out:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: East
+        volume: 300
+  - type: AtmosUnsafeUnanchor
+
+- type: entity
+  id: NuclearReactorConditionerFlatpack
+  parent: BaseFlatpack
+  name: reactor conditioning station flatpack
+  components:
+  - type: Flatpack
+    entity: NuclearReactorConditioner
+    qualityNeeded: Anchoring
+
+- type: industrialRecipe
+  id: AssembleNuclearUraniumCell
+  processor: FuelCartridgeAssembler
+  time: 15
+  minimumTier: Industrial
+  requiredTechnology: EnergyFission
+  requireDataDisk: true
+  inputs:
+    NuclearUraniumElement: 1
+    NuclearEmptyCartridge: 1
+  outputs:
+    NuclearUraniumCell: 1
+
+- type: industrialRecipe
+  id: AssembleNuclearMoxCell
+  processor: FuelCartridgeAssembler
+  time: 28
+  minimumTier: Industrial
+  requiredTechnology: EnergyMox
+  requireDataDisk: true
+  inputs:
+    NuclearMoxElement: 1
+    NuclearEmptyCartridge: 1
+    IndustrialHeatConduitAssembly: 2
+  outputs:
+    NuclearMoxCell: 1
+
+- type: industrialRecipe
+  id: AssembleNuclearPulseCell
+  processor: FuelCartridgeAssembler
+  time: 24
+  minimumTier: Industrial
+  requiredTechnology: EnergyMox
+  requireDataDisk: true
+  inputs:
+    NuclearPulseElement: 1
+    NuclearEmptyCartridge: 1
+    IndustrialAdvancedBoard: 1
+  outputs:
+    NuclearPulseCell: 1
+
+- type: industrialRecipe
+  id: AssembleNuclearReactorHeatSink
+  processor: Assembler
+  time: 18
+  minimumTier: Industrial
+  requiredTechnology: EnergyMox
+  requireDataDisk: true
+  inputs:
+    SheetSteel: 4
+    IndustrialHeatConduitAssembly: 2
+  outputs:
+    NuclearReactorHeatSinkFlatpack: 1
+
+- type: industrialRecipe
+  id: AssembleNuclearReactorConditioner
+  processor: Assembler
+  time: 36
+  minimumTier: Industrial
+  requiredTechnology: EnergyMox
+  requireDataDisk: true
+  inputs:
+    SheetPlasteel: 8
+    IndustrialHeatConduitAssembly: 7
+    IndustrialAdvancedBoard: 3
+  outputs:
+    NuclearReactorConditionerFlatpack: 1

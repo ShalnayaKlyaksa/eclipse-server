@@ -1,0 +1,27 @@
+# Карточки отображаются в порядке списка внутри каждой колонки.
+# status: Available (уже доступно), InProgress (в разработке), Planned (запланировано).
+# previous — ID предыдущего этапа. longTerm: true добавляет пометку «Долгосрочный план».
+# Название и описание задаются ключами eclipse-roadmap-<id>-title и
+# eclipse-roadmap-<id>-description в Resources/Locale/<язык>/_Eclipse/lobby-roadmap.ftl.
+- type: eclipseLobbyRoadmap
+  id: EclipseLobbyRoadmap
+  milestones:
+  - id: lobby
+    status: Available
+  - id: profile
+    status: InProgress
+    previous: lobby
+  - id: store
+    status: Planned
+    previous: lobby
+  - id: ranks
+    status: Planned
+    previous: profile
+  - id: events
+    status: Planned
+    previous: lobby
+    longTerm: true
+  - id: ares
+    status: Planned
+  - id: rnd
+    status: Planned

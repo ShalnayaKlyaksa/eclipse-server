@@ -54,6 +54,27 @@ public sealed partial class HumanoidCharacterAppearance : IEquatable<HumanoidCha
         return new(EyeColor, SkinColor, newMarkings);
     }
 
+    public HumanoidCharacterAppearance WithColorPreset(SpeciesAppearancePreset preset)
+    {
+        var markings = new Dictionary<ProtoId<OrganCategoryPrototype>, Dictionary<HumanoidVisualLayers, List<Marking>>>(Markings);
+        Apply("Head", HumanoidVisualLayers.Hair, preset.Hair);
+        Apply("Torso", HumanoidVisualLayers.Tail, preset.Tail);
+        return new HumanoidCharacterAppearance(EyeColor, preset.Skin, markings);
+
+        void Apply(ProtoId<OrganCategoryPrototype> organ, HumanoidVisualLayers layer, PresetGradient gradient)
+        {
+            var layers = markings.TryGetValue(organ, out var existing)
+                ? new Dictionary<HumanoidVisualLayers, List<Marking>>(existing)
+                : new Dictionary<HumanoidVisualLayers, List<Marking>>();
+            var selected = layers.TryGetValue(layer, out var current) && current.Count > 0
+                ? new List<Marking>(current)
+                : new List<Marking> { new(gradient.Fallback, 1) };
+            selected[0] = gradient.Apply(selected[0]);
+            layers[layer] = selected;
+            markings[organ] = layers;
+        }
+    }
+
     public static HumanoidCharacterAppearance DefaultWithSpecies(ProtoId<SpeciesPrototype> species, Sex sex)
     {
         var protoMan = IoCManager.Resolve<IPrototypeManager>();

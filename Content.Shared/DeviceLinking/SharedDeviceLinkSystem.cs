@@ -275,7 +275,7 @@ public abstract class SharedDeviceLinkSystem : EntitySystem
         var defaults = GetDefaults(sourcePorts);
         SaveLinks(userId, sourceUid, sinkUid, defaults, sourceComponent, sinkComponent);
 
-        if (userId != null)
+        if (userId != null && GetLinks(sourceUid, sinkUid, sourceComponent).Count > 0)
             _popupSystem.PopupCursor(Loc.GetString("signal-linking-verb-success", ("machine", sourceUid)), userId.Value);
     }
 
@@ -323,12 +323,10 @@ public abstract class SharedDeviceLinkSystem : EntitySystem
 
             sourceComponent.Outputs.GetOrNew(source).Add(sinkUid);
             sourceComponent.LinkedPorts.GetOrNew(sinkUid).Add((source, sink));
+            sinkComponent.LinkedSources.Add(sourceUid);
 
             SendNewLinkEvent(userId, sourceUid, source, sinkUid, sink);
         }
-
-        if (links.Count > 0)
-            sinkComponent.LinkedSources.Add(sourceUid);
     }
 
     /// <summary>

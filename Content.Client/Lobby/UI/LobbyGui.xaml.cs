@@ -1173,7 +1173,7 @@ namespace Content.Client.Lobby.UI
         private void ApplyLobbyChatStyle()
         {
             Chat.ApplyForgeChatLayout();
-            Chat.UseLobbyMessageColors = true;
+            Chat.MarkServerNotices = true;
             Chat.ChatWindowPanel.PanelOverride = new StyleBoxEmpty();
             Chat.Contents.Margin = new Thickness(0, 0, 3, 6);
             Chat.ChatInput.Margin = new Thickness(0);

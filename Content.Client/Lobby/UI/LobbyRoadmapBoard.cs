@@ -1,8 +1,10 @@
 using System.Linq;
 using Content.Client.MainMenu.UI;
 using Content.Client.Stylesheets;
+using Content.Shared._Eclipse.Lobby;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Prototypes;
 
 namespace Content.Client.Lobby.UI;
 
@@ -14,27 +16,23 @@ public sealed class LobbyRoadmapBoard : ScrollContainer
     private static readonly Color ColumnBackground = Color.FromHex("#141414");
     private static readonly Color ColumnBorder = Color.FromHex("#333333");
 
-    private static readonly Milestone[] Milestones =
-    [
-        new("lobby", Status.Available),
-        new("profile", Status.InProgress, "lobby"),
-        new("store", Status.Planned, "lobby"),
-        new("ranks", Status.Planned, "profile"),
-        new("events", Status.Planned, "lobby", LongTerm: true),
-    ];
-
+    private static readonly ProtoId<EclipseLobbyRoadmapPrototype> RoadmapId = "EclipseLobbyRoadmap";
+    private readonly IReadOnlyList<LobbyRoadmapMilestone> _milestones;
     private readonly BoxContainer _columns = new() { SeparationOverride = ColumnGap };
 
     public string ProgressText => Loc.GetString("eclipse-roadmap-progress",
-        ("done", Milestones.Count(milestone => milestone.State == Status.Available)), ("total", Milestones.Length));
+        ("done", _milestones.Count(milestone => milestone.Status == LobbyRoadmapStatus.Available)),
+        ("total", _milestones.Count));
 
     public LobbyRoadmapBoard()
     {
+        var prototypes = IoCManager.Resolve<IPrototypeManager>();
+        _milestones = prototypes.TryIndex(RoadmapId, out var roadmap) ? roadmap.Milestones : [];
         HScrollEnabled = false;
         AddChild(_columns);
-        _columns.AddChild(BuildColumn(Status.Available, "eclipse-roadmap-available", Color.FromHex("#87D0AB")));
-        _columns.AddChild(BuildColumn(Status.InProgress, "eclipse-roadmap-in-progress", Color.FromHex("#F0B16C")));
-        _columns.AddChild(BuildColumn(Status.Planned, "eclipse-roadmap-planned", Color.FromHex("#A6C2E2")));
+        _columns.AddChild(BuildColumn(LobbyRoadmapStatus.Available, "eclipse-roadmap-available", Color.FromHex("#87D0AB")));
+        _columns.AddChild(BuildColumn(LobbyRoadmapStatus.InProgress, "eclipse-roadmap-in-progress", Color.FromHex("#F0B16C")));
+        _columns.AddChild(BuildColumn(LobbyRoadmapStatus.Planned, "eclipse-roadmap-planned", Color.FromHex("#A6C2E2")));
     }
 
     protected override void Resized()
@@ -50,9 +48,9 @@ public sealed class LobbyRoadmapBoard : ScrollContainer
             column.MaxWidth = stacked ? float.PositiveInfinity : columnWidth;
     }
 
-    private static Control BuildColumn(Status status, string heading, Color accent)
+    private Control BuildColumn(LobbyRoadmapStatus status, string heading, Color accent)
     {
-        var milestones = Milestones.Where(milestone => milestone.State == status).ToArray();
+        var milestones = _milestones.Where(milestone => milestone.Status == status).ToArray();
         var column = new PanelContainer
         {
             PanelOverride = ForgeStyle.Panel(ColumnBackground, ColumnBorder, 12, 12),
@@ -91,7 +89,7 @@ public sealed class LobbyRoadmapBoard : ScrollContainer
         return column;
     }
 
-    private static Control BuildCard(Milestone milestone)
+    private static Control BuildCard(LobbyRoadmapMilestone milestone)
     {
         var card = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical };
         var title = Loc.GetString($"eclipse-roadmap-{milestone.Id}-title");
@@ -148,8 +146,4 @@ public sealed class LobbyRoadmapBoard : ScrollContainer
         label.SetMessage(text, Color.FromHex("#B3B3B3"));
         return label;
     }
-
-    private enum Status { Available, InProgress, Planned }
-
-    private sealed record Milestone(string Id, Status State, string? Previous = null, bool LongTerm = false);
 }

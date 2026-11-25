@@ -1,5 +1,5 @@
 #include "/Textures/Shaders/marking_gradient_shared.swsl"
 
 void fragment() {
-    COLOR = zTexture(UV) * markingGradient(1.0 - UV2.y);
+    COLOR = sampleBakedMarking(UV);
 }

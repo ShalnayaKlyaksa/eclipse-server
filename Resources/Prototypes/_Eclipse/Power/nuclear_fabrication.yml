@@ -1,0 +1,259 @@
+- type: entity
+  id: NuclearFuelPress
+  parent: IndustrialAssembler
+  name: fuel cell press
+  description: A shielded press that forms ceramic fuel cells. Its preset west port accepts feedstock and the east port sends cells to the cartridge line.
+  components:
+  - type: IndustrialProcessor
+    processorType: FuelPress
+    westFacePort: ItemInput
+    eastFacePort: ItemOutput
+  - type: ApcPowerReceiver
+    powerLoad: 3400
+  - type: Sprite
+    sprite: _Eclipse/Structures/Power/nuclear_fabrication.rsi
+    layers:
+    - state: press_idle
+      map: ["enum.IndustrialProcessorVisualLayers.Base"]
+  - type: Icon
+    sprite: _Eclipse/Structures/Power/nuclear_fabrication.rsi
+    state: press_idle
+  - type: GenericVisualizer
+    visuals:
+      enum.IndustrialProcessorVisuals.State:
+        enum.IndustrialProcessorVisualLayers.Base:
+          Idle: { state: press_idle }
+          Working: { state: press_active }
+          Blocked: { state: press_paused }
+          Unpowered: { state: press_idle }
+          Unheated: { state: press_paused }
+          Paused: { state: press_paused }
+          Unresearched: { state: press_paused }
+  - type: RadiationBlocker
+    resistance: 12
+  - type: GuideHelp
+    guides: [EclipseNuclearReactor]
+
+- type: entity
+  id: NuclearCartridgeFabricator
+  parent: IndustrialAssembler
+  name: fuel cartridge fabricator
+  description: Seals a ceramic fuel cell inside a prefabricated cartridge casing. Its preset west port accepts parts and the east port sends out finished cartridges.
+  components:
+  - type: IndustrialProcessor
+    processorType: FuelCartridgeAssembler
+    westFacePort: ItemInput
+    eastFacePort: ItemOutput
+  - type: ApcPowerReceiver
+    powerLoad: 2800
+  - type: Sprite
+    sprite: _Eclipse/Structures/Power/nuclear_fabrication.rsi
+    layers:
+    - state: sealer_idle
+      map: ["enum.IndustrialProcessorVisualLayers.Base"]
+  - type: Icon
+    sprite: _Eclipse/Structures/Power/nuclear_fabrication.rsi
+    state: sealer_idle
+  - type: GenericVisualizer
+    visuals:
+      enum.IndustrialProcessorVisuals.State:
+        enum.IndustrialProcessorVisualLayers.Base:
+          Idle: { state: sealer_idle }
+          Working: { state: sealer_active }
+          Blocked: { state: sealer_paused }
+          Unpowered: { state: sealer_idle }
+          Unheated: { state: sealer_paused }
+          Paused: { state: sealer_paused }
+          Unresearched: { state: sealer_paused }
+  - type: RadiationBlocker
+    resistance: 12
+  - type: GuideHelp
+    guides: [EclipseNuclearReactor]
+
+- type: entity
+  id: NuclearFuelPressFlatpack
+  parent: BaseFlatpack
+  name: fuel cell press flatpack
+  components:
+  - type: Flatpack
+    entity: NuclearFuelPress
+    qualityNeeded: Anchoring
+
+- type: entity
+  id: NuclearCartridgeFabricatorFlatpack
+  parent: BaseFlatpack
+  name: fuel cartridge fabricator flatpack
+  components:
+  - type: Flatpack
+    entity: NuclearCartridgeFabricator
+    qualityNeeded: Anchoring
+
+- type: entity
+  id: NuclearEmptyCartridge
+  parent: BaseItem
+  name: empty fuel cartridge casing
+  description: A shielded casing for the fuel cartridge fabricator. Load it together with a ceramic fuel cell.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Power/nuclear_fabrication.rsi
+    state: casing
+  - type: Item
+    size: Small
+
+- type: entity
+  id: NuclearUraniumElement
+  parent: BaseItem
+  name: ceramic uranium fuel cell
+  description: A radioactive intermediate that the cartridge fabricator can load into a reactor cartridge.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Power/nuclear_sections.rsi
+    state: element_uranium
+  - type: Item
+    size: Small
+  - type: RadiationSource
+    intensity: 3.5
+    slope: 1.2
+
+- type: entity
+  id: NuclearMoxElement
+  parent: NuclearUraniumElement
+  name: ceramic MOX fuel cell
+  components:
+  - type: Sprite
+    state: element_mox
+  - type: RadiationSource
+    intensity: 5.5
+
+- type: entity
+  id: NuclearThoriumElement
+  parent: NuclearUraniumElement
+  name: ceramic thorium fuel cell
+  components:
+  - type: Sprite
+    state: element_thorium
+
+- type: entity
+  id: NuclearPulseElement
+  parent: NuclearUraniumElement
+  name: ceramic pulse fuel cell
+  components:
+  - type: Sprite
+    state: element_pulse
+  - type: RadiationSource
+    intensity: 4.5
+
+- type: entity
+  id: NuclearThoriumFeed
+  parent: BaseItem
+  name: sealed thorium feedstock
+  description: A factory feed container for the fuel cell press.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Power/nuclear_sections.rsi
+    state: cell_thorium
+  - type: Item
+    size: Small
+
+- type: industrialRecipe
+  id: AssembleNuclearFuelPress
+  processor: Assembler
+  time: 32
+  minimumTier: Industrial
+  requiredTechnology: EnergyFission
+  requireDataDisk: true
+  inputs:
+    SheetPlasteel: 6
+    IndustrialMechanicalCore: 2
+    IndustrialHeatConduitAssembly: 3
+  outputs:
+    NuclearFuelPressFlatpack: 1
+
+- type: industrialRecipe
+  id: AssembleNuclearCartridgeFabricator
+  processor: Assembler
+  time: 32
+  minimumTier: Industrial
+  requiredTechnology: EnergyFission
+  requireDataDisk: true
+  inputs:
+    SheetPlasteel: 6
+    IndustrialMechanicalCore: 2
+    IndustrialAdvancedBoard: 2
+  outputs:
+    NuclearCartridgeFabricatorFlatpack: 1
+
+- type: industrialRecipe
+  id: AssembleNuclearEmptyCartridges
+  processor: Assembler
+  time: 12
+  minimumTier: Industrial
+  requiredTechnology: EnergyFission
+  requireDataDisk: true
+  inputs:
+    SheetPlasteel: 8
+  outputs:
+    NuclearEmptyCartridge: 4
+
+- type: industrialRecipe
+  id: PressNuclearUraniumElement
+  processor: FuelPress
+  time: 16
+  minimumTier: Industrial
+  requiredTechnology: EnergyFission
+  requireDataDisk: true
+  inputs:
+    UraniumDust: 6
+  outputs:
+    NuclearUraniumElement: 1
+
+- type: industrialRecipe
+  id: PressNuclearMoxElement
+  processor: FuelPress
+  time: 24
+  minimumTier: Industrial
+  requiredTechnology: EnergyMox
+  requireDataDisk: true
+  inputs:
+    UraniumDust: 8
+    SheetPlasma: 3
+  outputs:
+    NuclearMoxElement: 1
+
+- type: industrialRecipe
+  id: PressNuclearThoriumElement
+  processor: FuelPress
+  time: 21
+  minimumTier: Industrial
+  requiredTechnology: EnergyFission
+  requireDataDisk: true
+  inputs:
+    NuclearThoriumFeed: 1
+  outputs:
+    NuclearThoriumElement: 1
+
+- type: industrialRecipe
+  id: PressNuclearPulseElement
+  processor: FuelPress
+  time: 20
+  minimumTier: Industrial
+  requiredTechnology: EnergyMox
+  requireDataDisk: true
+  inputs:
+    UraniumDust: 6
+    SheetPlasma: 1
+  outputs:
+    NuclearPulseElement: 1
+
+- type: industrialRecipe
+  id: AssembleNuclearThoriumCell
+  processor: FuelCartridgeAssembler
+  time: 18
+  minimumTier: Industrial
+  requiredTechnology: EnergyFission
+  requireDataDisk: true
+  inputs:
+    NuclearThoriumElement: 1
+    NuclearEmptyCartridge: 1
+  outputs:
+    NuclearThoriumCell: 1

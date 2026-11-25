@@ -22,3 +22,28 @@
   path: "/Textures/Shaders/displacement_unshaded.swsl"
   params:
     displacementSize: 127
+
+- type: shader
+  id: MarkingGradientDisplaced
+  kind: source
+  path: "/Textures/Shaders/marking_gradient_displaced.swsl"
+  params:
+    displacementSize: 127
+
+- type: shader
+  id: MarkingGradientDisplacedUnshaded
+  kind: source
+  path: "/Textures/Shaders/marking_gradient_displaced_unshaded.swsl"
+  params:
+    displacementSize: 127
+
+- type: shader
+  id: MarkingGradientDisplacedStencil
+  kind: source
+  path: "/Textures/Shaders/marking_gradient_displaced.swsl"
+  stencil:
+    ref: 1
+    op: Keep
+    func: NotEqual
+  params:
+    displacementSize: 127

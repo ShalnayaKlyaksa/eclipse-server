@@ -7,13 +7,3 @@
   - type: Sprite
     sprite: Eclipse/Structures/Decoration/inteq_flag.rsi
     state: inteq_flag
-
-- type: entity
-  parent: BaseFlag
-  id: PactFlag
-  name: Pact flag
-  description: Flag with the Pact logo.
-  components:
-  - type: Sprite
-    sprite: Eclipse/Structures/Decoration/pact_flag.rsi
-    state: pact_flag

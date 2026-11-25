@@ -22,6 +22,21 @@
 
 - type: entity
   parent: AdvancedMedicineVialBase
+  id: AdvancedMedicineVialNeuroregen
+  name: Neuroregen vial
+  components:
+  - type: Label
+    currentLabel: reagent-name-neuroregen
+  - type: SolutionContainerManager
+    solutions:
+      drink:
+        maxVol: 30
+        reagents:
+        - ReagentId: Neuroregen
+          Quantity: 30
+
+- type: entity
+  parent: AdvancedMedicineVialBase
   id: AdvancedMedicineVialTranexamicAcid
   name: TranexamicAcid vial
   components:

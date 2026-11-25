@@ -15,8 +15,8 @@ public sealed partial class AdvancedExertionComponent : Component
     [DataField, AutoNetworkedField] public bool Exhausted;
     [DataField, AutoNetworkedField] public bool SprintRequested;
     [DataField, AutoNetworkedField] public bool CalmWalking;
-    [AutoNetworkedField] public EntityUid? JumpObstacle;
     [DataField] public float SprintCost = 3f;
+    [DataField, AutoNetworkedField] public float HeavyWorkCostMultiplier = 1f;
     [DataField] public float WalkingRecovery = 0.12f;
     [DataField] public float RestRecovery = 0.7f;
     public float RecoveryDelay;

@@ -171,3 +171,20 @@
   parent: [ AppearanceAvian, MobAnthropomorph ]
   id: MobAvian
   name: Urist McAvian
+  components:
+  - type: JumpAbility
+    action: ActionAvianWingLeap
+    jumpDistance: 5.5
+    groundJumpDistanceMultiplier: 1.4
+  - type: ActionGrant
+    actions: [ ActionAvianThrowFeather ]
+  - type: TemperatureDamage
+    coldDamageThreshold: 235
+    coldDamage:
+      types:
+        Cold: 0.05
+  - type: TemperatureSpeed
+    thresholds:
+      285: 0.9
+      267: 0.8
+      247: 0.7

@@ -52,6 +52,10 @@
       limit: 1
       required: true
       default: [ TailDemon ]
+    enum.HumanoidVisualLayers.Overlay:
+      limit: 1
+      required: true
+      default: [ ArkaneWings ]
     enum.HumanoidVisualLayers.Special:
       limit: 0
       required: false
@@ -158,3 +162,16 @@
   parent: [ AppearanceArkane, BaseSpeciesMobOrganic ]
   id: MobArkane
   name: Urist McArkane
+  components:
+  - type: JumpAbility
+    action: ActionArkaneWingHop
+    jumpDistance: 4.5
+    groundJumpDistanceMultiplier: 1.25
+
+- type: marking
+  id: ArkaneWings
+  bodyPart: Overlay
+  groupWhitelist: [ Arkane ]
+  sprites:
+  - sprite: _Orion/Mobs/Customization/Anthropomorph/wings.rsi
+    state: insect_wings_dragonalt

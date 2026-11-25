@@ -1,0 +1,22 @@
+species-variant-label = Family
+species-variant-therian-feline = Feline
+species-variant-therian-canine = Canine
+species-variant-therian-small = Small mammals
+species-appearance-palette-label = Palette
+species-appearance-palette-select = Choose skin, hair and tail colors
+species-appearance-lavrite-amber = Amber flame
+species-appearance-lavrite-copper = Molten copper
+species-appearance-lavrite-ember = Red embers
+species-appearance-lavrite-ash = Ash and sparks
+marking-LavriteTailFlame = Smooth lizard tail
+marking-LavriteTailEmber = Spiked lizard tail
+guide-entry-legacy-species = Legacy species
+
+racial-lavrite-no-heat-sink = There is nowhere to release the excess heat right now.
+racial-silk-no-wound = There is no external wound you can dress with silk.
+racial-silk-applied = The silk pulls the wound closed and slows the bleeding.
+racial-canine-scent-result = You catch the scent of { $count } living creatures nearby.
+racial-elir-pulse-result = { $target } has a pulse of { $pulse } bpm.
+racial-slime-reform-hungry = You need to eat before you can reform your body.
+racial-slime-reform-applied = Gel flows toward the damaged parts of your body.
+marking-ArkaneWings = Membranous wings

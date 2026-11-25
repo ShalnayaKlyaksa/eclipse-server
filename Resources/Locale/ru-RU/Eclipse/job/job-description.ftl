@@ -14,4 +14,4 @@ job-description-nanotrasen-navy-warrant-officer-engineer = Управляйте 
 job-description-nanotrasen-navy-warrant-officer-medical = Управляйте вашим медицинским подразделением на борту корабля.
 job-description-nanotrasen-navy-engineer = Выполняйти ремонт и техническое обслуживание корабля.
 job-description-nanotrasen-navy-medical = Лечите экипаж судна.
-job-description-nanotrasen-navy-sailor = Управляйте орудиями, ходите в абордажи и боритесь с врагами Пакта и корпорации.
+job-description-nanotrasen-navy-sailor = Управляйте орудиями, ходите в абордажи и боритесь с врагами корпорации.

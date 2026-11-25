@@ -18,6 +18,19 @@
     - Human
     - Moth
     - Reptilian
+    - Imperial
+    - Molei
+    - Lavrite
+    - Kobold
+    - Saurian
+    - Therian
+    - TherianCanine
+    - TherianSmall
+    - Arkane
+    - Shadowkin
+    - Avian
+    - Elir
+    - Slimefolk
     #Corvax-Species-Start
     - Vulpkanin
     - Tajaran
@@ -79,6 +92,18 @@
     - Dwarf
     - Human
     - Reptilian
+    - Imperial
+    - Lavrite
+    - Kobold
+    - Saurian
+    - Therian
+    - TherianCanine
+    - TherianSmall
+    - Arkane
+    - Shadowkin
+    - Avian
+    - Elir
+    - Slimefolk
     #Corvax-Species-Start
     - Vulpkanin
     - Tajaran
@@ -90,6 +115,7 @@
   - !type:SpeciesLoadoutEffect
     species:
     - Moth
+    - Molei
 
 - type: loadout
   id: EmergencyOxygenMime

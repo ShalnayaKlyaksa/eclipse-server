@@ -32,4 +32,6 @@ public enum IndustrialProcessorType : byte
     Extruder,
     PipeFabricator,
     Extractor,
+    FuelPress,
+    FuelCartridgeAssembler,
 }

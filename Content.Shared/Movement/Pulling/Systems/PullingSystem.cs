@@ -292,15 +292,19 @@ public sealed class PullingSystem : EntitySystem
 
     private void OnRefreshMovespeed(EntityUid uid, PullerComponent component, RefreshMovementSpeedModifiersEvent args)
     {
+        var walk = component.WalkSpeedModifier;
+        var sprint = component.SprintSpeedModifier;
         if (TryComp<HeldSpeedModifierComponent>(component.Pulling, out var heldMoveSpeed) && component.Pulling.HasValue)
+            (walk, sprint) = _clothingMoveSpeed.GetHeldMovementSpeedModifiers(component.Pulling.Value, heldMoveSpeed);
+
+        if (component.HeavyPullSpeedMultiplier != 1f && TryComp<PhysicsComponent>(component.Pulling, out var dragged)
+            && dragged.Mass >= component.HeavyPullMassThreshold)
         {
-            var (walkMod, sprintMod) =
-                _clothingMoveSpeed.GetHeldMovementSpeedModifiers(component.Pulling.Value, heldMoveSpeed);
-            args.ModifySpeed(walkMod, sprintMod);
-            return;
+            walk = Math.Min(1, walk * component.HeavyPullSpeedMultiplier);
+            sprint = Math.Min(1, sprint * component.HeavyPullSpeedMultiplier);
         }
 
-        args.ModifySpeed(component.WalkSpeedModifier, component.SprintSpeedModifier);
+        args.ModifySpeed(walk, sprint);
     }
 
     private void OnPullableMoveInput(EntityUid uid, PullableComponent component, ref MoveInputEvent args)

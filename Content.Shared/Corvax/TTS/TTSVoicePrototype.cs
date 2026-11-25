@@ -1,5 +1,6 @@
 using Content.Shared.Humanoid;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared.Corvax.TTS;
 
@@ -16,8 +17,8 @@ public sealed partial class TTSVoicePrototype : IPrototype
     [DataField("name")]
     public string Name { get; private set; } = string.Empty;
 
-    [DataField("sex", required: true)]
-    public Sex Sex { get; private set; } = default!;
+    [DataField]
+    public Sex Sex { get; private set; } = Sex.Unsexed;
 
     [ViewVariables(VVAccess.ReadWrite)]
     [DataField("speaker", required: true)]
@@ -31,4 +32,10 @@ public sealed partial class TTSVoicePrototype : IPrototype
 
     [DataField("sponsorOnly")]
     public bool SponsorOnly { get; private set; } = false;
+
+    public bool CanSelect(IReadOnlySet<string> sponsoredVoices)
+        => RoundStart && (!SponsorOnly || sponsoredVoices.Contains(ID));
 }
+
+[Serializable, NetSerializable]
+public readonly record struct TTSVoiceOption(string Id, string Name, string FallbackName, bool Selectable);

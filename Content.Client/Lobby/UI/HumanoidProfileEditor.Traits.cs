@@ -20,7 +20,6 @@ public sealed partial class HumanoidProfileEditor
     {
         TraitsList.RemoveAllChildren();
 
-        var traits = _prototypeManager.EnumeratePrototypes<TraitPrototype>().OrderBy(t => Loc.GetString(t.Name)).ToList();
         var maxTraitPoints = _cfgManager.GetCVar(CCVars.GameMaxTraitPoints);
         var selectedTraits = Profile?.TraitPreferences ?? new HashSet<ProtoId<TraitPrototype>>();
         HumanoidCharacterProfile.TryCalculateTraitPoints(
@@ -30,7 +29,21 @@ public sealed partial class HumanoidProfileEditor
             out var gained,
             out var spent,
             out var balance);
-        // TabContainer.SetTabTitle(3, Loc.GetString("humanoid-profile-editor-traits-tab")); // Corvax-TTS-Edit
+        TraitsBalance.SetMessage(FormattedMessage.FromUnformatted(Loc.GetString(
+            "humanoid-profile-editor-trait-balance",
+            ("balance", balance),
+            ("max", maxTraitPoints),
+            ("gained", gained),
+            ("spent", spent))), balance < 0 || gained > maxTraitPoints ? Color.Red : ForgeStyle.Muted);
+
+        var query = TraitSearch.Text.Trim();
+        var traits = _prototypeManager.EnumeratePrototypes<TraitPrototype>()
+            .Where(trait => !SelectedTraitsOnly.Pressed || selectedTraits.Contains(trait.ID))
+            .Where(trait => query.Length == 0 ||
+                Loc.GetString(trait.Name).Contains(query, StringComparison.OrdinalIgnoreCase) ||
+                (trait.Description is { } description && Loc.GetString(description).Contains(query, StringComparison.OrdinalIgnoreCase)))
+            .OrderBy(trait => Loc.GetString(trait.Name))
+            .ToList();
 
         if (traits.Count < 1)
         {
@@ -41,17 +54,6 @@ public sealed partial class HumanoidProfileEditor
             });
             return;
         }
-
-        TraitsList.AddChild(new Label
-        {
-            Text = Loc.GetString(
-                "humanoid-profile-editor-trait-balance",
-                ("balance", balance),
-                ("max", maxTraitPoints),
-                ("gained", gained),
-                ("spent", spent)),
-            FontColorOverride = balance < 0 || gained > maxTraitPoints ? Color.Red : Color.Gray
-        });
 
         // Setup model
         var traitGroups = new Dictionary<string, List<string>>
@@ -82,12 +84,12 @@ public sealed partial class HumanoidProfileEditor
         // Create UI view from model
         foreach (var (categoryId, categoryTraits) in traitGroups)
         {
-            TraitCategoryPrototype? category = null;
+            if (categoryTraits.Count == 0)
+                continue;
 
             if (categoryId != TraitCategoryPrototype.Default)
             {
-                category = _prototypeManager.Index<TraitCategoryPrototype>(categoryId);
-                // Label
+                var category = _prototypeManager.Index<TraitCategoryPrototype>(categoryId);
                 TraitsList.AddChild(new Label
                 {
                     Text = Loc.GetString(category.Name),
@@ -95,9 +97,6 @@ public sealed partial class HumanoidProfileEditor
                     StyleClasses = { StyleClass.LabelHeading },
                 });
             }
-
-            if (categoryTraits.Count == 0)
-                continue;
 
             if (categoryId == TraitCategoryPrototype.Languages)
             {
@@ -108,25 +107,13 @@ public sealed partial class HumanoidProfileEditor
                 });
             }
 
-            var selectedLanguages = CountSelectedLanguages(selectedTraits);
-            var displayedSelectedLanguages = 0;
             foreach (var traitProto in categoryTraits)
             {
                 var trait = _prototypeManager.Index<TraitPrototype>(traitProto);
-                var selected = selectedTraits.Contains(trait.ID);
-                var displayCost = trait.Category == TraitCategoryPrototype.Languages
-                    ? -HumanoidCharacterProfile.GetTraitPointCost(
-                        trait,
-                        selected
-                            ? displayedSelectedLanguages
-                            : selectedLanguages)
-                    : trait.Cost;
-
-                var selector = new TraitPreferenceSelector(trait, displayCost);
-
-                selector.Preference = selected;
-                if (selected && trait.Category == TraitCategoryPrototype.Languages)
-                    displayedSelectedLanguages++;
+                var selector = new TraitPreferenceSelector(trait)
+                {
+                    Preference = selectedTraits.Contains(trait.ID),
+                };
 
                 selector.PreferenceChanged += preference =>
                 {
@@ -200,18 +187,4 @@ public sealed partial class HumanoidProfileEditor
         return null;
     }
 
-    private int CountSelectedLanguages(IReadOnlySet<ProtoId<TraitPrototype>> selectedTraits)
-    {
-        var languages = 0;
-        foreach (var selected in selectedTraits)
-        {
-            if (_prototypeManager.TryIndex<TraitPrototype>(selected, out var selectedProto) &&
-                selectedProto.Category == TraitCategoryPrototype.Languages)
-            {
-                languages++;
-            }
-        }
-
-        return languages;
-    }
 }

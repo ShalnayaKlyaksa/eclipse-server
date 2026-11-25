@@ -5,7 +5,7 @@ using Robust.Shared.Serialization;
 namespace Content.Shared._Eclipse.Industrial;
 
 /// <summary>
-/// Empty industrial machine body. Accepts upgrade modules via the industrial key.
+/// Empty industrial machine body. Accepts machine modules once anchored.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
 public sealed partial class IndustrialMachineChassisComponent : Component;

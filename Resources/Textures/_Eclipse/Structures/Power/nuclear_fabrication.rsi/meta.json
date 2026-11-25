@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "license": "MIT",
+  "copyright": "Original pixel art for Eclipse",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "press_idle"
+    },
+    {
+      "name": "press_active",
+      "delays": [
+        [
+          0.2,
+          0.14,
+          0.16,
+          0.14
+        ]
+      ]
+    },
+    {
+      "name": "press_paused"
+    },
+    {
+      "name": "sealer_idle"
+    },
+    {
+      "name": "sealer_active",
+      "delays": [
+        [
+          0.2,
+          0.14,
+          0.16,
+          0.14
+        ]
+      ]
+    },
+    {
+      "name": "sealer_paused"
+    },
+    {
+      "name": "casing"
+    }
+  ]
+}

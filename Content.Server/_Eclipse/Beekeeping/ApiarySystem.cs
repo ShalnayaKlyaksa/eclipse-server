@@ -1,8 +1,11 @@
 using System.Linq;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Botany.Components;
+using Content.Server.Eclipse.Botany.Systems;
 using Content.Server.Power.Components;
 using Content.Shared._Eclipse.Beekeeping;
+using Content.Shared._Eclipse.Industrial;
+using Content.Shared._Eclipse.Industrial.Prototypes;
 using Content.Shared.Body.Components;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
@@ -150,7 +153,8 @@ public sealed partial class ApiarySystem : EntitySystem
                 var framePrototype = ent.Comp.FrameKind switch
                 {
                     "Selection" => "EclipseApiarySelectionFrame", "Nursing" => "EclipseApiaryNursingFrame",
-                    "Insulated" => "EclipseApiaryInsulatedFrame", _ => "EclipseApiaryFrame",
+                    "Insulated" => "EclipseApiaryInsulatedFrame", "Forage" => "EclipseApiaryForageFrame",
+                    _ => "EclipseApiaryFrame",
                 };
                 var frame = SpawnNextToOrDrop(framePrototype, ent);
                 Comp<ApiaryFrameComponent>(frame).Durability = ent.Comp.FrameDurability;
@@ -223,6 +227,7 @@ public sealed partial class ApiarySystem : EntitySystem
         ent.Comp.Father = Comp<BeeSpecimenComponent>(drone).Genome.Clone();
         ent.Comp.CycleSeconds = _prototypes.Index<BeeSpeciesPrototype>(ent.Comp.Mother.Dominant).CycleSeconds;
         ent.Comp.Progress = 0;
+        ent.Comp.ForageSamples.Clear();
         ent.Comp.Enabled = true;
         foreach (var uid in new[] { princess, drone }) { _containers.Remove(uid, ent.Comp.Input); QueueDel(uid); }
         Publish(ent);
@@ -265,8 +270,8 @@ public sealed partial class ApiarySystem : EntitySystem
         if (ent.Comp.Output.ContainedEntities.Count > 24) { ent.Comp.Status = "apiary-status-full"; return; }
         var step = Math.Min(seconds, Math.Max(0, ent.Comp.CycleSeconds - ent.Comp.Progress));
         var kind = ent.Comp.FrameDurability > 0 ? ent.Comp.FrameKind : "None";
-        var food = step * 0.04f * ApiaryFrameRules.FoodMultiplier(kind);
-        var water = step * 0.06f * ApiaryFrameRules.WaterMultiplier(kind);
+        var food = step * 0.04f * species.FoodMultiplier * ApiaryFrameRules.FoodMultiplier(kind);
+        var water = step * 0.06f * species.WaterMultiplier * ApiaryFrameRules.WaterMultiplier(kind);
         if (ent.Comp.Nectar < food || ent.Comp.Water < water)
         { ent.Comp.Status = "apiary-status-feed"; return; }
         ent.Comp.Nectar -= food;
@@ -309,14 +314,16 @@ public sealed partial class ApiarySystem : EntitySystem
         }
         AddOutput(ent, CreateBee(ent, Child(), BeeCaste.Princess));
         for (var i = 0; i < Math.Clamp(mother.Fertility, 1, 5) + ApiaryFrameRules.DroneBonus(frameKind); i++) AddOutput(ent, CreateBee(ent, Child(), BeeCaste.Drone));
-        for (var i = 0; i < Math.Max(1, 1 + mother.Productivity / 2 + ApiaryFrameRules.CombBonus(frameKind)); i++) AddOutput(ent, SpawnNextToOrDrop(species.Comb, ent));
+        var combs = Math.Max(1, 1 + mother.Productivity / 2 + species.CombBonus + ApiaryFrameRules.CombBonus(frameKind));
+        for (var i = 0; i < combs; i++)
+            AddOutput(ent, SpawnNextToOrDrop(species.Comb, ent));
         if (species.Byproduct != null && _random.Prob(species.ByproductChance))
             AddOutput(ent, SpawnNextToOrDrop(species.Byproduct.Value, ent));
         var worked = mother.Clone(); worked.LineageSeconds += seconds;
         // Neither fertility, productivity nor frames multiply this probability or the number of rare rolls.
         if (BeeGenetics.RareEligible(worked, species) && _random.Prob(species.RareChance))
             AddOutput(ent, SpawnNextToOrDrop(species.RareProduct!.Value, ent));
-        var harvest = new ApiaryHarvestEvent();
+        var harvest = new ApiaryHarvestEvent(frameKind);
         RaiseLocalEvent(ent, ref harvest);
         ent.Comp.Status = "apiary-status-finished";
     }
@@ -325,7 +332,9 @@ public sealed partial class ApiarySystem : EntitySystem
 
     public EntityUid CreateBee(EntityUid near, BeeGenome genome, BeeCaste caste)
     {
-        var bee = SpawnNextToOrDrop(caste == BeeCaste.Princess ? "EclipseBeePrincess" : "EclipseBeeDrone", near);
+        var variant = new EntProtoId($"EclipseBee{genome.Dominant}{caste}");
+        EntProtoId starter = caste == BeeCaste.Princess ? "EclipseBeePrincess" : "EclipseBeeDrone";
+        var bee = SpawnNextToOrDrop(_prototypes.HasIndex(variant) ? variant : starter, near);
         var specimen = Comp<BeeSpecimenComponent>(bee);
         specimen.Genome = genome.Clone(); specimen.Caste = caste;
         NameBee((bee, specimen));
@@ -376,9 +385,12 @@ public sealed partial class ApiarySystem : EntitySystem
 
     private void Sting(Entity<ApiaryComponent> hive, EntityUid actor)
     {
-        if (hive.Comp.Mother == null && !hive.Comp.Input.ContainedEntities.Any(uid => HasComp<BeeSpecimenComponent>(uid))
-            && !hive.Comp.Output.ContainedEntities.Any(uid => HasComp<BeeSpecimenComponent>(uid))) return;
-        if (hive.Comp.SmokeSeconds > 0 || Protected(actor) || !_random.Prob(0.35f)) return;
+        if (hive.Comp.SmokeSeconds > 0 || Protected(actor))
+            return;
+        var genome = hive.Comp.Mother ?? hive.Comp.Input.ContainedEntities.Concat(hive.Comp.Output.ContainedEntities)
+            .Select(uid => CompOrNull<BeeSpecimenComponent>(uid)?.Genome).FirstOrDefault(g => g != null);
+        if (genome == null || !_random.Prob(_prototypes.Index<BeeSpeciesPrototype>(genome.Dominant).StingChance))
+            return;
         _damage.TryChangeDamage(actor, new DamageSpecifier
         { DamageDict = new() { ["Piercing"] = FixedPoint2.New(1), ["Poison"] = FixedPoint2.New(1) } }, origin: hive.Owner);
         Tell(hive, actor, "apiary-sting");
@@ -391,7 +403,24 @@ public sealed partial class ApiarySystem : EntitySystem
 
     private void Publish(Entity<ApiaryComponent> ent)
     {
-        if (ent.Comp.Input == null) return;
+        if (ent.Comp.Input == null || !_ui.IsUiOpen(ent.Owner, ApiaryUiKey.Key))
+            return;
+
+        var separationRecipes = _prototypes.EnumeratePrototypes<IndustrialRecipePrototype>()
+            .Where(recipe => recipe.Processor == IndustrialProcessorType.ThermalCentrifuge && recipe.Inputs.Count == 1)
+            .ToLookup(recipe => recipe.Inputs.Keys.Single());
+
+        string? Separation(EntProtoId comb)
+        {
+            var recipe = separationRecipes[comb.Id].FirstOrDefault();
+            if (recipe == null)
+                return null;
+
+            var products = string.Join(", ", recipe.Outputs.Select(output =>
+                Loc.GetString("apiary-ui-recipe-output", ("count", output.Value), ("product", _prototypes.Index<EntityPrototype>(output.Key).Name))));
+            return Loc.GetString("apiary-ui-separation", ("count", recipe.Inputs[comb.Id]), ("products", products));
+        }
+
         var mutations = string.Join("\n", _prototypes.EnumeratePrototypes<BeeMutationPrototype>().OrderBy(p => p.Generation).Select(p =>
             Loc.GetString("apiary-mutation", ("first", Species(p.First.Id)), ("second", Species(p.Second.Id)), ("result", Species(p.Result.Id)),
                 ("chance", MathF.Round(p.Chance * 100, 1)), ("generation", p.Generation), ("minutes", p.LineageSeconds / 60),
@@ -416,6 +445,9 @@ public sealed partial class ApiarySystem : EntitySystem
                     Branch = s.Branch, MinTemperature = s.MinTemperature, MaxTemperature = s.MaxTemperature,
                     Byproduct = s.Byproduct?.Id, ByproductName = s.Byproduct == null ? null : _prototypes.Index(s.Byproduct.Value).Name,
                     ByproductChance = s.ByproductChance,
+                    Separation = Separation(s.Comb),
+                    FoodMultiplier = s.FoodMultiplier, WaterMultiplier = s.WaterMultiplier,
+                    CombBonus = s.CombBonus, StingChance = s.StingChance,
                 }).ToArray(),
             Crosses = _prototypes.EnumeratePrototypes<BeeMutationPrototype>().OrderBy(p => p.Generation).ThenBy(p => p.ID)
                 .Select(p => new ApiaryMutationState(p.Result.Id, p.First.Id, p.Second.Id, p.Chance, p.Generation, p.LineageSeconds / 60, p.NeedsMinerals)).ToArray(),
@@ -427,6 +459,7 @@ public sealed partial class ApiarySystem : EntitySystem
             LineageMinutes = (ent.Comp.Mother?.LineageSeconds ?? 0) / 60,
             Temperature = ent.Comp.Temperature,
             Pressure = ent.Comp.Pressure,
+            ForageComb = GardenPollinationSystem.PredictComb(ent.Comp) is { } comb ? _prototypes.Index(comb).Name : null,
         });
     }
 
@@ -440,6 +473,7 @@ public sealed partial class ApiarySystem : EntitySystem
         if (ent.Comp.Input == null) return;
         var mother = ent.Comp.Mother; var father = ent.Comp.Father;
         ent.Comp.Mother = ent.Comp.Father = null; ent.Comp.Enabled = false; ent.Comp.Progress = 0;
+        ent.Comp.ForageSamples.Clear();
         if (mother != null) CreateBee(ent, mother, BeeCaste.Princess);
         if (father != null) CreateBee(ent, father, BeeCaste.Drone);
         foreach (var container in new[] { ent.Comp.Input, ent.Comp.Output })

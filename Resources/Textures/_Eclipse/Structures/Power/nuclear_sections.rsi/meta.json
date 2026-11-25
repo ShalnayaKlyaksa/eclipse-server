@@ -1,0 +1,168 @@
+{
+  "version": 1,
+  "license": "MIT",
+  "copyright": "Original pixel art for Eclipse",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "shield"
+    },
+    {
+      "name": "deck_edge0",
+      "directions": 4
+    },
+    {
+      "name": "deck_edge1",
+      "directions": 4
+    },
+    {
+      "name": "deck_edge2",
+      "directions": 4
+    },
+    {
+      "name": "deck_edge3",
+      "directions": 4
+    },
+    {
+      "name": "deck_edge4",
+      "directions": 4
+    },
+    {
+      "name": "deck_edge5",
+      "directions": 4
+    },
+    {
+      "name": "deck_edge6",
+      "directions": 4
+    },
+    {
+      "name": "deck_edge7",
+      "directions": 4
+    },
+    {
+      "name": "deck_port_edge0",
+      "directions": 4
+    },
+    {
+      "name": "deck_port_edge1",
+      "directions": 4
+    },
+    {
+      "name": "deck_port_edge2",
+      "directions": 4
+    },
+    {
+      "name": "deck_port_edge3",
+      "directions": 4
+    },
+    {
+      "name": "deck_port_edge4",
+      "directions": 4
+    },
+    {
+      "name": "deck_port_edge5",
+      "directions": 4
+    },
+    {
+      "name": "deck_port_edge6",
+      "directions": 4
+    },
+    {
+      "name": "deck_port_edge7",
+      "directions": 4
+    },
+    {
+      "name": "graphite"
+    },
+    {
+      "name": "fuel"
+    },
+    {
+      "name": "fuel_off"
+    },
+    {
+      "name": "fuel_on"
+    },
+    {
+      "name": "rods_in"
+    },
+    {
+      "name": "rods_part"
+    },
+    {
+      "name": "rods_out"
+    },
+    {
+      "name": "core"
+    },
+    {
+      "name": "core_off"
+    },
+    {
+      "name": "core_on"
+    },
+    {
+      "name": "water_in"
+    },
+    {
+      "name": "water_out"
+    },
+    {
+      "name": "gas_in"
+    },
+    {
+      "name": "gas_out"
+    },
+    {
+      "name": "controls"
+    },
+    {
+      "name": "fuel_uranium"
+    },
+    {
+      "name": "fuel_mox"
+    },
+    {
+      "name": "cell_uranium"
+    },
+    {
+      "name": "cell_mox"
+    },
+    {
+      "name": "condenser"
+    },
+    {
+      "name": "conditioner"
+    },
+    {
+      "name": "fuel_thorium"
+    },
+    {
+      "name": "fuel_pulse"
+    },
+    {
+      "name": "cell_thorium"
+    },
+    {
+      "name": "cell_pulse"
+    },
+    {
+      "name": "heat_sink"
+    },
+    {
+      "name": "element_uranium"
+    },
+    {
+      "name": "element_mox"
+    },
+    {
+      "name": "element_thorium"
+    },
+    {
+      "name": "element_pulse"
+    }
+  ]
+}

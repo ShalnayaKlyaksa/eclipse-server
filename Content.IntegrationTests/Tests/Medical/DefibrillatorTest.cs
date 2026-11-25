@@ -1,5 +1,11 @@
 #nullable enable
+using System.Linq;
 using Content.IntegrationTests.Tests.Interaction;
+using Content.Server._Eclipse.AdvancedHealth;
+using Content.Server.Body.Systems;
+using Content.Shared._Eclipse.AdvancedHealth;
+using Content.Shared.Body;
+using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
@@ -9,6 +15,8 @@ using Content.Shared.Medical;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Robust.Shared;
+using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.Tests.Medical;
@@ -40,6 +48,8 @@ public sealed class DefibrillatorTest : InteractionTest
 
         await SpawnTarget(TargetProtoId);
 
+        // Exercise the damage-threshold revival path used by mobs without AdvancedHealth.
+        await Server.WaitPost(() => SEntMan.RemoveComponent<AdvancedHealthComponent>(STarget!.Value));
         var targetMobState = Comp<MobStateComponent>();
         var targetDamageable = Comp<DamageableComponent>();
 
@@ -98,5 +108,63 @@ public sealed class DefibrillatorTest : InteractionTest
 
         // The target should be revived, but in crit.
         Assert.That(targetMobState.CurrentState, Is.EqualTo(MobState.Critical), "Target mob was not revived from being defibrillated.");
+    }
+
+    [Test]
+    public async Task NeuroregenAllowsDefibrillationAfterBrainDeath()
+    {
+        await Server.WaitPost(() => Server.ResolveDependency<IConfigurationManager>().SetCVar(CVars.NetTickrate, 30));
+        await AddAtmosphere();
+        await SpawnTarget(TargetProtoId);
+        var patient = STarget!.Value;
+        var health = Comp<AdvancedHealthComponent>();
+        var head = health.BodyParts[BodyPartSlot.Head];
+        var state = Comp<MobStateComponent>();
+        var organs = SEntMan.System<AdvancedOrganHealthSystem>();
+        var brain = organs.Organs(patient).Single(organ => SEntMan.GetComponent<OrganComponent>(organ).Category?.Id == "Brain");
+
+        await Server.WaitPost(() =>
+        {
+            organs.Damage(brain, 100);
+            head.OrganIntegrity = 0;
+            head.IsDestroyed = true;
+            health.Oxygenation = 0;
+            health.TimeBelowLethalOxygen = 60;
+            health.HypoxiaExposure = 75;
+            health.VascularTone = 0.2f;
+            SEntMan.System<RespiratorSystem>().UpdateSaturation(patient, -10f);
+            SEntMan.System<MobStateSystem>().ChangeMobState(patient, MobState.Dead);
+        });
+
+        var defib = await PlaceInHands(DefibrillatorProtoId);
+        await RunSeconds((float) Comp<DefibrillatorComponent>(defib).ZapDelay.TotalSeconds);
+        await Interact();
+        Assert.That(state.CurrentState, Is.EqualTo(MobState.Dead));
+
+        var vial = await Spawn("AdvancedMedicineVialNeuroregen");
+        var syringe = ToServer(await PlaceInHands("Syringe"));
+        await Interact(vial, TargetCoords);
+        await Interact(vial, TargetCoords);
+        await UseInHand();
+        await Server.WaitAssertion(() =>
+        {
+            var injector = SEntMan.System<InjectorSystem>();
+            Assert.That(injector.TryInjectTreatmentAmount(syringe, SPlayer, patient, 10, out var injected), Is.True);
+            Assert.That(injected, Is.EqualTo(FixedPoint2.New(10)));
+        });
+
+        await RunSeconds(21);
+        Assert.That(head.OrganFraction, Is.GreaterThan(0.5f));
+        Assert.That(head.IsDestroyed, Is.False);
+        Assert.That(brain.Comp.Integrity, Is.GreaterThan(50f));
+        Assert.That(state.CurrentState, Is.EqualTo(MobState.Dead));
+
+        defib = await PlaceInHands(DefibrillatorProtoId);
+        await RunSeconds((float) Comp<DefibrillatorComponent>(defib).ZapDelay.TotalSeconds);
+        await Interact();
+        await RunSeconds(35);
+        Assert.That(state.CurrentState, Is.EqualTo(MobState.Alive),
+            $"Pulse {health.HeartRate}, SpO2 {health.Oxygenation}, perfusion {health.Perfusion}, consciousness {health.Consciousness}, arrest {health.ArrestTrigger}.");
+        Assert.That(health.IsHeartStopped, Is.False);
     }
 }

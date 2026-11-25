@@ -1,4 +1,5 @@
 using Robust.Shared.Containers;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._Eclipse.Beekeeping;
@@ -27,6 +28,7 @@ public sealed partial class ApiaryComponent : Component
     [DataField] public int CompletedCycles;
     [DataField] public bool ControlledClimate;
     [DataField] public string FrameKind = "Production";
+    [DataField] public Dictionary<EntProtoId, int> ForageSamples = new();
     public Container Input = default!;
     public Container Output = default!;
     public string Status = "apiary-status-idle";
@@ -83,6 +85,7 @@ public sealed class ApiaryState(string status, string queen, string parents, str
     public float LineageMinutes;
     public float Temperature;
     public float Pressure;
+    public string? ForageComb;
 }
 
 [Serializable, NetSerializable]
@@ -114,6 +117,11 @@ public sealed class ApiarySpeciesState(string id, string name, int tier, float s
     public string? Byproduct;
     public string? ByproductName;
     public float ByproductChance;
+    public string? Separation;
+    public float FoodMultiplier = 1f;
+    public float WaterMultiplier = 1f;
+    public int CombBonus;
+    public float StingChance = 0.35f;
 }
 
 [Serializable, NetSerializable]

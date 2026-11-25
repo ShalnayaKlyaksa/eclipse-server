@@ -58,6 +58,11 @@
   - type: Inventory
     speciesId: moth
     femaleDisplacements:
+      socks:
+        sizeMaps:
+          32:
+            sprite: _Eclipse/Mobs/Species/socks_displacement.rsi
+            state: moth
       jumpsuit:
         sizeMaps:
           32:
@@ -84,6 +89,11 @@
             sprite: Mobs/Species/Moth/displacement.rsi
             state: shoes
     displacements:
+      socks:
+        sizeMaps:
+          32:
+            sprite: _Eclipse/Mobs/Species/socks_displacement.rsi
+            state: moth
       jumpsuit:
         sizeMaps:
           32:

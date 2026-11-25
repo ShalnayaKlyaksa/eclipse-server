@@ -1,0 +1,218 @@
+- type: industrialRecipe
+  id: EclipseSeparateOrdinaryHoneycomb
+  name: ent-EclipseFoodHoneycomb
+  processor: ThermalCentrifuge
+  time: 10
+  heat: 20000
+  inputs:
+    EclipseFoodHoneycomb: 2
+  outputs:
+    EclipseBeeBread: 1
+    EclipseBeeswax: 1
+
+- type: industrialRecipe
+  id: EclipseSeparateHerbalHoneycomb
+  name: ent-EclipseFoodHerbalHoneycomb
+  processor: ThermalCentrifuge
+  time: 10
+  heat: 20000
+  inputs:
+    EclipseFoodHerbalHoneycomb: 2
+  outputs:
+    EclipsePropolis: 1
+    EclipseBeeswax: 1
+
+- type: industrialRecipe
+  id: EclipseSeparateEnergeticHoneycomb
+  name: ent-EclipseFoodEnergeticHoneycomb
+  processor: ThermalCentrifuge
+  time: 10
+  heat: 20000
+  inputs:
+    EclipseFoodEnergeticHoneycomb: 2
+  outputs:
+    EclipseBeeBread: 2
+    EclipseBeeswax: 1
+
+- type: industrialRecipe
+  id: EclipseSeparateRoyalHoneycomb
+  name: ent-EclipseFoodRoyalHoneycomb
+  processor: ThermalCentrifuge
+  time: 10
+  heat: 20000
+  inputs:
+    EclipseFoodRoyalHoneycomb: 2
+  outputs:
+    EclipseBeeBread: 1
+    EclipsePropolis: 1
+    EclipseBeeswax: 1
+
+- type: industrialRecipe
+  id: EclipseSeparateCitrusHoneycomb
+  name: ent-EclipseFoodCitrusHoneycomb
+  processor: ThermalCentrifuge
+  time: 10
+  heat: 20000
+  inputs:
+    EclipseFoodCitrusHoneycomb: 2
+  outputs:
+    EclipseBeeBread: 1
+    EclipseBeeswax: 2
+
+- type: industrialRecipe
+  id: EclipseSeparateAromaticHoneycomb
+  name: ent-EclipseFoodAromaticHoneycomb
+  processor: ThermalCentrifuge
+  time: 10
+  heat: 20000
+  inputs:
+    EclipseFoodAromaticHoneycomb: 2
+  outputs:
+    EclipsePropolis: 1
+    EclipseBeeswax: 2
+
+- type: industrialRecipe
+  id: EclipseSeparateCoolingHoneycomb
+  name: ent-EclipseFoodCoolingHoneycomb
+  processor: ThermalCentrifuge
+  time: 10
+  heat: 20000
+  inputs:
+    EclipseFoodCoolingHoneycomb: 2
+  outputs:
+    EclipseBeeBread: 1
+    EclipsePropolis: 1
+    EclipseBeeswax: 1
+
+- type: industrialRecipe
+  id: EclipseSeparateRestorativeHoneycomb
+  name: ent-EclipseFoodRestorativeHoneycomb
+  processor: ThermalCentrifuge
+  time: 10
+  heat: 20000
+  inputs:
+    EclipseFoodRestorativeHoneycomb: 2
+  outputs:
+    EclipseBeeBread: 2
+    EclipsePropolis: 1
+    EclipseBeeswax: 1
+
+- type: industrialRecipe
+  id: EclipseSeparateResinHoneycomb
+  name: ent-EclipseFoodResinHoneycomb
+  processor: ThermalCentrifuge
+  time: 10
+  heat: 20000
+  inputs:
+    EclipseFoodResinHoneycomb: 2
+  outputs:
+    EclipsePropolis: 2
+    EclipseBeeswax: 1
+
+- type: industrialRecipe
+  id: EclipseSeparateCopperHoneycomb
+  name: ent-EclipseCopperHoneycomb
+  processor: ThermalCentrifuge
+  time: 10
+  heat: 20000
+  inputs:
+    EclipseCopperHoneycomb: 2
+  outputs:
+    CableApcStack1: 2
+    EclipseBeeswax: 1
+
+- type: industrialRecipe
+  id: EclipseSeparateSilkenHoneycomb
+  name: ent-EclipseSilkenHoneycomb
+  processor: ThermalCentrifuge
+  time: 10
+  heat: 20000
+  inputs:
+    EclipseSilkenHoneycomb: 2
+  outputs:
+    MaterialCloth1: 1
+    EclipseBeeswax: 1
+
+- type: industrialRecipe
+  id: EclipseSeparateMetallicHoneycomb
+  name: ent-EclipseMetallicHoneycomb
+  processor: ThermalCentrifuge
+  time: 10
+  heat: 20000
+  inputs:
+    EclipseMetallicHoneycomb: 2
+  outputs:
+    SheetSteel1: 1
+    EclipseBeeswax: 1
+
+- type: industrialRecipe
+  id: EclipseSeparateAuricHoneycomb
+  name: ent-EclipseAuricHoneycomb
+  processor: ThermalCentrifuge
+  time: 15
+  heat: 30000
+  inputs:
+    EclipseAuricHoneycomb: 3
+  outputs:
+    GoldOre1: 1
+    EclipseBeeswax: 1
+
+- type: industrialRecipe
+  id: EclipseSeparateCrystallineHoneycomb
+  name: ent-EclipseCrystallineHoneycomb
+  processor: ThermalCentrifuge
+  time: 15
+  heat: 30000
+  inputs:
+    EclipseCrystallineHoneycomb: 3
+  outputs:
+    QuartzDust1: 2
+    EclipseBeeswax: 1
+
+- type: industrialRecipe
+  id: EclipseSeparateConductiveHoneycomb
+  name: ent-EclipseConductiveHoneycomb
+  processor: ThermalCentrifuge
+  time: 15
+  heat: 30000
+  inputs:
+    EclipseConductiveHoneycomb: 3
+  outputs:
+    SilverOre1: 1
+    EclipseBeeswax: 1
+
+- type: industrialRecipe
+  id: EclipseSeparateRadiantHoneycomb
+  name: ent-EclipseRadiantHoneycomb
+  processor: ThermalCentrifuge
+  time: 15
+  heat: 30000
+  inputs:
+    EclipseRadiantHoneycomb: 3
+  outputs:
+    PlasmaOre1: 1
+    EclipseBeeswax: 1
+
+- type: industrialRecipe
+  id: EclipseSeparateResonantHoneycomb
+  name: ent-EclipseResonantHoneycomb
+  processor: ThermalCentrifuge
+  time: 15
+  heat: 30000
+  inputs:
+    EclipseResonantHoneycomb: 3
+  outputs:
+    IndustrialBondingWire: 1
+    EclipseBeeswax: 1
+
+- type: industrialRecipe
+  id: EclipseSeparateQuantumHoneycomb
+  name: ent-EclipseQuantumHoneycomb
+  processor: ThermalCentrifuge
+  time: 20
+  heat: 40000
+  inputs:
+    EclipseQuantumHoneycomb: 4
+  outputs:
+    IndustrialPolySilicon: 1
+    EclipseBeeswax: 1

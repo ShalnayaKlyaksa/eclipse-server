@@ -12,6 +12,7 @@ using Content.Shared.Traits;
 using Robust.Shared.Collections;
 using Robust.Shared.Configuration;
 using Robust.Shared.Enums;
+using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -33,6 +34,14 @@ namespace Content.Shared.Preferences
     public sealed partial class HumanoidCharacterProfile
     {
         public static readonly ProtoId<SpeciesPrototype> DefaultSpecies = "Human";
+        public static readonly ProtoId<SpeciesPrototype> DefaultPlayableSpecies = "Imperial";
+
+        public static ProtoId<SpeciesPrototype> MigratePlayableSpecies(ProtoId<SpeciesPrototype> species) => species.Id switch
+        {
+            "Vulpkanin" => "TherianCanine",
+            "Human" => DefaultPlayableSpecies,
+            _ => species,
+        };
         private static readonly Regex RestrictedNameRegex = new("[^А-Яа-яёЁ0-9' -]"); // Corvax-Localization
         private static readonly Regex ICNameCaseRegex = new(@"^(?<word>\w)|\b(?<word>\w)(?=\w*$)");
 
@@ -256,10 +265,11 @@ namespace Content.Shared.Preferences
             }
 
             // Corvax-TTS-Start
-            var voiceId = random.Pick(prototypeManager
+            var voices = prototypeManager
                 .EnumeratePrototypes<TTSVoicePrototype>()
-                .Where(o => CanHaveVoice(o, sex)).ToArray()
-            ).ID;
+                .Where(voice => voice.RoundStart && !voice.SponsorOnly)
+                .ToArray();
+            var voiceId = voices.Length > 0 ? random.Pick(voices).ID : HumanoidProfileSystem.DefaultVoice;
             // Corvax-TTS-End
 
             var gender = Gender.Epicene;
@@ -488,16 +498,17 @@ namespace Content.Shared.Preferences
             var configManager = collection.Resolve<IConfigurationManager>();
             var prototypeManager = collection.Resolve<IPrototypeManager>();
 
+            Species = MigratePlayableSpecies(Species);
             if (!prototypeManager.TryIndex(Species, out var speciesPrototype) || speciesPrototype.RoundStart == false)
             {
-                Species = HumanoidCharacterProfile.DefaultSpecies;
+                Species = DefaultPlayableSpecies;
                 speciesPrototype = prototypeManager.Index(Species);
             }
 
             // Corvax-Sponsors-Start: Reset to human if player not sponsor
             if (speciesPrototype.SponsorOnly && !sponsorPrototypes.Contains(Species.Id))
             {
-                Species = HumanoidCharacterProfile.DefaultSpecies;
+                Species = DefaultPlayableSpecies;
                 speciesPrototype = prototypeManager.Index(Species);
             }
             // Corvax-Sponsors-End
@@ -636,10 +647,8 @@ namespace Content.Shared.Preferences
                 configManager.GetCVar(CCVars.GameMaxTraitPoints)));
 
             // Corvax-TTS-Start
-            prototypeManager.TryIndex<TTSVoicePrototype>(Voice, out var voice);
-            var vocalSex = Customization.GetVocalSex(sex);
-            if (voice is null || !voice.RoundStart || !CanHaveVoice(voice, vocalSex))
-                Voice = HumanoidProfileSystem.DefaultSexVoice[vocalSex];
+            if (collection.Resolve<INetManager>().IsServer)
+                Voice = ValidateVoice(Voice, prototypeManager, sponsorPrototypes.ToHashSet());
             // Corvax-TTS-End
 
             // Checks prototypes exist for all loadouts and dump / set to default if not.
@@ -684,7 +693,6 @@ namespace Content.Shared.Preferences
             var result = new List<ProtoId<TraitPrototype>>();
             var gained = 0;
             var spent = 0;
-            var languages = 0;
 
             foreach (var trait in traitList)
             {
@@ -704,18 +712,10 @@ namespace Content.Shared.Preferences
                     continue;
                 }
 
-                var cost = GetTraitPointCost(traitProto, languages);
-                if (cost > 0)
-                {
-                    if (spent + cost > gained)
-                        continue;
+                if (spent - traitProto.Cost > gained)
+                    continue;
 
-                    spent += cost;
-                }
-
-                if (traitProto.Category == TraitCategoryPrototype.Languages)
-                    languages++;
-
+                spent -= traitProto.Cost;
                 result.Add(trait);
             }
 
@@ -732,40 +732,20 @@ namespace Content.Shared.Preferences
         {
             gained = 0;
             spent = 0;
-            var languages = 0;
 
-            foreach (var trait in traits.OrderBy(trait =>
-                     {
-                         if (!protoManager.TryIndex<TraitPrototype>(trait, out var traitProto))
-                             return 0;
-
-                         return traitProto.Cost < 0 || traitProto.Category == TraitCategoryPrototype.Languages ? 1 : 0;
-                     }))
+            foreach (var trait in traits)
             {
                 if (!protoManager.TryIndex<TraitPrototype>(trait, out var traitProto))
                     continue;
 
                 if (traitProto.Cost > 0)
                     gained += traitProto.Cost;
-
-                spent += GetTraitPointCost(traitProto, languages);
-
-                if (traitProto.Category == TraitCategoryPrototype.Languages)
-                    languages++;
+                else
+                    spent -= traitProto.Cost;
             }
 
             balance = gained - spent;
             return gained <= maxPositivePoints && balance >= 0;
-        }
-
-        public static int GetTraitPointCost(TraitPrototype traitProto, int selectedLanguages)
-        {
-            if (traitProto.Category == TraitCategoryPrototype.Languages)
-            {
-                return selectedLanguages == 0 ? 0 : selectedLanguages + 1;
-            }
-
-            return traitProto.Cost < 0 ? -traitProto.Cost : 0;
         }
 
         public static bool HasTraitConflict(
@@ -790,13 +770,18 @@ namespace Content.Shared.Preferences
             return false;
         }
 
-        // Corvax-TTS-Start
-        // SHOULD BE NOT PUBLIC, BUT....
-        public static bool CanHaveVoice(TTSVoicePrototype voice, Sex sex)
+        public static string ValidateVoice(string voiceId, IPrototypeManager prototypes, IReadOnlySet<string> sponsoredVoices)
         {
-            return voice.RoundStart && sex == Sex.Unsexed || (voice.Sex == sex || voice.Sex == Sex.Unsexed);
+            if (prototypes.TryIndex<TTSVoicePrototype>(voiceId, out var voice) && voice.CanSelect(sponsoredVoices))
+                return voiceId;
+
+            if (prototypes.TryIndex<TTSVoicePrototype>(HumanoidProfileSystem.DefaultVoice, out var defaultVoice) &&
+                defaultVoice.CanSelect(sponsoredVoices))
+                return defaultVoice.ID;
+
+            return prototypes.EnumeratePrototypes<TTSVoicePrototype>()
+                .FirstOrDefault(candidate => candidate.CanSelect(sponsoredVoices))?.ID ?? string.Empty;
         }
-        // Corvax-TTS-End
 
         public HumanoidCharacterProfile Validated(ICommonSession session, IDependencyCollection collection, string[] sponsorPrototypes)// Corvax-Sponsors
         {

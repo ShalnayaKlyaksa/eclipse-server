@@ -32,6 +32,9 @@ public sealed partial class JumpAbilityComponent : Component
     [DataField, AutoNetworkedField]
     public float JumpDistance = 5f;
 
+    [DataField, AutoNetworkedField]
+    public float GroundJumpDistanceMultiplier = 1f;
+
     /// <summary>
     /// Basic “throwing” speed for TryThrow method.
     /// </summary>

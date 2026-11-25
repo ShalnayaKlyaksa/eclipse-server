@@ -2,7 +2,10 @@ using System.Linq;
 using Content.Client._Eclipse.Beekeeping;
 using Content.IntegrationTests.Fixtures;
 using Content.Server._Eclipse.Beekeeping;
+using Content.Server._Eclipse.Industrial;
+using Content.Server.Temperature.Systems;
 using Content.Shared._Eclipse.Beekeeping;
+using Content.Shared._Eclipse.Industrial;
 using Content.Shared.Inventory;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
@@ -11,6 +14,7 @@ using Content.Shared.Interaction;
 using Content.Shared._Eclipse.Industrial.Prototypes;
 using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.Tests._Eclipse.Beekeeping;
 
@@ -29,6 +33,9 @@ public sealed class ApiaryIntegrationTest : GameTest
             var hive = SEntMan.SpawnEntity("EclipseApiary", map.MapCoords);
             var person = SEntMan.SpawnEntity("MobHuman", map.MapCoords);
             var apiary = SEntMan.GetComponent<ApiaryComponent>(hive);
+            var separationRecipes = SProtoMan.EnumeratePrototypes<IndustrialRecipePrototype>()
+                .Where(recipe => recipe.Processor == IndustrialProcessorType.ThermalCentrifuge &&
+                    recipe.ID.StartsWith("EclipseSeparate")).ToArray();
             foreach (var species in SProtoMan.EnumeratePrototypes<BeeSpeciesPrototype>())
             {
                 Assert.That(species.RareChance, Is.InRange(0, 0.1f));
@@ -37,6 +44,19 @@ public sealed class ApiaryIntegrationTest : GameTest
                 if (species.RareProduct != null) Assert.That(SProtoMan.HasIndex(species.RareProduct.Value), Is.True);
                 if (species.Byproduct != null) Assert.That(SProtoMan.HasIndex(species.Byproduct.Value), Is.True);
                 Assert.That(species.MinTemperature, Is.LessThan(species.MaxTemperature));
+                Assert.That(separationRecipes.Count(recipe => recipe.Inputs.ContainsKey(species.Comb.Id)),
+                    Is.EqualTo(1), species.ID);
+                foreach (var caste in new[] { BeeCaste.Princess, BeeCaste.Drone })
+                {
+                    var variant = species.ID == "Meadow" ? $"EclipseBee{caste}" : $"EclipseBee{species.ID}{caste}";
+                    var prototype = SProtoMan.Index<EntityPrototype>(variant);
+                    Assert.That(prototype.Abstract, Is.False, variant);
+                    Assert.That(prototype.TryGetComponent<BeeSpecimenComponent>(out var specimen, SEntMan.ComponentFactory),
+                        Is.True, variant);
+                    Assert.That(specimen!.Caste, Is.EqualTo(caste), variant);
+                    Assert.That(specimen.Genome.Dominant, Is.EqualTo(species.ID), variant);
+                    Assert.That(specimen.Genome.Recessive, Is.EqualTo(species.ID), variant);
+                }
             }
             foreach (var id in new[] { "EclipseBuildApiaryFrame", "EclipseBuildAdvancedApiaryBoard", "EclipsePressOrdinaryHoneycomb", "EclipsePressHerbalHoneycomb", "EclipsePressEnergeticHoneycomb", "EclipsePressRoyalHoneycomb", "EclipseBuildSelectionFrame", "EclipseBuildNursingFrame", "EclipseBuildInsulatedFrame" })
                 Assert.That(SProtoMan.HasIndex<IndustrialRecipePrototype>(id), Is.True, id);
@@ -125,6 +145,60 @@ public sealed class ApiaryIntegrationTest : GameTest
         {
             using var window = new ApiaryWindow();
             window.Apply(new ApiaryState("apiary-status-working", "Meadow", "test", "test", "test", 0.5f, 100, 100, 5, 10, 1, true));
+        });
+    }
+
+    [Test]
+    public async Task SpeciesTraitsAffectTheHiveAndCopperCombsYieldMaterialsAfterHeating()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var apiaries = Server.System<ApiarySystem>();
+            var containers = Server.System<SharedContainerSystem>();
+            var hive = SEntMan.SpawnEntity("EclipseApiary", map.GridCoords);
+            var colony = SEntMan.GetComponent<ApiaryComponent>(hive);
+            colony.Nectar = colony.Water = 100;
+
+            void StartColony(string species)
+            {
+                var genome = new BeeGenome { Dominant = species, Recessive = species };
+                var princess = apiaries.CreateBee(hive, genome, BeeCaste.Princess);
+                var drone = apiaries.CreateBee(hive, genome, BeeCaste.Drone);
+                Assert.That(SEntMan.GetComponent<MetaDataComponent>(princess).EntityPrototype?.ID,
+                    Is.EqualTo($"EclipseBee{species}Princess"));
+                Assert.That(containers.Insert(princess, colony.Input), Is.True);
+                Assert.That(containers.Insert(drone, colony.Input), Is.True);
+                Assert.That(apiaries.Start((hive, colony)), Is.True);
+            }
+
+            StartColony("Industrious");
+            apiaries.AdvanceActive((hive, colony), 180);
+            Assert.That(colony.Nectar, Is.EqualTo(91).Within(0.01));
+            var resources = Server.System<IndustrialResourceSystem>();
+            Assert.That(resources.Count(colony.Output.ContainedEntities, "EclipseFoodEnergeticHoneycomb"), Is.EqualTo(3));
+
+            colony.Minerals = 1;
+            StartColony("Copper");
+            apiaries.AdvanceActive((hive, colony), 180);
+            Assert.That(colony.Minerals, Is.Zero);
+            var combs = colony.Output.ContainedEntities.Where(item => resources.Matches(item, "EclipseCopperHoneycomb")).ToArray();
+            Assert.That(combs, Has.Length.EqualTo(2));
+
+            var centrifuge = SEntMan.SpawnEntity("BasicIndustrialThermalCentrifuge", map.GridCoords);
+            var machine = SEntMan.GetComponent<IndustrialProcessorComponent>(centrifuge);
+            var input = containers.GetContainer(centrifuge, machine.InputContainerId);
+            foreach (var comb in combs)
+                Assert.That(containers.Insert(comb, input), Is.True);
+            Assert.That(machine.IsWorking, Is.False);
+            Server.System<TemperatureSystem>().ForceChangeTemperature(centrifuge, 600);
+            Assert.That(machine.CurrentRecipe?.Id, Is.EqualTo("EclipseSeparateCopperHoneycomb"));
+            Server.System<IndustrialProcessorSystem>().Update(15);
+            var output = containers.GetContainer(centrifuge, machine.OutputContainerId);
+            Assert.That(input.Count, Is.Zero);
+            Assert.That(resources.Count(output.ContainedEntities, "CableApcStack1"), Is.EqualTo(2));
+            Assert.That(resources.Count(output.ContainedEntities, "EclipseBeeswax"), Is.EqualTo(1));
+            SEntMan.DeleteEntity(map.MapUid);
         });
     }
 }

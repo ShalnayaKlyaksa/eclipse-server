@@ -16,6 +16,7 @@ public sealed class ApiaryWindow : FancyWindow
     private readonly Label _queen = Text();
     private readonly Label _age = Text("", true);
     private readonly Label _time = Text("", true);
+    private readonly Label _forage = Text("", true);
     private readonly Label _frame = Text("", true);
     private readonly Label _environment = Text("", true);
     private readonly Label _outputCount = Text("", true);
@@ -78,7 +79,7 @@ public sealed class ApiaryWindow : FancyWindow
 
         var right = Column(); right.VerticalExpand = true; family.AddChild(right);
         var cycle = Card(Loc.GetString("apiary-ui-cycle"), out var cycleBody);
-        cycleBody.AddChild(_progress); cycleBody.AddChild(_time); right.AddChild(cycle);
+        cycleBody.AddChild(_progress); cycleBody.AddChild(_time); cycleBody.AddChild(_forage); right.AddChild(cycle);
         var outputCard = Card(Loc.GetString("apiary-ui-output"), out var outputBody); outputCard.VerticalExpand = true;
         outputBody.AddChild(_outputCount);
         var products = new ScrollContainer { HScrollEnabled = false, VerticalExpand = true };
@@ -113,6 +114,11 @@ public sealed class ApiaryWindow : FancyWindow
             + (state.SmokeSeconds > 0 ? Loc.GetString("apiary-ui-smoke", ("seconds", MathF.Ceiling(state.SmokeSeconds))) : Loc.GetString("apiary-ui-protection"));
         _progress.Value = Math.Clamp(state.Progress, 0, 1);
         _time.Text = state.ActiveQueen ? Loc.GetString("workshop-time-left", ("seconds", MathF.Ceiling(state.SecondsRemaining))) : Loc.GetString("apiary-ui-cycle-idle");
+        _forage.Visible = state.ActiveQueen;
+        _forage.Text = state.ForageComb is { } comb
+            ? Loc.GetString("apiary-ui-forage-comb", ("comb", comb))
+            : Loc.GetString("apiary-ui-forage-waiting");
+        _forage.ToolTip = Loc.GetString("garden-apiary-forage-hint");
         _toggle.Text = Loc.GetString(state.Enabled ? "apiary-action-pause" : state.ActiveQueen ? "apiary-ui-resume" : "apiary-ui-start");
         _toggle.Disabled = !state.ActiveQueen && state.ParentSlots.Length < 2;
         _analyse.Disabled = !state.ActiveQueen && state.ParentSlots.Length == 0;
@@ -174,6 +180,14 @@ public sealed class ApiaryWindow : FancyWindow
         _details.AddChild(Text(Loc.GetString("apiary-ui-species-cycle", ("tier", species.Tier), ("minutes", MathF.Round(species.Seconds / 60, 1))), true));
         _details.AddChild(Text(Loc.GetString("apiary-ui-temperature-range", ("minimum", MathF.Round(species.MinTemperature - 273.15f)),
             ("maximum", MathF.Round(species.MaxTemperature - 273.15f))), true));
+        if (species.FoodMultiplier != 1f)
+            _details.AddChild(Text(Loc.GetString("apiary-ui-species-food", ("percent", MathF.Round(species.FoodMultiplier * 100))), true));
+        if (species.WaterMultiplier != 1f)
+            _details.AddChild(Text(Loc.GetString("apiary-ui-species-water", ("percent", MathF.Round(species.WaterMultiplier * 100))), true));
+        if (species.CombBonus != 0)
+            _details.AddChild(Text(Loc.GetString("apiary-ui-species-combs", ("count", species.CombBonus)), true));
+        if (species.StingChance != 0.35f)
+            _details.AddChild(Text(Loc.GetString("apiary-ui-species-sting", ("percent", MathF.Round(species.StingChance * 100))), true));
         var mutation = _state!.Crosses.FirstOrDefault(c => c.Result == species.Id);
         if (mutation != null)
         {
@@ -194,6 +208,8 @@ public sealed class ApiaryWindow : FancyWindow
         else _details.AddChild(Paragraph(Loc.GetString("apiary-ui-foundation"), 470));
         var products = Card(Loc.GetString("apiary-ui-products"), out var productBody);
         var comb = Row(); comb.AddChild(Icon(species.Comb)); comb.AddChild(Text(species.CombName)); productBody.AddChild(comb);
+        if (species.Separation is { } separation)
+            productBody.AddChild(Paragraph(separation, 450));
         if (species.Byproduct != null)
         {
             var extra = Row(); extra.AddChild(Icon(species.Byproduct)); extra.AddChild(Text(species.ByproductName ?? "")); productBody.AddChild(extra);

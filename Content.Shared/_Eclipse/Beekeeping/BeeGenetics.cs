@@ -40,6 +40,10 @@ public sealed partial class BeeSpeciesPrototype : IPrototype
     [DataField] public float MaxTemperature = 309;
     [DataField] public EntProtoId? Byproduct;
     [DataField] public float ByproductChance;
+    [DataField] public float FoodMultiplier = 1f;
+    [DataField] public float WaterMultiplier = 1f;
+    [DataField] public int CombBonus;
+    [DataField] public float StingChance = 0.35f;
 }
 
 [Prototype]

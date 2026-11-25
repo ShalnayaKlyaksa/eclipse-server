@@ -1,4 +1,4 @@
-guide-entry-ss14 = Станции и смены
+guide-entry-ss14 = Руководство Eclipse
 guide-entry-engineering = Инженерное дело
 guide-entry-construction = Строительство
 guide-entry-expandingrepairingstation = Расширение и починка станции
@@ -41,7 +41,7 @@ guide-entry-spacing = Разгерметизации
 guide-entry-deltapressure = Разница давления
 guide-entry-atmostools = Атмосферные инструменты
 guide-entry-gasses = Газы
-guide-entry-botany = Ботаника
+guide-entry-botany = Ботаника и селекция
 guide-entry-shuttle-craft = Шаттлостроение
 guide-entry-networking = Сетевые соединения
 guide-entry-access-configurator = Конфигуратор доступа

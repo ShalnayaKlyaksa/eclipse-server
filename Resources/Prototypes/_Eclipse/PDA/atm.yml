@@ -30,9 +30,8 @@
   components:
   - type: MachineBoard
     prototype: ImperialPersonalATM
-    requirements:
-      Manipulator: 1
-      Capacitor: 1
+    stackRequirements:
+      Manipulator: 2
 
 - type: latheRecipe
   parent: [BaseCircuitboardRecipe, BaseMachineRecipeCategory]

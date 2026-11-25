@@ -45,6 +45,10 @@
   id: MobDwarf
   name: Urist McHands the Dwarf
   components:
+  - type: AdvancedExertion
+    heavyWorkCostMultiplier: 0.55
+  - type: ActionGrant
+    actions: [ ActionDwarfBrace ]
   - type: Fixtures
     fixtures: # TODO: This needs a second fixture just for mob collisions.
       fix1:

@@ -167,3 +167,19 @@
     Bloodstream:
       metabolismRate: 0.1
       effects: []
+
+- type: reagent
+  id: Neuroregen
+  name: reagent-name-neuroregen
+  desc: reagent-desc-neuroregen
+  group: Medicine
+  physicalDesc: reagent-physical-desc-translucent
+  flavor: medicine
+  color: "#7B82CF"
+  worksOnTheDead: true
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 0.5
+      effects:
+      - !type:RestoreBrainIntegrity
+        amount: 6

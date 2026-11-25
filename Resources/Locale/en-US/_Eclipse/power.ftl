@@ -17,6 +17,8 @@ research-energyradioisotopes = Radioisotope sources
 research-energyfuelcells = Fuel cells
 research-energystabilization = High-power stabilization
 research-energyfission = Controlled fission
+research-energymox = Reactor core engineering
+research-energyfusion = Controlled fusion
 research-energyantimatter = Antimatter plants
 research-energysolarite = Solarite supermatter
 research-energytesla = Resonant discharge plants
@@ -27,23 +29,33 @@ guide-entry-eclipse-nuclear-reactor = Graphite reactor
 nuclear-ui-title = Reactor control station
 nuclear-ui-core-map = ACTIVE ZONE / PLAN VIEW
 nuclear-ui-instruments = OPERATING CONDITIONS
-nuclear-ui-rods = Absorber rod insertion
+nuclear-ui-group-name = Group { $group }
+nuclear-ui-assign-group = Assign group
+nuclear-ui-group-empty = No rods in this group
 nuclear-ui-scram = SCRAM — insert rods
 nuclear-ui-reset = Reset interlock
 nuclear-ui-heat-warning = Keep core cooling running after shutdown.
 nuclear-ui-thermal = Temperature: { $temperature } K
     Thermal power: { $power } kW
     Decay heat: { $decay } kW
+    Heavy water in core: { $heavyWater } / { $requiredHeavyWater } u minimum
 nuclear-ui-coolant = Pressure: { $pressure } kPa
     Flow: { $flow } mol/s
     Heat removal: { $cooling } kW
-nuclear-ui-rod-position = Rod insertion: { $actual }%
+nuclear-ui-water-coolant = Water loop · { $flow } u/s
+    Feed: { $inlet } K · Hot line: { $outlet } K
+    Heat removal: { $cooling } kW
+nuclear-ui-group-position = Rods: { $count } · Insertion: { $actual }%
     Target: { $target }%
+nuclear-ui-steam-coolant = Steam pressure: { $pressure } kPa · Output: { $steam } mol/s
+    Header water inventory: { $level } u
+    Heat removal: { $cooling } kW
 nuclear-ui-physics = Reactivity: { $reactivity }%
     Xenon: { $xenon }
-nuclear-status-no-core = Instrumentation spine not found
+nuclear-status-no-core = Link this console to the instrumentation spine with a network configurator
 nuclear-status-incomplete = Core assembly fault
 nuclear-status-power-loss = Auxiliary power lost — reactor scrammed
+nuclear-status-heavy-water = Fill the core with pure heavy water
 nuclear-status-no-flow = Insufficient coolant flow
 nuclear-status-pressure = Primary circuit overpressure
 nuclear-status-overheat = Core overtemperature — reactor scrammed
@@ -63,8 +75,61 @@ nuclear-part-core = Instrumentation spine
 nuclear-part-conflict = Overlapping sections
 nuclear-part-examine = Reactor section: { $kind }.
 nuclear-fuel-examine = Fuel remaining: { $percent }%.
+nuclear-fuel-hatch-ready = Click the hatch with an empty hand to remove the cartridge.
+nuclear-fuel-hatch-take = Remove cartridge
+nuclear-fuel-hatch-scram = The hatch is locked. Use SCRAM at the console to fully insert the rods.
+nuclear-fuel-hatch-rods = The hatch is locked. Wait for all rods to reach 100% insertion.
+nuclear-fuel-hatch-hot = The hatch is locked. Wait for the reactor to cool to { $limit } K.
+nuclear-turbine-pressure = Steam pressure is { $inlet } kPa at the inlet and { $exhaust } kPa at the exhaust.
+nuclear-turbine-output = Supplying { POWERWATTS($current) } to the grid, with { POWERWATTS($available) } available.
+nuclear-turbine-no-hv = The turbine is disconnected from the high-voltage grid.
 power-plant-fuel-economy = Fuel economy
 power-plant-reset = Reset interlock
+ent-IndustrialFusionReactor = ring fusion reactor
+    .desc = A fusion chamber with an integrated converter. Connect MV auxiliary power, an HV output cable, and a pumped coolant loop from west to east.
+ent-IndustrialFusionReactorFlatpack = fusion reactor flatpack
+ent-IndustrialFusionFuelCassette = fusion fuel cassette
+    .desc = A sealed fuel cassette for the ring fusion reactor.
+ent-NuclearReactorWaterInlet = reactor water inlet header
+    .desc = Install on the west edge of a graphite reactor. Feed clean water from the west.
+ent-NuclearReactorWaterOutlet = reactor hot water header
+    .desc = Install on the east edge of a graphite reactor. Run the hot line to a turbogenerator.
+ent-NuclearWaterTurbine = hot-water generator
+    .desc = Receives hot water from the west, returns cooler water to the east and supplies an HV cable under the centre. It releases waste heat into the surroundings.
+ent-NuclearReactorWaterInletFlatpack = reactor water inlet flatpack
+ent-NuclearReactorWaterOutletFlatpack = reactor hot water header flatpack
+ent-NuclearWaterTurbineFlatpack = hot-water generator flatpack
+ent-NuclearReactorSteamOutlet = graphite reactor steam header
+    .desc = Install opposite the water inlet. Connect an atmos steam pipe on its east face.
+ent-NuclearSteamTurbine = steam turbogenerator
+    .desc = Connect live steam from the west, exhaust to the east and an HV cable under the centre.
+ent-NuclearSteamCondenser = steam condenser
+    .desc = Takes steam from the west, circulates cold gas from north to south and returns water to the east.
+ent-NuclearReactorSteamOutletFlatpack = steam header flatpack
+ent-NuclearSteamTurbineFlatpack = steam turbogenerator flatpack
+ent-NuclearSteamCondenserFlatpack = steam condenser flatpack
+reagent-name-heavy-water = heavy water
+reagent-desc-heavy-water = A charge liquid for the graphite reactor's internal tank.
+ent-NuclearHeavyWaterTank = heavy water supply tank
+    .desc = Draw heavy water into a container and pour it into the central reactor module.
+nuclear-link-command = Reactor control
+nuclear-link-command-desc = Remote commands and telemetry.
+nuclear-link-reactor = Instrumentation spine
+nuclear-link-reactor-desc = Connection for a remote control console.
+ent-NuclearCoolantPipe = large-bore coolant pipe
+    .desc = A liquid pipe for long reactor cooling circuits. Narrow sections reduce the throughput of the entire line.
+materials-eclipse-fusion-fuel = fusion fuel
+power-fusion-title = Fusion reactor controls
+power-fusion-mode = Reactor mode
+power-fusion-nominal = Nominal
+power-fusion-boost = Boost
+power-fusion-output = Grid output: { $delivered } of { $available } kW
+power-fusion-utilities = Flow: { $flow } mol/s · Auxiliary draw: { $power } kW · Net: { $net } kW
+power-plant-condition-noauxiliarypower = Auxiliary power unavailable
+power-plant-condition-nocoolant = Insufficient coolant flow
+power-plant-condition-limited = Output limited by automatic controls
+power-plant-trip-noauxiliarypower = Reactor tripped. Auxiliary power lost.
+power-plant-trip-nocoolant = Reactor tripped. Coolant flow lost.
 power-plant-thermal-target = Thermal power
 power-plant-thermal-output = Thermal power: { $power } kW
 power-plant-electric-output = Electrical output: { $power } kW
@@ -85,8 +150,41 @@ power-plant-examine = Temperature: { $temperature } K. Limit: { $limit } K. Heat
 
 power-plant-start-success = Startup sequence accepted.
 power-plant-start-failure = Startup unavailable. Check fuel and interlocks.
-nuclear-ui-legend = F — fuel; G — graphite
-    R — absorber; # — shield
+nuclear-ui-legend = F — uranium · M — MOX · T — thorium
+    P — pulse · H — heat plate
+    G — graphite · # — shield · A–D — rods
+nuclear-fuel-slot = fuel cartridge
+nuclear-cell-none = Empty hatch
+nuclear-cell-uranium = Uranium cartridge
+nuclear-cell-mox = MOX cartridge
+nuclear-cell-thorium = Thorium cartridge
+nuclear-cell-pulse = Pulse cartridge
+nuclear-pulse-neighbours = Adjacent fueled cells: { $count }
+nuclear-part-heatsink = Heat transfer plate
+nuclear-status-no-fuel = No usable fuel remaining
+nuclear-status-mox-edge = MOX heat in the red zone · scram at 99%
+nuclear-ui-mox = MOX: { $cells } cells · Heat: { $heat }%
+    { $mode }
+nuclear-ui-conditioner = Auxiliary cooling: { $cooling } kW · Contacts: { $contacts }
+    Oxidizer: { $oxidizer } · Solvent: { $solvent }
+nuclear-mox-boost = Boost enabled
+nuclear-mox-standby = Boost requires heat, reagents and cooling
+nuclear-mox-no-conditioner = Install a conditioning station
+ent-NuclearUraniumCell = uranium cartridge
+    .desc = A replaceable fuel cell for steady graphite reactor operation.
+ent-NuclearMoxCell = MOX cartridge
+    .desc = A replaceable fuel cell for operation near the reactor's thermal limit.
+ent-NuclearThoriumCell = thorium cartridge
+    .desc = A low-output fuel cell with a long service life.
+ent-NuclearPulseCell = pulse cartridge
+    .desc = Gains heat output for each fueled hatch on an adjacent tile.
+ent-NuclearThoriumCrate = thorium feedstock crate
+ent-NuclearReactorHeatSink = reactor heat transfer plate
+    .desc = A flush plate that conducts heat from adjacent hatches to the auxiliary loop.
+ent-NuclearReactorHeatSinkFlatpack = heat transfer plate flatpack
+ent-NuclearReactorConditioner = reactor conditioning station
+    .desc = Anchor south of a shield tile bordering the active zone. Connect reagents on the west, cold gas on the south and warm gas on the east.
+ent-NuclearReactorConditionerFlatpack = reactor conditioning station flatpack
 reagent-name-industrial-biofuel = biofuel
 reagent-desc-industrial-biofuel = A combustible mixture refined from wood.
 power-plant-gravity-target = Gravity source power
@@ -99,3 +197,37 @@ ent-GravitationalKineticGenerator = gravitational kinetic generator
 ent-GravitationalKineticGeneratorFlatpack = gravitational kinetic generator flatpack
     .desc = Unpack with a wrench outside the containment field.
 ent-ResidualMicroBlackHole = collapsing micro black hole
+
+nuclear-ui-checks-heading = ASSEMBLY CHECKS
+nuclear-ui-rods-heading = CONTROL RODS
+nuclear-ui-cooling-heading = COOLING AND STEAM
+nuclear-ui-layout-size = Footprint { $width } × { $height } · Faults { $faults }
+nuclear-ui-awaiting-layout = Awaiting a layout from the instrumentation spine
+nuclear-ui-check-ready = Ready
+nuclear-ui-check-fault = Check
+nuclear-ui-checks = Shield enclosure · { $hull }
+    Coolant headers · { $ports }
+    Hatches { $fuel }/4 · Graphite { $graphite }/4 · Drives { $rods }/4
+    Fueled cartridges · { $live }
+nuclear-ui-heat-limit = Heat limit · { $percent }%
+nuclear-ui-proposed-depth = New insertion depth · { $percent }%
+nuclear-ui-apply-depth = Apply depth to selected group
+nuclear-ui-select-tile = Select a section on the map
+ent-NuclearFuelPress = fuel cell press
+    .desc = Forms ceramic fuel cells inside a shielded cabinet. The preset west port accepts feedstock and the east port outputs cells.
+ent-NuclearCartridgeFabricator = fuel cartridge fabricator
+    .desc = Seals a cell inside a prefabricated casing. The preset west port accepts parts and the east port outputs cartridges.
+ent-NuclearEmptyCartridge = empty fuel cartridge casing
+    .desc = A shielded casing. Load it into the fabricator with a ceramic fuel cell.
+ent-NuclearFuelPressFlatpack = fuel cell press flatpack
+ent-NuclearCartridgeFabricatorFlatpack = fuel cartridge fabricator flatpack
+ent-NuclearUraniumElement = uranium fuel cell
+    .desc = A radioactive ceramic intermediate for the cartridge fabricator.
+ent-NuclearMoxElement = MOX fuel cell
+    .desc = A radioactive ceramic intermediate for the cartridge fabricator.
+ent-NuclearThoriumElement = thorium fuel cell
+    .desc = A radioactive ceramic intermediate for the cartridge fabricator.
+ent-NuclearPulseElement = pulse fuel cell
+    .desc = A radioactive ceramic intermediate for the cartridge fabricator.
+ent-NuclearThoriumFeed = sealed thorium feedstock
+    .desc = Feedstock for the fuel cell press.

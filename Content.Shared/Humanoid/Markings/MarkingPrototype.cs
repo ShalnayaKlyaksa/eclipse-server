@@ -42,6 +42,10 @@ namespace Content.Shared.Humanoid.Markings
         [DataField]
         public bool CanBeDisplaced { get; private set; } = true;
 
+        /// <summary>Draw the marking behind body and clothing sprites while keeping its customization slot.</summary>
+        [DataField]
+        public bool DrawBehindBody { get; private set; }
+
         [DataField("sprites", required: true)]
         public List<SpriteSpecifier> Sprites { get; private set; } = default!;
 

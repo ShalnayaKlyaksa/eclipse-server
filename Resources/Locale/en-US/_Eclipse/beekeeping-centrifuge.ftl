@@ -1,0 +1,26 @@
+ent-EclipseCopperHoneycomb = copper honeycomb
+    .desc = A thermal centrifuge separates this comb into wax and industrial materials.
+ent-EclipseSilkenHoneycomb = silken honeycomb
+    .desc = A thermal centrifuge separates this comb into wax and industrial materials.
+ent-EclipseMetallicHoneycomb = metallic honeycomb
+    .desc = A thermal centrifuge separates this comb into wax and industrial materials.
+ent-EclipseAuricHoneycomb = auric honeycomb
+    .desc = A thermal centrifuge separates this comb into wax and industrial materials.
+ent-EclipseCrystallineHoneycomb = crystalline honeycomb
+    .desc = A thermal centrifuge separates this comb into wax and industrial materials.
+ent-EclipseConductiveHoneycomb = conductive honeycomb
+    .desc = A thermal centrifuge separates this comb into wax and industrial materials.
+ent-EclipseRadiantHoneycomb = radiant honeycomb
+    .desc = A thermal centrifuge separates this comb into wax and industrial materials.
+ent-EclipseResonantHoneycomb = resonant honeycomb
+    .desc = A thermal centrifuge separates this comb into wax and industrial materials.
+ent-EclipseQuantumHoneycomb = quantum honeycomb
+    .desc = A thermal centrifuge separates this comb into wax and industrial materials.
+
+bee-species-copper = copper
+apiary-ui-separation = Thermal centrifuge: { $count } combs → { $products }
+apiary-ui-recipe-output = { $count } × { $product }
+apiary-ui-species-food = Food consumption: { $percent }% of the standard rate.
+apiary-ui-species-water = Water consumption: { $percent }% of the standard rate.
+apiary-ui-species-combs = Combs per cycle: +{ $count }.
+apiary-ui-species-sting = Chance of a sting during handling: { $percent }%.

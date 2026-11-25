@@ -94,6 +94,11 @@
     speciesId: vulpkanin
 #Corvax-Vulp_Port start
     femaleDisplacements:
+      socks:
+        sizeMaps:
+          32:
+            sprite: _Sunrise/Mobs/Species/Reptilian/displacement.rsi
+            state: socks
       jumpsuit:
         sizeMaps:
           32:
@@ -106,6 +111,11 @@
             state: shoes
     #########
     displacements:
+      socks:
+        sizeMaps:
+          32:
+            sprite: _Sunrise/Mobs/Species/Reptilian/displacement.rsi
+            state: socks
       jumpsuit:
         sizeMaps:
           32:
@@ -174,6 +184,7 @@
   - BaseSpeciesMobOrganic
   id: MobVulpkanin
   name: Urist McArfArf
+  categories: [ HideSpawnMenu ]
   components:
   - type: DamageVisuals
     damageOverlayGroups:

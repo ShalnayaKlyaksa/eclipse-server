@@ -1,31 +1,28 @@
 <Document>
-  # Engineering
-  [color=#f39f27]Engineering[/color] is a combination of [textlink="construction" link="Construction"] work, [textlink="repair" link="ExpandingRepairingStation"] work, maintaining a death machine that happens to produce [textlink="power" link="Power"], and making sure the station contains [textlink="breathable air" link="Atmospherics"].
+# Инженерный отдел
 
-  ## Personnel
-  [color=#f39f27]Engineering[/color]'s staff is made up of Technical Assistants, Station Engineers and Atmospheric Technicians.
-  Engineering is run by the Chief Engineer.
+В начале смены спросите у старшего инженера, кто отвечает за генерацию, воздух и цех. Перед запуском нового станка проверьте, выдержит ли его линия. Если на участке пропали сразу свет и воздух, сначала разберитесь с питанием.
 
-  <Box>
-    <GuideEntityEmbed Entity="ToyFigurineEngineer" Caption="Engineer"/>
-    <GuideEntityEmbed Entity="ToyFigurineAtmosTech" Caption="Atmosian"/>
-    <GuideEntityEmbed Entity="ToyFigurineChiefEngineer" Caption="CE"/>
-  </Box>
+## Станки и материалы
 
-  ## Tools
-  <Box>
-    <GuideEntityEmbed Entity="Wrench"/>
-    <GuideEntityEmbed Entity="Crowbar"/>
-    <GuideEntityEmbed Entity="Screwdriver"/>
-    <GuideEntityEmbed Entity="Wirecutter"/>
-  </Box>
-  <Box>
-    <GuideEntityEmbed Entity="Welder"/>
-    <GuideEntityEmbed Entity="Multitool"/>
-    <GuideEntityEmbed Entity="NetworkConfigurator"/>
-  </Box>
-  Your core toolset is a small variety of tools.
-  If you're an engineer, then you should have a belt on your waist containing one of each; if not, you can likely find them in maintenance shafts and in tool storage within assorted toolboxes and vending machines.
+- [textlink="С чего начать" link="EclipseIndustrialStart"] — где взять верстак и как собрать первый станок.
+- [textlink="Рецепты инженерного цеха" link="EclipseIndustrialRecipes"] — руда, листы, сплавы и детали для следующей машины.
+- [textlink="Предметные трубы и порты" link="EclipseIndustrialLines"] — как подать сырьё и отвести готовый продукт.
+- [textlink="Развитие производства" link="EclipseIndustrialProgression"] — какие технологии запросить у НИО и когда понадобится диск.
+- [textlink="Тепло и электропитание станков" link="EclipseIndustrialPower"] — нагрузка сети и подогрев термоцентрифуги.
+- [textlink="Графитовый реактор" link="EclipseNuclearReactor"] — сборка активной зоны, топливо и внешнее охлаждение.
 
-  Most tasks will have explainers for how to perform them on examination; for example, if you're [textlink="constructing" link="Construction"] a wall, it'll tell you the next step if you look at it a bit closer.
+## Работа на станции
+
+- [textlink="Строительство" link="Construction"] и [textlink="ремонт отсеков" link="ExpandingRepairingStation"].
+- [textlink="Электросеть" link="Power"] и [textlink="поиск проблем с питанием" link="InspectingPower"].
+- [textlink="Атмосферные системы" link="Atmospherics"] и [textlink="действия при разгерметизации" link="Spacing"].
+
+На обход берите инструменты из пояса. При сборке осмотрите каркас, дверь или стену вблизи. В описании будет следующий инструмент или материал, который нужен для работы.
+<Box>
+  <GuideEntityEmbed Entity="Wrench"/>
+  <GuideEntityEmbed Entity="Screwdriver"/>
+  <GuideEntityEmbed Entity="Crowbar"/>
+  <GuideEntityEmbed Entity="Welder"/>
+</Box>
 </Document>

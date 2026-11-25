@@ -30,6 +30,7 @@
     EclipseApiaryInsulatedFrame: 1
 - type: industrialRecipe
   id: EclipsePressCitrusHoneycomb
+  name: ent-EclipseFoodCitrusHoneycomb
   processor: FilterPress
   time: 15
   inputs:
@@ -40,6 +41,7 @@
     EclipseHoney: 8
 - type: industrialRecipe
   id: EclipsePressAromaticHoneycomb
+  name: ent-EclipseFoodAromaticHoneycomb
   processor: FilterPress
   time: 15
   inputs:
@@ -50,6 +52,7 @@
     EclipseHoney: 8
 - type: industrialRecipe
   id: EclipsePressCoolingHoneycomb
+  name: ent-EclipseFoodCoolingHoneycomb
   processor: FilterPress
   time: 15
   inputs:
@@ -60,6 +63,7 @@
     EclipseHoney: 8
 - type: industrialRecipe
   id: EclipsePressRestorativeHoneycomb
+  name: ent-EclipseFoodRestorativeHoneycomb
   processor: FilterPress
   time: 15
   inputs:
@@ -70,6 +74,7 @@
     EclipseHoney: 8
 - type: industrialRecipe
   id: EclipsePressResinHoneycomb
+  name: ent-EclipseFoodResinHoneycomb
   processor: FilterPress
   time: 15
   inputs:

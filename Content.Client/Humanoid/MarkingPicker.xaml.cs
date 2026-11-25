@@ -15,6 +15,7 @@ using Robust.Client.UserInterface.XAML;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using Layer = Content.Shared.Humanoid.HumanoidVisualLayers;
 
 namespace Content.Client.Humanoid;
 
@@ -26,11 +27,11 @@ public sealed partial class MarkingPicker : Control
     [Dependency] private readonly MarkingManager _marking = default!;
 
     private readonly SpriteSystem _sprite;
-    private readonly BoxContainer _root;
     private readonly PanelContainer _leftPanel;
     private readonly PanelContainer _rightPanel;
     private readonly BoxContainer _zoneButtons;
     private readonly BoxContainer _filterButtons;
+    private readonly ScrollContainer _availableScroll;
     private readonly BoxContainer _availableItems;
     private readonly BoxContainer _selectedItems;
     private readonly Label _selectedCount;
@@ -38,7 +39,7 @@ public sealed partial class MarkingPicker : Control
 
     private MarkingsViewModel? _markingsModel;
     private BodyZone _selectedZone = BodyZone.Head;
-    private MarkingFilter _selectedFilter = MarkingFilter.All;
+    private readonly Dictionary<BodyZone, FilterDefinition> _filtersByZone = new();
     private bool _subscribed;
     // Set by ApplyResponsiveLayout and read while building rows, so the lists have to be rebuilt when they change.
     private bool _compactNav;
@@ -73,15 +74,48 @@ public sealed partial class MarkingPicker : Control
     private static readonly Color AccentColor = ForgeStyle.Accent;
     private static readonly Color MutedTextColor = ForgeStyle.Muted;
 
+    private static readonly FilterDefinition AllFilter = new("all", _ => true);
+    private static readonly FilterDefinition ScarsFilter = new("scars", entry => IsScar(entry.Prototype));
+    private static readonly FilterDefinition BandagesFilter = new("bandages", entry => IsBandage(entry.Prototype));
+    private static readonly FilterDefinition TattoosFilter = new("tattoos", entry => entry.Prototype.ID.Contains("Tattoo", StringComparison.OrdinalIgnoreCase));
+    private static readonly FilterDefinition[] CategoryTags = [ScarsFilter, BandagesFilter, TattoosFilter];
+
     private static readonly ZoneDefinition[] Zones =
     [
-        new(BodyZone.Head, "Голова", ZoneIcon("Mobs/Species/Human/parts.rsi", "head_m"), [HumanoidVisualLayers.Head, HumanoidVisualLayers.HeadTop, HumanoidVisualLayers.HeadSide, HumanoidVisualLayers.Snout, HumanoidVisualLayers.SnoutCover, HumanoidVisualLayers.Eyes]),
-        new(BodyZone.Hair, "Волосы", ZoneIcon("Mobs/Customization/human_hair.rsi", "afro"), [HumanoidVisualLayers.Hair, HumanoidVisualLayers.FacialHair]),
-        new(BodyZone.Torso, "Туловище", ZoneIcon("Mobs/Species/Human/parts.rsi", "torso_m"), [HumanoidVisualLayers.Chest, HumanoidVisualLayers.Overlay, HumanoidVisualLayers.UndergarmentTop, HumanoidVisualLayers.UndergarmentBottom]),
-        new(BodyZone.Tail, "Хвост", ZoneIcon("_Eclipse/Mobs/Customization/harpy_tails.rsi", "harpy_tail"), [HumanoidVisualLayers.Tail, HumanoidVisualLayers.TailOverlay]),
-        new(BodyZone.Arms, "Руки", ZoneIcon("Mobs/Species/Human/parts.rsi", "l_arm"), [HumanoidVisualLayers.LArm, HumanoidVisualLayers.RArm, HumanoidVisualLayers.LHand, HumanoidVisualLayers.RHand]),
-        new(BodyZone.Legs, "Ноги", ZoneIcon("Mobs/Species/Human/parts.rsi", "l_leg"), [HumanoidVisualLayers.LLeg, HumanoidVisualLayers.RLeg]),
-        new(BodyZone.Feet, "Стопы", ZoneIcon("Mobs/Species/Human/parts.rsi", "l_foot"), [HumanoidVisualLayers.LFoot, HumanoidVisualLayers.RFoot]),
+        new(BodyZone.Head, "Голова", ZoneIcon("Mobs/Species/Human/parts.rsi", "head_m"),
+            [Layer.Head, Layer.HeadTop, Layer.HeadSide, Layer.Snout, Layer.SnoutCover, Layer.Eyes],
+            [
+                ForLayers("face", Layer.Head, Layer.Snout, Layer.SnoutCover),
+                ForLayers("eyes", Layer.Eyes),
+                new("upper-ears", entry => entry.Layer == Layer.HeadTop && IsEar(entry.Prototype)),
+                new("side-ears", entry => entry.Layer == Layer.HeadSide && IsEar(entry.Prototype)),
+                new("horns", entry => IsHorn(entry.Prototype)),
+                new("antennae", entry => entry.Prototype.ID.Contains("Antenn", StringComparison.OrdinalIgnoreCase)),
+                TattoosFilter, ScarsFilter, BandagesFilter,
+            ]),
+        new(BodyZone.Hair, "Волосы", ZoneIcon("Mobs/Customization/human_hair.rsi", "afro"),
+            [Layer.Hair, Layer.FacialHair],
+            [ForLayers("hairstyles", Layer.Hair), ForLayers("facial-hair", Layer.FacialHair)]),
+        new(BodyZone.Torso, "Туловище", ZoneIcon("Mobs/Species/Human/parts.rsi", "torso_m"),
+            [Layer.Chest, Layer.Overlay, Layer.UndergarmentTop, Layer.UndergarmentBottom],
+            [
+                new("body-patterns", entry => (entry.Layer is Layer.Chest or Layer.Overlay) && !CategoryTags.Any(filter => filter.Matches(entry))),
+                ForLayers("underwear", Layer.UndergarmentTop, Layer.UndergarmentBottom),
+                TattoosFilter, ScarsFilter, BandagesFilter,
+            ]),
+        new(BodyZone.Tail, "Хвост", ZoneIcon("_Eclipse/Mobs/Customization/harpy_tails.rsi", "harpy_tail"),
+            [Layer.Tail, Layer.TailOverlay],
+            [ForLayers("tail-base", Layer.Tail), ForLayers("overlays", Layer.TailOverlay)]),
+        new(BodyZone.Arms, "Руки", ZoneIcon("Mobs/Species/Human/parts.rsi", "l_arm"),
+            [Layer.LArm, Layer.RArm, Layer.LHand, Layer.RHand],
+            [ForLayers("left", Layer.LArm, Layer.LHand), ForLayers("right", Layer.RArm, Layer.RHand),
+                ForLayers("hands", Layer.LHand, Layer.RHand), TattoosFilter, ScarsFilter, BandagesFilter]),
+        new(BodyZone.Legs, "Ноги", ZoneIcon("Mobs/Species/Human/parts.rsi", "l_leg"),
+            [Layer.LLeg, Layer.RLeg],
+            [ForLayers("left", Layer.LLeg), ForLayers("right", Layer.RLeg), TattoosFilter, ScarsFilter, BandagesFilter]),
+        new(BodyZone.Feet, "Стопы", ZoneIcon("Mobs/Species/Human/parts.rsi", "l_foot"),
+            [Layer.LFoot, Layer.RFoot],
+            [ForLayers("left", Layer.LFoot), ForLayers("right", Layer.RFoot), TattoosFilter, ScarsFilter, BandagesFilter]),
     ];
 
     private static SpriteSpecifier.Rsi ZoneIcon(string path, string state)
@@ -89,18 +123,8 @@ public sealed partial class MarkingPicker : Control
         return new SpriteSpecifier.Rsi(new ResPath(path), state);
     }
 
-    private static readonly FilterDefinition[] Filters =
-    [
-        new(MarkingFilter.All, "Все"),
-        new(MarkingFilter.Scars, "Шрамы"),
-        new(MarkingFilter.Bandages, "Повязки"),
-        new(MarkingFilter.Special, "Особые"),
-        new(MarkingFilter.Face, "Лицо"),
-        new(MarkingFilter.Eyes, "Глаза"),
-        new(MarkingFilter.UpperEars, "Верхние уши"),
-        new(MarkingFilter.LowerEars, "Нижние уши"),
-        new(MarkingFilter.Horns, "Рога"),
-    ];
+    private static FilterDefinition ForLayers(string key, params Layer[] layers)
+        => new(key, entry => layers.Contains(entry.Layer));
 
     public MarkingPicker()
     {
@@ -108,15 +132,15 @@ public sealed partial class MarkingPicker : Control
         IoCManager.InjectDependencies(this);
         _sprite = _entity.System<SpriteSystem>();
 
-        _root = new BoxContainer
+        var root = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Horizontal,
             SeparationOverride = RootSeparation,
             HorizontalExpand = true,
             VerticalExpand = true,
         };
-        AddChild(_root);
-        LayoutContainer.SetAnchorPreset(_root, LayoutContainer.LayoutPreset.Wide);
+        AddChild(root);
+        LayoutContainer.SetAnchorPreset(root, LayoutContainer.LayoutPreset.Wide);
 
         _leftPanel = CreatePanel(LeftPanelWidth);
         // The zone and filter lists are taller than the panel on small windows. Without a scroll container the
@@ -137,7 +161,7 @@ public sealed partial class MarkingPicker : Control
             HorizontalExpand = true,
         };
         leftScroll.AddChild(leftContent);
-        _root.AddChild(_leftPanel);
+        root.AddChild(_leftPanel);
 
         leftContent.AddChild(CreateHeader("Зоны тела"));
         _zoneButtons = new BoxContainer
@@ -159,6 +183,21 @@ public sealed partial class MarkingPicker : Control
         };
         leftContent.AddChild(_filterButtons);
 
+        var workspace = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Vertical,
+            SeparationOverride = RootSeparation,
+            HorizontalExpand = true,
+            VerticalExpand = true,
+        };
+        root.AddChild(workspace);
+        var lists = new BoxContainer
+        {
+            SeparationOverride = RootSeparation,
+            VerticalExpand = true,
+        };
+        workspace.AddChild(lists);
+
         var middlePanel = CreatePanel(null);
         middlePanel.HorizontalExpand = true;
         middlePanel.VerticalExpand = true;
@@ -171,7 +210,7 @@ public sealed partial class MarkingPicker : Control
             Margin = new Thickness(12),
         };
         middlePanel.AddChild(middleContent);
-        _root.AddChild(middlePanel);
+        lists.AddChild(middlePanel);
 
         middleContent.AddChild(CreateHeader("Доступные черты"));
         _searchBar = new LineEdit
@@ -182,7 +221,7 @@ public sealed partial class MarkingPicker : Control
         _searchBar.OnTextChanged += _ => RebuildAvailableItems();
         middleContent.AddChild(_searchBar);
 
-        var availableScroll = new ScrollContainer
+        _availableScroll = new ScrollContainer
         {
             HorizontalExpand = true,
             VerticalExpand = true,
@@ -193,8 +232,8 @@ public sealed partial class MarkingPicker : Control
             SeparationOverride = 6,
             HorizontalExpand = true,
         };
-        availableScroll.AddChild(_availableItems);
-        middleContent.AddChild(availableScroll);
+        _availableScroll.AddChild(_availableItems);
+        middleContent.AddChild(_availableScroll);
 
         _rightPanel = CreatePanel(RightPanelWidth);
         _rightPanel.VerticalExpand = true;
@@ -207,7 +246,7 @@ public sealed partial class MarkingPicker : Control
             Margin = new Thickness(12),
         };
         _rightPanel.AddChild(rightContent);
-        _root.AddChild(_rightPanel);
+        lists.AddChild(_rightPanel);
 
         var selectedHeader = new BoxContainer
         {
@@ -255,6 +294,12 @@ public sealed partial class MarkingPicker : Control
         footer.AddChild(clear);
         rightContent.AddChild(footer);
 
+        _colorEditor = CreateCard(false);
+        _colorEditor.Visible = false;
+        _colorEditor.HorizontalAlignment = HAlignment.Right;
+        _colorEditor.RectClipContent = true;
+        workspace.AddChild(_colorEditor);
+
         RebuildZoneButtons();
         RebuildFilterButtons();
         ApplyResponsiveLayout();
@@ -265,7 +310,7 @@ public sealed partial class MarkingPicker : Control
         if (_markingsModel == model)
             return;
 
-        _colorPopup?.Close();
+        CloseColorEditor();
         UnsubscribeModel();
         _markingsModel = model;
         SubscribeModel();
@@ -280,7 +325,7 @@ public sealed partial class MarkingPicker : Control
 
     protected override void ExitedTree()
     {
-        _colorPopup?.Close();
+        CloseColorEditor();
         base.ExitedTree();
         UnsubscribeModel();
     }
@@ -311,8 +356,9 @@ public sealed partial class MarkingPicker : Control
         _rightPanel.SetWidth = rightWidth;
 
         // Whatever the middle column is left with once the side panels and the separations have taken their share.
-        var middleWidth = Width - leftWidth - RootSeparation
-                          - (rightVisible ? rightWidth + RootSeparation : 0f);
+        var workspaceWidth = Width - leftWidth - RootSeparation;
+        var middleWidth = workspaceWidth - (rightVisible ? rightWidth + RootSeparation : 0f);
+        _colorEditor.SetWidth = Math.Clamp(workspaceWidth, 0, ColorEditorWidth);
 
         var compactEntries = middleWidth < CompactEntryWidth;
         var compactNav = Height < CompactNavHeight;
@@ -369,12 +415,15 @@ public sealed partial class MarkingPicker : Control
         if (!CurrentZone.Layers.Contains(layer))
             return;
 
+        ValidateColorEditor();
+        RebuildFilterButtons();
         RebuildAvailableItems();
         RebuildSelectedItems();
     }
 
     private void RebuildAll()
     {
+        ValidateColorEditor();
         RebuildZoneButtons();
         RebuildFilterButtons();
         RebuildAvailableItems();
@@ -432,8 +481,7 @@ public sealed partial class MarkingPicker : Control
             button.OnPressed += _ =>
             {
                 _selectedZone = zone.Zone;
-                if (_selectedZone != BodyZone.Head && IsHeadOnlyFilter(_selectedFilter))
-                    _selectedFilter = MarkingFilter.All;
+                _availableScroll.VScroll = 0;
                 RebuildAll();
             };
             _zoneButtons.AddChild(button);
@@ -445,15 +493,18 @@ public sealed partial class MarkingPicker : Control
         _filterButtons.RemoveAllChildren();
         _filterButtons.SeparationOverride = _compactNav ? NavSeparationCompact : NavSeparation;
 
-        foreach (var filter in Filters)
-        {
-            if (_selectedZone != BodyZone.Head && IsHeadOnlyFilter(filter.Filter))
-                continue;
+        var entries = GetAvailableEntries().Concat(GetSelectedEntries()).ToArray();
+        var filters = CurrentZone.Filters.Where(filter => entries.Any(filter.Matches)).Prepend(AllFilter).ToArray();
+        if (!filters.Contains(ActiveFilter))
+            _filtersByZone.Remove(_selectedZone);
 
-            var selected = filter.Filter == _selectedFilter;
+        foreach (var filter in filters)
+        {
+            var selected = filter == ActiveFilter;
+            var label = Loc.GetString(filter.LocaleKey);
             var button = new Button
             {
-                Text = selected ? $"▶  {filter.Label}" : $"   {filter.Label}",
+                Text = selected ? $"▶  {label}" : $"   {label}",
                 HorizontalExpand = true,
                 MinHeight = _compactNav ? NavButtonHeightCompact : NavButtonHeight,
                 TextAlign = Label.AlignMode.Left,
@@ -462,7 +513,8 @@ public sealed partial class MarkingPicker : Control
             };
             button.OnPressed += _ =>
             {
-                _selectedFilter = filter.Filter;
+                _filtersByZone[_selectedZone] = filter;
+                _availableScroll.VScroll = 0;
                 RebuildFilterButtons();
                 RebuildAvailableItems();
                 RebuildSelectedItems();
@@ -480,7 +532,7 @@ public sealed partial class MarkingPicker : Control
 
         var query = _searchBar.Text.Trim();
         var entries = GetAvailableEntries()
-            .Where(MatchesFilter)
+            .Where(ActiveFilter.Matches)
             .Where(entry => MatchesSearch(entry.Prototype, query))
             .OrderBy(entry => GetMarkingName(entry.Prototype), StringComparer.CurrentCultureIgnoreCase)
             .ToList();
@@ -507,7 +559,7 @@ public sealed partial class MarkingPicker : Control
             return;
         }
 
-        var selected = GetSelectedEntries().Where(MatchesFilter).ToList();
+        var selected = GetSelectedEntries().Where(ActiveFilter.Matches).ToList();
         _selectedCount.Text = $"Выбрано: {selected.Count}";
 
         if (selected.Count == 0)
@@ -580,7 +632,8 @@ public sealed partial class MarkingPicker : Control
                 SeparationOverride = 6,
                 Margin = new Thickness(0, 6, 0, 0),
             };
-            tags.AddChild(CreateTag(GetFilterLabel(entry.Prototype)));
+            if (CategoryTags.FirstOrDefault(filter => filter.Matches(entry)) is { } tag)
+                tags.AddChild(CreateTag(Loc.GetString(tag.LocaleKey)));
             tags.AddChild(CreateTag(GetLayerName(entry.Layer)));
             foreach (var species in GetSpeciesTags(entry.Prototype))
             {
@@ -729,49 +782,14 @@ public sealed partial class MarkingPicker : Control
                prototype.ID.Contains(query, StringComparison.OrdinalIgnoreCase);
     }
 
-    private bool MatchesFilter(MarkingEntry entry)
-    {
-        return _selectedFilter switch
-        {
-            MarkingFilter.All => true,
-            MarkingFilter.Scars => IsScar(entry.Prototype),
-            MarkingFilter.Bandages => IsBandage(entry.Prototype),
-            MarkingFilter.Special => !IsScar(entry.Prototype) && !IsBandage(entry.Prototype),
-            MarkingFilter.Face => entry.Layer is HumanoidVisualLayers.Snout or HumanoidVisualLayers.SnoutCover,
-            MarkingFilter.Eyes => entry.Layer == HumanoidVisualLayers.Eyes,
-            MarkingFilter.UpperEars => (entry.Layer is HumanoidVisualLayers.HeadTop or HumanoidVisualLayers.HeadSide) && IsEar(entry.Prototype),
-            MarkingFilter.LowerEars => entry.Layer == HumanoidVisualLayers.HeadSide && IsEar(entry.Prototype),
-            MarkingFilter.Horns => IsHorn(entry.Prototype),
-            _ => true,
-        };
-    }
-
-    private bool IsHeadOnlyFilter(MarkingFilter filter)
-    {
-        return filter switch
-        {
-            MarkingFilter.Face or MarkingFilter.Eyes or MarkingFilter.UpperEars or MarkingFilter.LowerEars or MarkingFilter.Horns => true,
-            _ => false,
-        };
-    }
-
-    private string GetFilterLabel(MarkingPrototype prototype)
-    {
-        if (IsScar(prototype))
-            return "Шрамы";
-        if (IsBandage(prototype))
-            return "Повязки";
-        return "Особые";
-    }
-
-    private bool IsScar(MarkingPrototype prototype)
+    private static bool IsScar(MarkingPrototype prototype)
     {
         var name = GetMarkingName(prototype);
         return prototype.ID.Contains("Scar", StringComparison.OrdinalIgnoreCase) ||
                name.Contains("шрам", StringComparison.OrdinalIgnoreCase);
     }
 
-    private bool IsBandage(MarkingPrototype prototype)
+    private static bool IsBandage(MarkingPrototype prototype)
     {
         var name = GetMarkingName(prototype);
         return prototype.ID.Contains("Gauze", StringComparison.OrdinalIgnoreCase) ||
@@ -780,7 +798,7 @@ public sealed partial class MarkingPicker : Control
                name.Contains("повяз", StringComparison.OrdinalIgnoreCase);
     }
 
-    private bool IsEar(MarkingPrototype prototype)
+    private static bool IsEar(MarkingPrototype prototype)
     {
         var name = GetMarkingName(prototype);
         return prototype.ID.Contains("Ear", StringComparison.OrdinalIgnoreCase) ||
@@ -788,10 +806,11 @@ public sealed partial class MarkingPicker : Control
                prototype.ID.Contains("Rabbit", StringComparison.OrdinalIgnoreCase) ||
                prototype.ID.Contains("Hare", StringComparison.OrdinalIgnoreCase) ||
                name.Contains("ух", StringComparison.OrdinalIgnoreCase) ||
+               name.Contains("уши", StringComparison.OrdinalIgnoreCase) ||
                name.Contains("ear", StringComparison.OrdinalIgnoreCase);
     }
 
-    private bool IsHorn(MarkingPrototype prototype)
+    private static bool IsHorn(MarkingPrototype prototype)
     {
         var name = GetMarkingName(prototype);
         return prototype.ID.Contains("Horn", StringComparison.OrdinalIgnoreCase) ||
@@ -799,7 +818,7 @@ public sealed partial class MarkingPicker : Control
                name.Contains("horn", StringComparison.OrdinalIgnoreCase);
     }
 
-    private string GetMarkingName(MarkingPrototype prototype)
+    private static string GetMarkingName(MarkingPrototype prototype)
     {
         return Loc.TryGetString($"marking-{prototype.ID}", out var name)
             ? name
@@ -912,9 +931,13 @@ public sealed partial class MarkingPicker : Control
     }
 
     private ZoneDefinition CurrentZone => Zones.First(zone => zone.Zone == _selectedZone);
+    private FilterDefinition ActiveFilter => _filtersByZone.GetValueOrDefault(_selectedZone, AllFilter);
 
-    private readonly record struct ZoneDefinition(BodyZone Zone, string Label, SpriteSpecifier Icon, HumanoidVisualLayers[] Layers);
-    private readonly record struct FilterDefinition(MarkingFilter Filter, string Label);
+    private readonly record struct ZoneDefinition(BodyZone Zone, string Label, SpriteSpecifier Icon, Layer[] Layers, FilterDefinition[] Filters);
+    private sealed record FilterDefinition(string Key, Func<MarkingEntry, bool> Matches)
+    {
+        public string LocaleKey => $"markings-filter-{Key}";
+    }
     private readonly record struct MarkingEntry(ProtoId<OrganCategoryPrototype> Organ, HumanoidVisualLayers Layer, MarkingPrototype Prototype);
 
     private enum BodyZone : byte
@@ -926,18 +949,5 @@ public sealed partial class MarkingPicker : Control
         Arms,
         Legs,
         Feet,
-    }
-
-    private enum MarkingFilter : byte
-    {
-        All,
-        Scars,
-        Bandages,
-        Special,
-        Face,
-        Eyes,
-        UpperEars,
-        LowerEars,
-        Horns,
     }
 }

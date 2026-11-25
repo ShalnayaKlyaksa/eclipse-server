@@ -5,10 +5,11 @@
   components:
   - type: Sprite
     sprite: Effects/rcd.rsi
-    state: deconstructPreview
     color: "#ff453acc"
     drawdepth: Effects
-    shader: unshaded
+    layers:
+    - state: deconstructPreview
+      shader: unshaded
   - type: PointLight
     color: red
     radius: 2
@@ -94,8 +95,9 @@
   - type: InteractionOutline
   - type: Sprite
     sprite: Structures/Specific/Anomalies/ice_anom.rsi
-    state: anom
-    shader: unshaded
+    layers:
+    - state: anom
+      shader: unshaded
   - type: PointLight
     color: "#7ceaff"
     radius: 4

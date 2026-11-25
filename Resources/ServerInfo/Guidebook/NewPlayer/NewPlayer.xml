@@ -1,42 +1,22 @@
 <Document>
-# Добро пожаловать в Space Station 14!
+# Первая смена на Eclipse
 
-Вы только что заступили на смену на борту космической станции ВИШ.
-Перед вами и вашими товарищами по экипажу стоит задача работать вместе, выживать и веселиться!
+Если вы впервые на станции, возьмите должность, где есть коллеги, готовые показать работу. В начале смены найдите свой отдел, представьтесь и уточните, чем помочь. В [textlink="списке должностей" link="Jobs"] можно заранее посмотреть, кто за что отвечает.
 
-[bold]Соблюдайте все правила сервера.[/bold] Вы можете задавать вопросы или сообщать о нарушениях правил команде [color=#EB2D3A][bold]администраторов[/bold][/color], используя [bold]меню помощи администратора[/bold]. ([italic]доступно по нажатию [/italic][color=yellow][bold][keybind="OpenAHelp"/][/bold][/color])
+Если нужно связаться с администрацией, откройте меню помощи клавишей [keybind="OpenAHelp"]. Справочник экипажа открывается клавишей [keybind="OpenGuidebook"].
 
-Более подробные руководства по [italic]определённым должностям[/italic] и [italic]механикам[/italic] можно найти [textlink="здесь." link="SS14"/]
+## Управление
 
-Это руководство можно открыть в любой момент, используя [color=yellow][bold][keybind="OpenGuidebook"][/bold][/color].
+- Движение — [keybind="MoveUp"][keybind="MoveLeft"][keybind="MoveDown"][keybind="MoveRight"]. Чтобы идти шагом, удерживайте [keybind="Walk"].
+- Осмотреть предмет — [keybind="ExamineEntity"]. Использовать предмет или взаимодействовать с объектом — [keybind="Use"].
+- Дополнительные действия — [keybind="UseSecondary"]. Так можно открыть контекстное меню двери, станка или предмета.
+- Сменить активную руку — [keybind="SwapHands"]. Активировать предмет в руке — [keybind="ActivateItemInHand"].
+- Положить предмет — [keybind="Drop"]. Бросить — [keybind="ThrowItemInHand"].
+- Потянуть объект — [keybind="TryPullObject"]. Отпустить — [keybind="ReleasePulledObject"].
 
-## Основные элементы управления
-Ниже перечислены элементы управления, которые понадобятся вам для обычной игры:
+Подробности есть в разделах [textlink="управления" link="Controls"] и [textlink="связи по рации" link="Radio"]. Если персонаж ещё не готов, откройте [textlink="создание персонажа" link="CharacterCreation"].
 
-- Бегайте, используя [color=yellow][bold][keybind="MoveUp"][keybind="MoveLeft"][keybind="MoveDown"][keybind="MoveRight"][/bold][/color]. Зажмите [color=yellow][bold][keybind="Walk"][/bold][/color] для ходьбы.
+## Где искать помощь по работе
 
-- Изучите окружающий мир с помощью [color=yellow][bold][keybind="ExamineEntity"][/bold][/color]
-
-- Взаимодействуйте с миром с помощью [color=yellow][bold][keybind="Use"][/bold][/color]
-
-- Наведите курсор на объект и нажмите [color=yellow][bold][keybind="UseSecondary"][/bold][/color], чтобы увидеть [italic]контекстное меню[/italic], которое содержит дополнительные взаимодействия
-
-- Меняйте руки, используя [color=yellow][bold][keybind="SwapHands"][/bold][/color] и активируйте текущий удерживаемый предмет с помощью [color=yellow][bold][keybind="ActivateItemInHand"][/bold][/color]
-
-- Положите предмет кнопкой [color=yellow][bold][keybind="Drop"][/bold][/color] или бросьте его, используя [color=yellow][bold][keybind="ThrowItemInHand"][/bold][/color]
-
-- Тяните и отпускайте предметы с помощью [color=yellow][bold][keybind="TryPullObject"][/bold][/color] и [color=yellow][bold][keybind="ReleasePulledObject"][/bold][/color]
-
-Более подробный список можно найти на странице [textlink="управление" link="Controls"].
-
-## Что такое SS14?
-Space Station 14 это многопользовательская игра о паранойе и хаосе на космической станции и ремейк культовой классической Space Station 13.
-
-Присоединяйтесь к десяткам других игроков на искусно спроектированной и смоделированной космической станции, погружаясь в ролевую игру и справляясь с угрозами на своем пути.
-
-SS14 - это [italic]игра с открытым исходным кодом[/italic], разработанная такими же людьми, [bold]как и вы![/bold]
-Она получает [color=lime]ежедневные обновления[/color] и временами может быть [color=#EB2D3A][bold]нестабильной.[/bold][/color]
-
-[italic]Если вы хотите сообщать об ошибках или помогать в разработке, присоединяйтесь к discord и узнайте, с чего начать.[/italic]
-
+Откройте [textlink="Руководство Eclipse" link="SS14"]. В каталоге есть статьи по отделам. Если застряли у станка или забыли рецепт, введите название устройства, реагента или продукции в поиск.
 </Document>

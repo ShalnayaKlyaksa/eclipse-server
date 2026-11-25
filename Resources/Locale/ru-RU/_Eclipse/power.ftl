@@ -17,6 +17,8 @@ research-energyradioisotopes = Радиоизотопные источники
 research-energyfuelcells = Топливные элементы
 research-energystabilization = Стабилизация мощных установок
 research-energyfission = Управляемое деление
+research-energymox = Инженерия активной зоны
+research-energyfusion = Управляемый термоядерный синтез
 research-energyantimatter = Антиматериальные установки
 research-energysolarite = Соларитовая суперматерия
 research-energytesla = Резонансные разрядные установки
@@ -27,23 +29,33 @@ guide-entry-eclipse-nuclear-reactor = Графитовый реактор
 nuclear-ui-title = Пульт реактора
 nuclear-ui-core-map = АКТИВНАЯ ЗОНА / ВИД СВЕРХУ
 nuclear-ui-instruments = КОНТРОЛЬ РЕЖИМА
-nuclear-ui-rods = Введение поглощающих стержней
+nuclear-ui-group-name = Группа { $group }
+nuclear-ui-assign-group = Назначить группу
+nuclear-ui-group-empty = В группе нет стержней
 nuclear-ui-scram = АЗ — ввести стержни
 nuclear-ui-reset = Снять блокировку
 nuclear-ui-heat-warning = После останова сохраняйте охлаждение активной зоны.
 nuclear-ui-thermal = Температура: { $temperature } K
     Тепловая мощность: { $power } кВт
     Остаточное тепло: { $decay } кВт
+    Тяжёлая вода в реакторе: { $heavyWater } ед. · Минимум { $requiredHeavyWater } ед.
 nuclear-ui-coolant = Давление: { $pressure } кПа
     Расход: { $flow } моль/с
     Отвод тепла: { $cooling } кВт
-nuclear-ui-rod-position = Стержни: { $actual }%
+nuclear-ui-water-coolant = Водяной контур · { $flow } ед./с
+    Подача: { $inlet } K · Горячая линия: { $outlet } K
+    Отвод тепла: { $cooling } кВт
+nuclear-ui-group-position = Стержней: { $count } · Введено на { $actual }%
     Задание: { $target }%
+nuclear-ui-steam-coolant = Давление пара: { $pressure } кПа · Выход: { $steam } моль/с
+    Запас воды в коллекторе: { $level } ед.
+    Отвод тепла: { $cooling } кВт
 nuclear-ui-physics = Реактивность: { $reactivity }%
     Ксенон: { $xenon }
-nuclear-status-no-core = Нет связи с измерительной колонной
+nuclear-status-no-core = Привяжите пульт к измерительной колонне конфигуратором
 nuclear-status-incomplete = Нарушена сборка активной зоны
 nuclear-status-power-loss = Нет питания приводов — аварийный останов
+nuclear-status-heavy-water = Заправьте активную зону чистой тяжёлой водой
 nuclear-status-no-flow = Недостаточный расход теплоносителя
 nuclear-status-pressure = Превышено давление первичного контура
 nuclear-status-overheat = Перегрев активной зоны — аварийный останов
@@ -63,11 +75,19 @@ nuclear-part-core = Измерительная колонна
 nuclear-part-conflict = Несколько секций на одном месте
 nuclear-part-examine = Секция реактора: { $kind }.
 nuclear-fuel-examine = Остаток топлива: { $percent }%.
+nuclear-fuel-hatch-ready = Нажмите на люк пустой рукой, чтобы достать картридж.
+nuclear-fuel-hatch-take = Извлечь картридж
+nuclear-fuel-hatch-scram = Люк заблокирован. Нажмите «АЗ» на пульте, чтобы полностью опустить стержни.
+nuclear-fuel-hatch-rods = Люк заблокирован. Дождитесь, пока все стержни опустятся до 100%.
+nuclear-fuel-hatch-hot = Люк заблокирован. Дождитесь охлаждения до { $limit } К.
+nuclear-turbine-pressure = Давление пара на входе { $inlet } кПа, на выходе { $exhaust } кПа.
+nuclear-turbine-output = В сеть поступает { POWERWATTS($current) }, доступно { POWERWATTS($available) }.
+nuclear-turbine-no-hv = Турбогенератор не подключён к сети высокого напряжения.
 ent-NuclearReactorCore = измерительная колонна реактора
-    .desc = Центральная колонна графитового реактора. Вокруг неё собирается активная зона 7×7 тайлов.
+    .desc = Центральная колонна графитового реактора. Перед запуском залейте тяжёлую воду во внутренний бак.
 ent-NuclearReactorShield = секция биологической защиты
     .desc = Внешняя защита активной зоны. Перед пуском закрепите секцию.
-ent-NuclearReactorFuelChannel = герметичный топливный канал
+ent-NuclearReactorFuelChannel = напольный топливный люк
     .desc = Топливная сборка в напорном канале. Менять после останова и охлаждения.
 ent-NuclearReactorGraphite = графитовый блок реактора
     .desc = Замедлитель нейтронов. Не заменяет поглощающие стержни.
@@ -78,9 +98,54 @@ ent-NuclearReactorInlet = входной коллектор реактора
 ent-NuclearReactorOutlet = выходной коллектор реактора
     .desc = Устанавливается посередине восточной стороны. Нагретый газ выходит на восток.
 ent-NuclearReactorConsole = пульт управления реактором
-    .desc = Устанавливается посередине северной стороны. Требует отдельного питания.
+    .desc = Трёхтайловый пульт. Разместите весь стол за пределами реактора, привяжите его к измерительной колонне сетевым конфигуратором и подведите отдельное питание.
+nuclear-link-command = Управление реактором
+nuclear-link-command-desc = Канал команд и показаний удалённого пульта.
+nuclear-link-reactor = Измерительная колонна
+nuclear-link-reactor-desc = Подключение отдельного пульта реактора.
+ent-NuclearReactorWaterInlet = коллектор подачи воды
+    .desc = Секция западной стороны графитового реактора. Подключите трубу подачи воды с запада.
+ent-NuclearReactorWaterOutlet = коллектор горячей воды
+    .desc = Секция восточной стороны графитового реактора. Подключите горячую линию к турбогенератору с востока.
+ent-NuclearWaterTurbine = генератор на горячей воде
+    .desc = Принимает горячую воду с запада, возвращает охлаждённую на восток и отдаёт ток в кабель высокого напряжения под корпусом. Сбросное тепло уходит в окружающую среду.
+ent-NuclearReactorWaterInletFlatpack = упакованный коллектор подачи воды
+ent-NuclearReactorWaterOutletFlatpack = упакованный коллектор горячей воды
+ent-NuclearWaterTurbineFlatpack = упакованный генератор на горячей воде
+ent-NuclearReactorSteamOutlet = паровой коллектор реактора
+    .desc = Устанавливается на восточной стороне активной зоны напротив коллектора подачи воды. Пар уходит на восток по атмосферной трубе.
+ent-NuclearSteamTurbine = паровой турбогенератор
+    .desc = Пар под давлением поступает с запада и выходит на восток к конденсатору. Подключите кабель высокого напряжения под центром корпуса.
+ent-NuclearSteamCondenser = паровой конденсатор
+    .desc = Подайте отработанный пар с запада, холодный газ с севера и отведите нагретый газ на юг. Конденсат выходит в жидкостную трубу на востоке.
+ent-NuclearReactorSteamOutletFlatpack = упакованный паровой коллектор
+ent-NuclearSteamTurbineFlatpack = упакованный паровой турбогенератор
+ent-NuclearSteamCondenserFlatpack = упакованный паровой конденсатор
+reagent-name-heavy-water = тяжёлая вода
+reagent-desc-heavy-water = Жидкость для заправки внутреннего бака графитового реактора.
+ent-NuclearHeavyWaterTank = бак с тяжёлой водой
+    .desc = Наберите тяжёлую воду в ёмкость и залейте её в центральную секцию реактора.
+ent-NuclearCoolantPipe = широкая труба охлаждения
+    .desc = Жидкостная труба для длинных контуров охлаждения. Узкие трубы снижают расход всей линии.
 power-plant-fuel-economy = Расход топлива
 power-plant-reset = Снять блокировку
+ent-IndustrialFusionReactor = кольцевой термоядерный реактор
+    .desc = Камера с плазменным кольцом и встроенным преобразователем. Подключите питание среднего напряжения, выход высокого напряжения и контур охлаждения с запада на восток.
+ent-IndustrialFusionReactorFlatpack = упакованный термоядерный реактор
+ent-IndustrialFusionFuelCassette = топливная кассета термояда
+    .desc = Герметичная кассета для кольцевого термоядерного реактора.
+materials-eclipse-fusion-fuel = термоядерное топливо
+power-fusion-title = Пульт термоядерного реактора
+power-fusion-mode = Режим реактора
+power-fusion-nominal = Штатный
+power-fusion-boost = Форсаж
+power-fusion-output = Выход в сеть: { $delivered } из { $available } кВт
+power-fusion-utilities = Расход: { $flow } моль/с · Собственные нужды: { $power } кВт · Баланс: { $net } кВт
+power-plant-condition-noauxiliarypower = Нет питания вспомогательной линии
+power-plant-condition-nocoolant = Недостаточный расход теплоносителя
+power-plant-condition-limited = Автоматика ограничила мощность
+power-plant-trip-noauxiliarypower = Реактор остановлен. Потеряно питание вспомогательной линии.
+power-plant-trip-nocoolant = Реактор остановлен. Пропал расход теплоносителя.
 power-plant-thermal-target = Тепловая мощность
 power-plant-thermal-output = Тепловая мощность: { $power } кВт
 power-plant-electric-output = Выработка: { $power } кВт
@@ -105,8 +170,41 @@ ent-IndustrialMicroBlackHoleGenerator = узел удержания микроч
     .desc = Узел удержания микрочёрной дыры. Электричество снимается отдельными гравитационными кинетическими генераторами. Требует независимого питания поля и насосного охлаждения.
 ent-PowerPlantFieldStabilizer = стабилизатор удерживающего поля
     .desc = Устанавливается рядом с удерживаемым источником энергии. Для работы нужна отдельная линия питания.
-nuclear-ui-legend = F — топливо; G — графит
-    R — стержень; # — защита
+nuclear-ui-legend = F — уран · M — МОКС · T — торий
+    P — импульс · H — теплоотвод
+    G — графит · # — защита · A–D — стержни
+nuclear-fuel-slot = топливный картридж
+nuclear-cell-none = Люк пуст
+nuclear-cell-uranium = Урановый картридж
+nuclear-cell-mox = МОКС-картридж
+nuclear-cell-thorium = Ториевый картридж
+nuclear-cell-pulse = Импульсный картридж
+nuclear-pulse-neighbours = Соседние ячейки с топливом: { $count }
+nuclear-part-heatsink = теплоотводящая плита
+nuclear-status-no-fuel = Доступное топливо исчерпано
+nuclear-status-mox-edge = Нагрев МОКС в красной зоне · АЗ на 99%
+nuclear-ui-mox = МОКС: { $cells } яч. · Нагрев: { $heat }%
+    { $mode }
+nuclear-ui-conditioner = Доп. отвод: { $cooling } кВт · Контакты: { $contacts }
+    Окислитель: { $oxidizer } · Растворитель: { $solvent }
+nuclear-mox-boost = Разгон включён
+nuclear-mox-standby = Разгон ждёт нагрева, реагентов и охлаждения
+nuclear-mox-no-conditioner = Установите станцию кондиционирования
+ent-NuclearUraniumCell = урановый картридж
+    .desc = Сменная топливная ячейка для штатной работы графитового реактора.
+ent-NuclearMoxCell = МОКС-картридж
+    .desc = Сменная топливная ячейка для разгона вблизи теплового предела реактора.
+ent-NuclearThoriumCell = ториевый картридж
+    .desc = Топливная ячейка с пониженной мощностью и большим ресурсом.
+ent-NuclearPulseCell = импульсный картридж
+    .desc = Выделяет больше тепла за каждую заряженную топливную ячейку на соседнем тайле.
+ent-NuclearThoriumCrate = ящик ториевого сырья
+ent-NuclearReactorHeatSink = теплоотводящая плита реактора
+    .desc = Плита заподлицо с полом. Передаёт тепло от соседних топливных люков в дополнительный контур.
+ent-NuclearReactorHeatSinkFlatpack = комплект теплоотводящей плиты
+ent-NuclearReactorConditioner = станция кондиционирования реактора
+    .desc = Закрепите к югу от плиты защиты, соседней с активной зоной. Реагенты входят с запада, холодный газ с юга, нагретый выходит на восток.
+ent-NuclearReactorConditionerFlatpack = комплект станции кондиционирования реактора
 ent-NuclearReactorCoreFlatpack = комплект измерительной колонны реактора
     .desc = Разверните гаечным ключом на подготовленном месте.
 ent-NuclearReactorShieldFlatpack = комплект защиты реактора
@@ -157,3 +255,37 @@ ent-GravitationalKineticGenerator = гравитационный кинетич�
 ent-GravitationalKineticGeneratorFlatpack = комплект гравитационного кинетического генератора
     .desc = Разверните гаечным ключом за пределами удерживающего поля.
 ent-ResidualMicroBlackHole = схлопывающаяся микрочёрная дыра
+
+nuclear-ui-checks-heading = ГОТОВНОСТЬ СБОРКИ
+nuclear-ui-rods-heading = УПРАВЛЕНИЕ СТЕРЖНЯМИ
+nuclear-ui-cooling-heading = ОХЛАЖДЕНИЕ И ПАР
+nuclear-ui-layout-size = Габариты { $width } × { $height } · Дефекты { $faults }
+nuclear-ui-awaiting-layout = Ожидание схемы с измерительной колонны
+nuclear-ui-check-ready = Готово
+nuclear-ui-check-fault = Проверить
+nuclear-ui-checks = Защитный контур · { $hull }
+    Коллекторы · { $ports }
+    Люки { $fuel }/4 · Графит { $graphite }/4 · Приводы { $rods }/4
+    Картриджей с топливом · { $live }
+nuclear-ui-heat-limit = Нагрев до предела · { $percent }%
+nuclear-ui-proposed-depth = Новая глубина ввода · { $percent }%
+nuclear-ui-apply-depth = Применить глубину к выбранной группе
+nuclear-ui-select-tile = Выберите секцию на схеме
+ent-NuclearFuelPress = пресс топливных ячеек
+    .desc = Экранированный пресс формует топливные ячейки. Западный порт принимает сырьё, восточный выдаёт ячейки.
+ent-NuclearCartridgeFabricator = запайщик топливных картриджей
+    .desc = Запаивает ячейку в готовый корпус. Западный порт принимает детали, восточный выдаёт картриджи.
+ent-NuclearEmptyCartridge = пустой корпус топливного картриджа
+    .desc = Экранированный корпус. Загрузите в запайщик вместе с керамической топливной ячейкой.
+ent-NuclearFuelPressFlatpack = комплект пресса топливных ячеек
+ent-NuclearCartridgeFabricatorFlatpack = комплект запайщика топливных картриджей
+ent-NuclearUraniumElement = урановая топливная ячейка
+    .desc = Радиоактивная керамическая заготовка для запайщика картриджей.
+ent-NuclearMoxElement = МОКС-топливная ячейка
+    .desc = Радиоактивная керамическая заготовка для запайщика картриджей.
+ent-NuclearThoriumElement = ториевая топливная ячейка
+    .desc = Радиоактивная керамическая заготовка для запайщика картриджей.
+ent-NuclearPulseElement = импульсная топливная ячейка
+    .desc = Радиоактивная керамическая заготовка для запайщика картриджей.
+ent-NuclearThoriumFeed = запечатанная ториевая заготовка
+    .desc = Сырьё для пресса топливных ячеек.

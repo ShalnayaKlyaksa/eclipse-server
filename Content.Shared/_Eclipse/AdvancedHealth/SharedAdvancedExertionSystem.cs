@@ -247,7 +247,7 @@ public sealed class SharedAdvancedExertionSystem : EntitySystem
     {
         if (!_net.IsServer || difficulty == PhysicalWorkClass.Light || !float.IsFinite(seconds) || seconds <= 0
             || !TryComp<AdvancedExertionComponent>(uid, out var exertion)) return;
-        var cost = difficulty == PhysicalWorkClass.Heavy ? 5f : 1.2f;
+        var cost = difficulty == PhysicalWorkClass.Heavy ? 5f * exertion.HeavyWorkCostMultiplier : 1.2f;
         ChargeExertion((uid, exertion), cost * seconds, difficulty == PhysicalWorkClass.Heavy ? 0.9f : 0.4f);
     }
 
@@ -269,7 +269,9 @@ public sealed class SharedAdvancedExertionSystem : EntitySystem
 
     public float WorkDurationMultiplier(EntityUid uid, PhysicalWorkClass difficulty)
         => difficulty == PhysicalWorkClass.Light || !TryComp<AdvancedExertionComponent>(uid, out var exertion)
-            ? 1f : 1f + (1 - exertion.Reserve / 100f) * 0.25f + exertion.SleepDebt / 100f * 0.3f;
+            ? 1f
+            : (1f + (1 - exertion.Reserve / 100f) * 0.25f + exertion.SleepDebt / 100f * 0.3f)
+              * (difficulty == PhysicalWorkClass.Heavy ? MathF.Sqrt(exertion.HeavyWorkCostMultiplier) : 1f);
 
     private void UpdateAlerts(Entity<AdvancedExertionComponent> ent)
     {

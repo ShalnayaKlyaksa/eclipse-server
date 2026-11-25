@@ -6,7 +6,9 @@
   children:
   - Bartender
   - Botany
+  - EclipseBeekeeping
   - Chef
+  - EclipseExperimentalCooking
   - Janitorial
   
 - type: guideEntry

@@ -16,3 +16,30 @@
   id: TraitStatusEffectPainNumbness
   name: pain numbness
 
+- type: entity
+  parent: [StaminaModifierStatusEffect, TraitStatusEffectBase]
+  id: TraitStatusEffectEndurance
+  components:
+  - type: StaminaModifierStatusEffect
+    modifier: 1.2
+
+- type: entity
+  parent: [StatusEffectDamageModifierBase, TraitStatusEffectBase]
+  id: TraitStatusEffectStrongBody
+  components:
+  - type: DamageModifierStatusEffect
+    modifiers:
+      coefficients:
+        Blunt: 0.9
+        Slash: 0.9
+        Piercing: 0.9
+
+- type: entity
+  parent: [StatusEffectDamageModifierBase, TraitStatusEffectBase]
+  id: TraitStatusEffectStrongLiver
+  components:
+  - type: DamageModifierStatusEffect
+    modifiers:
+      coefficients:
+        Poison: 0.75
+

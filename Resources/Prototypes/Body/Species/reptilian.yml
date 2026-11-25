@@ -60,6 +60,11 @@
   - type: Inventory
     speciesId: reptilian
     femaleDisplacements:
+      socks:
+        sizeMaps:
+          32:
+            sprite: _Sunrise/Mobs/Species/Reptilian/displacement.rsi
+            state: socks
       jumpsuit:
         sizeMaps:
           32:
@@ -83,6 +88,11 @@
             state: shoes
       # Corvax-Displacements-End
     displacements:
+      socks:
+        sizeMaps:
+          32:
+            sprite: _Sunrise/Mobs/Species/Reptilian/displacement.rsi
+            state: socks
       head:
         sizeMaps:
           32:

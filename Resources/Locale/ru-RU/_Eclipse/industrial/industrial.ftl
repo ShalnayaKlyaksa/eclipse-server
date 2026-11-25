@@ -366,7 +366,7 @@ industrial-processor-ui-ports = Конфигурация портов
 
 ent-IndustrialPortWrench = промышленный ключ
 
-    .desc = Настраивает порты промышленных машин, собирает рабочие столы из столешниц и снимает предметные трубы. Возьмите в руку, чтобы увидеть индикаторы портов.
+    .desc = Настраивает порты промышленных машин и снимает предметные трубы. Возьмите в руку, чтобы увидеть индикаторы портов.
 
 
 
@@ -500,6 +500,10 @@ industrial-workbench-category-components = Компоненты
 industrial-workbench-category-modules = Модули улучшения
 industrial-workbench-craft-duration = Время создания: { $seconds } с
 industrial-workbench-ingredient-line = { $have }/{ $need } { $name }
+industrial-recipe-requires-disk = Нужен диск с технологией «{ $technology }»
+industrial-recipe-requires-cleanroom = Нужна чистая комната класса { $grade }
+industrial-processor-requires-tier = Минимальный тир станка: { $tier }
+industrial-processor-requires-research = Требуется исследование «{ $technology }»
 
 industrial-chassis-upgraded = Машина собрана: {$machine}.
 
@@ -509,7 +513,7 @@ ent-IndustrialWorkbench = промышленный верстак (тир 1)
 
 ent-IndustrialMachineChassis = корпус промышленной машины
 
-    .desc = Пустой корпус механизма. Установите модуль улучшения для завершения сборки.
+    .desc = Закрепите корпус гаечным ключом и примените к нему модуль станка.
 
 ent-IndustrialUpgradeModuleCrusher = модуль улучшения в дробитель
 
@@ -535,7 +539,7 @@ industrial-fabrication-heat-conduit = Изготовить теплообмен�
 
 industrial-fabrication-circuit-core = Изготовить схемное ядро
 
-industrial-fabrication-machine-chassis = Изготовить корпус машины
+industrial-fabrication-machine-chassis = Чертёж корпуса станка
 
 industrial-fabrication-upgrade-crusher = Изготовить модуль улучшения в дробитель
 

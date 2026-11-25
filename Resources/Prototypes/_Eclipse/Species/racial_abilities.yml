@@ -1,0 +1,266 @@
+- type: entity
+  parent: BaseAction
+  id: ActionDwarfBrace
+  name: Brace
+  description: For seven seconds, take less physical damage while moving more slowly.
+  components:
+  - type: Action
+    useDelay: 40
+    icon: Interface/Actions/defile.png
+  - type: InstantAction
+    event: !type:RacialInstantActionEvent
+      ability: DwarfBrace
+
+- type: entity
+  parent: BaseAction
+  id: ActionLavriteVentHeat
+  name: Vent heat
+  description: Release excess body heat into the surrounding air.
+  components:
+  - type: Action
+    useDelay: 24
+    icon: Interface/Actions/firestarter.png
+  - type: InstantAction
+    event: !type:RacialInstantActionEvent
+      ability: LavriteVent
+
+- type: entity
+  parent: BaseAction
+  id: ActionTherianScent
+  name: Catch a scent
+  description: Count living creatures within six tiles, including behind doors.
+  components:
+  - type: Action
+    useDelay: 22
+    icon: Interface/Actions/eyeopen.png
+  - type: InstantAction
+    event: !type:RacialInstantActionEvent
+      ability: CanineScent
+
+- type: entity
+  parent: BaseAction
+  id: ActionTherianScurry
+  name: Scurry
+  description: Run 35 percent faster for five seconds.
+  components:
+  - type: Action
+    useDelay: 28
+    icon: Interface/Actions/malfunction.png
+  - type: InstantAction
+    event: !type:RacialInstantActionEvent
+      ability: TherianScurry
+
+- type: entity
+  parent: BaseAction
+  id: ActionShadowVeil
+  name: Shadow veil
+  description: Fade for up to six seconds. Movement makes you easier to see.
+  components:
+  - type: Action
+    useDelay: 32
+    icon: Interface/Actions/eyeclose.png
+  - type: InstantAction
+    event: !type:RacialInstantActionEvent
+      ability: ShadowVeil
+
+- type: entity
+  parent: BaseAction
+  id: ActionSlimeReform
+  name: Reform
+  description: Spend food to seal a wound and mend some soft tissue.
+  components:
+  - type: Action
+    useDelay: 35
+    icon: Interface/Actions/carp_summon.png
+  - type: InstantAction
+    event: !type:RacialInstantActionEvent
+      ability: SlimeReform
+
+- type: entity
+  parent: BaseAction
+  id: ActionMoleiSilk
+  name: Silk dressing
+  description: Use silk to slow the worst external bleeding on yourself or a nearby patient.
+  components:
+  - type: Action
+    useDelay: 35
+    icon: Interface/Actions/web.png
+  - type: TargetAction
+    range: 1.6
+  - type: EntityTargetAction
+    canTargetSelf: true
+    whitelist:
+      components: [ AdvancedHealth ]
+    event: !type:RacialTargetActionEvent
+      ability: MoleiSilk
+
+- type: entity
+  parent: BaseAction
+  id: ActionLavriteCoolTouch
+  name: Cool touch
+  description: Transfer body heat into something cooler within reach.
+  components:
+  - type: Action
+    useDelay: 15
+    icon: Interface/Actions/overloadlight.png
+  - type: TargetAction
+    range: 1.6
+  - type: EntityTargetAction
+    canTargetSelf: false
+    whitelist:
+      components: [ Temperature ]
+    event: !type:RacialTargetActionEvent
+      ability: LavriteCoolTouch
+
+- type: entity
+  parent: BaseAction
+  id: ActionSaurianTailSweep
+  name: Tail sweep
+  description: Hit a nearby target with your tail, dealing stamina damage.
+  components:
+  - type: Action
+    useDelay: 22
+    icon: Interface/Actions/disarm.png
+  - type: TargetAction
+    range: 1.6
+  - type: EntityTargetAction
+    canTargetSelf: false
+    whitelist:
+      components: [ Stamina ]
+    event: !type:RacialTargetActionEvent
+      ability: SaurianTailSweep
+
+- type: entity
+  parent: BaseAction
+  id: ActionElirReadPulse
+  name: Read pulse
+  description: Sense someone's pulse from up to six tiles away.
+  components:
+  - type: Action
+    useDelay: 10
+    icon: Interface/Actions/eyeopen.png
+  - type: TargetAction
+    range: 6
+  - type: EntityTargetAction
+    canTargetSelf: true
+    whitelist:
+      components: [ AdvancedHealth ]
+    event: !type:RacialTargetActionEvent
+      ability: ElirReadPulse
+
+- type: entity
+  parent: BaseAction
+  id: ActionSlimeAdhesive
+  name: Sticky spit
+  description: Spit a glob of gel that slows a nearby creature for five seconds.
+  components:
+  - type: Action
+    useDelay: 24
+    icon: Interface/Actions/blight.png
+  - type: TargetAction
+    range: 4
+  - type: EntityTargetAction
+    canTargetSelf: false
+    whitelist:
+      components: [ MobState ]
+    event: !type:RacialTargetActionEvent
+      ability: SlimeAdhesive
+
+- type: entity
+  parent: ActionGravityJump
+  id: ActionKoboldScurry
+  name: Scrambling leap
+  description: Bound forward with a quick spring.
+  components:
+  - type: Action
+    useDelay: 14
+
+- type: entity
+  parent: ActionGravityJump
+  id: ActionTherianPounce
+  name: Pounce
+  description: Pounce forward. A collision can knock you off balance.
+  components:
+  - type: Action
+    useDelay: 16
+
+- type: entity
+  parent: ActionGravityJump
+  id: ActionArkaneWingHop
+  name: Wing-assisted hop
+  description: Flap your wings and hop forward.
+  components:
+  - type: Action
+    useDelay: 17
+
+- type: entity
+  parent: ActionGravityJump
+  id: ActionAvianWingLeap
+  name: Wingbeat leap
+  description: Use your wings to leap farther forward.
+  components:
+  - type: Action
+    useDelay: 16
+
+- type: entity
+  parent: BaseAction
+  id: ActionAvianThrowFeather
+  name: Throw feather
+  description: Flick a stiff feather toward the target.
+  components:
+  - type: Action
+    useDelay: 10
+    icon:
+      sprite: _Eclipse/Objects/Species/feather.rsi
+      state: feather
+  - type: TargetAction
+    range: 7
+  - type: WorldTargetAction
+    event: !type:AvianThrowFeatherEvent {}
+
+- type: entity
+  parent: BaseItem
+  id: AvianThrownFeather
+  name: stiff feather
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Objects/Species/feather.rsi
+    state: feather
+  - type: DamageOtherOnHit
+    damage:
+      types:
+        Piercing: 7
+  - type: TimedDespawn
+    lifetime: 3
+
+- type: entity
+  parent: StatusEffectDamageModifierBase
+  id: StatusEffectDwarfBrace
+  name: braced
+  components:
+  - type: DamageModifierStatusEffect
+    modifiers:
+      coefficients:
+        Blunt: 0.6
+        Slash: 0.72
+        Piercing: 0.72
+  - type: MovementModStatusEffect
+  - type: RejuvenateRemovedStatusEffect
+
+- type: entity
+  parent: StatusEffectSpeed
+  id: StatusEffectTherianScurry
+  name: quick feet
+
+- type: entity
+  parent: StatusEffectSlowdown
+  id: StatusEffectSlimeAdhesive
+  name: sticky gel
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectShadowVeil
+  name: shadow veil
+  components:
+  - type: ShadowVeil
+  - type: RejuvenateRemovedStatusEffect

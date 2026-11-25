@@ -59,7 +59,7 @@ guide-entry-eclipse-industrial = Industrial production
 guide-entry-eclipse-industrial-start = Quick start
 guide-entry-eclipse-industrial-lines = Ports and item lines
 guide-entry-eclipse-industrial-power = Heat and electricity
-guide-entry-eclipse-industrial-recipes = Recipes and resources
+guide-entry-eclipse-industrial-recipes = Engineering Workshop Recipes
 guide-entry-eclipse-industrial-troubleshooting = Troubleshooting
 
 industrial-processor-unresearched = Research or a higher machine tier is required.

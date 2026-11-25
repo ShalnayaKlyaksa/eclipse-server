@@ -142,9 +142,17 @@ public sealed class MarkingManager
                 return false;
         }
 
-        if (prototype.SpeciesRestriction is { } speciesRestriction &&
-            (species is null || !speciesRestriction.Contains(species.Value)))
-            return false;
+        if (prototype.SpeciesRestriction is { } speciesRestriction)
+        {
+            if (species is null)
+                return false;
+
+            if (!speciesRestriction.Contains(species.Value)
+                && (!_prototype.TryIndex(species.Value, out var speciesPrototype)
+                    || speciesPrototype.MarkingSpecies is not { } markingSpecies
+                    || !speciesRestriction.Contains(markingSpecies)))
+                return false;
+        }
 
         return prototype.SexRestriction == null || prototype.SexRestriction == sex;
     }
