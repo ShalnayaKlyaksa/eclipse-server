@@ -7,6 +7,7 @@ using Robust.Shared.Timing;
 namespace Content.Client.UserInterface.Controls;
 
 /// <summary>Opt-in window mode shared by the research terminal and future redesigned interfaces.</summary>
+[Virtual]
 public class ImmersiveFancyWindow : FancyWindow
 {
     private readonly IConfigurationManager _configuration = IoCManager.Resolve<IConfigurationManager>();

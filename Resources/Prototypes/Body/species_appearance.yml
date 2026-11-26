@@ -4,6 +4,9 @@
   components:
   - type: Sprite
     layers:
+    - map: [ "enum.HumanoidVisualLayers.Wings" ]
+      offset: 0, 0.09375
+
     # Torso
     - map: [ "enum.HumanoidVisualLayers.Chest" ]
 

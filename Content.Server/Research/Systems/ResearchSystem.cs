@@ -3,7 +3,6 @@ using System.Linq;
 using Content.Server.Administration.Logs;
 using Content.Server.Radio.EntitySystems;
 using Content.Shared.Access.Systems;
-using Content.Shared.Popups;
 using Content.Shared.Research.Components;
 using Content.Shared.Research.Systems;
 using JetBrains.Annotations;
@@ -20,7 +19,6 @@ namespace Content.Server.Research.Systems
         [Dependency] private readonly AccessReaderSystem _accessReader = default!;
         [Dependency] private readonly EntityLookupSystem _lookup = default!;
         [Dependency] private readonly UserInterfaceSystem _uiSystem = default!;
-        [Dependency] private readonly SharedPopupSystem _popup = default!;
         [Dependency] private readonly RadioSystem _radio = default!;
 
         public override void Initialize()

@@ -248,7 +248,7 @@ public sealed partial class FabricationOrderWindow : ImmersiveFancyWindow
         _quantity.Text = Math.Clamp((int.TryParse(_quantity.Text, out var value) ? value : 1) + delta, 1, maximum).ToString();
     }
 
-    private bool Visible(FabricationOrderInfo order)
+    private bool MatchesFilter(FabricationOrderInfo order)
     {
         if (_department.SelectedId > 0 && (int) order.Department != _department.SelectedId - 1) return false;
         var matches = $"{order.Id} {order.Name} {order.Requester} {order.Reason}".Contains(_orderSearch.Text.Trim(), StringComparison.CurrentCultureIgnoreCase);
@@ -267,7 +267,7 @@ public sealed partial class FabricationOrderWindow : ImmersiveFancyWindow
     {
         var scroll = _orderScroll.VScrollTarget;
         _orders.RemoveAllChildren(); _orders.AddChild(OrderHeader());
-        var orders = _state.Orders.Where(Visible).OrderBy(o => o.Status).ThenByDescending(o => o.Priority).ThenBy(o => o.Id).ToArray();
+        var orders = _state.Orders.Where(MatchesFilter).OrderBy(o => o.Status).ThenByDescending(o => o.Priority).ThenBy(o => o.Id).ToArray();
         if (!orders.Any(o => o.Id == _selected)) { _selected = orders.FirstOrDefault()?.Id; _detailRevision = -1; }
         FabricationOrderStatus? previous = null;
         foreach (var order in orders)

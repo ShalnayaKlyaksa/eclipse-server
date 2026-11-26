@@ -7,7 +7,6 @@ using Content.Server.Station.Systems;
 using Content.Shared._Eclipse.Industrial;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Access.Components;
-using Content.Shared.Access.Systems;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
@@ -25,7 +24,6 @@ namespace Content.Server._Eclipse.Industrial;
 public sealed class IndustrialProgressionSystem : EntitySystem
 {
     [Dependency] private readonly ResearchSystem _research = default!;
-    [Dependency] private readonly AccessReaderSystem _access = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;

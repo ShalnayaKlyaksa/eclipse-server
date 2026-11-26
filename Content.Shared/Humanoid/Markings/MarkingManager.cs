@@ -211,6 +211,20 @@ public sealed class MarkingManager
     /// </summary>
     public void EnsureValidLayers(Dictionary<HumanoidVisualLayers, List<Marking>> markingSets, HashSet<HumanoidVisualLayers> layers)
     {
+        // Saved Avian profiles stored wing markings in the tail overlay slot.
+        if (layers.Contains(HumanoidVisualLayers.Wings) &&
+            markingSets.TryGetValue(HumanoidVisualLayers.TailOverlay, out var overlays))
+        {
+            var wings = overlays.FindAll(marking =>
+                TryGetMarking(marking, out var prototype) && prototype.BodyPart == HumanoidVisualLayers.Wings);
+            if (wings.Count > 0)
+            {
+                markingSets[HumanoidVisualLayers.TailOverlay] = overlays.FindAll(marking => !wings.Contains(marking));
+                if (!markingSets.TryGetValue(HumanoidVisualLayers.Wings, out var current) || current.Count == 0)
+                    markingSets[HumanoidVisualLayers.Wings] = wings;
+            }
+        }
+
         foreach (var (markingSet, markings) in markingSets)
         {
             for (var i = markings.Count - 1; i >= 0; i--)

@@ -51,12 +51,14 @@ public sealed partial class OrbitalStrikeVisualSystem : EntitySystem
 public sealed class OrbitalStrikeOverlay : Overlay
 {
     private const int MaximumEffects = 96;
+    private static readonly ProtoId<ShaderPrototype> UnshadedShader = "unshaded";
+    private static readonly ProtoId<ShaderPrototype> CloudShader = "EclipseStrikeCloud";
     private readonly List<(OrbitalStrikeEffectEvent Event, TimeSpan Started)> _effects = new();
     private readonly IGameTiming _timing = IoCManager.Resolve<IGameTiming>();
     private readonly IConfigurationManager _config = IoCManager.Resolve<IConfigurationManager>();
     private readonly IEntityManager _entities = IoCManager.Resolve<IEntityManager>();
-    private readonly ShaderInstance _unshaded = IoCManager.Resolve<IPrototypeManager>().Index<ShaderPrototype>("unshaded").Instance();
-    private readonly ShaderInstance _cloud = IoCManager.Resolve<IPrototypeManager>().Index<ShaderPrototype>("EclipseStrikeCloud").InstanceUnique();
+    private readonly ShaderInstance _unshaded = IoCManager.Resolve<IPrototypeManager>().Index(UnshadedShader).Instance();
+    private readonly ShaderInstance _cloud = IoCManager.Resolve<IPrototypeManager>().Index(CloudShader).InstanceUnique();
 
     public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowFOV;
 

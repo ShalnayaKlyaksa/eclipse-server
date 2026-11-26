@@ -84,4 +84,5 @@ markings-layer-RFoot = Правая стопа
 markings-layer-LFoot = Левая стопа
 markings-layer-Overlay = Наложение
 markings-layer-TailOverlay = Наложение
+markings-layer-Wings = Крылья
 

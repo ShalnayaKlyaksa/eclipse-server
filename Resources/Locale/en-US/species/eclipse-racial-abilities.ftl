@@ -10,6 +10,12 @@ species-appearance-lavrite-ember = Red embers
 species-appearance-lavrite-ash = Ash and sparks
 marking-LavriteTailFlame = Smooth lizard tail
 marking-LavriteTailEmber = Spiked lizard tail
+marking-AvianWings = Solid wings
+marking-AvianWingsTwoTone = Two-tone wings
+marking-AvianWingsThreeTone = Three-tone wings
+marking-AvianWingsSpeckled = Speckled wings
+marking-AvianWingsUndertone = Contrasting underwing
+marking-AvianWingsTipped = Tipped wings
 guide-entry-legacy-species = Legacy species
 
 racial-lavrite-no-heat-sink = There is nowhere to release the excess heat right now.

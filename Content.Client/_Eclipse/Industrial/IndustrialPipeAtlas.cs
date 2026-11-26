@@ -1,7 +1,13 @@
 using System.Collections.Generic;
-using Robust.Client.ResourceManagement;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Utility;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Png.Chunks;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 
 namespace Content.Client._Eclipse.Industrial;
 
@@ -9,16 +15,19 @@ namespace Content.Client._Eclipse.Industrial;
 public sealed class IndustrialPipeAtlas : IDisposable
 {
     private const string Directory = "/Textures/_Eclipse/Structures/Piping/";
-    private readonly CompositeRsiSource _source;
+    private const int FrameSize = 32;
+    // PNG metadata key read by RobustToolbox's RSIC loader.
+    private const string RsicMetadataKey = "robusttoolbox_rsic_meta";
+    private readonly MemoryContentRoot _root = new();
 
     public IndustrialPipeAtlas(IResourceManager resources)
     {
-        _source = new CompositeRsiSource(resources);
-        Build("item_pipe_parts", "item_lp_pipe", "lp", false);
-        Build("liquid_pipe_parts", "liquid_pipe", "pipe", true);
+        Build(resources, "item_pipe_parts", "item_lp_pipe", "lp", false);
+        Build(resources, "liquid_pipe_parts", "liquid_pipe", "pipe", true);
+        resources.AddRoot(ResPath.Root, _root);
     }
 
-    private void Build(string parts, string name, string prefix, bool includeContent)
+    private void Build(IResourceManager resources, string parts, string name, string prefix, bool includeContent)
     {
         var states = new List<(string Name, ResPath[] Layers)>();
         ResPath Part(string part) => new(Directory + parts + "/" + part + ".png");
@@ -36,8 +45,48 @@ public sealed class IndustrialPipeAtlas : IDisposable
             states.Add(("content", new[] { Part("content") }));
         states.Add(("connector", new[] { new ResPath(Directory + "connector_parts/socket.png") }));
         states.Add(("flow_arrow", new[] { new ResPath(Directory + "connector_parts/arrow.png") }));
-        _source.Add(new ResPath(Directory + name + ".rsi"), new Vector2i(32, 32), states);
+
+        var columns = (int) Math.Ceiling(Math.Sqrt(states.Count));
+        var rows = (states.Count + columns - 1) / columns;
+        using var atlas = new Image<Rgba32>(columns * FrameSize, rows * FrameSize);
+        var images = new Dictionary<ResPath, Image<Rgba32>>();
+        try
+        {
+            for (var index = 0; index < states.Count; index++)
+            {
+                var origin = new Point(index % columns * FrameSize, index / columns * FrameSize);
+                foreach (var path in states[index].Layers)
+                {
+                    if (!images.TryGetValue(path, out var image))
+                    {
+                        using var stream = resources.ContentFileRead(path);
+                        image = Image.Load<Rgba32>(stream);
+                        images.Add(path, image);
+                        if (image.Width != FrameSize || image.Height != FrameSize)
+                            throw new InvalidDataException($"Pipe atlas layer {path} must be {FrameSize}×{FrameSize}.");
+                    }
+
+                    atlas.Mutate(context => context.DrawImage(image, origin, 1f));
+                }
+            }
+
+            var metadata = JsonSerializer.Serialize(new
+            {
+                version = 1,
+                size = new { x = FrameSize, y = FrameSize },
+                states = states.Select(state => new { name = state.Name }).ToArray(),
+            });
+            atlas.Metadata.GetPngMetadata().TextData.Add(new PngTextData(RsicMetadataKey, metadata, "", ""));
+            using var encoded = new MemoryStream();
+            atlas.SaveAsPng(encoded);
+            _root.AddOrUpdateFile(new ResPath(Directory + name + ".rsic"), encoded.ToArray());
+        }
+        finally
+        {
+            foreach (var image in images.Values)
+                image.Dispose();
+        }
     }
 
-    public void Dispose() => _source.Dispose();
+    public void Dispose() => _root.Dispose();
 }

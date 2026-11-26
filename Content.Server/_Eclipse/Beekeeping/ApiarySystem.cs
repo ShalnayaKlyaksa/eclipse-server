@@ -35,6 +35,8 @@ namespace Content.Server._Eclipse.Beekeeping;
 /// <summary>Round-local apiculture. Breeding and rare-product rolls occur once per completed, supplied lifecycle.</summary>
 public sealed partial class ApiarySystem : EntitySystem
 {
+    private static readonly ProtoId<TagPrototype> BeeTag = "Bee";
+
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private SharedSolutionContainerSystem _solutions = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
@@ -360,7 +362,7 @@ public sealed partial class ApiarySystem : EntitySystem
 
     private void OnCatch(Entity<BeeNetComponent> ent, ref AfterInteractEvent args)
     {
-        if (args.Handled || !args.CanReach || args.Target is not {} target || !_tags.HasTag(target, "Bee")
+        if (args.Handled || !args.CanReach || args.Target is not {} target || !_tags.HasTag(target, BeeTag)
             || HasComp<BeeSpecimenComponent>(target) || !TryComp<MobStateComponent>(target, out var state) || state.CurrentState != MobState.Alive) return;
         args.Handled = true;
         EnsureComp<BeeSpecimenComponent>(target); // Block duplicate catches before deferred deletion runs.
@@ -398,7 +400,7 @@ public sealed partial class ApiarySystem : EntitySystem
 
     private void OnBeeDamage(Entity<DamageableComponent> ent, ref BeforeDamageChangedEvent args)
     {
-        if (args.Origin != null && _tags.HasTag(args.Origin.Value, "Bee") && Protected(ent)) args.Cancelled = true;
+        if (args.Origin != null && _tags.HasTag(args.Origin.Value, BeeTag) && Protected(ent)) args.Cancelled = true;
     }
 
     private void Publish(Entity<ApiaryComponent> ent)

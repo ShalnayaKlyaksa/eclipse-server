@@ -11,6 +11,9 @@ namespace Content.Client.Guidebook.Controls;
 
 public sealed partial class GuidebookWindow
 {
+    private static readonly Regex GuideTagPattern = new(@"<(Guide\w+)\s+([^>]+)>", RegexOptions.Singleline);
+    private static readonly Regex AttributePattern = new("(\\w+)=\"([^\"]*)\"");
+
     private string GetDocument(GuideEntry entry)
     {
         if (_documents.TryGetValue(entry.Text, out var document)) return document;
@@ -33,9 +36,9 @@ public sealed partial class GuidebookWindow
         var markup = GetDocument(entry);
         var result = new StringBuilder(GuidebookCatalog.PlainText(markup));
         // Index generated cards without constructing/spawning every guidebook control just to search.
-        foreach (Match tag in Regex.Matches(markup, "<(Guide\\w+)\\s+([^>]+)>", RegexOptions.Singleline))
+        foreach (Match tag in GuideTagPattern.Matches(markup))
         {
-            var attributes = Regex.Matches(tag.Groups[2].Value, "(\\w+)=\"([^\"]*)\"")
+            var attributes = AttributePattern.Matches(tag.Groups[2].Value)
                 .Cast<Match>().ToDictionary(m => m.Groups[1].Value, m => m.Groups[2].Value);
             switch (tag.Groups[1].Value)
             {

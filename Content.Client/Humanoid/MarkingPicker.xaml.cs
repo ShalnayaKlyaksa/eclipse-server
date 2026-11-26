@@ -103,9 +103,11 @@ public sealed partial class MarkingPicker : Control
                 ForLayers("underwear", Layer.UndergarmentTop, Layer.UndergarmentBottom),
                 TattoosFilter, ScarsFilter, BandagesFilter,
             ]),
-        new(BodyZone.Tail, "Хвост", ZoneIcon("_Eclipse/Mobs/Customization/harpy_tails.rsi", "harpy_tail"),
+        new(BodyZone.Tail, "Хвост", ZoneIcon("Mobs/Customization/reptilian_parts.rsi", "tail_smooth_behind"),
             [Layer.Tail, Layer.TailOverlay],
             [ForLayers("tail-base", Layer.Tail), ForLayers("overlays", Layer.TailOverlay)]),
+        new(BodyZone.Wings, "", ZoneIcon("_Backmen/Mobs/Customization/Harpy/harpy_wings.rsi", "harpy"),
+            [Layer.Wings], []),
         new(BodyZone.Arms, "Руки", ZoneIcon("Mobs/Species/Human/parts.rsi", "l_arm"),
             [Layer.LArm, Layer.RArm, Layer.LHand, Layer.RHand],
             [ForLayers("left", Layer.LArm, Layer.LHand), ForLayers("right", Layer.RArm, Layer.RHand),
@@ -423,6 +425,9 @@ public sealed partial class MarkingPicker : Control
 
     private void RebuildAll()
     {
+        if (!IsZoneAvailable(CurrentZone))
+            _selectedZone = BodyZone.Head;
+
         ValidateColorEditor();
         RebuildZoneButtons();
         RebuildFilterButtons();
@@ -437,6 +442,9 @@ public sealed partial class MarkingPicker : Control
 
         foreach (var zone in Zones)
         {
+            if (!IsZoneAvailable(zone))
+                continue;
+
             var selected = zone.Zone == _selectedZone;
             var button = new Button
             {
@@ -471,7 +479,7 @@ public sealed partial class MarkingPicker : Control
             });
             content.AddChild(new Label
             {
-                Text = zone.Label,
+                Text = zone.Zone == BodyZone.Wings ? GetLayerName(Layer.Wings) : zone.Label,
                 HorizontalExpand = true,
                 VerticalAlignment = VAlignment.Center,
                 ClipText = true,
@@ -486,6 +494,28 @@ public sealed partial class MarkingPicker : Control
             };
             _zoneButtons.AddChild(button);
         }
+    }
+
+    private bool IsZoneAvailable(ZoneDefinition zone)
+    {
+        if (zone.Zone is not (BodyZone.Tail or BodyZone.Wings))
+            return true;
+
+        if (_markingsModel is null)
+            return false;
+
+        foreach (var (organ, data) in _markingsModel.OrganData)
+        foreach (var layer in zone.Layers)
+        {
+            if (!data.Layers.Contains(layer))
+                continue;
+
+            _markingsModel.GetMarkingCounts(organ, layer, out _, out var count, out _);
+            if (count != 0)
+                return true;
+        }
+
+        return false;
     }
 
     private void RebuildFilterButtons()
@@ -729,6 +759,10 @@ public sealed partial class MarkingPicker : Control
                 if (!CurrentZone.Layers.Contains(layer))
                     continue;
 
+                _markingsModel.GetMarkingCounts(organ, layer, out _, out var count, out _);
+                if (count == 0)
+                    continue;
+
                 var markings = _markingsModel.EnforceGroupAndSexRestrictions
                     ? _marking.MarkingsByLayerAndSpeciesGroupAndSex(layer, _markingsModel.Species, organData.Group, organProfileData.Sex)
                     : _marking.MarkingsByLayer(layer);
@@ -751,6 +785,10 @@ public sealed partial class MarkingPicker : Control
             foreach (var (layer, markings) in organMarkings)
             {
                 if (!CurrentZone.Layers.Contains(layer))
+                    continue;
+
+                _markingsModel.GetMarkingCounts(organ, layer, out _, out var count, out _);
+                if (count == 0)
                     continue;
 
                 foreach (var marking in markings)
@@ -946,6 +984,7 @@ public sealed partial class MarkingPicker : Control
         Hair,
         Torso,
         Tail,
+        Wings,
         Arms,
         Legs,
         Feet,

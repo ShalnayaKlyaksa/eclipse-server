@@ -211,6 +211,7 @@ public sealed class VisualBodySystem : SharedVisualBodySystem
                 continue;
 
             var insertionIndex = proto.DrawBehindBody ? 0 : index + 1;
+            var offset = _sprite.TryGetLayer(target, index, out var anchor, false) ? anchor.Offset : default;
             ent.Comp.MarkingsDisplacement.TryGetValue(proto.BodyPart, out var displacement);
 
             for (var i = 0; i < proto.Sprites.Count; i++)
@@ -228,6 +229,7 @@ public sealed class VisualBodySystem : SharedVisualBodySystem
                     spriteLayer = _sprite.AddLayer(target, sprite, insertionIndex + i);
                     _sprite.LayerMapSet(target, layerId, spriteLayer);
                     _sprite.LayerSetSprite(target, layerId, rsi);
+                    _sprite.LayerSetOffset(target, spriteLayer, offset);
                 }
 
                 var color = marking.MarkingColors is { } colors && i < colors.Count ? colors[i] : Color.White;

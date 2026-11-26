@@ -5,6 +5,8 @@ namespace Content.Shared.PDA;
 [Prototype]
 public sealed partial class PersonalEconomyPrototype : IPrototype
 {
+    public static readonly ProtoId<PersonalEconomyPrototype> StationDefault = "StationPersonalEconomy";
+
     [IdDataField] public string ID { get; private set; } = "";
     [DataField] public int InitialCredits = 1000;
     [DataField] public TimeSpan SalaryInterval = TimeSpan.FromMinutes(10);

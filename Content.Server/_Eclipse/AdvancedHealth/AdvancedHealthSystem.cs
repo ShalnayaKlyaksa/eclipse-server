@@ -349,6 +349,9 @@ public sealed class AdvancedHealthSystem : EntitySystem
 
 public sealed class DamageToWoundSystem : EntitySystem
 {
+    private static readonly ProtoId<TagPrototype> GlassShardTag = "GlassShard";
+    private static readonly ProtoId<TagPrototype> ReinforcedGlassShardTag = "ReinforcedGlassShard";
+
     [Dependency] private readonly TagSystem _woundTags = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
 
@@ -429,7 +432,8 @@ public sealed class DamageToWoundSystem : EntitySystem
 
         var slot = isStepDamage ? PickFootSlot() : SelectSlot(ent.Comp, source);
         string damageType = hitCtx?.DominantDamageType ?? traumatic.MaxBy(x => x.Value).Key;
-        var isGlass = args.Origin is { } origin && (_woundTags.HasTag(origin, "GlassShard") || _woundTags.HasTag(origin, "ReinforcedGlassShard"));
+        var isGlass = args.Origin is { } origin &&
+            (_woundTags.HasTag(origin, GlassShardTag) || _woundTags.HasTag(origin, ReinforcedGlassShardTag));
         var baseType = GetWoundType(damageType);
         if (baseType == WoundType.Gunshot && (isGlass || args.Origin is not { } projectileOrigin || !HasComp<ProjectileComponent>(projectileOrigin)))
             baseType = WoundType.Puncture;
@@ -1288,7 +1292,6 @@ public sealed class AdvancedTreatmentSystem : EntitySystem
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly SharedInteractionSystem _interaction = default!;
     [Dependency] private readonly TagSystem _tags = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
 
     private static readonly ProtoId<TagPrototype> TourniquetTag = "Tourniquet";
     private static readonly ProtoId<TagPrototype> OintmentTag = "Ointment";

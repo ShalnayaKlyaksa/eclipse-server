@@ -53,12 +53,13 @@ public sealed class MicroBlackHoleVisualSystem : EntitySystem
 public sealed class MicroBlackHoleOverlay : Overlay
 {
     private const int MaximumVisible = 4;
+    private static readonly ProtoId<ShaderPrototype> BlackHoleShader = "EclipseMicroBlackHole";
     private readonly IEntityManager _entities = IoCManager.Resolve<IEntityManager>();
     private readonly IConfigurationManager _config = IoCManager.Resolve<IConfigurationManager>();
     private readonly IGameTiming _timing = IoCManager.Resolve<IGameTiming>();
     private readonly MicroBlackHoleVisualSystem _visuals;
     private readonly ShaderInstance _shader = IoCManager.Resolve<IPrototypeManager>()
-        .Index<ShaderPrototype>("EclipseMicroBlackHole").InstanceUnique();
+        .Index(BlackHoleShader).InstanceUnique();
     private readonly List<(Vector2 Position, float Radius, float Activity, float Instability)> _visible = new(MaximumVisible);
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
 

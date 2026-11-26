@@ -9,10 +9,12 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.PDA;
 using Content.Shared.Popups;
+using Content.Shared.Tools;
 using Content.Shared.Tools.Components;
 using Content.Shared.Tools.Systems;
 using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.PDA;
 
@@ -29,6 +31,8 @@ public sealed partial class StationCommerceSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedToolSystem _tools = default!;
     private const string GoodsSlot = "commerce-goods";
+    private static readonly ProtoId<ToolQualityPrototype> ScrewingQuality = "Screwing";
+    private static readonly ProtoId<ToolQualityPrototype> PulsingQuality = "Pulsing";
 
     public override void Initialize()
     {
@@ -191,14 +195,14 @@ public sealed partial class StationCommerceSystem : EntitySystem
     private void OnTool(EntityUid uid, PaymentTerminalComponent terminal, ref InteractUsingEvent args)
     {
         if (args.Handled || !TryComp<ToolComponent>(args.Used, out var tool)) return;
-        if (_tools.HasQuality(args.Used, "Screwing", tool))
+        if (_tools.HasQuality(args.Used, ScrewingQuality, tool))
         {
             terminal.PanelOpen = !terminal.PanelOpen;
             _popup.PopupEntity(Loc.GetString(terminal.PanelOpen ? "commerce-panel-open" : "commerce-panel-closed"), uid, args.User);
             args.Handled = true;
         }
-        else if (terminal.PanelOpen && _tools.HasQuality(args.Used, "Pulsing", tool) && TryIdentity(args.User, out _))
-            args.Handled = _tools.UseTool(args.Used, args.User, uid, 15f, "Pulsing", new PaymentTerminalHackEvent());
+        else if (terminal.PanelOpen && _tools.HasQuality(args.Used, PulsingQuality, tool) && TryIdentity(args.User, out _))
+            args.Handled = _tools.UseTool(args.Used, args.User, uid, 15f, PulsingQuality, new PaymentTerminalHackEvent());
     }
 
     private void OnHack(EntityUid uid, PaymentTerminalComponent terminal, PaymentTerminalHackEvent args)

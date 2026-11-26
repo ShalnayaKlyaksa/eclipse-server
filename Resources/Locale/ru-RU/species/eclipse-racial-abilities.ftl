@@ -10,6 +10,12 @@ species-appearance-lavrite-ember = Красные угли
 species-appearance-lavrite-ash = Пепел и искры
 marking-LavriteTailFlame = Гладкий ящерный хвост
 marking-LavriteTailEmber = Ящерный хвост с шипами
+marking-AvianWings = Однотонные крылья
+marking-AvianWingsTwoTone = Двухцветные крылья
+marking-AvianWingsThreeTone = Трёхцветные крылья
+marking-AvianWingsSpeckled = Крылья в крапинку
+marking-AvianWingsUndertone = Крылья с цветным подбоем
+marking-AvianWingsTipped = Крылья с цветными кончиками
 guide-entry-legacy-species = Справочные виды
 
 racial-lavrite-no-heat-sink = Сейчас некуда отдать лишнее тепло.

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Content.Client.Humanoid;
 using Content.Client.Lobby;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.Body.Systems;
@@ -25,6 +26,7 @@ using Content.Shared.Traits.Assorted;
 using Robust.Client.GameObjects;
 using Robust.Shared.Enums;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.Tests.Humanoid;
@@ -34,6 +36,53 @@ namespace Content.IntegrationTests.Tests.Humanoid;
 public sealed class HumanoidProfileTests : GameTest
 {
     private static readonly ProtoId<SpeciesPrototype> Vox = "Vox";
+
+    [Test]
+    public async Task AvianProfilesKeepWingsAndRestoreTheFixedTail()
+    {
+        await Client.WaitAssertion(() =>
+        {
+            var avian = new ProtoId<SpeciesPrototype>("Avian");
+            var species = CProtoMan.Index(avian);
+            var profile = HumanoidCharacterProfile.DefaultWithSpecies(avian, Sex.Female);
+            var appearance = profile.Appearance;
+            var torso = appearance.Markings["Torso"];
+            var wings = new Marking("AvianWingsTwoTone", [Color.Red, Color.Blue]);
+            torso.Remove(HumanoidVisualLayers.Wings);
+            torso[HumanoidVisualLayers.TailOverlay] = [wings];
+            torso[HumanoidVisualLayers.Tail] = [new Marking("AvianTailPhoenix", 1)];
+
+            var validated = HumanoidCharacterAppearance.EnsureValid(appearance, avian, profile.Sex, []);
+            var validatedTorso = validated.Markings["Torso"];
+            Assert.That(validatedTorso.ContainsKey(HumanoidVisualLayers.TailOverlay), Is.False);
+            Assert.That(validatedTorso[HumanoidVisualLayers.Tail].Single().MarkingId.Id, Is.EqualTo("AvianTailHarpy"));
+            Assert.That(validatedTorso[HumanoidVisualLayers.Wings].Single(), Is.EqualTo(wings));
+
+            var markings = Client.ResolveDependency<MarkingManager>();
+            var model = new MarkingsViewModel
+            {
+                Species = avian,
+                OrganData = markings.GetMarkingData(avian),
+                OrganProfileData = markings.GetProfileData(avian, profile.Sex, validated.SkinColor, validated.EyeColor),
+                Markings = validated.Markings,
+            };
+            Assert.That(model.OrganData["Torso"].Layers, Does.Not.Contain(HumanoidVisualLayers.TailOverlay));
+            Assert.That(model.TrySelectMarking("Torso", HumanoidVisualLayers.Tail, "AvianTailPhoenix"), Is.False);
+            Assert.That(model.TryDeselectMarking("Torso", HumanoidVisualLayers.Tail, "AvianTailHarpy"), Is.False);
+            Assert.That(model.IsMarkingColorCustomizable("Torso", HumanoidVisualLayers.Tail, "AvianTailHarpy"), Is.False);
+
+            var body = CSpawn(species.DollPrototype.Id);
+            CEntMan.System<SharedVisualBodySystem>().ApplyProfileTo(body, profile.WithCharacterAppearance(validated));
+            var sprites = CEntMan.System<SpriteSystem>();
+            Assert.That(sprites.LayerMapTryGet(body, "AvianWingsTwoTone-harpy2tone1", out var wingLayer, false), Is.True);
+            Assert.That(sprites.LayerMapTryGet(body, HumanoidVisualLayers.Chest, out var chestLayer, false), Is.True);
+            Assert.That(sprites.LayerMapTryGet(body, "AvianTailHarpy-phoenix_tail", out var tailLayer, false), Is.True);
+            Assert.That(wingLayer, Is.LessThan(chestLayer));
+            Assert.That(tailLayer, Is.GreaterThan(chestLayer));
+            Assert.That(sprites.TryGetLayer(body, wingLayer, out var wing, false), Is.True);
+            Assert.That(wing!.Offset.Y, Is.EqualTo(3f / 32f));
+        });
+    }
 
     [Test]
     public async Task LavriteTailsUseTheForegroundTailLayerWithPaletteGradients()

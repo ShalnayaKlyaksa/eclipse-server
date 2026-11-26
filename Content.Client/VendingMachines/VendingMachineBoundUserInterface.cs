@@ -38,7 +38,7 @@ namespace Content.Client.VendingMachines
             var system = EntMan.System<VendingMachineSystem>();
             _cachedInventory = system.GetAllInventory(Owner);
 
-            _menu?.SetPrice(bendy == null ? 0 : IoCManager.Resolve<IPrototypeManager>().Index<PersonalEconomyPrototype>("StationPersonalEconomy").VendorPrices.GetValueOrDefault(bendy.PackPrototypeId));
+            _menu?.SetPrice(bendy == null ? 0 : IoCManager.Resolve<IPrototypeManager>().Index(PersonalEconomyPrototype.StationDefault).VendorPrices.GetValueOrDefault(bendy.PackPrototypeId));
             _menu?.Populate(_cachedInventory, enabled);
         }
 

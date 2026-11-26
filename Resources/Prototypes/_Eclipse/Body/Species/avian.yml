@@ -30,12 +30,14 @@
       limit: 10
       required: false
     enum.HumanoidVisualLayers.Tail:
-      limit: 1
+      # The required default still renders, even with no customizable slots.
+      limit: 0
       required: true
       default: [ AvianTailHarpy ]
-    enum.HumanoidVisualLayers.TailOverlay:
+    enum.HumanoidVisualLayers.Wings:
       limit: 1
       required: true
+      onlyGroupWhitelisted: true
       default: [ AvianWings ]
     enum.HumanoidVisualLayers.LArm:
       limit: 10
@@ -81,6 +83,10 @@
 - type: entity
   parent: [ OrganBaseTorsoSexed, OrganBaseTorso, OrganAvianExternal ]
   id: OrganAvianTorso
+  components:
+  - type: VisualOrganMarkings
+    markingData:
+      layers: [ Chest, Tail, Wings, Overlay, UndergarmentTop, UndergarmentBottom, Special ]
 
 - type: entity
   parent: [ OrganBaseHeadSexed, OrganBaseHead, OrganAvianExternal ]

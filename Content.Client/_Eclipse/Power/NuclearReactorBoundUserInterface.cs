@@ -212,7 +212,7 @@ public sealed class NuclearReactorWindow : ImmersiveFancyWindow
             var button = new Button { MinSize = new Vector2(size), StyleClasses = { "terminal-control" } };
             button.OnPressed += _ =>
             {
-                _selected = Position(index);
+                _selected = GridPosition(index);
                 UpdateMap();
             };
             _cells.Add(button);
@@ -220,7 +220,7 @@ public sealed class NuclearReactorWindow : ImmersiveFancyWindow
         }
     }
 
-    private Vector2i Position(int index) => new(_state.Left + index % _state.Width, _state.Top - index / _state.Width);
+    private Vector2i GridPosition(int index) => new(_state.Left + index % _state.Width, _state.Top - index / _state.Width);
 
     private void UpdateMap()
     {
@@ -229,7 +229,7 @@ public sealed class NuclearReactorWindow : ImmersiveFancyWindow
         {
             var cell = _state.Cells[i];
             var button = _cells[i];
-            var position = Position(i);
+            var position = GridPosition(i);
             if (cell.Kind == NuclearPartKind.Outside)
             {
                 button.Text = string.Empty;
