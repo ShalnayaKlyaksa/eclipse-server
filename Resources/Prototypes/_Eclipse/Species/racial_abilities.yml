@@ -6,7 +6,10 @@
   components:
   - type: Action
     useDelay: 40
-    icon: Interface/Actions/defile.png
+    icon:
+      sprite: _Eclipse/Interface/Actions/species.rsi
+      state: brace
+
   - type: InstantAction
     event: !type:RacialInstantActionEvent
       ability: DwarfBrace
@@ -19,7 +22,10 @@
   components:
   - type: Action
     useDelay: 24
-    icon: Interface/Actions/firestarter.png
+    icon:
+      sprite: _Eclipse/Interface/Actions/species.rsi
+      state: vent
+
   - type: InstantAction
     event: !type:RacialInstantActionEvent
       ability: LavriteVent
@@ -32,7 +38,10 @@
   components:
   - type: Action
     useDelay: 22
-    icon: Interface/Actions/eyeopen.png
+    icon:
+      sprite: _Eclipse/Interface/Actions/species.rsi
+      state: scent
+
   - type: InstantAction
     event: !type:RacialInstantActionEvent
       ability: CanineScent
@@ -45,7 +54,10 @@
   components:
   - type: Action
     useDelay: 28
-    icon: Interface/Actions/malfunction.png
+    icon:
+      sprite: _Eclipse/Interface/Actions/species.rsi
+      state: scurry
+
   - type: InstantAction
     event: !type:RacialInstantActionEvent
       ability: TherianScurry
@@ -58,7 +70,10 @@
   components:
   - type: Action
     useDelay: 32
-    icon: Interface/Actions/eyeclose.png
+    icon:
+      sprite: _Eclipse/Interface/Actions/species.rsi
+      state: veil
+
   - type: InstantAction
     event: !type:RacialInstantActionEvent
       ability: ShadowVeil
@@ -71,7 +86,10 @@
   components:
   - type: Action
     useDelay: 35
-    icon: Interface/Actions/carp_summon.png
+    icon:
+      sprite: _Eclipse/Interface/Actions/species.rsi
+      state: reform
+
   - type: InstantAction
     event: !type:RacialInstantActionEvent
       ability: SlimeReform
@@ -84,7 +102,10 @@
   components:
   - type: Action
     useDelay: 35
-    icon: Interface/Actions/web.png
+    icon:
+      sprite: _Eclipse/Interface/Actions/species.rsi
+      state: silk
+
   - type: TargetAction
     range: 1.6
   - type: EntityTargetAction
@@ -102,7 +123,10 @@
   components:
   - type: Action
     useDelay: 15
-    icon: Interface/Actions/overloadlight.png
+    icon:
+      sprite: _Eclipse/Interface/Actions/species.rsi
+      state: cool
+
   - type: TargetAction
     range: 1.6
   - type: EntityTargetAction
@@ -120,7 +144,10 @@
   components:
   - type: Action
     useDelay: 22
-    icon: Interface/Actions/disarm.png
+    icon:
+      sprite: _Eclipse/Interface/Actions/species.rsi
+      state: sweep
+
   - type: TargetAction
     range: 1.6
   - type: EntityTargetAction
@@ -138,7 +165,10 @@
   components:
   - type: Action
     useDelay: 10
-    icon: Interface/Actions/eyeopen.png
+    icon:
+      sprite: _Eclipse/Interface/Actions/species.rsi
+      state: pulse
+
   - type: TargetAction
     range: 6
   - type: EntityTargetAction
@@ -156,7 +186,10 @@
   components:
   - type: Action
     useDelay: 24
-    icon: Interface/Actions/blight.png
+    icon:
+      sprite: _Eclipse/Interface/Actions/species.rsi
+      state: adhesive
+
   - type: TargetAction
     range: 4
   - type: EntityTargetAction
@@ -174,6 +207,9 @@
   components:
   - type: Action
     useDelay: 14
+    icon:
+      sprite: _Eclipse/Interface/Actions/species.rsi
+      state: kobold_jump
 
 - type: entity
   parent: ActionGravityJump
@@ -183,6 +219,9 @@
   components:
   - type: Action
     useDelay: 16
+    icon:
+      sprite: _Eclipse/Interface/Actions/species.rsi
+      state: pounce
 
 - type: entity
   parent: ActionGravityJump
@@ -192,6 +231,9 @@
   components:
   - type: Action
     useDelay: 17
+    icon:
+      sprite: _Eclipse/Interface/Actions/species.rsi
+      state: arkane_jump
 
 - type: entity
   parent: ActionGravityJump
@@ -201,6 +243,9 @@
   components:
   - type: Action
     useDelay: 16
+    icon:
+      sprite: _Eclipse/Interface/Actions/species.rsi
+      state: avian_jump
 
 - type: entity
   parent: BaseAction
@@ -211,8 +256,9 @@
   - type: Action
     useDelay: 10
     icon:
-      sprite: _Eclipse/Objects/Species/feather.rsi
+      sprite: _Eclipse/Interface/Actions/species.rsi
       state: feather
+
   - type: TargetAction
     range: 7
   - type: WorldTargetAction

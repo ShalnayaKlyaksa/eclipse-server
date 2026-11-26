@@ -1,7 +1,6 @@
 - type: marking
   id: LavriteTailFlame
   bodyPart: Tail
-  drawBehindBody: true
   speciesRestriction: [ Lavrite ]
   groupWhitelist: [ Lavrite ]
   coloring:
@@ -16,7 +15,6 @@
 - type: marking
   id: LavriteTailEmber
   bodyPart: Tail
-  drawBehindBody: true
   speciesRestriction: [ Lavrite ]
   groupWhitelist: [ Lavrite ]
   coloring:

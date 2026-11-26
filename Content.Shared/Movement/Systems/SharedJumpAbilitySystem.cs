@@ -262,7 +262,12 @@ public sealed partial class SharedJumpAbilitySystem : EntitySystem
 
     private void OnGravityJump(Entity<JumpAbilityComponent> entity, ref GravityJumpEvent args)
     {
-        if (_gravity.IsWeightless(args.Performer) || _standing.IsDown(args.Performer))
+        var user = args.Performer;
+        if (_gravity.IsWeightless(user) || _standing.IsDown(user) || _containers.IsEntityInContainer(user)
+            || HasComp<ThrownItemComponent>(user) || !TryComp<PhysicsComponent>(user, out var body)
+            || body.BodyStatus != BodyStatus.OnGround || !body.CanCollide
+            || TryComp<BuckleComponent>(user, out var buckle) && buckle.Buckled
+            || TryComp<PullableComponent>(user, out var pullable) && pullable.BeingPulled)
         {
             if (entity.Comp.JumpFailedPopup != null)
                 _popup.PopupClient(Loc.GetString(entity.Comp.JumpFailedPopup.Value), args.Performer, args.Performer);
@@ -271,6 +276,8 @@ public sealed partial class SharedJumpAbilitySystem : EntitySystem
 
         var direction = _transform.GetWorldRotation(args.Performer).ToWorldVec();
         LaunchJump(args.Performer, direction * entity.Comp.JumpDistance, entity.Comp.JumpThrowSpeed, entity.Comp.JumpSound, ability: true);
+        if (!HasComp<ThrownItemComponent>(user))
+            return;
 
         if (entity.Comp.CanCollide)
         {

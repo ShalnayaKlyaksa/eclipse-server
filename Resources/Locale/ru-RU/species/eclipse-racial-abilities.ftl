@@ -18,6 +18,7 @@ racial-silk-applied = Шёлк стягивает края раны и заме�
 racial-canine-scent-result = По запаху вы различаете живых существ поблизости: { $count }.
 racial-elir-pulse-result = Пульс у { $target }: { $pulse } уд/мин.
 racial-slime-reform-hungry = Чтобы собрать тело заново, вам нужно поесть.
+racial-slime-reform-uninjured = Сейчас у вас нет ран, которые можно затянуть этой способностью.
 racial-slime-reform-applied = Гель стекается к повреждённым участкам тела.
 marking-ArkaneWings = Перепончатые крылья
 ent-AvianThrownFeather = жёсткое перо

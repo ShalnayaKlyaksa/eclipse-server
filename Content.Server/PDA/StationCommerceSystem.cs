@@ -65,15 +65,15 @@ public sealed partial class StationCommerceSystem : EntitySystem
     }
 
     public bool CanManage(EntityUid uid, PaymentTerminalComponent terminal, EntityUid actor) =>
-        TryIdentity(actor, out var card) && Domain(uid, terminal) == card.Domain && terminal.Owner == card.Username;
+        TryIdentity(actor, out var card) && Domain(uid, terminal) == card.Domain && terminal.OwnerUsername == card.Username;
 
     public bool Claim(EntityUid uid, PaymentTerminalComponent terminal, EntityUid actor, bool hacked = false)
     {
         if (!TryIdentity(actor, out var card) || Domain(uid, terminal) != card.Domain) return false;
-        if (!hacked && terminal.Owner.Length != 0) return false;
+        if (!hacked && terminal.OwnerUsername.Length != 0) return false;
         if (!hacked && terminal.OwnerJob.Length != 0 &&
             Comp<ResearchAccountsComponent>(card.Domain).Credentials[card.Username].JobId != terminal.OwnerJob) return false;
-        terminal.Owner = card.Username;
+        terminal.OwnerUsername = card.Username;
         terminal.Hacked |= hacked;
         terminal.BillOpen = false;
         terminal.Version++;
@@ -163,7 +163,7 @@ public sealed partial class StationCommerceSystem : EntitySystem
     {
         var state = new PaymentTerminalState
         {
-            CanManage = CanManage(uid, terminal, actor), CanClaim = terminal.Owner.Length == 0,
+            CanManage = CanManage(uid, terminal, actor), CanClaim = terminal.OwnerUsername.Length == 0,
             Personal = terminal.Personal, Department = terminal.Department, Price = terminal.Price,
             Commission = terminal.Commission, CommissionDepartment = terminal.CommissionDepartment,
             Description = terminal.Description, BillOpen = terminal.BillOpen, Version = terminal.Version,
@@ -174,7 +174,7 @@ public sealed partial class StationCommerceSystem : EntitySystem
             state.Departments = _cargo.GetAccounts((domain, null)).Keys.Select(id => id.Id).Order().ToArray();
             if (TryComp<ResearchAccountsComponent>(domain, out var registry))
             {
-                state.Owner = registry.Credentials.GetValueOrDefault(terminal.Owner)?.PublicId ?? "";
+                state.Owner = registry.Credentials.GetValueOrDefault(terminal.OwnerUsername)?.PublicId ?? "";
                 state.Recipient = registry.Credentials.GetValueOrDefault(terminal.Recipient)?.PublicId ?? "";
             }
         }

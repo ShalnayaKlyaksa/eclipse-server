@@ -264,6 +264,16 @@
       FootLeft: OrganSlimePersonFootLeft
       FootRight: OrganSlimePersonFootRight
       Brain: OrganSlimePersonCore
+      Lungs: OrganSlimefolkGasSacs
+
+- type: entity
+  parent: OrganSlimePersonLungs
+  id: OrganSlimefolkGasSacs
+  components:
+  - type: Lung
+    alert: LowOxygen
+  - type: MixedGasLung
+    breathableGases: [ Oxygen, Nitrogen, CarbonDioxide, Plasma, WaterVapor, Ammonia, NitrousOxide ]
 
 - type: entity
   parent: [ AppearanceSlimefolk, BaseSpeciesMobOrganic ]

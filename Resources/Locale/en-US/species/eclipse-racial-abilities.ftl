@@ -18,5 +18,6 @@ racial-silk-applied = The silk pulls the wound closed and slows the bleeding.
 racial-canine-scent-result = You catch the scent of { $count } living creatures nearby.
 racial-elir-pulse-result = { $target } has a pulse of { $pulse } bpm.
 racial-slime-reform-hungry = You need to eat before you can reform your body.
+racial-slime-reform-uninjured = You have no injuries that this ability can mend.
 racial-slime-reform-applied = Gel flows toward the damaged parts of your body.
 marking-ArkaneWings = Membranous wings

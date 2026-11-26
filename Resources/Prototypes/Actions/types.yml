@@ -459,8 +459,8 @@
   - type: Action
     useDelay: 12
     icon:
-      sprite: Interface/Actions/jump.rsi
-      state: icon
+      sprite: _Eclipse/Interface/Actions/species.rsi
+      state: pounce
   - type: InstantAction
     event: !type:GravityJumpEvent {}
 

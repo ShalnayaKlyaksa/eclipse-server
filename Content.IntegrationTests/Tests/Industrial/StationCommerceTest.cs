@@ -108,7 +108,7 @@ public sealed class StationCommerceTest : GameTest
             var hack = new GotEmaggedEvent(buyer, EmagType.Interaction);
             SEntMan.EventBus.RaiseLocalEvent(uid, ref hack);
             Assert.That(hack.Handled, Is.True);
-            Assert.That(terminal.Owner, Is.EqualTo(b.Username));
+            Assert.That(terminal.OwnerUsername, Is.EqualTo(b.Username));
             Assert.That(commerce.CanManage(uid, terminal, seller), Is.False);
             Assert.That(commerce.CanManage(uid, terminal, buyer), Is.True);
             message.Version = terminal.Version; message.Recipient = "buyer"; message.Price = 5000;

@@ -2,11 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Content.Client.Lobby;
 using Content.IntegrationTests.Fixtures;
+using Content.Server.Body.Systems;
 using Content.Server.Preferences.Managers;
 using Content.Server.Traits;
 using Content.Shared._Eclipse.AdvancedHealth;
 using Content.Shared._Eclipse.Species;
 using Content.Shared.Actions;
+using Content.Shared.Atmos;
 using Content.Shared.Body;
 using Content.Shared.Corvax.TTS;
 using Content.Shared.Damage.Components;
@@ -34,7 +36,7 @@ public sealed class HumanoidProfileTests : GameTest
     private static readonly ProtoId<SpeciesPrototype> Vox = "Vox";
 
     [Test]
-    public async Task LavriteTailsRenderBehindTheBodyWithPaletteGradients()
+    public async Task LavriteTailsUseTheForegroundTailLayerWithPaletteGradients()
     {
         await Client.WaitAssertion(() =>
         {
@@ -52,10 +54,8 @@ public sealed class HumanoidProfileTests : GameTest
                 visuals.ApplyProfileTo(body, profile.WithCharacterAppearance(appearance));
 
                 Assert.That(sprites.LayerMapTryGet(body, $"{marking}-{state}", out var tail, false), Is.True);
-                Assert.That(sprites.LayerMapTryGet(body, HumanoidVisualLayers.Chest, out var torso, false), Is.True);
-                Assert.That(sprites.LayerMapTryGet(body, HumanoidVisualLayers.LLeg, out var leg, false), Is.True);
-                Assert.That(sprites.LayerMapTryGet(body, "pants", out var clothes, false), Is.True);
-                Assert.That(tail, Is.LessThan(torso).And.LessThan(leg).And.LessThan(clothes));
+                Assert.That(sprites.LayerMapTryGet(body, HumanoidVisualLayers.Tail, out var tailAnchor, false), Is.True);
+                Assert.That(tail, Is.EqualTo(tailAnchor + 1));
             }
         });
     }
@@ -134,9 +134,25 @@ public sealed class HumanoidProfileTests : GameTest
             }
 
             var slime = bodies["Slimefolk"];
-            Assert.That(SComp<AdvancedHealthComponent>(slime).NeedsOxygen, Is.False);
+            Assert.That(SComp<AdvancedHealthComponent>(slime).NeedsOxygen, Is.True);
             var organs = SComp<InitialBodyComponent>(slime).Organs;
-            Assert.That(organs.ContainsKey("Lungs"), Is.False);
+            Assert.That(organs.ContainsKey("Lungs"), Is.True);
+            var respirator = SEntMan.System<RespiratorSystem>();
+            var vacuum = new GasMixture(6f) { Temperature = 293f };
+            Assert.That(respirator.CanMetabolizeInhaledAir(slime, vacuum), Is.False);
+            foreach (var gas in new[] { Gas.Oxygen, Gas.Nitrogen, Gas.CarbonDioxide, Gas.Plasma, Gas.WaterVapor,
+                         Gas.Ammonia, Gas.NitrousOxide, Gas.Tritium, Gas.Frezon })
+            {
+                var sample = new GasMixture(6f) { Temperature = 293f };
+                sample.SetMoles(gas, 0.25f);
+                var breathable = gas is not (Gas.Tritium or Gas.Frezon);
+                Assert.That(respirator.CanMetabolizeInhaledAir(slime, sample), Is.EqualTo(breathable), gas.ToString());
+
+                respirator.UpdateSaturation(slime, -100f);
+                var inhaled = new InhaledGasEvent(sample);
+                SEntMan.EventBus.RaiseLocalEvent(slime, ref inhaled);
+                Assert.That(respirator.IsBreathing(slime), Is.EqualTo(breathable), gas.ToString());
+            }
             Assert.That(SComp<AdvancedHealthComponent>(bodies["Lavrite"]).NormalBodyTemperature, Is.EqualTo(323.15f));
             Assert.That(SProtoMan.Index<SpeciesPrototype>("Vulpkanin").RoundStart, Is.False);
             var migrated = HumanoidCharacterProfile.MigratePlayableSpecies("Vulpkanin");
@@ -154,7 +170,9 @@ public sealed class HumanoidProfileTests : GameTest
                 Target = bodies["Imperial"],
                 Ability = RacialTargetAbility.MoleiSilk,
             };
-            SEntMan.EventBus.RaiseLocalEvent(molei, silk);
+            var silkAction = actions.GetActions(molei).Single(action =>
+                SComp<MetaDataComponent>(action.Owner).EntityPrototype?.ID == "ActionMoleiSilk");
+            actions.PerformAction(molei, silkAction, silk, predicted: false);
             Assert.That(silk.Handled, Is.True);
             Assert.That(wound.ExternalBleedingRate, Is.EqualTo(1f));
         });

@@ -269,6 +269,16 @@ public sealed class RespiratorSystem : EntitySystem
         if (args.Args.Handled)
             return;
 
+        if (TryComp<MixedGasLungComponent>(ent, out var mixed))
+        {
+            var gas = args.Args.Gas;
+            var fraction = gas.Volume > 0f && TryComp<RespiratorComponent>(args.Body, out var respirator)
+                ? Math.Clamp(respirator.BreathVolume / gas.Volume, 0f, 1f)
+                : 0f;
+            args.Args = args.Args with { Handled = true, Saturation = mixed.GetSaturation(gas, fraction) };
+            return;
+        }
+
         var solution = _lungSystem.GasToReagent(args.Args.Gas);
 
         var saturation = 0f;
@@ -398,7 +408,10 @@ public sealed class RespiratorSystem : EntitySystem
             return;
 
         _atmosSys.Merge(ent.Comp.Air, args.Args.Gas);
-        _lungSystem.GasToReagent(ent, ent);
+        if (TryComp<MixedGasLungComponent>(ent, out var mixed))
+            UpdateSaturation(args.Body, mixed.GetSaturation(args.Args.Gas));
+        else
+            _lungSystem.GasToReagent(ent, ent);
 
         args.Args = args.Args with
         {

@@ -165,7 +165,6 @@
   fluidColor: "#70d5ff"
   bloodTypes: [ "P-Neutral", "P-Cryo", "P-Electro", "P-Acid", "P-Neuro" ]
   incompatibleTransfusionPopup: advanced-health-transfusion-incompatible-slimefolk
-  needsOxygen: false
   canFracture: false
   defaultSkinIntegrity: 82
   defaultMuscleIntegrity: 125

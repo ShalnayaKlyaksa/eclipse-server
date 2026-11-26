@@ -1,6 +1,6 @@
 light_mode unshaded;
 
-// Face-on adaptation of Gargantua's curved rays, Keplerian shear and plasma ramp.
+// Face-on adaptation of Gargantua's curved rays and plasma ramp.
 // https://github.com/hasnain7abbas/gargantua-blackhole (MIT; see micro_black_hole.LICENSE.txt).
 // The ordinary Singularity overlay lenses the station; this pass adds absorption and emission.
 uniform highp vec2 center;
@@ -9,7 +9,6 @@ uniform highp float radius;
 uniform highp float activity;
 uniform highp float instability;
 uniform highp float elapsed;
-uniform highp float motion;
 
 highp float hash(highp vec3 p) {
     p = fract(p * 0.1031);
@@ -24,12 +23,17 @@ highp float noise(highp vec3 p) {
     return mix(mix(mix(hash(i), hash(i + vec3(1.0, 0.0, 0.0)), f.x),
                    mix(hash(i + vec3(0.0, 1.0, 0.0)), hash(i + vec3(1.0, 1.0, 0.0)), f.x), f.y),
                mix(mix(hash(i + vec3(0.0, 0.0, 1.0)), hash(i + vec3(1.0, 0.0, 1.0)), f.x),
-                   mix(hash(i + vec3(0.0, 1.0, 1.0)), hash(i + vec3(1.0)), f.x), f.y), f.z);
+                   mix(hash(i + vec3(0.0, 1.0, 1.0)), hash(i + vec3(1.0, 1.0, 1.0)), f.x), f.y), f.z);
 }
 
 highp float turbulence(highp vec3 p) {
     return noise(p) * 0.57 + noise(p * 2.17 + vec3(11.3, 7.7, 5.1)) * 0.28 +
         noise(p * 4.71 + vec3(3.2, 19.8, 7.4)) * 0.15;
+}
+
+highp float gaussian(highp float offset, highp float width) {
+    highp float x = offset / width;
+    return exp(-x * x);
 }
 
 highp vec3 plasmaColor(highp float temperature) {
@@ -42,21 +46,23 @@ highp vec4 disk(highp vec3 p) {
     highp float r = length(p.xz);
     if (r < 0.8 || r > 4.0) return vec4(0.0);
 
-    // Differential rotation stretches clouds into filaments; circular coordinates have no angular seam.
-    highp float omega = 0.55 / (pow(r / 0.52, 1.5) * 0.35 + 0.05);
-    highp float angle = atan(p.z, p.x) - elapsed * omega * (1.0 + instability * 0.15);
+    // Keep the amount of shear from the reference frame while rotating the resulting texture.
+    highp float omega = 0.32 / (pow(r / 0.52, 1.5) * 0.35 + 0.05);
+    highp float spin = 0.22;
+    highp float twist = 22.0 * (omega - spin);
+    highp float angle = atan(p.z, p.x) - elapsed * spin - twist + log(r) * 1.3;
     highp vec2 orbit = vec2(cos(angle), sin(angle));
     highp float cloud = turbulence(vec3(orbit * r * 2.4, r * 1.2));
-    highp float lanes = turbulence(vec3(orbit * 3.8, r * 13.0 + cloud * 1.7));
-    highp float fine = noise(vec3(orbit * 7.0, r * 32.0 + cloud * 2.5));
+    highp float lanes = turbulence(vec3(orbit * 3.4, r * 8.0 + cloud * 1.6));
+    highp float fine = noise(vec3(orbit * 5.2, r * 16.0 + cloud * 2.0));
     highp float envelope = smoothstep(0.8, 1.0, r) * (1.0 - smoothstep(2.4, 4.0, r));
     highp float density = envelope * (0.2 + cloud * 0.8) * (0.18 + lanes * lanes * 1.8);
     highp float gravityRedshift = sqrt(max(0.0, 1.0 - 0.52 / r));
     highp float heat = pow(1.15 / r, 0.75);
-    highp float temperature = (0.1 + 0.25 * activity) * heat * (0.35 + 0.65 * gravityRedshift);
-    highp float clumps = pow(cloud, 3.0) * 3.2 + pow(lanes, 5.0) * 5.0;
+    highp float temperature = (0.12 + 0.56 * activity) * heat * (0.35 + 0.65 * gravityRedshift);
+    highp float clumps = cloud * cloud * 2.0 + lanes * lanes * lanes * 1.3;
     highp vec3 emission = plasmaColor(temperature) * density * (0.45 + heat * 2.8) *
-        (0.35 + fine * 1.1 + clumps) * gravityRedshift * activity;
+        (0.66 + fine * 0.38 + clumps) * gravityRedshift * activity;
     // Absorbing dust keeps the room visible through the thin outer wisps.
     return vec4(emission, 1.0 - exp(-(density * 4.8 + envelope * 1.1) * activity));
 }
@@ -68,11 +74,11 @@ highp vec3 tonemap(highp vec3 color) {
 void fragment() {
     highp vec2 q = (FRAGCOORD.xy - center) / max(pixel_scale * radius, vec2(0.01));
     highp float screenRadius = length(q);
+    if (screenRadius >= 1.0) {
+        COLOR = vec4(0.0);
+        return;
+    }
     highp float angle = atan(q.y, q.x);
-    // The field holds the centre in place, but its boundary flexes under load.
-    q *= 1.0 + (0.004 + instability * 0.018) * sin(angle * 3.0 + elapsed * 0.7) *
-        exp(-screenRadius * screenRadius * 8.0);
-    q += vec2(sin(elapsed * 2.3), sin(elapsed * 1.7 + 0.9)) * instability * 0.009 * motion;
     highp float edge = 1.0 - smoothstep(0.84, 1.0, screenRadius);
     highp vec3 p = vec3(0.0, 8.0, 0.0);
     highp vec3 direction = normalize(vec3(q.x * 0.65, -1.0, q.y * 0.65));
@@ -106,25 +112,22 @@ void fragment() {
     }
 
     // Soft photon corona follows the curved rays rather than a separate geometric ring.
-    highp float corona = exp(-pow((closest - 0.78) / 0.065, 2.0)) * 0.12 * activity;
-    emission += vec3(1.0, 0.5, 0.16) * corona * (1.0 - opacity);
+    highp float corona = gaussian(closest - 0.78, 0.07) * 0.20 * activity;
+    emission += vec3(1.0, 0.68, 0.29) * corona * (1.0 - opacity);
     opacity = max(opacity, corona);
-    highp float flicker = 1.0 + instability * motion * 0.06 * sin(elapsed * 4.7 + q.x * 17.0);
-    highp vec3 color = tonemap(emission * flicker * 0.28);
+    highp vec3 color = tonemap(emission * 0.34);
     // Straight alpha: preserve emission while letting the already-lensed station show through.
     opacity = max(opacity, max(color.r, max(color.g, color.b)));
     color *= edge;
     opacity *= edge;
-    // Four irregular, interrupted field arcs: restrained blue in normal operation, amber on loss of containment.
-    highp float ripple = noise(vec3(q * 17.0, elapsed * 0.6));
-    highp float fieldRadius = 0.925 + sin(angle * 11.0 - elapsed * 1.8) * 0.004 + (ripple - 0.5) * 0.012;
-    highp float arc = exp(-pow((screenRadius - fieldRadius) / (0.0035 + instability * 0.004), 2.0));
-    highp float segments = pow(max(0.0, cos(angle * 4.0)), 7.0);
-    highp float sparks = pow(ripple, 12.0) * 4.0;
-    highp float field = arc * (segments * 0.28 + sparks) * activity *
-        (0.7 + instability * 0.8 + sin(elapsed * 4.0 + angle * 9.0) * 0.15);
+    // Four fixed arc sectors with a slow charge sweep.
+    highp float fieldRadius = 0.92 + instability * 0.004 * sin(angle * 8.0 - elapsed);
+    highp float segment = smoothstep(0.40, 0.96, cos(angle * 4.0));
+    highp float sweep = 0.60 + 0.40 * sin(angle * 4.0 - elapsed * 1.35);
+    highp float field = (gaussian(screenRadius - fieldRadius, 0.007) * (0.25 + sweep * 0.30) +
+        gaussian(screenRadius - fieldRadius, 0.038) * 0.12) * segment * activity;
     highp vec3 fieldColor = mix(vec3(0.2, 0.66, 0.8), vec3(1.0, 0.25, 0.04), instability);
     color += fieldColor * field;
     opacity = clamp(max(opacity, field), 0.0, 1.0);
-    COLOR = vec4(clamp(color / max(0.001, opacity), 0.0, 1.0), opacity);
+    COLOR = vec4(clamp(color / max(0.001, opacity), 0.0, 1.0), opacity * smoothstep(0.0, 0.20, activity));
 }

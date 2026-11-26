@@ -1,6 +1,5 @@
 using Content.Shared.Popups;
 using Content.Shared._Eclipse.AdvancedHealth;
-using Robust.Shared.Network;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Content.Shared.ActionBlocker;
@@ -21,7 +20,6 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
 {
     [Dependency] protected readonly IGameTiming GameTiming = default!;
     [Dependency] private readonly SharedAdvancedExertionSystem _exertion = default!;
-    [Dependency] private readonly INetManager _workNet = default!;
     [Dependency] private readonly SharedPopupSystem _workPopup = default!;
     [Dependency] private readonly ActionBlockerSystem _actionBlocker = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;

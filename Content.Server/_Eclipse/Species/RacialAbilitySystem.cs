@@ -107,7 +107,7 @@ public sealed partial class RacialAbilitySystem : EntitySystem
 
     private bool VentHeat(EntityUid user)
     {
-        if (_atmos.GetContainingMixture(user, excite: true) is { } air && TransferToAir(user, air, 15000f, 323.15f))
+        if (_atmos.GetContainingMixture(user, excite: true) is { } air && TransferToAir(user, air, 15000f, 321.15f))
             return true;
 
         Notify(user, "racial-lavrite-no-heat-sink");
@@ -135,7 +135,10 @@ public sealed partial class RacialAbilitySystem : EntitySystem
     private bool CoolTouch(EntityUid user, EntityUid target)
     {
         if (!TryComp<TemperatureComponent>(user, out var body) || !TryComp<TemperatureComponent>(target, out var sink))
+        {
+            Notify(user, "racial-lavrite-no-heat-sink");
             return false;
+        }
 
         var bodyCapacity = _temperature.GetHeatCapacity(user, body);
         var sinkCapacity = _temperature.GetHeatCapacity(target, sink);
@@ -234,7 +237,10 @@ public sealed partial class RacialAbilitySystem : EntitySystem
         var sealedWound = SealWound(health, 1.5f);
         if (!sealedWound && !health.BodyParts.Values.Any(part => !part.IsDestroyed && !part.IsSurgicalOpen
             && (part.SkinFraction < 1f || part.MuscleFraction < 1f)))
+        {
+            Notify(user, "racial-slime-reform-uninjured");
             return false;
+        }
 
         _hunger.ModifyHunger(user, -ReformHungerCost, hunger);
         _medicine.ApplyDose((user, health), ReformDose, ignoreResistances: true);
@@ -249,6 +255,11 @@ public sealed partial class RacialAbilitySystem : EntitySystem
 
         var feather = Spawn("AvianThrownFeather", Transform(args.Performer).Coordinates);
         _throwing.TryThrow(feather, args.Target, baseThrowSpeed: 13f, user: args.Performer, recoil: false, doSpin: false);
+        if (!HasComp<ThrownItemComponent>(feather))
+        {
+            QueueDel(feather);
+            return;
+        }
         args.Handled = true;
     }
 

@@ -94,7 +94,7 @@ public sealed partial class StationCommerceSystem
         if (job is not ("Bartender" or "Chef") || !_merchantKits.Add((domain, username))) return;
         var uid = Spawn(job == "Bartender" ? "ImperialBarPaymentTerminal" : "ImperialKitchenPaymentTerminal", Transform(mob).Coordinates);
         var terminal = Comp<PaymentTerminalComponent>(uid);
-        terminal.Domain = domain; terminal.Owner = username; terminal.Recipient = username; terminal.Personal = true;
+        terminal.Domain = domain; terminal.OwnerUsername = username; terminal.Recipient = username; terminal.Personal = true;
         _hands.TryPickupAnyHand(mob, uid);
     }
 }
