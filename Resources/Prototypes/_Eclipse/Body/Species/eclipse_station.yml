@@ -104,7 +104,7 @@
       285: 0.6
   - type: LavriteHeat
   - type: ActionGrant
-    actions: [ ActionLavriteVentHeat, ActionLavriteCoolTouch ]
+    actions: [ ActionLavriteVentHeat, ActionLavriteThermalBurst ]
 
 - type: entity
   parent: AppearanceReptilian
@@ -232,8 +232,50 @@
   categories: [ HideSpawnMenu ]
   name: elir appearance
   components:
+  - type: InitialBody
+    organs:
+      Torso: OrganHumanTorso
+      Head: OrganElirHead
+      ArmLeft: OrganHumanArmLeft
+      ArmRight: OrganHumanArmRight
+      HandRight: OrganHumanHandRight
+      HandLeft: OrganHumanHandLeft
+      LegLeft: OrganHumanLegLeft
+      LegRight: OrganHumanLegRight
+      FootLeft: OrganHumanFootLeft
+      FootRight: OrganHumanFootRight
+      Brain: OrganHumanBrain
+      Eyes: OrganHumanEyes
+      Tongue: OrganHumanTongue
+      Appendix: OrganHumanAppendix
+      Ears: OrganHumanEars
+      Lungs: OrganHumanLungs
+      Heart: OrganHumanHeart
+      Stomach: OrganHumanStomach
+      Liver: OrganHumanLiver
+      Kidneys: OrganHumanKidneys
   - type: HumanoidProfile
     species: Elir
+
+- type: entity
+  parent: OrganHumanHead
+  id: OrganElirHead
+  components:
+  - type: VisualOrganMarkings
+    markingData:
+      group: Elir
+
+- type: markingsGroup
+  parent: Human
+  id: Elir
+  limits:
+    enum.HumanoidVisualLayers.HeadSide:
+      limit: 0
+      required: true
+      default: [ AnthropomorphHeadSideElf ]
+  appearances:
+    enum.HumanoidVisualLayers.HeadSide:
+      matchSkin: true
 
 - type: entity
   parent: [ AppearanceElir, BaseSpeciesMobOrganic ]

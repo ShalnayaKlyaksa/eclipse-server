@@ -23,6 +23,8 @@ namespace Content.IntegrationTests.Tests.Industrial;
 
 public sealed class WallDisplaysTest : GameTest
 {
+    private static readonly ProtoId<ConstructionPrototype> WallTelevision = "EclipseWallTelevision";
+
     [TestCase("EclipseWallBoard1", 1)]
     [TestCase("EclipseWallBoard2", 2)]
     [TestCase("EclipseWallBoard3", 3)]
@@ -108,7 +110,7 @@ public sealed class WallDisplaysTest : GameTest
                 Assert.That(system.TrySetText(board, component, "Мелкий текст", 4, 6), Is.True);
                 Assert.That(component.FontSize, Is.EqualTo(6));
             }
-            Assert.That(SProtoMan.HasIndex<ConstructionPrototype>("EclipseWallTelevision"), Is.True);
+            Assert.That(SProtoMan.HasIndex(WallTelevision), Is.True);
             var television = SEntMan.SpawnEntity("EclipseWallTelevision", map.GridCoords);
             Assert.That(SEntMan.GetComponent<ApcPowerReceiverComponent>(television).Load, Is.EqualTo(50));
             Assert.That(SEntMan.HasComponent<PowerSwitchComponent>(television), Is.True);
@@ -137,7 +139,7 @@ public sealed class WallDisplaysTest : GameTest
             var employee = research.IssueCrewAccount(domain, actor, "Bartender", "Vendor test", "vendor.test");
             research.AssignMailbox(actor, domain, employee.Username);
             var bank = SEntMan.System<PdaPersonalServicesSystem>();
-            Assert.That(SProtoMan.Index<PersonalEconomyPrototype>("StationPersonalEconomy").VendorPrices[pack], Is.EqualTo(price));
+                Assert.That(SProtoMan.Index(PersonalEconomyPrototype.StationDefault).VendorPrices[pack], Is.EqualTo(price));
             var uid = SEntMan.SpawnEntity("VendingMachineSnack", map.GridCoords);
             var machine = SEntMan.GetComponent<VendingMachineComponent>(uid);
             machine.PackPrototypeId = pack;

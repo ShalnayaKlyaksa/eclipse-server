@@ -9,4 +9,5 @@ public sealed partial class MicroBlackHoleVisualComponent : Component
     [DataField, AutoNetworkedField] public float Activity = .6f;
     [DataField, AutoNetworkedField] public float Instability;
     [DataField, AutoNetworkedField] public float Radius = 2.5f;
+    [DataField, AutoNetworkedField] public float FieldRadius;
 }

@@ -166,13 +166,16 @@ public sealed class MarkingManager
         {
             for (var i = markings.Count - 1; i >= 0; i--)
             {
-                if (!TryGetMarking(markings[i], out var marking))
+                var current = markings[i];
+                if (current.MarkingId.Id == "HarpyTail")
+                    current.MarkingId = "AvianTailHarpy";
+
+                if (!TryGetMarking(current, out var marking))
                 {
                     markings.RemoveAt(i);
                     continue;
                 }
 
-                var current = markings[i];
                 if (marking.Sprites.Count != current.MarkingColors.Count)
                 {
                     current = new Marking(marking.ID, marking.Sprites.Count);

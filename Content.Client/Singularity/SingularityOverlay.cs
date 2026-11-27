@@ -74,10 +74,12 @@ namespace Content.Client.Singularity
             var microQuery = _entMan.EntityQueryEnumerator<MicroBlackHoleVisualComponent, TransformComponent>();
             while (_count < MaxCount && microQuery.MoveNext(out var uid, out var visual, out var xform))
             {
-                var (activity, instability) = visuals.GetDisplay(uid);
+                var (activity, instability, radius) = visuals.GetDisplay(uid);
                 if (activity <= .001f) continue;
-                var strength = (18 + 24 * activity + 40 * instability) *
-                    MathF.Pow(MicroBlackHoleVisualSystem.DisplayRadius(visual, activity) / 2.5f, MathF.Sqrt(2));
+                radius = MicroBlackHoleVisualSystem.DisplayRadius(radius, activity);
+                if (visual.FieldRadius > 0)
+                    radius = MathF.Min(radius, visual.FieldRadius);
+                var strength = (18 + 24 * activity + 40 * instability) * MathF.Pow(radius / 2.5f, MathF.Sqrt(2));
                 AddDistortion(args, uid, xform, strength, MathF.Sqrt(2));
             }
 

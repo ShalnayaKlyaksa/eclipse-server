@@ -888,7 +888,7 @@ public sealed partial class MarkingPicker : Control
     {
         return new LayeredTextureRect
         {
-            Textures = prototype.Sprites.Select(layer => _sprite.Frame0(layer)).ToList(),
+            Textures = prototype.Sprites.Select(layer => _sprite.RsiStateLike(layer).TextureFor(prototype.PreviewDirection)).ToList(),
             TextureScale = new Vector2(2f, 2f),
             SetSize = new Vector2(size, size),
             VerticalAlignment = VAlignment.Center,

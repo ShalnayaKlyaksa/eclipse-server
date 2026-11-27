@@ -61,7 +61,7 @@
       nudityDefault: [ UndergarmentBottomBoxersVulpkanin ]
 
 - type: entity
-  parent: BaseSpeciesAppearance
+  parent: [VulpkaninClothingVisuals, BaseSpeciesAppearance]
   id: AppearanceVulpkanin
   categories: [ HideSpawnMenu ]
   name: vulpkanin appearance
@@ -90,6 +90,11 @@
       Kidneys: OrganVulpkaninKidneys
   - type: HumanoidProfile
     species: Vulpkanin
+
+- type: entity
+  abstract: true
+  id: VulpkaninClothingVisuals
+  components:
   - type: Inventory
     speciesId: vulpkanin
 #Corvax-Vulp_Port start

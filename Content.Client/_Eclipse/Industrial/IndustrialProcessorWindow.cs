@@ -662,9 +662,9 @@ public sealed partial class IndustrialProcessorWindow : FancyWindow
         var column = Column();
         column.SeparationOverride = 4;
         column.AddChild(new Label { Text = SharedIndustrialProcessorSystem.GetDirectionName(face), ClipText = true, FontColorOverride = Muted, StyleClasses = { StyleClass.FontSmall } });
-        var button = new OptionButton
+        var button = new ClippedOptionButton
         {
-            Name = $"Port{face}", HorizontalExpand = true, ClipText = true, PrefixMargin = false, MinHeight = 30,
+            Name = $"Port{face}", HorizontalExpand = true, PrefixMargin = false, MinHeight = 30,
             StyleClasses = { "industrial-control" }, ModulateSelfOverride = Color.White,
         };
         button.OptionStyleClasses.Add("industrial-control");

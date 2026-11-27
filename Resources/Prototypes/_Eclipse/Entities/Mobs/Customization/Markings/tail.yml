@@ -1,8 +1,8 @@
 - type: marking
   id: HarpyTail
   bodyPart: Tail
-  groupWhitelist: [Avian]
+  groupWhitelist: []
   speciesRestriction: [Avian]
   sprites:
     - sprite: _Eclipse/Mobs/Customization/harpy_tails.rsi
-      state: harpy_tail
+      state: harpy_tail_feathers

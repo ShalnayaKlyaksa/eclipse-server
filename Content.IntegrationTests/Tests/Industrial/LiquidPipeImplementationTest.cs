@@ -113,7 +113,7 @@ public sealed class LiquidPipeImplementationTest : GameTest
                 var rsi = cache.GetResource<RSIResource>(new ResPath($"/Textures/_Eclipse/Structures/Piping/{folder}.rsi")).RSI;
                 Assert.That(cache.ContentFileExists(new ResPath($"/Textures/_Eclipse/Structures/Piping/{folder}.rsic")), Is.True);
                 Assert.That(cache.ContentFileExists(new ResPath($"/Textures/_Eclipse/Structures/Piping/{folder}.rsi/{prefix}0.png")), Is.False,
-                    "Connection images must be generated in memory, not supplied as baked PNGs.");
+                    "Connection images must load from the packed atlas.");
                 var texture = ((AtlasTexture) rsi[prefix + "0"].Frame0).SourceTexture;
                 for (var i = 0; i < 16; i++)
                 {

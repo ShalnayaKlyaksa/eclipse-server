@@ -44,6 +44,7 @@
                 <Label Name="OperatingDecay" StyleClasses="terminal-muted"/>
                 <Label Name="OperatingFields" StyleClasses="terminal-muted"/>
                 <Label Name="OperatingKinetics" Visible="False" StyleClasses="terminal-muted"/>
+                <Label Name="OperatingGravityHorizon" Visible="False" StyleClasses="terminal-muted"/>
                 <Label Name="FusionUtilities" Visible="False" StyleClasses="terminal-muted"/>
                 <ProgressBar Name="WarmupBar" MaxValue="1"/>
                 <Button Name="ResetButton" Text="{Loc 'power-plant-reset'}" HorizontalAlignment="Right"/>

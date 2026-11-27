@@ -1,3 +1,5 @@
+#nullable enable annotations
+
 using Content.IntegrationTests.Fixtures;
 using Content.Server._Eclipse.Power;
 using Content.Server.Materials;

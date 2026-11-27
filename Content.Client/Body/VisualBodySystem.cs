@@ -36,9 +36,9 @@ public sealed class VisualBodySystem : SharedVisualBodySystem
             if (marking.Gradient is not { } gradient || !_marking.TryGetMarking(marking, out var prototype))
                 continue;
 
-            for (var i = 0; i < prototype.Sprites.Count && i < marking.MarkingColors.Count; i++)
+            foreach (var (specifier, i, _) in MarkingSprites(prototype))
             {
-                if (prototype.Sprites[i] is SpriteSpecifier.Rsi sprite &&
+                if (i < marking.MarkingColors.Count && specifier is SpriteSpecifier.Rsi sprite &&
                     _resourceCache.TryGetResource<RSIResource>(SpriteSystem.TextureRoot / sprite.RsiPath, out var resource) &&
                     resource.RSI.TryGetState(sprite.RsiState, out var state))
                     _gradientBaker.GetBake(state, marking.MarkingColors[i], gradient, persist: true);
@@ -211,13 +211,10 @@ public sealed class VisualBodySystem : SharedVisualBodySystem
                 continue;
 
             var insertionIndex = proto.DrawBehindBody ? 0 : index + 1;
-            var offset = _sprite.TryGetLayer(target, index, out var anchor, false) ? anchor.Offset : default;
             ent.Comp.MarkingsDisplacement.TryGetValue(proto.BodyPart, out var displacement);
 
-            for (var i = 0; i < proto.Sprites.Count; i++)
+            foreach (var (sprite, i, behindHair) in MarkingSprites(proto))
             {
-                var sprite = proto.Sprites[i];
-
                 DebugTools.Assert(sprite is SpriteSpecifier.Rsi);
                 if (sprite is not SpriteSpecifier.Rsi rsi)
                     continue;
@@ -226,10 +223,12 @@ public sealed class VisualBodySystem : SharedVisualBodySystem
 
                 if (!_sprite.LayerMapTryGet(target, layerId, out var spriteLayer, false))
                 {
-                    spriteLayer = _sprite.AddLayer(target, sprite, insertionIndex + i);
+                    var layerIndex = insertionIndex + i;
+                    if (behindHair && _sprite.LayerMapTryGet(target, HumanoidVisualLayers.Hair, out var hairIndex, false))
+                        layerIndex = hairIndex;
+                    spriteLayer = _sprite.AddLayer(target, sprite, layerIndex);
                     _sprite.LayerMapSet(target, layerId, spriteLayer);
                     _sprite.LayerSetSprite(target, layerId, rsi);
-                    _sprite.LayerSetOffset(target, spriteLayer, offset);
                 }
 
                 var color = marking.MarkingColors is { } colors && i < colors.Count ? colors[i] : Color.White;
@@ -271,6 +270,15 @@ public sealed class VisualBodySystem : SharedVisualBodySystem
         _sprite.LayerSetColor(layer, Color.White);
     }
 
+    private static IEnumerable<(SpriteSpecifier Sprite, int ColorIndex, bool BehindHair)> MarkingSprites(MarkingPrototype prototype)
+    {
+        for (var i = 0; i < prototype.Sprites.Count; i++)
+            yield return (prototype.Sprites[i], i, false);
+
+        for (var i = 0; i < prototype.SpritesBehindHair.Count; i++)
+            yield return (prototype.SpritesBehindHair[i], i, true);
+    }
+
     private void RemoveMarkings(Entity<VisualOrganMarkingsComponent> ent, Entity<SpriteComponent?> target)
     {
         if (!Resolve(target, ref target.Comp))
@@ -281,7 +289,7 @@ public sealed class VisualBodySystem : SharedVisualBodySystem
             if (!_marking.TryGetMarking(marking, out var proto))
                 continue;
 
-            foreach (var sprite in proto.Sprites)
+            foreach (var (sprite, _, _) in MarkingSprites(proto))
             {
                 DebugTools.Assert(sprite is SpriteSpecifier.Rsi);
                 if (sprite is not SpriteSpecifier.Rsi rsi)
@@ -320,7 +328,7 @@ public sealed class VisualBodySystem : SharedVisualBodySystem
                 if (proto.BodyPart != args.Args.Layer && !(ent.Comp.DependentHidingLayers.TryGetValue(args.Args.Layer, out var dependent) && dependent.Contains(proto.BodyPart)))
                     continue;
 
-                foreach (var sprite in proto.Sprites)
+                foreach (var (sprite, _, _) in MarkingSprites(proto))
                 {
                     DebugTools.Assert(sprite is SpriteSpecifier.Rsi);
                     if (sprite is not SpriteSpecifier.Rsi rsi)

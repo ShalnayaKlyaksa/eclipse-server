@@ -32,6 +32,11 @@ namespace Content.IntegrationTests.Tests.Botany;
 
 public sealed class GardenAndBarTest : GameTest
 {
+    // The client-side static field validator does not load server-only seed prototypes.
+    private readonly ProtoId<SeedPrototype> _tomatoSeed = "tomato";
+    private readonly ProtoId<SeedPrototype> _chiliSeed = "chili";
+    private readonly ProtoId<SeedPrototype> _energyFlowerSeed = "energyFlower";
+
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
 
     [Test]
@@ -41,7 +46,7 @@ public sealed class GardenAndBarTest : GameTest
         {
             Server.ResolveDependency<IRobustRandom>().SetSeed(5021);
             var mutation = Server.System<MutationSystem>();
-            var tomato = SProtoMan.Index<SeedPrototype>("tomato").Clone();
+            var tomato = SProtoMan.Index(_tomatoSeed).Clone();
             var donor = tomato.Clone();
             donor.Potency = 80;
             for (var i = 0; i < 50; i++)
@@ -68,7 +73,7 @@ public sealed class GardenAndBarTest : GameTest
                 Assert.That(child.Production, Is.EqualTo(1));
                 Assert.That(child.Lifespan, Is.EqualTo(100));
             }
-            var chili = SProtoMan.Index<SeedPrototype>("chili");
+            var chili = SProtoMan.Index(_chiliSeed);
             var bombs = 0;
             for (var i = 0; i < 5000; i++)
             {
@@ -79,7 +84,7 @@ public sealed class GardenAndBarTest : GameTest
                 Assert.That(child.Seedless, Is.False);
             }
             Assert.That(bombs, Is.InRange(1, 80), "Bombomatos must be possible but very rare.");
-            var flower = SProtoMan.Index<SeedPrototype>("energyFlower");
+            var flower = SProtoMan.Index(_energyFlowerSeed);
             Assert.That(mutation.Cross(flower, tomato).PowerProduction, Is.Zero,
                 "Species-specific electricity cannot be copied to an ordinary tomato.");
         });
@@ -96,7 +101,7 @@ public sealed class GardenAndBarTest : GameTest
                 maps.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(x, 0), map.Tile.Tile);
             var bed = SEntMan.SpawnEntity("hydroponicsSoil", new EntityCoordinates(map.Grid.Owner, .5f, .5f));
             var plant = SEntMan.GetComponent<PlantHolderComponent>(bed);
-            plant.Seed = SProtoMan.Index<SeedPrototype>("energyFlower").Clone();
+            plant.Seed = SProtoMan.Index(_energyFlowerSeed).Clone();
             plant.Age = 20;
             plant.Health = 100;
             var receivers = new ApcPowerReceiverComponent[3];
@@ -131,7 +136,7 @@ public sealed class GardenAndBarTest : GameTest
             Server.System<SharedMapSystem>().SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(1, 0), map.Tile.Tile);
             var bed = SEntMan.SpawnEntity("hydroponicsSoil", map.GridCoords);
             var plant = SEntMan.GetComponent<PlantHolderComponent>(bed);
-            plant.Seed = SProtoMan.Index<SeedPrototype>("energyFlower").Clone();
+            plant.Seed = SProtoMan.Index(_energyFlowerSeed).Clone();
             plant.Age = 20;
             plant.Health = 100;
             var hive = SEntMan.SpawnEntity("EclipseApiary", new EntityCoordinates(map.Grid.Owner, 1.5f, .5f));

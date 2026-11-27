@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Numerics;
 using Content.Client.MainMenu.UI;
+using Content.Client.UserInterface.Controls;
 using Content.Shared.Humanoid.Markings;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface.Controls;
@@ -78,7 +79,7 @@ public sealed partial class MarkingPicker
         header.AddChild(close);
         content.AddChild(header);
 
-        var steps = new OptionButton { HorizontalExpand = true, ClipText = true };
+        var steps = new ClippedOptionButton { HorizontalExpand = true };
         steps.AddItem(Loc.GetString("marking-gradient-off"), 0);
         for (var i = MarkingGradient.MinSteps; i <= MarkingGradient.MaxSteps; i++)
             steps.AddItem(Loc.GetString("marking-gradient-steps", ("steps", i)), i);
@@ -92,7 +93,7 @@ public sealed partial class MarkingPicker
         var stops = gradientSettings.Stops?.ToList() ?? [];
         var geometry = new BoxContainer { Orientation = BoxContainer.LayoutOrientation.Vertical, SeparationOverride = 4 };
         content.AddChild(geometry);
-        var shape = new OptionButton { HorizontalExpand = true, ClipText = true };
+        var shape = new ClippedOptionButton { HorizontalExpand = true };
         foreach (var value in Enum.GetValues<MarkingGradientShape>())
             shape.AddItem(Loc.GetString($"marking-gradient-shape-{value.ToString().ToLowerInvariant()}"), (int) value);
         shape.SelectId((int) gradientSettings.Shape);
@@ -121,7 +122,7 @@ public sealed partial class MarkingPicker
         geometry.AddChild(strip);
 
         var targetRow = new BoxContainer { SeparationOverride = 4 };
-        var colorTarget = new OptionButton { HorizontalExpand = true, ClipText = true };
+        var colorTarget = new ClippedOptionButton { HorizontalExpand = true };
         targetRow.AddChild(colorTarget);
         var addStop = new Button { Text = "+", ToolTip = Loc.GetString("marking-gradient-add-color") };
         var removeStop = new Button { Text = "−", ToolTip = Loc.GetString("marking-gradient-remove-color") };

@@ -225,6 +225,47 @@ public sealed class PowerPlantSystem : EntitySystem
         var transform = Transform(uid);
         if (transform.GridUid is not { } gridUid || !TryComp<MapGridComponent>(gridUid, out var grid)) return 0;
         var tile = _map.TileIndicesFor(gridUid, grid, transform.Coordinates);
+        if (TryComp<GravityPowerSourceComponent>(uid, out var gravity))
+        {
+            var fields = 0;
+            var projectors = 0;
+            var limit = GravityPowerSystem.MaximumHorizon;
+            foreach (var direction in FieldDirections)
+            {
+                var fieldDistance = 0;
+                var hasProjector = false;
+                for (var distance = 2; distance <= 12; distance++)
+                {
+                    var entities = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile + direction * distance);
+                    while (entities.MoveNext(out var entity))
+                    {
+                        if (!TryComp<PowerConsumerComponent>(entity, out var power) || !GravityPowerSystem.IsPowered(power))
+                            continue;
+
+                        if (fieldDistance == 0 && HasComp<PowerPlantFieldStabilizerComponent>(entity))
+                            fieldDistance = distance;
+                        if (HasComp<GravityStaticChargeProjectorComponent>(entity))
+                            hasProjector = true;
+                    }
+
+                    if (fieldDistance > 0 && hasProjector)
+                        break;
+                }
+
+                if (hasProjector)
+                    projectors++;
+                if (fieldDistance == 0)
+                    continue;
+                fields++;
+                limit = MathF.Min(limit, fieldDistance - .5f);
+            }
+
+            gravity.StaticProjectors = projectors;
+            if (fields == 4)
+                gravity.FieldLimit = limit;
+            return fields;
+        }
+
         var count = 0;
         var radius = Math.Clamp(Comp<PowerPlantComponent>(uid).FieldRadius, 1, 8);
         for (var x = -radius; x <= radius; x++)
@@ -241,7 +282,9 @@ public sealed class PowerPlantSystem : EntitySystem
         return count;
     }
 
-    private void Trip(Entity<PowerPlantComponent> ent, PowerPlantCondition reason)
+    private static readonly Vector2i[] FieldDirections = [new(1, 0), new(-1, 0), new(0, 1), new(0, -1)];
+
+    internal void Trip(Entity<PowerPlantComponent> ent, PowerPlantCondition reason)
     {
         if (ent.Comp.Tripped) return;
         ent.Comp.Tripped = true;
@@ -285,6 +328,9 @@ public sealed class PowerPlantSystem : EntitySystem
             Condition = ent.Comp.Condition,
             GravitySource = gravity != null, GravityPower = gravity?.AvailablePower ?? 0,
             HarvestedPower = gravity?.HarvestedPower ?? 0, KineticGenerators = gravity?.Collectors ?? 0,
+            GravityHorizon = gravity == null ? 0 : GravityPowerSystem.Horizon(gravity.Mass),
+            GravityFieldLimit = gravity?.FieldLimit ?? 0,
+            GravityStaticProjectors = gravity?.StaticProjectors ?? 0,
             FusionNominalPower = reactor == null ? null : Comp<FuelGeneratorComponent>(ent).OptimalPower,
             CoolantFlow = reactor?.MeasuredFlow ?? 0,
             AuxiliaryPower = reactor == null ? 0 : Comp<PowerConsumerComponent>(ent).ReceivedPower,

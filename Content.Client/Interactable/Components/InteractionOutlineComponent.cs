@@ -19,6 +19,8 @@ namespace Content.Client.Interactable.Components
         private ShaderInstance? _shader;
         private int _lastRenderScale;
 
+        internal bool OwnsShader(ShaderInstance shader) => shader == _shader;
+
         public void OnMouseEnter(EntityUid uid, bool inInteractionRange, int renderScale)
         {
             _lastRenderScale = renderScale;
@@ -48,7 +50,7 @@ namespace Content.Client.Interactable.Components
         {
             if (_entMan.TryGetComponent(uid, out SpriteComponent? sprite)
                 && sprite.PostShader == _shader
-                && (inInteractionRange != _inRange || _lastRenderScale != renderScale))
+                && (_shader == null || inInteractionRange != _inRange || _lastRenderScale != renderScale))
             {
                 _inRange = inInteractionRange;
                 _lastRenderScale = renderScale;

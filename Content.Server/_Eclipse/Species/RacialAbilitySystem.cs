@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Numerics;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Temperature.Systems;
 using Content.Shared._Eclipse.AdvancedHealth;
@@ -9,18 +10,23 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Humanoid;
+using Content.Shared.Interaction;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Popups;
+using Content.Shared.Projectiles;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.Stealth;
 using Content.Shared.Stealth.Components;
 using Content.Shared.Temperature.Components;
 using Content.Shared.Throwing;
+using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Player;
+using Robust.Shared.Timing;
 
 namespace Content.Server._Eclipse.Species;
 
@@ -30,15 +36,26 @@ public sealed partial class LavriteHeatComponent : Component;
 [RegisterComponent]
 public sealed partial class ShadowVeilComponent : Component;
 
+[RegisterComponent]
+public sealed partial class StickySpitProjectileComponent : Component;
+
 public sealed partial class RacialAbilitySystem : EntitySystem
 {
     private const float ReformHungerCost = 20f;
+    private const float TailSweepRange = 1.6f;
+    private const float TailSweepDamage = 28f;
+    private const float TailSweepCone = 0.7071068f; // Cosine of the 45-degree half-angle.
+    private const float PulseRange = 6f;
+    private readonly Dictionary<EntityUid, TimeSpan> _pulseListeners = new();
+    private TimeSpan _nextPulseSample;
     private static readonly EntProtoId ShadowVeil = "StatusEffectShadowVeil";
     private static readonly DamageSpecifier ReformDose = new() { DamageDict = { ["Blunt"] = FixedPoint2.New(-12) } };
 
     [Dependency] private AtmosphereSystem _atmos = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private HungerSystem _hunger = default!;
+    [Dependency] private SharedAdvancedExertionSystem _exertion = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private MobStateSystem _mobs = default!;
     [Dependency] private MovementModStatusSystem _movement = default!;
     [Dependency] private SharedAdvancedMedicineSystem _medicine = default!;
@@ -48,12 +65,19 @@ public sealed partial class RacialAbilitySystem : EntitySystem
     [Dependency] private StatusEffectsSystem _status = default!;
     [Dependency] private TemperatureSystem _temperature = default!;
     [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedGunSystem _guns = default!;
+    [Dependency] private ISharedPlayerManager _players = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {
         SubscribeLocalEvent<HumanoidProfileComponent, RacialInstantActionEvent>(OnInstant);
         SubscribeLocalEvent<HumanoidProfileComponent, RacialTargetActionEvent>(OnTarget);
         SubscribeLocalEvent<HumanoidProfileComponent, AvianThrowFeatherEvent>(OnFeather);
+        SubscribeLocalEvent<HumanoidProfileComponent, SaurianTailSweepEvent>(OnTailSweep);
+        SubscribeLocalEvent<StickySpitProjectileComponent, ProjectileHitEvent>(OnStickySpitHit);
+        SubscribeLocalEvent<HumanoidProfileComponent, LavriteThermalBurstEvent>(OnLavriteThermalBurst);
         SubscribeLocalEvent<LavriteHeatComponent, AtmosExposedUpdateEvent>(OnLavriteHeat);
         SubscribeLocalEvent<ShadowVeilComponent, StatusEffectAppliedEvent>(OnVeilApplied);
         SubscribeLocalEvent<ShadowVeilComponent, StatusEffectRemovedEvent>(OnVeilRemoved);
@@ -71,6 +95,7 @@ public sealed partial class RacialAbilitySystem : EntitySystem
                 "StatusEffectDwarfBrace", TimeSpan.FromSeconds(7), 0.65f),
             RacialInstantAbility.LavriteVent => VentHeat(user),
             RacialInstantAbility.CanineScent => Scent(user),
+            RacialInstantAbility.ElirReadPulse => StartPulseListening(user),
             RacialInstantAbility.TherianScurry => _movement.TryUpdateMovementSpeedModDuration(user,
                 "StatusEffectTherianScurry", TimeSpan.FromSeconds(5), 1.35f),
             RacialInstantAbility.ShadowVeil => !HasComp<StealthComponent>(user)
@@ -90,11 +115,7 @@ public sealed partial class RacialAbilitySystem : EntitySystem
         args.Handled = args.Ability switch
         {
             RacialTargetAbility.MoleiSilk => ApplySilk(user, target),
-            RacialTargetAbility.LavriteCoolTouch => CoolTouch(user, target),
-            RacialTargetAbility.SaurianTailSweep => TailSweep(user, target),
-            RacialTargetAbility.ElirReadPulse => ReadPulse(user, target),
-            RacialTargetAbility.SlimeAdhesive => !_mobs.IsDead(target) && _movement.TryUpdateMovementSpeedModDuration(target,
-                "StatusEffectSlimeAdhesive", TimeSpan.FromSeconds(5), 0.65f),
+            RacialTargetAbility.SlimeAdhesive => SpitAdhesive(user, target),
             _ => false,
         };
     }
@@ -108,7 +129,11 @@ public sealed partial class RacialAbilitySystem : EntitySystem
     private bool VentHeat(EntityUid user)
     {
         if (_atmos.GetContainingMixture(user, excite: true) is { } air && TransferToAir(user, air, 15000f, 321.15f))
+        {
+            Spawn("LavriteHeatPuff", Transform(user).Coordinates);
+            Notify(user, "racial-lavrite-vent-success");
             return true;
+        }
 
         Notify(user, "racial-lavrite-no-heat-sink");
         return false;
@@ -132,28 +157,38 @@ public sealed partial class RacialAbilitySystem : EntitySystem
         return true;
     }
 
-    private bool CoolTouch(EntityUid user, EntityUid target)
+    private void OnLavriteThermalBurst(Entity<HumanoidProfileComponent> ent, ref LavriteThermalBurstEvent args)
     {
-        if (!TryComp<TemperatureComponent>(user, out var body) || !TryComp<TemperatureComponent>(target, out var sink))
+        if (args.Handled)
+            return;
+
+        const float range = 2.5f;
+        var user = args.Performer;
+        var origin = _transform.GetMapCoordinates(user);
+        var aim = _transform.ToMapCoordinates(args.Target);
+        var delta = aim.Position - origin.Position;
+        if (aim.MapId != origin.MapId || delta.LengthSquared() < 0.0001f)
+            return;
+
+        var direction = Vector2.Normalize(delta);
+        Spawn("LavriteHeatPuff", Transform(user).Coordinates);
+
+        foreach (var target in _lookup.GetEntitiesInRange(Transform(user).Coordinates, range, LookupFlags.Uncontained))
         {
-            Notify(user, "racial-lavrite-no-heat-sink");
-            return false;
+            if (target == user || !HasComp<MobStateComponent>(target) || _mobs.IsDead(target))
+                continue;
+
+            var offset = _transform.GetWorldPosition(target) - origin.Position;
+            var distance = offset.Length();
+            if (distance > range || Vector2.Dot(direction, offset) <= distance * TailSweepCone
+                || !_interaction.InRangeUnobstructed(user, target, range: range, overlapCheck: false))
+                continue;
+
+            _throwing.TryThrow(target, direction * 1.25f, baseThrowSpeed: 4f, recoil: false,
+                animated: false, playSound: false, doSpin: false);
         }
 
-        var bodyCapacity = _temperature.GetHeatCapacity(user, body);
-        var sinkCapacity = _temperature.GetHeatCapacity(target, sink);
-        var difference = body.CurrentTemperature - sink.CurrentTemperature;
-        var energy = Math.Min(12000f, Math.Min((body.CurrentTemperature - 320.15f) * bodyCapacity,
-            difference * bodyCapacity * sinkCapacity / (bodyCapacity + sinkCapacity)));
-        if (energy <= 0 || !float.IsFinite(energy))
-        {
-            Notify(user, "racial-lavrite-no-heat-sink");
-            return false;
-        }
-
-        _temperature.ChangeHeat(user, -energy, ignoreHeatResistance: true, temperature: body);
-        _temperature.ChangeHeat(target, energy, ignoreHeatResistance: true, temperature: sink);
-        return true;
+        args.Handled = true;
     }
 
     private bool ApplySilk(EntityUid user, EntityUid target)
@@ -186,13 +221,51 @@ public sealed partial class RacialAbilitySystem : EntitySystem
         return true;
     }
 
-    private bool TailSweep(EntityUid user, EntityUid target)
+    private void OnTailSweep(Entity<HumanoidProfileComponent> ent, ref SaurianTailSweepEvent args)
     {
-        if (_mobs.IsDead(target) || !HasComp<StaminaComponent>(target))
-            return false;
+        if (args.Handled)
+            return;
 
-        _stamina.TakeStaminaDamage(target, 28f, source: user);
-        return true;
+        var user = args.Performer;
+        var origin = _transform.GetMapCoordinates(user);
+        var aim = _transform.ToMapCoordinates(args.Target);
+        var delta = aim.Position - origin.Position;
+        if (aim.MapId != origin.MapId || delta.LengthSquared() < 0.0001f)
+        {
+            Notify(user, "racial-tail-sweep-miss");
+            return;
+        }
+
+        var direction = Vector2.Normalize(delta);
+        var candidates = _lookup.GetEntitiesInRange(Transform(user).Coordinates, TailSweepRange, LookupFlags.Uncontained)
+            .Where(target => target != user && HasComp<MobStateComponent>(target) && !_mobs.IsDead(target)
+                && (HasComp<AdvancedExertionComponent>(target) || HasComp<StaminaComponent>(target)))
+            .Select(target => (Target: target, Offset: _transform.GetWorldPosition(target) - origin.Position))
+            .Where(candidate => candidate.Offset.LengthSquared() <= TailSweepRange * TailSweepRange
+                && Vector2.Dot(direction, candidate.Offset) > candidate.Offset.Length() * TailSweepCone)
+            .OrderBy(candidate => candidate.Offset.LengthSquared());
+        foreach (var (target, _) in candidates)
+        {
+            if (!_interaction.InRangeUnobstructed(user, target, range: TailSweepRange, overlapCheck: false))
+                continue;
+
+            if (TryComp<AdvancedExertionComponent>(target, out var exertion))
+                args.Handled = _exertion.TryDrainReserve((target, exertion), TailSweepDamage);
+            else if (TryComp<StaminaComponent>(target, out var stamina))
+            {
+                var before = stamina.StaminaDamage;
+                _stamina.TakeStaminaDamage(target, TailSweepDamage, stamina, source: user);
+                args.Handled = stamina.StaminaDamage > before;
+            }
+
+            if (args.Handled)
+            {
+                Notify(user, "racial-tail-sweep-hit");
+                return;
+            }
+        }
+
+        Notify(user, "racial-tail-sweep-miss");
     }
 
     private bool Scent(EntityUid user)
@@ -203,14 +276,65 @@ public sealed partial class RacialAbilitySystem : EntitySystem
         return true;
     }
 
-    private bool ReadPulse(EntityUid user, EntityUid target)
+    private bool StartPulseListening(EntityUid user)
     {
-        if (!TryComp<AdvancedHealthComponent>(target, out var health))
+        if (!_players.TryGetSessionByEntity(user, out var session))
             return false;
 
-        var pulse = _mobs.IsDead(target) ? 0 : (int) MathF.Round(health.HeartRate);
-        _popup.PopupEntity(Loc.GetString("racial-elir-pulse-result", ("target", target), ("pulse", pulse)), user, user);
+        _pulseListeners[user] = _timing.CurTime + TimeSpan.FromSeconds(5);
+        var samples = CollectPulseSamples(user);
+        if (samples.Length == 0)
+            Notify(user, "racial-elir-pulse-empty");
+        SendPulseSamples(session, samples);
         return true;
+    }
+
+    public override void Update(float frameTime)
+    {
+        if (_pulseListeners.Count == 0 || _timing.CurTime < _nextPulseSample)
+            return;
+
+        _nextPulseSample = _timing.CurTime + TimeSpan.FromSeconds(0.25);
+        foreach (var (user, expires) in _pulseListeners)
+        {
+            if (!_players.TryGetSessionByEntity(user, out var session))
+            {
+                _pulseListeners.Remove(user);
+                continue;
+            }
+
+            if (_timing.CurTime >= expires || _mobs.IsDead(user))
+            {
+                _pulseListeners.Remove(user);
+                SendPulseSamples(session, Array.Empty<ElirPulseSample>());
+                continue;
+            }
+
+            SendPulseSamples(session, CollectPulseSamples(user));
+        }
+    }
+
+    private void SendPulseSamples(ICommonSession session, ElirPulseSample[] samples)
+    {
+        RaiseNetworkEvent(new ElirPulseSamplesEvent(samples), Filter.SinglePlayer(session), recordReplay: false);
+    }
+
+    internal ElirPulseSample[] CollectPulseSamples(EntityUid user)
+    {
+        var origin = _transform.GetMapCoordinates(user);
+        var samples = new List<ElirPulseSample>();
+        foreach (var target in _lookup.GetEntitiesInRange(Transform(user).Coordinates, PulseRange, LookupFlags.Uncontained))
+        {
+            if (target == user || !TryComp<AdvancedHealthComponent>(target, out var health) || _mobs.IsDead(target)
+                || health.IsHeartStopped || !float.IsFinite(health.HeartRate) || health.HeartRate <= 0f)
+                continue;
+
+            var position = _transform.GetMapCoordinates(target);
+            if (position.MapId == origin.MapId && Vector2.DistanceSquared(position.Position, origin.Position) <= PulseRange * PulseRange)
+                samples.Add(new ElirPulseSample(position, health.HeartRate));
+        }
+
+        return samples.ToArray();
     }
 
     private void OnVeilApplied(Entity<ShadowVeilComponent> ent, ref StatusEffectAppliedEvent args)
@@ -235,7 +359,7 @@ public sealed partial class RacialAbilitySystem : EntitySystem
         }
 
         var sealedWound = SealWound(health, 1.5f);
-        if (!sealedWound && !health.BodyParts.Values.Any(part => !part.IsDestroyed && !part.IsSurgicalOpen
+        if (!sealedWound && !health.BodyParts.Values.Any(part => SharedAdvancedMedicineSystem.CanRepairSoftTissue(part)
             && (part.SkinFraction < 1f || part.MuscleFraction < 1f)))
         {
             Notify(user, "racial-slime-reform-uninjured");
@@ -261,6 +385,30 @@ public sealed partial class RacialAbilitySystem : EntitySystem
             return;
         }
         args.Handled = true;
+    }
+
+    private bool SpitAdhesive(EntityUid user, EntityUid target)
+    {
+        if (_mobs.IsDead(target))
+            return false;
+
+        var direction = _transform.GetWorldPosition(target) - _transform.GetWorldPosition(user);
+        if (direction.LengthSquared() < 0.0001f)
+            return false;
+
+        var glob = Spawn("SlimefolkStickySpit", Transform(user).Coordinates);
+        _guns.ShootProjectile(glob, direction, Vector2.Zero, user, user, 10f);
+        return true;
+    }
+
+    private void OnStickySpitHit(Entity<StickySpitProjectileComponent> ent, ref ProjectileHitEvent args)
+    {
+        if (!HasComp<MobStateComponent>(args.Target) || _mobs.IsDead(args.Target)
+            || !_movement.TryUpdateMovementSpeedModDuration(args.Target, "StatusEffectSlimeAdhesive", TimeSpan.FromSeconds(5), 0.65f))
+            return;
+
+        if (args.Shooter is { } shooter)
+            Notify(shooter, "racial-slime-spit-hit");
     }
 
     private void Notify(EntityUid user, string message) => _popup.PopupEntity(Loc.GetString(message), user, user);

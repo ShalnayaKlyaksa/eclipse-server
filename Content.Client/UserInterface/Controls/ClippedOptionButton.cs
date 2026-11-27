@@ -1,12 +1,14 @@
 using System.Linq;
 using Robust.Client.UserInterface.Controls;
+using Robust.Client.UserInterface.CustomControls;
 
-namespace Content.Client.Lobby.UI.ProfileEditorControls;
+namespace Content.Client.UserInterface.Controls;
 
-public sealed class SpeciesPaletteOptionButton : OptionButton
+public sealed class ClippedOptionButton : OptionButton
 {
-    public SpeciesPaletteOptionButton()
+    public ClippedOptionButton()
     {
+        // OptionButton keeps its caption label inside its own layout container.
         var caption = Children.SelectMany(child => child.Children).OfType<Label>().FirstOrDefault();
         if (caption != null)
             caption.ClipText = true;
@@ -17,6 +19,6 @@ public sealed class SpeciesPaletteOptionButton : OptionButton
     public override void ButtonOverride(Button button)
     {
         button.ClipText = true;
-        button.ToolTip = button.Text;
+        button.TooltipSupplier = static sender => new Tooltip { Text = ((Button) sender).Text };
     }
 }

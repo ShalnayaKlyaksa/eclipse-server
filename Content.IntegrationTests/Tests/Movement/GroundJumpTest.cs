@@ -78,7 +78,13 @@ public sealed class GroundJumpTest : MovementTest
         var wall = await SpawnEntity("WallSolid", ToServer(TargetCoords).Offset(new Vector2(2, 0)));
         await Move(DirectionFlag.East, 0.8f);
         var groundOffset = Vector2.Zero;
-        await Client.WaitPost(() => groundOffset = CEntMan.GetComponent<SpriteComponent>(CPlayer).Offset);
+        var groundColor = Color.White;
+        await Client.WaitPost(() =>
+        {
+            var sprite = CEntMan.GetComponent<SpriteComponent>(CPlayer);
+            groundOffset = sprite.Offset;
+            groundColor = sprite.Color;
+        });
 
         await PressSpace();
         await RunTicks(3);
@@ -86,7 +92,11 @@ public sealed class GroundJumpTest : MovementTest
         {
             Assert.That(CEntMan.HasComponent<JumpFlightComponent>(CPlayer), Is.True);
             CEntMan.System<JumpFlightVisualsSystem>().FrameUpdate(0);
-            Assert.That(CEntMan.GetComponent<SpriteComponent>(CPlayer).Offset.Y, Is.GreaterThan(groundOffset.Y + 0.1f));
+            var sprite = CEntMan.GetComponent<SpriteComponent>(CPlayer);
+            Assert.That(sprite.Offset.Y, Is.GreaterThan(groundOffset.Y + 0.1f));
+            Assert.That(sprite.Color.R, Is.LessThan(groundColor.R));
+            Assert.That(sprite.Color.B, Is.EqualTo(groundColor.B));
+            Assert.That(sprite.Color.A, Is.EqualTo(groundColor.A));
         });
         await RunSeconds(0.6f);
 
@@ -95,6 +105,7 @@ public sealed class GroundJumpTest : MovementTest
         await Client.WaitAssertion(() =>
         {
             Assert.That(CEntMan.HasComponent<JumpFlightComponent>(CPlayer), Is.False);
+            Assert.That(CEntMan.GetComponent<SpriteComponent>(CPlayer).Color, Is.EqualTo(groundColor));
             // The gravity visualizer can also animate the sprite independently of the jump.
             Assert.That(Vector2.Distance(CEntMan.GetComponent<SpriteComponent>(CPlayer).Offset, groundOffset), Is.LessThan(0.15f));
         });

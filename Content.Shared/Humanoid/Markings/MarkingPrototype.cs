@@ -1,4 +1,5 @@
 using Robust.Shared.Prototypes;
+using Robust.Shared.Maths;
 using Robust.Shared.Utility;
 using Content.Shared.Humanoid.Prototypes;
 
@@ -46,8 +47,14 @@ namespace Content.Shared.Humanoid.Markings
         [DataField]
         public bool DrawBehindBody { get; private set; }
 
+        [DataField]
+        public Direction PreviewDirection { get; private set; } = Direction.South;
+
         [DataField("sprites", required: true)]
         public List<SpriteSpecifier> Sprites { get; private set; } = default!;
+
+        [DataField]
+        public List<SpriteSpecifier> SpritesBehindHair { get; private set; } = new();
 
         public Marking AsMarking()
         {

@@ -9,18 +9,23 @@ using Content.Shared.Body;
 using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Metabolism;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.IntegrationTests.Tests.Medical;
 
 public sealed class PhysiologyProgressionTests : GameTest
 {
+    private static readonly ProtoId<ReagentPrototype> Water = "Water";
+    private static readonly ProtoId<ReagentPrototype> Vitamin = "Vitamin";
+
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
 
     [Test]
@@ -40,7 +45,7 @@ public sealed class PhysiologyProgressionTests : GameTest
             {
                 Assert.That(solutions.TryGetSolution(stomachs[i], StomachSystem.DefaultSolutionName, out var entity, out _), Is.True);
                 var meal = i == 0 ? new Solution("Nutriment", 30) : new Solution("Nutriment", 10);
-                if (i != 0) { meal.AddReagent("Water", 10); meal.AddReagent("Vitamin", 10); }
+                if (i != 0) { meal.AddReagent(Water.Id, 10); meal.AddReagent(Vitamin.Id, 10); }
                 Assert.That(SEntMan.System<StomachSystem>().TryTransferSolution(stomachs[i], meal), Is.True);
             }
             var health = SEntMan.GetComponent<AdvancedHealthComponent>(mixed);

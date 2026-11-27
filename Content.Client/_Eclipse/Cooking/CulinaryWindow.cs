@@ -14,7 +14,7 @@ public sealed class CulinaryWindow : FancyWindow
     private readonly Label _volume = Text("", true);
     private readonly Label _power = Text("", true);
     private readonly GridContainer _ingredients = new() { Columns = 6, HSeparationOverride = 5, VSeparationOverride = 5 };
-    private readonly OptionButton _method = new() { Name = "CulinaryMethodPicker", MinHeight = 36, ClipText = true, HorizontalExpand = true };
+    private readonly ClippedOptionButton _method = new() { Name = "CulinaryMethodPicker", MinHeight = 36, HorizontalExpand = true };
     private readonly BoxContainer _description = Column();
     private readonly BoxContainer _details = Column();
     private readonly BoxContainer _working = Column();

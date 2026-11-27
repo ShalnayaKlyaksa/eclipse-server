@@ -3,6 +3,7 @@
   parent: BaseStorageItem
   abstract: true
   components:
+  - type: GravityMagnetic
   - type: Sprite
     layers:
       - map: [ base ]

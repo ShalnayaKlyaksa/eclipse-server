@@ -117,30 +117,39 @@
 
 - type: entity
   parent: BaseAction
-  id: ActionLavriteCoolTouch
-  name: Cool touch
-  description: Transfer body heat into something cooler within reach.
+  id: ActionLavriteThermalBurst
+  name: Thermal burst
+  description: Send a wave of heat in a direction, pushing nearby creatures back.
   components:
   - type: Action
-    useDelay: 15
+    useDelay: 28
     icon:
       sprite: _Eclipse/Interface/Actions/species.rsi
       state: cool
 
   - type: TargetAction
-    range: 1.6
-  - type: EntityTargetAction
-    canTargetSelf: false
-    whitelist:
-      components: [ Temperature ]
-    event: !type:RacialTargetActionEvent
-      ability: LavriteCoolTouch
+    range: 0
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:LavriteThermalBurstEvent {}
+
+- type: entity
+  id: LavriteHeatPuff
+  name: heat puff
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Effects/chempuff.rsi
+    state: chempuff
+    color: "#FFA04D80"
+  - type: TimedDespawn
+    lifetime: 0.35
 
 - type: entity
   parent: BaseAction
   id: ActionSaurianTailSweep
   name: Tail sweep
-  description: Hit a nearby target with your tail, dealing stamina damage.
+  description: Click in a direction to sweep your tail and drain a nearby target's stamina.
   components:
   - type: Action
     useDelay: 22
@@ -149,19 +158,16 @@
       state: sweep
 
   - type: TargetAction
-    range: 1.6
-  - type: EntityTargetAction
-    canTargetSelf: false
-    whitelist:
-      components: [ Stamina ]
-    event: !type:RacialTargetActionEvent
-      ability: SaurianTailSweep
+    range: 0
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:SaurianTailSweepEvent {}
 
 - type: entity
   parent: BaseAction
   id: ActionElirReadPulse
   name: Read pulse
-  description: Sense someone's pulse from up to six tiles away.
+  description: Listen for nearby heartbeats, even through walls, for five seconds.
   components:
   - type: Action
     useDelay: 10
@@ -169,26 +175,23 @@
       sprite: _Eclipse/Interface/Actions/species.rsi
       state: pulse
 
-  - type: TargetAction
-    range: 6
-  - type: EntityTargetAction
-    canTargetSelf: true
-    whitelist:
-      components: [ AdvancedHealth ]
-    event: !type:RacialTargetActionEvent
+  - type: InstantAction
+    event: !type:RacialInstantActionEvent
       ability: ElirReadPulse
 
 - type: entity
   parent: BaseAction
   id: ActionSlimeAdhesive
   name: Sticky spit
-  description: Spit a glob of gel that slows a nearby creature for five seconds.
+  description: Launch a glob of gel that slows the first creature it hits for five seconds.
   components:
   - type: Action
     useDelay: 24
     icon:
       sprite: _Eclipse/Interface/Actions/species.rsi
       state: adhesive
+    sound:
+      path: /Audio/Voice/Slime/slime_squish.ogg
 
   - type: TargetAction
     range: 4
@@ -198,6 +201,26 @@
       components: [ MobState ]
     event: !type:RacialTargetActionEvent
       ability: SlimeAdhesive
+
+- type: entity
+  parent: BaseBullet
+  id: SlimefolkStickySpit
+  name: sticky gel glob
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/xeno_toxic.rsi
+    layers:
+    - state: xeno_toxic
+  - type: Projectile
+    damage: {}
+    impactEffect: null
+    soundHit:
+      path: /Audio/Effects/Fluids/splat.ogg
+    forceSound: true
+  - type: StickySpitProjectile
+  - type: TimedDespawn
+    lifetime: 0.42
 
 - type: entity
   parent: ActionGravityJump

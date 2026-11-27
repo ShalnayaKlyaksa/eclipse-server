@@ -6,6 +6,7 @@ light_mode unshaded;
 uniform highp vec2 center;
 uniform highp vec2 pixel_scale;
 uniform highp float radius;
+uniform highp float field_limit;
 uniform highp float activity;
 uniform highp float instability;
 uniform highp float elapsed;
@@ -72,62 +73,87 @@ highp vec3 tonemap(highp vec3 color) {
 }
 
 void fragment() {
-    highp vec2 q = (FRAGCOORD.xy - center) / max(pixel_scale * radius, vec2(0.01));
-    highp float screenRadius = length(q);
-    if (screenRadius >= 1.0) {
+    highp vec2 offset = (FRAGCOORD.xy - center) / max(pixel_scale, vec2(0.01));
+    highp float distance = length(offset);
+    highp float diskEdge = field_limit > 0.0 ? min(radius, field_limit * 0.95) : radius;
+    if (distance >= max(diskEdge, field_limit * 1.1)) {
         COLOR = vec4(0.0);
         return;
     }
-    highp float angle = atan(q.y, q.x);
-    highp float edge = 1.0 - smoothstep(0.84, 1.0, screenRadius);
-    highp vec3 p = vec3(0.0, 8.0, 0.0);
-    highp vec3 direction = normalize(vec3(q.x * 0.65, -1.0, q.y * 0.65));
-    highp vec3 momentum = cross(p, direction);
-    highp float h2 = dot(momentum, momentum);
-    highp vec3 emission = vec3(0.0);
+    highp float angle = atan(offset.y, offset.x);
+    highp vec3 color = vec3(0.0);
     highp float opacity = 0.0;
-    highp float closest = 8.0;
+    if (distance < diskEdge) {
+        // Only compress the luminous disk when it reaches the field. The event horizon keeps its size.
+        highp float shadow = min(radius * 0.25, diskEdge * 0.85);
+        highp float screenRadius = distance < shadow
+            ? 0.25 * distance / max(0.01, shadow)
+            : 0.25 + 0.75 * (distance - shadow) / max(0.01, diskEdge - shadow);
+        highp vec2 q = offset * (screenRadius / max(distance, 0.01));
+        highp float edge = 1.0 - smoothstep(0.84, 1.0, screenRadius);
+        highp vec3 p = vec3(0.0, 8.0, 0.0);
+        highp vec3 direction = normalize(vec3(q.x * 0.65, -1.0, q.y * 0.65));
+        highp vec3 momentum = cross(p, direction);
+        highp float h2 = dot(momentum, momentum);
+        highp vec3 emission = vec3(0.0);
+        highp float closest = 8.0;
 
-    // Thin, face-on disk: sample noise only at plane crossings, not at every ray step.
-    // Bounded work: at most 80 curved-ray steps per pixel inside a culled local quad.
-    for (int i = 0; i < 80; i++) {
-        highp float r2 = dot(p, p);
-        highp float r = sqrt(r2);
-        closest = min(closest, r);
-        if (r < 0.525) { opacity = 1.0; break; }
-        if (r > 9.0 && dot(p, direction) > 0.0) break;
-        highp float dt = clamp(r * 0.085, 0.018, 0.42);
-        // Gargantua's Schwarzschild acceleration with its small approximate spin term.
-        highp vec3 acceleration = -1.5 * h2 * 0.52 * p / (r2 * r2 * r);
-        acceleration += 0.65 * 0.52 * 0.52 * 0.3 * cross(vec3(0.0, 1.0, 0.0), p) / (r2 * r2);
-        direction = normalize(direction + acceleration * dt);
-        highp vec3 next = p + direction * dt;
-        if (p.y * next.y <= 0.0) {
-            highp float t = clamp(p.y / (p.y - next.y), 0.0, 1.0);
-            highp vec4 sample = disk(mix(p, next, t));
-            emission += (1.0 - opacity) * sample.rgb;
-            opacity += (1.0 - opacity) * sample.a;
+        // Thin, face-on disk: sample noise only at plane crossings, not at every ray step.
+        // Bounded work: at most 80 curved-ray steps per pixel inside a culled local quad.
+        for (int i = 0; i < 80; i++) {
+            highp float r2 = dot(p, p);
+            highp float r = sqrt(r2);
+            closest = min(closest, r);
+            if (r < 0.525) { opacity = 1.0; break; }
+            if (r > 9.0 && dot(p, direction) > 0.0) break;
+            highp float dt = clamp(r * 0.085, 0.018, 0.42);
+            // Gargantua's Schwarzschild acceleration with its small approximate spin term.
+            highp vec3 acceleration = -1.5 * h2 * 0.52 * p / (r2 * r2 * r);
+            acceleration += 0.65 * 0.52 * 0.52 * 0.3 * cross(vec3(0.0, 1.0, 0.0), p) / (r2 * r2);
+            direction = normalize(direction + acceleration * dt);
+            highp vec3 next = p + direction * dt;
+            if (p.y * next.y <= 0.0) {
+                highp float t = clamp(p.y / (p.y - next.y), 0.0, 1.0);
+                highp vec4 sample = disk(mix(p, next, t));
+                emission += (1.0 - opacity) * sample.rgb;
+                opacity += (1.0 - opacity) * sample.a;
+            }
+            p = next;
         }
-        p = next;
-    }
 
-    // Soft photon corona follows the curved rays rather than a separate geometric ring.
-    highp float corona = gaussian(closest - 0.78, 0.07) * 0.20 * activity;
-    emission += vec3(1.0, 0.68, 0.29) * corona * (1.0 - opacity);
-    opacity = max(opacity, corona);
-    highp vec3 color = tonemap(emission * 0.34);
-    // Straight alpha: preserve emission while letting the already-lensed station show through.
-    opacity = max(opacity, max(color.r, max(color.g, color.b)));
-    color *= edge;
-    opacity *= edge;
-    // Four fixed arc sectors with a slow charge sweep.
-    highp float fieldRadius = 0.92 + instability * 0.004 * sin(angle * 8.0 - elapsed);
-    highp float segment = smoothstep(0.40, 0.96, cos(angle * 4.0));
-    highp float sweep = 0.60 + 0.40 * sin(angle * 4.0 - elapsed * 1.35);
-    highp float field = (gaussian(screenRadius - fieldRadius, 0.007) * (0.25 + sweep * 0.30) +
-        gaussian(screenRadius - fieldRadius, 0.038) * 0.12) * segment * activity;
-    highp vec3 fieldColor = mix(vec3(0.2, 0.66, 0.8), vec3(1.0, 0.25, 0.04), instability);
-    color += fieldColor * field;
-    opacity = clamp(max(opacity, field), 0.0, 1.0);
+        // Soft photon corona follows the curved rays rather than a separate geometric ring.
+        highp float corona = gaussian(closest - 0.78, 0.07) * 0.20 * activity;
+        emission += vec3(1.0, 0.68, 0.29) * corona * (1.0 - opacity);
+        opacity = max(opacity, corona);
+        color = tonemap(emission * 0.34);
+        // Straight alpha: preserve emission while letting the already-lensed station show through.
+        opacity = max(opacity, max(color.r, max(color.g, color.b)));
+        color *= edge;
+        opacity *= edge;
+    }
+    if (field_limit > 0.0) {
+        highp float displacement = distance - field_limit;
+        // Four strong arcs face the stabilizers.
+        highp float mainArc = smoothstep(0.40, 0.96, cos(angle * 4.0));
+        highp float sweep = 0.6 + 0.4 * sin(angle * 4.0 - elapsed * 1.35);
+        highp float edgeWidth = max(0.5, field_limit * 0.009);
+        highp float glowWidth = max(2.0, field_limit * 0.05);
+        highp float anchors = (gaussian(displacement, edgeWidth) * (0.28 + sweep * 0.27) +
+            gaussian(displacement, glowWidth) * 0.15) * mainArc;
+
+        // Faint traces briefly reveal the field between the stabilizers.
+        highp float quadrant = angle * (4.0 / 6.28318530);
+        highp float index = mod(floor(quadrant), 4.0);
+        highp float seed = hash(vec3(index, 6.21, 13.74));
+        highp float offset = fract(quadrant) - mix(0.40, 0.60, seed);
+        highp float shortArc = 1.0 - smoothstep(0.025, 0.072, abs(offset));
+        highp float pulse = 0.5 + 0.5 * sin(elapsed * 0.90 + index * 1.57079633);
+        highp float traces = (gaussian(displacement, edgeWidth) * 0.21 +
+            gaussian(displacement, glowWidth * 0.65) * 0.075) * shortArc * smoothstep(0.73, 0.98, pulse);
+        highp float field = (anchors + traces) * activity;
+        highp vec3 fieldColor = mix(vec3(0.2, 0.66, 0.8), vec3(1.0, 0.25, 0.04), instability);
+        color += fieldColor * field;
+        opacity = clamp(max(opacity, field), 0.0, 1.0);
+    }
     COLOR = vec4(clamp(color / max(0.001, opacity), 0.0, 1.0), opacity * smoothstep(0.0, 0.20, activity));
 }

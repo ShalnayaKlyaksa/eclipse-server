@@ -80,6 +80,7 @@
   parent: LockerBaseSecure
   name: captain's locker
   components:
+  - type: GravityRecoveryLocker
   - type: Appearance
   - type: EntityStorageVisuals
     stateBaseClosed: cap

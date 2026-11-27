@@ -1,4 +1,5 @@
 using Content.Shared.ActionBlocker;
+using Content.Shared._Eclipse.Power;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Alert;
 using Content.Shared.Buckle.Components;
@@ -45,6 +46,7 @@ public sealed class PullingSystem : EntitySystem
     [Dependency] private readonly ActionBlockerSystem _blocker = default!;
     [Dependency] private readonly AlertsSystem _alertsSystem = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _modifierSystem = default!;
+    [Dependency] private readonly GravityMagneticSystem _gravityMagnetism = default!;
     [Dependency] private readonly SharedJointSystem _joints = default!;
     [Dependency] private readonly SharedContainerSystem _containerSystem = default!;
     [Dependency] private readonly SharedHandsSystem _handsSystem = default!;
@@ -76,6 +78,7 @@ public sealed class PullingSystem : EntitySystem
         SubscribeLocalEvent<PullerComponent, EntityUnpausedEvent>(OnPullerUnpaused);
         SubscribeLocalEvent<PullerComponent, VirtualItemDeletedEvent>(OnVirtualItemDeleted);
         SubscribeLocalEvent<PullerComponent, RefreshMovementSpeedModifiersEvent>(OnRefreshMovespeed);
+        SubscribeLocalEvent<GravityMagneticComponent, MoveEvent>(OnMagneticObjectMoved);
         SubscribeLocalEvent<PullerComponent, DropHandItemsEvent>(OnDropHandItems);
         SubscribeLocalEvent<PullerComponent, StopPullingAlertEvent>(OnStopPullingAlert);
 
@@ -304,7 +307,20 @@ public sealed class PullingSystem : EntitySystem
             sprint = Math.Min(1, sprint * component.HeavyPullSpeedMultiplier);
         }
 
+        if (component.Pulling is { } target && _gravityMagnetism.IsAdhering(target))
+        {
+            walk *= .55f;
+            sprint *= .55f;
+        }
+
         args.ModifySpeed(walk, sprint);
+    }
+
+    private void OnMagneticObjectMoved(Entity<GravityMagneticComponent> ent, ref MoveEvent args)
+    {
+        if (TryComp<PullableComponent>(ent, out var pullable) && pullable.Puller is { } puller &&
+            _gravityMagnetism.IsMetal(args.OldPosition) != _gravityMagnetism.IsMetal(args.NewPosition))
+            _modifierSystem.RefreshMovementSpeedModifiers(puller);
     }
 
     private void OnPullableMoveInput(EntityUid uid, PullableComponent component, ref MoveInputEvent args)

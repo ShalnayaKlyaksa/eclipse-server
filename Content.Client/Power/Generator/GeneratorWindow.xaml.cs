@@ -94,6 +94,11 @@ public sealed partial class GeneratorWindow : ImmersiveFancyWindow
             OperatingKinetics.Visible = operating.GravitySource;
             OperatingKinetics.Text = Loc.GetString("power-plant-kinetics", ("count", operating.KineticGenerators),
                 ("power", (int) (operating.HarvestedPower / 1000)));
+            OperatingGravityHorizon.Visible = operating.GravitySource;
+            if (operating.GravitySource)
+                OperatingGravityHorizon.Text = Loc.GetString("gravity-plant-horizon",
+                    ("radius", MathF.Round(operating.GravityHorizon, 1)), ("limit", MathF.Round(operating.GravityFieldLimit, 1)),
+                    ("projectors", operating.GravityStaticProjectors));
             FusionUtilities.Visible = fusion;
             if (operating.FusionNominalPower is { } nominal)
             {

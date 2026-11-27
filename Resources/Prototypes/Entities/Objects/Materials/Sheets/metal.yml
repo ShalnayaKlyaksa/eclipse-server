@@ -41,6 +41,7 @@
   name: steel
   suffix: Full
   components:
+  - type: GravityMagnetic
   - type: Material
   - type: PhysicalComposition
     materialComposition:

@@ -4,6 +4,7 @@
          xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
          xmlns:ui="clr-namespace:Content.Client.Lobby.UI"
          xmlns:profile="clr-namespace:Content.Client.Lobby.UI.ProfileEditorControls"
+         xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
          xmlns:pda="clr-namespace:Content.Client.PDA"
          HorizontalExpand="True"
          VerticalExpand="True"
@@ -134,7 +135,7 @@
                                 <Label Text="{Loc 'humanoid-profile-editor-skin-color-label'}" />
                                 <BoxContainer Name="SpeciesPaletteRow" Visible="False" SeparationOverride="8" Margin="0 4 0 4">
                                     <Label Text="{Loc 'species-appearance-palette-label'}" />
-                                    <profile:SpeciesPaletteOptionButton Name="SpeciesPaletteButton" HorizontalExpand="True" />
+                                    <controls:ClippedOptionButton Name="SpeciesPaletteButton" HorizontalExpand="True" />
                                 </BoxContainer>
                                 <Slider HorizontalExpand="True" Name="Skin" MinValue="0" MaxValue="100" Value="20" />
                                 <BoxContainer Name="RgbSkinColorContainer" Visible="False" Orientation="Vertical" HorizontalExpand="True"></BoxContainer>

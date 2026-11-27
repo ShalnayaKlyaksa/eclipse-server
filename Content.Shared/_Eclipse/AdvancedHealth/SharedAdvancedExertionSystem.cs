@@ -257,6 +257,15 @@ public sealed class SharedAdvancedExertionSystem : EntitySystem
             ChargeExertion(ent, JumpCost, 0.9f);
     }
 
+    public bool TryDrainReserve(Entity<AdvancedExertionComponent> ent, float amount)
+    {
+        if (!_net.IsServer || !float.IsFinite(amount) || amount <= 0f || ent.Comp.Reserve <= 0f)
+            return false;
+
+        ChargeExertion(ent, amount, ent.Comp.WorkEffort);
+        return true;
+    }
+
     private void ChargeExertion(Entity<AdvancedExertionComponent> ent, float cost, float effort)
     {
         ent.Comp.Reserve = Math.Max(0, ent.Comp.Reserve - cost);

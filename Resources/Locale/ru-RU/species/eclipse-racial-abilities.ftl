@@ -16,15 +16,20 @@ marking-AvianWingsThreeTone = Трёхцветные крылья
 marking-AvianWingsSpeckled = Крылья в крапинку
 marking-AvianWingsUndertone = Крылья с цветным подбоем
 marking-AvianWingsTipped = Крылья с цветными кончиками
+marking-AvianTailHarpy = Веерный хвост
+marking-AvianTailPhoenix = Хвост феникса
+marking-AvianTailRooster = Петушиный хвост
 guide-entry-legacy-species = Справочные виды
 
 racial-lavrite-no-heat-sink = Сейчас некуда отдать лишнее тепло.
+racial-lavrite-vent-success = Вы отдали часть тепла окружающему воздуху.
 racial-silk-no-wound = Здесь нет наружной раны, которую можно прикрыть шёлком.
 racial-silk-applied = Шёлк стягивает края раны и замедляет кровотечение.
 racial-canine-scent-result = По запаху вы различаете живых существ поблизости: { $count }.
-racial-elir-pulse-result = Пульс у { $target }: { $pulse } уд/мин.
+racial-elir-pulse-empty = Вы не слышите поблизости ни одного сердцебиения.
 racial-slime-reform-hungry = Чтобы собрать тело заново, вам нужно поесть.
 racial-slime-reform-uninjured = Сейчас у вас нет ран, которые можно затянуть этой способностью.
+racial-slime-spit-hit = Сгусток попал и замедлил цель.
 racial-slime-reform-applied = Гель стекается к повреждённым участкам тела.
 marking-ArkaneWings = Перепончатые крылья
 ent-AvianThrownFeather = жёсткое перо
@@ -54,14 +59,16 @@ ent-ActionSlimeReform = Собраться заново
 ent-ActionMoleiSilk = Шёлковая повязка
     .desc = Прикройте шёлком самую сильно кровоточащую наружную рану у себя или у того, кто рядом.
 
-ent-ActionLavriteCoolTouch = Охладиться касанием
-    .desc = Отдайте часть тепла чему-нибудь прохладному на расстоянии вытянутой руки.
+ent-ActionLavriteThermalBurst = Тепловой толчок
+    .desc = Направьте волну жара, чтобы оттолкнуть ближайших существ.
 
 ent-ActionSaurianTailSweep = Удар хвостом
-    .desc = Ударьте хвостом ближайшую цель и нанесите урон выносливости.
+    .desc = Укажите направление взмаха. Ближайшая цель в этом направлении потеряет выносливость.
+racial-tail-sweep-hit = Вы задели цель хвостом.
+racial-tail-sweep-miss = В эту сторону хвост ни до кого не достал.
 
 ent-ActionElirReadPulse = Услышать пульс
-    .desc = Почувствуйте чужой пульс с расстояния до шести клеток.
+    .desc = На пять секунд покажите пульс существ в пределах шести клеток, даже за стенами.
 
 ent-ActionSlimeAdhesive = Липкий плевок
     .desc = Плюньте сгустком геля, который замедлит цель на пять секунд.

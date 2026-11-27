@@ -1,4 +1,6 @@
 using Content.Shared.Actions;
+using Robust.Shared.Map;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared._Eclipse.Species;
 
@@ -13,6 +15,8 @@ public sealed partial class RacialTargetActionEvent : EntityTargetActionEvent
 }
 
 public sealed partial class AvianThrowFeatherEvent : WorldTargetActionEvent;
+public sealed partial class SaurianTailSweepEvent : WorldTargetActionEvent;
+public sealed partial class LavriteThermalBurstEvent : WorldTargetActionEvent;
 
 public enum RacialInstantAbility : byte
 {
@@ -22,13 +26,20 @@ public enum RacialInstantAbility : byte
     TherianScurry,
     ShadowVeil,
     SlimeReform,
+    ElirReadPulse,
 }
 
 public enum RacialTargetAbility : byte
 {
     MoleiSilk,
-    LavriteCoolTouch,
-    SaurianTailSweep,
-    ElirReadPulse,
     SlimeAdhesive,
+}
+
+[Serializable, NetSerializable]
+public readonly record struct ElirPulseSample(MapCoordinates Position, float BeatsPerMinute);
+
+[Serializable, NetSerializable]
+public sealed class ElirPulseSamplesEvent(ElirPulseSample[] samples) : EntityEventArgs
+{
+    public readonly ElirPulseSample[] Samples = samples;
 }

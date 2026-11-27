@@ -1,3 +1,5 @@
+#nullable enable annotations
+
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
 using Content.Client._Eclipse.Industrial;

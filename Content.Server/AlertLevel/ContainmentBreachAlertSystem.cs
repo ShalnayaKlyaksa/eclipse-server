@@ -75,7 +75,7 @@ public sealed class ContainmentBreachAlertSystem : EntitySystem
         return false;
     }
 
-    private void TrySetEnigma(EntityUid uid)
+    internal void TrySetEnigma(EntityUid uid)
     {
         var station = _station.GetOwningStation(uid) ?? _station.GetStationInMap(Transform(uid).MapID);
         if (station == null)

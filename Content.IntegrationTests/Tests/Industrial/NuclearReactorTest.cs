@@ -1,3 +1,5 @@
+#nullable enable annotations
+
 using System;
 using System.Collections.Generic;
 using Content.IntegrationTests.Fixtures;
@@ -346,7 +348,7 @@ public sealed class NuclearReactorTest : GameTest
     [TestCase(NuclearFuelKind.Mox, "UraniumDust1", 8, "SheetPlasma1", 3, "IndustrialHeatConduitAssembly", 2)]
     [TestCase(NuclearFuelKind.Pulse, "UraniumDust1", 6, "SheetPlasma1", 1, "IndustrialAdvancedBoard", 1)]
     public async Task FuelLineTransfersCellsAndSealsRadioactiveCartridges(NuclearFuelKind kind, string feedstock, int feedCount,
-        string pressPart, int pressCount, string sealerPart, int sealerCount)
+        string? pressPart, int pressCount, string? sealerPart, int sealerCount)
     {
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>

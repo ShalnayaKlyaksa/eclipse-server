@@ -23,6 +23,8 @@ namespace Content.IntegrationTests.Tests.Industrial;
 
 public sealed class StationCommerceTest : GameTest
 {
+    private static readonly ProtoId<LatheRecipePrototype> StationReportRecipe = "PrintedDocumentReportStationRecipe";
+
     private async Task Check(Action action)
     {
         try { await Server.WaitAssertion(action); }
@@ -144,7 +146,7 @@ public sealed class StationCommerceTest : GameTest
             var printer = SEntMan.SpawnEntity("PrinterDoc", map.GridCoords);
             var lathe = SEntMan.System<LatheSystem>();
             var comp = SEntMan.GetComponent<LatheComponent>(printer);
-            var recipe = Server.ProtoMan.Index<LatheRecipePrototype>("PrintedDocumentReportStationRecipe");
+            var recipe = Server.ProtoMan.Index(StationReportRecipe);
             Assert.That(lathe.TryAddToQueue(printer, recipe, 2, comp, actor, 5), Is.False, "No paper must not debit the account");
             SEntMan.System<MaterialStorageSystem>().TryChangeMaterialAmount(printer, "PrinterPaper", 1000);
             Assert.That(lathe.TryAddToQueue(printer, recipe, 2, comp, actor, 1), Is.False, "Stale quote");

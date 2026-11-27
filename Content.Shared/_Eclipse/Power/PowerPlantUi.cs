@@ -22,6 +22,9 @@ public sealed class PowerPlantOperatingState
     public float GravityPower;
     public float HarvestedPower;
     public int KineticGenerators;
+    public float GravityHorizon;
+    public float GravityFieldLimit;
+    public int GravityStaticProjectors;
     public bool Tripped;
     public int FieldCount;
     public int RequiredFields;

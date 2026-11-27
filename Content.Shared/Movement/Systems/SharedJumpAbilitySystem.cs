@@ -133,8 +133,13 @@ public sealed partial class SharedJumpAbilitySystem : EntitySystem
 
         // Throwing adds its launch velocity to the existing velocity. Set the speed explicitly so
         // jumping while running gives the same small boost as jumping from a walk.
+        var previousVelocity = body.LinearVelocity;
         _physics.SetLinearVelocity(uid, Vector2.Zero, body: body);
-        LaunchJump(uid, jumpPath, launchSpeed, GroundJumpSound, obstacles);
+        if (!LaunchJump(uid, jumpPath, launchSpeed, GroundJumpSound, obstacles))
+        {
+            _physics.SetLinearVelocity(uid, previousVelocity, body: body);
+            return;
+        }
         if (obstacles is { Count: > 0 })
             _broadphase.RegenerateContacts((uid, body, null, xform));
 
@@ -275,31 +280,31 @@ public sealed partial class SharedJumpAbilitySystem : EntitySystem
         }
 
         var direction = _transform.GetWorldRotation(args.Performer).ToWorldVec();
-        LaunchJump(args.Performer, direction * entity.Comp.JumpDistance, entity.Comp.JumpThrowSpeed, entity.Comp.JumpSound, ability: true);
-        if (!HasComp<ThrownItemComponent>(user))
+        if (!LaunchJump(user, direction * entity.Comp.JumpDistance, entity.Comp.JumpThrowSpeed, entity.Comp.JumpSound, ability: true))
             return;
 
         if (entity.Comp.CanCollide)
         {
-            EnsureComp<ActiveLeaperComponent>(entity, out var leaperComp);
+            var leaperComp = EnsureComp<ActiveLeaperComponent>(user);
             leaperComp.KnockdownDuration = entity.Comp.CollideKnockdown;
-            Dirty(entity.Owner, leaperComp);
+            Dirty(user, leaperComp);
         }
 
         args.Handled = true;
     }
 
-    private void LaunchJump(EntityUid user, Vector2 path, float speed, SoundSpecifier? sound,
+    private bool LaunchJump(EntityUid user, Vector2 path, float speed, SoundSpecifier? sound,
         List<EntityUid>? obstacles = null, bool ability = false)
     {
         _throwing.TryThrow(user, path, speed, playSound: ability, doSpin: ability, animated: false);
-        if (HasComp<ThrownItemComponent>(user))
-        {
-            var flight = EnsureComp<JumpFlightComponent>(user);
-            flight.VaultedObstacles = obstacles ?? new();
-            Dirty(user, flight);
-        }
+        if (!HasComp<ThrownItemComponent>(user))
+            return false;
+
+        var flight = EnsureComp<JumpFlightComponent>(user);
+        flight.VaultedObstacles = obstacles ?? new();
+        Dirty(user, flight);
         _audio.PlayPredicted(sound, user, user);
+        return true;
     }
 
     private void OnClone(Entity<JumpAbilityComponent> ent, ref CloningEvent args)

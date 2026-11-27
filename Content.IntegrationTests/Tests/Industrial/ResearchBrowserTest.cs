@@ -15,6 +15,9 @@ namespace Content.IntegrationTests.Tests.Industrial;
 
 public sealed class ResearchBrowserTest : GameTest
 {
+    private static readonly EntProtoId LaserEngraver = "IndustrialUpgradeModuleLaserEngraver";
+    private static readonly ProtoId<ReagentPrototype> IndustrialDeveloper = "IndustrialDeveloper";
+
     [Test]
     public async Task ResearchLanesAreStableNonOverlappingAndFollowLocalPrerequisites()
     {
@@ -51,11 +54,11 @@ public sealed class ResearchBrowserTest : GameTest
             window.UpdatePanels(states);
             window.SelectResearchSection(0);
             var search = Find<LineEdit>(window, "Search");
-            search.SetText(CProtoMan.Index<EntityPrototype>("IndustrialUpgradeModuleLaserEngraver").Name, true);
+            search.SetText(CProtoMan.Index(LaserEngraver).Name, true);
             var graph = Find<ResearchesContainerPanel>(window, "DragContainer");
             Assert.That(graph.Children.OfType<FancyResearchConsoleItem>().Any(n => n.Prototype.ID == "IndustrialPhotolithography"), Is.True);
             Assert.That(window.CurrentTech?.Id, Is.EqualTo("IndustrialPhotolithography"), "Search must select a match rather than one of its prerequisites.");
-            var reagent = CProtoMan.Index<ReagentPrototype>("IndustrialDeveloper");
+            var reagent = CProtoMan.Index(IndustrialDeveloper);
             search.SetText(reagent.LocalizedName, true);
             Assert.That(graph.Children.OfType<FancyResearchConsoleItem>().Any(n => n.Prototype.ID == "IndustrialSurfaceChemistry"), Is.True,
                 "A liquid-only recipe must be discoverable.");

@@ -1,3 +1,5 @@
+#nullable enable annotations
+
 using System;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.Power.Components;
