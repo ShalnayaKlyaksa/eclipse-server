@@ -7,8 +7,10 @@ using Content.Client.Humanoid;
 using Content.Client.Lobby;
 using Content.IntegrationTests.Fixtures;
 using Content.Server._Eclipse.Species;
+using Content.Server.Atmos.EntitySystems;
 using Content.Server.Body.Systems;
 using Content.Server.Preferences.Managers;
+using Content.Server.Temperature.Systems;
 using Content.Server.Traits;
 using Content.Shared._Eclipse.AdvancedHealth;
 using Content.Shared._Eclipse.Species;
@@ -28,14 +30,19 @@ using Content.Shared.Preferences;
 using Content.Shared.Speech.Components;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.Stunnable;
+using Content.Shared.Temperature.Components;
 using Content.Shared.Throwing;
 using Content.Shared.Traits;
 using Content.Shared.Traits.Assorted;
 using Robust.Client.GameObjects;
+using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Enums;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Map;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
+using Robust.Shared.Utility;
 
 namespace Content.IntegrationTests.Tests.Humanoid;
 
@@ -52,10 +59,14 @@ public sealed class HumanoidProfileTests : GameTest
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
         {
-            var origin = map.GridCoords;
+            var origin = map.GridCoords.Offset(new Vector2(0.5f, 0.5f));
+            Server.System<SharedMapSystem>().SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(2, 1), map.Tile.Tile);
             var lavrite = SSpawnAtPosition("MobLavrite", origin);
-            var target = SSpawnAtPosition("MobImperial", origin.Offset(Vector2.UnitX));
+            var target = SSpawnAtPosition("MobImperial", origin.Offset(Vector2.UnitX * 4.5f));
             var behind = SSpawnAtPosition("MobImperial", origin.Offset(-Vector2.UnitX));
+            var outOfRange = SSpawnAtPosition("MobImperial", origin.Offset(Vector2.UnitX * 6f));
+            SSpawnAtPosition("WallSolid", origin.Offset(new Vector2(2f, 1f)));
+            var behindWall = SSpawnAtPosition("MobImperial", origin.Offset(new Vector2(4f, 2f)));
             var actions = SEntMan.System<SharedActionsSystem>();
             var action = actions.GetActions(lavrite).Single(entry =>
                 SComp<MetaDataComponent>(entry.Owner).EntityPrototype?.ID == "ActionLavriteThermalBurst");
@@ -64,6 +75,99 @@ public sealed class HumanoidProfileTests : GameTest
             Assert.That(burst.Handled, Is.True);
             Assert.That(SEntMan.HasComponent<ThrownItemComponent>(target), Is.True);
             Assert.That(SEntMan.HasComponent<ThrownItemComponent>(behind), Is.False);
+            Assert.That(SEntMan.HasComponent<ThrownItemComponent>(outOfRange), Is.False);
+            Assert.That(SEntMan.HasComponent<ThrownItemComponent>(behindWall), Is.False);
+        });
+    }
+
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task LavriteRegulatesTemperatureInStationAir(bool freezing)
+    {
+        EntityUid lavrite = default;
+        await Server.WaitAssertion(() =>
+        {
+            var maps = Server.System<SharedMapSystem>();
+            var map = maps.CreateMap(out var mapId);
+            Assert.That(Server.System<MapLoaderSystem>().TryLoadGrid(mapId, new ResPath("/Maps/Test/Breathing/3by3-20oxy-80nit.yml"), out var grid), Is.True);
+            lavrite = SSpawnAtPosition("MobLavrite", new EntityCoordinates(grid!.Value.Owner, 0.5f, 0.5f));
+            var atmos = Server.System<AtmosphereSystem>();
+            if (freezing)
+            {
+                for (var x = -2; x <= 2; x++)
+                for (var y = -2; y <= 2; y++)
+                {
+                    var air = atmos.GetTileMixture(grid.Value.Owner, map, new Vector2i(x, y));
+                    if (air is { Immutable: false })
+                        air.Temperature = 203.15f;
+                }
+            }
+            else
+            {
+                Server.System<TemperatureSystem>().ForceChangeTemperature(lavrite, 316.85f);
+            }
+        });
+
+        var tickRate = Server.ResolveDependency<IGameTiming>().TickRate;
+        await Pair.RunTicksSync(tickRate * 45);
+        await Server.WaitAssertion(() =>
+        {
+            var body = SComp<TemperatureComponent>(lavrite);
+            if (freezing)
+                Assert.That(body.CurrentTemperature, Is.LessThan(320.15f));
+            else
+                Assert.That(body.CurrentTemperature, Is.InRange(322.15f, 324.65f));
+        });
+    }
+
+    [Test]
+    public async Task LavriteExertionWarmsTheBodyAndVentingTransfersHeatToAir()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var map = Server.System<SharedMapSystem>().CreateMap(out var mapId);
+            var mapLoader = Server.System<MapLoaderSystem>();
+            Assert.That(mapLoader.TryLoadGrid(mapId, new ResPath("/Maps/Test/Breathing/3by3-20oxy-80nit.yml"), out var grid), Is.True);
+            var lavrite = SSpawnAtPosition("MobLavrite", new EntityCoordinates(grid!.Value.Owner, 0.5f, 0.5f));
+            var body = SComp<TemperatureComponent>(lavrite);
+            var normal = body.CurrentTemperature;
+            var exertion = Server.System<SharedAdvancedExertionSystem>();
+            var reserve = SComp<AdvancedExertionComponent>(lavrite);
+            var atmos = Server.System<AtmosphereSystem>();
+            var air = atmos.GetContainingMixture(lavrite)!;
+            Assert.That(air.Immutable, Is.False);
+            air.Clear();
+            air.Temperature = 293.15f;
+
+            var actions = Server.System<SharedActionsSystem>();
+            var action = actions.GetActions(lavrite).Single(entry =>
+                SComp<MetaDataComponent>(entry.Owner).EntityPrototype?.ID == "ActionLavriteVentHeat");
+
+            exertion.ChargeWork(lavrite, PhysicalWorkClass.Heavy, 6f);
+            var afterWork = body.CurrentTemperature;
+            Assert.That(afterWork, Is.GreaterThan(normal + 6f));
+            exertion.Advance((lavrite, reserve), 1f, running: true, sleeping: false);
+            var afterRunning = body.CurrentTemperature;
+            Assert.That(afterRunning, Is.GreaterThan(afterWork));
+
+            var ventInVacuum = new RacialInstantActionEvent { Ability = RacialInstantAbility.LavriteVent };
+            actions.PerformAction(lavrite, action, ventInVacuum, predicted: false);
+            Assert.That(ventInVacuum.Handled, Is.False);
+            Assert.That(body.CurrentTemperature, Is.EqualTo(afterRunning));
+
+            air.SetMoles(Gas.Nitrogen, 100f);
+            var airBefore = air.Temperature;
+            var vent = new RacialInstantActionEvent { Ability = RacialInstantAbility.LavriteVent };
+            actions.PerformAction(lavrite, action, vent, predicted: false);
+
+            Assert.That(vent.Handled, Is.True);
+            Assert.That(body.CurrentTemperature, Is.InRange(normal - 0.01f, afterRunning - 0.5f));
+            Assert.That(air.Temperature, Is.GreaterThan(airBefore + 0.5f));
+
+            var airEnergy = (air.Temperature - airBefore) * atmos.GetHeatCapacity(air, applyScaling: false);
+            var bodyEnergy = (afterRunning - body.CurrentTemperature) * Server.System<TemperatureSystem>().GetHeatCapacity(lavrite, body);
+            Assert.That(airEnergy, Is.EqualTo(bodyEnergy).Within(1f));
+            SEntMan.DeleteEntity(map);
         });
     }
 

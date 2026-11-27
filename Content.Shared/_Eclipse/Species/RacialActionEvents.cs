@@ -1,3 +1,4 @@
+using System.Numerics;
 using Content.Shared.Actions;
 using Robust.Shared.Map;
 using Robust.Shared.Serialization;
@@ -42,4 +43,13 @@ public readonly record struct ElirPulseSample(MapCoordinates Position, float Bea
 public sealed class ElirPulseSamplesEvent(ElirPulseSample[] samples) : EntityEventArgs
 {
     public readonly ElirPulseSample[] Samples = samples;
+}
+
+[Serializable, NetSerializable]
+public sealed class LavriteHeatWaveEvent(MapCoordinates origin, float range, Vector2[] rays) : EntityEventArgs
+{
+    public const int RayCount = 17;
+    public readonly MapCoordinates Origin = origin;
+    public readonly float Range = range;
+    public readonly Vector2[] Rays = rays;
 }

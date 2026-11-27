@@ -1,10 +1,7 @@
 using System.Linq;
 using System.Numerics;
-using Content.Server.Atmos.EntitySystems;
-using Content.Server.Temperature.Systems;
 using Content.Shared._Eclipse.AdvancedHealth;
 using Content.Shared._Eclipse.Species;
-using Content.Shared.Atmos;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
@@ -21,7 +18,6 @@ using Content.Shared.Projectiles;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.Stealth;
 using Content.Shared.Stealth.Components;
-using Content.Shared.Temperature.Components;
 using Content.Shared.Throwing;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Prototypes;
@@ -29,9 +25,6 @@ using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
 namespace Content.Server._Eclipse.Species;
-
-[RegisterComponent]
-public sealed partial class LavriteHeatComponent : Component;
 
 [RegisterComponent]
 public sealed partial class ShadowVeilComponent : Component;
@@ -51,7 +44,6 @@ public sealed partial class RacialAbilitySystem : EntitySystem
     private static readonly EntProtoId ShadowVeil = "StatusEffectShadowVeil";
     private static readonly DamageSpecifier ReformDose = new() { DamageDict = { ["Blunt"] = FixedPoint2.New(-12) } };
 
-    [Dependency] private AtmosphereSystem _atmos = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private HungerSystem _hunger = default!;
     [Dependency] private SharedAdvancedExertionSystem _exertion = default!;
@@ -63,7 +55,6 @@ public sealed partial class RacialAbilitySystem : EntitySystem
     [Dependency] private SharedStaminaSystem _stamina = default!;
     [Dependency] private SharedStealthSystem _stealth = default!;
     [Dependency] private StatusEffectsSystem _status = default!;
-    [Dependency] private TemperatureSystem _temperature = default!;
     [Dependency] private ThrowingSystem _throwing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedGunSystem _guns = default!;
@@ -77,8 +68,7 @@ public sealed partial class RacialAbilitySystem : EntitySystem
         SubscribeLocalEvent<HumanoidProfileComponent, AvianThrowFeatherEvent>(OnFeather);
         SubscribeLocalEvent<HumanoidProfileComponent, SaurianTailSweepEvent>(OnTailSweep);
         SubscribeLocalEvent<StickySpitProjectileComponent, ProjectileHitEvent>(OnStickySpitHit);
-        SubscribeLocalEvent<HumanoidProfileComponent, LavriteThermalBurstEvent>(OnLavriteThermalBurst);
-        SubscribeLocalEvent<LavriteHeatComponent, AtmosExposedUpdateEvent>(OnLavriteHeat);
+        InitializeLavrite();
         SubscribeLocalEvent<ShadowVeilComponent, StatusEffectAppliedEvent>(OnVeilApplied);
         SubscribeLocalEvent<ShadowVeilComponent, StatusEffectRemovedEvent>(OnVeilRemoved);
     }
@@ -118,77 +108,6 @@ public sealed partial class RacialAbilitySystem : EntitySystem
             RacialTargetAbility.SlimeAdhesive => SpitAdhesive(user, target),
             _ => false,
         };
-    }
-
-    private void OnLavriteHeat(Entity<LavriteHeatComponent> ent, ref AtmosExposedUpdateEvent args)
-    {
-        if (!_mobs.IsDead(ent))
-            TransferToAir(ent, args.GasMixture, 220f, 323.15f);
-    }
-
-    private bool VentHeat(EntityUid user)
-    {
-        if (_atmos.GetContainingMixture(user, excite: true) is { } air && TransferToAir(user, air, 15000f, 321.15f))
-        {
-            Spawn("LavriteHeatPuff", Transform(user).Coordinates);
-            Notify(user, "racial-lavrite-vent-success");
-            return true;
-        }
-
-        Notify(user, "racial-lavrite-no-heat-sink");
-        return false;
-    }
-
-    private bool TransferToAir(EntityUid user, GasMixture air, float maxEnergy, float minimumBodyTemperature)
-    {
-        if (air.Immutable || air.TotalMoles < 0.1f || !TryComp<TemperatureComponent>(user, out var body))
-            return false;
-
-        var bodyCapacity = _temperature.GetHeatCapacity(user, body);
-        var airCapacity = _atmos.GetHeatCapacity(air, applyScaling: false);
-        var difference = body.CurrentTemperature - air.Temperature;
-        var energy = Math.Min(maxEnergy, Math.Min((body.CurrentTemperature - minimumBodyTemperature) * bodyCapacity,
-            difference * bodyCapacity * airCapacity / (bodyCapacity + airCapacity)));
-        if (energy <= 0 || !float.IsFinite(energy))
-            return false;
-
-        air.Temperature += energy / airCapacity;
-        _temperature.ChangeHeat(user, -energy, ignoreHeatResistance: true, temperature: body);
-        return true;
-    }
-
-    private void OnLavriteThermalBurst(Entity<HumanoidProfileComponent> ent, ref LavriteThermalBurstEvent args)
-    {
-        if (args.Handled)
-            return;
-
-        const float range = 2.5f;
-        var user = args.Performer;
-        var origin = _transform.GetMapCoordinates(user);
-        var aim = _transform.ToMapCoordinates(args.Target);
-        var delta = aim.Position - origin.Position;
-        if (aim.MapId != origin.MapId || delta.LengthSquared() < 0.0001f)
-            return;
-
-        var direction = Vector2.Normalize(delta);
-        Spawn("LavriteHeatPuff", Transform(user).Coordinates);
-
-        foreach (var target in _lookup.GetEntitiesInRange(Transform(user).Coordinates, range, LookupFlags.Uncontained))
-        {
-            if (target == user || !HasComp<MobStateComponent>(target) || _mobs.IsDead(target))
-                continue;
-
-            var offset = _transform.GetWorldPosition(target) - origin.Position;
-            var distance = offset.Length();
-            if (distance > range || Vector2.Dot(direction, offset) <= distance * TailSweepCone
-                || !_interaction.InRangeUnobstructed(user, target, range: range, overlapCheck: false))
-                continue;
-
-            _throwing.TryThrow(target, direction * 1.25f, baseThrowSpeed: 4f, recoil: false,
-                animated: false, playSound: false, doSpin: false);
-        }
-
-        args.Handled = true;
     }
 
     private bool ApplySilk(EntityUid user, EntityUid target)

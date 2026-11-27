@@ -34,6 +34,10 @@ public sealed partial class AdvancedExertionComponent : Component
 [Serializable, NetSerializable]
 public enum PhysicalWorkClass : byte { Light, Medium, Heavy }
 
+/// <summary>Physical work or sprinting, measured in seconds of full effort.</summary>
+[ByRefEvent]
+public readonly record struct PhysicalExertionEvent(float EffortSeconds);
+
 /// <summary>Optional defaults for operations performed with this item. Hands holding the tool count as working hands.</summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class PhysicalWorkComponent : Component

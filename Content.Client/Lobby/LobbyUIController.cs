@@ -126,16 +126,22 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
     {
         PreviewPanel?.SetLoaded(true);
 
-        if (_stateManager.CurrentState is not LobbyState)
+        if (_stateManager.CurrentState is not LobbyState lobby)
             return;
 
-        ReloadCharacterSetup();
+        if (lobby.Lobby?.CharacterSetupState.Visible == true)
+            ReloadCharacterSetup();
+        else
+            RefreshLobbyPreview();
     }
 
     public void OnStateEntered(LobbyState state)
     {
+        if (state.Lobby?.CharacterSetupState.Visible == true)
+            state.SwitchState(LobbyGui.LobbyGuiState.Default);
+
         PreviewPanel?.SetLoaded(_preferencesManager.ServerDataLoaded);
-        ReloadCharacterSetup();
+        RefreshLobbyPreview();
     }
 
     public void OnStateExited(LobbyState state)

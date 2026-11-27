@@ -174,6 +174,11 @@ public sealed class SharedAdvancedExertionSystem : EntitySystem
         var targetEffort = sleeping ? 0 : Math.Max(running, working ? ent.Comp.WorkEffort : 0f);
         ent.Comp.Effort += (targetEffort - ent.Comp.Effort) * Math.Clamp(seconds * 0.25f, 0, 1);
         if (ent.Comp.Effort < 0.005f) ent.Comp.Effort = 0;
+        if (running > 0)
+        {
+            var exertion = new PhysicalExertionEvent(running * seconds);
+            RaiseLocalEvent(ent.Owner, ref exertion);
+        }
         var food = TryComp<Content.Shared._Eclipse.Cooking.CulinaryNutritionComponent>(ent, out var culinary) ? culinary : null;
         ent.Comp.Reserve -= ent.Comp.SprintCost * seconds * running
             * (1 + (food?.Heaviness ?? 0) * 0.2f - (food?.Efficiency ?? 0) * 0.15f);
@@ -248,7 +253,10 @@ public sealed class SharedAdvancedExertionSystem : EntitySystem
         if (!_net.IsServer || difficulty == PhysicalWorkClass.Light || !float.IsFinite(seconds) || seconds <= 0
             || !TryComp<AdvancedExertionComponent>(uid, out var exertion)) return;
         var cost = difficulty == PhysicalWorkClass.Heavy ? 5f * exertion.HeavyWorkCostMultiplier : 1.2f;
-        ChargeExertion((uid, exertion), cost * seconds, difficulty == PhysicalWorkClass.Heavy ? 0.9f : 0.4f);
+        var effort = difficulty == PhysicalWorkClass.Heavy ? 0.9f : 0.4f;
+        ChargeExertion((uid, exertion), cost * seconds, effort);
+        var work = new PhysicalExertionEvent(effort * seconds);
+        RaiseLocalEvent(uid, ref work);
     }
 
     public void ChargeJump(Entity<AdvancedExertionComponent> ent)

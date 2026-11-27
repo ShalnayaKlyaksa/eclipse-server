@@ -87,10 +87,12 @@
   components:
   - type: Temperature
     currentTemperature: 323.15
+    atmosTemperatureTransferEfficiency: 0.035
   - type: ThermalRegulator
     normalBodyTemperature: 323.15
     metabolismHeat: 1150
     radiatedHeat: 220
+    implicitHeatRegulation: 1500
   - type: TemperatureDamage
     heatDamageThreshold: 380
     coldDamageThreshold: 285

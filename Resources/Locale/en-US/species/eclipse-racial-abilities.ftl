@@ -21,8 +21,10 @@ marking-AvianTailPhoenix = Phoenix tail
 marking-AvianTailRooster = Rooster tail
 guide-entry-legacy-species = Legacy species
 
-racial-lavrite-no-heat-sink = There is nowhere to release the excess heat right now.
-racial-lavrite-vent-success = You release some of your heat into the surrounding air.
+racial-lavrite-no-heat-sink = You need air cooler than your body to vent heat.
+racial-lavrite-not-overheated = Your body is at a normal temperature. There's no excess heat to vent yet.
+racial-lavrite-exertion-heat = You're getting hot from exertion. You can vent heat into cooler air.
+racial-lavrite-vent-success = You cool down and the air around you warms up.
 racial-silk-no-wound = There is no external wound you can dress with silk.
 racial-silk-applied = The silk pulls the wound closed and slows the bleeding.
 racial-canine-scent-result = You catch the scent of { $count } living creatures nearby.
