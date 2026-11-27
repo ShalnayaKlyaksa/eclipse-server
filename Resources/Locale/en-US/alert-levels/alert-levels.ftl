@@ -24,7 +24,7 @@ alert-level-kappa-announcement = A serious engineering or operational threat has
 alert-level-kappa-instructions = Leave hazardous areas. Follow command and departmental instructions.
 
 alert-level-gamma = Gamma
-alert-level-gamma-announcement = Eidos Empire has ordered the Gamma security level on the station. Security is to have weapons equipped at all times, and all civilians are to immediately seek their nearest head for transportation to a secure location.
+alert-level-gamma-announcement = Eidos Empire has ordered the Gamma security level on the station. Security is to have weapons equipped at all times, and all civilians are to immediately seek their nearest head for transportation to a secure location. { chat-manager-empire-announcement-closing }
 alert-level-gamma-instructions = All civilians are to immediately seek their nearest head for transportation to a secure location.
 
 alert-level-delta = Delta
@@ -32,7 +32,7 @@ alert-level-delta-announcement = The station is currently under threat of immine
 alert-level-delta-instructions = Crewmembers are advised to listen to heads of staff for more information.
 
 alert-level-epsilon = Epsilon
-alert-level-epsilon-announcement = VISH has ordered the Epsilon security level on the station. Consider all contracts terminated.
+alert-level-epsilon-announcement = VISH has ordered the Epsilon security level on the station. Consider all contracts terminated. { chat-manager-empire-announcement-closing }
 alert-level-epsilon-instructions = Consider all contracts terminated.
 
 alert-level-mortem = Mortem

@@ -71,7 +71,7 @@ public sealed partial class TelevisionRenderSystem : EntitySystem
         {
             var detailed = now < feed.DetailedUntil;
             if ((!feed.UsedByTelevision && !detailed) || !IsOnAir(camera) ||
-                !TryComp<TransformComponent>(camera, out var xform) || xform.MapID == MapId.Nullspace)
+                !TryComp(camera, out TransformComponent? xform) || xform.MapID == MapId.Nullspace)
             {
                 feed.Viewport?.Dispose();
                 _feeds.Remove(camera);

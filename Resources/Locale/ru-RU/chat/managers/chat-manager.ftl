@@ -20,6 +20,7 @@ chat-manager-whisper-headset-on-message = Вы не можете шептать 
 
 chat-manager-server-wrap-message = [bold]{ $message }[/bold]
 chat-manager-sender-announcement = ВИШ
+chat-manager-empire-announcement-closing = И помните - Империя заботится о вас!
 chat-manager-sender-announcement-wrap-message = [font size=14][bold]Объявление { $sender }:[/font][font size=12]
                                                 { $message }[/bold][/font]
 chat-manager-entity-say-wrap-message = [BubbleHeader][bold][Name]{ $entityName }[/Name][/bold][/BubbleHeader] { $verb }, [font={ $fontType } size={ $fontSize } ]"[BubbleContent]{ $message }[/BubbleContent]"[/font]
