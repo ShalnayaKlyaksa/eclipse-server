@@ -85,7 +85,7 @@ internal sealed class ConstructionMenuPresenter : IDisposable
     public ConstructionMenuPresenter()
     {
         IoCManager.InjectDependencies(this);
-        _constructionView = new ConstructionMenu();
+        _constructionView = new ConstructionMenu { HelpGuidebookIds = new() { "EclipseIndustrialStart", "EclipseIndustrial" } };
         _whitelistSystem = _entManager.System<EntityWhitelistSystem>();
         _spriteSystem = _entManager.System<SpriteSystem>();
         _sawmill = _logManager.GetSawmill("construction.ui");

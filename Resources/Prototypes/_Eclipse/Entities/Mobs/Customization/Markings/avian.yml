@@ -11,69 +11,104 @@
 
 - type: marking
   id: AvianWings
-  bodyPart: TailOverlay
+  bodyPart: Wings
   groupWhitelist: [Avian]
   speciesRestriction: [Avian]
+  coloring:
+    default:
+      type: !type:SimpleColoring
+        color: "#99745A"
+    layers: {}
   sprites:
-  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_wings.rsi
+  - sprite: _Eclipse/Mobs/Customization/Avian/wings.rsi
     state: harpy
+  spritesBehindHair:
+  - sprite: _Eclipse/Mobs/Customization/Avian/wings.rsi
+    state: harpy_north
 
 - type: marking
   id: AvianWingsTwoTone
-  bodyPart: TailOverlay
+  bodyPart: Wings
   groupWhitelist: [Avian]
   speciesRestriction: [Avian]
   sprites:
-  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_wings.rsi
+  - sprite: _Eclipse/Mobs/Customization/Avian/wings.rsi
     state: harpy2tone1
-  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_wings.rsi
+  - sprite: _Eclipse/Mobs/Customization/Avian/wings.rsi
     state: harpy2tone2
+  spritesBehindHair:
+  - sprite: _Eclipse/Mobs/Customization/Avian/wings.rsi
+    state: harpy2tone1_north
+  - sprite: _Eclipse/Mobs/Customization/Avian/wings.rsi
+    state: harpy2tone2_north
 
 - type: marking
   id: AvianWingsThreeTone
-  bodyPart: TailOverlay
+  bodyPart: Wings
   groupWhitelist: [Avian]
   speciesRestriction: [Avian]
   sprites:
-  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_wings.rsi
+  - sprite: _Eclipse/Mobs/Customization/Avian/wings.rsi
     state: harpy3tone1
-  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_wings.rsi
+  - sprite: _Eclipse/Mobs/Customization/Avian/wings.rsi
     state: harpy3tone2
-  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_wings.rsi
+  - sprite: _Eclipse/Mobs/Customization/Avian/wings.rsi
     state: harpy3tone3
+  spritesBehindHair:
+  - sprite: _Eclipse/Mobs/Customization/Avian/wings.rsi
+    state: harpy3tone1_north
+  - sprite: _Eclipse/Mobs/Customization/Avian/wings.rsi
+    state: harpy3tone2_north
+  - sprite: _Eclipse/Mobs/Customization/Avian/wings.rsi
+    state: harpy3tone3_north
 
 - type: marking
   id: AvianWingsSpeckled
-  bodyPart: TailOverlay
+  bodyPart: Wings
   groupWhitelist: [Avian]
   speciesRestriction: [Avian]
   sprites:
-  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_wings.rsi
+  - sprite: _Eclipse/Mobs/Customization/Avian/wings.rsi
     state: harpyspeckled1
-  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_wings.rsi
+  - sprite: _Eclipse/Mobs/Customization/Avian/wings.rsi
     state: harpyspeckled2
+  spritesBehindHair:
+  - sprite: _Eclipse/Mobs/Customization/Avian/wings.rsi
+    state: harpyspeckled1_north
+  - sprite: _Eclipse/Mobs/Customization/Avian/wings.rsi
+    state: harpyspeckled2_north
 
 - type: marking
   id: AvianWingsUndertone
-  bodyPart: TailOverlay
+  bodyPart: Wings
   groupWhitelist: [Avian]
   speciesRestriction: [Avian]
   sprites:
-  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_wings.rsi
+  - sprite: _Eclipse/Mobs/Customization/Avian/wings.rsi
     state: harpyundertone1
-  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_wings.rsi
+  - sprite: _Eclipse/Mobs/Customization/Avian/wings.rsi
     state: harpyundertone2
+  spritesBehindHair:
+  - sprite: _Eclipse/Mobs/Customization/Avian/wings.rsi
+    state: harpyundertone1_north
+  - sprite: _Eclipse/Mobs/Customization/Avian/wings.rsi
+    state: harpyundertone2_north
 
 - type: marking
   id: AvianWingsTipped
-  bodyPart: TailOverlay
+  bodyPart: Wings
   groupWhitelist: [Avian]
   speciesRestriction: [Avian]
   sprites:
-  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_wings.rsi
+  - sprite: _Eclipse/Mobs/Customization/Avian/wings.rsi
     state: harpywingtip1
-  - sprite: _Backmen/Mobs/Customization/Harpy/harpy_wings.rsi
+  - sprite: _Eclipse/Mobs/Customization/Avian/wings.rsi
     state: harpywingtip2
+  spritesBehindHair:
+  - sprite: _Eclipse/Mobs/Customization/Avian/wings.rsi
+    state: harpywingtip1_north
+  - sprite: _Eclipse/Mobs/Customization/Avian/wings.rsi
+    state: harpywingtip2_north
 
 # --- Ears --------------------------------------------------------------------------------------------------
 
@@ -91,15 +126,22 @@
 - type: marking
   id: AvianTailHarpy
   bodyPart: Tail
+  previewDirection: North
   groupWhitelist: [Avian]
   speciesRestriction: [Avian]
+  coloring:
+    default:
+      type: !type:SimpleColoring
+        color: "#A57755"
+    layers: {}
   sprites:
   - sprite: _Eclipse/Mobs/Customization/harpy_tails.rsi
-    state: harpy_tail
+    state: harpy_tail_feathers
 
 - type: marking
   id: AvianTailPhoenix
   bodyPart: Tail
+  previewDirection: North
   groupWhitelist: [Avian]
   speciesRestriction: [Avian]
   sprites:
@@ -109,6 +151,7 @@
 - type: marking
   id: AvianTailRooster
   bodyPart: Tail
+  previewDirection: North
   groupWhitelist: [Avian]
   speciesRestriction: [Avian]
   sprites:

@@ -1,0 +1,206 @@
+- type: entity
+  id: NuclearReactorWaterInlet
+  parent: BaseNuclearFloorPort
+  name: reactor water inlet header
+  description: The western header for a graphite reactor. Feed it water from the liquid pipe on its west face.
+  components:
+  - type: NuclearReactorPart
+    kind: Inlet
+  - type: NuclearWaterCollector
+  - type: RadiationBlocker
+    resistance: 5
+  - type: Sprite
+    state: water_in
+  - type: Icon
+    state: water_in
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        maxVol: 250
+        canReact: false
+  - type: LiquidPipeEndpoint
+    inputFace: West
+    allowedInputs: [Water]
+
+- type: entity
+  id: NuclearReactorWaterOutlet
+  parent: BaseNuclearFloorPort
+  name: reactor hot water header
+  description: The eastern header for a graphite reactor. Connect the hot water line to its east face.
+  components:
+  - type: NuclearReactorPart
+    kind: Outlet
+  - type: NuclearWaterCollector
+  - type: RadiationBlocker
+    resistance: 5
+  - type: Sprite
+    state: water_out
+  - type: Icon
+    state: water_out
+  - type: SolutionContainerManager
+    solutions:
+      output:
+        maxVol: 250
+        canReact: false
+  - type: LiquidPipeEndpoint
+    inputFace: Invalid
+    outputFace: East
+    hasOutput: true
+
+- type: entity
+  abstract: true
+  id: BaseNuclearTurbine
+  parent: BaseNuclearSection
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Power/nuclear_turbine.rsi
+    layers:
+    - state: body
+    - state: idle
+      shader: unshaded
+      map: ["rotor"]
+  - type: Icon
+    sprite: _Eclipse/Structures/Power/nuclear_turbine.rsi
+    state: body
+  - type: GenericVisualizer
+    visuals:
+      enum.NuclearReactorVisuals.Active:
+        rotor:
+          True: { state: spin }
+          False: { state: idle }
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PhysShapeAabb
+          bounds: "-1.22,-0.42,1.22,0.42"
+        density: 155
+        mask: [MachineMask]
+        layer: [MachineLayer]
+  - type: PowerSupplier
+    supplyRate: 0
+    enabled: false
+    supplyRampRate: 1000000
+    supplyRampTolerance: 1000000
+  - type: PowerMonitoringDevice
+    group: Generator
+    loadNode: output
+    sprite: _Eclipse/Structures/Power/nuclear_turbine.rsi
+    state: body
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      output:
+        !type:CableDeviceNode
+        nodeGroupID: HVPower
+
+- type: entity
+  id: NuclearWaterTurbine
+  parent: BaseNuclearTurbine
+  name: hot-water generator
+  description: Receives hot reactor water from the west and returns cooler water to the east. Connect an HV cable under its centre. Waste heat is released into the surroundings.
+  components:
+  - type: NuclearWaterTurbine
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        maxVol: 250
+        canReact: false
+      output:
+        maxVol: 250
+        canReact: false
+  - type: LiquidPipeEndpoint
+    inputFace: West
+    outputFace: East
+    hasOutput: true
+    allowedInputs: [Water]
+
+- type: entity
+  id: NuclearCoolantPipe
+  parent: BaseLiquidPipe
+  name: large-bore coolant pipe
+  description: A high-throughput liquid pipe built for long reactor cooling circuits.
+  components:
+  - type: LiquidPipe
+    tier: Perfect
+    throughputOverride: 90
+
+- type: entity
+  id: NuclearReactorWaterInletFlatpack
+  parent: BaseFlatpack
+  name: reactor water inlet flatpack
+  components:
+  - type: Flatpack
+    entity: NuclearReactorWaterInlet
+    qualityNeeded: Anchoring
+
+- type: entity
+  id: NuclearReactorWaterOutletFlatpack
+  parent: BaseFlatpack
+  name: reactor hot water header flatpack
+  components:
+  - type: Flatpack
+    entity: NuclearReactorWaterOutlet
+    qualityNeeded: Anchoring
+
+- type: entity
+  id: NuclearWaterTurbineFlatpack
+  parent: BaseFlatpack
+  name: closed-cycle turbogenerator flatpack
+  components:
+  - type: Flatpack
+    entity: NuclearWaterTurbine
+    qualityNeeded: Anchoring
+
+- type: industrialRecipe
+  id: AssembleNuclearReactorWaterInlet
+  processor: Assembler
+  time: 20
+  minimumTier: Industrial
+  requiredTechnology: EnergyFission
+  requireDataDisk: true
+  inputs:
+    SheetPlasteel: 6
+    IndustrialHeatConduitAssembly: 3
+  outputs:
+    NuclearReactorWaterInletFlatpack: 1
+
+- type: industrialRecipe
+  id: AssembleNuclearReactorWaterOutlet
+  processor: Assembler
+  time: 20
+  minimumTier: Industrial
+  requiredTechnology: EnergyFission
+  requireDataDisk: true
+  inputs:
+    SheetPlasteel: 6
+    IndustrialHeatConduitAssembly: 3
+  outputs:
+    NuclearReactorWaterOutletFlatpack: 1
+
+- type: industrialRecipe
+  id: AssembleNuclearCoolantPipe
+  processor: Assembler
+  time: 8
+  minimumTier: Industrial
+  requiredTechnology: EnergyFission
+  requireDataDisk: true
+  inputs:
+    SheetSteel: 4
+    IndustrialHeatConduitAssembly: 1
+  outputs:
+    NuclearCoolantPipe: 4
+
+- type: industrialRecipe
+  id: AssembleNuclearWaterTurbine
+  processor: Assembler
+  time: 35
+  minimumTier: Industrial
+  requiredTechnology: EnergyFission
+  requireDataDisk: true
+  inputs:
+    SheetPlasteel: 12
+    IndustrialHeatConduitAssembly: 6
+    IndustrialMechanicalCore: 4
+    IndustrialAdvancedBoard: 2
+  outputs:
+    NuclearWaterTurbineFlatpack: 1

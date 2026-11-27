@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Client.UserInterface.Controls;
 using Content.Shared._Eclipse.MedicalChemistry;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Containers.ItemSlots;
@@ -12,8 +13,8 @@ public sealed partial class MedicalSynthesizerControl : BoxContainer
 {
     [Dependency] private IPrototypeManager _prototypes = default!;
 
-    private readonly OptionButton _recipe = new() { HorizontalExpand = true, ClipText = true };
-    private readonly OptionButton _protocol = new() { HorizontalExpand = true, ClipText = true };
+    private readonly ClippedOptionButton _recipe = new() { HorizontalExpand = true };
+    private readonly ClippedOptionButton _protocol = new() { HorizontalExpand = true };
     private readonly SpinBox _amount = new() { Value = 30, MinWidth = 100 };
     private readonly RichTextLabel _instructions = new();
     private readonly RichTextLabel _description = new();

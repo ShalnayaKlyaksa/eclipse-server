@@ -1,8 +1,7 @@
+using System.Linq;
 using Content.Client.Corvax.TTS;
 using Content.Shared.Corvax.CCCVars;
-using Content.Shared.Corvax.TTS;
 using Content.Shared.Humanoid;
-using Content.Shared.Preferences;
 using Robust.Client.UserInterface;
 
 namespace Content.Client.Lobby.UI;
@@ -57,14 +56,21 @@ public sealed partial class HumanoidProfileEditor
         if (Profile is null || _ttsTab is null)
             return;
 
-        var sex = Profile.Customization.GetVocalSex(Profile.Sex);
-        if (!_prototypeManager.TryIndex<TTSVoicePrototype>(Profile.Voice, out var voice) || !voice.RoundStart ||
-            !HumanoidCharacterProfile.CanHaveVoice(voice, sex))
-            Profile = Profile.WithVoice(HumanoidProfileSystem.DefaultSexVoice[sex]);
+        var voices = _preferencesManager.Settings?.TtsVoices ?? [];
+        if (!voices.Any(voice => voice.Id == Profile.Voice && voice.Selectable))
+        {
+            var fallback = voices.FirstOrDefault(voice => voice.Selectable && voice.Id == HumanoidProfileSystem.DefaultVoice);
+            if (fallback.Id is null)
+                fallback = voices.FirstOrDefault(voice => voice.Selectable);
 
-        _ttsTab.UpdateControls(Profile, sex);
+            if (fallback.Id is not null)
+                Profile = Profile.WithVoice(fallback.Id);
+        }
+
+        _ttsTab.UpdateControls(Profile.Voice, voices);
         UpdateTtsVoiceLabel();
     }
+
     private void SetVoice(string newVoice)
     {
         Profile = Profile?.WithVoice(newVoice);
@@ -75,7 +81,12 @@ public sealed partial class HumanoidProfileEditor
 
     private void UpdateTtsVoiceLabel()
     {
-        if (Profile != null && _prototypeManager.TryIndex<TTSVoicePrototype>(Profile.Voice, out var voice))
-            TtsVoiceButton.Text = Loc.GetString(voice.Name);
+        var voices = _preferencesManager.Settings?.TtsVoices ?? [];
+        var voice = voices.FirstOrDefault(voice => voice.Id == Profile?.Voice && voice.Selectable);
+        TtsVoiceButton.Text = voice.Id is null
+            ? Loc.GetString("humanoid-profile-editor-voice-none")
+            : _ttsTab!.GetVoiceName(voice);
+        TtsVoiceButton.Disabled = voices.Length == 0;
+        TtsPreviewButton.Disabled = voice.Id is null;
     }
 }

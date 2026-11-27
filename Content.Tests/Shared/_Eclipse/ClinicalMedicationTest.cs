@@ -4,6 +4,7 @@ using NUnit.Framework;
 
 namespace Content.Tests.Shared._Eclipse;
 
+#pragma warning disable RA0039 // These calculation tests use synthetic prototype data.
 [TestFixture]
 public sealed class ClinicalMedicationTest
 {
@@ -54,3 +55,4 @@ public sealed class ClinicalMedicationTest
         Assert.That(weak.RespiratoryDepression, Is.GreaterThan(0.5f));
     }
 }
+#pragma warning restore RA0039

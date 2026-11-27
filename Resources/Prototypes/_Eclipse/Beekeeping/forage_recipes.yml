@@ -1,0 +1,230 @@
+- type: industrialRecipe
+  id: EclipsePressLilyForageHoneycomb
+  name: ent-GardenLilyHoneycomb
+  processor: FilterPress
+  time: 15
+  inputs:
+    GardenLilyHoneycomb: 1
+  outputs:
+    EclipseBeeswax: 1
+  fluidOutputs:
+    EclipseLilyHoney: 8
+
+- type: industrialRecipe
+  id: EclipseSeparateLilyForageHoneycomb
+  name: ent-GardenLilyHoneycomb
+  processor: ThermalCentrifuge
+  time: 10
+  heat: 20000
+  inputs:
+    GardenLilyHoneycomb: 2
+  outputs:
+    EclipseBeeswax: 2
+    EclipseBeeBread: 1
+
+- type: industrialRecipe
+  id: EclipsePressPoppyForageHoneycomb
+  name: ent-GardenPoppyHoneycomb
+  processor: FilterPress
+  time: 15
+  inputs:
+    GardenPoppyHoneycomb: 1
+  outputs:
+    EclipseBeeswax: 1
+  fluidOutputs:
+    EclipsePoppyHoney: 8
+
+- type: industrialRecipe
+  id: EclipseSeparatePoppyForageHoneycomb
+  name: ent-GardenPoppyHoneycomb
+  processor: ThermalCentrifuge
+  time: 10
+  heat: 20000
+  inputs:
+    GardenPoppyHoneycomb: 2
+  outputs:
+    EclipseBeeswax: 1
+    EclipsePropolis: 2
+
+- type: industrialRecipe
+  id: EclipsePressChargedForageHoneycomb
+  name: ent-GardenChargedHoneycomb
+  processor: FilterPress
+  time: 15
+  inputs:
+    GardenChargedHoneycomb: 1
+  outputs:
+    EclipseBeeswax: 1
+  fluidOutputs:
+    FlowerNectar: 4
+    EclipseHoney: 8
+
+- type: industrialRecipe
+  id: EclipseSeparateChargedForageHoneycomb
+  name: ent-GardenChargedHoneycomb
+  processor: ThermalCentrifuge
+  time: 10
+  heat: 20000
+  inputs:
+    GardenChargedHoneycomb: 2
+  outputs:
+    EclipseBeeswax: 1
+    EclipseBeeBread: 2
+
+- type: industrialRecipe
+  id: EclipsePressSpicedForageHoneycomb
+  name: ent-GardenSpicedHoneycomb
+  processor: FilterPress
+  time: 15
+  inputs:
+    GardenSpicedHoneycomb: 1
+  outputs:
+    EclipseBeeswax: 1
+  fluidOutputs:
+    InfernalJuice: 4
+    EclipseHoney: 8
+
+- type: industrialRecipe
+  id: EclipseSeparateSpicedForageHoneycomb
+  name: ent-GardenSpicedHoneycomb
+  processor: ThermalCentrifuge
+  time: 10
+  heat: 20000
+  inputs:
+    GardenSpicedHoneycomb: 2
+  outputs:
+    EclipseBeeswax: 1
+    EclipsePropolis: 1
+
+- type: industrialRecipe
+  id: EclipsePressNectarForageHoneycomb
+  name: ent-GardenNectarHoneycomb
+  processor: FilterPress
+  time: 15
+  inputs:
+    GardenNectarHoneycomb: 1
+  outputs:
+    EclipseBeeswax: 1
+  fluidOutputs:
+    FloralNectar: 4
+    EclipseHoney: 8
+
+- type: industrialRecipe
+  id: EclipseSeparateNectarForageHoneycomb
+  name: ent-GardenNectarHoneycomb
+  processor: ThermalCentrifuge
+  time: 10
+  heat: 20000
+  inputs:
+    GardenNectarHoneycomb: 2
+  outputs:
+    EclipseBeeswax: 2
+    EclipsePropolis: 1
+
+- type: entity
+  parent: EclipseFoodHoneycomb
+  id: GardenLilyHoneycomb
+  name: lily honeycomb
+  components:
+  - type: Sprite
+    color: '#F3DFAD'
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 8
+        reagents:
+        - ReagentId: EclipseLilyHoney
+          Quantity: 8
+
+- type: reagent
+  id: EclipseLilyHoney
+  parent: EclipseHoney
+  name: reagent-name-eclipse-lily-honey
+  desc: reagent-desc-eclipse-lily-honey
+  color: '#F3DFAD'
+
+- type: culinaryIngredient
+  id: CulinaryEclipseLilyHoney
+  foods: [GardenLilyHoneycomb]
+  reagents: [EclipseLilyHoney]
+  traits:
+    Calm: 3
+    Hydration: 2
+    Stability: 1
+
+- type: reagent
+  id: LilyHoneyLemonade
+  parent: BaseDrink
+  name: reagent-name-lilyhoneylemonade
+  desc: reagent-desc-lilyhoneylemonade
+  physicalDesc: reagent-physical-desc-aromatic
+  flavor: sweet
+  color: '#F3DFAD'
+  recognizable: true
+
+- type: reaction
+  id: LilyHoneyLemonade
+  requiredMixerCategories:
+  - Stir
+  reactants:
+    EclipseLilyHoney:
+      amount: 1
+    JuiceLemon:
+      amount: 1
+    SodaWater:
+      amount: 2
+  products:
+    LilyHoneyLemonade: 4
+
+- type: entity
+  parent: EclipseFoodHoneycomb
+  id: GardenPoppyHoneycomb
+  name: poppy honeycomb
+  components:
+  - type: Sprite
+    color: '#DEABBA'
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 8
+        reagents:
+        - ReagentId: EclipsePoppyHoney
+          Quantity: 8
+
+- type: reagent
+  id: EclipsePoppyHoney
+  parent: EclipseHoney
+  name: reagent-name-eclipse-poppy-honey
+  desc: reagent-desc-eclipse-poppy-honey
+  color: '#DEABBA'
+
+- type: culinaryIngredient
+  id: CulinaryEclipsePoppyHoney
+  foods: [GardenPoppyHoneycomb]
+  reagents: [EclipsePoppyHoney]
+  traits:
+    Recovery: 3
+    Calm: 2
+    Warmth: 1
+
+- type: reagent
+  id: PoppyHoneyTea
+  parent: BaseDrink
+  name: reagent-name-poppyhoneytea
+  desc: reagent-desc-poppyhoneytea
+  physicalDesc: reagent-physical-desc-aromatic
+  flavor: tea
+  color: '#DEABBA'
+  recognizable: true
+
+- type: reaction
+  id: PoppyHoneyTea
+  requiredMixerCategories:
+  - Stir
+  reactants:
+    EclipsePoppyHoney:
+      amount: 1
+    Tea:
+      amount: 3
+  products:
+    PoppyHoneyTea: 4

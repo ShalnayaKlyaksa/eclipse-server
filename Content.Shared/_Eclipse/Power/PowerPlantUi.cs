@@ -2,7 +2,10 @@ using Robust.Shared.Serialization;
 namespace Content.Shared._Eclipse.Power;
 
 [Serializable, NetSerializable]
-public enum PowerPlantCondition : byte { Stopped, Warming, Running, Overheated, MissingField, Cooling, Failed }
+public enum PowerPlantCondition : byte { Stopped, Warming, Running, Overheated, MissingField, Cooling, Failed, NoAuxiliaryPower, NoCoolant, Limited }
+
+[Serializable, NetSerializable]
+public enum FusionReactorVisuals : byte { Status }
 
 [Serializable, NetSerializable]
 public sealed class PowerPlantOperatingState
@@ -19,10 +22,18 @@ public sealed class PowerPlantOperatingState
     public float GravityPower;
     public float HarvestedPower;
     public int KineticGenerators;
+    public float GravityHorizon;
+    public float GravityFieldLimit;
+    public int GravityStaticProjectors;
     public bool Tripped;
     public int FieldCount;
     public int RequiredFields;
     public PowerPlantCondition Condition;
+    public float? FusionNominalPower;
+    public float CoolantFlow;
+    public float AuxiliaryPower;
+    public float DeliveredPower;
+    public bool FusionReady;
 }
 
 [Serializable, NetSerializable]

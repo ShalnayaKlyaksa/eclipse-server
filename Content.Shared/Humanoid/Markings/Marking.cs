@@ -118,6 +118,7 @@ public partial record struct MarkingGradient()
     public const int MinSteps = 2;
     public const int MaxSteps = 6;
     public const int DefaultSteps = 3;
+    public const int MaxExtraColors = 6;
 
     [DataField]
     public Color TipColor = Color.White;
@@ -125,9 +126,86 @@ public partial record struct MarkingGradient()
     [DataField]
     public int Steps = DefaultSteps;
 
+    [DataField]
+    public MarkingGradientShape Shape = MarkingGradientShape.Contour;
+
+    [DataField]
+    public MarkingGradientDirection Direction = MarkingGradientDirection.Down;
+
+    [DataField] public int? AngleDegrees;
+    [DataField] public int? Start;
+    [DataField] public int? Length;
+    [DataField] public int CenterX = 50;
+    [DataField] public int CenterY = 50;
+    [DataField] public MarkingGradientStop[]? Stops;
+
+    public int EffectiveAngle => AngleDegrees ?? (Direction switch
+    {
+        MarkingGradientDirection.Right => 0,
+        MarkingGradientDirection.Left => 180,
+        MarkingGradientDirection.Up => 270,
+        _ => 90,
+    });
+
+    public int EffectiveStart => Start ?? (Shape == MarkingGradientShape.Contour ? 22 : 0);
+    public int EffectiveLength => Length ?? (100 - (Shape == MarkingGradientShape.Contour ? 22 : 0));
+
     public MarkingGradient Normalized() => this with
     {
         TipColor = HumanoidCharacterAppearance.ClampColor(TipColor),
         Steps = Math.Clamp(Steps, MinSteps, MaxSteps),
+        Shape = Enum.IsDefined(Shape) ? Shape : MarkingGradientShape.Contour,
+        Direction = Enum.IsDefined(Direction) ? Direction : MarkingGradientDirection.Down,
+        AngleDegrees = AngleDegrees is { } angle ? ((angle % 360) + 360) % 360 : null,
+        Start = Start is { } start ? Math.Clamp(start, 0, 100) : null,
+        Length = Length is { } length ? Math.Clamp(length, 1, 100) : null,
+        CenterX = Math.Clamp(CenterX, 0, 100),
+        CenterY = Math.Clamp(CenterY, 0, 100),
+        Stops = Stops is { Length: > 0 } ? Stops.Take(MaxExtraColors)
+            .Where(stop => stop.Position is > 0 and < 100)
+            .DistinctBy(stop => stop.Position)
+            .OrderBy(stop => stop.Position)
+            .Select(stop => stop with { Color = HumanoidCharacterAppearance.ClampColor(stop.Color) })
+            .ToArray() : null,
     };
+
+    public bool Equals(MarkingGradient other) =>
+        TipColor == other.TipColor && Steps == other.Steps && Shape == other.Shape &&
+        Direction == other.Direction && AngleDegrees == other.AngleDegrees && Start == other.Start && Length == other.Length &&
+        CenterX == other.CenterX && CenterY == other.CenterY && Stops.AsSpan().SequenceEqual(other.Stops);
+
+    public override int GetHashCode()
+    {
+        var hash = new HashCode();
+        hash.Add(HashCode.Combine(TipColor, Steps, Shape, Direction, AngleDegrees, Start, Length));
+        hash.Add(CenterX);
+        hash.Add(CenterY);
+        foreach (var stop in Stops.AsSpan())
+            hash.Add(stop);
+        return hash.ToHashCode();
+    }
+}
+
+[DataDefinition, Serializable, NetSerializable]
+public partial record struct MarkingGradientStop()
+{
+    [DataField] public int Position;
+    [DataField] public Color Color;
+}
+
+[Serializable, NetSerializable]
+public enum MarkingGradientShape : byte
+{
+    Contour,
+    Linear,
+    Radial,
+}
+
+[Serializable, NetSerializable]
+public enum MarkingGradientDirection : byte
+{
+    Down,
+    Up,
+    Right,
+    Left,
 }

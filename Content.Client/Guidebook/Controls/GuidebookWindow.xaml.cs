@@ -162,7 +162,16 @@ public sealed partial class GuidebookWindow : BaseWindow, ILinkClickHandler, IAn
         Navigate(new View(ViewKind.Article, id, _catalog.Children(id).Count > 0 ? id : _catalog.Parent(id),
             Filter: _entries[id].FilterEnabled ? filter : ""));
     }
-    private void OpenCatalog(string? id) => Navigate(new View(ViewKind.Catalog, Branch: id));
+    private void OpenCatalog(string? id)
+    {
+        if (id != null && _catalog.Entries.TryGetValue(id, out var entry) && entry.OpenArticleFromCatalog)
+        {
+            OpenArticle(id);
+            return;
+        }
+
+        Navigate(new View(ViewKind.Catalog, Branch: id));
+    }
     private void RememberPosition()
     {
         if (_historyIndex < 0) return;

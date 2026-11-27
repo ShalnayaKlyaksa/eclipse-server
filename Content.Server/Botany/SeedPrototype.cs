@@ -135,6 +135,9 @@ public partial class SeedData
     [DataField]
     public List<EntProtoId> ProductPrototypes = new();
 
+    [DataField]
+    public EntProtoId? ApiaryComb;
+
     [DataField] public Dictionary<string, SeedChemQuantity> Chemicals = new();
 
     [DataField] public Dictionary<Gas, float> ConsumeGasses = new();
@@ -273,6 +276,7 @@ public partial class SeedData
 
             PacketPrototype = PacketPrototype,
             ProductPrototypes = new List<EntProtoId>(ProductPrototypes),
+            ApiaryComb = ApiaryComb,
             MutationPrototypes = new List<ProtoId<SeedPrototype>>(MutationPrototypes),
             Chemicals = new Dictionary<string, SeedChemQuantity>(Chemicals),
             ConsumeGasses = new Dictionary<Gas, float>(ConsumeGasses),

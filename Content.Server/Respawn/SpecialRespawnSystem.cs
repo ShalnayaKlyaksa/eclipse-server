@@ -2,6 +2,7 @@ using Content.Server.Administration.Logs;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
+using Content.Server.Storage.EntitySystems;
 using Content.Shared.Database;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
@@ -24,6 +25,7 @@ public sealed class SpecialRespawnSystem : SharedSpecialRespawnSystem
     [Dependency] private readonly TurfSystem _turf = default!;
     [Dependency] private readonly IChatManager _chat = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly EntityStorageSystem _storage = default!;
 
     public override void Initialize()
     {
@@ -82,14 +84,20 @@ public sealed class SpecialRespawnSystem : SharedSpecialRespawnSystem
         var entityMapUid = component.StationMap.Item1;
         var entityGridUid = component.StationMap.Item2;
 
-        if (!component.Respawn || !HasComp<StationMemberComponent>(entityGridUid) || entityMapUid == null)
+        if (!component.Respawn || !_proto.HasIndex(component.Prototype))
+            return;
+
+        if (component.PreferredContainer is { } locker && !TerminatingOrDeleted(locker) && !EntityManager.IsQueuedForDeletion(locker))
+        {
+            var replacement = Respawn(uid, component.Prototype, Transform(locker).Coordinates);
+            _storage.Insert(replacement, locker);
+            return;
+        }
+
+        if (!HasComp<StationMemberComponent>(entityGridUid) || entityMapUid == null)
             return;
 
         if (!TryComp<MapGridComponent>(entityGridUid, out var grid) || MetaData(entityGridUid.Value).EntityLifeStage >= EntityLifeStage.Terminating)
-            return;
-
-        //Invalid prototype
-        if (!_proto.HasIndex(component.Prototype))
             return;
 
         if (TryFindRandomTile(entityGridUid.Value, entityMapUid.Value, 10, out var coords))
@@ -132,11 +140,12 @@ public sealed class SpecialRespawnSystem : SharedSpecialRespawnSystem
     /// <param name="oldEntity">The entity being deleted</param>
     /// <param name="prototype">The prototype being spawned</param>
     /// <param name="coords">The place where it will be spawned</param>
-    private void Respawn(EntityUid oldEntity, string prototype, EntityCoordinates coords)
+    private EntityUid Respawn(EntityUid oldEntity, string prototype, EntityCoordinates coords)
     {
         var entity = Spawn(prototype, coords);
         _adminLog.Add(LogType.Respawn, LogImpact.Extreme, $"{ToPrettyString(oldEntity)} was deleted and was respawned at {_transform.ToMapCoordinates(coords)} as {ToPrettyString(entity)}");
         _chat.SendAdminAlert($"{MetaData(oldEntity).EntityName} was deleted and was respawned as {ToPrettyString(entity)}");
+        return entity;
     }
 
     /// <summary>
@@ -173,16 +182,16 @@ public sealed class SpecialRespawnSystem : SharedSpecialRespawnSystem
 
             tile = new Vector2i(randomX - (int)gridPos.X, randomY - (int)gridPos.Y);
             var mapPos = _map.GridTileToWorldPos(targetGrid, grid, tile);
-            var mapTarget = _map.WorldToTile(targetGrid, grid, mapPos);
             var circle = new Circle(mapPos, 2);
 
             foreach (var newTileRef in _map.GetTilesIntersecting(targetGrid, grid, circle))
             {
-                if (_turf.IsSpace(newTileRef) || _turf.IsTileBlocked(newTileRef, CollisionGroup.MobMask) || !_atmosphere.IsTileMixtureProbablySafe(targetGrid, targetMap, mapTarget))
+                if (_turf.IsSpace(newTileRef) || _turf.IsTileBlocked(newTileRef, CollisionGroup.MobMask) ||
+                    !_atmosphere.IsTileMixtureProbablySafe(targetGrid, targetMap, newTileRef.GridIndices))
                     continue;
 
                 found = true;
-                targetCoords = _map.GridTileToLocal(targetGrid, grid, tile);
+                targetCoords = _map.GridTileToLocal(targetGrid, grid, newTileRef.GridIndices);
                 break;
             }
 

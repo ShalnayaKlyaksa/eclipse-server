@@ -41,6 +41,7 @@ public sealed class BeeGeneticsTest
         Assert.That(first.LineageSeconds, Is.EqualTo(1000), "Parents must remain immutable during inheritance.");
     }
 
+#pragma warning disable RA0039 // These rule tests use synthetic prototype data.
     [Test]
     public void RareProductsRequireBothTimeAndGeneration()
     {
@@ -67,4 +68,5 @@ public sealed class BeeGeneticsTest
         second.Dominant = "Meadow";
         Assert.That(BeeGenetics.Eligible(first, second, mutation, 200, true), Is.False);
     }
+#pragma warning restore RA0039
 }

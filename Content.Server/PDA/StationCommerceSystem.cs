@@ -9,10 +9,12 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.PDA;
 using Content.Shared.Popups;
+using Content.Shared.Tools;
 using Content.Shared.Tools.Components;
 using Content.Shared.Tools.Systems;
 using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.PDA;
 
@@ -29,6 +31,8 @@ public sealed partial class StationCommerceSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedToolSystem _tools = default!;
     private const string GoodsSlot = "commerce-goods";
+    private static readonly ProtoId<ToolQualityPrototype> ScrewingQuality = "Screwing";
+    private static readonly ProtoId<ToolQualityPrototype> PulsingQuality = "Pulsing";
 
     public override void Initialize()
     {
@@ -65,15 +69,15 @@ public sealed partial class StationCommerceSystem : EntitySystem
     }
 
     public bool CanManage(EntityUid uid, PaymentTerminalComponent terminal, EntityUid actor) =>
-        TryIdentity(actor, out var card) && Domain(uid, terminal) == card.Domain && terminal.Owner == card.Username;
+        TryIdentity(actor, out var card) && Domain(uid, terminal) == card.Domain && terminal.OwnerUsername == card.Username;
 
     public bool Claim(EntityUid uid, PaymentTerminalComponent terminal, EntityUid actor, bool hacked = false)
     {
         if (!TryIdentity(actor, out var card) || Domain(uid, terminal) != card.Domain) return false;
-        if (!hacked && terminal.Owner.Length != 0) return false;
+        if (!hacked && terminal.OwnerUsername.Length != 0) return false;
         if (!hacked && terminal.OwnerJob.Length != 0 &&
             Comp<ResearchAccountsComponent>(card.Domain).Credentials[card.Username].JobId != terminal.OwnerJob) return false;
-        terminal.Owner = card.Username;
+        terminal.OwnerUsername = card.Username;
         terminal.Hacked |= hacked;
         terminal.BillOpen = false;
         terminal.Version++;
@@ -163,7 +167,7 @@ public sealed partial class StationCommerceSystem : EntitySystem
     {
         var state = new PaymentTerminalState
         {
-            CanManage = CanManage(uid, terminal, actor), CanClaim = terminal.Owner.Length == 0,
+            CanManage = CanManage(uid, terminal, actor), CanClaim = terminal.OwnerUsername.Length == 0,
             Personal = terminal.Personal, Department = terminal.Department, Price = terminal.Price,
             Commission = terminal.Commission, CommissionDepartment = terminal.CommissionDepartment,
             Description = terminal.Description, BillOpen = terminal.BillOpen, Version = terminal.Version,
@@ -174,7 +178,7 @@ public sealed partial class StationCommerceSystem : EntitySystem
             state.Departments = _cargo.GetAccounts((domain, null)).Keys.Select(id => id.Id).Order().ToArray();
             if (TryComp<ResearchAccountsComponent>(domain, out var registry))
             {
-                state.Owner = registry.Credentials.GetValueOrDefault(terminal.Owner)?.PublicId ?? "";
+                state.Owner = registry.Credentials.GetValueOrDefault(terminal.OwnerUsername)?.PublicId ?? "";
                 state.Recipient = registry.Credentials.GetValueOrDefault(terminal.Recipient)?.PublicId ?? "";
             }
         }
@@ -191,14 +195,14 @@ public sealed partial class StationCommerceSystem : EntitySystem
     private void OnTool(EntityUid uid, PaymentTerminalComponent terminal, ref InteractUsingEvent args)
     {
         if (args.Handled || !TryComp<ToolComponent>(args.Used, out var tool)) return;
-        if (_tools.HasQuality(args.Used, "Screwing", tool))
+        if (_tools.HasQuality(args.Used, ScrewingQuality, tool))
         {
             terminal.PanelOpen = !terminal.PanelOpen;
             _popup.PopupEntity(Loc.GetString(terminal.PanelOpen ? "commerce-panel-open" : "commerce-panel-closed"), uid, args.User);
             args.Handled = true;
         }
-        else if (terminal.PanelOpen && _tools.HasQuality(args.Used, "Pulsing", tool) && TryIdentity(args.User, out _))
-            args.Handled = _tools.UseTool(args.Used, args.User, uid, 15f, "Pulsing", new PaymentTerminalHackEvent());
+        else if (terminal.PanelOpen && _tools.HasQuality(args.Used, PulsingQuality, tool) && TryIdentity(args.User, out _))
+            args.Handled = _tools.UseTool(args.Used, args.User, uid, 15f, PulsingQuality, new PaymentTerminalHackEvent());
     }
 
     private void OnHack(EntityUid uid, PaymentTerminalComponent terminal, PaymentTerminalHackEvent args)

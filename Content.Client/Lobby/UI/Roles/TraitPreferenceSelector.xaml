@@ -1,7 +1,13 @@
 <Control xmlns="https://spacestation14.io"
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-        <BoxContainer Name="Container"
-                      Orientation="Horizontal">
-            <CheckBox Name="Checkbox" Access="Public"/>
+    <PanelContainer Name="Card" HorizontalExpand="True">
+        <BoxContainer Orientation="Vertical" SeparationOverride="3" Margin="8 5">
+            <BoxContainer SeparationOverride="6">
+                <CheckBox Name="Checkbox" Access="Public" HorizontalExpand="True" ClipText="True" />
+                <Label Name="PointCost" />
+            </BoxContainer>
+            <RichTextLabel Name="Description" Margin="4 0" />
+            <RichTextLabel Name="BlockReason" Visible="False" Margin="4 0" />
         </BoxContainer>
+    </PanelContainer>
 </Control>

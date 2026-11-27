@@ -15,8 +15,8 @@ public sealed partial class AdvancedExertionComponent : Component
     [DataField, AutoNetworkedField] public bool Exhausted;
     [DataField, AutoNetworkedField] public bool SprintRequested;
     [DataField, AutoNetworkedField] public bool CalmWalking;
-    [AutoNetworkedField] public EntityUid? JumpObstacle;
     [DataField] public float SprintCost = 3f;
+    [DataField, AutoNetworkedField] public float HeavyWorkCostMultiplier = 1f;
     [DataField] public float WalkingRecovery = 0.12f;
     [DataField] public float RestRecovery = 0.7f;
     public float RecoveryDelay;
@@ -33,6 +33,10 @@ public sealed partial class AdvancedExertionComponent : Component
 
 [Serializable, NetSerializable]
 public enum PhysicalWorkClass : byte { Light, Medium, Heavy }
+
+/// <summary>Physical work or sprinting, measured in seconds of full effort.</summary>
+[ByRefEvent]
+public readonly record struct PhysicalExertionEvent(float EffortSeconds);
 
 /// <summary>Optional defaults for operations performed with this item. Hands holding the tool count as working hands.</summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]

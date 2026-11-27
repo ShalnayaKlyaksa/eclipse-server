@@ -1,3 +1,4 @@
+using Content.Shared.Corvax.TTS;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.Preferences
@@ -9,6 +10,8 @@ namespace Content.Shared.Preferences
     public sealed class GameSettings
     {
         private int _maxCharacterSlots;
+
+        public TTSVoiceOption[] TtsVoices = [];
 
         public int MaxCharacterSlots
         {

@@ -154,7 +154,7 @@ public sealed partial class PdaPersonalServicesSystem : EntitySystem
         var service = EnsureComp<PdaPersonalServicesComponent>(domain);
         if (!service.Accounts.TryGetValue(id, out var account))
         {
-            var economy = _prototypes.Index<PersonalEconomyPrototype>("StationPersonalEconomy");
+            var economy = _prototypes.Index(PersonalEconomyPrototype.StationDefault);
             var job = Comp<ResearchAccountsComponent>(domain).Credentials[id].JobId;
             service.Accounts[id] = account = new()
             {
@@ -173,7 +173,7 @@ public sealed partial class PdaPersonalServicesSystem : EntitySystem
     public override void Update(float frameTime)
     {
         var query = EntityQueryEnumerator<PdaPersonalServicesComponent>();
-        var economy = _prototypes.Index<PersonalEconomyPrototype>("StationPersonalEconomy");
+        var economy = _prototypes.Index(PersonalEconomyPrototype.StationDefault);
         if (economy.SalaryInterval <= TimeSpan.Zero) return;
         while (query.MoveNext(out var domain, out var service))
         {

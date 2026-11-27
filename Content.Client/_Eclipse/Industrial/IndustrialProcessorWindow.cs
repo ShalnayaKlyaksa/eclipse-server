@@ -5,6 +5,7 @@ using Content.Client.Stylesheets;
 using Content.Client.Resources;
 using Content.Client.UserInterface.Controls;
 using Content.Shared._Eclipse.Industrial;
+using Content.Shared._Eclipse.Industrial.Prototypes;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
@@ -169,7 +170,7 @@ public sealed partial class IndustrialProcessorWindow : FancyWindow
         _availableOnly = new CheckBox
         {
             Name = "AvailableRecipesOnly", Text = Loc.GetString("industrial-ui-available-only"),
-            Pressed = true, HorizontalAlignment = HAlignment.Left,
+            HorizontalAlignment = HAlignment.Left,
         };
         _availableOnly.OnToggled += _ => FilterFromStart();
         sidebar.AddChild(_availableOnly);
@@ -486,6 +487,31 @@ public sealed partial class IndustrialProcessorWindow : FancyWindow
         }
     }
 
+    private string? GetRecipeRequirements(IndustrialRecipeUiState recipe)
+    {
+        if (!_prototypes.TryIndex<IndustrialRecipePrototype>(recipe.Id, out var prototype))
+            return recipe.Unlocked ? null : Loc.GetString("industrial-processor-unresearched");
+
+        var requirements = new List<string>();
+        if (prototype.MinimumTier > MachineTier.Basic)
+        {
+            var tier = prototype.MinimumTier == MachineTier.Perfect ? "industrial-machine-tier-perfect" : "industrial-machine-tier-industrial";
+            requirements.Add(Loc.GetString("industrial-processor-requires-tier", ("tier", Loc.GetString(tier))));
+        }
+
+        if (prototype.RequiredTechnology is { } technology)
+        {
+            var disk = prototype.RequireDataDisk || technology.Id.StartsWith("Industrial", StringComparison.Ordinal);
+            requirements.Add(Loc.GetString(disk ? "industrial-recipe-requires-disk" : "industrial-processor-requires-research",
+                ("technology", Loc.GetString(_prototypes.Index(technology).Name))));
+        }
+
+        if (prototype.CleanroomGrade > 0)
+            requirements.Add(Loc.GetString("industrial-recipe-requires-cleanroom", ("grade", prototype.CleanroomGrade)));
+
+        return requirements.Count > 0 ? string.Join('\n', requirements) : null;
+    }
+
     private void RefreshRecipeDetails()
     {
         if (_state == null)
@@ -503,9 +529,10 @@ public sealed partial class IndustrialProcessorWindow : FancyWindow
         if (_state.IsExtractor)
             _processTitle.Text = Loc.GetString("industrial-extraction-title");
         _processTitle.ToolTip = _processTitle.Text;
-        _description.Visible = recipe == null || !recipe.Unlocked;
-        _description.SetMessage(FormattedMessage.FromUnformatted(Loc.GetString(recipe is { Unlocked: false }
-            ? "industrial-processor-unresearched" : _state.IsBuffer ? "industrial-ui-buffer-help" : "industrial-ui-automatic-help")),
+        var requirements = recipe != null && !_state.IsBuffer ? GetRecipeRequirements(recipe) : null;
+        _description.Visible = recipe == null || requirements != null;
+        _description.SetMessage(FormattedMessage.FromUnformatted(requirements ??
+            Loc.GetString(_state.IsBuffer ? "industrial-ui-buffer-help" : "industrial-ui-automatic-help")),
             recipe is { Unlocked: false } ? Amber : Muted);
         if (_state.IsExtractor)
         {
@@ -635,9 +662,9 @@ public sealed partial class IndustrialProcessorWindow : FancyWindow
         var column = Column();
         column.SeparationOverride = 4;
         column.AddChild(new Label { Text = SharedIndustrialProcessorSystem.GetDirectionName(face), ClipText = true, FontColorOverride = Muted, StyleClasses = { StyleClass.FontSmall } });
-        var button = new OptionButton
+        var button = new ClippedOptionButton
         {
-            Name = $"Port{face}", HorizontalExpand = true, ClipText = true, PrefixMargin = false, MinHeight = 30,
+            Name = $"Port{face}", HorizontalExpand = true, PrefixMargin = false, MinHeight = 30,
             StyleClasses = { "industrial-control" }, ModulateSelfOverride = Color.White,
         };
         button.OptionStyleClasses.Add("industrial-control");

@@ -10,7 +10,7 @@
 - type: polymorph
   id: AdminVulpSmite
   configuration:
-    entity: MobVulpkanin
+    entity: MobTherianCanine
     forced: true
     transferName: true
     inventory: Transfer

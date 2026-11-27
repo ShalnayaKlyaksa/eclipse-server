@@ -17,12 +17,19 @@ using Content.Shared.Metabolism;
 using Content.Shared.Containers.ItemSlots;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Localization;
+using Robust.Shared.Prototypes;
 using Robust.UnitTesting;
 
 namespace Content.IntegrationTests.Tests.Chemistry;
 
 public sealed class MedicalChemistryTests : GameTest
 {
+    private static readonly ProtoId<ReagentPrototype> AntibioticPrecursor = "ClinicalAntibioticPrecursor";
+    private static readonly ProtoId<ReagentPrototype> Bicaridine = "Bicaridine";
+    private static readonly ProtoId<ReagentPrototype> Carbon = "Carbon";
+    private static readonly ProtoId<ReagentPrototype> Inaprovaline = "Inaprovaline";
+    private static readonly ProtoId<ReagentPrototype> Iron = "Iron";
+
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
 
     [TestPrototypes]
@@ -59,8 +66,8 @@ public sealed class MedicalChemistryTests : GameTest
             Assert.That(solutions.TryGetSolution(machine, SharedChemMaster.BufferSolutionName, out _, out var buffer), Is.True);
             var beaker = SEntMan.SpawnEntity("LargeBeaker", map.GridCoords);
             Assert.That(solutions.TryGetSolution(beaker, "beaker", out var beakerEnt, out var mixture), Is.True);
-            mixture.AddReagent("Inaprovaline", FixedPoint2.New(15));
-            mixture.AddReagent("Carbon", FixedPoint2.New(15));
+            mixture.AddReagent(Inaprovaline.Id, FixedPoint2.New(15));
+            mixture.AddReagent(Carbon.Id, FixedPoint2.New(15));
             solutions.UpdateChemicals(beakerEnt!.Value);
             buffer.AddSolution(mixture.SplitSolution(mixture.Volume), SProtoMan);
             Assert.That(buffer.GetTotalPrototypeQuantity("BicaridinePrecursor"), Is.EqualTo(FixedPoint2.New(30)));
@@ -134,7 +141,7 @@ public sealed class MedicalChemistryTests : GameTest
             Assert.That(slots.TryInsert(synthesizer, MedicalSynthesisRules.SampleSlot, reference, null), Is.True);
             Assert.That(system.GetState(synthesizer)!.SampleProfile, Is.EqualTo("laboratory-patient-A"));
             Assert.That(solutions.TryGetSolution(synthesizer, SharedChemMaster.BufferSolutionName, out _, out var buffer), Is.True);
-            buffer.AddReagent("ClinicalAntibioticPrecursor", FixedPoint2.New(20));
+            buffer.AddReagent(AntibioticPrecursor.Id, FixedPoint2.New(20));
             Assert.That(system.TryStart(synthesizerEnt, "ClinicalAntibiotic", MedicalSynthesisProtocol.Precision, 20), Is.True);
             system.Advance(synthesizerEnt, 90);
             Assert.That(buffer.Volume, Is.EqualTo(FixedPoint2.New(18)));
@@ -160,8 +167,8 @@ public sealed class MedicalChemistryTests : GameTest
             var solutions = SEntMan.System<SharedSolutionContainerSystem>();
             Assert.That(solutions.TryGetSolution(beaker, "beaker", out var soln, out var solution), Is.True);
             solution.AddReagent(new ReagentId("Dexalin", [new MedicalBatchData { Purity = 80 }]), FixedPoint2.New(1));
-            solution.AddReagent("Carbon", FixedPoint2.New(1));
-            solution.AddReagent("Iron", FixedPoint2.New(1));
+            solution.AddReagent(Carbon.Id, FixedPoint2.New(1));
+            solution.AddReagent(Iron.Id, FixedPoint2.New(1));
             solutions.UpdateChemicals(soln!.Value);
             Assert.That(solution.GetTotalPrototypeQuantity("DexalinPlus"), Is.EqualTo(FixedPoint2.New(3)));
             Assert.That(MedicalBatch.GetPurity(solution, "DexalinPlus"), Is.EqualTo(0.8f).Within(0.001));
@@ -183,7 +190,7 @@ public sealed class MedicalChemistryTests : GameTest
             var solutions = SEntMan.System<SharedSolutionContainerSystem>();
             Assert.That(solutions.TryGetSolution(patient, "medicalTestBlood", out _, out var blood), Is.True);
             blood.AddReagent(new ReagentId("Bicaridine", [new MedicalBatchData { Purity = 50 }]), FixedPoint2.New(volume / 2));
-            blood.AddReagent("Bicaridine", FixedPoint2.New(volume / 2));
+            blood.AddReagent(Bicaridine.Id, FixedPoint2.New(volume / 2));
             var initial = health.BodyParts.Values.Sum(bodyPart => bodyPart.SkinIntegrity + bodyPart.MuscleIntegrity);
             var metabolism = SEntMan.GetComponent<MetabolizerComponent>(patient);
             typeof(MetabolizerComponent).GetField(nameof(MetabolizerComponent.NextUpdate))!.SetValue(metabolism, TimeSpan.Zero);
@@ -191,7 +198,7 @@ public sealed class MedicalChemistryTests : GameTest
             var healed = health.BodyParts.Values.Sum(bodyPart => bodyPart.SkinIntegrity + bodyPart.MuscleIntegrity) - initial;
             Assert.That(healed, Is.EqualTo(1.125f).Within(0.04f), "Different grades must produce one weighted dose, not stacked healing.");
             Assert.That(health.ToxinLoad, overdose ? Is.GreaterThan(1.7f) : Is.InRange(0.35f, 0.4f));
-            var rate = SProtoMan.Index<ReagentPrototype>("Bicaridine").Metabolisms!.Metabolisms["Bloodstream"].MetabolismRate;
+            var rate = SProtoMan.Index(Bicaridine).Metabolisms!.Metabolisms["Bloodstream"].MetabolismRate;
             Assert.That(blood.GetTotalPrototypeQuantity("Bicaridine"), Is.EqualTo(FixedPoint2.New(volume) - rate));
             Assert.That(MedicalBatch.GetPurity(blood, "Bicaridine"), Is.EqualTo(0.75f).Within(0.002));
         });

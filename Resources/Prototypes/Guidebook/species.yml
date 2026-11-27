@@ -2,16 +2,94 @@
   id: Species
   name: guide-entry-species
   text: "/ServerInfo/Guidebook/Mobs/Species.xml"
+  openArticleFromCatalog: true
+  children:
+  - Imperial
+  - Molei
+  - Dwarf
+  - Lavrite
+  - Kobold
+  - Saurian
+  - Therian
+  - Arkane
+  - Shadowkin
+  - Avian
+  - Elir
+  - Slimefolk
+  - LegacySpecies
+
+- type: guideEntry
+  id: Imperial
+  name: species-name-imperial
+  text: "/ServerInfo/Guidebook/Mobs/Imperial.xml"
+
+- type: guideEntry
+  id: Molei
+  name: species-name-molei
+  text: "/ServerInfo/Guidebook/Mobs/Molei.xml"
+
+- type: guideEntry
+  id: Dwarf
+  name: species-name-dwarf
+  text: "/ServerInfo/Guidebook/Mobs/Dwarf.xml"
+
+- type: guideEntry
+  id: Lavrite
+  name: species-name-lavrite
+  text: "/ServerInfo/Guidebook/Mobs/Lavrite.xml"
+
+- type: guideEntry
+  id: Kobold
+  name: species-name-kobold
+  text: "/ServerInfo/Guidebook/Mobs/Kobold.xml"
+
+- type: guideEntry
+  id: Saurian
+  name: species-name-saurian
+  text: "/ServerInfo/Guidebook/Mobs/Saurian.xml"
+
+- type: guideEntry
+  id: Therian
+  name: species-name-therian
+  text: "/ServerInfo/Guidebook/Mobs/Therian.xml"
+
+- type: guideEntry
+  id: Arkane
+  name: species-name-arkane
+  text: "/ServerInfo/Guidebook/Mobs/Arkane.xml"
+
+- type: guideEntry
+  id: Shadowkin
+  name: species-name-shadowkin
+  text: "/ServerInfo/Guidebook/Mobs/Shadowkin.xml"
+
+- type: guideEntry
+  id: Avian
+  name: species-name-avian
+  text: "/ServerInfo/Guidebook/Mobs/Avian.xml"
+
+- type: guideEntry
+  id: Elir
+  name: species-name-elir
+  text: "/ServerInfo/Guidebook/Mobs/Elir.xml"
+
+- type: guideEntry
+  id: Slimefolk
+  name: species-name-slimefolk
+  text: "/ServerInfo/Guidebook/Mobs/Slimefolk.xml"
+
+- type: guideEntry
+  id: LegacySpecies
+  name: guide-entry-legacy-species
+  text: "/ServerInfo/Guidebook/Mobs/LegacySpecies.xml"
   children:
   - Arachnid
   - Diona
-  - Dwarf
   - Human
   - Moth
   - Reptilian
   - SlimePerson
   - Vox
-  - Vulpkanin
 
 - type: guideEntry
   id: Arachnid
@@ -22,11 +100,6 @@
   id: Diona
   name: species-name-diona
   text: "/ServerInfo/Guidebook/Mobs/Diona.xml"
-
-- type: guideEntry
-  id: Dwarf
-  name: species-name-dwarf
-  text: "/ServerInfo/Guidebook/Mobs/Dwarf.xml"
 
 - type: guideEntry
   id: Human

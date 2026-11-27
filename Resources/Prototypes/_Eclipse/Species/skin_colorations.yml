@@ -15,14 +15,13 @@
     saturation: [0, 0.42]
     lightness: [0.08, 0.95]
 
-# Лавриты — угольно-чёрный, тёмно-серый, тёмно-коричневый, бордовый, медный, красно-коричневый, пепельный.
-# Warm red..orange band only, and kept dark so they read as heat-resistant hide.
+# Лавриты — от пепельных и угольных тонов до светлых человеческих и насыщенных медных.
 - type: skinColoration
   id: EclipseLavriteSkin
   strategy: !type:ClampedHsvColoration
-    hue: [0.93, 0.12]
-    saturation: [0, 0.65]
-    value: [0.08, 0.55]
+    hue: [0.93, 0.17]
+    saturation: [0, 0.9]
+    value: [0.08, 1]
 
 # Кобольды — чешуя: песочный, коричневый, красный, кирпичный, оранжевый, болотный, тёмно-зелёный,
 # серый, синий, чёрный. Wide hue range, mid brightness.

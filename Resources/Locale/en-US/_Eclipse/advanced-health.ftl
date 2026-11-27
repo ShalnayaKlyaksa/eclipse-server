@@ -173,7 +173,7 @@ advanced-health-slot-interact-hint = {$slot}
     LMB — take / switch hand · RMB — actions · E — open · Shift+E — alternate action
 
 advanced-health-vital-immunity = Immune defense
-advanced-health-vital-brain-tooltip = Brain tissue integrity. At 50% or below normal defibrillation is impossible; mannitol is required.
+advanced-health-vital-brain-tooltip = Brain tissue integrity. Use Neuroregen to restore it above 50% before defibrillation.
 advanced-health-vital-consciousness-tooltip = Consciousness level. A healthy character has 100%; hypoxia, shock, and poor cerebral perfusion reduce it.
 advanced-health-vital-pain-tooltip = Pain level. It contributes to shock, unconsciousness, and difficulty performing medical procedures.
 advanced-health-vital-immunity-tooltip = The body's immune defense. It suppresses infection in open and contaminated wounds.

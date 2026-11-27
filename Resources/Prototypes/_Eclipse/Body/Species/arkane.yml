@@ -188,14 +188,24 @@
   categories: [ HideSpawnMenu ]
   name: shadowkin appearance
   components:
-  # Shadowkin sprites have no displacement map of their own; the human one lines up well enough.
   - type: Inventory
     femaleDisplacements:
+      socks:
+        sizeMaps:
+          32:
+            sprite: _Eclipse/Mobs/Species/socks_displacement.rsi
+            state: shadowkin
       jumpsuit:
         sizeMaps:
           32:
             sprite: Mobs/Species/Human/displacement.rsi
             state: jumpsuit-female
+    displacements:
+      socks:
+        sizeMaps:
+          32:
+            sprite: _Eclipse/Mobs/Species/socks_displacement.rsi
+            state: shadowkin
   - type: InitialBody
     organs:
       Torso: OrganShadowkinTorso
@@ -227,3 +237,6 @@
   parent: [ AppearanceShadowkin, BaseSpeciesMobOrganic ]
   id: MobShadowkin
   name: Urist McShadowkin
+  components:
+  - type: ActionGrant
+    actions: [ ActionShadowVeil ]

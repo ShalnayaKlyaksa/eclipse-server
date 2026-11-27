@@ -349,7 +349,7 @@ namespace Content.Server.RoundEnd
                     else
                     {
                         RequestRoundEnd(time, checkCooldown: false, text: textCall,
-                            name: Loc.GetString(sender));
+                            name: sender);
                     }
                     break;
             }

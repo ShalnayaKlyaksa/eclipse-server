@@ -11,8 +11,8 @@ namespace Content.Shared.DoAfter;
 public abstract partial class SharedDoAfterSystem : EntitySystem
 {
     [Dependency] private readonly IDynamicTypeFactory _factory = default!;
-#if EXCEPTION_TOLERANCE
     [Dependency] private readonly INetManager _netManager = default!;
+#if EXCEPTION_TOLERANCE
     [Dependency] private readonly IRuntimeLog _runtimeLog = default!;
 #endif
     [Dependency] private readonly SharedGravitySystem _gravity = default!;
@@ -101,7 +101,7 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
         for (var i = 0; i < count; i++)
         {
             var doAfter = _doAfters[i];
-            if (_workNet.IsServer && doAfter.Args.WorkClass != PhysicalWorkClass.Light)
+            if (_netManager.IsServer && doAfter.Args.WorkClass != PhysicalWorkClass.Light)
             {
                 var stop = doAfter.CancelledTime ?? time;
                 var activeSeconds = Math.Clamp((float) (stop - doAfter.StartTime).TotalSeconds, 0, (float) doAfter.Args.Delay.TotalSeconds);

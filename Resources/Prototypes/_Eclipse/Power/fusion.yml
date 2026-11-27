@@ -1,0 +1,178 @@
+- type: entity
+  id: IndustrialFusionReactor
+  parent: PortableGeneratorBase
+  name: ring fusion reactor
+  description: A fusion chamber with an integrated converter. Connect MV auxiliary power, an HV output cable, and a pumped coolant loop from west to east.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Power/fusion_reactor.rsi
+    noRot: false
+    layers:
+    - state: chamber
+    - state: off
+      shader: unshaded
+      map: ["plasma"]
+  - type: Icon
+    sprite: _Eclipse/Structures/Power/fusion_reactor.rsi
+    state: chamber
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PhysShapeAabb
+          bounds: "-0.77,-0.75,0.77,0.75"
+        density: 155
+        mask: [MachineMask]
+        layer: [MachineLayer]
+  - type: GenericVisualizer
+    visuals:
+      enum.FusionReactorVisuals.Status:
+        plasma:
+          off: { state: off }
+          ignition: { state: ignition }
+          running: { state: running }
+          boost: { state: boost }
+          limited: { state: limited }
+          trip: { state: trip }
+  - type: PointLight
+    enabled: false
+    radius: 3.4
+    energy: 1.5
+    color: "#54E8FF"
+  - type: AmbientSound
+    range: 7
+    volume: -11
+    sound:
+      path: /Audio/Ambience/Objects/gravity_gen_hum.ogg
+    enabled: false
+  - type: PortableGenerator
+    startChance: 1
+    startTime: 1
+    startSound: null
+    startSoundEmpty: null
+    startSuccessMessage: power-plant-start-success
+    startFailureMessage: power-plant-start-failure
+  - type: FuelGenerator
+    minTargetPower: 140000
+    maxTargetPower: 240000
+    targetPower: 140000
+    optimalPower: 140000
+    optimalBurnRate: 0.005
+    fuelEfficiencyConstant: 1
+  - type: SolidFuelGeneratorAdapter
+    fuelMaterial: EclipseFusionFuel
+    multiplier: 0.01
+  - type: MaterialStorage
+    storageLimit: 100
+    materialWhiteList: [EclipseFusionFuel]
+  - type: PowerPlant
+    heatCapacity: 20000
+    heatPerFuel: 28000000
+    shutdownTemperature: 780
+    warmupSeconds: 12
+    maximumHeatTransfer: 310000
+  - type: FusionReactor
+  - type: PowerConsumer
+    voltage: Medium
+    node: auxiliary
+    drawRate: 15000
+  - type: PowerSupplier
+    supplyRate: 0
+    supplyRampRate: 1000000
+    supplyRampTolerance: 1000000
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      output:
+        !type:CableDeviceNode
+        nodeGroupID: HVPower
+      auxiliary:
+        !type:CableDeviceNode
+        nodeGroupID: MVPower
+      coolant_in:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: West
+        volume: 400
+      coolant_out:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: East
+        volume: 400
+  - type: AtmosUnsafeUnanchor
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [Destruction]
+
+- type: entity
+  id: IndustrialFusionReactorFlatpack
+  parent: BaseFlatpack
+  name: fusion reactor flatpack
+  components:
+  - type: Flatpack
+    entity: IndustrialFusionReactor
+    qualityNeeded: Anchoring
+
+- type: material
+  id: EclipseFusionFuel
+  stackEntity: IndustrialFusionFuelCassette
+  name: materials-eclipse-fusion-fuel
+  icon: { sprite: _Eclipse/Structures/Power/fusion_fuel.rsi, state: cassette }
+  color: "#BA9FFF"
+  price: 0.8
+
+- type: stack
+  id: EclipseFusionFuel
+  parent: BaseMediumStack
+  name: materials-eclipse-fusion-fuel
+  icon: { sprite: /Textures/_Eclipse/Structures/Power/fusion_fuel.rsi, state: cassette }
+  spawn: IndustrialFusionFuelCassette
+
+- type: entity
+  id: IndustrialFusionFuelCassette
+  parent: BaseItem
+  name: fusion fuel cassette
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Power/fusion_fuel.rsi
+    state: cassette
+  - type: Item
+    size: Small
+  - type: Stack
+    stackType: EclipseFusionFuel
+    count: 1
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      EclipseFusionFuel: 100
+
+- type: industrialRecipe
+  id: AssembleIndustrialFusionReactor
+  processor: Assembler
+  minimumTier: Industrial
+  requiredTechnology: EnergyFusion
+  requireDataDisk: true
+  time: 45
+  inputs:
+    SheetPlasteel: 16
+    IndustrialAdvancedBoard: 3
+    IndustrialHeatConduitAssembly: 6
+  outputs:
+    IndustrialFusionReactorFlatpack: 1
+
+- type: industrialRecipe
+  id: AssembleIndustrialFusionFuelCassette
+  processor: Assembler
+  minimumTier: Industrial
+  requiredTechnology: EnergyFusion
+  requireDataDisk: true
+  time: 10
+  inputs:
+    SheetPlasma: 2
+    SheetSteel: 1
+  outputs:
+    IndustrialFusionFuelCassette: 1

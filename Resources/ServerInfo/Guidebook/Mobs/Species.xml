@@ -1,22 +1,22 @@
 <Document>
-  # Расы
+  # Расы станции
 
-  ВИШ нанимает разнообразные разумные виды.
+  Даже на одной станции у всех своё представление о сквозняке. Лаврит ищет прохладную переборку, молей выбирает отсек подальше от печей, а слаймолюда прежде всего волнует, насколько холодно за шлюзом.
 
-  <Box>
-  <GuideEntityEmbed Entity="AppearanceArachnid" Caption="Арахнид"/>
-  <GuideEntityEmbed Entity="AppearanceDiona" Caption="Диона"/>
-  <GuideEntityEmbed Entity="AppearanceDwarf" Caption="Дворф"/>
-  <GuideEntityEmbed Entity="AppearanceHuman" Caption="Человек"/>
-  </Box>
-  <Box>
-  <GuideEntityEmbed Entity="AppearanceMoth" Caption="Ниан"/>
-  <GuideEntityEmbed Entity="AppearanceReptilian" Caption="Унатх"/>
-  <GuideEntityEmbed Entity="AppearanceSlimePerson" Caption="Слаймалюд"/>
-  <GuideEntityEmbed Entity="AppearanceVox" Caption="Вокс"/>
-  </Box>
-  <Box>
-    <GuideEntityEmbed Entity="AppearanceVulpkanin" Caption="Вульпакин"/>
-  </Box>
+  Откройте плашку расы, чтобы узнать, как она выглядит, какие способности появятся на панели действий и что стоит учитывать в раунде.
 
+  <Table Columns="2">
+    <GuideSpeciesCard Species="Imperial" Accent="#d9b98c" Caption="Обычная человеческая физиология и знакомая экипировка."/>
+    <GuideSpeciesCard Species="Molei" Accent="#c7b0d1" Caption="Шёлковая повязка, любовь к холоду и ловкость в невесомости."/>
+    <GuideSpeciesCard Species="Dwarf" Accent="#d4ac7f" Caption="Выносливость в тяжёлой работе и защитный «Упор»."/>
+    <GuideSpeciesCard Species="Lavrite" Accent="#ff9e68" Caption="Люди вулканических миров, способные отдавать лишнее тепло."/>
+    <GuideSpeciesCard Species="Kobold" Accent="#b6ce88" Caption="Быстрый ящер для длинных переходов и лёгких грузов."/>
+    <GuideSpeciesCard Species="Saurian" Accent="#95c5a5" Caption="Крепкая чешуя, работа с грузами и удар хвостом."/>
+    <GuideSpeciesCard Species="Therian" Accent="#edba82" Caption="Три семьи с разной внешностью и способностями."/>
+    <GuideSpeciesCard Species="Arkane" Accent="#c5a8ee" Caption="Рога, хвост и дополнительный толчок крыльями при прыжке."/>
+    <GuideSpeciesCard Species="Shadowkin" Accent="#b4a5e0" Caption="Теневая пелена скрывает силуэт, пока вы не спешите двигаться."/>
+    <GuideSpeciesCard Species="Avian" Accent="#a4cddd" Caption="Дальний прыжок, тёплое оперение и бросок пера."/>
+    <GuideSpeciesCard Species="Elir" Accent="#acd4e1" Caption="Остроухий народ, способный почувствовать пульс на расстоянии."/>
+    <GuideSpeciesCard Species="Slimefolk" Accent="#82d6cf" Caption="Живой гель, который дышит разными газами и стягивает раны."/>
+  </Table>
 </Document>

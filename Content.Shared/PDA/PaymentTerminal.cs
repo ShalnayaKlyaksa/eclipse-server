@@ -13,7 +13,7 @@ public sealed partial class PaymentTerminalComponent : Component
     [DataField] public int Commission = 5;
     [DataField] public string CommissionDepartment = "Cargo";
     public EntityUid? Domain;
-    public string Owner = "";
+    public string OwnerUsername = "";
     public string Recipient = "";
     public bool Personal;
     public string Description = "";

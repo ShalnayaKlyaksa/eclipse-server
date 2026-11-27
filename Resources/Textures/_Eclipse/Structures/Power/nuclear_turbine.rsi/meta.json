@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-4.0",
+  "copyright": "Made by Xaoser for Eclipse",
+  "size": {
+    "x": 96,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "body"
+    },
+    {
+      "name": "idle"
+    },
+    {
+      "name": "spin",
+      "delays": [
+        [
+          0.07,
+          0.07,
+          0.07,
+          0.07,
+          0.07,
+          0.07,
+          0.07,
+          0.07
+        ]
+      ]
+    }
+  ]
+}

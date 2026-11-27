@@ -124,6 +124,20 @@ namespace Content.IntegrationTests.Tests.Preferences
             var username = new NetUserId(new Guid("640bd619-fc8d-4fe2-bf3c-4a5fb17d6ddd"));
             const int slot = 0;
             var originalProfile = CharlieCharlieson();
+            originalProfile.Appearance.Markings["Head"] = new()
+            {
+                [HumanoidVisualLayers.Hair] =
+                [
+                    new Marking("HumanHairShorthair2", [Color.Red])
+                    {
+                        Gradient = new MarkingGradient
+                        {
+                            TipColor = Color.Yellow,
+                            Stops = [new MarkingGradientStop { Position = 50, Color = Color.Orange }],
+                        },
+                    },
+                ],
+            };
             await db.InitPrefsAsync(username, originalProfile);
             var prefs = await db.GetPlayerPreferencesAsync(username);
             var profile = preferences.ConvertProfiles(prefs!.Profiles.Find(p => p.Slot == slot));

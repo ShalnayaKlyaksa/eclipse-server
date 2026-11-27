@@ -19,7 +19,13 @@
         </BoxContainer>
         <GridContainer Columns="2" HorizontalExpand="True" HSeparationOverride="16" VSeparationOverride="8">
             <Label Name="TargetLabel" Text="{Loc 'portable-generator-ui-target-power-label'}"/>
-            <SpinBox Name="TargetPower" HorizontalExpand="True"/>
+            <Control HorizontalExpand="True">
+                <SpinBox Name="TargetPower"/>
+                <BoxContainer Name="FusionModes" Visible="False" SeparationOverride="8">
+                    <Button Name="FusionNominal" Text="{Loc 'power-fusion-nominal'}" HorizontalExpand="True"/>
+                    <Button Name="FusionBoost" Text="{Loc 'power-fusion-boost'}" HorizontalExpand="True"/>
+                </BoxContainer>
+            </Control>
             <Label Text="{Loc 'power-plant-fuel-economy'}"/>
             <BoxContainer SeparationOverride="10"><Label Name="Efficiency"/><Label Name="Eta" HorizontalExpand="True"/></BoxContainer>
             <Label Text="{Loc 'portable-generator-ui-fuel-left-label'}"/>
@@ -38,6 +44,8 @@
                 <Label Name="OperatingDecay" StyleClasses="terminal-muted"/>
                 <Label Name="OperatingFields" StyleClasses="terminal-muted"/>
                 <Label Name="OperatingKinetics" Visible="False" StyleClasses="terminal-muted"/>
+                <Label Name="OperatingGravityHorizon" Visible="False" StyleClasses="terminal-muted"/>
+                <Label Name="FusionUtilities" Visible="False" StyleClasses="terminal-muted"/>
                 <ProgressBar Name="WarmupBar" MaxValue="1"/>
                 <Button Name="ResetButton" Text="{Loc 'power-plant-reset'}" HorizontalAlignment="Right"/>
             </BoxContainer>

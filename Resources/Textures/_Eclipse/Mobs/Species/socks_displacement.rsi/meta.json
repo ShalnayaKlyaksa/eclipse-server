@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Made for Eclipse using the limb silhouettes from Mobs/Species/Moth/parts.rsi and _Backmen/Mobs/Species/Shadowkin/parts.rsi.",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "load": {
+        "srgb": false
+    },
+    "states": [
+        {
+            "name": "moth",
+            "directions": 4
+        },
+        {
+            "name": "shadowkin",
+            "directions": 4
+        }
+    ]
+}

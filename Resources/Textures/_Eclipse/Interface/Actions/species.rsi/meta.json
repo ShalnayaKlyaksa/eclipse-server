@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "license": "CC0-1.0",
+  "copyright": "Original pixel art for Eclipse.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "brace"
+    },
+    {
+      "name": "vent"
+    },
+    {
+      "name": "scent"
+    },
+    {
+      "name": "scurry"
+    },
+    {
+      "name": "veil"
+    },
+    {
+      "name": "reform"
+    },
+    {
+      "name": "silk"
+    },
+    {
+      "name": "cool"
+    },
+    {
+      "name": "sweep"
+    },
+    {
+      "name": "pulse"
+    },
+    {
+      "name": "adhesive"
+    },
+    {
+      "name": "kobold_jump"
+    },
+    {
+      "name": "pounce"
+    },
+    {
+      "name": "arkane_jump"
+    },
+    {
+      "name": "avian_jump"
+    },
+    {
+      "name": "feather"
+    }
+  ]
+}

@@ -1,4 +1,24 @@
 markings-search = Search
+markings-filter-all = All
+markings-filter-face = Face
+markings-filter-eyes = Eyes
+markings-filter-upper-ears = Top ears
+markings-filter-side-ears = Side ears
+markings-filter-horns = Horns
+markings-filter-antennae = Antennae
+markings-filter-hairstyles = Hairstyles
+markings-filter-facial-hair = Facial hair
+markings-filter-body-patterns = Body patterns
+markings-filter-underwear = Underwear
+markings-filter-tail-base = Tails and appendages
+markings-filter-overlays = Overlays
+markings-filter-left = Left side
+markings-filter-right = Right side
+markings-filter-hands = Hands
+markings-filter-tattoos = Tattoos
+markings-filter-scars = Scars
+markings-filter-bandages = Bandages
+
 -markings-selection = { $selectable ->
     [0] You have no markings remaining.
     [one] You can select one more marking.
@@ -64,4 +84,5 @@ markings-layer-RFoot = Right Foot
 markings-layer-LFoot = Left Foot
 markings-layer-Overlay = Overlay
 markings-layer-TailOverlay = Overlay
+markings-layer-Wings = Wings
 

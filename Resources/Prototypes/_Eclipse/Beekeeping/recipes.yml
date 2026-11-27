@@ -19,6 +19,7 @@
     EclipseAdvancedApiaryCircuitboard: 1
 - type: industrialRecipe
   id: EclipsePressOrdinaryHoneycomb
+  name: ent-EclipseFoodHoneycomb
   processor: FilterPress
   time: 15
   inputs:
@@ -29,6 +30,7 @@
     EclipseBeeswax: 1
 - type: industrialRecipe
   id: EclipsePressHerbalHoneycomb
+  name: ent-EclipseFoodHerbalHoneycomb
   processor: FilterPress
   time: 15
   inputs:
@@ -39,6 +41,7 @@
     EclipseBeeswax: 1
 - type: industrialRecipe
   id: EclipsePressEnergeticHoneycomb
+  name: ent-EclipseFoodEnergeticHoneycomb
   processor: FilterPress
   time: 15
   inputs:
@@ -49,6 +52,7 @@
     EclipseBeeswax: 1
 - type: industrialRecipe
   id: EclipsePressRoyalHoneycomb
+  name: ent-EclipseFoodRoyalHoneycomb
   processor: FilterPress
   time: 15
   inputs:

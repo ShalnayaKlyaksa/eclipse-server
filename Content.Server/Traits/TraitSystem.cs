@@ -32,38 +32,43 @@ public sealed class TraitSystem : EntitySystem
             return;
         }
 
-        foreach (var traitId in args.Profile.TraitPreferences)
+        ApplyTraits(args.Mob, args.Profile.TraitPreferences);
+    }
+
+    internal void ApplyTraits(EntityUid mob, IReadOnlySet<ProtoId<TraitPrototype>> traits)
+    {
+        foreach (var traitId in traits)
         {
             if (!_prototypeManager.TryIndex<TraitPrototype>(traitId, out var traitPrototype))
             {
                 Log.Error($"No trait found with ID {traitId}!");
-                return;
+                continue;
             }
 
-            if (_whitelistSystem.IsWhitelistFail(traitPrototype.Whitelist, args.Mob) ||
-                _whitelistSystem.IsWhitelistPass(traitPrototype.Blacklist, args.Mob))
+            if (_whitelistSystem.IsWhitelistFail(traitPrototype.Whitelist, mob) ||
+                _whitelistSystem.IsWhitelistPass(traitPrototype.Blacklist, mob))
                 continue;
 
             // Add all components required by the prototype
             if (traitPrototype.Components.Count > 0)
-                EntityManager.AddComponents(args.Mob, traitPrototype.Components, false);
+                EntityManager.AddComponents(mob, traitPrototype.Components, false);
 
             // Add all JobSpecials required by the prototype
             foreach (var special in traitPrototype.Specials)
             {
-                special.AfterEquip(args.Mob);
+                special.AfterEquip(mob);
             }
 
             // Add item required by the trait
             if (traitPrototype.TraitGear == null)
                 continue;
 
-            if (!TryComp(args.Mob, out HandsComponent? handsComponent))
+            if (!TryComp(mob, out HandsComponent? handsComponent))
                 continue;
 
-            var coords = Transform(args.Mob).Coordinates;
+            var coords = Transform(mob).Coordinates;
             var inhandEntity = Spawn(traitPrototype.TraitGear, coords);
-            _sharedHandsSystem.TryPickup(args.Mob,
+            _sharedHandsSystem.TryPickup(mob,
                 inhandEntity,
                 checkActionBlocker: false,
                 handsComp: handsComponent);

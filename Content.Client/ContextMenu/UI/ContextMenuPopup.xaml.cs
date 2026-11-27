@@ -72,6 +72,10 @@ namespace Content.Client.ContextMenu.UI
 
         protected override void Dispose(bool disposing)
         {
+            // Hiding the popup can run callbacks that still need the menu body and its parent entry.
+            if (disposing)
+                Close();
+
             MenuBody.OnChildRemoved -= ctrl => _uiController.OnRemoveElement(this, ctrl);
             ParentElement = null;
             base.Dispose(disposing);

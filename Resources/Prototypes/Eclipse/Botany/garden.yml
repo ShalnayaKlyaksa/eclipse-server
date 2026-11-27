@@ -41,6 +41,7 @@
   displayName: seeds-energy-flower-display-name
   plantRsi: Objects/Specific/Hydroponics/lemoon.rsi
   packetPrototype: EnergyFlowerSeeds
+  apiaryComb: GardenChargedHoneycomb
   productPrototypes:
   - FoodEnergyFlower
   harvestRepeat: Repeat
@@ -112,6 +113,7 @@
   displayName: seeds-demonic-watermelon-display-name
   plantRsi: Objects/Specific/Hydroponics/watermelon.rsi
   packetPrototype: DemonicWatermelonSeeds
+  apiaryComb: GardenSpicedHoneycomb
   productPrototypes:
   - FoodDemonicWatermelon
   harvestRepeat: Repeat
@@ -152,6 +154,7 @@
   displayName: seeds-nectar-berry-display-name
   plantRsi: Objects/Specific/Hydroponics/berries.rsi
   packetPrototype: NectarBerrySeeds
+  apiaryComb: GardenNectarHoneycomb
   productPrototypes:
   - FoodNectarBerry
   harvestRepeat: Repeat

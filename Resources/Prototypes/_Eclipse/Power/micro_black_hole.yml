@@ -42,9 +42,10 @@
     requiredFields: 4
     fieldRadius: 3
   - type: GravityPowerSource
-  - type: GravityWell
-    maxRange: -1
-    gravPulsePeriod: 0.2
+  - type: EventHorizon
+    radius: -1
+    consumerFixtureId: null
+    colliderFixtureId: null
   - type: MicroBlackHoleVisual
     activity: 0
     radius: 2.5
@@ -74,25 +75,32 @@
   - type: AtmosUnsafeUnanchor
 
 - type: entity
-  id: PowerPlantFieldStabilizer
+  id: GravityFieldDeviceBase
+  abstract: true
   parent: BaseMachine
-  name: power plant field stabilizer
-  description: A powered field projector. Install next to the contained energy source, on a separate auxiliary circuit.
   placement:
     mode: SnapgridCenter
   components:
   - type: Transform
     anchored: false
   - type: Pullable
-  - type: PowerPlantFieldStabilizer
   - type: PowerConsumer
     voltage: Medium
-    drawRate: 30000
   - type: NodeContainer
     nodes:
       input:
         !type:CableDeviceNode
         nodeGroupID: MVPower
+
+- type: entity
+  id: PowerPlantFieldStabilizer
+  parent: GravityFieldDeviceBase
+  name: power plant field stabilizer
+  description: A powered containment post. Install one along each cardinal axis of the gravity source. The nearest post sets the maximum radius.
+  components:
+  - type: PowerPlantFieldStabilizer
+  - type: PowerConsumer
+    drawRate: 30000
   - type: Sprite
     sprite: Structures/Power/Generation/Tesla/coil.rsi
     state: coil
@@ -167,20 +175,24 @@
     group: Generator
     loadNode: output
     collectionName: gravitationalKineticGenerator
-    sprite: Structures/Power/Generation/Singularity/collector.rsi
+    sprite: _Eclipse/Structures/Power/gravity_kinetic.rsi
     state: static
   - type: Sprite
-    sprite: Structures/Power/Generation/Singularity/collector.rsi
+    sprite: _Eclipse/Structures/Power/gravity_kinetic.rsi
     layers:
-    - state: ca_off
+    - state: static
       map: [rotor]
+    - state: running
+      map: [rotor_glow]
+      visible: false
+      shader: unshaded
   - type: Appearance
   - type: GenericVisualizer
     visuals:
       enum.GeneratorVisuals.Running:
-        rotor:
-          True: { state: ca_active }
-          False: { state: ca_off }
+        rotor_glow:
+          True: { visible: true }
+          False: { visible: false }
   - type: Destructible
     thresholds:
     - trigger:
@@ -216,15 +228,88 @@
 
 - type: entity
   id: ResidualMicroBlackHole
-  name: collapsing micro black hole
+  name: escaped micro black hole
   categories: [HideSpawnMenu]
   components:
   - type: ResidualMicroBlackHole
   - type: MicroBlackHoleVisual
     activity: 1
     instability: 1
-  - type: GravityWell
-    maxRange: 10
-    baseRadialAcceleration: 35
-    baseTangentialAcceleration: 12
-    gravPulsePeriod: 0.2
+  - type: EventHorizon
+    radius: -1
+    consumerFixtureId: null
+    colliderFixtureId: null
+    canBreachContainment: true
+
+- type: entity
+  id: GravityStaticChargeProjector
+  parent: GravityFieldDeviceBase
+  name: static charge projector
+  description: Four powered projectors, one on each side of a contained gravity well, prevent it from shrinking when it runs out of feedstock.
+  components:
+  - type: GravityStaticChargeProjector
+  - type: PowerConsumer
+    drawRate: 15000
+  - type: Sprite
+    sprite: _Eclipse/Structures/Power/gravity_kinetic.rsi
+    layers:
+    - state: charge
+
+- type: entity
+  id: GravitySuppressionEmitter
+  parent: GravityFieldDeviceBase
+  name: gravity suppression emitter
+  description: Drains mass from micro black holes within twelve tiles. Anchor it and connect it to medium-voltage power.
+  components:
+  - type: GravitySuppressionEmitter
+  - type: PowerConsumer
+    drawRate: 90000
+  - type: Sprite
+    sprite: _Eclipse/Structures/Power/gravity_kinetic.rsi
+    state: suppression
+
+- type: entity
+  id: GravityStaticChargeProjectorFlatpack
+  parent: BaseFlatpack
+  name: static charge projector flatpack
+  components:
+  - type: Flatpack
+    entity: GravityStaticChargeProjector
+    qualityNeeded: Anchoring
+
+- type: entity
+  id: GravitySuppressionEmitterFlatpack
+  parent: BaseFlatpack
+  name: gravity suppression emitter flatpack
+  components:
+  - type: Flatpack
+    entity: GravitySuppressionEmitter
+    qualityNeeded: Anchoring
+
+- type: industrialRecipe
+  id: AssembleGravityStaticChargeProjector
+  processor: Assembler
+  minimumTier: Industrial
+  requiredTechnology: EnergyStabilization
+  requireDataDisk: true
+  time: 30
+  inputs:
+    SheetPlasteel: 6
+    IndustrialAdvancedBoard: 2
+    IndustrialCircuitCore: 2
+  outputs:
+    GravityStaticChargeProjectorFlatpack: 1
+
+- type: industrialRecipe
+  id: AssembleGravitySuppressionEmitter
+  processor: Assembler
+  minimumTier: Perfect
+  requiredTechnology: EnergySingularity
+  requireDataDisk: true
+  time: 35
+  inputs:
+    SheetPlasteel: 12
+    IndustrialPerfectBoard: 2
+    IndustrialAdvancedProcessor: 2
+  outputs:
+    GravitySuppressionEmitterFlatpack: 1

@@ -49,6 +49,7 @@ ent-IndustrialIronPlate1 = { ent-IndustrialIronPlate }
 ent-IndustrialProductionDisk = диск производственных данных
     .desc = Запись исследованных технологий на консоли НИО. Установка в механизм сохраняет данные навсегда.
 ent-IndustrialChassisBlueprint = чертёж корпуса станка
+    .desc = Примените на свободной клетке пола. Для сборки корпуса понадобятся 8 железных пластин, 4 железных стержня и отвёртка.
 ent-IndustrialManualCrusher = ручная дробилка
 ent-IndustrialChassisConstruction = сборочный каркас промышленного станка
 ent-IndustrialCleanroomController = контроллер чистой комнаты

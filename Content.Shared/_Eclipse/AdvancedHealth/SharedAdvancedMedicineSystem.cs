@@ -53,17 +53,7 @@ public sealed class SharedAdvancedMedicineSystem : EntitySystem
         {
             if (repair <= 0f)
                 break;
-            if (part.IsDestroyed || part.IsSurgicalOpen || part.ForeignBodyCount > 0)
-                continue;
-            var protectedWounds = true;
-            foreach (var wound in part.Wounds)
-            {
-                if (wound.HasForeignBody || wound.InternalBleedingRate > 0.001f
-                    || wound.Type is WoundType.Cut or WoundType.Puncture or WoundType.Gunshot or WoundType.Shrapnel
-                    && !wound.IsBandaged && !wound.IsSutured)
-                    protectedWounds = false;
-            }
-            if (!protectedWounds)
+            if (!CanRepairSoftTissue(part))
                 continue;
             var skin = Math.Min(repair, Math.Max(0f, part.MaxSkinIntegrity - part.SkinIntegrity));
             part.SkinIntegrity += skin;
@@ -78,5 +68,21 @@ public sealed class SharedAdvancedMedicineSystem : EntitySystem
         }
         Dirty(ent);
         _functions.Refresh((ent.Owner, ent.Comp));
+    }
+
+    public static bool CanRepairSoftTissue(BodyPartState part)
+    {
+        if (part.IsDestroyed || part.IsSurgicalOpen || part.ForeignBodyCount > 0)
+            return false;
+
+        foreach (var wound in part.Wounds)
+        {
+            if (wound.HasForeignBody || wound.InternalBleedingRate > 0.001f
+                || wound.Type is WoundType.Cut or WoundType.Puncture or WoundType.Gunshot or WoundType.Shrapnel
+                && !wound.IsBandaged && !wound.IsSutured)
+                return false;
+        }
+
+        return true;
     }
 }

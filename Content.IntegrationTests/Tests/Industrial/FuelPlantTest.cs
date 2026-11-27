@@ -1,14 +1,19 @@
+#nullable enable annotations
+
 using Content.IntegrationTests.Fixtures;
 using Content.Server._Eclipse.Power;
+using Content.Server.Materials;
 using Content.Server._Eclipse.Industrial;
 using Content.Server.Power.Generator;
 using Content.Server.Power.Components;
 using Content.Server.NodeContainer.EntitySystems;
 using Content.Server.NodeContainer.Nodes;
 using Content.Shared._Eclipse.Industrial;
+using Content.Shared._Eclipse.Power;
 using Content.Shared.Atmos;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.FixedPoint;
+using Content.Shared.Power.Generator;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Maths;
@@ -17,6 +22,81 @@ namespace Content.IntegrationTests.Tests.Industrial;
 
 public sealed class FuelPlantTest : GameTest
 {
+    [Test]
+    public async Task FusionUsesAuxiliaryPowerAndTripsAfterCoolantFlowStops()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid reactor = default;
+        await Server.WaitAssertion(() =>
+        {
+            var maps = Server.System<SharedMapSystem>();
+            for (var x = 0; x < 2; x++)
+            {
+                maps.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(x, 0), map.Tile.Tile);
+                SEntMan.SpawnEntity("CableMV", new EntityCoordinates(map.Grid.Owner, x + .5f, .5f));
+            }
+
+            var reserve = SEntMan.SpawnEntity("SubstationBasic", new EntityCoordinates(map.Grid.Owner, .5f, .5f));
+            var battery = SEntMan.GetComponent<PowerNetworkBatteryComponent>(reserve);
+            battery.SupplyRampRate = battery.SupplyRampTolerance = 1000000;
+            reactor = SEntMan.SpawnEntity("IndustrialFusionReactor", new EntityCoordinates(map.Grid.Owner, 1.5f, .5f));
+            Server.System<SharedTransformSystem>().AnchorEntity(reactor);
+            Assert.That(Server.System<MaterialStorageSystem>().TryChangeMaterialAmount(reactor, "EclipseFusionFuel", 100));
+        });
+        await Pair.RunTicksSync(10);
+        await Server.WaitAssertion(() =>
+        {
+            var generators = Server.System<GeneratorSystem>();
+            var plants = Server.System<PowerPlantSystem>();
+            var plant = SEntMan.GetComponent<PowerPlantComponent>(reactor);
+            var supplier = SEntMan.GetComponent<PowerSupplierComponent>(reactor);
+            var auxiliary = SEntMan.GetComponent<PowerConsumerComponent>(reactor);
+            var nodes = Server.System<NodeContainerSystem>();
+            Assert.That(nodes.TryGetNode(reactor, "coolant_in", out PipeNode? inlet));
+            Assert.That(nodes.TryGetNode(reactor, "coolant_out", out PipeNode? outlet));
+            Assert.That(auxiliary.ReceivedPower, Is.EqualTo(15000).Within(1));
+
+            void Step(float inletMoles)
+            {
+                // The bench supplies cold gas and empties the return between steps.
+                inlet!.Air.Clear();
+                outlet!.Air.Clear();
+                inlet.Air.Temperature = outlet.Air.Temperature = 293.15f;
+                inlet.Air.SetMoles(Gas.CarbonDioxide, inletMoles);
+                plants.Update(.5f);
+                generators.Update(.5f);
+            }
+
+            generators.SetFuelGeneratorOn(reactor, true);
+            Step(0);
+            Assert.That(generators.IsRunning(reactor), Is.False);
+            Assert.That(plant.Condition, Is.EqualTo(PowerPlantCondition.NoCoolant));
+
+            Step(120);
+            generators.SetFuelGeneratorOn(reactor, true);
+            Step(120);
+            Assert.That(supplier.MaxSupply, Is.Zero);
+            Assert.That(generators.GetFuel(reactor), Is.EqualTo(1));
+            for (var i = 0; i < 24; i++) Step(120);
+            Assert.That(supplier.MaxSupply, Is.EqualTo(140000).Within(1));
+            Assert.That(generators.GetFuel(reactor), Is.LessThan(1));
+
+            SEntMan.EventBus.RaiseLocalEvent(reactor, new PortableGeneratorSetTargetPowerMessage(240));
+            Step(120);
+            Assert.That(supplier.MaxSupply, Is.EqualTo(240000).Within(1));
+            for (var i = 0; i < 6; i++) Step(24);
+            Assert.That(supplier.MaxSupply, Is.InRange(140000, 239000));
+            Assert.That(plant.Condition, Is.EqualTo(PowerPlantCondition.Limited));
+
+            for (var i = 0; i < 8; i++) Step(0);
+            Assert.That(plant.Tripped, Is.True);
+            Assert.That(plant.Condition, Is.EqualTo(PowerPlantCondition.NoCoolant));
+            Assert.That(supplier.Enabled, Is.False);
+            Assert.That(generators.IsRunning(reactor), Is.False);
+            SEntMan.DeleteEntity(map.MapUid);
+        });
+    }
+
     [TestCase("IndustrialCoalGenerator")]
     [TestCase("IndustrialLiquidFuelGenerator")]
     [TestCase("IndustrialGasGenerator")]

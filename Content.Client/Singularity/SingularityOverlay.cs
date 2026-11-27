@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client._Eclipse.Power;
 using Content.Shared.CCVar;
 using Content.Shared.Singularity.Components;
 using Content.Shared._Eclipse.Power;
@@ -69,12 +70,16 @@ namespace Content.Client.Singularity
             }
 
             // Contained micro holes share the ordinary singularity lens and its cursor projection.
+            var visuals = _entMan.System<MicroBlackHoleVisualSystem>();
             var microQuery = _entMan.EntityQueryEnumerator<MicroBlackHoleVisualComponent, TransformComponent>();
             while (_count < MaxCount && microQuery.MoveNext(out var uid, out var visual, out var xform))
             {
-                if (visual.Activity <= .001f) continue;
-                var strength = (18 + 24 * Math.Clamp(visual.Activity, 0, 1) + 40 * Math.Clamp(visual.Instability, 0, 1)) *
-                    MathF.Pow(Math.Clamp(visual.Radius, .5f, 4) / 2.5f * MathF.Sqrt(Math.Clamp(visual.Activity, 0, 1)), MathF.Sqrt(2));
+                var (activity, instability, radius) = visuals.GetDisplay(uid);
+                if (activity <= .001f) continue;
+                radius = MicroBlackHoleVisualSystem.DisplayRadius(radius, activity);
+                if (visual.FieldRadius > 0)
+                    radius = MathF.Min(radius, visual.FieldRadius);
+                var strength = (18 + 24 * activity + 40 * instability) * MathF.Pow(radius / 2.5f, MathF.Sqrt(2));
                 AddDistortion(args, uid, xform, strength, MathF.Sqrt(2));
             }
 

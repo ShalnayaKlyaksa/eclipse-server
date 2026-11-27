@@ -32,7 +32,7 @@ public sealed partial class StationCommerceSystem
     }
 
     public int DocumentPrice(EntityUid uid) => HasComp<DocumentPrinterComponent>(uid)
-        ? Math.Clamp(_prototypes.Index<PersonalEconomyPrototype>("StationPersonalEconomy").DocumentPrice, 0, 1000000) : 0;
+        ? Math.Clamp(_prototypes.Index(PersonalEconomyPrototype.StationDefault).DocumentPrice, 0, 1000000) : 0;
 
     public bool ReservePrint(EntityUid machine, EntityUid? actor, int units, int expectedPrice, out Guid receipt)
     {
@@ -47,7 +47,7 @@ public sealed partial class StationCommerceSystem
     {
         // Physical break-in/EMP ejections are theft, not purchases by an invented payer.
         if (args.Buyer is not { } buyer) return;
-        var price = _prototypes.Index<PersonalEconomyPrototype>("StationPersonalEconomy").VendorPrices.GetValueOrDefault(vendor.PackPrototypeId);
+        var price = _prototypes.Index(PersonalEconomyPrototype.StationDefault).VendorPrices.GetValueOrDefault(vendor.PackPrototypeId);
         if (price <= 0) return;
         args.Cancelled = !Reserve(uid, buyer, price, 1, Loc.GetString("commerce-vend-entry"), out vendor.PaymentReceipt);
         if (args.Cancelled) _popup.PopupEntity(Loc.GetString("commerce-no-funds"), uid, buyer);
@@ -94,7 +94,7 @@ public sealed partial class StationCommerceSystem
         if (job is not ("Bartender" or "Chef") || !_merchantKits.Add((domain, username))) return;
         var uid = Spawn(job == "Bartender" ? "ImperialBarPaymentTerminal" : "ImperialKitchenPaymentTerminal", Transform(mob).Coordinates);
         var terminal = Comp<PaymentTerminalComponent>(uid);
-        terminal.Domain = domain; terminal.Owner = username; terminal.Recipient = username; terminal.Personal = true;
+        terminal.Domain = domain; terminal.OwnerUsername = username; terminal.Recipient = username; terminal.Personal = true;
         _hands.TryPickupAnyHand(mob, uid);
     }
 }

@@ -40,7 +40,7 @@ public sealed class LiquidPipeSystem : SharedLiquidPipeSystem
     private void ApplyTierSettings(Entity<LiquidPipeComponent> ent)
     {
         var specs = PipeTierHelper.GetSpecs(ent.Comp.Tier);
-        ent.Comp.ThroughputPerSecond = specs.ThroughputPerSecond;
+        ent.Comp.ThroughputPerSecond = ent.Comp.ThroughputOverride ?? specs.ThroughputPerSecond;
         Dirty(ent);
     }
 

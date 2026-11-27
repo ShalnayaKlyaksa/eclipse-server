@@ -3,10 +3,16 @@
   name: guide-entry-science
   text: "/ServerInfo/Guidebook/Science/Science.xml"
   children:
+  - EclipseResearchTerminal
   - Technologies
   - AnomalousResearch
   - Xenoarchaeology
   - Robotics
+
+- type: guideEntry
+  id: EclipseResearchTerminal
+  name: guide-entry-eclipse-research-terminal
+  text: "/ServerInfo/Guidebook/Science/EclipseResearchTerminal.xml"
 
 - type: guideEntry
   id: Technologies

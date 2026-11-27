@@ -59,7 +59,7 @@ guide-entry-eclipse-industrial = Промышленное производств
 guide-entry-eclipse-industrial-start = Быстрый старт
 guide-entry-eclipse-industrial-lines = Порты и предметные линии
 guide-entry-eclipse-industrial-power = Тепло и электропитание
-guide-entry-eclipse-industrial-recipes = Рецепты и ресурсы
+guide-entry-eclipse-industrial-recipes = Рецепты инженерного цеха
 guide-entry-eclipse-industrial-troubleshooting = Если линия остановилась
 
 industrial-processor-unresearched = Требуется исследование или станок более высокого уровня.

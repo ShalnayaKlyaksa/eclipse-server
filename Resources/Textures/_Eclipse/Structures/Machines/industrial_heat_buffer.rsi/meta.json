@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "license": "AGPL-3.0-or-later",
-  "copyright": "Original sprites from https://github.com/discordia-space/CEV-Eris/blob/master/icons/obj/machines/mining_machines.dmi. CEV Eris/Baystation12/tgstation contributors. Selected DMI states repacked into RSI for Eclipse without repainting. Original files and licensing notes: art/industrial-sprite-candidates/.",
+  "license": "CC-BY-SA-4.0",
+  "copyright": "Made by Xaoser for Eclipse",
   "size": {
     "x": 32,
     "y": 32

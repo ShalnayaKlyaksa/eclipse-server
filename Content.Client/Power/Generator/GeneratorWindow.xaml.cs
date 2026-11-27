@@ -17,6 +17,7 @@ public sealed partial class GeneratorWindow : ImmersiveFancyWindow
     [Dependency] private readonly ILocalizationManager _loc = default!;
 
     private EntityUid _entity;
+    private int _fusionNominalKilowatts;
 
     public float? MaximumPower;
 
@@ -33,6 +34,8 @@ public sealed partial class GeneratorWindow : ImmersiveFancyWindow
         ((Control) this).Stylesheet = ResearchTerminalTheme.Create(IoCManager.Resolve<IUserInterfaceManager>().Stylesheet);
         ResearchTerminalTheme.StyleButtons(ContentsContainer);
         ResetButton.OnPressed += _ => OnReset?.Invoke();
+        FusionNominal.OnPressed += _ => OnPower?.Invoke(_fusionNominalKilowatts);
+        FusionBoost.OnPressed += _ => OnPower?.Invoke((int) (MaximumPower.GetValueOrDefault() / 1000));
 
         TargetPower.IsValid += IsValid;
         TargetPower.ValueChanged += (args) =>
@@ -68,6 +71,10 @@ public sealed partial class GeneratorWindow : ImmersiveFancyWindow
     {
         MaximumPower = state.MaximumPower;
         OperatingPanel.Visible = state.Operating != null;
+        var fusion = state.Operating?.FusionNominalPower != null;
+        FusionModes.Visible = fusion;
+        TargetPower.Visible = !fusion;
+        EntityView.Scale = fusion ? new(1, 1) : new(2, 2);
         if (state.Operating is { } operating)
         {
             OperatingCondition.Text = Loc.GetString("power-plant-condition-" + operating.Condition.ToString().ToLowerInvariant());
@@ -87,6 +94,27 @@ public sealed partial class GeneratorWindow : ImmersiveFancyWindow
             OperatingKinetics.Visible = operating.GravitySource;
             OperatingKinetics.Text = Loc.GetString("power-plant-kinetics", ("count", operating.KineticGenerators),
                 ("power", (int) (operating.HarvestedPower / 1000)));
+            OperatingGravityHorizon.Visible = operating.GravitySource;
+            if (operating.GravitySource)
+                OperatingGravityHorizon.Text = Loc.GetString("gravity-plant-horizon",
+                    ("radius", MathF.Round(operating.GravityHorizon, 1)), ("limit", MathF.Round(operating.GravityFieldLimit, 1)),
+                    ("projectors", operating.GravityStaticProjectors));
+            FusionUtilities.Visible = fusion;
+            if (operating.FusionNominalPower is { } nominal)
+            {
+                Title = Loc.GetString("power-fusion-title");
+                _fusionNominalKilowatts = (int) (nominal / 1000);
+                FusionNominal.Disabled = state.TargetPower <= nominal;
+                FusionBoost.Disabled = state.TargetPower >= state.MaximumPower;
+                TargetLabel.Text = Loc.GetString("power-fusion-mode");
+                OperatingOutput.Text = Loc.GetString("power-fusion-output",
+                    ("delivered", (int) (operating.DeliveredPower / 1000)),
+                    ("available", (int) (operating.AvailablePower / 1000)));
+                FusionUtilities.Text = Loc.GetString("power-fusion-utilities",
+                    ("power", (int) (operating.AuxiliaryPower / 1000)),
+                    ("flow", (int) operating.CoolantFlow),
+                    ("net", (int) ((operating.DeliveredPower - operating.AuxiliaryPower) / 1000)));
+            }
             WarmupBar.Visible = state.On && operating.Warmup < 1;
             WarmupBar.Value = operating.Warmup;
             ResetButton.Visible = operating.Tripped && operating.Condition != PowerPlantCondition.Failed;
@@ -106,11 +134,12 @@ public sealed partial class GeneratorWindow : ImmersiveFancyWindow
         Eta.Text = Loc.GetString(
             "portable-generator-ui-eta",
             ("minutes", Math.Ceiling(left / 60.0)));
-        FuelFraction.Value = state.RemainingFuel - (int) state.RemainingFuel;
-        FuelLeft.Text = ((int) MathF.Floor(state.RemainingFuel)).ToString();
+        FuelFraction.Value = fusion ? Math.Clamp(state.RemainingFuel, 0, 1) : state.RemainingFuel - (int) state.RemainingFuel;
+        FuelLeft.Text = fusion ? FuelFraction.Value.ToString("P0") : ((int) MathF.Floor(state.RemainingFuel)).ToString();
         FuelEject.Visible = state.CanEjectFuel;
+        FuelEject.Disabled = fusion && state.RemainingFuel < 1;
         StartButton.Disabled = state.RemainingFuel <= 0 || state.Operating is { Tripped: true } ||
-            state.Operating is { } plant && plant.FieldCount < plant.RequiredFields;
+            state.Operating is { } plant && (plant.FieldCount < plant.RequiredFields || fusion && !plant.FusionReady);
 
         var progress = 0f;
 

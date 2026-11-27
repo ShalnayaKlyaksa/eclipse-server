@@ -296,6 +296,11 @@ public sealed class MarkingsViewModel
         if (!_previousMarkings.TryGetValue(markingId, out var newMarking))
         {
             var colors = MarkingColoring.GetMarkingLayerColors(markingProto, profileData.SkinColor, profileData.EyeColor, layerMarkings);
+            if (layer == HumanoidVisualLayers.Hair && !markingProto.ForcedColoring && colors.Count > 0
+                && Species is { } species && _prototype.TryIndex(species, out var speciesPrototype)
+                && speciesPrototype.DefaultHairColor is { } hairColor)
+                colors[0] = hairColor;
+
             newMarking = new Marking(markingId, colors);
         }
         newMarking.Forced = AnyEnforcementsLifted;

@@ -1,0 +1,91 @@
+- type: entity
+  parent: BaseItem
+  id: EclipseIndustrialHoneycomb
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Objects/Consumable/Food/culinary_produce.rsi
+    state: honeycomb
+  - type: Item
+    size: Small
+
+- type: entity
+  parent: EclipseIndustrialHoneycomb
+  id: EclipseCopperHoneycomb
+  name: copper honeycomb
+  description: This comb can be separated into wax and industrial materials in a thermal centrifuge.
+  components:
+  - type: Sprite
+    color: '#CB8C58'
+
+- type: entity
+  parent: EclipseIndustrialHoneycomb
+  id: EclipseSilkenHoneycomb
+  name: silken honeycomb
+  description: This comb can be separated into wax and industrial materials in a thermal centrifuge.
+  components:
+  - type: Sprite
+    color: '#ECD9B2'
+
+- type: entity
+  parent: EclipseIndustrialHoneycomb
+  id: EclipseMetallicHoneycomb
+  name: metallic honeycomb
+  description: This comb can be separated into wax and industrial materials in a thermal centrifuge.
+  components:
+  - type: Sprite
+    color: '#A1ABB6'
+
+- type: entity
+  parent: EclipseIndustrialHoneycomb
+  id: EclipseAuricHoneycomb
+  name: auric honeycomb
+  description: This comb can be separated into wax and industrial materials in a thermal centrifuge.
+  components:
+  - type: Sprite
+    color: '#E8BB48'
+
+- type: entity
+  parent: EclipseIndustrialHoneycomb
+  id: EclipseCrystallineHoneycomb
+  name: crystalline honeycomb
+  description: This comb can be separated into wax and industrial materials in a thermal centrifuge.
+  components:
+  - type: Sprite
+    color: '#8CD9EA'
+
+- type: entity
+  parent: EclipseIndustrialHoneycomb
+  id: EclipseConductiveHoneycomb
+  name: conductive honeycomb
+  description: This comb can be separated into wax and industrial materials in a thermal centrifuge.
+  components:
+  - type: Sprite
+    color: '#C5DAEC'
+
+- type: entity
+  parent: EclipseIndustrialHoneycomb
+  id: EclipseRadiantHoneycomb
+  name: radiant honeycomb
+  description: This comb can be separated into wax and industrial materials in a thermal centrifuge.
+  components:
+  - type: Sprite
+    color: '#A8DA6F'
+
+- type: entity
+  parent: EclipseIndustrialHoneycomb
+  id: EclipseResonantHoneycomb
+  name: resonant honeycomb
+  description: This comb can be separated into wax and industrial materials in a thermal centrifuge.
+  components:
+  - type: Sprite
+    color: '#C4A7EB'
+
+- type: entity
+  parent: EclipseIndustrialHoneycomb
+  id: EclipseQuantumHoneycomb
+  name: quantum honeycomb
+  description: This comb can be separated into wax and industrial materials in a thermal centrifuge.
+  components:
+  - type: Sprite
+    color: '#8C96DE'

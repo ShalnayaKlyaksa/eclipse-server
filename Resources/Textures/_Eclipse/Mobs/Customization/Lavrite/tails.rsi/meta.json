@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "license": "CC0-1.0",
+  "copyright": "Original pixel art for Eclipse.",
+  "size": { "x": 32, "y": 32 },
+  "states": [
+    { "name": "flame", "directions": 4 },
+    { "name": "ember", "directions": 4 }
+  ]
+}

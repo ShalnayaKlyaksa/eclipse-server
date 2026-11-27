@@ -241,6 +241,34 @@
   recipeUnlocks: []
   position: 29, -30
 - type: technology
+  id: EnergyMox
+  name: research-energymox
+  icon:
+    sprite: _Eclipse/Structures/Power/nuclear_sections.rsi
+    state: cell_mox
+  discipline: Energy
+  tier: 3
+  cost: 9800
+  technologyPrerequisites:
+  - EnergyFission
+  - IndustrialChemicalSynthesis
+  recipeUnlocks: []
+  position: 29, -31
+- type: technology
+  id: EnergyFusion
+  name: research-energyfusion
+  icon:
+    sprite: _Eclipse/Structures/Power/fusion_reactor.rsi
+    state: chamber
+  discipline: Energy
+  tier: 3
+  cost: 10000
+  technologyPrerequisites:
+  - EnergyStabilization
+  - IndustrialPrecisionElectronics
+  recipeUnlocks: []
+  position: 30, -27
+- type: technology
   id: EnergyAntimatter
   name: research-energyantimatter
   icon:

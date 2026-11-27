@@ -21,6 +21,8 @@ namespace Content.IntegrationTests.Tests.Industrial;
 
 public sealed class IndustrialAdvancedProductionTest : GameTest
 {
+    private static readonly ProtoId<IndustrialRecipePrototype> CrushQuartzOre = "CrushQuartzOre";
+
     // This fixture exercises material/solution transactions; licensing and room failures are tested separately.
     private void PrepareProductionEnvironment(EntityUid uid)
     {
@@ -122,7 +124,7 @@ public sealed class IndustrialAdvancedProductionTest : GameTest
                 "DrawBondingWire", "StampChipFrames", "CutHeatSpreaders", "FormContacts" };
             foreach (var name in sideChains)
                 Run(prototypes.Index<IndustrialRecipePrototype>("Industrial" + name));
-            Run(prototypes.Index<IndustrialRecipePrototype>("CrushQuartzOre"));
+            Run(prototypes.Index(CrushQuartzOre));
             var main = prototypes.EnumeratePrototypes<IndustrialRecipePrototype>()
                 .Where(r => r.ID.StartsWith("Advanced")).OrderBy(r => r.ID).ToArray();
             Assert.That(main, Has.Length.EqualTo(34));

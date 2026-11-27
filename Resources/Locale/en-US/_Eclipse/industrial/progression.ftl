@@ -49,6 +49,7 @@ ent-IndustrialIronPlate1 = { ent-IndustrialIronPlate }
 ent-IndustrialProductionDisk = production data disk
     .desc = Record completed science research and install it permanently into machines.
 ent-IndustrialChassisBlueprint = machine chassis blueprint
+    .desc = Use it on a clear floor tile. Build the frame with 8 iron plates, 4 iron rods, and a screwdriver.
 ent-IndustrialManualCrusher = manual crusher
 ent-IndustrialChassisConstruction = industrial chassis under construction
 ent-IndustrialCleanroomController = cleanroom HEPA controller

@@ -74,6 +74,10 @@ public sealed partial class OrganMarkingPicker : Control
         var i = 0;
         foreach (var layer in _layers)
         {
+            _markingsModel.GetMarkingCounts(_organ, layer, out _, out var count, out _);
+            if (count == 0)
+                continue;
+
             var allMarkings =
                 _markingsModel.EnforceGroupAndSexRestrictions
                     ? _marking.MarkingsByLayerAndSpeciesGroupAndSex(layer, _markingsModel.Species, _group, organProfileData.Sex)

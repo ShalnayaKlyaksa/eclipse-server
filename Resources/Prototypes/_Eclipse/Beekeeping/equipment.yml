@@ -70,7 +70,7 @@
 - type: entity
   parent: BaseItem
   id: EclipseBeePrincess
-  name: bee princess
+  name: meadow bee princess
   components:
   - type: Sprite
     sprite: Mobs/Animals/bee.rsi
@@ -83,7 +83,7 @@
 - type: entity
   parent: EclipseBeePrincess
   id: EclipseBeeDrone
-  name: bee drone
+  name: meadow bee drone
   components:
   - type: BeeSpecimen
     caste: Drone
@@ -91,21 +91,22 @@
 - type: entity
   parent: EclipseBeePrincess
   id: EclipseBeeForestPrincess
+  name: forest bee princess
   components:
+  - type: Sprite
+    color: '#B9CA85'
   - type: BeeSpecimen
     genome:
       dominant: Forest
       recessive: Forest
 
 - type: entity
-  parent: EclipseBeeDrone
+  parent: EclipseBeeForestPrincess
   id: EclipseBeeForestDrone
+  name: forest bee drone
   components:
   - type: BeeSpecimen
     caste: Drone
-    genome:
-      dominant: Forest
-      recessive: Forest
 
 - type: entity
   parent: ClothingHeadBase

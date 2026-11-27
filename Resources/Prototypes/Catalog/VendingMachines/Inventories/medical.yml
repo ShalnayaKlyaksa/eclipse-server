@@ -37,6 +37,7 @@
     AdvancedMedicineVialEpinephrine: 2
     AdvancedMedicineVialClinicalOpioid: 2
     AdvancedMedicineVialClinicalNaloxone: 2
+    AdvancedMedicineVialNeuroregen: 2
     AdvancedEmptyBloodBag: 8
     EclipsePackedCellsONeg: 4
     AdvancedBloodTestKit: 8

@@ -23,6 +23,10 @@ namespace Content.IntegrationTests.Tests.Industrial;
 
 public sealed class IndustrialRecipeAuditTest : GameTest
 {
+    private static readonly ProtoId<IndustrialRecipePrototype> ElectrolysisFuelBlend = "IndustrialElectrolysisFuelBlend";
+    private static readonly EntProtoId FuelCellGenerator = "IndustrialFuelCellGenerator";
+    private static readonly EntProtoId Electrolyzer = "IndustrialElectrolyzer";
+
     private string _currentRecipe = "initialization";
 
     private async Task Audit(Action body)
@@ -182,12 +186,12 @@ public sealed class IndustrialRecipeAuditTest : GameTest
         await Server.WaitAssertion(() =>
         {
             var prototypes = Server.ResolveDependency<IPrototypeManager>();
-            var recipe = prototypes.Index<IndustrialRecipePrototype>("IndustrialElectrolysisFuelBlend");
-            var cell = prototypes.Index<EntityPrototype>("IndustrialFuelCellGenerator");
+            var recipe = prototypes.Index(ElectrolysisFuelBlend);
+            var cell = prototypes.Index(FuelCellGenerator);
             var fuel = (Content.Shared.Power.Generator.FuelGeneratorComponent) cell.Components["FuelGenerator"].Component;
             var chemistry = (Content.Server._Eclipse.Power.ReagentFuelCellComponent) cell.Components["ReagentFuelCell"].Component;
             var thermal = (Content.Server._Eclipse.Power.PowerPlantComponent) cell.Components["PowerPlant"].Component;
-            var electrolyzer = prototypes.Index<EntityPrototype>("IndustrialElectrolyzer");
+            var electrolyzer = prototypes.Index(Electrolyzer);
             var load = ((Content.Server.Power.Components.ApcPowerReceiverComponent) electrolyzer.Components["ApcPowerReceiver"].Component).Load;
             var packets = chemistry.Inputs.Min(p => recipe.FluidOutputs[p.Key].Float() / p.Value);
             var maximumReturnedEnergy = packets * (fuel.OptimalPower / fuel.OptimalBurnRate + thermal.HeatPerFuel);

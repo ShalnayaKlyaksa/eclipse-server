@@ -4,6 +4,7 @@ using Content.Shared.Drunk;
 using Content.Shared.Speech;
 using Content.Shared.Speech.EntitySystems;
 using Content.Shared.StatusEffectNew;
+using Content.Shared.Traits.Assorted;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
@@ -61,6 +62,8 @@ public sealed class SlurredSystem : SharedSlurredSystem
     private void GetAccent(EntityUid uid, ref AccentGetEvent args)
     {
         var scale = GetProbabilityScale(uid);
+        if (HasComp<ClearDictionComponent>(uid))
+            scale *= 0.5f;
         args.Message = Accentuate(args.Message, scale);
     }
 

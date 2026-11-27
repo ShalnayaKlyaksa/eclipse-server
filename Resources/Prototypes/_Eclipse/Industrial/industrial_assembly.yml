@@ -84,7 +84,7 @@
   parent: BaseMachine
   id: IndustrialMachineChassis
   name: industrial machine chassis
-  description: An empty industrial machine frame. Install an upgrade module to complete assembly.
+  description: Anchor it with a wrench, then use a machine module on it to finish assembly.
   components:
   - type: Transform
     anchored: false

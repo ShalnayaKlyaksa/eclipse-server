@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "license": "CC0-1.0",
+  "copyright": "Original pixel art for Eclipse.",
+  "size": { "x": 16, "y": 16 },
+  "states": [ { "name": "feather" } ]
+}

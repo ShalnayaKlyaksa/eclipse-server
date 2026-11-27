@@ -48,7 +48,6 @@ namespace Content.Client.Entry
 {
     public sealed class EntryPoint : GameClient
     {
-        private Content.Client._Eclipse.Industrial.IndustrialPipeAtlas? _industrialPipeAtlas;
         [Dependency] private readonly IBaseClient _baseClient = default!;
         [Dependency] private readonly IGameController _gameController = default!;
         [Dependency] private readonly IStateManager _stateManager = default!;
@@ -100,8 +99,6 @@ namespace Content.Client.Entry
         {
             Dependencies.BuildGraph();
             Dependencies.InjectDependencies(this);
-
-            _industrialPipeAtlas = new Content.Client._Eclipse.Industrial.IndustrialPipeAtlas(_resourceManager);
 
             _contentLoc.Initialize();
             _componentFactory.DoAutoRegistrations();
@@ -159,12 +156,6 @@ namespace Content.Client.Entry
             _configManager.SetCVar("interface.resolutionAutoScaleLowerCutoffX", 520);
             _configManager.SetCVar("interface.resolutionAutoScaleLowerCutoffY", 240);
             _configManager.SetCVar("interface.resolutionAutoScaleMinimum", 0.5f);
-        }
-
-        public override void Shutdown()
-        {
-            _industrialPipeAtlas?.Dispose();
-            base.Shutdown();
         }
 
         public override void PostInit()

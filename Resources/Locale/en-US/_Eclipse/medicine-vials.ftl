@@ -10,3 +10,7 @@ ent-AdvancedMedicineVialClinicalOpioid = ClinicalOpioid vial
     .desc = A labelled 30-unit medicine vial. Draw the solution with a syringe.
 ent-AdvancedMedicineVialClinicalNaloxone = ClinicalNaloxone vial
     .desc = A labelled 30-unit medicine vial. Draw the solution with a syringe.
+ent-AdvancedMedicineVialNeuroregen = Neuroregen vial
+    .desc = Contains 30 units of Neuroregen. Draw it with a syringe. A 10-unit dose can restore brain tissue in a deceased patient.
+reagent-name-neuroregen = Neuroregen
+reagent-desc-neuroregen = An injectable medicine that gradually repairs damaged brain tissue, even after death.

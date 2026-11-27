@@ -13,7 +13,7 @@ trait-pacifist-desc = Вы не можете нападать и причиня�
 permanent-blindness-trait-examined = [color=lightblue]{ CAPITALIZE(POSS-ADJ($target)) } глаза остекленелые и расфокусированные. Не похоже, что { SUBJECT($target) } может хорошо вас видеть, если может вообще.[/color]
 
 trait-lightweight-name = Быстрое опьянение
-trait-lightweight-desc = Алкоголь сильнее воздействует на вас.
+trait-lightweight-desc = Каждая порция алкоголя продлевает опьянение вдвое сильнее обычного.
 
 trait-monochromacy-name = Монохромазия
 trait-monochromacy-desc = Вы полный дальтоник, всё, что вы видите, сводится к оттенкам от чёрного до белого.
@@ -43,7 +43,7 @@ trait-snoring-name = Храп
 trait-snoring-desc = Вы храпите во время сна.
 
 trait-liar-name = Патологический лжец
-trait-liar-desc = Вы с трудом заставляете себя говорить правду. Иногда вы всё равно лжёте.
+trait-liar-desc = В вашей речи иногда меняются слова, даже «да» и «нет».
 
 trait-german-name = Немецкий акцент
 trait-german-desc = Вы, кажется, родом из Космической Германии.
@@ -64,27 +64,27 @@ trait-hemophilia-name = Гемофилия
 trait-hemophilia-desc = Ваш организм не справляется со свёртыванием крови.
 
 trait-impaired-mobility-name = Нарушение подвижности
-trait-impaired-mobility-desc = Вам тяжело передвигаться без посторонней помощи.
+trait-impaired-mobility-desc = Без трости в руке вы двигаетесь медленнее. После падения вам нужно больше времени, чтобы встать.
 trait-endurance-name = Выносливость
-trait-endurance-desc = Персонаж немного медленнее устает. Стоит 2 очка черт.
+trait-endurance-desc = На 20% больше урона по выносливости требуется, чтобы сбить вас с ног.
 
 trait-strong-body-name = Крепкое тело
-trait-strong-body-desc = Персонаж немного лучше переносит легкий физический урон. Стоит 2 очка черт.
+trait-strong-body-desc = Вы получаете на 10% меньше ушибов, порезов и колотых ран.
 
 trait-sober-name = Трезвость
-trait-sober-desc = Алкоголь действует слабее. Стоит 1 очко черт. Несовместимо с быстрым опьянением.
+trait-sober-desc = Каждая порция алкоголя добавляет на 35% меньше времени опьянения.
 
 trait-strong-liver-name = Сильная печень
-trait-strong-liver-desc = Алкоголь и часть слабых токсичных эффектов действуют немного слабее. Стоит 1 очко черт.
+trait-strong-liver-desc = Вы получаете на 25% меньше урона ядом.
 
 trait-cold-head-name = Холодная голова
 trait-cold-head-desc = Персонаж лучше переносит стресс, панику или дезориентацию, если такие механики есть. Стоит 2 очка черт.
 
 trait-clear-diction-name = Четкая дикция
-trait-clear-diction-desc = Речь персонажа меньше искажается от легких эффектов, если это поддерживается. Стоит 1 очко черт.
+trait-clear-diction-desc = При невнятной речи слова искажаются вдвое реже.
 
 trait-light-step-name = Легкий шаг
-trait-light-step-desc = Персонаж немного тише ходит, но не становится полноценным скрытным антагонистом. Стоит 1 очко черт.
+trait-light-step-desc = Ваши шаги на 6 дБ тише при ходьбе и беге.
 
 trait-observant-name = Наблюдательность
 trait-observant-desc = Персонаж лучше замечает мелкие признаки, если такая механика есть. Стоит 1 очко черт.
@@ -93,31 +93,29 @@ trait-stable-motorics-name = Стабильная моторика
 trait-stable-motorics-desc = Слабое дрожание рук или мелкие штрафы от состояний влияют немного меньше, если такая механика есть. Стоит 1 очко черт.
 
 trait-tenacity-name = Живучесть
-trait-tenacity-desc = Персонаж немного дольше остается в строю при некритических повреждениях. Стоит 2 очка черт.
+trait-tenacity-desc = Вы тратите на 25% меньше времени, чтобы подняться после падения.
+
+trait-pocket-musician-name = Карманный музыкант
+trait-pocket-musician-desc = Вы начинаете смену с губной гармошкой. Подходит для джема в баре и импровизаций между вызовами.
+
+trait-dice-collector-name = Любитель настолок
+trait-dice-collector-desc = Вы начинаете смену с мешочком игральных костей. Можно устроить партию между сменами или решить спор броском кубика.
 
 trait-italian-american-name = Итало-американский акцент
 trait-italian-american-desc = Речь персонажа звучит с итало-американским акцентом. Нейтральная речевая черта, стоит 0 очков.
 
 trait-language-galactic-common-name = Общегалактический
-trait-language-galactic-common-desc = Персонаж знает общегалактический язык. Первый язык бесплатный; каждый следующий стоит очки черт.
 
 trait-language-tradeband-name = Торговый жаргон
-trait-language-tradeband-desc = Персонаж знает торговый жаргон. Первый язык бесплатный; каждый следующий стоит очки черт.
 
 trait-language-freespeak-name = Вольная речь
-trait-language-freespeak-desc = Персонаж знает вольную речь. Первый язык бесплатный; каждый следующий стоит очки черт.
 
 trait-language-elyran-name = Элиранский
-trait-language-elyran-desc = Персонаж знает элиранский язык. Первый язык бесплатный; каждый следующий стоит очки черт.
 
 trait-language-valyrian-name = Валирийский
-trait-language-valyrian-desc = Персонаж знает валирийский язык. Первый язык бесплатный; каждый следующий стоит очки черт.
 
 trait-language-canilunzt-name = Канилунцт
-trait-language-canilunzt-desc = Персонаж знает канилунцт. Первый язык бесплатный; каждый следующий стоит очки черт.
 
 trait-language-bubblish-name = Пузырчатый
-trait-language-bubblish-desc = Персонаж знает пузырчатый язык. Первый язык бесплатный; каждый следующий стоит очки черт.
 
 trait-language-moffic-name = Моффик
-trait-language-moffic-desc = Персонаж знает моффик. Первый язык бесплатный; каждый следующий стоит очки черт.

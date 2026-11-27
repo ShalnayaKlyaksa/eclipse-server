@@ -1,22 +1,19 @@
 <Document>
-# Медбей
-Это отдел, куда люди обращаются с травмами, и только от работающих здесь людей зависит их устранение.
+# Медблок
 
-В настоящее время медблок делится на два разных направления:
+При поступлении пациента проверьте, дышит ли он, и остановите сильное кровотечение. Затем осмотрите раны и сверяйтесь со сканером. Внутренние повреждения, переломы и потерю крови придётся разбирать отдельно.
 
-## Медицинская помощь
 <Box>
-<GuideEntityEmbed Entity="Brutepack"/>
-<GuideEntityEmbed Entity="Bloodpack"/>
-<GuideEntityEmbed Entity="Ointment"/>
-<GuideEntityEmbed Entity="Gauze"/>
-<GuideEntityEmbed Entity="HandheldHealthAnalyzer"/>
+  <GuideEntityEmbed Entity="HandheldHealthAnalyzer"/>
+  <GuideEntityEmbed Entity="Gauze"/>
+  <GuideEntityEmbed Entity="Bloodpack"/>
 </Box>
-## Химическое производство
-<Box>
-<GuideEntityEmbed Entity="ChemDispenser"/>
-<GuideEntityEmbed Entity="LargeBeaker"/>
-<GuideEntityEmbed Entity="PillCanister"/>
-<GuideEntityEmbed Entity="ChemMaster"/>
-</Box>
+
+- [textlink="Травмы и первая помощь" link="EclipseTraumaCare"] — кровотечение, переломы, ожоги и обработка ран.
+- [textlink="Клиническая медицина" link="EclipseClinicalMedicine"] — симптомы, состояния и наблюдение за пациентом.
+- [textlink="Кровь и переливания" link="EclipseBloodMedicine"] — анализ группы крови, совместимость и восполнение потери.
+- [textlink="Диагностика и хирургия" link="EclipseSurgicalDiagnostics"] — обследование и подготовка к операциям.
+- [textlink="Химик" link="Chemist"] — рабочее место, раздатчик и фасовка.
+- [textlink="Медицинский синтез" link="EclipseMedicalChemistry"] — бикаридин, дермалин, дексалин и чистота партии.
+- [textlink="Клинические препараты" link="EclipseClinicalRecipes"] — рецепты прекурсоров для фармацевтической лаборатории.
 </Document>

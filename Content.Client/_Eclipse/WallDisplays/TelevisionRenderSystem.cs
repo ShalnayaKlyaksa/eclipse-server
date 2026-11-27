@@ -6,6 +6,7 @@ using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Shared.Enums;
+using Robust.Shared.Map;
 using Robust.Shared.Timing;
 
 namespace Content.Client._Eclipse.WallDisplays;
@@ -24,108 +25,138 @@ public sealed partial class TelevisionRenderSystem : EntitySystem
     private TelevisionOverlay _overlay = default!;
     private Font? _font;
     private TimeSpan _nextRender;
-    private bool _rendering;
     private const string ScreenLayer = "television-live-screen";
-    private sealed class Feed(IClydeViewport viewport)
+    private static readonly Vector2i SmallFeedSize = new(384, 216);
+    private static readonly Vector2i DetailedFeedSize = new(960, 540);
+
+    private sealed class Feed
     {
-        public IClydeViewport Viewport = viewport;
-        public FixedEye Eye = new() { Zoom = Vector2.One };
+        public IClydeViewport? Viewport;
+        public readonly FixedEye Eye = new() { Zoom = Vector2.One };
         public TimeSpan NextRender;
         public TimeSpan DetailedUntil;
+        public bool UsedByTelevision;
     }
 
     public override void Initialize()
     {
+        UpdatesAfter.Add(typeof(EyeSystem));
         SubscribeLocalEvent<TelevisionComponent, ComponentShutdown>((uid, _, _) => Release(uid));
         _overlay = new TelevisionOverlay(this); _overlays.AddOverlay(_overlay);
     }
 
-    public Texture? RenderFeed(EntityUid camera, bool detailed = false)
+    public Texture? GetFeed(EntityUid camera) =>
+        _feeds.TryGetValue(camera, out var feed) ? feed.Viewport?.RenderTarget.Texture : null;
+
+    public void RequestDetailedFeed(EntityUid camera)
     {
-        if (!TryComp<PublicBroadcastCameraComponent>(camera, out var source) || !source.OnAir || !HasComp<EyeComponent>(camera)) return null;
-        if (!_feeds.TryGetValue(camera, out var feed))
-        {
-            feed = new Feed(CreateViewport(new Vector2i(384, 216)));
-            feed.Viewport.Eye = feed.Eye; _feeds[camera] = feed;
-        }
-        if (detailed) feed.DetailedUntil = _timing.RealTime + TimeSpan.FromSeconds(.3);
-        var highQuality = _timing.RealTime < feed.DetailedUntil;
-        var size = highQuality ? new Vector2i(960, 540) : new Vector2i(384, 216);
-        if (feed.Viewport.Size != size)
-        {
-            feed.Viewport.Dispose(); feed.Viewport = CreateViewport(size);
-            feed.Viewport.Eye = feed.Eye; feed.NextRender = TimeSpan.Zero;
-        }
-        // Preserve the same field of view when promoting a feed to the large viewing window.
-        feed.Eye.Zoom = new Vector2(384f / size.X);
-        feed.Eye.Position = _transforms.GetMapCoordinates(camera);
-        if (_timing.RealTime >= feed.NextRender)
-        {
-            feed.NextRender = _timing.RealTime + TimeSpan.FromSeconds(highQuality ? 1d / 24 : .1);
-            feed.Viewport.Render();
-        }
-        return feed.Viewport.RenderTarget.Texture;
+        if (IsOnAir(camera))
+            GetOrCreateFeed(camera).DetailedUntil = _timing.RealTime + TimeSpan.FromSeconds(.3);
     }
 
-    private IClydeViewport CreateViewport(Vector2i size)
+    public override void FrameUpdate(float frameTime)
     {
-        var viewport = _clyde.CreateViewport(size, name: "Public television broadcast");
-        viewport.AutomaticRender = false; viewport.ClearColor = Color.Black;
-        return viewport;
+        var now = _timing.RealTime;
+        var televisions = EntityQueryEnumerator<TelevisionComponent, SpriteComponent>();
+        while (televisions.MoveNext(out _, out var television, out _))
+        {
+            if (television.Powered && television.Channel == TelevisionChannel.Broadcast &&
+                television.Camera is { } camera && IsOnAir(camera))
+            {
+                GetOrCreateFeed(camera).UsedByTelevision = true;
+            }
+        }
+
+        foreach (var (camera, feed) in _feeds)
+        {
+            var detailed = now < feed.DetailedUntil;
+            if ((!feed.UsedByTelevision && !detailed) || !IsOnAir(camera) ||
+                !TryComp(camera, out TransformComponent? xform) || xform.MapID == MapId.Nullspace)
+            {
+                feed.Viewport?.Dispose();
+                _feeds.Remove(camera);
+                continue;
+            }
+
+            feed.UsedByTelevision = false;
+            var size = detailed ? DetailedFeedSize : SmallFeedSize;
+            if (feed.Viewport?.Size != size)
+            {
+                feed.Viewport?.Dispose();
+                feed.Viewport = _clyde.CreateViewport(size, name: "Public television broadcast");
+                feed.Viewport.Eye = feed.Eye;
+                // Higher quality changes pixel density while keeping the same field of view.
+                feed.Viewport.RenderScale = new Vector2((float) size.X / SmallFeedSize.X);
+                feed.NextRender = TimeSpan.Zero;
+            }
+
+            // Render before the UI draws so both displays can use the completed frame.
+            feed.Viewport.AutomaticRender = now >= feed.NextRender;
+            if (!feed.Viewport.AutomaticRender)
+                continue;
+
+            feed.NextRender = now + TimeSpan.FromSeconds(detailed ? 1d / 24 : .1);
+            feed.Eye.Position = _transforms.GetMapCoordinates(xform);
+            feed.Eye.Rotation = xform.GridUid is { } grid ? -_transforms.GetWorldRotation(grid) : Angle.Zero;
+        }
+    }
+
+    private bool IsOnAir(EntityUid camera) =>
+        TryComp<PublicBroadcastCameraComponent>(camera, out var source) && source.OnAir && HasComp<EyeComponent>(camera);
+
+    private Feed GetOrCreateFeed(EntityUid camera)
+    {
+        if (!_feeds.TryGetValue(camera, out var feed))
+            _feeds[camera] = feed = new Feed();
+
+        return feed;
     }
 
     public void RenderPending(DrawingHandleScreen screen)
     {
-        if (_rendering || _timing.RealTime < _nextRender) return;
+        if (_timing.RealTime < _nextRender) return;
         _nextRender = _timing.RealTime + TimeSpan.FromSeconds(.1);
-        _rendering = true;
-        try
+        _font ??= _resources.GetFont("/Fonts/NotoSans/NotoSans-Bold.ttf", 9);
+        var televisions = EntityQueryEnumerator<TelevisionComponent, SpriteComponent>();
+        while (televisions.MoveNext(out var uid, out var television, out var sprite))
         {
-            _font ??= _resources.GetFont("/Fonts/NotoSans/NotoSans-Bold.ttf", 9);
-            var usedCameras = new HashSet<EntityUid>();
-            var televisions = EntityQueryEnumerator<TelevisionComponent, SpriteComponent>();
-            while (televisions.MoveNext(out var uid, out var television, out var sprite))
+            if (!television.Powered)
             {
-                if (!television.Powered)
-                {
-                    if (_sprites.LayerMapTryGet((uid, sprite), ScreenLayer, out var old, false)) _sprites.LayerSetVisible((uid, sprite), old, false);
-                    continue;
-                }
-                Texture? video = null;
-                if (television.Channel == TelevisionChannel.Broadcast && television.Camera is { } camera)
-                { usedCameras.Add(camera); video = RenderFeed(camera); }
-                if (!_screens.TryGetValue(uid, out var target))
-                    _screens[uid] = target = _clyde.CreateRenderTarget(new Vector2i(256, 128), new RenderTargetFormatParameters(RenderTargetColorFormat.Rgba8Srgb), name: "Television screen");
-                var transform = screen.GetTransform();
-                screen.RenderInRenderTarget(target, () =>
-                {
-                    screen.SetTransform(Matrix3x2.Identity);
-                    var rect = new UIBox2(8, 8, 248, 112);
-                    screen.DrawRect(rect, Color.FromHex("#0B141D"));
-                    if (video != null)
-                    {
-                        screen.DrawTextureRect(video, new UIBox2(36, 8, 220, 112));
-                        screen.DrawRect(new UIBox2(12, 12, 51, 28), Color.FromHex("#A3282C"));
-                        screen.DrawString(_font, new Vector2(15, 12), "LIVE", Color.White);
-                    }
-                    else if (television.Channel == TelevisionChannel.Broadcast)
-                    {
-                        screen.DrawString(_font, new Vector2(18, 43), Loc.GetString("television-no-signal"), Color.FromHex("#91B6B9"));
-                        screen.DrawString(_font, new Vector2(18, 65), Loc.GetString("television-start-camera"), Color.FromHex("#668185"));
-                    }
-                    else DrawArcade(screen, television.Channel);
-                }, Color.Transparent);
-                screen.SetTransform(transform);
-                var layer = _sprites.LayerMapReserve((uid, sprite), ScreenLayer);
-                _sprites.LayerSetTexture((uid, sprite), layer, target.Texture);
-                _sprites.LayerSetScale((uid, sprite), layer, new Vector2(.25f));
-                sprite.LayerSetShader(layer, "unshaded");
-                _sprites.LayerSetVisible((uid, sprite), layer, true);
+                if (_sprites.LayerMapTryGet((uid, sprite), ScreenLayer, out var old, false)) _sprites.LayerSetVisible((uid, sprite), old, false);
+                continue;
             }
-            foreach (var camera in _feeds.Keys.Except(usedCameras).ToArray())
-            { _feeds[camera].Viewport.Dispose(); _feeds.Remove(camera); }
+
+            var video = television.Channel == TelevisionChannel.Broadcast && television.Camera is { } camera
+                ? GetFeed(camera)
+                : null;
+            if (!_screens.TryGetValue(uid, out var target))
+                _screens[uid] = target = _clyde.CreateRenderTarget(new Vector2i(256, 128), new RenderTargetFormatParameters(RenderTargetColorFormat.Rgba8Srgb), name: "Television screen");
+            var transform = screen.GetTransform();
+            screen.RenderInRenderTarget(target, () =>
+            {
+                screen.SetTransform(Matrix3x2.Identity);
+                var rect = new UIBox2(8, 8, 248, 112);
+                screen.DrawRect(rect, Color.FromHex("#0B141D"));
+                if (video != null)
+                {
+                    screen.DrawTextureRect(video, new UIBox2(36, 8, 220, 112));
+                    screen.DrawRect(new UIBox2(12, 12, 51, 28), Color.FromHex("#A3282C"));
+                    screen.DrawString(_font, new Vector2(15, 12), "LIVE", Color.White);
+                }
+                else if (television.Channel == TelevisionChannel.Broadcast)
+                {
+                    screen.DrawString(_font, new Vector2(18, 43), Loc.GetString("television-no-signal"), Color.FromHex("#91B6B9"));
+                    screen.DrawString(_font, new Vector2(18, 65), Loc.GetString("television-start-camera"), Color.FromHex("#668185"));
+                }
+                else DrawArcade(screen, television.Channel);
+            }, Color.Transparent);
+            screen.SetTransform(transform);
+            var layer = _sprites.LayerMapReserve((uid, sprite), ScreenLayer);
+            _sprites.LayerSetTexture((uid, sprite), layer, target.Texture);
+            _sprites.LayerSetScale((uid, sprite), layer, new Vector2(.25f));
+            sprite.LayerSetShader(layer, "unshaded");
+            _sprites.LayerSetVisible((uid, sprite), layer, true);
         }
-        finally { _rendering = false; }
     }
 
     private void DrawArcade(DrawingHandleScreen screen, TelevisionChannel channel)
@@ -162,7 +193,7 @@ public sealed partial class TelevisionRenderSystem : EntitySystem
     public override void Shutdown()
     {
         foreach (var uid in _screens.Keys.ToArray()) Release(uid);
-        foreach (var feed in _feeds.Values) feed.Viewport.Dispose();
+        foreach (var feed in _feeds.Values) feed.Viewport?.Dispose();
         _feeds.Clear(); _overlays.RemoveOverlay(_overlay); base.Shutdown();
     }
 }

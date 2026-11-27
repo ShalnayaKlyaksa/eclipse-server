@@ -142,9 +142,17 @@ public sealed class MarkingManager
                 return false;
         }
 
-        if (prototype.SpeciesRestriction is { } speciesRestriction &&
-            (species is null || !speciesRestriction.Contains(species.Value)))
-            return false;
+        if (prototype.SpeciesRestriction is { } speciesRestriction)
+        {
+            if (species is null)
+                return false;
+
+            if (!speciesRestriction.Contains(species.Value)
+                && (!_prototype.TryIndex(species.Value, out var speciesPrototype)
+                    || speciesPrototype.MarkingSpecies is not { } markingSpecies
+                    || !speciesRestriction.Contains(markingSpecies)))
+                return false;
+        }
 
         return prototype.SexRestriction == null || prototype.SexRestriction == sex;
     }
@@ -158,13 +166,16 @@ public sealed class MarkingManager
         {
             for (var i = markings.Count - 1; i >= 0; i--)
             {
-                if (!TryGetMarking(markings[i], out var marking))
+                var current = markings[i];
+                if (current.MarkingId.Id == "HarpyTail")
+                    current.MarkingId = "AvianTailHarpy";
+
+                if (!TryGetMarking(current, out var marking))
                 {
                     markings.RemoveAt(i);
                     continue;
                 }
 
-                var current = markings[i];
                 if (marking.Sprites.Count != current.MarkingColors.Count)
                 {
                     current = new Marking(marking.ID, marking.Sprites.Count);
@@ -203,6 +214,20 @@ public sealed class MarkingManager
     /// </summary>
     public void EnsureValidLayers(Dictionary<HumanoidVisualLayers, List<Marking>> markingSets, HashSet<HumanoidVisualLayers> layers)
     {
+        // Saved Avian profiles stored wing markings in the tail overlay slot.
+        if (layers.Contains(HumanoidVisualLayers.Wings) &&
+            markingSets.TryGetValue(HumanoidVisualLayers.TailOverlay, out var overlays))
+        {
+            var wings = overlays.FindAll(marking =>
+                TryGetMarking(marking, out var prototype) && prototype.BodyPart == HumanoidVisualLayers.Wings);
+            if (wings.Count > 0)
+            {
+                markingSets[HumanoidVisualLayers.TailOverlay] = overlays.FindAll(marking => !wings.Contains(marking));
+                if (!markingSets.TryGetValue(HumanoidVisualLayers.Wings, out var current) || current.Count == 0)
+                    markingSets[HumanoidVisualLayers.Wings] = wings;
+            }
+        }
+
         foreach (var (markingSet, markings) in markingSets)
         {
             for (var i = markings.Count - 1; i >= 0; i--)

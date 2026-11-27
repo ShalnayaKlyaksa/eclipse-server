@@ -32,7 +32,6 @@ nuke-user-interface-second-status-cooldown-time = ОЖИДАНИЕ: { $time }
 
 ## Nuke labels
 
-nuke-label-pact = PACT-{ $serial }
 # do you even need this one? It's more funnier to say that
 # the AshLegion stole a NT nuke
 nuke-label-syndicate = INT-{ $serial }

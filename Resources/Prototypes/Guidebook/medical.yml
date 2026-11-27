@@ -53,11 +53,17 @@
   text: "/ServerInfo/Guidebook/Medical/Chemist.xml"
   children:
   - EclipseMedicalChemistry
+  - EclipseClinicalRecipes
   # - Medicine
   # Duplicate guide entries are currently not supported
   # TODO GUIDEBOOK Maybe allow duplicate entries?
   - Botanicals
   - AdvancedBrute
+
+- type: guideEntry
+  id: EclipseClinicalRecipes
+  name: guide-entry-eclipse-clinical-recipes
+  text: "/ServerInfo/Guidebook/Medical/EclipseClinicalRecipes.xml"
 
 - type: guideEntry
   id: Medicine

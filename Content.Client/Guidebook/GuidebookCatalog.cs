@@ -7,6 +7,12 @@ namespace Content.Client.Guidebook;
 /// <summary>Navigation and text search over the entries supplied to a guidebook, including restricted help books.</summary>
 public sealed class GuidebookCatalog
 {
+    private static readonly Regex CommentPattern = new("<!--.*?-->", RegexOptions.Singleline);
+    private static readonly Regex CaptionPattern = new("""<[^>]*Caption="([^"]*)"[^>]*>""");
+    private static readonly Regex TextLinkPattern = new("""\[textlink="([^"]*)"[^\]]*\]""");
+    private static readonly Regex MarkupPattern = new(@"<[^>]*>|\[[^\]]*\]");
+    private static readonly Regex WhitespacePattern = new(@"\s+");
+
     public readonly Dictionary<string, GuideEntry> Entries;
     public readonly List<string> Roots;
     private readonly Dictionary<string, List<string>> _children = new();
@@ -94,10 +100,10 @@ public sealed class GuidebookCatalog
     public static string Normalize(string text) => text.ToLowerInvariant().Replace('ё', 'е');
     public static string PlainText(string markup)
     {
-        var text = Regex.Replace(markup, "<!--.*?-->", " ", RegexOptions.Singleline);
-        text = Regex.Replace(text, "<[^>]*Caption=\"([^\"]*)\"[^>]*>", " $1 ");
-        text = Regex.Replace(text, "\\[textlink=\"([^\"]*)\"[^\\]]*\\]", "$1");
-        text = Regex.Replace(text, "<[^>]*>|\\[[^\\]]*\\]", " ");
-        return Regex.Replace(text, "\\s+", " ").Trim();
+        var text = CommentPattern.Replace(markup, " ");
+        text = CaptionPattern.Replace(text, " $1 ");
+        text = TextLinkPattern.Replace(text, "$1");
+        text = MarkupPattern.Replace(text, " ");
+        return WhitespacePattern.Replace(text, " ").Trim();
     }
 }

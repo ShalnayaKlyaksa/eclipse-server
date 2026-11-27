@@ -34,3 +34,12 @@ public sealed partial class PowerPlantComponent : Component
 
 [RegisterComponent]
 public sealed partial class PowerPlantFieldStabilizerComponent : Component;
+
+[RegisterComponent]
+public sealed partial class FusionReactorComponent : Component
+{
+    [DataField] public float MinimumFlow = 3;
+    [DataField] public float NominalFlow = 18;
+    [DataField] public float BoostFlow = 60;
+    public float MeasuredFlow;
+}

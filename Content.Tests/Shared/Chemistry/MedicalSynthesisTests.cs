@@ -11,6 +11,9 @@ namespace Content.Tests.Shared.Chemistry;
 [TestFixture]
 public sealed class MedicalSynthesisTests : ContentUnitTest
 {
+    private static readonly ProtoId<ReagentPrototype> Bicaridine = "Bicaridine";
+    private static readonly ProtoId<ReagentPrototype> Water = "Water";
+
     [OneTimeSetUp]
     public void Setup() => IoCManager.Resolve<IPrototypeManager>().Initialize();
 
@@ -19,8 +22,8 @@ public sealed class MedicalSynthesisTests : ContentUnitTest
     {
         var solution = new Solution();
         solution.AddReagent(new ReagentId("Bicaridine", [new MedicalBatchData { Purity = 50 }]), FixedPoint2.New(10));
-        solution.AddReagent("Bicaridine", FixedPoint2.New(10));
-        solution.AddReagent("Water", FixedPoint2.New(10));
+        solution.AddReagent(Bicaridine.Id, FixedPoint2.New(10));
+        solution.AddReagent(Water.Id, FixedPoint2.New(10));
         Assert.That(MedicalBatch.GetPurity(solution, "Bicaridine"), Is.EqualTo(0.75f));
         var dose = MedicalBatch.Take(solution, "Bicaridine", FixedPoint2.New(4));
         Assert.That(dose.Volume, Is.EqualTo(FixedPoint2.New(4)));
@@ -79,14 +82,16 @@ public sealed class MedicalSynthesisTests : ContentUnitTest
         Assert.That(MedicalBatch.GetActivity(drug, "Bicaridine", "patient-B"), Is.EqualTo(5.2f).Within(0.001));
         Assert.That(MedicalBatch.GetMismatch(drug, "Bicaridine", "patient-B"), Is.EqualTo(1));
         Assert.That(MedicalBatch.GetActivity(drug.Clone(), "Bicaridine", "patient-A"), Is.EqualTo(9.2f).Within(0.001));
-        drug.AddReagent("Bicaridine", FixedPoint2.New(1));
+        drug.AddReagent(Bicaridine.Id, FixedPoint2.New(1));
         Assert.That(MedicalBatch.TryGetPatientProfile(drug, "Bicaridine", out _), Is.False);
     }
 
     [Test]
     public void ColdStopsReactionAndOverheatingAccumulatesPersistentStress()
     {
+#pragma warning disable RA0039 // Supply synthetic temperature limits to the rules under test.
         var recipe = new MedicalSynthesisPrototype { MinTemperature = 315, MaxTemperature = 335 };
+#pragma warning restore RA0039
         var cold = MedicalSynthesisRules.Step(recipe, MedicalSynthesisProtocol.Precision, MedicalReactorHeat.Cool, 293, 0, 0, 1);
         Assert.That(cold.Progress, Is.Zero);
         var hot = MedicalSynthesisRules.Step(recipe, MedicalSynthesisProtocol.Precision, MedicalReactorHeat.Boost, 345, 0, 0, 1);

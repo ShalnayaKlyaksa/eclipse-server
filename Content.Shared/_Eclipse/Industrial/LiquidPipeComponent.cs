@@ -23,6 +23,9 @@ public sealed partial class LiquidPipeComponent : Component
     [DataField]
     public float ThroughputPerSecond = 1f;
 
+    [DataField]
+    public float? ThroughputOverride;
+
     [DataField, AutoNetworkedField]
     public int NetworkId = -1;
 }

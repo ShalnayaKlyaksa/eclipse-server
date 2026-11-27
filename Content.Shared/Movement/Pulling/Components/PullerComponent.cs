@@ -32,6 +32,12 @@ public sealed partial class PullerComponent : Component
 
     public float SprintSpeedModifier => Pulling == default ? 1.0f : 0.95f;
 
+    [DataField, AutoNetworkedField]
+    public float HeavyPullMassThreshold = float.PositiveInfinity;
+
+    [DataField, AutoNetworkedField]
+    public float HeavyPullSpeedMultiplier = 1f;
+
     /// <summary>
     /// Entity currently being pulled if applicable.
     /// </summary>

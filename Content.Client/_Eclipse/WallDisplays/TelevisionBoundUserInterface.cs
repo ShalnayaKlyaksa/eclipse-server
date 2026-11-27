@@ -8,6 +8,7 @@ using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
+using Robust.Shared.Timing;
 
 namespace Content.Client._Eclipse.WallDisplays;
 
@@ -101,10 +102,17 @@ public sealed class PublicBroadcastView(TelevisionRenderSystem renderer) : Contr
 {
     public EntityUid? Camera;
     private readonly Font _font = IoCManager.Resolve<IResourceCache>().GetFont("/Fonts/NotoSans/NotoSans-Regular.ttf", 14);
+
+    protected override void FrameUpdate(FrameEventArgs args)
+    {
+        if (Camera is { } camera)
+            renderer.RequestDetailedFeed(camera);
+    }
+
     protected override void Draw(DrawingHandleScreen handle)
     {
         handle.DrawRect(new UIBox2(Vector2.Zero, PixelSize), Color.Black);
-        if (Camera is { } camera && renderer.RenderFeed(camera, detailed: true) is { } texture)
+        if (Camera is { } camera && renderer.GetFeed(camera) is { } texture)
         {
             const float aspect = 16f / 9;
             var width = Math.Min(PixelWidth, PixelHeight * aspect);

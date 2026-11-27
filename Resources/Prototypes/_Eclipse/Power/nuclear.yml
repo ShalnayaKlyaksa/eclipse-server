@@ -1,4 +1,3 @@
-# Temporary in-project artwork. External reactor candidates have not been approved.
 - type: entity
   abstract: true
   id: BaseNuclearSection
@@ -9,35 +8,126 @@
   - type: Transform
     anchored: false
   - type: Pullable
+  - type: Appearance
   - type: Sprite
-    sprite: Structures/Power/Generation/ame.rsi
-    state: shield_0
+    sprite: _Eclipse/Structures/Power/nuclear_sections.rsi
+    state: shield
   - type: Icon
-    sprite: Structures/Power/Generation/ame.rsi
-    state: shield_0
+    sprite: _Eclipse/Structures/Power/nuclear_sections.rsi
+    state: shield
   - type: GuideHelp
     guides: [EclipseNuclearReactor]
 
 - type: entity
-  id: NuclearReactorCore
+  id: BaseNuclearFloorSection
   parent: BaseNuclearSection
+  abstract: true
+  components:
+  - type: Physics
+    canCollide: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,0.49"
+        hard: false
+  - type: Sprite
+    drawdepth: FloorObjects
+  - type: IconSmooth
+    key: nuclearReactorDeck
+    mode: NoSprite
+
+- type: entity
+  id: BaseNuclearFloorPort
+  parent: BaseNuclearFloorSection
+  abstract: true
+  components:
+  - type: IconSmooth
+    key: nuclearReactorDeck
+    mode: Corners
+    base: deck_port_edge
+
+- type: entity
+  id: NuclearReactorCore
+  parent: BaseNuclearFloorSection
   name: reactor instrumentation spine
-  description: The central instrumentation spine of a seven-by-seven graphite reactor. It produces heat, not electricity.
+  description: The instrumentation spine of a graphite reactor. Enclose it with shield tiles and charge its internal tank with heavy water.
   components:
   - type: NuclearReactor
+  - type: SolutionContainerManager
+    solutions:
+      charge:
+        maxVol: 250
+        canReact: false
+  - type: RefillableSolution
+    solution: charge
+  - type: DrainableSolution
+    solution: charge
+  - type: ExaminableSolution
+    solution: charge
+  - type: DeviceLinkSink
+    ports: [NuclearReactorControl]
   - type: Explosive
     explosionType: Default
   - type: RadiationSource
     intensity: 0
     slope: 0.3
   - type: Sprite
-    state: core
+    layers:
+    - state: core
+    - state: core_off
+      shader: unshaded
+      map: ["activity"]
+  - type: GenericVisualizer
+    visuals:
+      enum.NuclearReactorVisuals.Active:
+        activity:
+          True: { state: core_on }
+          False: { state: core_off }
+  - type: PointLight
+    enabled: false
+    radius: 6.5
+    energy: 0.7
+    color: "#4AA9FF"
+    castShadows: false
   - type: Icon
     state: core
 
+- type: reagent
+  id: HeavyWater
+  name: reagent-name-heavy-water
+  desc: reagent-desc-heavy-water
+  physicalDesc: reagent-physical-desc-translucent
+  color: "#60BDFA"
+  recognizable: true
+
+- type: entity
+  id: NuclearHeavyWaterTank
+  parent: WaterTank
+  name: heavy water supply tank
+  description: Contains heavy water for filling the internal tank of a graphite reactor.
+  suffix: Full
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        reagents:
+        - ReagentId: HeavyWater
+          Quantity: 1500
+
+- type: cargoProduct
+  id: NuclearHeavyWaterSupply
+  icon:
+    sprite: Structures/Storage/tanks.rsi
+    state: watertank-2
+  product: NuclearHeavyWaterTank
+  cost: 2400
+  category: cargoproduct-category-name-engineering
+  group: market
+
 - type: entity
   id: NuclearReactorShield
-  parent: BaseNuclearSection
+  parent: BaseNuclearFloorSection
   name: reactor biological shield section
   description: A bolted section of the reactor's outer shield.
   components:
@@ -45,6 +135,12 @@
     kind: Shield
   - type: RadiationBlocker
     resistance: 5
+  - type: Icon
+    state: shield
+  - type: IconSmooth
+    key: nuclearReactorDeck
+    mode: Corners
+    base: deck_edge
 
 - type: entity
   id: NuclearReactorCorium
@@ -66,48 +162,85 @@
 
 - type: entity
   id: NuclearReactorFuelChannel
-  parent: BaseNuclearSection
-  name: sealed reactor fuel channel
-  description: A sealed fuel assembly and its pressure channel. Replace only after shutdown and cooldown.
+  parent: BaseNuclearFloorSection
+  name: reactor fuel hatch
+  description: A flush hatch for a removable fuel cell. Service it after shutdown and cooldown.
   components:
   - type: NuclearReactorPart
     kind: Fuel
+  - type: ItemSlots
+    slots:
+      reactor_fuel:
+        name: nuclear-fuel-slot
+        ejectOnInteract: true
+        ejectVerbText: nuclear-fuel-hatch-take
+        whitelist:
+          tags: [EclipseNuclearFuelCell]
+        ejectOnBreak: true
+  - type: RadiationBlocker
+    resistance: 12
   - type: Sprite
-    sprite: Structures/Power/Generation/rtg.rsi
-    state: rtg
+    layers:
+    - state: fuel
+    - state: fuel_off
+      shader: unshaded
+      map: ["activity"]
+    - state: fuel_uranium
+      map: ["grade"]
+  - type: GenericVisualizer
+    visuals:
+      enum.NuclearReactorVisuals.Active:
+        activity:
+          True: { state: fuel_on }
+          False: { state: fuel_off }
+      enum.NuclearReactorVisuals.Fuel:
+        grade:
+          None: { visible: false }
+          Uranium: { state: fuel_uranium, visible: true }
+          Mox: { state: fuel_mox, visible: true }
+          Thorium: { state: fuel_thorium, visible: true }
+          Pulse: { state: fuel_pulse, visible: true }
   - type: Icon
-    sprite: Structures/Power/Generation/rtg.rsi
-    state: rtg
+    state: fuel
 
 - type: entity
   id: NuclearReactorGraphite
-  parent: BaseNuclearSection
+  parent: BaseNuclearFloorSection
   name: reactor graphite moderator block
   description: Slows neutrons in the active zone. This is not a control rod.
   components:
   - type: NuclearReactorPart
     kind: Graphite
   - type: Sprite
-    color: '#777E83'
+    state: graphite
+  - type: Icon
+    state: graphite
 
 - type: entity
   id: NuclearReactorControlChannel
-  parent: BaseNuclearSection
+  parent: BaseNuclearFloorSection
   name: reactor control rod drive
   description: A neutron absorber with a powered positioning drive and a gravity-assisted emergency drop.
   components:
   - type: NuclearReactorPart
     kind: Control
   - type: Sprite
-    sprite: Structures/Power/Generation/teg.rsi
-    state: circ-0
+    layers:
+    - state: rods_in
+      map: ["rods"]
+  - type: GenericVisualizer
+    visuals:
+      enum.NuclearReactorVisuals.Rods:
+        rods:
+          in: { state: rods_in }
+          part: { state: rods_part }
+          out: { state: rods_out }
   - type: Icon
-    sprite: Structures/Power/Generation/teg.rsi
-    state: circ-0
+    state: rods_in
 
 - type: entity
   id: NuclearReactorInlet
-  parent: BaseNuclearSection
+  parent: BaseNuclearFloorPort
   name: reactor coolant inlet header
   description: The western coolant inlet. Connect a separate pumped primary loop outside the reactor.
   components:
@@ -125,11 +258,9 @@
         volume: 1000
   - type: AtmosUnsafeUnanchor
   - type: Sprite
-    sprite: Structures/Power/Generation/teg.rsi
-    state: circ-0
+    state: gas_in
   - type: Icon
-    sprite: Structures/Power/Generation/teg.rsi
-    state: circ-0
+    state: gas_in
 
 - type: entity
   id: NuclearReactorOutlet
@@ -148,33 +279,68 @@
         nodeGroupID: Pipe
         pipeDirection: East
         volume: 1000
+  - type: Sprite
+    state: gas_out
+  - type: Icon
+    state: gas_out
 
 - type: entity
   id: NuclearReactorConsole
   parent: BaseNuclearSection
   name: reactor control station
-  description: The northern control station of a seven-by-seven reactor. Requires independent auxiliary power.
+  description: A three-tile remote reactor console. Mount the whole desk outside the reactor and link its centre to the instrumentation column with a network configurator.
   components:
   - type: NuclearReactorPart
     kind: Console
+  - type: DeviceLinkSource
+    ports: [NuclearReactorControl]
   - type: RadiationBlocker
     resistance: 5
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PhysShapeAabb
+          bounds: "-1.47,-0.43,1.47,0.43"
+        density: 150
+        mask: [MachineMask]
+        layer: [MachineLayer]
   - type: Sprite
-    sprite: Structures/Machines/computers.rsi
-    state: computer
+    sprite: _Eclipse/Structures/Power/nuclear_console.rsi
+    layers:
+    - state: desk
+    - state: screens
+      shader: unshaded
+      visible: false
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
   - type: Icon
-    sprite: Structures/Machines/computers.rsi
-    state: computer
+    sprite: _Eclipse/Structures/Power/nuclear_console.rsi
+    state: desk
+  - type: GenericVisualizer
+    visuals:
+      enum.PowerDeviceVisuals.Powered:
+        enum.PowerDeviceVisualLayers.Powered:
+          True: { visible: true }
+          False: { visible: false }
   - type: ApcPowerReceiver
     powerLoad: 5000
   - type: ExtensionCableReceiver
   - type: ActivatableUI
     key: enum.NuclearReactorUiKey.Key
-    requiresPower: false
   - type: UserInterface
     interfaces:
       enum.NuclearReactorUiKey.Key:
         type: NuclearReactorBoundUserInterface
+
+- type: sourcePort
+  id: NuclearReactorControl
+  name: nuclear-link-command
+  description: nuclear-link-command-desc
+  defaultLinks: [NuclearReactorControl]
+
+- type: sinkPort
+  id: NuclearReactorControl
+  name: nuclear-link-reactor
+  description: nuclear-link-reactor-desc
 
 - type: guideEntry
   id: EclipseNuclearReactor

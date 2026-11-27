@@ -134,6 +134,7 @@ public sealed partial class LiquidPipeNetworkSystem : EntitySystem
         {
             Id = _nextNetworkId++,
             EffectiveTier = PipeTier.Perfect,
+            ThroughputPerSecond = float.PositiveInfinity,
         };
 
         foreach (var pipeUid in pipes)
@@ -141,10 +142,8 @@ public sealed partial class LiquidPipeNetworkSystem : EntitySystem
             network.Pipes.Add(pipeUid);
             var pipe = Comp<LiquidPipeComponent>(pipeUid);
             network.EffectiveTier = PipeTierHelper.GetWeakest(network.EffectiveTier, pipe.Tier);
+            network.ThroughputPerSecond = MathF.Min(network.ThroughputPerSecond, pipe.ThroughputPerSecond);
         }
-
-        var specs = PipeTierHelper.GetSpecs(network.EffectiveTier);
-        network.ThroughputPerSecond = specs.ThroughputPerSecond;
 
         _networks[network.Id] = network;
         return network;

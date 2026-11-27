@@ -1,0 +1,27 @@
+- type: marking
+  id: LavriteTailFlame
+  bodyPart: Tail
+  speciesRestriction: [ Lavrite ]
+  groupWhitelist: [ Lavrite ]
+  coloring:
+    default:
+      type: !type:SimpleColoring
+        color: "#EC7839"
+    layers: {}
+  sprites:
+  - sprite: Mobs/Customization/reptilian_parts.rsi
+    state: tail_large
+
+- type: marking
+  id: LavriteTailEmber
+  bodyPart: Tail
+  speciesRestriction: [ Lavrite ]
+  groupWhitelist: [ Lavrite ]
+  coloring:
+    default:
+      type: !type:SimpleColoring
+        color: "#C25C39"
+    layers: {}
+  sprites:
+  - sprite: Mobs/Customization/reptilian_parts.rsi
+    state: tail_spikes

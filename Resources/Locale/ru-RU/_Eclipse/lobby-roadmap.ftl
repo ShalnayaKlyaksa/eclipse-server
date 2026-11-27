@@ -16,3 +16,5 @@ eclipse-roadmap-ranks-title = Ранги и награды
 eclipse-roadmap-ranks-description = Система заслуг, служебные ранги и награды за достижения.
 eclipse-roadmap-events-title = Режимы и события
 eclipse-roadmap-events-description = Сезонные события и особые миссии на станции.
+eclipse-roadmap-ares-title = ИИ А.Р.Е.С
+eclipse-roadmap-ares-description = Парный антагонист, исполнитель и ии АРЕС.

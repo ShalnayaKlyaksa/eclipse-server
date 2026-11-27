@@ -3,12 +3,14 @@
   cycleSeconds: 120
   tier: 0
   needsMinerals: false
+  stingChance: 0.15
   branch: Natural
 - type: beeSpecies
   id: Forest
   cycleSeconds: 120
   tier: 0
   needsMinerals: false
+  foodMultiplier: 0.75
   branch: Natural
 - type: beeSpecies
   id: Common
@@ -22,6 +24,7 @@
   tier: 1
   needsMinerals: false
   comb: EclipseFoodHerbalHoneycomb
+  waterMultiplier: 0.75
   branch: Natural
 - type: beeSpecies
   id: Cultivated
@@ -35,6 +38,8 @@
   tier: 2
   needsMinerals: false
   comb: EclipseFoodEnergeticHoneycomb
+  combBonus: 1
+  foodMultiplier: 1.25
   rareProduct: SheetSteel1
   rareChance: 0.08
   rareGeneration: 3
@@ -59,10 +64,19 @@
   rareLineageSeconds: 900
   branch: Medicine
 - type: beeSpecies
+  id: Copper
+  cycleSeconds: 180
+  tier: 2
+  needsMinerals: true
+  comb: EclipseCopperHoneycomb
+  stingChance: 0.55
+  branch: Industry
+- type: beeSpecies
   id: Metallic
   cycleSeconds: 240
   tier: 3
   needsMinerals: true
+  comb: EclipseMetallicHoneycomb
   rareProduct: IngotGold1
   rareChance: 0.03
   rareGeneration: 4
@@ -73,6 +87,7 @@
   cycleSeconds: 300
   tier: 4
   needsMinerals: true
+  comb: EclipseAuricHoneycomb
   rareProduct: MaterialDiamond1
   rareChance: 0.02
   rareGeneration: 5
@@ -83,6 +98,7 @@
   cycleSeconds: 360
   tier: 4
   needsMinerals: true
+  comb: EclipseCrystallineHoneycomb
   rareProduct: MaterialDiamond1
   rareChance: 0.01
   rareGeneration: 6
@@ -93,6 +109,7 @@
   cycleSeconds: 420
   tier: 5
   needsMinerals: true
+  comb: EclipseResonantHoneycomb
   rareProduct: IndustrialBondedDie
   rareChance: 0.0075
   rareGeneration: 7
@@ -103,6 +120,7 @@
   cycleSeconds: 480
   tier: 6
   needsMinerals: true
+  comb: EclipseQuantumHoneycomb
   rareProduct: IndustrialAdvancedProcessor
   rareChance: 0.005
   rareGeneration: 8
@@ -161,6 +179,15 @@
   chance: 0.1
   generation: 4
   lineageSeconds: 900
+  needsMinerals: false
+- type: beeMutation
+  id: EclipseMutateCopper
+  first: Common
+  second: Common
+  result: Copper
+  chance: 0.25
+  generation: 2
+  lineageSeconds: 240
   needsMinerals: false
 - type: beeMutation
   id: EclipseMutateMetallic

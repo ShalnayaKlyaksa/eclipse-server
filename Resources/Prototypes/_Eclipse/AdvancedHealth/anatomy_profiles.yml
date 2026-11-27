@@ -6,10 +6,6 @@
 
 - type: advancedHealthAnatomy
   id: Imperial
-  bodyFluid: Blood
-  fluidColor: "#c60000"
-  bloodTypes: [ "O-", "O+", "A-", "A+", "B-", "B+", "AB-", "AB+" ]
-  incompatibleTransfusionPopup: advanced-health-transfusion-incompatible-imperial
 
 - type: advancedHealthAnatomy
   id: Dwarf
@@ -88,6 +84,25 @@
   bleedingModifier: 1.02
   painModifier: 1.0
   traumaModifier: 1.0
+  bodyFluid: Blood
+  fluidColor: "#d05a18"
+  bloodTypes: [ "T-A", "T-B", "T-O" ]
+  incompatibleTransfusionPopup: advanced-health-transfusion-incompatible-therian
+
+- type: advancedHealthAnatomy
+  id: TherianCanine
+  maxBloodVolume: 4800
+  bleedingModifier: 1.02
+  bodyFluid: Blood
+  fluidColor: "#d05a18"
+  bloodTypes: [ "T-A", "T-B", "T-O" ]
+  incompatibleTransfusionPopup: advanced-health-transfusion-incompatible-therian
+
+- type: advancedHealthAnatomy
+  id: TherianSmall
+  maxBloodVolume: 4200
+  bleedingModifier: 1.08
+  defaultBoneIntegrity: 90
   bodyFluid: Blood
   fluidColor: "#d05a18"
   bloodTypes: [ "T-A", "T-B", "T-O" ]

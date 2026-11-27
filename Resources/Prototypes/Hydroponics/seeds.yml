@@ -1162,6 +1162,7 @@
   displayName: seeds-poppy-display-name
   plantRsi: Objects/Specific/Hydroponics/poppy.rsi
   packetPrototype: PoppySeeds
+  apiaryComb: GardenPoppyHoneycomb
   productPrototypes:
     - FoodPoppy
   mutationPrototypes:
@@ -1216,6 +1217,7 @@
   displayName: seeds-lily-display-name
   plantRsi: Objects/Specific/Hydroponics/lily.rsi
   packetPrototype: LilySeeds
+  apiaryComb: GardenLilyHoneycomb
   productPrototypes:
     - FoodLily
   mutationPrototypes:

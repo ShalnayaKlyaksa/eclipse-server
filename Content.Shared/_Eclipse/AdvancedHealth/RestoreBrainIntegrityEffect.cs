@@ -22,6 +22,7 @@ public sealed partial class RestoreBrainIntegrityEffectSystem
         var repair = new AdvancedBrainRepairEvent(restored * 100f / Math.Max(1f, head.MaxOrganIntegrity));
         RaiseLocalEvent(entity.Owner, ref repair);
         head.OrganIntegrity = Math.Min(head.MaxOrganIntegrity, head.OrganIntegrity + restored);
+        head.IsDestroyed = head.OrganIntegrity <= 0f || head.MuscleIntegrity <= 0f;
         Dirty(entity);
     }
 }

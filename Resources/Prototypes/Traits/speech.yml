@@ -1,7 +1,5 @@
 # If you add a new trait, make sure to add the corresponding component to the whitelist in \Resources\Prototypes\Entities\Mobs\Player\clone.yml so it gets copied to clones correctly!
 
-# Free
-
 - type: trait
   id: Accentless
   name: trait-accentless-name
@@ -22,8 +20,6 @@
     - type: ReplacementAccent
       accent: scottish
     - type: GrowlingAccent # Corvax-Vulps
-
-# 1 Cost
 
 - type: trait
   id: SouthernAccent
@@ -113,14 +109,11 @@
   - type: ReplacementAccent
     accent: scottish
 
-# 2 Cost
-
 - type: trait
   id: SocialAnxiety
   name: trait-socialanxiety-name
   description: trait-socialanxiety-desc
   category: SpeechTraits
-  cost: 1
   conflicts:
   - Muted
   components:
@@ -135,7 +128,6 @@
   name: trait-frontal-lisp-name
   description: trait-frontal-lisp-desc
   category: SpeechTraits
-  cost: 1
   conflicts:
   - Muted
   components:

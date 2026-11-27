@@ -73,6 +73,7 @@
       sprite: Objects/Misc/handcuffs.rsi
       state: body-overlay-2
       visible: false
+    - map: [ "enum.HumanoidVisualLayers.Wings" ]
 
 - type: entity
   id: BaseSpeciesAppearance

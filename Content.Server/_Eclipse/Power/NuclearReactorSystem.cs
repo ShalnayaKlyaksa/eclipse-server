@@ -2,42 +2,63 @@ using Content.Server.Atmos.EntitySystems;
 using Content.Server.Explosion.EntitySystems;
 using Content.Server.NodeContainer.EntitySystems;
 using Content.Server.NodeContainer.Nodes;
-using Content.Server.Power.Components;
+using Content.Server.Power.EntitySystems;
 using Content.Server.Power.Generation.Teg;
 using Content.Shared.Radiation.Systems;
 using Content.Shared._Eclipse.Power;
+using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Construction.Components;
+using Content.Shared.Containers.ItemSlots;
+using Content.Shared.DeviceLinking;
+using Content.Shared.DeviceLinking.Events;
 using Content.Shared.Examine;
+using Content.Shared.Interaction;
 using Content.Shared.UserInterface;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server._Eclipse.Power;
 
 /// <summary>
-/// Graphite moderated, gas cooled multiblock. A bounded tile scan validates the physical core;
-/// heat leaves only in real gas parcels. The core itself never supplies electricity.
+/// Graphite-moderated multiblock with interchangeable gas and water collectors.
+/// A bounded tile scan validates the core. Heat is carried away by the coolant.
 /// </summary>
-public sealed class NuclearReactorSystem : EntitySystem
+public sealed partial class NuclearReactorSystem : EntitySystem
 {
     private static readonly (int X, int Y)[] Neighbours = [(1, 0), (-1, 0), (0, 1), (0, -1)];
+    private static readonly ProtoId<ReagentPrototype> HeavyWater = "HeavyWater";
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly NodeContainerSystem _nodes = default!;
     [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
     [Dependency] private readonly UserInterfaceSystem _ui = default!;
     [Dependency] private readonly ExplosionSystem _explosion = default!;
     [Dependency] private readonly SharedRadiationSystem _radiation = default!;
+    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
+    [Dependency] private readonly SharedPointLightSystem _light = default!;
+    [Dependency] private readonly SharedDeviceLinkSystem _links = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
     private float _elapsed;
 
     public override void Initialize()
     {
+        UpdatesBefore.Add(typeof(PowerNetSystem));
         SubscribeLocalEvent<NuclearReactorPartComponent, BeforeActivatableUIOpenEvent>(OnOpen);
         SubscribeLocalEvent<NuclearReactorPartComponent, NuclearReactorCommandMessage>(OnCommand);
         SubscribeLocalEvent<NuclearReactorPartComponent, UnanchorAttemptEvent>(OnUnanchor);
         SubscribeLocalEvent<NuclearReactorPartComponent, ExaminedEvent>(OnExamined);
+        SubscribeLocalEvent<NuclearReactorPartComponent, LinkAttemptEvent>(OnLinkAttempt);
         SubscribeLocalEvent<NuclearReactorComponent, UnanchorAttemptEvent>(OnCoreUnanchor);
         SubscribeLocalEvent<NuclearReactorComponent, EntityTerminatingEvent>(OnCoreDestroyed);
+        SubscribeLocalEvent<NuclearReactorPartComponent, MapInitEvent>(InitializeFuel);
+        SubscribeLocalEvent<NuclearReactorPartComponent, ItemSlotInsertAttemptEvent>(OnFuelInsert);
+        SubscribeLocalEvent<NuclearReactorPartComponent, ItemSlotEjectAttemptEvent>(OnFuelEject);
+        SubscribeLocalEvent<NuclearFuelCellComponent, ExaminedEvent>(OnFuelExamined);
+        SubscribeLocalEvent<NuclearReactorPartComponent, InteractHandEvent>(OnFuelHatchInteract);
+        SubscribeLocalEvent<NuclearSteamTurbineComponent, ExaminedEvent>(OnSteamTurbineExamined);
     }
 
     public static NuclearPartKind RequiredPart(int x, int y)
@@ -45,76 +66,9 @@ public sealed class NuclearReactorSystem : EntitySystem
         if (x == 0 && y == 0) return NuclearPartKind.Core;
         if (x == -3 && y == 0) return NuclearPartKind.Inlet;
         if (x == 3 && y == 0) return NuclearPartKind.Outlet;
-        if (x == 0 && y == 3) return NuclearPartKind.Console;
         if (Math.Abs(x) == 3 || Math.Abs(y) == 3) return NuclearPartKind.Shield;
         // Interior positions are configurable; at least four independent control channels are required.
         return NuclearPartKind.Fuel;
-    }
-
-    public void ScanLayout(Entity<NuclearReactorComponent> ent)
-    {
-        var core = ent.Comp;
-        foreach (var part in core.Parts.Values)
-            if (TryComp<NuclearReactorPartComponent>(part, out var old) && old.Core == ent.Owner) old.Core = null;
-        core.Parts.Clear();
-        core.Cells = new NuclearCellState[49];
-        core.Faults = 0;
-        var xform = Transform(ent);
-        if (!xform.Anchored || !TryComp<MapGridComponent>(xform.GridUid, out var grid))
-        {
-            core.Complete = false;
-            core.Faults = 49;
-            for (var i = 0; i < 49; i++) core.Cells[i] = new(NuclearPartKind.Missing, false, 0);
-            return;
-        }
-        var origin = _map.LocalToTile(xform.GridUid.Value, grid, xform.Coordinates);
-        var fuels = 0;
-        var graphite = 0;
-        var controls = 0;
-        for (var y = -3; y <= 3; y++)
-        for (var x = -3; x <= 3; x++)
-        {
-            var expected = RequiredPart(x, y);
-            EntityUid? found = null;
-            var kind = NuclearPartKind.Missing;
-            var fuel = 0f;
-            foreach (var candidate in _map.GetAnchoredEntities(xform.GridUid.Value, grid, origin + new Vector2i(x, y)))
-            {
-                NuclearPartKind candidateKind;
-                if (HasComp<NuclearReactorComponent>(candidate)) candidateKind = NuclearPartKind.Core;
-                else if (TryComp<NuclearReactorPartComponent>(candidate, out var part)) candidateKind = part.Kind;
-                else continue;
-                if (found != null) { kind = NuclearPartKind.Conflict; break; }
-                found = candidate;
-                kind = candidateKind;
-            }
-            var interior = Math.Abs(x) < 3 && Math.Abs(y) < 3 && (x != 0 || y != 0);
-            var valid = interior
-                ? kind is NuclearPartKind.Fuel or NuclearPartKind.Graphite or NuclearPartKind.Control
-                : kind == expected && (kind != NuclearPartKind.Core || found == ent.Owner);
-            if (valid && found != null)
-            {
-                core.Parts[(x, y)] = found.Value;
-                if (TryComp<NuclearReactorPartComponent>(found, out var part))
-                {
-                    part.Core = ent.Owner;
-                    if (kind == NuclearPartKind.Fuel)
-                    {
-                        fuels++;
-                        fuel = (float) Math.Clamp(part.FuelEnergy / Math.Max(1, part.InitialFuelEnergy), 0, 1);
-                    }
-                    if (kind == NuclearPartKind.Graphite) graphite++;
-                    if (kind == NuclearPartKind.Control) controls++;
-                }
-            }
-            else core.Faults++;
-            core.Cells[(3 - y) * 7 + x + 3] = new(kind, valid, fuel);
-        }
-        if (fuels < 4) core.Faults++;
-        if (graphite < 4) core.Faults++;
-        if (controls < 4) core.Faults++;
-        core.Complete = core.Faults == 0;
-        core.LayoutAge = 0;
     }
 
     public override void Update(float frameTime)
@@ -129,25 +83,35 @@ public sealed class NuclearReactorSystem : EntitySystem
             if (Paused(uid) || TerminatingOrDeleted(uid)) continue;
             core.LayoutAge += dt;
             if (core.LayoutAge >= 1 || core.Cells.Length == 0) ScanLayout((uid, core));
-            var powered = ConsolePowered(core);
-            core.CoolingPower = Cool(core, dt) / dt;
+            var console = FindConsole(uid);
+            if (core.Console != console && core.Console is { } previous && !TerminatingOrDeleted(previous))
+                _ui.SetUiState(previous, NuclearReactorUiKey.Key, new NuclearReactorState());
+            core.Console = console;
+            var powered = ConsolePowered(console);
+            ReadCoreCharge(uid, core);
+            core.SteamFlow = 0;
+            core.CoolingPower = (core.SteamCooling ? CoolWithSteam(core, dt) :
+                core.WaterCooling ? CoolWithWater(core, dt) : Cool(core, dt)) / dt;
+            var (fuelEnergy, moxShare, fuelFactor) = ReadFuelLoad(core);
+            core.CoolingPower += UpdateConditioner(core, dt, moxShare);
             if (!core.Complete) Scram(core, "nuclear-status-incomplete");
             else if (!powered) Scram(core, "nuclear-status-power-loss");
-            else if (!core.Scrammed && (core.Pressure < core.MinimumPressure || core.Flow < .01f)) Scram(core, "nuclear-status-no-flow");
-            else if (core.Pressure > core.MaximumPressure) Scram(core, "nuclear-status-pressure");
-            else if (core.Temperature >= core.TripTemperature) Scram(core, "nuclear-status-overheat");
-            var fuel = 0f;
+            else if (core.HeavyWaterLevel < NuclearReactorComponent.RequiredHeavyWater) Scram(core, "nuclear-status-heavy-water");
+            else if (!core.Scrammed && (core.WaterCooling
+                ? core.NoWaterFlowTime >= 2
+                : core.Pressure < core.MinimumPressure || core.Flow < .01f)) Scram(core, "nuclear-status-no-flow");
+            else if (core.SteamCooling ? core.Pressure >= core.MaximumPressure :
+                     !core.WaterCooling && core.Pressure > core.MaximumPressure) Scram(core, "nuclear-status-pressure");
+            else if (core.LiveCells == 0) Scram(core, "nuclear-status-no-fuel");
+            else if (AtTripTemperature(core)) Scram(core, "nuclear-status-overheat");
             var moderators = 0;
             var channels = 0;
-            var controls = 0;
             foreach (var partUid in core.Parts.Values)
             {
                 if (!TryComp<NuclearReactorPartComponent>(partUid, out var part)) continue;
-                if (part.Kind == NuclearPartKind.Fuel) { fuel += (float) Math.Max(0, part.FuelEnergy); channels++; }
+                if (part.Kind == NuclearPartKind.Fuel) channels++;
                 if (part.Kind == NuclearPartKind.Graphite) moderators++;
-                if (part.Kind == NuclearPartKind.Control) controls++;
             }
-            core.ControlAvailability = Math.Clamp(controls / 4f, 0, 1);
             var contacts = 0;
             foreach (var (position, partUid) in core.Parts)
             {
@@ -157,33 +121,46 @@ public sealed class NuclearReactorSystem : EntitySystem
                         TryComp<NuclearReactorPartComponent>(neighbour, out var moderator) && moderator.Kind == NuclearPartKind.Graphite) contacts++;
             }
             var moderation = Math.Clamp(moderators / 8f, 0, 1) * Math.Clamp(contacts / MathF.Max(1, channels * 2), 0, 1);
-            var burned = StepPhysics(core, dt, fuel, moderation);
+            var burned = StepPhysics(core, dt, fuelEnergy, moderation, moxShare, fuelFactor);
+            var active = core.Complete && core.ThermalPower > 10000;
+            _appearance.SetData(uid, NuclearReactorVisuals.Active, active);
+            _light.SetEnabled(uid, active);
+            if (active)
+                _light.SetEnergy(uid, .7f + 3.3f * Math.Clamp(core.ThermalPower / core.MaximumPower, 0, 1));
             _radiation.SetIntensity(uid, 60 * (core.ThermalPower + core.DecayPower) / core.MaximumPower);
-            // Equal sharing accounts for every joule even when one assembly depletes this step.
-            while (burned > .1f && channels > 0)
-            {
-                var share = burned / channels;
-                var spent = 0f;
-                channels = 0;
-                foreach (var partUid in core.Parts.Values)
-                {
-                    if (!TryComp<NuclearReactorPartComponent>(partUid, out var part) || part.Kind != NuclearPartKind.Fuel) continue;
-                    var use = (float) Math.Min(Math.Max(0, part.FuelEnergy), share);
-                    part.FuelEnergy -= use;
-                    spent += use;
-                    if (part.FuelEnergy > .1f) channels++;
-                }
-                if (spent <= 0) break;
-                burned -= spent;
-            }
-            if (!core.Failed && core.Temperature >= core.FailureTemperature)
+            BurnFuel(burned);
+            if (!core.Failed && core.Temperature >= HeatLimit(core))
             {
                 core.Failed = true;
                 Scram(core, "nuclear-status-failed");
                 _explosion.TriggerExplosive(uid, totalIntensity: 15000, radius: 8);
             }
-            Publish(core, powered);
+            else if (!core.Scrammed && AtTripTemperature(core))
+                Scram(core, "nuclear-status-overheat");
+            else if (!core.Scrammed && core.MoxCells > 0 && HeatFraction(core) >= .98f)
+                core.Status = "nuclear-status-mox-edge";
+            if (console is { } terminal && _ui.IsUiOpen(terminal, NuclearReactorUiKey.Key))
+                Publish(terminal, core, powered);
+            foreach (var partUid in core.Parts.Values)
+            {
+                if (!TryComp<NuclearReactorPartComponent>(partUid, out var part))
+                    continue;
+                if (part.Kind == NuclearPartKind.Fuel)
+                {
+                    var cell = ReadFuel(partUid);
+                    _appearance.SetData(partUid, NuclearReactorVisuals.Active, active && cell is { Energy: > .1 });
+                    _appearance.SetData(partUid, NuclearReactorVisuals.Fuel, cell?.Kind ?? NuclearFuelKind.None);
+                }
+                else if (part.Kind == NuclearPartKind.Control)
+                {
+                    var insertion = core.RodGroups[Math.Clamp(part.RodGroup, 0, core.RodGroups.Length - 1)].Position;
+                    _appearance.SetData(partUid, NuclearReactorVisuals.RodInsertion, (int) MathF.Round(insertion * 100));
+                    _appearance.SetData(partUid, NuclearReactorVisuals.Rods, insertion >= .95f ? "in" : insertion <= .05f ? "out" : "part");
+                }
+            }
         }
+        UpdateWaterTurbines(dt);
+        UpdateSteamEquipment(dt);
         var debris = EntityQueryEnumerator<NuclearCoriumComponent>();
         while (debris.MoveNext(out var uid, out var corium))
         {
@@ -206,19 +183,41 @@ public sealed class NuclearReactorSystem : EntitySystem
         }
     }
 
+    private void ReadCoreCharge(EntityUid uid, NuclearReactorComponent core)
+    {
+        core.HeavyWaterLevel = 0;
+        if (_solutions.TryGetSolution(uid, "charge", out _, out var charge) &&
+            charge.GetTotalPrototypeQuantity(HeavyWater) == charge.Volume)
+            core.HeavyWaterLevel = charge.Volume.Float();
+    }
+
     /// <summary>Accelerated game kinetics. Fuel energy becomes prompt heat or a finite decay reservoir.</summary>
-    public static float StepPhysics(NuclearReactorComponent core, float dt, float fuelEnergy, float moderation)
+    public static float StepPhysics(NuclearReactorComponent core, float dt, float fuelEnergy, float moderation,
+        float moxShare = 0, float fuelFactor = 1)
     {
         if (!float.IsFinite(dt) || dt <= 0) return 0;
         dt = MathF.Min(dt, 1);
-        var target = core.Scrammed || core.Failed ? 1 : core.RodTarget;
-        var travel = dt / (core.Scrammed ? 2 : 20);
-        core.RodPosition += Math.Clamp(target - core.RodPosition, -travel, travel);
-        core.Reactivity = .08f * moderation - .16f * core.RodPosition * core.ControlAvailability -
-            .00012f * MathF.Max(0, core.Temperature - 293.15f) - .04f * core.Xenon;
+        var scram = core.Scrammed || core.Failed;
+        var travel = dt / (scram ? 2 : 20);
+        var inserted = 0f;
+        var rods = 0;
+        for (var i = 0; i < core.RodGroups.Length; i++)
+        {
+            var group = core.RodGroups[i];
+            var target = scram ? 1 : group.Target;
+            var position = group.Position + Math.Clamp(target - group.Position, -travel, travel);
+            core.RodGroups[i] = group with { Position = position, Target = target };
+            inserted += position * group.Count;
+            rods += group.Count;
+        }
+        var absorption = inserted / Math.Max(4, rods);
+        var heatFeedback = .00012f * (1 - .35f * moxShare);
+        core.Reactivity = .08f * moderation - .16f * absorption -
+            heatFeedback * MathF.Max(0, core.Temperature - 293.15f) - .04f * core.Xenon;
         if (core.Failed || fuelEnergy <= 0) core.NeutronPower = 0;
         else core.NeutronPower = Math.Clamp((core.NeutronPower + 10 * dt) * MathF.Exp(core.Reactivity * 8 * dt), 0, core.MaximumPower * 2);
-        var burned = MathF.Min(MathF.Max(0, fuelEnergy), core.NeutronPower * dt);
+        var multiplier = fuelFactor + (MoxPowerFactor(HeatFraction(core), core.MoxBoost && !scram) - 1) * moxShare;
+        var burned = MathF.Min(MathF.Max(0, fuelEnergy), core.NeutronPower * multiplier * dt);
         core.ThermalPower = burned / dt;
         core.DecayEnergy += burned * .06f;
         var decay = core.DecayEnergy * (1 - MathF.Exp(-dt / 180));
@@ -238,7 +237,7 @@ public sealed class NuclearReactorSystem : EntitySystem
     {
         core.Flow = 0;
         core.Pressure = 0;
-        if (!core.Parts.TryGetValue((-3, 0), out var input) || !core.Parts.TryGetValue((3, 0), out var output) ||
+        if (core.Inlet is not { } input || core.Outlet is not { } output ||
             !Exists(input) || !Exists(output) || !Transform(input).Anchored || !Transform(output).Anchored ||
             !_nodes.TryGetNode(input, "coolant", out PipeNode? inlet) || !_nodes.TryGetNode(output, "coolant", out PipeNode? outlet)) return 0;
         core.Pressure = MathF.Max(inlet.Air.Pressure, outlet.Air.Pressure);
@@ -252,88 +251,25 @@ public sealed class NuclearReactorSystem : EntitySystem
         return heat;
     }
 
-    public static float ExchangeHeat(NuclearReactorComponent core, float temperature, float capacity, float dt)
+    public static float ExchangeHeat(NuclearReactorComponent core, float temperature, float capacity, float dt, float? maximumPower = null)
     {
         if (capacity <= 0 || dt <= 0) return 0;
         var heat = (core.Temperature - temperature) / (1 / core.HeatCapacity + 1 / capacity);
-        heat = Math.Clamp(heat, -core.MaximumHeatTransfer * dt, core.MaximumHeatTransfer * dt);
+        var limit = (maximumPower ?? core.MaximumHeatTransfer) * dt;
+        heat = Math.Clamp(heat, -limit, limit);
         core.Temperature -= heat / core.HeatCapacity;
         return heat;
-    }
-
-    private bool ConsolePowered(NuclearReactorComponent core) =>
-        core.Parts.TryGetValue((0, 3), out var console) && Exists(console) && Transform(console).Anchored &&
-        TryComp<ApcPowerReceiverComponent>(console, out var power) && power.Powered;
-
-    private static void Scram(NuclearReactorComponent core, string status)
-    {
-        core.Scrammed = true;
-        core.RodTarget = 1;
-        if (!core.Failed) core.Status = status;
-        else core.Status = "nuclear-status-failed";
-    }
-
-    private bool TryConsoleCore(Entity<NuclearReactorPartComponent> ent, out Entity<NuclearReactorComponent> result)
-    {
-        result = default;
-        if (ent.Comp.Kind != NuclearPartKind.Console || !Transform(ent).Anchored) return false;
-        var xform = Transform(ent);
-        if (!TryComp<MapGridComponent>(xform.GridUid, out var grid)) return false;
-        var tile = _map.LocalToTile(xform.GridUid.Value, grid, xform.Coordinates) + new Vector2i(0, -3);
-        foreach (var candidate in _map.GetAnchoredEntities(xform.GridUid.Value, grid, tile))
-            if (TryComp<NuclearReactorComponent>(candidate, out var core))
-            {
-                result = (candidate, core);
-                ScanLayout(result);
-                return true;
-            }
-        return false;
-    }
-
-    private void OnOpen(Entity<NuclearReactorPartComponent> ent, ref BeforeActivatableUIOpenEvent args)
-    {
-        if (TryConsoleCore(ent, out var core)) Publish(core.Comp, ConsolePowered(core.Comp));
-        else if (ent.Comp.Kind == NuclearPartKind.Console) _ui.SetUiState(ent.Owner, NuclearReactorUiKey.Key, new NuclearReactorState());
-    }
-
-    private void OnCommand(Entity<NuclearReactorPartComponent> ent, ref NuclearReactorCommandMessage args)
-    {
-        if (!TryConsoleCore(ent, out var core)) return;
-        // Mechanical emergency insertion remains available without control power.
-        if (args.Command == NuclearCommand.Scram) Scram(core.Comp, "nuclear-status-scram");
-        else if (ConsolePowered(core.Comp) && !core.Comp.Failed)
-        {
-            if (args.Command == NuclearCommand.Reset && core.Comp.Complete && core.Comp.Temperature < 600 &&
-                core.Comp.Pressure >= core.Comp.MinimumPressure && core.Comp.Pressure <= core.Comp.MaximumPressure && core.Comp.Flow >= .01f)
-            { core.Comp.Scrammed = false; core.Comp.Status = "nuclear-status-starting"; }
-            else if (args.Command == NuclearCommand.Rods && !core.Comp.Scrammed && float.IsFinite(args.Value))
-                core.Comp.RodTarget = Math.Clamp(args.Value, 0, 1);
-        }
-        Publish(core.Comp, ConsolePowered(core.Comp));
-    }
-
-    private void Publish(NuclearReactorComponent core, bool powered)
-    {
-        if (!core.Parts.TryGetValue((0, 3), out var console) || !Exists(console)) return;
-        _ui.SetUiState(console, NuclearReactorUiKey.Key, new NuclearReactorState
-        {
-            Cells = core.Cells, Status = core.Status, Powered = powered, Complete = core.Complete,
-            Scrammed = core.Scrammed, Temperature = core.Temperature, Power = core.ThermalPower,
-            Cooling = core.CoolingPower, Decay = core.DecayPower, Pressure = core.Pressure,
-            Flow = core.Flow, RodPosition = core.RodPosition, RodTarget = core.RodTarget,
-            Reactivity = core.Reactivity, Xenon = core.Xenon, Faults = core.Faults,
-        });
     }
 
     private void OnUnanchor(Entity<NuclearReactorPartComponent> ent, ref UnanchorAttemptEvent args)
     {
         if (ent.Comp.Core is { } owner && TryComp<NuclearReactorComponent>(owner, out var core) &&
-            (core.Temperature > 350 || !core.Scrammed || core.RodPosition < .999f)) args.Cancel();
+            (core.Temperature > 350 || !RodsSecured(core))) args.Cancel();
     }
 
     private void OnCoreUnanchor(Entity<NuclearReactorComponent> ent, ref UnanchorAttemptEvent args)
     {
-        if (ent.Comp.Temperature > 350 || !ent.Comp.Scrammed || ent.Comp.RodPosition < .999f) args.Cancel();
+        if (ent.Comp.Temperature > 350 || !RodsSecured(ent.Comp)) args.Cancel();
     }
 
     private void OnCoreDestroyed(Entity<NuclearReactorComponent> ent, ref EntityTerminatingEvent args)
@@ -352,6 +288,9 @@ public sealed class NuclearReactorSystem : EntitySystem
     {
         args.PushMarkup(Loc.GetString("nuclear-part-examine", ("kind", Loc.GetString($"nuclear-part-{ent.Comp.Kind.ToString().ToLowerInvariant()}"))));
         if (ent.Comp.Kind == NuclearPartKind.Fuel)
-            args.PushMarkup(Loc.GetString("nuclear-fuel-examine", ("percent", Math.Round(100 * ent.Comp.FuelEnergy / Math.Max(1, ent.Comp.InitialFuelEnergy)))));
+        {
+            args.PushMarkup(Loc.GetString("nuclear-fuel-examine", ("percent", Math.Round(100 * (ReadFuel(ent.Owner) is { } cell ? FuelRemaining(cell) : 0)))));
+            args.PushMarkup(FuelServiceBlock(ent.Comp) ?? Loc.GetString("nuclear-fuel-hatch-ready"));
+        }
     }
 }

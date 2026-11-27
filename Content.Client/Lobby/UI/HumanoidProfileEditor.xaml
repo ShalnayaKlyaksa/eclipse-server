@@ -4,6 +4,7 @@
          xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
          xmlns:ui="clr-namespace:Content.Client.Lobby.UI"
          xmlns:profile="clr-namespace:Content.Client.Lobby.UI.ProfileEditorControls"
+         xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
          xmlns:pda="clr-namespace:Content.Client.PDA"
          HorizontalExpand="True"
          VerticalExpand="True"
@@ -65,6 +66,10 @@
                                                    ToolTip="{Loc 'humanoid-profile-editor-guidebook-button-tooltip'}"/>
                                     <OptionButton Name="SpeciesButton" HorizontalAlignment="Right" />
                                 </BoxContainer>
+                                <BoxContainer Name="SpeciesVariantRow" HorizontalExpand="True" Visible="False">
+                                    <Label Text="{Loc 'species-variant-label'}" HorizontalExpand="True" />
+                                    <OptionButton Name="SpeciesVariantButton" />
+                                </BoxContainer>
                                 <BoxContainer Name="BodyTypeRow" HorizontalExpand="True" Visible="False">
                                     <Label Text="{Loc 'humanoid-profile-editor-body-type'}" HorizontalExpand="True" />
                                     <OptionButton Name="BodyTypeButton" />
@@ -80,10 +85,6 @@
                                     <Label Text="{Loc 'humanoid-profile-editor-sex-label'}" />
                                     <Control HorizontalExpand="True"/>
                                     <OptionButton Name="SexButton" HorizontalAlignment="Right" />
-                                </BoxContainer>
-                                <BoxContainer HorizontalExpand="True">
-                                    <Label Text="{Loc 'humanoid-profile-editor-vocal-style'}" HorizontalExpand="True" />
-                                    <OptionButton Name="VocalStyleButton" />
                                 </BoxContainer>
                                 <!-- Pronouns -->
                                 <BoxContainer HorizontalExpand="True">
@@ -132,6 +133,10 @@
                             <!-- Skin -->
                             <BoxContainer Margin="10" HorizontalExpand="True" Orientation="Vertical">
                                 <Label Text="{Loc 'humanoid-profile-editor-skin-color-label'}" />
+                                <BoxContainer Name="SpeciesPaletteRow" Visible="False" SeparationOverride="8" Margin="0 4 0 4">
+                                    <Label Text="{Loc 'species-appearance-palette-label'}" />
+                                    <controls:ClippedOptionButton Name="SpeciesPaletteButton" HorizontalExpand="True" />
+                                </BoxContainer>
                                 <Slider HorizontalExpand="True" Name="Skin" MinValue="0" MaxValue="100" Value="20" />
                                 <BoxContainer Name="RgbSkinColorContainer" Visible="False" Orientation="Vertical" HorizontalExpand="True"></BoxContainer>
                             </BoxContainer>
@@ -172,10 +177,16 @@
                         <BoxContainer Name="AntagList" Orientation="Vertical" />
                     </ScrollContainer>
                 </BoxContainer>
-                <BoxContainer Orientation="Vertical" Margin="10">
+                <BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="6">
                     <!-- Traits -->
-                    <ScrollContainer VerticalExpand="True">
-                        <BoxContainer Name="TraitsList" Orientation="Vertical" />
+                    <RichTextLabel Name="TraitsBalance" />
+                    <BoxContainer SeparationOverride="10">
+                        <LineEdit Name="TraitSearch" HorizontalExpand="True"
+                                  PlaceHolder="{Loc 'humanoid-profile-editor-trait-search'}" />
+                        <CheckBox Name="SelectedTraitsOnly" Text="{Loc 'humanoid-profile-editor-trait-selected-only'}" />
+                    </BoxContainer>
+                    <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
+                        <BoxContainer Name="TraitsList" Orientation="Vertical" SeparationOverride="4" />
                     </ScrollContainer>
                 </BoxContainer>
                 <BoxContainer Name="MarkingsTab" Orientation="Vertical" Margin="10" HorizontalExpand="True" VerticalExpand="True">

@@ -12,6 +12,7 @@
     <PackageReference Include="SixLabors.ImageSharp" />
     <PackageReference Include="Pidgin" />
     <PackageReference Include="Robust.Shared.AuthLib" />
+    <PackageReference Include="SpaceWizards.Sodium" PrivateAssets="compile" />
   </ItemGroup>
 
   <Import Project="..\RobustToolbox\Imports\Lidgren.props" />

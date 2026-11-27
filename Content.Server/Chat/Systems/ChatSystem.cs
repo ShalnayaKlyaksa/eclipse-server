@@ -307,6 +307,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         )
     {
         sender ??= Loc.GetString("chat-manager-sender-announcement");
+        message += GetEmpireAnnouncementSuffix(sender, message);
 
         var wrappedMessage = Loc.GetString("chat-manager-sender-announcement-wrap-message", ("sender", sender), ("message", FormattedMessage.EscapeText(message)));
         _chatManager.ChatMessageToAll(ChatChannel.Radio, message, wrappedMessage, default, false, true, colorOverride);
@@ -329,6 +330,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         Color? colorOverride = null)
     {
         sender ??= Loc.GetString("chat-manager-sender-announcement");
+        message += GetEmpireAnnouncementSuffix(sender, message);
 
         var wrappedMessage = Loc.GetString("chat-manager-sender-announcement-wrap-message", ("sender", sender), ("message", FormattedMessage.EscapeText(message)));
         _chatManager.ChatMessageToManyFiltered(filter, ChatChannel.Radio, message, wrappedMessage, source ?? default, false, true, colorOverride);
@@ -350,8 +352,12 @@ public sealed partial class ChatSystem : SharedChatSystem
         FormattedMessage? formattedMessage = null)
     {
         sender ??= Loc.GetString("chat-manager-sender-announcement");
+        var suffix = GetEmpireAnnouncementSuffix(sender, message);
+        message += suffix;
 
-        var displayMessage = formattedMessage?.ToMarkup() ?? FormattedMessage.EscapeText(message);
+        var displayMessage = formattedMessage == null
+            ? FormattedMessage.EscapeText(message)
+            : formattedMessage.ToMarkup() + FormattedMessage.EscapeText(suffix);
         var wrappedMessage = Loc.GetString("chat-manager-sender-announcement-wrap-message", ("sender", sender), ("message", displayMessage));
         var station = _stationSystem.GetOwningStation(source);
 
@@ -373,6 +379,19 @@ public sealed partial class ChatSystem : SharedChatSystem
         }
 
         _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Station Announcement on {station} from {sender}: {message}");
+    }
+
+    private string GetEmpireAnnouncementSuffix(string sender, string message)
+    {
+        sender = sender.Trim();
+        if (!sender.Equals(Loc.GetString("chat-manager-sender-announcement"), StringComparison.OrdinalIgnoreCase) &&
+            !sender.Equals(Loc.GetString("department-CentralCommand"), StringComparison.OrdinalIgnoreCase))
+        {
+            return string.Empty;
+        }
+
+        var closing = Loc.GetString("chat-manager-empire-announcement-closing");
+        return message.TrimEnd().EndsWith(closing, StringComparison.Ordinal) ? string.Empty : "\n" + closing;
     }
 
     #endregion

@@ -1,4 +1,24 @@
 markings-search = Поиск
+markings-filter-all = Все
+markings-filter-face = Лицо
+markings-filter-eyes = Глаза
+markings-filter-upper-ears = Верхние уши
+markings-filter-side-ears = Боковые уши
+markings-filter-horns = Рога
+markings-filter-antennae = Усики
+markings-filter-hairstyles = Причёски
+markings-filter-facial-hair = Бороды и усы
+markings-filter-body-patterns = Окрас и узоры
+markings-filter-underwear = Нижнее бельё
+markings-filter-tail-base = Хвосты и придатки
+markings-filter-overlays = Накладки
+markings-filter-left = Левая сторона
+markings-filter-right = Правая сторона
+markings-filter-hands = Кисти
+markings-filter-tattoos = Татуировки
+markings-filter-scars = Шрамы
+markings-filter-bandages = Повязки
+
 -markings-selection = { $selectable ->
     [0] Вы больше не можете выбрать черту.
     [one] Вы можете выбрать еще одну черту.
@@ -64,4 +84,5 @@ markings-layer-RFoot = Правая стопа
 markings-layer-LFoot = Левая стопа
 markings-layer-Overlay = Наложение
 markings-layer-TailOverlay = Наложение
+markings-layer-Wings = Крылья
 

@@ -1,5 +1,7 @@
 guidebook-station-library = ECLIPSE / БАЗА ЗНАНИЙ СТАНЦИИ
 guidebook-crew-handbook = Руководство экипажа
+guide-entry-eclipse-research-terminal = Терминал НИО
+guide-entry-eclipse-clinical-recipes = Рецепты клинических препаратов
 guidebook-global-search = Название, предмет или проблема…
 guidebook-clear-search = Очистить поиск
 guidebook-expand = Развернуть / восстановить размер

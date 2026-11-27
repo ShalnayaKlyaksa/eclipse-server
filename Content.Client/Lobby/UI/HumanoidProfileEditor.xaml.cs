@@ -202,8 +202,12 @@ namespace Content.Client.Lobby.UI
             {
                 SpeciesButton.SelectId(args.Id);
                 SetSpecies(_species[args.Id].ID);
-                OnSkinColorOnValueChanged();
             };
+            SpeciesVariantButton.OnItemSelected += args =>
+            {
+                SetSpecies(_speciesVariants[args.Id].ID);
+            };
+            SpeciesPaletteButton.OnItemSelected += args => ApplySpeciesPalette(args.Id - 1);
 
             #region Skin
 
@@ -280,6 +284,8 @@ namespace Content.Client.Lobby.UI
 
             TabContainer.SetTabTitle(2, Loc.GetString("humanoid-profile-editor-antags-tab"));
 
+            TraitSearch.OnTextChanged += _ => RefreshTraits();
+            SelectedTraitsOnly.OnToggled += _ => RefreshTraits();
             RefreshTraits();
 
             TabContainer.SetTabTitle(3, Loc.GetString("humanoid-profile-editor-traits-tab")); // Corvax-TTS-Edit
@@ -442,6 +448,7 @@ namespace Content.Client.Lobby.UI
             RefreshJobs();
             RefreshLoadouts();
             RefreshSpecies();
+            UpdateSpeciesGuidebookIcon();
             RefreshTraits();
             RefreshFlavorText();
             ReloadPreview();

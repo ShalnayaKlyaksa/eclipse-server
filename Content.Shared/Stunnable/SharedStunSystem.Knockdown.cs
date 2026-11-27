@@ -14,6 +14,7 @@ using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Rejuvenate;
 using Content.Shared.Standing;
+using Content.Shared.Traits.Assorted;
 using Robust.Shared.Audio;
 using Robust.Shared.Configuration;
 using Robust.Shared.Input.Binding;
@@ -70,6 +71,7 @@ public abstract partial class SharedStunSystem
         SubscribeLocalEvent<KnockedDownComponent, HandCountChangedEvent>(OnHandCountChanged);
         SubscribeLocalEvent<GravityAffectedComponent, KnockDownAttemptEvent>(OnKnockdownAttempt);
         SubscribeLocalEvent<GravityAffectedComponent, GetStandUpTimeEvent>(OnGetStandUpTime);
+        SubscribeLocalEvent<TenacityComponent, GetStandUpTimeEvent>(OnTenacityStandUpTime);
 
         // Handling Alternative Inputs
         SubscribeAllEvent<ForceStandUpEvent>(OnForceStandup);
@@ -78,6 +80,11 @@ public abstract partial class SharedStunSystem
         CommandBinds.Builder
             .Bind(ContentKeyFunctions.ToggleKnockdown, InputCmdHandler.FromDelegate(HandleToggleKnockdown, handle: false))
             .Register<SharedStunSystem>();
+    }
+
+    private void OnTenacityStandUpTime(Entity<TenacityComponent> ent, ref GetStandUpTimeEvent args)
+    {
+        args.DoAfterTime *= 0.75;
     }
 
     public override void Update(float frameTime)

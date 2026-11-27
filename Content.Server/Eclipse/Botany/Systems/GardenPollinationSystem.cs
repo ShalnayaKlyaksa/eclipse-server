@@ -3,15 +3,10 @@ using Content.Server.Botany.Components;
 using Content.Shared._Eclipse.Beekeeping;
 using Content.Shared.Examine;
 using Robust.Shared.Containers;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Server.Eclipse.Botany.Systems;
-
-[RegisterComponent]
-public sealed partial class GardenForageComponent : Component
-{
-    [DataField] public string? Honeycomb;
-}
 
 /// <summary>Optional mutual benefit: flowering beds feed a working hive, bees add one fruit per harvest.</summary>
 public sealed class GardenPollinationSystem : EntitySystem
@@ -46,6 +41,7 @@ public sealed class GardenPollinationSystem : EntitySystem
             if (!hive.Enabled || hive.Mother == null || Paused(uid) || !xform.Anchored || xform.GridUid == null
                 || hive.Status is not ("apiary-status-working" or "apiary-status-feed"))
                 continue;
+            var frame = hive.FrameDurability > 0 ? hive.FrameKind : "None";
             foreach (var plant in _lookup.GetEntitiesInRange<PlantHolderComponent>(xform.Coordinates, 4)
                          .OrderBy(ent => ent.Owner.Id))
             {
@@ -56,30 +52,32 @@ public sealed class GardenPollinationSystem : EntitySystem
                     || bed.WaterLevel <= 10 || bed.NutritionLevel <= 5 || Paused(plant.Owner)
                     || !bedXform.Anchored || bedXform.GridUid != xform.GridUid || !visited.Add(plant.Owner))
                     continue;
-                hive.Nectar = Math.Min(200, hive.Nectar + 0.4f);
+                hive.Nectar = Math.Min(200, hive.Nectar + 0.4f * ApiaryFrameRules.ForageMultiplier(frame));
                 // Explosive and hostile crops do not become a source of extra weapons through bees.
                 if (seed.PacketPrototype != "BombomatoSeeds" && seed.ProductPrototypes.All(id => id != "MobTomatoKiller"))
                     bed.BeePollinated = true;
-                var comb = seed.PacketPrototype switch
-                {
-                    "EnergyFlowerSeeds" => "GardenChargedHoneycomb",
-                    "DemonicWatermelonSeeds" => "GardenSpicedHoneycomb",
-                    "NectarBerrySeeds" => "GardenNectarHoneycomb",
-                    _ => null,
-                };
-                if (comb != null)
-                    EnsureComp<GardenForageComponent>(uid).Honeycomb = comb;
+                if (seed.ApiaryComb is { } comb)
+                    hive.ForageSamples[comb] = hive.ForageSamples.GetValueOrDefault(comb) + 1;
             }
         }
     }
 
+    public static EntProtoId? PredictComb(ApiaryComponent hive) => hive.ForageSamples
+        .OrderByDescending(sample => sample.Value)
+        .ThenBy(sample => sample.Key.Id, StringComparer.Ordinal)
+        .Select(sample => (EntProtoId?) sample.Key)
+        .FirstOrDefault();
+
     private void OnHarvest(Entity<ApiaryComponent> ent, ref ApiaryHarvestEvent args)
     {
-        if (!TryComp<GardenForageComponent>(ent, out var forage) || forage.Honeycomb == null)
+        var comb = PredictComb(ent.Comp);
+        ent.Comp.ForageSamples.Clear();
+        if (comb == null)
             return;
-        var product = SpawnNextToOrDrop(forage.Honeycomb, ent);
-        _containers.Insert(product, ent.Comp.Output);
-        forage.Honeycomb = null;
+
+        var count = ApiaryFrameRules.ForageMultiplier(args.FrameKind);
+        for (var i = 0; i < count; i++)
+            _containers.Insert(SpawnNextToOrDrop(comb.Value, ent), ent.Comp.Output);
     }
 
     private void OnExamine(Entity<ApiaryComponent> ent, ref ExaminedEvent args)

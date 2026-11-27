@@ -15,6 +15,8 @@ public sealed partial class SpecialRespawnComponent: Component
     [DataField("stationMap")]
     public (EntityUid?, EntityUid?) StationMap;
 
+    public EntityUid? PreferredContainer;
+
     /// <summary>
     /// Checks if the entityentity should respawn on the station grid
     /// </summary>

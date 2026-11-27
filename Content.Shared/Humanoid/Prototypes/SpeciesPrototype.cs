@@ -21,6 +21,15 @@ public sealed partial class SpeciesPrototype : IPrototype
     [DataField(required: true)]
     public string Name { get; private set; } = default!;
 
+    [DataField]
+    public ProtoId<SpeciesPrototype>? VariantOf { get; private set; }
+
+    [DataField]
+    public LocId? VariantName { get; private set; }
+
+    [DataField]
+    public ProtoId<SpeciesPrototype>? MarkingSpecies { get; private set; }
+
     /// <summary>
     ///     Descriptor. Unused...? This is intended
     ///     for an eventual integration into IdentitySystem
@@ -48,6 +57,13 @@ public sealed partial class SpeciesPrototype : IPrototype
     /// </summary>
     [DataField]
     public Color DefaultSkinTone { get; private set; } = Color.White;
+
+    /// <summary>Suggested color for a newly selected hairstyle.</summary>
+    [DataField]
+    public Color? DefaultHairColor { get; private set; }
+
+    [DataField]
+    public List<SpeciesAppearancePreset> AppearancePresets { get; private set; } = new();
 
     /// <summary>
     ///     Default human skin tone for this species. This applies for human skin tones.

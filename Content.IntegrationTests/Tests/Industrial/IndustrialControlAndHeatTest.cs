@@ -349,11 +349,14 @@ public sealed class IndustrialControlAndHeatTest : GameTest
             var recipeButton = Find<ContainerButton>(window, "Recipe-CrushSteelOre");
             var availableOnly = Find<CheckBox>(window, "AvailableRecipesOnly");
             var lockedRecipe = Find<ContainerButton>(window, "Recipe-Locked");
-            Assert.That(availableOnly.Pressed, Is.True);
-            Assert.That(lockedRecipe.Visible, Is.False);
+            Assert.That(availableOnly.Pressed, Is.False);
+            Assert.That(lockedRecipe.Visible, Is.True);
             Assert.That(recipeButton.Parent!.Children.Where(c => c.Visible).Select(c => c.Name),
-                Is.EqualTo(new[] { "Recipe-Available", "Recipe-CrushSteelOre" }));
+                Is.EqualTo(new[] { "Recipe-Available", "Recipe-CrushSteelOre", "Recipe-Locked" }));
             search.SetText("locked", true);
+            Assert.That(lockedRecipe.Visible, Is.True);
+            availableOnly.Pressed = true;
+            search.SetText("Locked", true);
             Assert.That(lockedRecipe.Visible, Is.False);
             availableOnly.Pressed = false;
             search.SetText("iron ore", true);

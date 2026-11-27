@@ -1,0 +1,163 @@
+- type: entity
+  id: NuclearReactorSteamOutlet
+  parent: BaseNuclearFloorPort
+  name: graphite reactor steam header
+  description: The east header of a boiling graphite reactor. Fit the water inlet on the west side and connect an atmos steam pipe to this header's east side.
+  components:
+  - type: NuclearReactorPart
+    kind: Outlet
+  - type: NuclearWaterCollector
+  - type: NuclearSteamOutlet
+  - type: RadiationBlocker
+    resistance: 5
+  - type: Sprite
+    state: gas_out
+  - type: Icon
+    state: gas_out
+  - type: SolutionContainerManager
+    solutions:
+      output:
+        maxVol: 80
+        canReact: false
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      steam:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: East
+        volume: 400
+  - type: AtmosUnsafeUnanchor
+
+- type: entity
+  id: NuclearSteamTurbine
+  parent: BaseNuclearTurbine
+  name: steam turbogenerator
+  description: High-pressure steam enters from the west. Exhaust flows east to the condenser. Electricity leaves through the HV cable under the centre.
+  components:
+  - type: NuclearSteamTurbine
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      output:
+        !type:CableDeviceNode
+        nodeGroupID: HVPower
+      steam_in:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: West
+        volume: 400
+      steam_out:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: East
+        volume: 400
+  - type: AtmosUnsafeUnanchor
+
+- type: entity
+  id: NuclearSteamCondenser
+  parent: BaseNuclearSection
+  name: steam condenser
+  description: Connect exhaust steam from the west, a cold gas loop from north to south, and a liquid return pipe to the east.
+  components:
+  - type: NuclearSteamCondenser
+  - type: Sprite
+    state: condenser
+  - type: Icon
+    state: condenser
+  - type: SolutionContainerManager
+    solutions:
+      output:
+        maxVol: 250
+        canReact: false
+  - type: LiquidPipeEndpoint
+    inputFace: Invalid
+    outputFace: East
+    hasOutput: true
+  - type: NodeContainer
+    examinable: true
+    nodes:
+      steam_in:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: West
+        volume: 400
+      coolant_in:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: North
+        volume: 400
+      coolant_out:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: South
+        volume: 400
+  - type: AtmosUnsafeUnanchor
+
+- type: entity
+  id: NuclearReactorSteamOutletFlatpack
+  parent: BaseFlatpack
+  name: steam header flatpack
+  components:
+  - type: Flatpack
+    entity: NuclearReactorSteamOutlet
+    qualityNeeded: Anchoring
+
+- type: entity
+  id: NuclearSteamTurbineFlatpack
+  parent: BaseFlatpack
+  name: steam turbogenerator flatpack
+  components:
+  - type: Flatpack
+    entity: NuclearSteamTurbine
+    qualityNeeded: Anchoring
+
+- type: entity
+  id: NuclearSteamCondenserFlatpack
+  parent: BaseFlatpack
+  name: steam condenser flatpack
+  components:
+  - type: Flatpack
+    entity: NuclearSteamCondenser
+    qualityNeeded: Anchoring
+
+- type: industrialRecipe
+  id: AssembleNuclearReactorSteamOutlet
+  processor: Assembler
+  time: 25
+  minimumTier: Industrial
+  requiredTechnology: EnergyFission
+  requireDataDisk: true
+  inputs:
+    SheetPlasteel: 8
+    IndustrialHeatConduitAssembly: 4
+  outputs:
+    NuclearReactorSteamOutletFlatpack: 1
+
+- type: industrialRecipe
+  id: AssembleNuclearSteamTurbine
+  processor: Assembler
+  time: 40
+  minimumTier: Industrial
+  requiredTechnology: EnergyFission
+  requireDataDisk: true
+  inputs:
+    SheetPlasteel: 12
+    IndustrialHeatConduitAssembly: 6
+    IndustrialMechanicalCore: 4
+    IndustrialAdvancedBoard: 2
+  outputs:
+    NuclearSteamTurbineFlatpack: 1
+
+- type: industrialRecipe
+  id: AssembleNuclearSteamCondenser
+  processor: Assembler
+  time: 30
+  minimumTier: Industrial
+  requiredTechnology: EnergyFission
+  requireDataDisk: true
+  inputs:
+    SheetSteel: 8
+    IndustrialHeatConduitAssembly: 6
+  outputs:
+    NuclearSteamCondenserFlatpack: 1

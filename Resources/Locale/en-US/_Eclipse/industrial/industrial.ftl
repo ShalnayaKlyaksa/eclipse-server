@@ -366,7 +366,7 @@ industrial-processor-ui-ports = Port configuration
 
 ent-IndustrialPortWrench = industrial key
 
-    .desc = Configures ports on industrial machines, assembles workbenches from tables, and removes item pipes. Hold it to see port indicators.
+    .desc = Configures ports on industrial machines and removes item pipes. Hold it to see port indicators.
 
 
 
@@ -536,6 +536,10 @@ industrial-workbench-category-components = Components
 industrial-workbench-category-modules = Upgrade modules
 industrial-workbench-craft-duration = Craft time: { $seconds } s
 industrial-workbench-ingredient-line = { $have }/{ $need } { $name }
+industrial-recipe-requires-disk = Requires a data disk with { $technology }
+industrial-recipe-requires-cleanroom = Requires a class { $grade } cleanroom
+industrial-processor-requires-tier = Minimum machine tier: { $tier }
+industrial-processor-requires-research = Requires research: { $technology }
 
 industrial-chassis-upgraded = Machine assembled: {$machine}.
 
@@ -545,7 +549,7 @@ ent-IndustrialWorkbench = industrial workbench (tier 1)
 
 ent-IndustrialMachineChassis = industrial machine chassis
 
-    .desc = An empty industrial machine frame. Install an upgrade module to complete assembly.
+    .desc = Anchor it with a wrench, then use a machine module on it to finish assembly.
 
 ent-IndustrialUpgradeModuleCrusher = crusher upgrade module
 
@@ -571,7 +575,7 @@ industrial-fabrication-heat-conduit = Fabricate heat conduit assembly
 
 industrial-fabrication-circuit-core = Fabricate circuit core
 
-industrial-fabrication-machine-chassis = Fabricate machine chassis
+industrial-fabrication-machine-chassis = Machine chassis blueprint
 
 industrial-fabrication-upgrade-crusher = Fabricate crusher upgrade module
 

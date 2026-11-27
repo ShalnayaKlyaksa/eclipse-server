@@ -210,9 +210,10 @@ public abstract class SharedDefibrillatorSystem : EntitySystem
             {
                 // Defibrillation restarts a viable heart, but cannot repair lethal trauma or destroyed vital organs.
                 advanced.BodyParts.TryGetValue(BodyPartSlot.Head, out var head);
+                var brainViable = !advanced.IsBrainDestroyed && head is { OrganFraction: > 0.5f };
                 var viable = advanced.TraumaLoad < advanced.LethalTraumaThreshold &&
                              (!advanced.HasBlood || advanced.BloodVolume > advanced.BloodDeathThreshold) &&
-                             head is { OrganFraction: > 0.5f } &&
+                             brainViable &&
                              advanced.BodyParts.TryGetValue(BodyPartSlot.Chest, out var chest) &&
                              chest.OrganIntegrity > 0;
                 if (viable)
@@ -220,16 +221,16 @@ public abstract class SharedDefibrillatorSystem : EntitySystem
                     advanced.IsHeartStopped = false;
                     advanced.ArrestTrigger = CardiacArrestTrigger.Unknown;
                     advanced.TimeSinceHeartStopped = 0;
+                    advanced.TimeBelowLethalOxygen = 0;
                     advanced.IsInAgonalState = false;
-                    // Restart with a viable rhythm and pressure so the cardiovascular loop can pick up
-                    // instead of immediately re-arresting from a zeroed heart rate.
-                    advanced.HeartRate = Math.Max(advanced.HeartRate, 55f);
+                    // Give circulation enough time to deliver oxygen before hypoxia can cause another arrest.
+                    advanced.HeartRate = Math.Max(advanced.HeartRate, advanced.RestingHeartRate);
                     advanced.MeanArterialPressure = Math.Max(advanced.MeanArterialPressure, 45f);
                     Dirty(target, advanced);
                     _mobState.ChangeMobState(target, MobState.Critical, targetMobState, user);
                     failedRevive = false;
                 }
-                else if (head is { OrganFraction: <= 0.5f })
+                else if (!brainViable)
                 {
                     _chat.TrySendInGameICMessage(ent.Owner, Loc.GetString("defibrillator-brain-damage"),
                         InGameICChatType.Speak, true);

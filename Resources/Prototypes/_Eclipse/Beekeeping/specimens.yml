@@ -1,0 +1,599 @@
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeCommonPrincess
+  name: common bee princess
+  components:
+  - type: Sprite
+    color: '#E6C470'
+  - type: BeeSpecimen
+    genome:
+      dominant: Common
+      recessive: Common
+
+- type: entity
+  parent: EclipseBeeCommonPrincess
+  id: EclipseBeeCommonDrone
+  name: common bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeHardyPrincess
+  name: hardy bee princess
+  components:
+  - type: Sprite
+    color: '#B4C780'
+  - type: BeeSpecimen
+    genome:
+      dominant: Hardy
+      recessive: Hardy
+
+- type: entity
+  parent: EclipseBeeHardyPrincess
+  id: EclipseBeeHardyDrone
+  name: hardy bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeCultivatedPrincess
+  name: cultivated bee princess
+  components:
+  - type: Sprite
+    color: '#F1CB94'
+  - type: BeeSpecimen
+    genome:
+      dominant: Cultivated
+      recessive: Cultivated
+
+- type: entity
+  parent: EclipseBeeCultivatedPrincess
+  id: EclipseBeeCultivatedDrone
+  name: cultivated bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeIndustriousPrincess
+  name: industrious bee princess
+  components:
+  - type: Sprite
+    color: '#E4A259'
+  - type: BeeSpecimen
+    genome:
+      dominant: Industrious
+      recessive: Industrious
+
+- type: entity
+  parent: EclipseBeeIndustriousPrincess
+  id: EclipseBeeIndustriousDrone
+  name: industrious bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeNoblePrincess
+  name: noble bee princess
+  components:
+  - type: Sprite
+    color: '#E0B7D4'
+  - type: BeeSpecimen
+    genome:
+      dominant: Noble
+      recessive: Noble
+
+- type: entity
+  parent: EclipseBeeNoblePrincess
+  id: EclipseBeeNobleDrone
+  name: noble bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeImperialPrincess
+  name: imperial bee princess
+  components:
+  - type: Sprite
+    color: '#C8A7E4'
+  - type: BeeSpecimen
+    genome:
+      dominant: Imperial
+      recessive: Imperial
+
+- type: entity
+  parent: EclipseBeeImperialPrincess
+  id: EclipseBeeImperialDrone
+  name: imperial bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeCopperPrincess
+  name: copper bee princess
+  components:
+  - type: Sprite
+    color: '#DC9470'
+  - type: BeeSpecimen
+    genome:
+      dominant: Copper
+      recessive: Copper
+
+- type: entity
+  parent: EclipseBeeCopperPrincess
+  id: EclipseBeeCopperDrone
+  name: copper bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeMetallicPrincess
+  name: metallic bee princess
+  components:
+  - type: Sprite
+    color: '#AFB8CB'
+  - type: BeeSpecimen
+    genome:
+      dominant: Metallic
+      recessive: Metallic
+
+- type: entity
+  parent: EclipseBeeMetallicPrincess
+  id: EclipseBeeMetallicDrone
+  name: metallic bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeAuricPrincess
+  name: auric bee princess
+  components:
+  - type: Sprite
+    color: '#F5D473'
+  - type: BeeSpecimen
+    genome:
+      dominant: Auric
+      recessive: Auric
+
+- type: entity
+  parent: EclipseBeeAuricPrincess
+  id: EclipseBeeAuricDrone
+  name: auric bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeCrystallinePrincess
+  name: crystalline bee princess
+  components:
+  - type: Sprite
+    color: '#B5DFE8'
+  - type: BeeSpecimen
+    genome:
+      dominant: Crystalline
+      recessive: Crystalline
+
+- type: entity
+  parent: EclipseBeeCrystallinePrincess
+  id: EclipseBeeCrystallineDrone
+  name: crystalline bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeResonantPrincess
+  name: resonant bee princess
+  components:
+  - type: Sprite
+    color: '#C6B8F9'
+  - type: BeeSpecimen
+    genome:
+      dominant: Resonant
+      recessive: Resonant
+
+- type: entity
+  parent: EclipseBeeResonantPrincess
+  id: EclipseBeeResonantDrone
+  name: resonant bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeQuantumPrincess
+  name: quantum bee princess
+  components:
+  - type: Sprite
+    color: '#ACB1EC'
+  - type: BeeSpecimen
+    genome:
+      dominant: Quantum
+      recessive: Quantum
+
+- type: entity
+  parent: EclipseBeeQuantumPrincess
+  id: EclipseBeeQuantumDrone
+  name: quantum bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeOrchardPrincess
+  name: orchard bee princess
+  components:
+  - type: Sprite
+    color: '#BED88A'
+  - type: BeeSpecimen
+    genome:
+      dominant: Orchard
+      recessive: Orchard
+
+- type: entity
+  parent: EclipseBeeOrchardPrincess
+  id: EclipseBeeOrchardDrone
+  name: orchard bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeCitrusPrincess
+  name: citrus bee princess
+  components:
+  - type: Sprite
+    color: '#E9DF77'
+  - type: BeeSpecimen
+    genome:
+      dominant: Citrus
+      recessive: Citrus
+
+- type: entity
+  parent: EclipseBeeCitrusPrincess
+  id: EclipseBeeCitrusDrone
+  name: citrus bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeAromaticPrincess
+  name: aromatic bee princess
+  components:
+  - type: Sprite
+    color: '#D3BAE6'
+  - type: BeeSpecimen
+    genome:
+      dominant: Aromatic
+      recessive: Aromatic
+
+- type: entity
+  parent: EclipseBeeAromaticPrincess
+  id: EclipseBeeAromaticDrone
+  name: aromatic bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeBakerPrincess
+  name: baker bee princess
+  components:
+  - type: Sprite
+    color: '#DDBB8D'
+  - type: BeeSpecimen
+    genome:
+      dominant: Baker
+      recessive: Baker
+
+- type: entity
+  parent: EclipseBeeBakerPrincess
+  id: EclipseBeeBakerDrone
+  name: baker bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeTropicalPrincess
+  name: tropical bee princess
+  components:
+  - type: Sprite
+    color: '#F2A879'
+  - type: BeeSpecimen
+    genome:
+      dominant: Tropical
+      recessive: Tropical
+
+- type: entity
+  parent: EclipseBeeTropicalPrincess
+  id: EclipseBeeTropicalDrone
+  name: tropical bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeGlacialPrincess
+  name: glacial bee princess
+  components:
+  - type: Sprite
+    color: '#A3D6EC'
+  - type: BeeSpecimen
+    genome:
+      dominant: Glacial
+      recessive: Glacial
+
+- type: entity
+  parent: EclipseBeeGlacialPrincess
+  id: EclipseBeeGlacialDrone
+  name: glacial bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeFragrantPrincess
+  name: fragrant bee princess
+  components:
+  - type: Sprite
+    color: '#EEADDD'
+  - type: BeeSpecimen
+    genome:
+      dominant: Fragrant
+      recessive: Fragrant
+
+- type: entity
+  parent: EclipseBeeFragrantPrincess
+  id: EclipseBeeFragrantDrone
+  name: fragrant bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeHerbalPrincess
+  name: herbal bee princess
+  components:
+  - type: Sprite
+    color: '#B0D895'
+  - type: BeeSpecimen
+    genome:
+      dominant: Herbal
+      recessive: Herbal
+
+- type: entity
+  parent: EclipseBeeHerbalPrincess
+  id: EclipseBeeHerbalDrone
+  name: herbal bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeMedicinalPrincess
+  name: medicinal bee princess
+  components:
+  - type: Sprite
+    color: '#A3E1BA'
+  - type: BeeSpecimen
+    genome:
+      dominant: Medicinal
+      recessive: Medicinal
+
+- type: entity
+  parent: EclipseBeeMedicinalPrincess
+  id: EclipseBeeMedicinalDrone
+  name: medicinal bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeRestorativePrincess
+  name: restorative bee princess
+  components:
+  - type: Sprite
+    color: '#E8B2A9'
+  - type: BeeSpecimen
+    genome:
+      dominant: Restorative
+      recessive: Restorative
+
+- type: entity
+  parent: EclipseBeeRestorativePrincess
+  id: EclipseBeeRestorativeDrone
+  name: restorative bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeAntisepticPrincess
+  name: antiseptic bee princess
+  components:
+  - type: Sprite
+    color: '#C5C992'
+  - type: BeeSpecimen
+    genome:
+      dominant: Antiseptic
+      recessive: Antiseptic
+
+- type: entity
+  parent: EclipseBeeAntisepticPrincess
+  id: EclipseBeeAntisepticDrone
+  name: antiseptic bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeRoyalPrincess
+  name: royal bee princess
+  components:
+  - type: Sprite
+    color: '#F4D0DB'
+  - type: BeeSpecimen
+    genome:
+      dominant: Royal
+      recessive: Royal
+
+- type: entity
+  parent: EclipseBeeRoyalPrincess
+  id: EclipseBeeRoyalDrone
+  name: royal bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeVitalPrincess
+  name: vital bee princess
+  components:
+  - type: Sprite
+    color: '#F4A5A3'
+  - type: BeeSpecimen
+    genome:
+      dominant: Vital
+      recessive: Vital
+
+- type: entity
+  parent: EclipseBeeVitalPrincess
+  id: EclipseBeeVitalDrone
+  name: vital bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeResinousPrincess
+  name: resinous bee princess
+  components:
+  - type: Sprite
+    color: '#C89C69'
+  - type: BeeSpecimen
+    genome:
+      dominant: Resinous
+      recessive: Resinous
+
+- type: entity
+  parent: EclipseBeeResinousPrincess
+  id: EclipseBeeResinousDrone
+  name: resinous bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeSilkenPrincess
+  name: silken bee princess
+  components:
+  - type: Sprite
+    color: '#F2E2CD'
+  - type: BeeSpecimen
+    genome:
+      dominant: Silken
+      recessive: Silken
+
+- type: entity
+  parent: EclipseBeeSilkenPrincess
+  id: EclipseBeeSilkenDrone
+  name: silken bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeFerricPrincess
+  name: ferric bee princess
+  components:
+  - type: Sprite
+    color: '#AF9B93'
+  - type: BeeSpecimen
+    genome:
+      dominant: Ferric
+      recessive: Ferric
+
+- type: entity
+  parent: EclipseBeeFerricPrincess
+  id: EclipseBeeFerricDrone
+  name: ferric bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeConductivePrincess
+  name: conductive bee princess
+  components:
+  - type: Sprite
+    color: '#D1DFEA'
+  - type: BeeSpecimen
+    genome:
+      dominant: Conductive
+      recessive: Conductive
+
+- type: entity
+  parent: EclipseBeeConductivePrincess
+  id: EclipseBeeConductiveDrone
+  name: conductive bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone
+
+- type: entity
+  parent: EclipseBeePrincess
+  id: EclipseBeeRadiantPrincess
+  name: radiant bee princess
+  components:
+  - type: Sprite
+    color: '#C0E784'
+  - type: BeeSpecimen
+    genome:
+      dominant: Radiant
+      recessive: Radiant
+
+- type: entity
+  parent: EclipseBeeRadiantPrincess
+  id: EclipseBeeRadiantDrone
+  name: radiant bee drone
+  components:
+  - type: BeeSpecimen
+    caste: Drone

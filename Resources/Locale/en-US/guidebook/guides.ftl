@@ -1,4 +1,4 @@
-guide-entry-ss14 = Station and Shifts
+guide-entry-ss14 = Eclipse Handbook
 guide-entry-engineering = Engineering
 guide-entry-construction = Construction
 guide-entry-expandingrepairingstation = Expanding and Repairing Stations
@@ -41,7 +41,7 @@ guide-entry-spacing = Spacing
 guide-entry-deltapressure = Delta Pressure
 guide-entry-atmostools = Atmos Tools
 guide-entry-gasses = Gasses
-guide-entry-botany = Botany
+guide-entry-botany = Botany and Plant Breeding
 guide-entry-shuttle-craft = Shuttle-craft
 guide-entry-networking = Networking
 guide-entry-access-configurator = Access Configurator

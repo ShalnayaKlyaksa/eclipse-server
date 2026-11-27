@@ -15,12 +15,6 @@ public sealed class HumanoidProfileSystem : EntitySystem
 
     // Corvax-TTS-Start
     public const string DefaultVoice = "Garithos";
-    public static readonly Dictionary<Sex, string> DefaultSexVoice = new()
-    {
-        {Sex.Male, "Garithos"},
-        {Sex.Female, "Maiev"},
-        {Sex.Unsexed, "Myron"},
-    };
     // Corvax-TTS-End
 
     public override void Initialize()

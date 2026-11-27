@@ -47,10 +47,14 @@ public sealed class WorkshopLayoutTest : GameTest
             using var apiary = new ApiaryWindow();
             var species = CProtoMan.EnumeratePrototypes<BeeSpeciesPrototype>().Select(p => new ApiarySpeciesState(
                 p.ID, longName, p.Tier, p.CycleSeconds, p.Comb.Id, longName, p.RareProduct?.Id, longName,
-                p.RareChance, p.RareGeneration, p.RareLineageSeconds / 60, p.NeedsMinerals)).ToArray();
+                p.RareChance, p.RareGeneration, p.RareLineageSeconds / 60, p.NeedsMinerals)
+                {
+                    Separation = "Термоцентрифуга: соты ×2 → пчелиный воск ×1, золотая соединительная проволока ×1",
+                    FoodMultiplier = 0.75f, WaterMultiplier = 0.75f, CombBonus = 1, StingChance = 0.55f,
+                }).ToArray();
             apiary.Apply(new ApiaryState("apiary-status-working", longName, longName, longName, longName, .5f, 200, 200, 50, 12, 8, true)
             {
-                ActiveQueen = true, Species = species,
+                ActiveQueen = true, Species = species, ForageComb = "лилейные соты",
                 OutputSlots = Enumerable.Range(0, 40).Select(i => new WorkshopItemState(i, "EclipseBeeDrone", longName)).ToArray(),
                 ParentSlots = [new(0, "EclipseBeePrincess", longName) { Role = "Princess" }, new(1, "EclipseBeeDrone", longName) { Role = "Drone" }],
                 Crosses = CProtoMan.EnumeratePrototypes<BeeMutationPrototype>().Select(p => new ApiaryMutationState(

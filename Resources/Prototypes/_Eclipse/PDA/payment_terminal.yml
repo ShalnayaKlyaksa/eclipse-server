@@ -5,7 +5,7 @@
   description: A portable register for goods and services. Revenue can go to a personal account or a department budget. Management requires the owner's ID card.
   components:
   - type: Sprite
-    sprite: _Eclipse/Objects/Devices/payment_terminal_adt.rsi
+    sprite: _Eclipse/Objects/Devices/payment_terminal.rsi
     noRot: true
     layers:
     - state: eftpos

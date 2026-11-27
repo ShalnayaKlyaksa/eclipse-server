@@ -18,7 +18,7 @@
   parent: BaseItem
   id: IndustrialKey
   name: industrial key
-  description: Configures ports on industrial machines, assembles workbenches from tables, and removes item pipes. Hold it to see port indicators.
+  description: Configures ports on industrial machines and removes item pipes. Hold it to see port indicators.
   components:
   - type: Sprite
     sprite: Objects/Tools/wrench.rsi

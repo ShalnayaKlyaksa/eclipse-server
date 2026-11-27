@@ -11,4 +11,5 @@ public static class ApiaryFrameRules
     public static float FoodMultiplier(string kind) => kind == "Nursing" ? 1.5f : 1;
     public static float WaterMultiplier(string kind) => kind == "Insulated" ? 0.75f : 1;
     public static float TemperatureTolerance(string kind) => kind == "Insulated" ? 8 : 0;
+    public static int ForageMultiplier(string kind) => kind == "Forage" ? 2 : 1;
 }

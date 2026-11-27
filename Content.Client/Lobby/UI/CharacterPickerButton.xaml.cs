@@ -22,6 +22,8 @@ namespace Content.Client.Lobby.UI;
 [GenerateTypedNameReferences]
 public sealed partial class CharacterPickerButton : ContainerButton
 {
+    private static readonly ProtoId<SpeciesPrototype> Shadowkin = "Shadowkin";
+
     /// <summary>
     /// Invoked if we should delete the attached character
     /// </summary>
@@ -46,10 +48,15 @@ public sealed partial class CharacterPickerButton : ContainerButton
         View.LoadPreview(profile);
 
         var highPriorityJob = profile.JobPriorities.SingleOrDefault(p => p.Value == JobPriority.High).Key;
-        if (highPriorityJob != default)
+        var job = highPriorityJob != default ? prototypeManager.Index(highPriorityJob) : null;
+        if (job != null)
+            description = $"{description}\n{job.LocalizedName}";
+
+        if (profile.Species == Shadowkin && job?.JobPreviewEntity == null && job?.JobEntity == null)
         {
-            var jobName = prototypeManager.Index(highPriorityJob).LocalizedName;
-            description = $"{description}\n{jobName}";
+            // The 64px tail frames are mostly transparent from the south. Leave room for the widest visible tail.
+            View.Stretch = SpriteView.StretchMode.None;
+            View.Scale = new(1.6f);
         }
 
         Pressed = isSelected;

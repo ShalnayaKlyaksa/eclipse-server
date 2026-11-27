@@ -39,6 +39,9 @@ public class GuideEntry
     /// </summary>
     [DataField] public bool FilterEnabled = default!;
 
+    /// <summary>Open the authored overview when the section is selected from the catalog.</summary>
+    [DataField] public bool OpenArticleFromCatalog;
+
     [DataField] public bool RuleEntry;
 
     /// <summary>

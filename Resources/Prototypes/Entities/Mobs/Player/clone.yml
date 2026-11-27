@@ -22,16 +22,19 @@
   - TemperatureSpeed
   # traits
   - BlackAndWhiteOverlay
+  - ClearDiction
   - Clumsy
   - ImpairedMobility
   # - LegsParalyzed (you get healed)
   - LightweightDrunk
+  - LightStep
   - Muted
   - Narcolepsy
   - Pacified
   - Paracusia
   - PermanentBlindness
   - Snoring
+  - Tenacity
   - Unrevivable
   # accents
   - Accentless
