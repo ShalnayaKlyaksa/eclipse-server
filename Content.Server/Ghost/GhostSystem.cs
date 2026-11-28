@@ -605,24 +605,27 @@ namespace Content.Server.Ghost
             {
                 if (_mobState.IsCritical(playerEntity.Value, mobState))
                 {
-                    canReturn = true;
-
-                    //todo: what if they dont breathe lol
-                    //cry deeply
-
-                    FixedPoint2 dealtDamage = 200;
-
-                    if (TryComp<DamageableComponent>(playerEntity, out var damageable)
-                        && TryComp<MobThresholdsComponent>(playerEntity, out var thresholds))
+                    if (HasComp<Content.Shared._Eclipse.AdvancedHealth.AdvancedHealthComponent>(playerEntity))
                     {
-                        var playerDeadThreshold = _mobThresholdSystem.GetThresholdForState(playerEntity.Value, MobState.Dead, thresholds);
-                        dealtDamage = playerDeadThreshold -
-                                      _damageable.GetTotalDamage((playerEntity.Value, damageable));
+                        _mobState.ChangeMobState(playerEntity.Value, MobState.Dead, mobState);
                     }
+                    else
+                    {
 
-                    DamageSpecifier damage = new(_prototypeManager.Index(AsphyxiationDamageType), dealtDamage);
+                        FixedPoint2 dealtDamage = 200;
 
-                    _damageable.ChangeDamage(playerEntity.Value, damage, true);
+                        if (TryComp<DamageableComponent>(playerEntity, out var damageable)
+                            && TryComp<MobThresholdsComponent>(playerEntity, out var thresholds))
+                        {
+                            var playerDeadThreshold = _mobThresholdSystem.GetThresholdForState(playerEntity.Value, MobState.Dead, thresholds);
+                            dealtDamage = playerDeadThreshold -
+                                          _damageable.GetTotalDamage((playerEntity.Value, damageable));
+                        }
+
+                        DamageSpecifier damage = new(_prototypeManager.Index(AsphyxiationDamageType), dealtDamage);
+                        _damageable.ChangeDamage(playerEntity.Value, damage, true);
+                    }
+                    canReturn = _mobState.IsDead(playerEntity.Value, mobState);
                 }
             }
 

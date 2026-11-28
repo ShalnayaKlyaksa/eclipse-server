@@ -1,0 +1,11 @@
+ent-IndustrialRollingMill = rolling mill
+    .desc = Rolls batches of metal ingots and billets into plates and sheets.
+ent-IndustrialStampingPress = stamping press
+    .desc = Stamps metal sheets into chip frames and reinforced machine panels.
+ent-IndustrialUpgradeModuleRollingMill = rolling mill module
+    .desc = Install it on an anchored industrial machine chassis.
+ent-IndustrialUpgradeModuleStampingPress = stamping press module
+    .desc = Install it on an anchored industrial machine chassis.
+ent-IndustrialReinforcedPanel = reinforced machine panel
+    .desc = A stamped plasteel panel used in advanced machine housings.
+stack-IndustrialReinforcedPanel = reinforced machine panels

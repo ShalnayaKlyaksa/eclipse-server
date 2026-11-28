@@ -81,7 +81,7 @@ public sealed partial class ResearchSystem
     {
         var parts = argument.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         var accounts = TerminalAccounts(console.AccountServer!.Value);
-        if (!accounts.Accounts[console.Username!].Administrator || parts.Length != 2 ||
+        if (!IsTerminalAdministrator(console) || parts.Length != 2 ||
             !accounts.Accounts.TryGetValue(parts[0], out var account) || parts[1] is not ("observer" or "researcher" or "admin"))
         { TerminalPrint(console, Loc.GetString("research-terminal-role-usage")); return; }
         accounts.Accounts[parts[0]] = account with { Administrator = parts[1] == "admin", CanResearch = parts[1] != "observer" };
@@ -95,8 +95,7 @@ public sealed partial class ResearchSystem
     {
         var server = console.AccountServer!.Value;
         var accounts = TerminalAccounts(server);
-        var requester = console.Username!;
-        if (!accounts.Accounts[requester].Administrator || !accounts.Credentials.TryGetValue(username, out var credential))
+        if (!IsTerminalAdministrator(console) || !accounts.Credentials.TryGetValue(username, out var credential))
         { TerminalPrint(console, Loc.GetString("research-terminal-operation-denied")); return; }
         const string alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
         var password = new string(Enumerable.Range(0, 10).Select(_ => alphabet[RandomNumberGenerator.GetInt32(alphabet.Length)]).ToArray());
@@ -104,14 +103,23 @@ public sealed partial class ResearchSystem
         var previous = accounts.Accounts.GetValueOrDefault(username);
         accounts.Accounts[username] = new ResearchAccount(salt, PasswordHash(password, salt), previous?.Administrator ?? credential.Administrator, previous?.CanResearch ?? credential.CanResearch);
         accounts.Credentials[username] = credential with { Password = password };
-        SendResearchMail(AccountDomain(server), requester, Loc.GetString("research-mail-reset-subject"),
-            Loc.GetString("research-mail-reset-body", ("name", credential.Name), ("login", credential.Username), ("password", password)));
+        var message = Loc.GetString("research-mail-reset-body", ("name", credential.Name), ("login", credential.Username), ("password", password));
+        if (console.AdminSession != null)
+            TerminalPrint(console, message);
+        else
+            SendResearchMail(AccountDomain(server), console.Username!, Loc.GetString("research-mail-reset-subject"), message);
         RefreshAccountSessions(server, username, close: true);
         TerminalPrint(console, Loc.GetString("research-terminal-password-reset", ("user", username)));
     }
 
     private void HandleTerminalMail(ResearchConsoleComponent console, string argument)
     {
+        if (console.AdminSession != null)
+        {
+            TerminalPrint(console, Loc.GetString("research-terminal-operation-denied"));
+            return;
+        }
+
         var domain = AccountDomain(console.AccountServer!.Value);
         var accounts = Comp<ResearchAccountsComponent>(domain);
         var inbox = accounts.Mailboxes[console.Username!];
@@ -133,7 +141,7 @@ public sealed partial class ResearchSystem
 
     private void HandleResearchQueue(EntityUid uid, ResearchConsoleComponent console, EntityUid actor, string argument)
     {
-        if (!CanResearchAtTerminal(uid)) { TerminalPrint(console, Loc.GetString("research-terminal-operation-denied")); return; }
+        if (!CanResearchAtTerminal(uid, actor)) { TerminalPrint(console, Loc.GetString("research-terminal-operation-denied")); return; }
         var parts = argument.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         if (parts.Length == 0 || parts[0] == "list")
         {
@@ -154,7 +162,7 @@ public sealed partial class ResearchSystem
 
     private void TryAdvanceResearchQueue(EntityUid uid, ResearchConsoleComponent console)
     {
-        if (console.QueueProcessing || console.PendingResearch.Count == 0 || !CanResearchAtTerminal(uid)) return;
+        if (console.QueueProcessing || console.PendingResearch.Count == 0 || !CanResearchAtTerminal(uid, console.QueueActor)) return;
         console.QueueProcessing = true;
         try
         {

@@ -38,6 +38,8 @@ namespace Content.Client.Tabletop
         private ScalingViewport? _viewport; // Viewport currently being used
         private BaseWindow? _window; // Current open tabletop window (only allow one at a time)
         private EntityUid? _table; // The table entity of the currently open game session
+        private TabletopPlayEvent? _pendingGame;
+        private TimeSpan _pendingUntil;
 
         public override void Initialize()
         {
@@ -62,6 +64,30 @@ namespace Content.Client.Tabletop
 
         public override void FrameUpdate(float frameTime)
         {
+            if (_pendingGame is { } game)
+            {
+                if (TryGetEntity(game.TableUid, out var table) && TryGetEntity(game.CameraUid, out var camera)
+                    && TryComp<EyeComponent>(camera, out var eye) && eye.Eye.Position != MapCoordinates.Nullspace)
+                {
+                    _pendingGame = null;
+                    _table = table;
+                    var window = new TabletopWindow(eye.Eye, game.Size)
+                    {
+                        MinWidth = 500,
+                        MinHeight = 436,
+                        Title = game.Title
+                    };
+                    _window = window;
+                    window.OnClose += OnWindowClose;
+                    window.OpenCentered();
+                }
+                else if (_gameTiming.RealTime >= _pendingUntil)
+                {
+                    _pendingGame = null;
+                    RaiseNetworkEvent(new TabletopStopPlayingEvent(game.TableUid));
+                }
+            }
+
             if (_window == null)
                 return;
 
@@ -123,30 +149,10 @@ namespace Content.Client.Tabletop
         /// </summary>
         private void OnTabletopPlay(TabletopPlayEvent msg)
         {
-            // Close the currently opened window, if it exists
             _window?.Close();
-
-            _table = GetEntity(msg.TableUid);
-
-            // Get the camera entity that the server has created for us
-            var camera = GetEntity(msg.CameraUid);
-
-            if (!TryComp<EyeComponent>(camera, out var eyeComponent))
-            {
-                // If there is no eye, print error and do not open any window
-                Log.Error("Camera entity does not have eye component!");
-                return;
-            }
-
-            // Create a window to contain the viewport
-            _window = new TabletopWindow(eyeComponent.Eye, (msg.Size.X, msg.Size.Y))
-            {
-                MinWidth = 500,
-                MinHeight = 436,
-                Title = msg.Title
-            };
-
-            _window.OnClose += OnWindowClose;
+            // The event can arrive before the camera's first game state.
+            _pendingGame = msg;
+            _pendingUntil = _gameTiming.RealTime + TimeSpan.FromSeconds(5);
         }
 
         private void OnWindowClose()
@@ -158,6 +164,7 @@ namespace Content.Client.Tabletop
 
             StopDragging();
             _window = null;
+            _table = null;
         }
 
         private bool OnUse(in PointerInputCmdArgs args)

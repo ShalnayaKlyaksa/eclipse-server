@@ -52,32 +52,3 @@
     IndustrialCircuitCore: 1
   outputs:
     RadioHandheld: 1
-
-- type: industrialFabricationRecipe
-  id: SupplyWrench
-  result: Wrench
-  duration: 12
-  ingredients:
-    SheetSteel: 2
-
-- type: industrialFabricationRecipe
-  id: SupplyScrewdriver
-  result: Screwdriver
-  duration: 12
-  ingredients:
-    SheetSteel: 1
-
-- type: industrialFabricationRecipe
-  id: SupplyCrowbar
-  result: Crowbar
-  duration: 12
-  ingredients:
-    SheetSteel: 2
-
-- type: industrialFabricationRecipe
-  id: SupplyWirecutter
-  result: Wirecutter
-  duration: 12
-  ingredients:
-    SheetSteel: 2
-

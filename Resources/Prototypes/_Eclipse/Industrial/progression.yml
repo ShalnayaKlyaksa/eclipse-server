@@ -1169,7 +1169,6 @@
   id: IndustrialBuildDrill
   processor: Assembler
   minimumTier: Basic
-  requiredTechnology: IndustrialResourceExtraction
   time: 25
   inputs:
     IndustrialIronPlate: 8
@@ -1177,7 +1176,6 @@
     IndustrialMechanicalCore: 2
   outputs:
     IndustrialDrillFlatpack: 1
-  requireDataDisk: true
 
 - type: entity
   id: IndustrialExcavator
@@ -1194,6 +1192,7 @@
   - type: IndustrialExtractor
     interval: 3
     amount: 2
+    requiredTechnology: IndustrialAutomation
   - type: ApcPowerReceiver
     powerLoad: 6500
   - type: Transform
@@ -1216,7 +1215,7 @@
 
 - type: industrialFabricationRecipe
   id: FabricateItemPipeLP
-  result: LpItemPipe
+  result: LpItemPipePack
   duration: 5
   ingredients:
     IndustrialIronPlate: 1
@@ -1229,11 +1228,11 @@
   inputs:
     IndustrialIronPlate: 1
   outputs:
-    LpItemPipe: 2
+    LpItemPipePack: 2
   requireDataDisk: true
 - type: industrialFabricationRecipe
   id: FabricateItemPipeMP
-  result: MpItemPipe
+  result: MpItemPipePack
   duration: 5
   ingredients:
     IndustrialIronPlate: 2
@@ -1247,11 +1246,11 @@
   inputs:
     IndustrialIronPlate: 2
   outputs:
-    MpItemPipe: 2
+    MpItemPipePack: 2
   requireDataDisk: true
 - type: industrialFabricationRecipe
   id: FabricateItemPipeHP
-  result: HpItemPipe
+  result: HpItemPipePack
   duration: 5
   ingredients:
     IndustrialIronPlate: 4
@@ -1265,7 +1264,7 @@
   inputs:
     IndustrialIronPlate: 4
   outputs:
-    HpItemPipe: 2
+    HpItemPipePack: 2
   requireDataDisk: true
 - type: industrialRecipe
   id: IndustrialProducePipeLP
@@ -1276,7 +1275,7 @@
   inputs:
     SheetSteel: 1
   outputs:
-    BasicLiquidPipe: 2
+    BasicLiquidPipePack: 2
   requireDataDisk: true
 - type: industrialRecipe
   id: IndustrialProducePipeMP
@@ -1287,7 +1286,7 @@
   inputs:
     SheetSteel: 2
   outputs:
-    IndustrialLiquidPipe: 2
+    IndustrialLiquidPipePack: 2
   requireDataDisk: true
 - type: industrialRecipe
   id: IndustrialProducePipeHP
@@ -1298,7 +1297,7 @@
   inputs:
     SheetSteel: 4
   outputs:
-    PerfectLiquidPipe: 2
+    PerfectLiquidPipePack: 2
   requireDataDisk: true
 - type: industrialRecipe
   id: IndustrialProducePipeGasStraight
@@ -1350,7 +1349,7 @@
   category: Piping
   sprite: /Textures/Interface/Radial/RCD/cable_terminal.png
   mode: ConstructObject
-  prototype: BasicLiquidPipe
+  prototype: BasicLiquidPipeRCD
   cost: 4
   delay: 2
   rotation: User

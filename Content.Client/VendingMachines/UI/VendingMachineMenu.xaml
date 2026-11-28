@@ -7,6 +7,8 @@
     <BoxContainer Name="MainContainer" Orientation="Vertical">
         <LineEdit Name="SearchBar" PlaceHolder="{Loc 'vending-machine-component-search-filter'}" HorizontalExpand="True"  Margin ="4 4"/>
         <co:SearchListContainer Name="VendingContents" VerticalExpand="True" Margin="4 4"/>
+        <Label Name="OutOfStockLabel" Text="{Loc 'vending-machine-component-try-eject-out-of-stock'}"
+               Visible="False" Margin="4 4" VerticalExpand="True" HorizontalAlignment="Center" />
          <!-- Footer -->
         <BoxContainer Orientation="Vertical">
             <PanelContainer StyleClasses="LowDivider" />

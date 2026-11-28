@@ -8,7 +8,10 @@ using Content.Server.Stack;
 using Content.Server.Temperature.Systems;
 using Content.Shared._Eclipse.Industrial;
 using Content.Shared._Eclipse.Industrial.Prototypes;
+using Content.Shared.Cargo.Prototypes;
 using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.Lathe.Prototypes;
+using Content.Shared.Research.Prototypes;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.Components;
 using Content.Shared.Stacks;
@@ -28,6 +31,50 @@ public sealed class IndustrialRecipeAuditTest : GameTest
     private static readonly EntProtoId Electrolyzer = "IndustrialElectrolyzer";
 
     private string _currentRecipe = "initialization";
+
+    [Test]
+    public async Task IndustrialSuppliesHaveAnAssemblerRecipeAndNoLathePack()
+    {
+        await Audit(() =>
+        {
+            var prototypes = Server.ResolveDependency<IPrototypeManager>();
+            var resources = Server.System<IndustrialResourceSystem>();
+            var assembled = prototypes.EnumeratePrototypes<IndustrialRecipePrototype>()
+                .Where(recipe => recipe.Processor == IndustrialProcessorType.Assembler)
+                .SelectMany(recipe => recipe.Outputs.Keys).ToHashSet();
+            var printable = prototypes.EnumeratePrototypes<LatheRecipePackPrototype>()
+                .SelectMany(pack => pack.Recipes)
+                .Select(id => prototypes.Index<LatheRecipePrototype>(id).Result)
+                .Where(result => result != null)
+                .Select(result => resources.Key(result!.Value.Id)).ToHashSet();
+            var supplies = prototypes.EnumeratePrototypes<CargoProductPrototype>()
+                .Where(product => product.Category == "cargoproduct-category-name-industrial").ToArray();
+            Assert.That(supplies, Has.Length.EqualTo(257));
+            foreach (var supply in supplies)
+            {
+                Assert.That(supply.Cost, Is.Positive, supply.ID);
+                Assert.That(assembled, Does.Contain(supply.Product.Id), supply.ID);
+                Assert.That(printable, Does.Not.Contain(resources.Key(supply.Product.Id)), supply.ID);
+            }
+        });
+    }
+
+    [Test]
+    public async Task StarterKitContainsThePartsForOneAssembler()
+    {
+        var map = await Pair.CreateTestMap();
+        await Audit(() =>
+        {
+            var kit = SEntMan.SpawnEntity("BoxIndustrialAssemblerKit", map.GridCoords);
+            var items = SEntMan.GetComponent<StorageComponent>(kit).Container.ContainedEntities;
+            var resources = Server.System<IndustrialResourceSystem>();
+            Assert.That(resources.Count(items, "IndustrialChassisBlueprint"), Is.EqualTo(1));
+            Assert.That(resources.Count(items, "IndustrialIronPlate"), Is.EqualTo(8));
+            Assert.That(resources.Count(items, "IndustrialIronRod"), Is.EqualTo(4));
+            Assert.That(resources.Count(items, "IndustrialUpgradeModuleAssembler"), Is.EqualTo(1));
+            SEntMan.DeleteEntity(map.MapUid);
+        });
+    }
 
     private async Task Audit(Action body)
     {

@@ -1,13 +1,21 @@
 using System.Linq;
 using System.Globalization;
+using Content.Server.Medical.Components;
+using Content.Server.Power.Components;
+using Content.Server.Power.EntitySystems;
 using Content.Shared._Eclipse.AdvancedHealth;
 using Content.Shared.ActionBlocker;
+using Content.Shared.Damage;
+using Content.Shared.Damage.Prototypes;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Paper;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Popups;
+using Content.Shared.Power;
+using Content.Shared.Verbs;
 using Robust.Shared.Timing;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
@@ -27,43 +35,138 @@ public sealed class MedicalDiagnosticsSystem : EntitySystem
     [Dependency] private readonly PaperSystem _paper = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly IPrototypeManager _prototypes = default!;
+    [Dependency] private readonly DamageableSystem _damage = default!;
+
+    internal const float XRayDuration = 7f;
+    private static readonly ProtoId<DamageTypePrototype> Radiation = "Radiation";
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<ClinicalBloodAnalyzerComponent, AfterInteractEvent>(OnUseAnalyzer);
-        SubscribeLocalEvent<ClinicalBloodSampleComponent, ClinicalAnalysisDoAfterEvent>(OnAnalysisComplete);
+        SubscribeLocalEvent<ClinicalBloodAnalyzerComponent, InteractUsingEvent>(OnUseAnalyzer);
+        SubscribeLocalEvent<ClinicalBloodAnalyzerComponent, AnchorStateChangedEvent>(OnAnalyzerUnanchored);
+        SubscribeLocalEvent<ClinicalBloodAnalyzerComponent, PowerChangedEvent>(OnAnalyzerPowerChanged);
+        SubscribeLocalEvent<ClinicalBloodAnalyzerComponent, ClinicalAnalysisDoAfterEvent>(OnAnalysisComplete);
+        SubscribeLocalEvent<MedicalScannerComponent, GetVerbsEvent<Verb>>(OnScannerVerbs);
+        SubscribeLocalEvent<MedicalScannerComponent, MedicalXRayDoAfterEvent>(OnXRayComplete);
     }
 
-    private bool CanAnalyze(EntityUid user, EntityUid analyzer, EntityUid tube)
-        => Exists(analyzer) && Exists(tube) && _hands.IsHolding(user, analyzer)
-            && HasComp<ClinicalBloodAnalyzerComponent>(analyzer)
-            && _actions.CanConsciouslyPerformAction(user) && _actions.CanInteract(user, tube)
-            && _interaction.InRangeUnobstructed(user, tube)
-            && TryComp<ClinicalBloodSampleComponent>(tube, out var sample) && _blood.IsFresh(sample);
-
-    private void OnUseAnalyzer(Entity<ClinicalBloodAnalyzerComponent> ent, ref AfterInteractEvent args)
+    private void OnScannerVerbs(Entity<MedicalScannerComponent> scanner, ref GetVerbsEvent<Verb> args)
     {
-        if (args.Handled || !args.CanReach || args.Target is not { } tube) return;
-        if (!CanAnalyze(args.User, ent, tube))
+        if (!args.CanAccess || !args.CanInteract || scanner.Comp.BodyContainer.ContainedEntity is not { } patient)
+            return;
+
+        var user = args.User;
+        var slot = TryComp<AimTargetComponent>(user, out var aim) && aim.CurrentTarget != BodyPartTarget.Auto
+            ? aim.CurrentTarget.ToSlot() : BodyPartSlot.Chest;
+        if (!CanTakeXRay(scanner, user, patient, slot))
+            return;
+
+        args.Verbs.Add(new Verb
         {
-            if (HasComp<ClinicalBloodSampleComponent>(tube))
-                _popup.PopupEntity(Loc.GetString("diagnostic-sample-invalid"), tube, args.User);
+            Text = Loc.GetString("advanced-health-action-xray"),
+            Act = () => TryStartXRay(scanner, user, patient, slot),
+        });
+    }
+
+    internal bool TryStartXRay(Entity<MedicalScannerComponent> scanner, EntityUid user, EntityUid patient, BodyPartSlot slot)
+    {
+        if (!CanTakeXRay(scanner, user, patient, slot))
+            return false;
+
+        return _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, user, XRayDuration,
+            new MedicalXRayDoAfterEvent { Patient = GetNetEntity(patient), Slot = slot }, scanner, target: scanner)
+        {
+            BreakOnMove = true,
+            BreakOnDamage = true,
+        });
+    }
+
+    private bool CanTakeXRay(Entity<MedicalScannerComponent> scanner, EntityUid user, EntityUid patient, BodyPartSlot slot)
+        => scanner.Comp.BodyContainer.ContainedEntity == patient && Transform(scanner).Anchored
+            && user != patient && this.IsPowered(scanner, EntityManager) && _actions.CanConsciouslyPerformAction(user)
+            && _actions.CanInteract(user, scanner) && _interaction.InRangeUnobstructed(user, scanner.Owner)
+            && TryComp<AdvancedHealthComponent>(patient, out var health) && health.BodyParts.ContainsKey(slot);
+
+    private void OnXRayComplete(Entity<MedicalScannerComponent> scanner, ref MedicalXRayDoAfterEvent args)
+    {
+        if (args.Cancelled || args.Handled || !TryGetEntity(args.Patient, out var patientUid) || patientUid is not { } patient
+            || !CanTakeXRay(scanner, args.User, patient, args.Slot))
+            return;
+
+        _damage.ChangeDamage(patient, new DamageSpecifier(_prototypes.Index(Radiation), 0.5), true);
+        RecordExamination(patient, args.Slot, AdvancedTreatmentType.XRay, args.User, scanner);
+        args.Handled = true;
+    }
+
+    private bool CanReachAnalyzer(EntityUid user, EntityUid analyzer, EntityUid tube)
+        => _hands.IsHolding(user, tube) && _actions.CanUseHeldEntity(user, tube)
+            && _actions.CanConsciouslyPerformAction(user) && _actions.CanInteract(user, analyzer)
+            && _interaction.InRangeUnobstructed(user, analyzer);
+
+    private bool IsReady(EntityUid analyzer)
+        => Transform(analyzer).Anchored && TryComp<ApcPowerReceiverComponent>(analyzer, out var receiver) && receiver.Powered;
+
+    private void OnAnalyzerUnanchored(Entity<ClinicalBloodAnalyzerComponent> ent, ref AnchorStateChangedEvent args)
+    {
+        if (!args.Anchored)
+            CancelAnalysis(ent.Comp);
+    }
+
+    private void OnAnalyzerPowerChanged(Entity<ClinicalBloodAnalyzerComponent> ent, ref PowerChangedEvent args)
+    {
+        if (!args.Powered)
+            CancelAnalysis(ent.Comp);
+    }
+
+    private void CancelAnalysis(ClinicalBloodAnalyzerComponent analyzer)
+    {
+        var analysis = analyzer.Analysis;
+        analyzer.Analysis = null;
+        if (_doAfter.IsRunning(analysis))
+            _doAfter.Cancel(analysis);
+    }
+
+    private void OnUseAnalyzer(Entity<ClinicalBloodAnalyzerComponent> ent, ref InteractUsingEvent args)
+    {
+        if (args.Handled || !TryComp<ClinicalBloodSampleComponent>(args.Used, out var sample)
+            || !CanReachAnalyzer(args.User, ent, args.Used))
+            return;
+
+        args.Handled = true;
+        var error = !IsReady(ent) ? "diagnostic-analyzer-unavailable"
+            : _doAfter.IsRunning(ent.Comp.Analysis) ? "diagnostic-analyzer-busy"
+            : !_blood.IsFresh(sample) ? "diagnostic-sample-invalid"
+            : null;
+        if (error != null)
+        {
+            _popup.PopupEntity(Loc.GetString(error), ent, args.User);
             return;
         }
-        args.Handled = _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, ent.Comp.Delay,
-            new ClinicalAnalysisDoAfterEvent(), tube, target: tube, used: ent)
-        { NeedHand = true, BreakOnMove = true, BreakOnDamage = true });
+
+        if (_doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, ent.Comp.Delay,
+            new ClinicalAnalysisDoAfterEvent(), ent, target: ent, used: args.Used)
+        { NeedHand = true, BreakOnMove = true, BreakOnDamage = true }, out var analysis) && _doAfter.IsRunning(analysis))
+            ent.Comp.Analysis = analysis;
     }
 
-    private void OnAnalysisComplete(Entity<ClinicalBloodSampleComponent> ent, ref ClinicalAnalysisDoAfterEvent args)
+    private void OnAnalysisComplete(Entity<ClinicalBloodAnalyzerComponent> ent, ref ClinicalAnalysisDoAfterEvent args)
     {
-        if (args.Cancelled || args.Handled || args.Target != ent.Owner || args.Used is not { } analyzer
-            || !CanAnalyze(args.User, analyzer, ent)) return;
-        args.Handled = AnalyzeSample(ent.Owner, args.User);
+        if (ent.Comp.Analysis == args.DoAfter.Id)
+            ent.Comp.Analysis = null;
+
+        if (args.Cancelled || args.Handled || args.Target != ent.Owner || args.Used is not { } tube
+            || !CanReachAnalyzer(args.User, ent, tube))
+            return;
+
+        if (!IsReady(ent))
+            _popup.PopupEntity(Loc.GetString("diagnostic-analyzer-unavailable"), ent, args.User);
+        else if (!AnalyzeSample(tube, args.User, ent))
+            _popup.PopupEntity(Loc.GetString("diagnostic-sample-invalid"), ent, args.User);
+        args.Handled = true;
     }
 
     /// <summary>Uses the contents-validated sample snapshot, including after the patient's death.</summary>
-    public bool AnalyzeSample(EntityUid tube, EntityUid? user = null)
+    public bool AnalyzeSample(EntityUid tube, EntityUid? user = null, EntityUid? analyzer = null)
     {
         if (!TryComp<ClinicalBloodSampleComponent>(tube, out var sample) || !_blood.IsFresh(sample)) return false;
         var report = new MedicalDiagnosticReport
@@ -71,29 +174,29 @@ public sealed class MedicalDiagnosticsSystem : EntitySystem
             Kind = MedicalDiagnosticKind.Blood, Slot = BodyPartSlot.Chest,
             CollectedAt = sample.CollectedAt, PatientName = sample.PatientName, PatientIdentity = sample.PatientIdentity,
             BloodGroup = sample.BloodType, BodyFluid = sample.BodyFluid,
-            Medications = new(sample.Medications),
-            Readings = new()
-            {
-                ["glucose"] = sample.Glucose,
-                ["oxygen-capacity"] = sample.OxygenCarryingCapacity * 100,
-                ["toxins"] = sample.ToxinLoad,
-                ["kidneys"] = sample.KidneyFunction * 100,
-                ["liver"] = sample.LiverFunction * 100,
-            },
+            Readings = new(sample.LaboratoryReadings) { ["glucose"] = sample.Glucose },
         };
-        foreach (var (marker, value) in sample.LaboratoryReadings) report.Readings[marker] = value;
         report.Findings.Add(sample.LaboratoryReadings.Count > 0 ? "diagnostic-human-laboratory" : "diagnostic-no-laboratory-reference");
-        report.Findings.Add("diagnostic-blood-proxies");
         // Never attach a report to a different body just because its name matches the label.
         if (sample.Patient is { } patient && Exists(patient)
             && TryComp<AdvancedHealthComponent>(patient, out var health) && health.MedicalIdentity == sample.PatientIdentity)
+        {
             Remember(patient, report);
-        Print(tube, report);
+            if (!health.BloodTypeConfirmed && health.BodyFluid == sample.BodyFluid && health.BloodType == sample.BloodType)
+            {
+                health.BloodTypeConfirmed = true;
+                Dirty(patient, health);
+            }
+
+            EntityManager.System<AdvancedDiseaseSystem>().Diagnose(patient, ClinicalTest.Blood, sample.BloodTestConditions);
+        }
+        Print(analyzer ?? tube, report);
         Show(user, report);
         return true;
     }
 
-    public void RecordExamination(EntityUid patient, BodyPartSlot slot, AdvancedTreatmentType treatment, EntityUid? user = null)
+    public void RecordExamination(EntityUid patient, BodyPartSlot slot, AdvancedTreatmentType treatment,
+        EntityUid? user = null, EntityUid? printAt = null)
     {
         if (treatment is not (AdvancedTreatmentType.XRay or AdvancedTreatmentType.Electrocardiogram)
             || !TryComp<AdvancedHealthComponent>(patient, out var health)
@@ -121,7 +224,7 @@ public sealed class MedicalDiagnosticsSystem : EntitySystem
             report.Findings.Add("diagnostic-ecg-limits");
         }
         Remember(patient, report);
-        Print(patient, report);
+        Print(printAt ?? patient, report);
         Show(user, report);
     }
 
@@ -148,16 +251,38 @@ public sealed class MedicalDiagnosticsSystem : EntitySystem
             Loc.GetString("diagnostic-report-title-" + report.Kind.ToString().ToLowerInvariant()),
             Loc.GetString("diagnostic-report-patient", ("patient", FormattedMessage.EscapeText(report.PatientName))),
             Loc.GetString("diagnostic-report-time", ("time", report.CollectedAt.ToString(@"hh\:mm\:ss"))),
-            Loc.GetString("advanced-health-part-" + report.Slot.ToString().ToLowerInvariant()),
         };
-        foreach (var (key, value) in report.Readings)
-            lines.Add(Loc.GetString("diagnostic-reading-" + key, ("value", value.ToString("0.#", CultureInfo.InvariantCulture))));
         if (report.Kind == MedicalDiagnosticKind.Blood)
         {
             lines.Add(Loc.GetString("diagnostic-blood-group", ("group", report.BloodGroup), ("fluid", report.BodyFluid)));
+            foreach (var (section, markers) in ClinicalLaboratoryModel.Sections)
+            {
+                if (!markers.Any(report.Readings.ContainsKey))
+                    continue;
+
+                lines.Add("");
+                lines.Add(Loc.GetString("diagnostic-section-" + section));
+                foreach (var marker in markers)
+                {
+                    if (!report.Readings.TryGetValue(marker, out var value))
+                        continue;
+
+                    var reading = Loc.GetString("diagnostic-reading-" + marker, ("value", ClinicalLaboratoryModel.FormatValue(value)));
+                    var reference = report.Readings.ContainsKey("hemoglobin")
+                        ? ClinicalLaboratoryModel.FormatReference(marker, value) : null;
+                    lines.Add(reference == null ? reading : $"{reading} ({reference})");
+                }
+            }
+            lines.Add("");
             foreach (var (drug, quantity) in report.Medications)
                 lines.Add(Loc.GetString("diagnostic-medication", ("drug", _prototypes.Index<ReagentPrototype>(drug).LocalizedName),
                     ("value", quantity.ToString("0.##", CultureInfo.InvariantCulture))));
+        }
+        else
+        {
+            lines.Add(Loc.GetString("advanced-health-part-" + report.Slot.ToString().ToLowerInvariant()));
+            foreach (var (key, value) in report.Readings)
+                lines.Add(Loc.GetString("diagnostic-reading-" + key, ("value", ClinicalLaboratoryModel.FormatValue(value))));
         }
         foreach (var finding in report.Findings) lines.Add(Loc.GetString(finding));
         var paper = Spawn("Paper", Transform(source).Coordinates);

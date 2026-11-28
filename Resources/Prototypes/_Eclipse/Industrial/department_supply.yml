@@ -1,0 +1,1807 @@
+# Individual orders fulfilled through the station cargo market.
+- type: cargoProduct
+  id: BaseIndustrialSupply
+  abstract: true
+  category: cargoproduct-category-name-industrial
+  container:
+    entity: CrateGenericSteel
+    containerId: entity_storage
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyAPCElectronics
+  product: APCElectronics
+  icon: { entity: APCElectronics }
+  cost: 750
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyAdvMopItem
+  product: AdvMopItem
+  icon: { entity: AdvMopItem }
+  cost: 1550
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyAdvancedJetInjector
+  product: AdvancedJetInjector
+  icon: { entity: AdvancedJetInjector }
+  cost: 4250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyAdvancedMineralScannerEmpty
+  product: AdvancedMineralScannerEmpty
+  icon: { entity: AdvancedMineralScannerEmpty }
+  cost: 5600
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyAirAlarmElectronics
+  product: AirAlarmElectronics
+  icon: { entity: AirAlarmElectronics }
+  cost: 600
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyAirTank
+  product: AirTank
+  icon: { entity: AirTank }
+  cost: 450
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyAnomalyLocatorEmpty
+  product: AnomalyLocatorEmpty
+  icon: { entity: AnomalyLocatorEmpty }
+  cost: 1000
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyAnomalyLocatorWideEmpty
+  product: AnomalyLocatorWideEmpty
+  icon: { entity: AnomalyLocatorWideEmpty }
+  cost: 1000
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyAnomalyScanner
+  product: AnomalyScanner
+  icon: { entity: AnomalyScanner }
+  cost: 1250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyAppraisalTool
+  product: AppraisalTool
+  icon: { entity: AppraisalTool }
+  cost: 500
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyAshtray
+  product: Ashtray
+  icon: { entity: Ashtray }
+  cost: 150
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyBeaker
+  product: Beaker
+  icon: { entity: Beaker }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyBluespaceBeaker
+  product: BluespaceBeaker
+  icon: { entity: BluespaceBeaker }
+  cost: 3200
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyBoxBeanbag
+  product: BoxBeanbag
+  icon: { entity: BoxBeanbag }
+  cost: 1100
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyBoxFolderClipboardEmpty
+  product: BoxFolderClipboardEmpty
+  icon: { entity: BoxFolderClipboardEmpty }
+  cost: 200
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyBoxFolderPlasticClipboardEmpty
+  product: BoxFolderPlasticClipboardEmpty
+  icon: { entity: BoxFolderPlasticClipboardEmpty }
+  cost: 300
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyBoxLethalshot
+  product: BoxLethalshot
+  icon: { entity: BoxLethalshot }
+  cost: 750
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyBoxShellTranquilizer
+  product: BoxShellTranquilizer
+  icon: { entity: BoxShellTranquilizer }
+  cost: 2250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyBoxShotgunIncendiary
+  product: BoxShotgunIncendiary
+  icon: { entity: BoxShotgunIncendiary }
+  cost: 1200
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyBoxShotgunSlug
+  product: BoxShotgunSlug
+  icon: { entity: BoxShotgunSlug }
+  cost: 1000
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyBoxShotgunUranium
+  product: BoxShotgunUranium
+  icon: { entity: BoxShotgunUranium }
+  cost: 2300
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyBucket
+  product: Bucket
+  icon: { entity: Bucket }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyC4
+  product: C4
+  icon: { entity: C4 }
+  cost: 12150
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyCableDetStack1
+  product: CableDetStack1
+  icon: { entity: CableDetStack1 }
+  cost: 600
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyCableHVStack1
+  product: CableHVStack1
+  icon: { entity: CableHVStack1 }
+  cost: 150
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyCableMVStack1
+  product: CableMVStack1
+  icon: { entity: CableMVStack1 }
+  cost: 150
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyCableApcStack1
+  product: CableApcStack1
+  icon: { entity: CableApcStack1 }
+  cost: 150
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyCameraBug
+  product: CameraBug
+  icon: { entity: CameraBug }
+  cost: 8400
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyCaseAshLegion
+  product: CaseAshLegion
+  icon: { entity: CaseAshLegion }
+  cost: 2400
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyCautery
+  product: Cautery
+  icon: { entity: Cautery }
+  cost: 350
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyCellRechargerCircuitboard
+  product: CellRechargerCircuitboard
+  icon: { entity: CellRechargerCircuitboard }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyCheapRollerBedSpawnFolded
+  product: CheapRollerBedSpawnFolded
+  icon: { entity: CheapRollerBedSpawnFolded }
+  cost: 1000
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyChemicalPayload
+  product: ChemicalPayload
+  icon: { entity: ChemicalPayload }
+  cost: 1300
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyChemistryEmptyBottle01
+  product: ChemistryEmptyBottle01
+  icon: { entity: ChemistryEmptyBottle01 }
+  cost: 200
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyChemistryEmptyVial
+  product: ChemistryEmptyVial
+  icon: { entity: ChemistryEmptyVial }
+  cost: 200
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyChemistryEmptyVialSmall
+  product: ChemistryEmptyVialSmall
+  icon: { entity: ChemistryEmptyVialSmall }
+  cost: 150
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyClothingBackpackDuffelHolding
+  product: ClothingBackpackDuffelHolding
+  icon: { entity: ClothingBackpackDuffelHolding }
+  cost: 13800
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyClothingBackpackElectropack
+  product: ClothingBackpackElectropack
+  icon: { entity: ClothingBackpackElectropack }
+  cost: 2250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyClothingBackpackHarmpack
+  product: ClothingBackpackHarmpack
+  icon: { entity: ClothingBackpackHarmpack }
+  cost: 11000
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyClothingBackpackHolding
+  product: ClothingBackpackHolding
+  icon: { entity: ClothingBackpackHolding }
+  cost: 13800
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyClothingBackpackSatchelHolding
+  product: ClothingBackpackSatchelHolding
+  icon: { entity: ClothingBackpackSatchelHolding }
+  cost: 13800
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyClothingBackpackWaterTank
+  product: ClothingBackpackWaterTank
+  icon: { entity: ClothingBackpackWaterTank }
+  cost: 2000
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyClothingBeltAshLegionHolster
+  product: ClothingBeltAshLegionHolster
+  icon: { entity: ClothingBeltAshLegionHolster }
+  cost: 3550
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyClothingEyesGlassesChemical
+  product: ClothingEyesGlassesChemical
+  icon: { entity: ClothingEyesGlassesChemical }
+  cost: 1000
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyClothingEyesHudDiagnostic
+  product: ClothingEyesHudDiagnostic
+  icon: { entity: ClothingEyesHudDiagnostic }
+  cost: 2000
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyClothingHeadHatCone
+  product: ClothingHeadHatCone
+  icon: { entity: ClothingHeadHatCone }
+  cost: 400
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyClothingHeadHatWelding
+  product: ClothingHeadHatWelding
+  icon: { entity: ClothingHeadHatWelding }
+  cost: 600
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyClothingMaskWeldingGas
+  product: ClothingMaskWeldingGas
+  icon: { entity: ClothingMaskWeldingGas }
+  cost: 1450
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyClothingOuterVestTank
+  product: ClothingOuterVestTank
+  icon: { entity: ClothingOuterVestTank }
+  cost: 200
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyClothingShoesBootsJump
+  product: ClothingShoesBootsJump
+  icon: { entity: ClothingShoesBootsJump }
+  cost: 5700
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyClothingShoesBootsMagAshLegion
+  product: ClothingShoesBootsMagAshLegion
+  icon: { entity: ClothingShoesBootsMagAshLegion }
+  cost: 5150
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyClothingShoesBootsMagSci
+  product: ClothingShoesBootsMagSci
+  icon: { entity: ClothingShoesBootsMagSci }
+  cost: 3100
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyClothingShoesBootsMoon
+  product: ClothingShoesBootsMoon
+  icon: { entity: ClothingShoesBootsMoon }
+  cost: 1200
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyClothingShoesBootsSpeed
+  product: ClothingShoesBootsSpeed
+  icon: { entity: ClothingShoesBootsSpeed }
+  cost: 7200
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyConveyorBeltAssembly
+  product: ConveyorBeltAssembly
+  icon: { entity: ConveyorBeltAssembly }
+  cost: 400
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyCrowbar
+  product: Crowbar
+  icon: { entity: Crowbar }
+  cost: 300
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyCrowbarGreen
+  product: CrowbarGreen
+  icon: { entity: CrowbarGreen }
+  cost: 350
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyCryostasisBeaker
+  product: CryostasisBeaker
+  icon: { entity: CryostasisBeaker }
+  cost: 750
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyCustomDrinkJug
+  product: CustomDrinkJug
+  icon: { entity: CustomDrinkJug }
+  cost: 400
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyCyberPen
+  product: CyberPen
+  icon: { entity: CyberPen }
+  cost: 2500
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyDeviceDesynchronizer
+  product: DeviceDesynchronizer
+  icon: { entity: DeviceDesynchronizer }
+  cost: 2500
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyDeviceQuantumSpinInverter
+  product: DeviceQuantumSpinInverter
+  icon: { entity: DeviceQuantumSpinInverter }
+  cost: 2000
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyDimLightBulb
+  product: DimLightBulb
+  icon: { entity: DimLightBulb }
+  cost: 300
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyDoorElectronics
+  product: DoorElectronics
+  icon: { entity: DoorElectronics }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyDoubleEmergencyNitrogenTank
+  product: DoubleEmergencyNitrogenTank
+  icon: { entity: DoubleEmergencyNitrogenTank }
+  cost: 600
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyDoubleEmergencyOxygenTank
+  product: DoubleEmergencyOxygenTank
+  icon: { entity: DoubleEmergencyOxygenTank }
+  cost: 600
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyDrill
+  product: Drill
+  icon: { entity: Drill }
+  cost: 400
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyDrinkGlass
+  product: DrinkGlass
+  icon: { entity: DrinkGlass }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyDrinkGlassCoupeShaped
+  product: DrinkGlassCoupeShaped
+  icon: { entity: DrinkGlassCoupeShaped }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyDrinkMug
+  product: DrinkMug
+  icon: { entity: DrinkMug }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyDrinkMugMetal
+  product: DrinkMugMetal
+  icon: { entity: DrinkMugMetal }
+  cost: 350
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyDrinkShotGlass
+  product: DrinkShotGlass
+  icon: { entity: DrinkShotGlass }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyDropper
+  product: Dropper
+  icon: { entity: Dropper }
+  cost: 200
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyEclipseReporterCamera
+  product: EclipseReporterCamera
+  icon: { entity: EclipseReporterCamera }
+  cost: 700
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyEmergencyRollerBedSpawnFolded
+  product: EmergencyRollerBedSpawnFolded
+  icon: { entity: EmergencyRollerBedSpawnFolded }
+  cost: 1000
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyEmpGrenade
+  product: EmpGrenade
+  icon: { entity: EmpGrenade }
+  cost: 12150
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyEmptyDetonator
+  product: EmptyDetonator
+  icon: { entity: EmptyDetonator }
+  cost: 400
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyExGrenade
+  product: ExGrenade
+  icon: { entity: ExGrenade }
+  cost: 10650
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyExplosivePayload
+  product: ExplosivePayload
+  icon: { entity: ExplosivePayload }
+  cost: 1150
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyExteriorLightTube
+  product: ExteriorLightTube
+  icon: { entity: ExteriorLightTube }
+  cost: 300
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyFireAlarmElectronics
+  product: FireAlarmElectronics
+  icon: { entity: FireAlarmElectronics }
+  cost: 600
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyFirelockElectronics
+  product: FirelockElectronics
+  icon: { entity: FirelockElectronics }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyFlashPayload
+  product: FlashPayload
+  icon: { entity: FlashPayload }
+  cost: 650
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyEmptyFlashlightLantern
+  product: EmptyFlashlightLantern
+  icon: { entity: EmptyFlashlightLantern }
+  cost: 400
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyFoodBowlBig
+  product: FoodBowlBig
+  icon: { entity: FoodBowlBig }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyFoodKebabSkewer
+  product: FoodKebabSkewer
+  icon: { entity: FoodKebabSkewer }
+  cost: 200
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyFoodPlate
+  product: FoodPlate
+  icon: { entity: FoodPlate }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyFoodPlateMuffinTin
+  product: FoodPlateMuffinTin
+  icon: { entity: FoodPlateMuffinTin }
+  cost: 150
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyFoodPlatePlastic
+  product: FoodPlatePlastic
+  icon: { entity: FoodPlatePlastic }
+  cost: 400
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyFoodPlateSmall
+  product: FoodPlateSmall
+  icon: { entity: FoodPlateSmall }
+  cost: 150
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyFoodPlateSmallPlastic
+  product: FoodPlateSmallPlastic
+  icon: { entity: FoodPlateSmallPlastic }
+  cost: 200
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyFoodPlateTin
+  product: FoodPlateTin
+  icon: { entity: FoodPlateTin }
+  cost: 200
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyFreezerElectronics
+  product: FreezerElectronics
+  icon: { entity: FreezerElectronics }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyFulton1
+  product: Fulton1
+  icon: { entity: Fulton1 }
+  cost: 1150
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyFultonBeacon
+  product: FultonBeacon
+  icon: { entity: FultonBeacon }
+  cost: 2500
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyGasAnalyzer
+  product: GasAnalyzer
+  icon: { entity: GasAnalyzer }
+  cost: 1050
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyGrenadeBlast
+  product: GrenadeBlast
+  icon: { entity: GrenadeBlast }
+  cost: 2550
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyGrenadeEMP
+  product: GrenadeEMP
+  icon: { entity: GrenadeEMP }
+  cost: 750
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyGrenadeFlash
+  product: GrenadeFlash
+  icon: { entity: GrenadeFlash }
+  cost: 750
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyHandHeldMassScannerEmpty
+  product: HandHeldMassScannerEmpty
+  icon: { entity: HandHeldMassScannerEmpty }
+  cost: 2050
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyHandLabeler
+  product: HandLabeler
+  icon: { entity: HandLabeler }
+  cost: 400
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyHandheldGPSBasic
+  product: HandheldGPSBasic
+  icon: { entity: HandheldGPSBasic }
+  cost: 1050
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyHandheldStationMapEmpty
+  product: HandheldStationMapEmpty
+  icon: { entity: HandheldStationMapEmpty }
+  cost: 500
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyHemostat
+  product: Hemostat
+  icon: { entity: Hemostat }
+  cost: 350
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyHolofanProjectorEmpty
+  product: HolofanProjectorEmpty
+  icon: { entity: HolofanProjectorEmpty }
+  cost: 900
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyHoloprojectorEmpty
+  product: HoloprojectorEmpty
+  icon: { entity: HoloprojectorEmpty }
+  cost: 550
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyHoloprojectorFieldEmpty
+  product: HoloprojectorFieldEmpty
+  icon: { entity: HoloprojectorFieldEmpty }
+  cost: 2600
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyHoloprojectorSecurityEmpty
+  product: HoloprojectorSecurityEmpty
+  icon: { entity: HoloprojectorSecurityEmpty }
+  cost: 900
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyIgniter
+  product: Igniter
+  icon: { entity: Igniter }
+  cost: 550
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyImperialPaymentTerminal
+  product: ImperialPaymentTerminal
+  icon: { entity: ImperialPaymentTerminal }
+  cost: 600
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyIntercomElectronics
+  product: IntercomElectronics
+  icon: { entity: IntercomElectronics }
+  cost: 600
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyJawsOfLife
+  product: JawsOfLife
+  icon: { entity: JawsOfLife }
+  cost: 4250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyJug
+  product: Jug
+  icon: { entity: Jug }
+  cost: 650
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyLargeBeaker
+  product: LargeBeaker
+  icon: { entity: LargeBeaker }
+  cost: 400
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyLauncherSyringe
+  product: LauncherSyringe
+  icon: { entity: LauncherSyringe }
+  cost: 3300
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyLedLightBulb
+  product: LedLightBulb
+  icon: { entity: LedLightBulb }
+  cost: 300
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyLedLightTube
+  product: LedLightTube
+  icon: { entity: LedLightTube }
+  cost: 300
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyLightBulb
+  product: LightBulb
+  icon: { entity: LightBulb }
+  cost: 300
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyLightReplacerEmpty
+  product: LightReplacerEmpty
+  icon: { entity: LightReplacerEmpty }
+  cost: 550
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyLightTube
+  product: LightTube
+  icon: { entity: LightTube }
+  cost: 300
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineBoxAntiMateriel
+  product: MagazineBoxAntiMateriel
+  icon: { entity: MagazineBoxAntiMateriel }
+  cost: 550
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineBoxLightRifle
+  product: MagazineBoxLightRifle
+  icon: { entity: MagazineBoxLightRifle }
+  cost: 1650
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineBoxLightRifleAshLegion
+  product: MagazineBoxLightRifleAshLegion
+  icon: { entity: MagazineBoxLightRifleAshLegion }
+  cost: 2950
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineBoxLightRifleIncendiary
+  product: MagazineBoxLightRifleIncendiary
+  icon: { entity: MagazineBoxLightRifleIncendiary }
+  cost: 2550
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineBoxLightRifleUranium
+  product: MagazineBoxLightRifleUranium
+  icon: { entity: MagazineBoxLightRifleUranium }
+  cost: 4900
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineBoxMagnum
+  product: MagazineBoxMagnum
+  icon: { entity: MagazineBoxMagnum }
+  cost: 600
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineBoxMagnumIncendiary
+  product: MagazineBoxMagnumIncendiary
+  icon: { entity: MagazineBoxMagnumIncendiary }
+  cost: 850
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineBoxMagnumUranium
+  product: MagazineBoxMagnumUranium
+  icon: { entity: MagazineBoxMagnumUranium }
+  cost: 1800
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineBoxPistol
+  product: MagazineBoxPistol
+  icon: { entity: MagazineBoxPistol }
+  cost: 1200
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineBoxPistolAshLegion
+  product: MagazineBoxPistolAshLegion
+  icon: { entity: MagazineBoxPistolAshLegion }
+  cost: 1150
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineBoxPistolIncendiary
+  product: MagazineBoxPistolIncendiary
+  icon: { entity: MagazineBoxPistolIncendiary }
+  cost: 1800
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineBoxPistolUranium
+  product: MagazineBoxPistolUranium
+  icon: { entity: MagazineBoxPistolUranium }
+  cost: 4100
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineBoxRifle
+  product: MagazineBoxRifle
+  icon: { entity: MagazineBoxRifle }
+  cost: 1400
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineBoxRifleIncendiary
+  product: MagazineBoxRifleIncendiary
+  icon: { entity: MagazineBoxRifleIncendiary }
+  cost: 2150
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineBoxRifleUranium
+  product: MagazineBoxRifleUranium
+  icon: { entity: MagazineBoxRifleUranium }
+  cost: 4100
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineBoxShotgunAshLegion
+  product: MagazineBoxShotgunAshLegion
+  icon: { entity: MagazineBoxShotgunAshLegion }
+  cost: 1900
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineGrenadeEmpty
+  product: MagazineGrenadeEmpty
+  icon: { entity: MagazineGrenadeEmpty }
+  cost: 600
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineLightRifle
+  product: MagazineLightRifle
+  icon: { entity: MagazineLightRifle }
+  cost: 1150
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineLightRifleEmpty
+  product: MagazineLightRifleEmpty
+  icon: { entity: MagazineLightRifleEmpty }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineLightRifleIncendiary
+  product: MagazineLightRifleIncendiary
+  icon: { entity: MagazineLightRifleIncendiary }
+  cost: 1650
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineLightRifleUranium
+  product: MagazineLightRifleUranium
+  icon: { entity: MagazineLightRifleUranium }
+  cost: 3050
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazinePistol
+  product: MagazinePistol
+  icon: { entity: MagazinePistol }
+  cost: 450
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazinePistolCaselessRifle
+  product: MagazinePistolCaselessRifle
+  icon: { entity: MagazinePistolCaselessRifle }
+  cost: 450
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazinePistolEmpty
+  product: MagazinePistolEmpty
+  icon: { entity: MagazinePistolEmpty }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazinePistolIncendiary
+  product: MagazinePistolIncendiary
+  icon: { entity: MagazinePistolIncendiary }
+  cost: 600
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazinePistolSubMachineGun
+  product: MagazinePistolSubMachineGun
+  icon: { entity: MagazinePistolSubMachineGun }
+  cost: 700
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazinePistolSubMachineGunEmpty
+  product: MagazinePistolSubMachineGunEmpty
+  icon: { entity: MagazinePistolSubMachineGunEmpty }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazinePistolSubMachineGunIncendiary
+  product: MagazinePistolSubMachineGunIncendiary
+  icon: { entity: MagazinePistolSubMachineGunIncendiary }
+  cost: 1000
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazinePistolSubMachineGunTopMounted
+  product: MagazinePistolSubMachineGunTopMounted
+  icon: { entity: MagazinePistolSubMachineGunTopMounted }
+  cost: 700
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazinePistolSubMachineGunTopMountedEmpty
+  product: MagazinePistolSubMachineGunTopMountedEmpty
+  icon: { entity: MagazinePistolSubMachineGunTopMountedEmpty }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazinePistolSubMachineGunUranium
+  product: MagazinePistolSubMachineGunUranium
+  icon: { entity: MagazinePistolSubMachineGunUranium }
+  cost: 2200
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazinePistolUranium
+  product: MagazinePistolUranium
+  icon: { entity: MagazinePistolUranium }
+  cost: 1050
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineRifle
+  product: MagazineRifle
+  icon: { entity: MagazineRifle }
+  cost: 1000
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineRifleEmpty
+  product: MagazineRifleEmpty
+  icon: { entity: MagazineRifleEmpty }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineRifleIncendiary
+  product: MagazineRifleIncendiary
+  icon: { entity: MagazineRifleIncendiary }
+  cost: 1450
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineRifleUranium
+  product: MagazineRifleUranium
+  icon: { entity: MagazineRifleUranium }
+  cost: 2600
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineShotgun
+  product: MagazineShotgun
+  icon: { entity: MagazineShotgun }
+  cost: 600
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineShotgunBeanbag
+  product: MagazineShotgunBeanbag
+  icon: { entity: MagazineShotgunBeanbag }
+  cost: 850
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineShotgunEmpty
+  product: MagazineShotgunEmpty
+  icon: { entity: MagazineShotgunEmpty }
+  cost: 300
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineShotgunIncendiary
+  product: MagazineShotgunIncendiary
+  icon: { entity: MagazineShotgunIncendiary }
+  cost: 900
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMagazineShotgunSlug
+  product: MagazineShotgunSlug
+  icon: { entity: MagazineShotgunSlug }
+  cost: 800
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMailingUnitElectronics
+  product: MailingUnitElectronics
+  icon: { entity: MailingUnitElectronics }
+  cost: 600
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMaterialDurathread1
+  product: MaterialDurathread1
+  icon: { entity: MaterialDurathread1 }
+  cost: 300
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMegaSprayBottle
+  product: MegaSprayBottle
+  icon: { entity: MegaSprayBottle }
+  cost: 850
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMicroManipulatorStockPart
+  product: MicroManipulatorStockPart
+  icon: { entity: MicroManipulatorStockPart }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMineralScannerEmpty
+  product: MineralScannerEmpty
+  icon: { entity: MineralScannerEmpty }
+  cost: 5800
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMiniSyringe
+  product: MiniSyringe
+  icon: { entity: MiniSyringe }
+  cost: 950
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMiningDrill
+  product: MiningDrill
+  icon: { entity: MiningDrill }
+  cost: 1900
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMiningDrillDiamond
+  product: MiningDrillDiamond
+  icon: { entity: MiningDrillDiamond }
+  cost: 6150
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyModularReceiver
+  product: ModularReceiver
+  icon: { entity: ModularReceiver }
+  cost: 850
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMopItem
+  product: MopItem
+  icon: { entity: MopItem }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyMultitool
+  product: Multitool
+  icon: { entity: Multitool }
+  cost: 550
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyNetworkConfigurator
+  product: NetworkConfigurator
+  icon: { entity: NetworkConfigurator }
+  cost: 550
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyNodeScanner
+  product: NodeScanner
+  icon: { entity: NodeScanner }
+  cost: 500
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyOreBagOfHolding
+  product: OreBagOfHolding
+  icon: { entity: OreBagOfHolding }
+  cost: 13800
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyPKAUpgradeDamage
+  product: PKAUpgradeDamage
+  icon: { entity: PKAUpgradeDamage }
+  cost: 7400
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyPKAUpgradeFireRate
+  product: PKAUpgradeFireRate
+  icon: { entity: PKAUpgradeFireRate }
+  cost: 7400
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyPKAUpgradeRange
+  product: PKAUpgradeRange
+  icon: { entity: PKAUpgradeRange }
+  cost: 7400
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyPenExplodingBox
+  product: PenExplodingBox
+  icon: { entity: PenExplodingBox }
+  cost: 2650
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyPersonalAI
+  product: PersonalAI
+  icon: { entity: PersonalAI }
+  cost: 600
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyPickaxe
+  product: Pickaxe
+  icon: { entity: Pickaxe }
+  cost: 1300
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyPillCanister
+  product: PillCanister
+  icon: { entity: PillCanister }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyPlasmaSword
+  product: PlasmaSword
+  icon: { entity: PlasmaSword }
+  cost: 68750
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyPlasmaSwordAlt
+  product: PlasmaSwordAlt
+  icon: { entity: PlasmaSwordAlt }
+  cost: 68750
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyPoltergeistDetector
+  product: PoltergeistDetector
+  icon: { entity: PoltergeistDetector }
+  cost: 500
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyPortableRecharger
+  product: PortableRecharger
+  icon: { entity: PortableRecharger }
+  cost: 19300
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyPowerCageHigh
+  product: PowerCageHigh
+  icon: { entity: PowerCageHigh }
+  cost: 3900
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyPowerCageMedium
+  product: PowerCageMedium
+  icon: { entity: PowerCageMedium }
+  cost: 2600
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyPowerCageSmall
+  product: PowerCageSmall
+  icon: { entity: PowerCageSmall }
+  cost: 800
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyPowerCellHighPrinted
+  product: PowerCellHighPrinted
+  icon: { entity: PowerCellHighPrinted }
+  cost: 3100
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyPowerCellHyperPrinted
+  product: PowerCellHyperPrinted
+  icon: { entity: PowerCellHyperPrinted }
+  cost: 6100
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyPowerCellMediumPrinted
+  product: PowerCellMediumPrinted
+  icon: { entity: PowerCellMediumPrinted }
+  cost: 750
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyPowerCellMicroreactorPrinted
+  product: PowerCellMicroreactorPrinted
+  icon: { entity: PowerCellMicroreactorPrinted }
+  cost: 3200
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyPowerCellSmallPrinted
+  product: PowerCellSmallPrinted
+  icon: { entity: PowerCellSmallPrinted }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyPowerDrill
+  product: PowerDrill
+  icon: { entity: PowerDrill }
+  cost: 1700
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyPushHorn
+  product: PushHorn
+  icon: { entity: PushHorn }
+  cost: 3200
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyRadioJammer
+  product: RadioJammer
+  icon: { entity: RadioJammer }
+  cost: 12700
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyRetractor
+  product: Retractor
+  icon: { entity: Retractor }
+  cost: 350
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyRollerBedSpawnFolded
+  product: RollerBedSpawnFolded
+  icon: { entity: RollerBedSpawnFolded }
+  cost: 1000
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplySMESMachineCircuitboard
+  product: SMESMachineCircuitboard
+  icon: { entity: SMESMachineCircuitboard }
+  cost: 950
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplySaw
+  product: Saw
+  icon: { entity: Saw }
+  cost: 350
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyScalpel
+  product: Scalpel
+  icon: { entity: Scalpel }
+  cost: 350
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyScrewdriver
+  product: Screwdriver
+  icon: { entity: Screwdriver }
+  cost: 350
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplySeismicCharge
+  product: SeismicCharge
+  icon: { entity: SeismicCharge }
+  cost: 4700
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplySheetRGlass1
+  product: SheetRGlass1
+  icon: { entity: SheetRGlass1 }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplySignalTimerElectronics
+  product: SignalTimerElectronics
+  icon: { entity: SignalTimerElectronics }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplySignalTrigger
+  product: SignalTrigger
+  icon: { entity: SignalTrigger }
+  cost: 1200
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyRemoteSignaller
+  product: RemoteSignaller
+  icon: { entity: RemoteSignaller }
+  cost: 550
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyRemoteSignallerAdvanced
+  product: RemoteSignallerAdvanced
+  icon: { entity: RemoteSignallerAdvanced }
+  cost: 1350
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplySodiumLightTube
+  product: SodiumLightTube
+  icon: { entity: SodiumLightTube }
+  cost: 300
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplySpeedLoaderMagnum
+  product: SpeedLoaderMagnum
+  icon: { entity: SpeedLoaderMagnum }
+  cost: 550
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplySpeedLoaderMagnumEmpty
+  product: SpeedLoaderMagnumEmpty
+  icon: { entity: SpeedLoaderMagnumEmpty }
+  cost: 300
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplySpeedLoaderMagnumIncendiary
+  product: SpeedLoaderMagnumIncendiary
+  icon: { entity: SpeedLoaderMagnumIncendiary }
+  cost: 700
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplySpeedLoaderMagnumUranium
+  product: SpeedLoaderMagnumUranium
+  icon: { entity: SpeedLoaderMagnumUranium }
+  cost: 1250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplySprayBottle
+  product: SprayBottle
+  icon: { entity: SprayBottle }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplySprayPainterEmpty
+  product: SprayPainterEmpty
+  icon: { entity: SprayPainterEmpty }
+  cost: 500
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplySprayPainterAmmo
+  product: SprayPainterAmmo
+  icon: { entity: SprayPainterAmmo }
+  cost: 300
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyStationMapCircuitboard
+  product: StationMapCircuitboard
+  icon: { entity: StationMapCircuitboard }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplySubstationMachineCircuitboard
+  product: SubstationMachineCircuitboard
+  icon: { entity: SubstationMachineCircuitboard }
+  cost: 950
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplySyndicateJawsOfLife
+  product: SyndicateJawsOfLife
+  icon: { entity: SyndicateJawsOfLife }
+  cost: 8450
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplySyndicateWhistle
+  product: SyndicateWhistle
+  icon: { entity: SyndicateWhistle }
+  cost: 1150
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplySynthesizerInstrument
+  product: SynthesizerInstrument
+  icon: { entity: SynthesizerInstrument }
+  cost: 1600
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplySyringe
+  product: Syringe
+  icon: { entity: Syringe }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplySyringeBluespace
+  product: SyringeBluespace
+  icon: { entity: SyringeBluespace }
+  cost: 1750
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplySyringeCryostasis
+  product: SyringeCryostasis
+  icon: { entity: SyringeCryostasis }
+  cost: 650
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplytrayScanner
+  product: trayScanner
+  icon: { entity: trayScanner }
+  cost: 1050
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyTelescopicShield
+  product: TelescopicShield
+  icon: { entity: TelescopicShield }
+  cost: 1800
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyTimerTrigger
+  product: TimerTrigger
+  icon: { entity: TimerTrigger }
+  cost: 1200
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyTowelColorWhite
+  product: TowelColorWhite
+  icon: { entity: TowelColorWhite }
+  cost: 300
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyTrashBag
+  product: TrashBag
+  icon: { entity: TrashBag }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyTruncheon
+  product: Truncheon
+  icon: { entity: Truncheon }
+  cost: 1500
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyClothingBeltUtility
+  product: ClothingBeltUtility
+  icon: { entity: ClothingBeltUtility }
+  cost: 300
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyUtilityKnife
+  product: UtilityKnife
+  icon: { entity: UtilityKnife }
+  cost: 200
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyvoicesensor
+  product: voicesensor
+  icon: { entity: voicesensor }
+  cost: 550
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyVoiceTrigger
+  product: VoiceTrigger
+  icon: { entity: VoiceTrigger }
+  cost: 1200
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyWallmountSubstationElectronics
+  product: WallmountSubstationElectronics
+  icon: { entity: WallmountSubstationElectronics }
+  cost: 950
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyWarmLightBulb
+  product: WarmLightBulb
+  icon: { entity: WarmLightBulb }
+  cost: 300
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyWeaponAdvancedLaser
+  product: WeaponAdvancedLaser
+  icon: { entity: WeaponAdvancedLaser }
+  cost: 8400
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyWeaponCapacitorRechargerCircuitboard
+  product: WeaponCapacitorRechargerCircuitboard
+  icon: { entity: WeaponCapacitorRechargerCircuitboard }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyWeaponForceGun
+  product: WeaponForceGun
+  icon: { entity: WeaponForceGun }
+  cost: 2400
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyWeaponGauntletGorilla
+  product: WeaponGauntletGorilla
+  icon: { entity: WeaponGauntletGorilla }
+  cost: 7300
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyWeaponLaserCannon
+  product: WeaponLaserCannon
+  icon: { entity: WeaponLaserCannon }
+  cost: 6150
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyWeaponLaserCarbine
+  product: WeaponLaserCarbine
+  icon: { entity: WeaponLaserCarbine }
+  cost: 5850
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyWeaponParticleDecelerator
+  product: WeaponParticleDecelerator
+  icon: { entity: WeaponParticleDecelerator }
+  cost: 3000
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyWeaponPistolCHIMP
+  product: WeaponPistolCHIMP
+  icon: { entity: WeaponPistolCHIMP }
+  cost: 1600
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyWeaponProtoKineticAccelerator
+  product: WeaponProtoKineticAccelerator
+  icon: { entity: WeaponProtoKineticAccelerator }
+  cost: 2900
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyWeaponSprayNozzle
+  product: WeaponSprayNozzle
+  icon: { entity: WeaponSprayNozzle }
+  cost: 3300
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyWeaponTemperatureGun
+  product: WeaponTemperatureGun
+  icon: { entity: WeaponTemperatureGun }
+  cost: 8200
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyWeaponTetherGun
+  product: WeaponTetherGun
+  icon: { entity: WeaponTetherGun }
+  cost: 2000
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyWeaponXrayCannon
+  product: WeaponXrayCannon
+  icon: { entity: WeaponXrayCannon }
+  cost: 5350
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyWelder
+  product: Welder
+  icon: { entity: Welder }
+  cost: 500
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyWelderExperimental
+  product: WelderExperimental
+  icon: { entity: WelderExperimental }
+  cost: 3750
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyWetFloorSign
+  product: WetFloorSign
+  icon: { entity: WetFloorSign }
+  cost: 250
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyWhiteholeGrenade
+  product: WhiteholeGrenade
+  icon: { entity: WhiteholeGrenade }
+  cost: 17100
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyWireBrush
+  product: WireBrush
+  icon: { entity: WireBrush }
+  cost: 350
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyWirecutter
+  product: Wirecutter
+  icon: { entity: Wirecutter }
+  cost: 350
+
+- type: cargoProduct
+  parent: BaseIndustrialSupply
+  id: IndustrialSupplyWrench
+  product: Wrench
+  icon: { entity: Wrench }
+  cost: 350

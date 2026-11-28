@@ -20,6 +20,7 @@ public sealed class IndustrialProcessorSlotState(
     public string? PrototypeId = prototypeId;
     public int Count = count;
     public string DisplayName = displayName;
+    public NetEntity? Item;
 }
 
 [Serializable, NetSerializable]
@@ -83,10 +84,11 @@ public sealed class IndustrialProcessorBoundUserInterfaceState(
 }
 
 [Serializable, NetSerializable]
-public sealed class IndustrialProcessorSlotMessage(bool isInput, int slotIndex) : BoundUserInterfaceMessage
+public sealed class IndustrialProcessorSlotMessage(bool isInput, int slotIndex, NetEntity? item = null) : BoundUserInterfaceMessage
 {
     public bool IsInput = isInput;
     public int SlotIndex = slotIndex;
+    public NetEntity? Item = item;
 }
 
 [Serializable, NetSerializable]

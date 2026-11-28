@@ -163,6 +163,7 @@ public sealed partial class ClinicalBloodSampleComponent : Component
     [DataField] public EntityUid? Patient;
     /// <summary>Server-only observations at collection time, revealed by a completed laboratory analysis.</summary>
     [DataField] public Dictionary<string, float> LaboratoryReadings = new();
+    [DataField] public List<string> BloodTestConditions = new();
 }
 
 [RegisterComponent]

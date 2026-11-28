@@ -65,6 +65,7 @@ public sealed partial class IndustrialExtractorComponent : Component
 {
     [DataField] public float Interval = 5;
     [DataField] public int Amount = 1;
+    [DataField] public ProtoId<TechnologyPrototype>? RequiredTechnology;
     public float Elapsed;
     public IndustrialProcessorState State;
 }

@@ -15,5 +15,5 @@ public sealed partial class AdvancedBandageRollComponent : Component
     [DataField] public float MaxDurability = 100f;
 
     /// <summary>Litres/min of bleeding removed per 1% of durability spent.</summary>
-    public const float BleedPerPercent = 0.01f;
+    public const float BleedPerPercent = 0.004f;
 }

@@ -68,7 +68,7 @@
   suffix: Command
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Standard/command.rsi
+    sprite: Eclipse/Structures/Doors/Airlocks/Standard/nanotrasen_navy_command.rsi
     state: "assembly"
 
 - type: entity
@@ -77,7 +77,7 @@
   suffix: Command, Glass
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Glass/command.rsi
+    sprite: Eclipse/Structures/Doors/Airlocks/Glass/nanotrasen_navy_command.rsi
     state: "assembly"
 
 #Engineering

@@ -11,8 +11,8 @@ public sealed class IndustrialProcessorBoundUserInterface(EntityUid owner, Enum 
         base.Open();
 
         _window = new IndustrialProcessorWindow(Owner);
-        _window.OnSlotPressed += (isInput, index) =>
-            SendMessage(new IndustrialProcessorSlotMessage(isInput, index));
+        _window.OnSlotPressed += (isInput, index, item) =>
+            SendMessage(new IndustrialProcessorSlotMessage(isInput, index, item));
         _window.OnRecipeSelected += recipe => SendMessage(new IndustrialProcessorRecipeMessage(recipe));
         _window.OnToggle += () => SendMessage(new IndustrialProcessorToggleMessage());
         _window.OnManualOperate += () => SendMessage(new IndustrialManualOperateMessage());

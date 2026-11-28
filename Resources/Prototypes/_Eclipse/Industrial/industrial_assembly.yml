@@ -33,6 +33,7 @@
     sprite: _Eclipse/Structures/Machines/industrial_workbench_wood.rsi
     state: icon
   - type: RoomSanitation
+  - type: InteractionOutline
   - type: IndustrialMachineKnowledge
   - type: IndustrialWorkbench
   - type: Storage

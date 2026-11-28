@@ -39,7 +39,7 @@ internal sealed partial class TreatmentMinigameState
         switch (SuturePhase)
         {
             case StitchPhase.Position:
-                if (Vector2.Distance(point, entry) <= 10)
+                if (Vector2.Distance(point, entry) <= 14)
                 {
                     SuturePhase = StitchPhase.Pass;
                     NeedlePass = 0;
@@ -49,13 +49,12 @@ internal sealed partial class TreatmentMinigameState
                 break;
             case StitchPhase.Pass:
                 var along = Math.Clamp((point.Y - entry.Y) / (exit.Y - entry.Y), 0, 1);
-                if (Vector2.Distance(point, NeedlePath(Stitch, along)) > 12
-                    || delta.Length() > Math.Max(18, elapsed * 220))
+                if (Vector2.Distance(point, NeedlePath(Stitch, along)) > 22)
                 {
                     SutureSlip();
                     return;
                 }
-                NeedlePass = along;
+                NeedlePass = Math.Max(NeedlePass, along);
                 if (along >= 0.98f)
                 {
                     SuturePhase = StitchPhase.Tension;
@@ -65,7 +64,7 @@ internal sealed partial class TreatmentMinigameState
                 break;
             case StitchPhase.Tension:
                 ThreadTension = Vector2.Distance(point, exit) / 88;
-                if (ThreadTension > 1.6f || delta.Length() > Math.Max(36, elapsed * 450)) SutureSlip();
+                if (ThreadTension > 1.7f) SutureSlip();
                 break;
             case StitchPhase.Knot:
                 var radius = Vector2.Distance(point, KnotCenter);

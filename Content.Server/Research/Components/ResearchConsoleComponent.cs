@@ -1,4 +1,5 @@
 using Content.Shared.Radio;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.Research.Components;
@@ -6,9 +7,10 @@ namespace Content.Server.Research.Components;
 [RegisterComponent]
 public sealed partial class ResearchConsoleComponent : Component
 {
-    // Session belongs to the physical terminal; closing its UI does not log it out.
+    // Crew sessions belong to the physical terminal. Staff sessions belong to the player using it.
     public string? Username;
     public EntityUid? AccountServer;
+    public (EntityUid Actor, ICommonSession Player)? AdminSession;
     public int Address;
     public readonly List<string> TerminalLines = new();
     public TimeSpan NextAuthentication;

@@ -2,11 +2,7 @@
 
 - type: latheRecipePack
   id: CargoStatic
-  recipes:
-  - ImperialPaymentTerminal
-  - AppraisalTool
-  - Pickaxe
-  - UtilityKnife
+  recipes: []
 
 - type: latheRecipePack
   id: CargoBoardsStatic
@@ -19,12 +15,7 @@
 
 - type: latheRecipePack
   id: Mining
-  recipes:
-  - MiningDrill
-  - MiningDrillDiamond
-  - MineralScannerEmpty
-  - AdvancedMineralScannerEmpty
-  - OreBagOfHolding
+  recipes: []
 
 - type: latheRecipePack
   id: CargoBoards

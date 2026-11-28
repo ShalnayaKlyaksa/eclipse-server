@@ -86,12 +86,13 @@ namespace Content.Server.Medical
                 return;
 
             var name = "Unknown";
-            if (TryComp(args.Using.Value, out MetaDataComponent? metadata))
+            var patient = args.Using.Value;
+            if (TryComp(patient, out MetaDataComponent? metadata))
                 name = metadata.EntityName;
 
             InteractionVerb verb = new()
             {
-                Act = () => InsertBody(uid, args.Target, component),
+                Act = () => InsertBody(uid, patient, component),
                 Category = VerbCategory.Insert,
                 Text = name
             };

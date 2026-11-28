@@ -171,6 +171,7 @@
     - id: ClothingHeadsetAltEngineering
     - id: DoorRemoteEngineering
     - id: BoxCECircuitboards
+    - id: BoxIndustrialAssemblerKit
     - id: RCD
     - id: RCDAmmo
     - id: RubberStampCE

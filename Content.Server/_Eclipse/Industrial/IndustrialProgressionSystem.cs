@@ -126,7 +126,7 @@ public sealed class IndustrialProgressionSystem : EntitySystem
     {
         database = null;
         return _hands.IsHolding(user, disk) && _actionBlocker.CanInteract(user, console) &&
-               _interaction.InRangeAndAccessible(user, console) && _research.CanResearchAtTerminal(console) &&
+               _interaction.InRangeAndAccessible(user, console) && _research.CanResearchAtTerminal(console, user) &&
                _research.TryGetClientServer(console, out var server, out _) && TryComp(server, out database);
     }
 
@@ -150,7 +150,7 @@ public sealed class IndustrialProgressionSystem : EntitySystem
         if (args.Handled || !args.CanReach || args.Target is not { } target || !HasComp<ResearchConsoleComponent>(target))
             return;
         args.Handled = true;
-        if (!_research.CanResearchAtTerminal(target))
+        if (!_research.CanResearchAtTerminal(target, args.User))
         {
             _popup.PopupEntity(Loc.GetString("research-terminal-login-required"), target, args.User);
             return;
@@ -169,7 +169,7 @@ public sealed class IndustrialProgressionSystem : EntitySystem
     {
         if (args.Cancelled || args.Handled || args.Target is not { } target || !HasComp<ResearchConsoleComponent>(target) ||
             !this.IsPowered(target, EntityManager) ||
-            !_research.CanResearchAtTerminal(target) ||
+            !_research.CanResearchAtTerminal(target, args.User) ||
             !_research.TryGetClientServer(target, out var server, out _))
             return;
         var points = SampleAward(ent, server.Value);

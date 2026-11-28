@@ -2,63 +2,38 @@
 
 - type: latheRecipePack
   id: MaterialsStatic
-  recipes:
-  - SheetRGlass
-  - MaterialDurathread
+  recipes: []
 
 - type: latheRecipePack
   id: PartsStatic
-  recipes:
-  - Igniter
-  - ModularReceiver
-  - MicroManipulatorStockPart
-  - ConveyorBeltAssembly
+  recipes: []
 
 - type: latheRecipePack
   id: LightsStatic
-  recipes:
-  - LightTube
-  - LedLightTube
-  - SodiumLightTube
-  - ExteriorLightTube
-  - LightBulb
-  - LedLightBulb
-  - DimLightBulb
-  - WarmLightBulb
+  recipes: []
 
 - type: latheRecipePack
   id: PowerCellsStatic
-  recipes:
-  - PowerCellSmall
-  - PowerCellMedium
+  recipes: []
 
 - type: latheRecipePack
   id: CablesStatic
-  recipes:
-  - CableStack
-  - CableMVStack
-  - CableHVStack
+  recipes: []
 
 - type: latheRecipePack
   id: PaperworkStatic
-  recipes:
-  - BoxFolderClipboardEmpty
-  - BoxFolderPlasticClipboardEmpty
+  recipes: []
 
 - type: latheRecipePack
   id: TowelsStatic # This is used for both the autolathe and the uniform printer, so "unique" towels that only HoP can print shouldn't be included!
-  recipes:
-  - TowelColorWhite
+  recipes: []
 
 ## Dynamic
 
 # Things you'd expect sci salv and engi to make use of
 - type: latheRecipePack
   id: Equipment
-  recipes:
-  - HandHeldMassScanner
-  - ClothingMaskWeldingGas
-  - SignallerAdvanced
+  recipes: []
 
 - type: latheRecipePack
   id: SalvageSecurityBoards
@@ -67,8 +42,4 @@
 
 - type: latheRecipePack
   id: SalvageSecurityWeapons
-  recipes:
-  - WeaponProtoKineticAccelerator
-  - PKAUpgradeDamage
-  - PKAUpgradeRange
-  - PKAUpgradeFireRate
+  recipes: []

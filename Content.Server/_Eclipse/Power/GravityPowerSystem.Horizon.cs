@@ -5,7 +5,9 @@ using Content.Server.Chat.Systems;
 using Content.Server.Ghost;
 using Content.Server.Mind;
 using Content.Server.Power.Components;
+using Content.Server.Power.EntitySystems;
 using Content.Server.Respawn;
+using Content.Server.Singularity.Components;
 using Content.Server.RoundEnd;
 using Content.Server.Singularity.EntitySystems;
 using Content.Server.Singularity.Events;
@@ -16,6 +18,7 @@ using Content.Shared.Ghost;
 using Content.Shared.Respawn;
 using Content.Shared.Singularity.Components;
 using Content.Shared.Stacks;
+using Robust.Server.GameStates;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
@@ -28,6 +31,10 @@ public sealed partial class GravityPowerSystem
 {
     internal const float MaximumHorizon = 6f;
     private const float HorizonPerRootMass = .6f;
+    private const float ContainedHorizonScale = 1.3f;
+    private const float EscapedHorizonScale = 1.5f;
+    private const float EscapedGrowthPerSecond = .08f;
+    private const float LureRange = 40f;
     private const float PullRange = 21f;
     private const float GracePeriod = 12f;
     private const float MinimumMass = .025f;
@@ -47,6 +54,7 @@ public sealed partial class GravityPowerSystem
     [Dependency] private readonly GhostSystem _ghosts = default!;
     [Dependency] private readonly MindSystem _minds = default!;
     [Dependency] private readonly SharedMapSystem _maps = default!;
+    [Dependency] private readonly PvsOverrideSystem _pvs = default!;
 
     private readonly HashSet<EntityUid> _nearby = new();
     private readonly List<TileRef> _edibleTiles = new();
@@ -55,26 +63,47 @@ public sealed partial class GravityPowerSystem
     {
         SubscribeLocalEvent<GravityPowerSourceComponent, EntityConsumedByEventHorizonEvent>(OnContainedFeed);
         SubscribeLocalEvent<GravityPowerSourceComponent, TilesConsumedByEventHorizonEvent>(OnContainedTileFeed);
+        SubscribeLocalEvent<ResidualMicroBlackHoleComponent, ComponentStartup>(OnEscapedStartup);
+        SubscribeLocalEvent<ResidualMicroBlackHoleComponent, ComponentShutdown>(OnEscapedShutdown);
         SubscribeLocalEvent<ResidualMicroBlackHoleComponent, EntityConsumedByEventHorizonEvent>(OnEscapedFeed);
         SubscribeLocalEvent<ResidualMicroBlackHoleComponent, TilesConsumedByEventHorizonEvent>(OnEscapedTileFeed);
     }
+
+    // Like a singularity, an escaped hole can reach well into the view while its center is still outside PVS.
+    private void OnEscapedStartup(Entity<ResidualMicroBlackHoleComponent> ent, ref ComponentStartup args)
+        => _pvs.AddGlobalOverride(ent);
+
+    private void OnEscapedShutdown(Entity<ResidualMicroBlackHoleComponent> ent, ref ComponentShutdown args)
+        => _pvs.RemoveGlobalOverride(ent);
 
     internal static bool IsPowered(PowerConsumerComponent power) =>
         power.NetworkLoad.Enabled && power.DrawRate > 0 && power.ReceivedPower >= power.DrawRate * .99f;
 
     internal static float Horizon(float mass) => HorizonPerRootMass * MathF.Sqrt(MathF.Max(0, mass));
 
+    internal static float ActiveHorizon(float mass, bool escaped = false)
+        => Horizon(mass) * (escaped ? EscapedHorizonScale : ContainedHorizonScale);
+
     private static float CapacityAt(float radius) => MathF.Pow(radius / HorizonPerRootMass, 2);
 
     private static float ContainedCapacity(GravityPowerSourceComponent source) => CapacityAt(source.FieldLimit * .72f);
 
     public static float PullAt(float distance, float mass, float activity, bool escaped)
+        => CalculatePull(distance, mass, activity, escaped, escaped);
+
+    private static float CalculatePull(float distance, float mass, float activity, bool escaped, bool strong)
     {
-        var edge = MathF.Max(0, distance - Horizon(mass));
-        var reach = Math.Clamp((PullRange - edge) / 4, 0, 1);
-        var strength = (escaped ? 105 : 70) * MathF.Sqrt(MathF.Max(0, mass)) * activity;
-        return MathF.Min(140, strength * reach / (1 + edge * edge * .25f));
+        var radius = strong ? ActiveHorizon(mass, escaped) : Horizon(mass);
+        var edge = MathF.Max(0, distance - radius);
+        var reach = Math.Clamp((PullReach(radius, strong) - edge) / 4, 0, 1);
+        var baseStrength = escaped ? 150f : 70f;
+        if (strong && !escaped)
+            baseStrength += 18f * radius;
+        var strength = baseStrength * MathF.Sqrt(MathF.Max(0, mass)) * activity;
+        return MathF.Min(strong ? 200 : 140, strength * reach / (1 + edge * edge * (escaped ? .12f : .25f)));
     }
+
+    private static float PullReach(float radius, bool strong) => PullRange + (strong ? radius * 1.5f : 0f);
 
     private void UpdateContained(EntityUid uid, GravityPowerSourceComponent source, PowerPlantComponent plant,
         TransformComponent xform, float frameTime, float pulse)
@@ -129,18 +158,44 @@ public sealed partial class GravityPowerSystem
         if (pulse <= 0)
             return;
 
-        hole.StarvingTime += pulse;
-        var decay = hole.StarvingTime > GracePeriod ? .012f : 0;
-        hole.Mass -= (decay + SuppressionAt(xform)) * pulse;
+        var growthLimit = CapacityAt(Horizon(hole.Mass) + EscapedGrowthPerSecond / EscapedHorizonScale * pulse);
+        var growth = Math.Min(hole.PendingMass, Math.Max(0, growthLimit - hole.Mass));
+        hole.PendingMass -= growth;
+        hole.Mass = Math.Min(CapacityAt(MaximumHorizon), hole.Mass + growth + .015f * pulse);
+        hole.Mass -= SuppressionAt(xform) * pulse;
         if (hole.Mass < MinimumMass)
         {
             QueueDel(uid);
             return;
         }
 
+        MoveTowardLure(uid, xform, pulse);
         hole.Activity = Math.Clamp(.55f + hole.Mass * .45f, 0, 1);
         UpdateVisual(uid, hole.Mass, hole.Activity, 1);
         PulseHorizon(uid, xform, hole.Mass, hole.Activity, pulse, true);
+    }
+
+    private void MoveTowardLure(EntityUid uid, TransformComponent xform, float elapsed)
+    {
+        var position = _transform.GetWorldPosition(xform);
+        var direction = Vector2.Zero;
+        var nearest = LureRange * LureRange;
+        var query = EntityQueryEnumerator<SingularityAttractorComponent, TransformComponent>();
+        while (query.MoveNext(out var lure, out _, out var transform))
+        {
+            if (transform.MapID != xform.MapID || !transform.Anchored
+                || EntityManager.IsQueuedForDeletion(lure) || !this.IsPowered(lure, EntityManager))
+                continue;
+            var difference = _transform.GetWorldPosition(transform) - position;
+            var distanceSquared = difference.LengthSquared();
+            if (distanceSquared >= nearest)
+                continue;
+            direction = difference;
+            nearest = distanceSquared;
+        }
+
+        if (nearest > 0 && direction != Vector2.Zero)
+            _transform.SetWorldPosition(uid, position + direction * Math.Min(1f, 0.8f * elapsed / MathF.Sqrt(nearest)));
     }
 
     private float SuppressionAt(TransformComponent xform)
@@ -161,10 +216,11 @@ public sealed partial class GravityPowerSystem
     private void PulseHorizon(EntityUid uid, TransformComponent xform, float mass, float activity, float elapsed, bool escaped)
     {
         var position = _transform.GetWorldPosition(xform);
-        var radius = Horizon(mass);
+        var radius = ActiveHorizon(mass, escaped);
+        var floorRadius = escaped ? radius : Horizon(mass);
         var horizon = Comp<EventHorizonComponent>(uid);
         _nearby.Clear();
-        _lookup.GetEntitiesInRange(xform.MapID, position, radius + PullRange, _nearby,
+        _lookup.GetEntitiesInRange(xform.MapID, position, radius + PullReach(radius, true), _nearby,
             LookupFlags.Dynamic | LookupFlags.Sundries);
         if (escaped)
             _lookup.GetEntitiesInRange(xform.MapID, position, radius, _nearby, LookupFlags.Static | LookupFlags.Sundries);
@@ -181,8 +237,7 @@ public sealed partial class GravityPowerSystem
                 continue;
             var delta = position - _transform.GetWorldPosition(other);
             var distance = delta.Length();
-            // Consider bodies that touch the horizon with their fixtures before their center crosses it.
-            if (distance <= radius + (other.Anchored ? 0 : .25f))
+            if (distance <= radius)
             {
                 _horizons.AttemptConsumeEntity(uid, entity, horizon);
                 continue;
@@ -191,7 +246,7 @@ public sealed partial class GravityPowerSystem
             if (other.Anchored || body.BodyType == BodyType.Static ||
                 TryComp<MovedByPressureComponent>(entity, out var pressure) && !pressure.Enabled)
                 continue;
-            var pull = PullAt(distance, mass, activity, escaped);
+            var pull = CalculatePull(distance, mass, activity, escaped, true);
             if (_magnetism.IsAdhering(entity))
                 pull -= GravityMagneticSystem.HoldingAcceleration;
             if (pull > 0)
@@ -200,15 +255,15 @@ public sealed partial class GravityPowerSystem
 
         if (escaped)
         {
-            _horizons.ConsumeTilesInRange(uid, radius, xform, horizon);
+            _horizons.ConsumeTilesInRange(uid, floorRadius, xform, horizon);
         }
-        else if (radius >= 1 && xform.GridUid is { } gridUid && TryComp<MapGridComponent>(gridUid, out var grid))
+        else if (floorRadius >= 1 && xform.GridUid is { } gridUid && TryComp<MapGridComponent>(gridUid, out var grid))
         {
             _edibleTiles.Clear();
             var coreTile = _maps.TileIndicesFor(gridUid, grid, xform.Coordinates);
             var coolantAxis = xform.LocalRotation.RotateVec(Vector2.UnitX);
             var horizontal = MathF.Abs(coolantAxis.X) >= MathF.Abs(coolantAxis.Y);
-            foreach (var tile in _maps.GetTilesIntersecting(gridUid, grid, new Circle(position, radius)))
+            foreach (var tile in _maps.GetTilesIntersecting(gridUid, grid, new Circle(position, floorRadius)))
             {
                 // Keep the core's coolant route connected to the surrounding deck.
                 if (horizontal ? tile.GridIndices.Y == coreTile.Y : tile.GridIndices.X == coreTile.X)
@@ -270,8 +325,7 @@ public sealed partial class GravityPowerSystem
 
     private void OnEscapedFeed(Entity<ResidualMicroBlackHoleComponent> ent, ref EntityConsumedByEventHorizonEvent args)
     {
-        ent.Comp.Mass = MathF.Min(CapacityAt(MaximumHorizon), ent.Comp.Mass + FeedMass(args.Entity));
-        ent.Comp.StarvingTime = 0;
+        AddEscapedMass(ent.Comp, FeedMass(args.Entity));
         GhostConsumedPlayer(args.Entity);
         RecoverDisk(ent, args.Entity);
     }
@@ -285,9 +339,11 @@ public sealed partial class GravityPowerSystem
 
     private void OnEscapedTileFeed(Entity<ResidualMicroBlackHoleComponent> ent, ref TilesConsumedByEventHorizonEvent args)
     {
-        ent.Comp.Mass = MathF.Min(CapacityAt(MaximumHorizon), ent.Comp.Mass + args.Tiles.Count * .45f);
-        ent.Comp.StarvingTime = 0;
+        AddEscapedMass(ent.Comp, args.Tiles.Count * .45f);
     }
+
+    private static void AddEscapedMass(ResidualMicroBlackHoleComponent hole, float mass)
+        => hole.PendingMass = Math.Min(Math.Max(0, CapacityAt(MaximumHorizon) - hole.Mass), hole.PendingMass + mass);
 
     private void RecoverDisk(EntityUid hole, EntityUid entity)
     {
@@ -299,6 +355,7 @@ public sealed partial class GravityPowerSystem
             : null;
         station ??= _station.GetOwningStation(hole) ?? _station.GetStationInMap(holeTransform.MapID);
         var position = _transform.GetWorldPosition(holeTransform);
+        var safeRadius = HasComp<ResidualMicroBlackHoleComponent>(hole) ? MaximumHorizon * EscapedHorizonScale : MaximumHorizon;
         var closest = float.PositiveInfinity;
         var lockers = EntityQueryEnumerator<GravityRecoveryLockerComponent, TransformComponent>();
         while (lockers.MoveNext(out var uid, out _, out var locker))
@@ -310,7 +367,7 @@ public sealed partial class GravityPowerSystem
             var distance = locker.MapID == holeTransform.MapID
                 ? Vector2.DistanceSquared(position, _transform.GetWorldPosition(locker))
                 : float.MaxValue;
-            if (distance <= MaximumHorizon * MaximumHorizon || distance >= closest)
+            if (distance <= safeRadius * safeRadius || distance >= closest)
                 continue;
             closest = distance;
             respawn.PreferredContainer = uid;
@@ -357,7 +414,7 @@ public sealed partial class GravityPowerSystem
             return;
         var origin = _transform.GetWorldPosition(xform);
         var stagingArea = EntityCoordinates.Invalid;
-        var bestDistance = MathF.Pow(MaximumHorizon + 4, 2);
+        var bestDistance = MathF.Pow(MaximumHorizon * EscapedHorizonScale + 4, 2);
         for (var i = 0; i < 10; i++)
         {
             if (!_respawn.TryFindRandomTile(grid, map, 12, out var tile))

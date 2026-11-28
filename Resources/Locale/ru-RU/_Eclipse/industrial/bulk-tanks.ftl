@@ -1,0 +1,11 @@
+ent-IndustrialTankSection = секция промышленного бака
+    .desc = Выложите секции квадратом. Возьмите гаечный ключ и откройте контекстное меню юго-восточной секции, чтобы собрать бак.
+ent-IndustrialTankSupport = опора промышленного бака
+ent-IndustrialBulkBarrel = промышленная бочка
+    .desc = Бочка 2×2 на 4000 единиц. Южный вход и восточный выход подключаются у юго-восточной клетки.
+ent-IndustrialBulkReservoir = большой промышленный резервуар
+    .desc = Резервуар 3×3 на 9000 единиц. Южный вход и восточный выход подключаются у юго-восточной клетки.
+industrial-tank-assemble-barrel = Собрать бочку 2×2
+industrial-tank-assemble-reservoir = Собрать резервуар 3×3
+industrial-tank-disassemble = Разобрать на секции
+industrial-tank-drain-first = Перед разборкой слейте содержимое бака.

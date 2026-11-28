@@ -3,7 +3,7 @@
 
 - type: entity
   abstract: true
-  parent: BaseStructure
+  parent: BaseItem
   id: WireItemPipeBase
   name: item pipe
   description: Moves items between industrial machines. Auto-connects on all sides like a cable.
@@ -16,14 +16,12 @@
     anchored: true
     noRot: true
   - type: Physics
-    bodyType: Static
+    bodyType: Dynamic
     canCollide: false
   - type: Fixtures
   - type: InteractionOutline
   - type: IndustrialPipingOccupant
   - type: Anchorable
-    tool: IndustrialPipeDetaching
-    flags: Unanchorable
     delay: 0.5
   - type: ItemPipeWireConnect
   - type: ItemPipeWireVisualizer
@@ -71,6 +69,8 @@
   suffix: LP
   description: Low performance item pipe. Low throughput.
   components:
+  - type: IndustrialPipePack
+    pack: LpItemPipePack
   - type: ItemPipe
     tier: Basic
 
@@ -81,6 +81,8 @@
   suffix: MP
   description: Medium performance item pipe. Moderate throughput.
   components:
+  - type: IndustrialPipePack
+    pack: MpItemPipePack
   - type: ItemPipe
     tier: Industrial
 
@@ -91,5 +93,7 @@
   suffix: HP
   description: High performance item pipe. High throughput.
   components:
+  - type: IndustrialPipePack
+    pack: HpItemPipePack
   - type: ItemPipe
     tier: Perfect

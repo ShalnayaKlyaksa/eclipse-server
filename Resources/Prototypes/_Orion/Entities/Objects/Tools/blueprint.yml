@@ -2,7 +2,7 @@
   parent: BaseBlueprint
   id: BlueprintAshLegion
   name: AshLegion blueprint
-  description: A blueprint with a schematic of a AshLegion contraband. It can be inserted into an autolathe.
+  description: A blueprint with a schematic of a AshLegion contraband.
   components:
   - type: Blueprint
     providedRecipes:
@@ -19,7 +19,7 @@
   parent: BaseBlueprint
   id: BlueprintSyndicate
   name: Syndicate blueprint
-  description: A blueprint with a schematic of a Syndicate contraband. It can be inserted into an autolathe.
+  description: A blueprint with a schematic of a Syndicate contraband.
   components:
   - type: Blueprint
     providedRecipes:

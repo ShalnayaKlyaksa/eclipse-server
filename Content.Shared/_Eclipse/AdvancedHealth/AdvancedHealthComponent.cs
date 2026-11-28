@@ -147,7 +147,7 @@ public sealed partial class AdvancedHealthComponent : Component
     /// <summary>Per-second recovery of immune defense back toward 100.</summary>
     [DataField] public float ImmuneRegen = 0.05f;
 
-    /// <summary>EMA-smoothed condition score (0 = healthy, 1 = critical) used for the health HUD readout.</summary>
+    /// <summary>Condition score (0 = healthy, 1 = critical) for the health HUD and medical chip. Recovery is smoothed.</summary>
     [DataField, AutoNetworkedField] public float SmoothedConditionBadness;
 
     /// <summary>Last HumanHealth alert severity — used for hysteresis so the icon does not flicker.</summary>
@@ -263,6 +263,7 @@ public enum AdvancedTreatmentType : byte
     Injection,
     XRay,
     Electrocardiogram,
+    BandageRemoval,
 }
 
 [RegisterComponent]

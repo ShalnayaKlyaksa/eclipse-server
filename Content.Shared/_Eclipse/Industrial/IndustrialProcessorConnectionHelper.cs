@@ -94,14 +94,14 @@ public static class IndustrialProcessorConnectionHelper
         return true;
     }
 
-    public static bool TryFindHeatBufferOnFace(
+    public static bool TryFindHeatConnectionOnFace(
         EntityUid processor,
-        Direction faceFromProcessorToBuffer,
+        Direction faceFromProcessorToConnection,
         IEntityManager ent,
         SharedMapSystem map,
-        out EntityUid buffer)
+        out EntityUid connection)
     {
-        buffer = default;
+        connection = default;
 
         if (!ent.TryGetComponent(processor, out TransformComponent? procXform) ||
             !procXform.Anchored ||
@@ -112,51 +112,29 @@ public static class IndustrialProcessorConnectionHelper
         }
 
         var origin = map.TileIndicesFor(gridUid, grid, procXform.Coordinates);
-        var neighbor = origin.Offset(faceFromProcessorToBuffer);
+        var neighbor = origin.Offset(faceFromProcessorToConnection);
 
         var enumerator = map.GetAnchoredEntitiesEnumerator(gridUid, grid, neighbor);
         while (enumerator.MoveNext(out var entity) && entity != null)
         {
-            if (!ent.HasComponent<IndustrialHeatBufferComponent>(entity.Value))
+            if (!ent.HasComponent<IndustrialHeatBufferComponent>(entity.Value) &&
+                !ent.HasComponent<IndustrialHeatPipeComponent>(entity.Value))
                 continue;
 
-            buffer = entity.Value;
+            connection = entity.Value;
             return true;
         }
 
         return false;
     }
 
-    public static bool IsBufferOnProcessorFace(
-        EntityUid processor,
-        EntityUid buffer,
-        Direction faceFromProcessorToBuffer,
-        IEntityManager ent,
-        SharedMapSystem map)
-    {
-        if (!ent.TryGetComponent(processor, out TransformComponent? procXform) ||
-            !ent.TryGetComponent(buffer, out TransformComponent? bufferXform) ||
-            !procXform.Anchored || !bufferXform.Anchored ||
-            procXform.GridUid is not EntityUid gridUid ||
-            bufferXform.GridUid != gridUid ||
-            !ent.TryGetComponent(gridUid, out MapGridComponent? grid))
-        {
-            return false;
-        }
-
-        var procPos = map.TileIndicesFor(gridUid, grid, procXform.Coordinates);
-        var bufferPos = map.TileIndicesFor(gridUid, grid, bufferXform.Coordinates);
-
-        return bufferPos == procPos.Offset(faceFromProcessorToBuffer);
-    }
-
     /// <summary>
-    /// Auto-enables heat input on machine faces adjacent to a heat exchange buffer.
+    /// Auto-enables heat input on machine faces adjacent to a heat buffer or pipe.
     /// </summary>
     public static bool TryAutoBindHeatPort(
         EntityUid processor,
-        EntityUid buffer,
-        Direction faceFromProcessorToBuffer,
+        EntityUid connection,
+        Direction faceFromProcessorToConnection,
         IEntityManager ent,
         SharedMapSystem map)
     {
@@ -166,13 +144,13 @@ public static class IndustrialProcessorConnectionHelper
             return false;
         }
 
-        if (!IsBufferOnProcessorFace(processor, buffer, faceFromProcessorToBuffer, ent, map))
+        if (!IsPipeOnProcessorFace(processor, connection, faceFromProcessorToConnection, ent, map))
             return false;
 
-        if (processorComp.GetFacePort(faceFromProcessorToBuffer) != FacePortState.Disabled)
+        if (processorComp.GetFacePort(faceFromProcessorToConnection) != FacePortState.Disabled)
             return false;
 
-        processorComp.SetFacePort(faceFromProcessorToBuffer, FacePortState.HeatInput);
+        processorComp.SetFacePort(faceFromProcessorToConnection, FacePortState.HeatInput);
         ent.Dirty(processor, processorComp);
         return true;
     }

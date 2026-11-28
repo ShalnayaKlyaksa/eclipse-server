@@ -98,7 +98,7 @@
   suffix: Command
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Standard/command.rsi
+    sprite: Eclipse/Structures/Doors/Airlocks/Standard/nanotrasen_navy_command.rsi
   - type: WiresPanelSecurity
     securityLevel: medSecurity
   - type: Wires
@@ -288,7 +288,7 @@
   suffix: Command
   components:
   - type: Sprite
-    sprite: Structures/Doors/Airlocks/Glass/command.rsi
+    sprite: Eclipse/Structures/Doors/Airlocks/Glass/nanotrasen_navy_command.rsi
   - type: WiresPanelSecurity
     securityLevel: medSecurity
   - type: Wires

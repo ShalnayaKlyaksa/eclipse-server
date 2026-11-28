@@ -3,7 +3,6 @@ using Content.Shared._Eclipse.Industrial;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
-using Content.Shared.Research.Prototypes;
 using Content.Shared.Tag;
 using Content.Shared.Stacks;
 using Robust.Shared.Serialization;
@@ -16,8 +15,6 @@ namespace Content.Server._Eclipse.Industrial;
 /// <summary>Passable floor veins share finite stock between manual mining and powered extraction.</summary>
 public sealed class IndustrialExtractionSystem : EntitySystem
 {
-    private static readonly ProtoId<TechnologyPrototype> Automation = "IndustrialAutomation";
-
     [Dependency] private readonly IPrototypeManager _prototypes = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
@@ -111,7 +108,8 @@ public sealed class IndustrialExtractionSystem : EntitySystem
             return IndustrialProcessorState.Paused;
         if (!xform.Anchored || FindDeposit(uid, xform) is not { Remaining: > 0 } deposit)
             return IndustrialProcessorState.Idle;
-        if (!TryComp<IndustrialMachineKnowledgeComponent>(uid, out var knowledge) || !knowledge.Technologies.Contains(Automation))
+        if (extractor.RequiredTechnology is { } technology &&
+            (!TryComp<IndustrialMachineKnowledgeComponent>(uid, out var knowledge) || !knowledge.Technologies.Contains(technology)))
             return IndustrialProcessorState.Unresearched;
         if (!_containers.TryGetContainer(uid, processor.OutputContainerId, out var output) || output.Count >= processor.MaxOutputSlots)
             return IndustrialProcessorState.Blocked;

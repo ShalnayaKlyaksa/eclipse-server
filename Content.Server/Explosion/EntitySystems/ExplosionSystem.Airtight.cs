@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Runtime.InteropServices;
 using Content.Server.Atmos.Components;
+using Content.Server.Atmos.EntitySystems;
 using Content.Server.Explosion.Components;
 using Content.Shared.Atmos;
 using Content.Shared.Damage.Systems;
@@ -16,6 +17,8 @@ namespace Content.Server.Explosion.EntitySystems;
 
 public sealed partial class ExplosionSystem
 {
+    [Dependency] private readonly AirtightSystem _airtight = default!;
+
     // We keep track of which tiles are airtight, and how much damage from explosions those airtight blockers can take.
     // This is quite complicated, as the data effectively needs to be tracked *per tile*, *per explosion type*.
     // To avoid wasting significant memory, we calculate the values and share the actual backing storage of it.
@@ -89,12 +92,18 @@ public sealed partial class ExplosionSystem
         var anchoredEnumerator = _map.GetAnchoredEntitiesEnumerator(gridId, grid, tile);
 
         while (anchoredEnumerator.MoveNext(out var uid))
+            AddBlocker(uid.Value);
+
+        foreach (var additional in _airtight.GetAdditionalBlockers(gridId, tile))
+            AddBlocker(additional);
+
+        void AddBlocker(EntityUid uid)
         {
             if (!_airtightQuery.TryGetComponent(uid, out var airtight) || !airtight.AirBlocked)
-                continue;
+                return;
 
             blockedDirections |= airtight.AirBlockedDirection;
-            GetExplosionTolerance(uid.Value, tolerance);
+            GetExplosionTolerance(uid, tolerance);
         }
 
         // Log.Info($"UPDATE {gridId}/{tile}: {blockedDirections}");
@@ -203,6 +212,7 @@ public sealed partial class ExplosionSystem
             return;
 
         UpdateAirtightMap(transform.GridUid.Value, grid, _map.CoordinatesToTile(transform.GridUid.Value, grid, transform.Coordinates));
+        _airtight.InvalidateAdditionalTiles((uid, airtight));
     }
 
     /// <summary>

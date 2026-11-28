@@ -294,31 +294,31 @@
 
 - type: fabricationOrderProduct
   id: OrderLpItemPipe
-  product: LpItemPipe
+  product: LpItemPipePack
   category: logistics
   maxQuantity: 50
 
 - type: fabricationOrderProduct
   id: OrderMpItemPipe
-  product: MpItemPipe
+  product: MpItemPipePack
   category: logistics
   maxQuantity: 50
 
 - type: fabricationOrderProduct
   id: OrderHpItemPipe
-  product: HpItemPipe
+  product: HpItemPipePack
   category: logistics
   maxQuantity: 50
 
 - type: fabricationOrderProduct
   id: OrderBasicLiquidPipe
-  product: BasicLiquidPipe
+  product: BasicLiquidPipePack
   category: logistics
   maxQuantity: 50
 
 - type: fabricationOrderProduct
   id: OrderIndustrialLiquidPipe
-  product: IndustrialLiquidPipe
+  product: IndustrialLiquidPipePack
   category: logistics
   maxQuantity: 50
 

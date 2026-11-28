@@ -39,7 +39,9 @@ public sealed class SharedIndustrialPipingOccupancySystem : EntitySystem
         if (!TryGetTileIndices(ent, out var gridUid, out var grid, out var indices) || grid == null)
             return;
 
-        if (!IndustrialPipingOccupancyHelper.TileContainsPiping(gridUid, grid, indices, EntityManager, _map))
+        if (!IndustrialPipingOccupancyHelper.TileContainsPiping(gridUid, grid, indices, EntityManager, _map, ent) &&
+            !(HasComp<IndustrialHeatPipeComponent>(ent) &&
+              IndustrialPipingOccupancyHelper.TileContainsIndustrialProcessor(gridUid, grid, indices, EntityManager, _map)))
             return;
 
         _popup.PopupClient(Loc.GetString("industrial-piping-tile-occupied"), ent, args.User);

@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
@@ -124,7 +125,12 @@ public partial class AtmosphereSystem
         var noAirWhenBlocked = false;
         var fixVacuum = false;
 
-        foreach (var ent in _map.GetAnchoredEntities(uid, grid, tile))
+        var entities = _map.GetAnchoredEntities(uid, grid, tile);
+        var additionalBlockers = _airtight.GetAdditionalBlockers(uid, tile);
+        if (additionalBlockers.Count > 0)
+            entities = entities.Concat(additionalBlockers);
+
+        foreach (var ent in entities)
         {
             if (!_airtightQuery.TryGetComponent(ent, out var airtight))
                 continue;

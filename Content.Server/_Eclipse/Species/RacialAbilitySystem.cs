@@ -129,14 +129,18 @@ public sealed partial class RacialAbilitySystem : EntitySystem
     private static bool SealWound(AdvancedHealthComponent health, float reduction)
     {
         var wound = health.BodyParts.Values.Where(part => !part.IsDestroyed && !part.IsSurgicalOpen)
-            .SelectMany(part => part.Wounds)
-            .Where(wound => !wound.IsSurgicalIncision && wound.ExternalBleedingRate > 0.01f)
-            .MaxBy(wound => wound.ExternalBleedingRate);
-        if (wound == null)
+            .SelectMany(part => part.Wounds.Select(wound => (Part: part, Wound: wound)))
+            .Where(entry => !entry.Wound.IsSurgicalIncision && entry.Wound.ExternalBleedingRate > 0.01f)
+            .OrderByDescending(entry => entry.Wound.ExternalBleedingRate)
+            .FirstOrDefault();
+        var (part, injury) = wound;
+        if (injury == null)
             return false;
 
-        wound.ExternalBleedingRate = Math.Max(0f, wound.ExternalBleedingRate - reduction);
-        wound.IsBandaged = true;
+        injury.ApplyBandage(Math.Min(injury.ExternalBleedingRate, reduction));
+        part.RefreshBandageState();
+        if (part.IsBandageDirty || injury.IsDirty)
+            part.ContaminateBandage();
         return true;
     }
 

@@ -1,0 +1,143 @@
+- type: entity
+  parent: BaseStructure
+  id: IndustrialTankSection
+  name: industrial tank section
+  components:
+  - type: Transform
+    noRot: true
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_tank_section.rsi
+    state: icon
+  - type: InteractionOutline
+  - type: IndustrialTankSection
+  - type: IndustrialPipingOccupant
+  - type: Construction
+    graph: IndustrialTankSection
+    node: section
+
+- type: entity
+  parent: BaseStructure
+  id: IndustrialTankSupport
+  categories: [ HideSpawnMenu ]
+  name: industrial tank foundation
+  components:
+  - type: Transform
+    noRot: true
+  - type: IndustrialTankSupport
+  - type: IndustrialPipingOccupant
+
+- type: entity
+  abstract: true
+  parent: BaseStructure
+  id: BaseIndustrialBulkTank
+  components:
+  - type: Transform
+    noRot: true
+  - type: InteractionOutline
+  - type: IndustrialPipingOccupant
+  - type: LiquidPipeEndpoint
+    inputSolution: tank
+    outputSolution: tank
+    inputFace: South
+    outputFace: East
+    hasOutput: true
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        canReact: false
+  - type: RefillableSolution
+    solution: tank
+  - type: DrainableSolution
+    solution: tank
+  - type: ExaminableSolution
+    solution: tank
+    exactVolume: true
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: StructuralMetallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:SpillBehavior
+        solution: tank
+      - !type:DoActsBehavior
+        acts: [Destruction]
+
+- type: entity
+  parent: BaseIndustrialBulkTank
+  id: IndustrialBulkBarrel
+  name: industrial barrel
+  components:
+  - type: IndustrialBulkTank
+    side: 2
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_bulk_barrel.rsi
+    state: icon
+    offset: "-0.5,0.5"
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        maxVol: 4000
+
+- type: entity
+  parent: BaseIndustrialBulkTank
+  id: IndustrialBulkReservoir
+  name: bulk industrial reservoir
+  components:
+  - type: IndustrialBulkTank
+    side: 3
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_bulk_reservoir.rsi
+    state: icon
+    offset: "-1,1"
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        maxVol: 9000
+
+- type: construction
+  id: IndustrialTankSection
+  graph: IndustrialTankSection
+  startNode: start
+  targetNode: section
+  category: construction-category-industrial-mechanisms
+  placementMode: SnapgridCenter
+  objectType: Structure
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: constructionGraph
+  id: IndustrialTankSection
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: section
+      steps:
+      - material: Steel
+        amount: 3
+        doAfter: 1
+      - material: MetalRod
+        amount: 2
+        doAfter: 1
+      - tool: Screwing
+        doAfter: 1
+  - node: section
+    entity: IndustrialTankSection
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: SheetSteel1
+        amount: 3
+      - !type:SpawnPrototype
+        prototype: PartRodMetal1
+        amount: 2
+      - !type:DeleteEntity {}
+      steps:
+      - tool: Welding
+        doAfter: 2

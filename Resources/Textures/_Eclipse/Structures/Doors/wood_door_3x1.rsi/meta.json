@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from Tgstation https://github.com/tgstation/tgstation/commit/a5eaa18d2192ef9dd7c8d5b8f4ff22bcf304cdd1#diff-4713a9070dd0da77d2f0932685db4d445073695edb05bb49ff96240cbe355036. Adapted for Eclipse with new panel layout, trim and animation.",
+  "size": {
+    "x": 96,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "closed"
+    },
+    {
+      "name": "open"
+    },
+    {
+      "name": "opening",
+      "delays": [
+        [
+          0.16,
+          0.16,
+          0.16,
+          0.16,
+          0.16
+        ]
+      ]
+    },
+    {
+      "name": "closing",
+      "delays": [
+        [
+          0.16,
+          0.16,
+          0.16,
+          0.16,
+          0.16
+        ]
+      ]
+    }
+  ]
+}

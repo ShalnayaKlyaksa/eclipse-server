@@ -150,6 +150,8 @@ namespace Content.Client.Viewport
 
             DebugTools.AssertNotNull(_viewport);
 
+            var screen = handle.DrawingHandleScreen;
+            var controlTransform = screen.GetTransform();
             _viewport!.Render();
 
             if (_queuedScreenshots.Count != 0)
@@ -170,8 +172,11 @@ namespace Content.Client.Viewport
             var drawBox = GetDrawBox();
             var drawBoxGlobal = drawBox.Translated(GlobalPixelPosition);
             _viewport.RenderScreenOverlaysBelow(handle, this, drawBoxGlobal);
-            handle.DrawingHandleScreen.DrawTextureRect(_viewport.RenderTarget.Texture, drawBox);
+            // Screen overlays can reset the model matrix. The viewport texture uses control-local coordinates.
+            screen.SetTransform(controlTransform);
+            screen.DrawTextureRect(_viewport.RenderTarget.Texture, drawBox);
             _viewport.RenderScreenOverlaysAbove(handle, this, drawBoxGlobal);
+            screen.SetTransform(controlTransform);
         }
 
         public void Screenshot(CopyPixelsDelegate<Rgba32> callback)

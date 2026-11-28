@@ -32,7 +32,7 @@ public sealed partial class ResearchSystem
 
     public bool TryConsoleResearch(EntityUid uid, EntityUid act, string technology)
     {
-        if (!CanResearchAtTerminal(uid) || !TryComp<ResearchConsoleComponent>(uid, out var component) ||
+        if (!CanResearchAtTerminal(uid, act) || !TryComp<ResearchConsoleComponent>(uid, out var component) ||
             !PrototypeManager.TryIndex<TechnologyPrototype>(technology, out var technologyPrototype) || technologyPrototype.Hidden)
             return false;
         if (!UnlockTechnology(uid, technology, act)) return false;

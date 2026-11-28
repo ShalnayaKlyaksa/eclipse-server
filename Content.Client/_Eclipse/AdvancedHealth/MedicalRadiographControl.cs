@@ -23,10 +23,11 @@ internal sealed class MedicalRadiographControl(MedicalDiagnosticReport report) :
     protected override void Draw(DrawingHandleScreen h)
     {
         base.Draw(h);
-        h.DrawRect(new UIBox2(Vector2.Zero, Size), Film);
+        h.DrawRect(PixelSizeBox, Film);
         var previous = h.GetTransform();
         var scale = Math.Min(Size.X / 320, Size.Y / 260);
-        h.SetTransform(Matrix3x2.CreateScale(scale) * Matrix3x2.CreateTranslation((Size - new Vector2(320, 260) * scale) / 2) * previous);
+        var origin = (Size - new Vector2(320, 260) * scale) / 2;
+        h.SetTransform(Matrix3x2.CreateScale(scale * UIScale) * Matrix3x2.CreateTranslation(origin * UIScale) * previous);
         try
         {
             for (var y = 12; y < 250; y += 8)

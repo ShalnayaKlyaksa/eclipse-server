@@ -160,7 +160,7 @@ public sealed class AdvancedBloodSystem : EntitySystem
             && TryComp<BloodstreamComponent>(patient, out var stream) && stream.BloodReferenceSolution.Volume > 0
             && health.BloodVolume >= 5f / (float) stream.BloodReferenceSolution.Volume * health.MaxBloodVolume;
 
-    /// <summary>Completed blood testing consumes a real sample volume and produces a dated physical profile.</summary>
+    /// <summary>Blood collection draws a real sample volume into a dated, labeled tube.</summary>
     public EntityUid? Sample(EntityUid patient)
     {
         if (!CanSample(patient)) return null;
@@ -169,7 +169,6 @@ public sealed class AdvancedBloodSystem : EntitySystem
         var sampleVolume = 5f / (float) source.BloodReferenceSolution.Volume * health.MaxBloodVolume;
         if (health.BloodVolume < sampleVolume) return null;
         health.BloodVolume -= sampleVolume;
-        health.BloodTypeConfirmed = true;
         var tube = Spawn("AdvancedClinicalBloodSample", Transform(patient).Coordinates);
         var sample = Comp<ClinicalBloodSampleComponent>(tube);
         sample.Patient = patient;
@@ -183,11 +182,16 @@ public sealed class AdvancedBloodSystem : EntitySystem
         sample.ToxinLoad = health.ToxinLoad;
         sample.KidneyFunction = _organs.Function(patient, "Kidneys");
         sample.LiverFunction = _organs.Function(patient, "Liver");
+        TryComp<AdvancedDiseaseComponent>(patient, out var clinical);
+        if (clinical != null)
+            sample.BloodTestConditions = clinical.Active.Keys
+                .Where(id => _prototypes.Index<AdvancedDiseasePrototype>(id).Diagnostic == ClinicalTest.Blood).ToList();
+
         if (TryComp<Content.Shared.Humanoid.HumanoidProfileComponent>(patient, out var appearance)
             && appearance.Species.Id == "Human")
         {
             var inflammation = 0f;
-            if (TryComp<AdvancedDiseaseComponent>(patient, out var clinical))
+            if (clinical != null)
                 foreach (var id in clinical.Active.Keys)
                     if (_prototypes.TryIndex<AdvancedDiseasePrototype>(id, out var disease)
                         && disease.Cause is ClinicalCause.Bacterial or ClinicalCause.Fungal or ClinicalCause.Viral or ClinicalCause.Inflammatory)
@@ -222,10 +226,11 @@ public sealed class AdvancedBloodSystem : EntitySystem
         => sample.PatientIdentity != "" && sample.CollectedAt <= _timing.CurTime
             && _timing.CurTime - sample.CollectedAt <= TimeSpan.FromMinutes(30)
             && _solutions.TryGetSolution(sample.Owner, "drink", out _, out var contents)
-            && contents.Contents.Any(reagent => reagent.Quantity > 0 && reagent.Reagent.Data?.OfType<ClinicalBloodData>().Any() == true)
-            && contents.Contents.Where(reagent => reagent.Quantity > 0).SelectMany(reagent => reagent.Reagent.Data ?? [])
-                .OfType<ClinicalBloodData>().All(data => data.PatientIdentity == sample.PatientIdentity && data.BodyFluid == sample.BodyFluid
-                    && data.BloodType == sample.BloodType)
+            && contents.Volume > 0
+            && contents.Contents.Where(reagent => reagent.Quantity > 0).All(reagent =>
+                reagent.Reagent.Data?.OfType<ClinicalBloodData>().Any() == true
+                && reagent.Reagent.Data.OfType<ClinicalBloodData>().All(data =>
+                    data.PatientIdentity == sample.PatientIdentity && data.BodyFluid == sample.BodyFluid && data.BloodType == sample.BloodType))
             && contents.Contents.SelectMany(reagent => reagent.Reagent.Data ?? []).OfType<DnaData>()
                 .Select(data => data.DNA).Distinct().Count() <= 1;
 
@@ -307,13 +312,7 @@ public sealed class AdvancedBloodSystem : EntitySystem
     private void OnSampleExamined(Entity<ClinicalBloodSampleComponent> ent, ref ExaminedEvent args)
     {
         args.PushMarkup(Loc.GetString("clinical-sample-label", ("patient", ent.Comp.PatientName),
-            ("group", BloodCompatibility.Format(ent.Comp.BodyFluid, ent.Comp.BloodType)), ("glucose", MathF.Round(ent.Comp.Glucose, 1)),
-            ("carry", MathF.Round(ent.Comp.OxygenCarryingCapacity * 100)), ("toxins", MathF.Round(ent.Comp.ToxinLoad, 1))));
+            ("time", ent.Comp.CollectedAt.ToString(@"hh\:mm\:ss"))));
         args.PushMarkup(Loc.GetString(IsFresh(ent.Comp) ? "clinical-sample-fresh" : "clinical-sample-expired"));
-        args.PushMarkup(Loc.GetString("clinical-sample-organs", ("kidneys", MathF.Round(ent.Comp.KidneyFunction * 100)),
-            ("liver", MathF.Round(ent.Comp.LiverFunction * 100))));
-        foreach (var (drug, quantity) in ent.Comp.Medications)
-            args.PushMarkup(Loc.GetString("clinical-sample-drug", ("drug", _prototypes.Index<Content.Shared.Chemistry.Reagent.ReagentPrototype>(drug).LocalizedName),
-                ("quantity", MathF.Round(quantity, 1))));
     }
 }

@@ -126,7 +126,7 @@
   inputs:
     IndustrialUpgradeModuleAssembler: 1
     IndustrialAdvancedBoard: 2
-    SheetPlasteel: 4
+    IndustrialReinforcedPanel: 2
   outputs:
     IndustrialUpgradeModuleAssemblerIndustrial: 1
 - type: industrialRecipe

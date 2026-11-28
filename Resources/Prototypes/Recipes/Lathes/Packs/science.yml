@@ -14,58 +14,24 @@
 
 - type: latheRecipePack
   id: ScienceEquipment
-  recipes:
-  - AnomalyScanner
-  - NodeScanner
-  - AnomalyLocator
-  - AnomalyLocatorWide
-  - HoloprojectorField
-  - SignallerAdvanced
-  - DeviceQuantumSpinInverter
-  - DeviceDesynchronizer
-  - ClothingBackpackHarmpack
-  - ClothingEyesHudDiagnostic # Backmen
-  - PersonalAI # Backmen
+  recipes: []
 
 - type: latheRecipePack
   id: ScienceClothing
-  recipes:
-  - ClothingShoesBootsMagSci
-  - ClothingShoesBootsMoon
-  - ClothingShoesBootsSpeed
-  - ClothingShoesBootsJump
-  - ClothingBackpackHolding
-  - ClothingBackpackSatchelHolding
-  - ClothingBackpackDuffelHolding
+  recipes: []
 
 - type: latheRecipePack
   id: PowerCells
-  recipes:
-  - PowerCellMicroreactor
-  - PowerCellHigh
-  - PowerCellHyper
+  recipes: []
 
 - type: latheRecipePack
   id: ScienceWeapons
-  recipes:
-  - WeaponPistolCHIMP
-  - WeaponForceGun
-  - WeaponProtoKineticAccelerator
-  - PKAUpgradeDamage
-  - PKAUpgradeRange
-  - PKAUpgradeFireRate
-  - WeaponTetherGun
-  - WeaponGauntletGorilla
+  recipes: []
 
 # Only contains parts for making basic modular grenades, no actual explosives
 - type: latheRecipePack
   id: ScienceExplosives
-  recipes:
-  - ChemicalPayload
-  - FlashPayload
-  - TimerTrigger
-  - SignalTrigger
-  - VoiceTrigger
+  recipes: []
 
 - type: latheRecipePack
   id: ScienceBoards

@@ -33,6 +33,7 @@ public sealed partial class IndustrialRecipePrototype : IPrototype
     /// <summary>Zero for ordinary production, one/two for controlled clean rooms.</summary>
     [DataField] public int CleanroomGrade;
     [DataField] public bool RequireDataDisk;
+    [DataField] public bool RequireSelection;
 
 
     [DataField(customTypeSerializer: typeof(PrototypeIdDictionarySerializer<int, EntityPrototype>))]

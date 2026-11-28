@@ -58,18 +58,23 @@ public sealed partial class IndustrialProcessorSystem
         if (args.SlotIndex < 0 || args.SlotIndex >= maxSlots)
             return;
         var items = container.ContainedEntities;
-
-        if (args.SlotIndex < items.Count)
+        EntityUid? item = args.SlotIndex < items.Count ? items[args.SlotIndex] : null;
+        if (args.Item != GetNetEntity(item))
         {
-            var item = items[args.SlotIndex];
+            UpdateUserInterface(ent);
+            return;
+        }
+
+        if (item is { } stored)
+        {
             if (!args.IsInput)
             {
-                EjectOutput(ent, item, actor);
+                EjectOutput(ent, stored, actor);
                 return;
             }
 
-            _container.Remove(item, container);
-            _hands.PickupOrDrop(actor, item);
+            if (_container.Remove(stored, container))
+                _hands.PickupOrDrop(actor, stored);
             UpdateUserInterface(ent);
             return;
         }
@@ -99,8 +104,9 @@ public sealed partial class IndustrialProcessorSystem
 
     private void OnRecipeSelected(Entity<IndustrialProcessorComponent> ent, ref IndustrialProcessorRecipeMessage args)
     {
-        if (args.RecipeId != null && (!PrototypeManager.TryIndex<IndustrialRecipePrototype>(args.RecipeId, out var recipe) ||
-            (ent.Comp.ProcessorType != IndustrialProcessorType.Buffer && recipe.Processor != ent.Comp.ProcessorType) || !IsRecipeAvailable(ent, recipe)))
+        if (ent.Comp.ProcessorType == IndustrialProcessorType.Buffer ||
+            args.RecipeId != null && (!PrototypeManager.TryIndex<IndustrialRecipePrototype>(args.RecipeId, out var recipe) ||
+                recipe.Processor != ent.Comp.ProcessorType || !IsRecipeAvailable(ent, recipe)))
             return;
         ent.Comp.SelectedRecipe = args.RecipeId == null ? (ProtoId<IndustrialRecipePrototype>?) null : new ProtoId<IndustrialRecipePrototype>(args.RecipeId);
         CancelCycle(ent);
@@ -110,6 +116,8 @@ public sealed partial class IndustrialProcessorSystem
 
     private void OnToggle(Entity<IndustrialProcessorComponent> ent, ref IndustrialProcessorToggleMessage args)
     {
+        if (ent.Comp.ProcessorType == IndustrialProcessorType.Buffer)
+            return;
         ent.Comp.Enabled = !ent.Comp.Enabled;
         Dirty(ent);
         if (ent.Comp.AutoStart)
@@ -207,7 +215,9 @@ public sealed partial class IndustrialProcessorSystem
             ent.Comp.MaxInputSlots,
             ent.Comp.MaxOutputSlots,
             BuildSlotStates(ent, ent.Comp.InputContainerId, ent.Comp.MaxInputSlots),
-            BuildSlotStates(ent, ent.Comp.OutputContainerId, ent.Comp.MaxOutputSlots),
+            ent.Comp.InputContainerId == ent.Comp.OutputContainerId
+                ? []
+                : BuildSlotStates(ent, ent.Comp.OutputContainerId, ent.Comp.MaxOutputSlots),
             BuildProcessingSlot(ent),
             ent.Comp.NorthFacePort,
             ent.Comp.SouthFacePort,
@@ -243,18 +253,11 @@ public sealed partial class IndustrialProcessorSystem
     {
         if (ent.Comp.RecipeCatalog != null)
             return ent.Comp.RecipeCatalog;
-        IEnumerable<IndustrialRecipePrototype> recipes;
-        if (ent.Comp.ProcessorType == IndustrialProcessorType.Buffer)
-            recipes = PrototypeManager.EnumeratePrototypes<IndustrialRecipePrototype>()
-                .Where(r => r.Outputs.Count > 0)
-                .GroupBy(r => string.Join(",", r.Outputs.Keys.OrderBy(k => k)))
-                .Select(group => group.First()).OrderBy(GetRecipeProductName);
-        else if (RecipesByProcessor.TryGetValue(ent.Comp.ProcessorType, out var typedRecipes))
-            recipes = typedRecipes;
-        else
+        if (ent.Comp.ProcessorType == IndustrialProcessorType.Buffer ||
+            !RecipesByProcessor.TryGetValue(ent.Comp.ProcessorType, out var recipes))
             return [];
         return ent.Comp.RecipeCatalog = recipes.Select(recipe => new IndustrialRecipeUiState(
-            recipe.ID, ent.Comp.ProcessorType == IndustrialProcessorType.Buffer ? GetRecipeProductName(recipe) : GetRecipeDisplayName(recipe),
+            recipe.ID, GetRecipeDisplayName(recipe),
             recipe.Time / ent.Comp.ProcessingSpeedMultiplier,
             IsRecipeAvailable(ent, recipe), RecipeSlots(recipe.Inputs), RecipeSlots(recipe.Outputs))
             {
@@ -348,7 +351,7 @@ public sealed partial class IndustrialProcessorSystem
             slots[index] = new IndustrialProcessorSlotState(
                 proto?.ID,
                 count,
-                Identity.Name(item, EntityManager));
+                Identity.Name(item, EntityManager)) { Item = GetNetEntity(item) };
             index++;
         }
 

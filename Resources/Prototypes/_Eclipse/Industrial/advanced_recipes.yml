@@ -599,7 +599,7 @@
     IndustrialBondingWire: 16
 - type: industrialRecipe
   id: IndustrialStampChipFrames
-  processor: Cutter
+  processor: StampingPress
   minimumTier: Industrial
   time: 8
   inputs:

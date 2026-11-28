@@ -25,10 +25,20 @@ public sealed partial class InstrumentSterilizationDoAfterEvent : SimpleDoAfterE
 public sealed partial class ClinicalBloodAnalyzerComponent : Component
 {
     [DataField] public float Delay = 8;
+    public DoAfterId? Analysis;
 }
 
 [Serializable, NetSerializable]
 public sealed partial class ClinicalAnalysisDoAfterEvent : SimpleDoAfterEvent;
+
+[Serializable, NetSerializable]
+public sealed partial class MedicalXRayDoAfterEvent : DoAfterEvent
+{
+    [DataField] public NetEntity Patient;
+    [DataField] public BodyPartSlot Slot;
+
+    public override DoAfterEvent Clone() => new MedicalXRayDoAfterEvent { Patient = Patient, Slot = Slot };
+}
 
 /// <summary>Completed observations, never a live view of undiscovered illness.</summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]

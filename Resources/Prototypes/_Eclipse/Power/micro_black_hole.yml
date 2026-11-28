@@ -242,6 +242,43 @@
     canBreachContainment: true
 
 - type: entity
+  id: GravityBlackHoleLure
+  parent: BaseMachinePowered
+  name: black hole lure
+  description: An anchored, powered beacon that draws an escaped black hole toward its signal.
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    sprite: Objects/Devices/singularity_beacon.rsi
+    state: icon
+  - type: SingularityAttractor
+  - type: ApcPowerReceiver
+    powerLoad: 5000
+
+- type: entity
+  id: GravityBlackHoleLureFlatpack
+  parent: BaseFlatpack
+  name: black hole lure flatpack
+  components:
+  - type: Flatpack
+    entity: GravityBlackHoleLure
+    qualityNeeded: Anchoring
+
+- type: industrialRecipe
+  id: AssembleGravityBlackHoleLure
+  processor: Assembler
+  minimumTier: Industrial
+  requiredTechnology: EnergyStabilization
+  time: 25
+  inputs:
+    SheetPlasteel: 4
+    IndustrialAdvancedBoard: 1
+    IndustrialCircuitCore: 1
+  outputs:
+    GravityBlackHoleLureFlatpack: 1
+
+- type: entity
   id: GravityStaticChargeProjector
   parent: GravityFieldDeviceBase
   name: static charge projector

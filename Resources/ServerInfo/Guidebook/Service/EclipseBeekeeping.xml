@@ -5,9 +5,12 @@
 
 <Box>
   <GuideEntityEmbed Entity="EclipseApiary"/>
+  <GuideEntityEmbed Entity="EclipseAdvancedApiary"/>
   <GuideEntityEmbed Entity="EclipseBeeSmoker"/>
   <GuideEntityEmbed Entity="EclipseBeeAnalyzer"/>
 </Box>
+
+Ставьте ульи вплотную по горизонтали, чтобы собрать их в стойку. Оставьте проход шириной в одну клетку между рядами.
 
 ## Первый цикл
 

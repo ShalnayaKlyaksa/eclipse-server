@@ -94,7 +94,7 @@
   id: Autolathe
   parent: BaseLatheLube
   name: autolathe
-  description: It produces basic items using metal and glass. Has the ability to process blueprints to print new recipes.
+  description: A retired fabricator. Departmental supplies are made on Engineering's industrial assemblers or ordered through Cargo.
   components:
   - type: Sprite
     sprite: Structures/Machines/autolathe.rsi
@@ -123,43 +123,11 @@
     runningState: building
     unlitIdleState: unlit
     unlitRunningState: unlit-building
-    staticPacks:
-    - ToolsStatic
-    - PartsStatic
-    - AtmosStatic
-    - CablesStatic
-    - PaperworkStatic
-    - TowelsStatic
-    - CargoStatic
-    - MaterialsStatic
-    - BasicChemistryStatic
-    - RollerBedsStatic
-    - LightsStatic
-    - ServiceStatic
-    - PowerCellsStatic
-    - ElectronicsStatic
-  - type: EmagLatheRecipes
-    emagStaticPacks:
-    - SecurityAmmoStatic
-    - LegionAmmoStatic
-  - type: BlueprintReceiver
-    whitelist:
-      tags:
-      - BlueprintAutolathe
-  - type: ContainerContainer
-    containers:
-      machine_board: !type:Container
-      machine_parts: !type:Container
-      blueprint: !type:Container
-  - type: EmptyOnMachineDeconstruct
-    containers:
-    - blueprint
 
 - type: entity
   id: AutolatheHyperConvection
   parent: [Autolathe, BaseHyperlathe]
   name: hyper convection autolathe
-  description: A highly-experimental autolathe that harnesses the power of extreme heat to slowly create objects more cost-effectively.
   components:
   - type: Sprite
     sprite: Structures/Machines/autolathe_hypercon.rsi
@@ -170,7 +138,7 @@
   id: Protolathe
   parent: BaseLatheLube
   name: protolathe
-  description: Converts raw materials into advanced items.
+  description: A retired fabricator. Departmental supplies are made on Engineering's industrial assemblers or ordered through Cargo.
   components:
   - type: Sprite
     sprite: Structures/Machines/protolathe.rsi
@@ -195,35 +163,11 @@
     runningState: building
     unlitIdleState: unlit
     unlitRunningState: unlit-building
-    staticPacks:
-    - ChemistryStatic
-    - SurgeryStatic
-    dynamicPacks:
-    - AdvancedTools
-    - ScienceEquipment
-    - ScienceExplosives
-    - ScienceClothing
-    - PowerCells
-    - ScienceWeapons
-    - Mining
-    - AtmosTools
-    - EngineeringWeapons
-    - Chemistry
-    - Janitor
-    - Instruments
-    - Equipment
-  - type: EmagLatheRecipes
-    emagDynamicPacks:
-    - SecurityAmmo
-    - SecurityExplosives
-    - SecurityEquipment
-    - SecurityWeapons
 
 - type: entity
   id: ProtolatheHyperConvection
   parent: [Protolathe, BaseHyperlathe]
   name: hyper convection protolathe
-  description: A highly-experimental protolathe that harnesses the power of extreme heat to slowly create objects more cost-effectively.
   components:
   - type: Sprite
     sprite: Structures/Machines/protolathe_hypercon.rsi
@@ -415,7 +359,7 @@
   id: AmmoTechFab
   parent: BaseLatheLube
   name: ammo techfab
-  description: Prints the bare minimum of bullets that any budget military or armory could need. Nothing fancy.
+  description: A retired ammunition fabricator. Replacement ammunition is made on Engineering's industrial assemblers or ordered through Cargo.
   components:
     - type: Sprite
       sprite: Structures/Machines/techfab.rsi

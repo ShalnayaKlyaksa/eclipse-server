@@ -155,6 +155,11 @@ internal sealed class TreatmentMinigameControl : Control
     {
         base.MouseExited();
         _pointerInside = false;
+    }
+
+    protected override void ControlFocusExited()
+    {
+        base.ControlFocusExited();
         State.CancelGrip();
     }
 
@@ -470,8 +475,17 @@ internal sealed class TreatmentMinigameControl : Control
             }
         }
         var index = Math.Min(State.Stitch, TreatmentMinigameState.StitchCount - 1);
+        var entry = State.StitchPoint(index, false);
         var exit = State.StitchPoint(index, true);
         var tip = State.NeedlePosition;
+        if (State.SuturePhase is StitchPhase.Position or StitchPhase.Pass)
+        {
+            Ring(h, entry, 10, Accent, 1.5f);
+            for (var i = 0; i < 12; i++)
+                Line(h, State.NeedlePath(index, i / 12f), State.NeedlePath(index, (i + 1) / 12f),
+                    Accent.WithAlpha(0.45f), 2);
+            Ring(h, exit, 7, Accent, 1.5f);
+        }
         if (State.SuturePhase != StitchPhase.Position)
         {
             var start = State.SuturePhase == StitchPhase.Pass ? State.StitchPoint(index, false) : exit;
@@ -485,6 +499,11 @@ internal sealed class TreatmentMinigameControl : Control
                 Line(h, last, point, color, 1.5f);
                 last = point;
             }
+        }
+        if (State.SuturePhase == StitchPhase.Tension)
+        {
+            var color = State.ThreadTension is >= 0.88f and <= 1.12f ? Accent : Muted;
+            Ring(h, exit, 88, color.WithAlpha(0.55f), 1.5f);
         }
         if (State.SuturePhase == StitchPhase.Knot)
         {
@@ -509,7 +528,8 @@ internal sealed class TreatmentMinigameControl : Control
             Line(h, centreNeedle + new Vector2(MathF.Cos(a), MathF.Sin(a)) * 17,
                 centreNeedle + new Vector2(MathF.Cos(b), MathF.Sin(b)) * 17, Steel, 2);
         }
-        DrawHand(h, tip + new Vector2(24, 18), State.Engaged);
+        if (_pointerInside || State.Engaged)
+            DrawHand(h, State.Cursor, State.Engaged);
     }
 
     private void DrawSplint(DrawingHandleScreen h)

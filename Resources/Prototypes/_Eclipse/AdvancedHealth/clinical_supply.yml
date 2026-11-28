@@ -13,8 +13,8 @@
           amount: 2
         - id: AdvancedBloodTestKit
           amount: 4
-        - id: AdvancedClinicalBloodAnalyzer
-        - id: AdvancedPortableXRay
+        - id: AdvancedClinicalBloodAnalyzerFlatpack
+        - id: MedicalScannerMachineCircuitboard
         - id: AdvancedElectrocardiograph
         - id: AdvancedInstrumentSterilizationKit
           amount: 8

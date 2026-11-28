@@ -1,6 +1,13 @@
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
 using Content.Server._Eclipse.AdvancedHealth;
+using Content.Server.Medical;
+using Content.Server.Medical.Components;
+using Content.Server.Power.Components;
+using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.Item;
+using Content.Shared.Power;
+using Robust.Shared.Map;
 using Content.Shared._Eclipse.AdvancedHealth;
 using Content.Shared._Eclipse.Industrial;
 using Content.Shared.Hands.EntitySystems;
@@ -17,33 +24,36 @@ public sealed class SurgicalDiagnosticsTests : GameTest
 
     [TestCase(false)]
     [TestCase(true)]
-    public async Task XRayRequiresCompletionWithTheHeldScannerAndKeepsItsOriginalRegion(bool cancel)
+    public async Task XRayRequiresAnOccupiedPoweredScannerAndKeepsItsOriginalRegion(bool cancel)
     {
         var map = await Pair.CreateTestMap();
         EntityUid doctor = default, patient = default, scanner = default;
         await Server.WaitAssertion(() =>
         {
-            doctor = SEntMan.SpawnEntity("MobHuman", map.MapCoords);
-            patient = SEntMan.SpawnEntity("MobHuman", map.MapCoords);
-            scanner = SEntMan.SpawnEntity("AdvancedPortableXRay", map.MapCoords);
-            SEntMan.GetComponent<AdvancedTreatmentComponent>(scanner).Delay = 0.1f;
-            SEntMan.EnsureComponent<AimTargetComponent>(doctor).CurrentTarget = BodyPartTarget.LeftForearm;
-            Assert.That(SEntMan.System<SharedHandsSystem>().TryPickupAnyHand(doctor, scanner), Is.True);
-            var interaction = new AfterInteractEvent(doctor, scanner, patient,
-                SEntMan.GetComponent<TransformComponent>(patient).Coordinates, true);
-            SEntMan.EventBus.RaiseLocalEvent(scanner, interaction);
-            Assert.That(interaction.Handled, Is.True);
+            doctor = SEntMan.SpawnEntity("MobHuman", map.GridCoords);
+            patient = SEntMan.SpawnEntity("MobHuman", map.GridCoords);
+            scanner = SEntMan.SpawnEntity("MedicalScanner", map.GridCoords);
+            var component = SEntMan.GetComponent<MedicalScannerComponent>(scanner);
+            var diagnostics = SEntMan.System<MedicalDiagnosticsSystem>();
+            Assert.That(diagnostics.TryStartXRay((scanner, component), doctor, patient, BodyPartSlot.LeftForearm), Is.False);
+            SEntMan.System<MedicalScannerSystem>().InsertBody(scanner, patient, component);
+            var power = SEntMan.GetComponent<ApcPowerReceiverComponent>(scanner);
+            power.NeedsPower = false;
+            power.Powered = true;
+            Assert.That(diagnostics.TryStartXRay((scanner, component), doctor, patient, BodyPartSlot.LeftForearm), Is.True);
             Assert.That(SEntMan.HasComponent<MedicalDiagnosticHistoryComponent>(patient), Is.False);
             SEntMan.GetComponent<AimTargetComponent>(doctor).CurrentTarget = BodyPartTarget.RightForearm;
-            if (cancel) Assert.That(SEntMan.System<SharedHandsSystem>().TryDrop(doctor, scanner), Is.True);
+            if (cancel)
+                SEntMan.System<MedicalScannerSystem>().EjectBody(scanner, component);
         });
-        await Pair.RunTicksSync(25);
+        await Pair.RunTicksSync(480);
         await Server.WaitAssertion(() =>
         {
             Assert.That(SEntMan.HasComponent<MedicalDiagnosticHistoryComponent>(patient), Is.EqualTo(!cancel));
             if (!cancel)
                 Assert.That(SEntMan.GetComponent<MedicalDiagnosticHistoryComponent>(patient).Reports.Single().Slot,
                     Is.EqualTo(BodyPartSlot.LeftForearm));
+            Assert.That(SEntMan.GetComponent<AdvancedHealthComponent>(patient).RadiationLoad, Is.EqualTo(cancel ? 0 : 0.5f));
             Assert.That(SEntMan.Deleted(scanner), Is.False);
             SEntMan.DeleteEntity(map.MapUid);
         });
@@ -74,6 +84,64 @@ public sealed class SurgicalDiagnosticsTests : GameTest
     }
 
     [Test]
+    public async Task StationaryAnalyzerRequiresPowerAndAHeldTube()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid doctor = default, patient = default, tube = default, analyzer = default;
+
+        void UseAnalyzer(bool handled = true)
+        {
+            var interaction = new InteractUsingEvent(doctor, tube, analyzer, map.GridCoords);
+            SEntMan.EventBus.RaiseLocalEvent(analyzer, interaction);
+            Assert.That(interaction.Handled, Is.EqualTo(handled));
+        }
+
+        await Server.WaitAssertion(() =>
+        {
+            doctor = SEntMan.SpawnEntity("MobHuman", new EntityCoordinates(map.Grid, -0.8f, 0.5f));
+            patient = SEntMan.SpawnEntity("MobHuman", new EntityCoordinates(map.Grid, -1.5f, 0.5f));
+            analyzer = SEntMan.SpawnEntity("AdvancedClinicalBloodAnalyzer", map.GridCoords);
+            tube = SEntMan.System<AdvancedBloodSystem>().Sample(patient)!.Value;
+            var machine = SEntMan.GetComponent<ClinicalBloodAnalyzerComponent>(analyzer);
+            machine.Delay = 0.15f;
+            Assert.That(SEntMan.GetComponent<TransformComponent>(analyzer).Anchored, Is.True);
+            Assert.That(SEntMan.HasComponent<ItemComponent>(analyzer), Is.False);
+            UseAnalyzer(handled: false);
+
+            Assert.That(SEntMan.System<SharedHandsSystem>().TryPickupAnyHand(doctor, tube), Is.True);
+            var power = SEntMan.GetComponent<ApcPowerReceiverComponent>(analyzer);
+            power.NeedsPower = false;
+            power.Powered = false;
+            UseAnalyzer();
+            Assert.That(machine.Analysis, Is.Null);
+
+            power.Powered = true;
+            UseAnalyzer();
+            Assert.That(machine.Analysis, Is.Not.Null);
+            power.Powered = false;
+            var outage = new PowerChangedEvent(false, 0);
+            SEntMan.EventBus.RaiseLocalEvent(analyzer, ref outage);
+        });
+
+        await Pair.RunTicksSync(25);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.HasComponent<MedicalDiagnosticHistoryComponent>(patient), Is.False);
+            SEntMan.GetComponent<ApcPowerReceiverComponent>(analyzer).Powered = true;
+            UseAnalyzer();
+        });
+
+        await Pair.RunTicksSync(25);
+        await Server.WaitAssertion(() =>
+        {
+            var report = SEntMan.GetComponent<MedicalDiagnosticHistoryComponent>(patient).Reports.Single();
+            Assert.That(report.Kind, Is.EqualTo(MedicalDiagnosticKind.Blood));
+            Assert.That(SEntMan.System<SharedHandsSystem>().IsHolding(doctor, tube), Is.True);
+            SEntMan.DeleteEntity(map.MapUid);
+        });
+    }
+
+    [Test]
     public async Task BloodAnalysisUsesThePhysicalSampleSnapshotAndRejectsAnExpiredTube()
     {
         var map = await Pair.CreateTestMap();
@@ -84,21 +152,38 @@ public sealed class SurgicalDiagnosticsTests : GameTest
             health.BloodGlucose = 12;
             health.OxygenCarryingCapacity = 0.5f;
             SEntMan.System<AdvancedDiseaseSystem>().ApplyCondition(patient, "ClinicalBacterialPneumonia", 0.8f);
+            SEntMan.System<AdvancedDiseaseSystem>().ApplyCondition(patient, "ClinicalHepatitis", 0.8f);
             var tube = SEntMan.System<AdvancedBloodSystem>().Sample(patient)!.Value;
+            var diseases = SEntMan.GetComponent<AdvancedDiseaseComponent>(patient);
+            Assert.That(diseases.Known, Is.Empty);
+            SEntMan.System<AdvancedDiseaseSystem>().ApplyCondition(patient, "ClinicalSepsis", 0.8f);
             health.BloodGlucose = 4;
             health.OxygenCarryingCapacity = 1;
             var diagnostics = SEntMan.System<MedicalDiagnosticsSystem>();
             Assert.That(diagnostics.AnalyzeSample(tube), Is.True);
             var report = SEntMan.GetComponent<MedicalDiagnosticHistoryComponent>(patient).Reports.Single();
+            Assert.That(diseases.Known.ContainsKey("ClinicalHepatitis"), Is.True);
+            Assert.That(diseases.Known.ContainsKey("ClinicalSepsis"), Is.False);
             Assert.That(report.Readings["glucose"], Is.EqualTo(12), "Old blood cannot show live glucose.");
             Assert.That(report.Readings["hemoglobin"], Is.EqualTo(75), "Cellular markers must preserve the sampled oxygen-carrying state.");
-            Assert.That(report.Readings.Count, Is.EqualTo(20));
+            Assert.That(report.Readings["mcv"], Is.EqualTo(90).Within(0.01));
+            Assert.That(report.Readings["mch"], Is.EqualTo(30).Within(0.01));
+            Assert.That(report.Readings["mchc"], Is.EqualTo(333.33).Within(0.01));
+            Assert.That(report.Readings.ContainsKey("kidneys"), Is.False);
             Assert.That(report.Readings["leukocytes"], Is.GreaterThan(11), "Inflammatory markers must react to the sampled disease state.");
             Assert.That(report.PatientIdentity, Is.EqualTo(health.MedicalIdentity));
             var paper = SEntMan.EntityQuery<PaperComponent>().Single();
             Assert.That(paper.Content, Does.Contain("12"));
+            Assert.That(paper.Content, Does.Contain("↑"));
             var sample = SEntMan.GetComponent<ClinicalBloodSampleComponent>(tube);
+            var collectedAt = sample.CollectedAt;
             sample.CollectedAt = Server.ResolveDependency<IGameTiming>().CurTime - TimeSpan.FromMinutes(31);
+            Assert.That(diagnostics.AnalyzeSample(tube), Is.False);
+
+            sample.CollectedAt = collectedAt;
+            var solutions = SEntMan.System<SharedSolutionContainerSystem>();
+            Assert.That(solutions.TryGetSolution(tube, "drink", out var contents, out _), Is.True);
+            Assert.That(solutions.TryAddReagent(contents!.Value, "Water", 1), Is.True);
             Assert.That(diagnostics.AnalyzeSample(tube), Is.False);
             SEntMan.DeleteEntity(map.MapUid);
         });

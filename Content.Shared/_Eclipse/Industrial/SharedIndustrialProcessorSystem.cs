@@ -299,6 +299,12 @@ public abstract partial class SharedIndustrialProcessorSystem : EntitySystem
             ("mode", GetFacePortName(ent.Comp.WestFacePort))));
 
         var inputCount = GetContainerCount(ent, ent.Comp.InputContainerId);
+        if (ent.Comp.ProcessorType == IndustrialProcessorType.Buffer)
+        {
+            args.PushMarkup(Loc.GetString("industrial-examine-storage", ("count", inputCount), ("max", ent.Comp.MaxInputSlots)));
+            return;
+        }
+
         var outputCount = GetContainerCount(ent, ent.Comp.OutputContainerId);
         args.PushMarkup(Loc.GetString("industrial-examine-input-buffer",
             ("count", inputCount), ("max", ent.Comp.MaxInputSlots)));
@@ -328,7 +334,7 @@ public abstract partial class SharedIndustrialProcessorSystem : EntitySystem
 
     private void OnPowerChanged(Entity<IndustrialProcessorComponent> ent, ref PowerChangedEvent args)
     {
-        if (!args.Powered)
+        if (!args.Powered && ent.Comp.ProcessorType != IndustrialProcessorType.Buffer)
             _popup.PopupEntity(Loc.GetString("industrial-processor-no-power"), ent);
 
         UpdateAppearance(ent);
@@ -419,6 +425,8 @@ public abstract partial class SharedIndustrialProcessorSystem : EntitySystem
 
     protected bool IsEnvironmentBlocked(Entity<IndustrialProcessorComponent> ent)
     {
+        if (ent.Comp.ProcessorType == IndustrialProcessorType.Buffer)
+            return false;
         if ((ent.Comp.CurrentRecipe ?? ent.Comp.SelectedRecipe) is { } id && PrototypeManager.TryIndex(id, out IndustrialRecipePrototype? recipe))
             return !HasProcessEnvironment(ent, recipe);
         return TryMatchRecipe(ent, out var matched) && matched != null && !HasProcessEnvironment(ent, matched);
@@ -456,14 +464,8 @@ public abstract partial class SharedIndustrialProcessorSystem : EntitySystem
     public bool CanAcceptInputProto(Entity<IndustrialProcessorComponent> ent, string protoId)
     {
         if (ent.Comp.ProcessorType == IndustrialProcessorType.Buffer)
-        {
-            if (!PrototypeManager.TryIndex<EntityPrototype>(protoId, out var proto) ||
-                !proto.TryGetComponent<Content.Shared.Item.ItemComponent>(out _, EntityManager.ComponentFactory))
-                return false;
-            return ent.Comp.SelectedRecipe is not { } filter ||
-                   PrototypeManager.TryIndex(filter, out IndustrialRecipePrototype? filtered) &&
-                   filtered.Outputs.Keys.Any(id => Resources.Key(id) == Resources.Key(protoId));
-        }
+            return PrototypeManager.TryIndex<EntityPrototype>(protoId, out var proto) &&
+                   proto.TryGetComponent<Content.Shared.Item.ItemComponent>(out _, EntityManager.ComponentFactory);
         if (!RecipesByProcessor.TryGetValue(ent.Comp.ProcessorType, out var recipes))
             return false;
         foreach (var recipe in recipes)
@@ -522,7 +524,8 @@ public abstract partial class SharedIndustrialProcessorSystem : EntitySystem
     {
         recipe = null;
 
-        if (!RecipesByProcessor.TryGetValue(ent.Comp.ProcessorType, out var recipes))
+        if (ent.Comp.ProcessorType == IndustrialProcessorType.Buffer ||
+            !RecipesByProcessor.TryGetValue(ent.Comp.ProcessorType, out var recipes))
             return false;
 
         if (!_container.TryGetContainer(ent, ent.Comp.InputContainerId, out var input))
@@ -530,7 +533,7 @@ public abstract partial class SharedIndustrialProcessorSystem : EntitySystem
 
         foreach (var candidate in recipes)
         {
-            if (ent.Comp.SelectedRecipe is { } selected && candidate.ID != selected.Id)
+            if (ent.Comp.SelectedRecipe is { } selected ? candidate.ID != selected.Id : candidate.RequireSelection)
                 continue;
             if (!IsRecipeAvailable(ent, candidate) || !Resources.CanAfford(input.ContainedEntities, candidate.Inputs) ||
                 !HasFluidIngredients(ent, candidate))
@@ -543,8 +546,6 @@ public abstract partial class SharedIndustrialProcessorSystem : EntitySystem
 
     protected bool IsRecipeAvailable(Entity<IndustrialProcessorComponent> ent, IndustrialRecipePrototype recipe)
     {
-        if (ent.Comp.ProcessorType == IndustrialProcessorType.Buffer)
-            return true;
         if (recipe.MinimumTier > ent.Comp.Tier)
             return false;
         if (recipe.RequiredTechnology is not { } technology)

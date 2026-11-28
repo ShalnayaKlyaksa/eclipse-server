@@ -23,6 +23,7 @@
   - type: Paper
     editingDisabled: true
   - type: PaperVisuals
+    headerImagePath: "/Textures/Interface/Paper/paper_heading_eidos_empire.png"
     footerImagePath: "/Textures/Interface/Paper/AcquisitionSlips/barcode.svg.192dpi.png"
     maxWritableArea: 512.0, 512.0
 
@@ -42,8 +43,6 @@
     - state: paper_stamp-generic
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
-  - type: PaperVisuals
-    headerImagePath: "/Textures/Interface/Paper/AcquisitionSlips/medical.svg.192dpi.png"
 
 - type: entity
   parent: PaperAcquisitionSlip
@@ -61,8 +60,6 @@
     - state: paper_stamp-generic
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
-  - type: PaperVisuals
-    headerImagePath: "/Textures/Interface/Paper/AcquisitionSlips/science.svg.192dpi.png"
 
 - type: entity
   parent: PaperAcquisitionSlip
@@ -80,8 +77,6 @@
     - state: paper_stamp-generic
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
-  - type: PaperVisuals
-    headerImagePath: "/Textures/Interface/Paper/AcquisitionSlips/security.svg.192dpi.png"
 
 - type: entity
   parent: PaperAcquisitionSlip
@@ -99,8 +94,6 @@
     - state: paper_stamp-generic
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
-  - type: PaperVisuals
-    headerImagePath: "/Textures/Interface/Paper/AcquisitionSlips/service.svg.192dpi.png"
 
 - type: entity
   parent: PaperAcquisitionSlip
@@ -118,8 +111,6 @@
     - state: paper_stamp-generic
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
-  - type: PaperVisuals
-    headerImagePath: "/Textures/Interface/Paper/AcquisitionSlips/cargo.svg.192dpi.png"
 
 - type: entity
   parent: PaperAcquisitionSlip
@@ -137,5 +128,3 @@
     - state: paper_stamp-generic
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
-  - type: PaperVisuals
-    headerImagePath: "/Textures/Interface/Paper/AcquisitionSlips/engineering.svg.192dpi.png"

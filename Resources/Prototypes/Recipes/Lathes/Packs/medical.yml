@@ -9,33 +9,16 @@
 
 - type: latheRecipePack
   id: BasicChemistryStatic
-  recipes:
-  - Beaker
-  - LargeBeaker
-  - Syringe
-  - PillCanister
-  - HandLabeler
-  - ChemistryEmptyVial
-  - ChemistryEmptyVialSmall
-  - Dropper
+  recipes: []
 
 - type: latheRecipePack
   parent: BasicChemistryStatic
   id: ChemistryStatic
-  recipes:
-  - Jug
-  - ChemistryEmptyBottle01
-  - ClothingEyesGlassesChemical
+  recipes: []
 
 - type: latheRecipePack
   id: SurgeryStatic
-  recipes:
-  - Scalpel
-  - Retractor
-  - Cautery
-  - Drill
-  - Saw
-  - Hemostat
+  recipes: []
 
 - type: latheRecipePack
   id: MedicalStatic
@@ -52,10 +35,7 @@
 
 - type: latheRecipePack
   id: RollerBedsStatic
-  recipes:
-  - RollerBedSpawnFolded
-  - CheapRollerBedSpawnFolded
-  - EmergencyRollerBedSpawnFolded
+  recipes: []
 
 - type: latheRecipePack
   id: MedicalClothingStatic
@@ -92,15 +72,7 @@
 # Shared with protolathe
 - type: latheRecipePack
   id: Chemistry
-  recipes:
-  - ChemicalPayload
-  - CryostasisBeaker
-  - SyringeCryostasis
-  - BluespaceBeaker
-  - SyringeBluespace
-  - LauncherSyringe
-  - MiniSyringe
-  - AdvancedJetInjector
+  recipes: []
 
 - type: latheRecipePack
   id: MedicalBoards

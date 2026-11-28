@@ -31,5 +31,8 @@ namespace Content.Server.Power.Components
         /// </summary>
         [DataField]
         public bool OverTile;
+
+        [DataField]
+        public bool IndustrialPipe;
     }
 }

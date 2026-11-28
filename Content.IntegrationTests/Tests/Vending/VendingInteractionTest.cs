@@ -1,4 +1,7 @@
 using System.Linq;
+using System.Numerics;
+using Content.Client.UserInterface.Controls;
+using Content.Client.VendingMachines.UI;
 using Content.IntegrationTests.Tests.Interaction;
 using Content.Server.VendingMachines;
 using Content.Shared.Damage;
@@ -8,6 +11,8 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.VendingMachines;
 using Robust.Shared.Prototypes;
+using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Maths;
 
 namespace Content.IntegrationTests.Tests.Vending;
 
@@ -65,6 +70,41 @@ public sealed class VendingInteractionTest : InteractionTest
   - type: Sprite
     sprite: error.rsi
 ";
+
+    [Test]
+    public async Task StockChangedWhileFilteredIsShownWhenRowsReturn()
+    {
+        await Client.WaitAssertion(() =>
+        {
+            using var menu = new VendingMachineMenu();
+            var search = menu.FindControl<LineEdit>("SearchBar");
+            var rows = menu.FindControl<SearchListContainer>("VendingContents");
+            var size = new Vector2(400, 320);
+            VendingMachineInventoryEntry[] Stock(uint regular, uint contraband) =>
+                [new(InventoryType.Regular, VendedItemProtoId, regular),
+                 new(InventoryType.Contraband, VendedItemProtoId, contraband)];
+
+            menu.Populate(Stock(5, 6).ToList(), true);
+            search.SetText("No matching entry", invokeEvent: true);
+            menu.UpdateAmounts(Stock(0, 2).ToList(), true);
+            search.SetText("", invokeEvent: true);
+            menu.Measure(size);
+            menu.Arrange(new UIBox2(Vector2.Zero, size));
+
+            var buttons = rows.Children.OfType<ListContainerButton>().ToArray();
+            Assert.That(buttons.Length, Is.EqualTo(2));
+            Assert.That(buttons[0].Disabled, Is.True);
+            Assert.That(buttons[1].Disabled, Is.False);
+            var label = buttons[1].Children.OfType<VendingMachineItem>().Single().Children.OfType<Label>().Single();
+            Assert.That(label.Text, Does.EndWith("[2]"));
+
+            menu.Populate([], false);
+            Assert.That(rows.Visible, Is.False);
+            menu.UpdateAmounts(Stock(3, 2).ToList(), true);
+            Assert.That(rows.Visible, Is.True);
+            Assert.That(menu.FindControl<Label>("OutOfStockLabel").Visible, Is.False);
+        });
+    }
 
     [Test]
     public async Task InteractUITest()

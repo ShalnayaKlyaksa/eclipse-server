@@ -10,6 +10,14 @@ namespace Content.Server.Atmos.Components
         public (EntityUid Grid, Vector2i Tile) LastPosition { get; set; }
 
         /// <summary>
+        /// Additional tile offsets relative to the anchored tile, in the entity's local rotation.
+        /// </summary>
+        [DataField]
+        public Vector2i[] AdditionalTiles = [];
+
+        public List<(EntityUid Grid, Vector2i Tile)>? IndexedTiles;
+
+        /// <summary>
         /// The directions in which this entity should block airflow, relative to its own reference frame.
         /// </summary>
         [DataField("airBlockedDirection", customTypeSerializer: typeof(FlagSerializer<AtmosDirectionFlags>))]

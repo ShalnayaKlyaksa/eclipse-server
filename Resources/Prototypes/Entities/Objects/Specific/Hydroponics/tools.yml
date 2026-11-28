@@ -2,8 +2,9 @@
   name: mini hoe
   parent: BaseItem
   id: HydroponicsToolMiniHoe
-  description: It's used for removing weeds or scratching your back.
+  description: Use it to make a garden bed on dirt or a lawn, or to clear weeds from plants.
   components:
+  - type: SoilTillingTool
   - type: Tag
     tags:
     - Hoe

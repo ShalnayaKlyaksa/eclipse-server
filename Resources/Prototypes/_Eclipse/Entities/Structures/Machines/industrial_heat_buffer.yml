@@ -1,23 +1,29 @@
-# Heat exchange buffer — plasma inlet/outlet (TEG-style atmos pipes) and heat distribution.
+# The plasma circuit and the solid heat distribution network use separate nodes.
 
 - type: entity
   parent: BaseMachine
   id: IndustrialHeatBuffer
   name: heat exchange buffer
-  description: Stores thermal energy from flowing plasma and supplies heat to adjacent industrial machines with heat-input ports.
+  description: Exchanges heat with a plasma circuit and supplies industrial equipment through heat pipes or direct contact.
   placement:
     mode: SnapgridCenter
   components:
   - type: Transform
     anchored: false
-    noRot: false
   - type: Physics
     bodyType: Dynamic
   - type: Sprite
     sprite: _Eclipse/Structures/Machines/industrial_heat_buffer.rsi
+    noRot: true
     layers:
     - state: icon
       map: ["enum.IndustrialHeatBufferVisualLayers.Light"]
+    - sprite: Structures/Piping/Atmospherics/pipe.rsi
+      state: pipeConnector
+      rotation: 90
+    - sprite: Structures/Piping/Atmospherics/pipe.rsi
+      state: pipeConnector
+      rotation: -90
   - type: Icon
     sprite: _Eclipse/Structures/Machines/industrial_heat_buffer.rsi
     state: icon
@@ -30,8 +36,8 @@
           False: { state: icon }
   - type: Anchorable
   - type: Pullable
-  - type: Rotatable
   - type: AtmosDevice
+  - type: AtmosPipeLayers
   - type: AtmosUnsafeUnanchor
   - type: PipeRestrictOverlap
   - type: NodeContainer
@@ -40,13 +46,16 @@
       inlet:
         !type:PipeNode
         nodeGroupID: Pipe
-        pipeDirection: North
+        pipeDirection: West
         volume: 100
       outlet:
         !type:PipeNode
         nodeGroupID: Pipe
-        pipeDirection: South
+        pipeDirection: East
         volume: 100
+      heat:
+        !type:AdjacentNode
+        nodeGroupID: IndustrialHeat
   - type: IndustrialHeatBuffer
     operatingTemperature: 1200
     minPlasmaMoles: 0.25
@@ -61,4 +70,4 @@
     color: "#FF6600"
   - type: GuideHelp
     guides:
-    - TEG
+    - EclipseIndustrialPower

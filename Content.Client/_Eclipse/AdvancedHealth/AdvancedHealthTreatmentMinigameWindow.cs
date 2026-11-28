@@ -10,6 +10,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Timing;
 using Robust.Client.Player;
+using Robust.Shared.Utility;
 
 namespace Content.Client._Eclipse.AdvancedHealth;
 
@@ -25,6 +26,8 @@ public sealed class AdvancedHealthTreatmentMinigameWindow : BaseWindow
     private readonly EntityUid? _tool;
     private readonly bool _isBandage;
     private readonly TreatmentMinigameControl _game;
+    private readonly RichTextLabel? _sutureHint;
+    private string? _lastSutureHint;
     private bool _bandageApplied;
     private int _injectionId;
     private bool _injectionStopped;
@@ -121,6 +124,12 @@ public sealed class AdvancedHealthTreatmentMinigameWindow : BaseWindow
             VerticalExpand = true,
         };
         root.AddChild(_game);
+        if (mode == AdvancedTreatmentType.Suture)
+        {
+            _sutureHint = new RichTextLabel { Margin = new Thickness(14, 4, 14, 8), HorizontalExpand = true };
+            root.AddChild(_sutureHint);
+            UpdateSutureHint();
+        }
         _game.OnInjury += severity =>
         {
             if (IoCManager.Resolve<IPlayerManager>().LocalEntity != null)
@@ -161,6 +170,7 @@ public sealed class AdvancedHealthTreatmentMinigameWindow : BaseWindow
     protected override void FrameUpdate(FrameEventArgs args)
     {
         base.FrameUpdate(args);
+        UpdateSutureHint();
         var entities = IoCManager.Resolve<IEntityManager>();
         var medic = IoCManager.Resolve<IPlayerManager>().LocalEntity;
         if (entities.TryGetComponent<AdvancedHealthComponent>(_target, out var patient)
@@ -189,6 +199,26 @@ public sealed class AdvancedHealthTreatmentMinigameWindow : BaseWindow
             && entities.System<SharedSolutionContainerSystem>().TryGetSolution(tool, injector.SolutionName, out _, out var contents))
             _game.SetInjectionAmount(_hasInjectionStatus ? _game.State.InjectedVolume : 0,
                 _hasInjectionStatus ? _game.State.RemainingVolume : contents.Volume.Float(), contents.MaxVolume.Float());
+    }
+
+    private void UpdateSutureHint()
+    {
+        if (_sutureHint == null)
+            return;
+
+        var hint = _game.State.SuturePhase switch
+        {
+            StitchPhase.Pass => "advanced-health-suture-pass",
+            StitchPhase.Tension => "advanced-health-suture-tension",
+            StitchPhase.Knot when _game.State.KnotTied => "advanced-health-suture-release",
+            StitchPhase.Knot => "advanced-health-suture-knot",
+            _ => "advanced-health-minigame-hint-suture",
+        };
+        if (hint == _lastSutureHint)
+            return;
+
+        _lastSutureHint = hint;
+        _sutureHint.SetMessage(FormattedMessage.FromUnformatted(Loc.GetString(hint)), Muted);
     }
 
     public override void Close()

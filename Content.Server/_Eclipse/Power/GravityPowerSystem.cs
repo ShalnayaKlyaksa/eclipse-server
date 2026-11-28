@@ -88,7 +88,7 @@ public sealed partial class GravityPowerSystem : EntitySystem
                     var source = _sources[i];
                     if (source.Source.AvailablePower <= 0 || source.Transform.GridUid != xform.GridUid) continue;
                     var distance = Vector2.Distance(position, source.Position);
-                    var horizon = Horizon(source.Source.Mass);
+                    var horizon = ActiveHorizon(source.Source.Mass);
                     if (distance <= horizon || distance < source.Source.MinimumHarvestRange ||
                         distance - horizon > source.Source.HarvestRange)
                         continue;

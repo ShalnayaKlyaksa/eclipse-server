@@ -418,14 +418,28 @@
         Quantity: 4
 - type: Tag
   id: CocktailGarnish
+
+- type: entity
+  parent: hydroponicsSoil
+  id: GardenIrrigatedSoil
+  name: irrigated garden bed
+  description: A soil bed that shares moisture with other irrigated beds placed side by side.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Botany/irrigated_bed.rsi
+    state: bed
+  - type: IrrigatedSoil
+  - type: PlantHolder
+    waterLevel: 0
+
 - type: entity
   parent: BaseFlatpack
   id: GardenSoilBag
   name: garden soil bag
-  description: Unpack on a free tile to make a ready-to-plant soil bed.
+  description: Unpack on a clear floor with a wrench to make an irrigated garden bed.
   components:
   - type: Flatpack
-    entity: hydroponicsSoil
+    entity: GardenIrrigatedSoil
     qualityNeeded: Anchoring
   - type: StaticPrice
     price: 15

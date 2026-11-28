@@ -87,6 +87,7 @@ public sealed partial class Wound
     [DataField] public float InfectionRisk;
     [DataField] public bool IsDirty;
     [DataField] public bool IsBandaged;
+    [DataField] public float BandageBleedingReduction;
     [DataField] public bool IsSutured;
     [DataField] public bool HasForeignBody;
     [DataField] public ForeignBodyKind ForeignBody;
@@ -96,6 +97,20 @@ public sealed partial class Wound
     [DataField] public float HealingProgress;
     /// <summary>How many hits were folded into this wound entry (for UI and network size).</summary>
     [DataField] public byte StackCount = 1;
+
+    public void ApplyBandage(float reduction)
+    {
+        ExternalBleedingRate -= reduction;
+        BandageBleedingReduction += reduction;
+        IsBandaged = true;
+    }
+
+    public void RemoveBandage()
+    {
+        ExternalBleedingRate += BandageBleedingReduction;
+        BandageBleedingReduction = 0;
+        IsBandaged = false;
+    }
 }
 
 [DataDefinition, Serializable, NetSerializable]
@@ -170,6 +185,30 @@ public sealed partial class BodyPartState
     /// <summary>Only confirmed indications are exposed; hidden diagnoses remain server-side.</summary>
     [DataField] public HashSet<AdvancedTreatmentType> ClinicalProcedures = new();
     [DataField] public float DirtyExposure;
+    [DataField] public float BandageExposure;
+    [DataField] public bool IsBandageDirty;
+
+    public bool HasBandage => Wounds.Any(wound => wound.IsBandaged);
+
+    public void RefreshBandageState()
+    {
+        IsBandaged = HasBandage;
+        if (IsBandaged)
+            return;
+
+        BandageExposure = 0;
+        IsBandageDirty = false;
+    }
+
+    public void ContaminateBandage()
+    {
+        IsBandageDirty = true;
+        foreach (var wound in Wounds.Where(wound => wound.IsBandaged))
+        {
+            wound.IsDirty = true;
+            wound.InfectionRisk = Math.Max(wound.InfectionRisk, 0.5f);
+        }
+    }
     /// <summary>Accumulated exposure of an open incision to its environment, in game seconds.</summary>
     [DataField] public float OpenSurgicalExposure;
     [DataField] public bool PostoperativeRecovery;
@@ -198,7 +237,7 @@ public sealed partial class BodyPartState
             stage >= 1,
             bleeding,
             Wounds.Any(wound => wound.Type == WoundType.Fracture),
-            IsBandaged,
+            HasBandage,
             IsSplinted,
             HasTourniquet,
             IsDestroyed,

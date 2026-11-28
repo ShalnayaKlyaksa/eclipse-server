@@ -1,0 +1,146 @@
+- type: entity
+  id: EclipseBaseWideBlastDoor
+  parent: BaseShutter
+  abstract: true
+  components:
+  - type: AccessReader
+    containerAccessProvider: board
+  - type: Sprite
+    layers:
+    - state: closed
+      map: ["enum.DoorVisualLayers.Base"]
+    - sprite: Structures/Doors/Shutters/blastdoor.rsi
+      state: welded
+      map: ["enum.WeldableLayers.BaseWelded"]
+  - type: Door
+    clickOpen: true
+    canPry: false
+    crushDamage:
+      types:
+        Blunt: 25
+    openSound:
+      path: /Audio/Machines/blastdoor.ogg
+    closeSound:
+      path: /Audio/Machines/blastdoor.ogg
+  - type: Occluder
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: StrongMetallic
+
+- type: entity
+  id: EclipseBlastDoor2x1
+  parent: EclipseBaseWideBlastDoor
+  name: double blast door
+  description: An armored door spanning a two-tile opening.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Doors/blastdoor_2x1.rsi
+    offset: 0.5,0
+  - &Door2x1Fixtures
+    type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,1.49,0.49"
+        density: 100
+        mask: [FullTileMask]
+        layer: [AirlockLayer]
+  - &Door2x1Occluder
+    type: Occluder
+    boundingBox: "-0.5,-0.5,1.5,0.5"
+  - &Door2x1Airtight
+    type: Airtight
+    additionalTiles: ["1,0"]
+  - type: Door
+    openTimeOne: 0.6
+    openTimeTwo: 0.6
+    closeTimeOne: 0.6
+    closeTimeTwo: 0.6
+    openingAnimationTime: 1.2
+    closingAnimationTime: 1.2
+
+- type: entity
+  id: EclipseBlastDoor3x1
+  parent: EclipseBaseWideBlastDoor
+  name: triple blast door
+  description: An armored door spanning a three-tile opening.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Doors/blastdoor_3x1.rsi
+  - &Door3x1Fixtures
+    type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.49,-0.49,1.49,0.49"
+        density: 100
+        mask: [FullTileMask]
+        layer: [AirlockLayer]
+  - &Door3x1Occluder
+    type: Occluder
+    boundingBox: "-1.5,-0.5,1.5,0.5"
+  - &Door3x1Airtight
+    type: Airtight
+    additionalTiles: ["-1,0", "1,0"]
+  - type: Door
+    openTimeOne: 0.48
+    openTimeTwo: 0.48
+    closeTimeOne: 0.48
+    closeTimeTwo: 0.48
+    openingAnimationTime: 0.96
+    closingAnimationTime: 0.96
+
+- type: entity
+  id: EclipseBaseWoodDoor
+  parent: BaseMaterialDoorNavMap
+  abstract: true
+  components:
+  - type: Door
+    closeTimeOne: 0.6
+    closeTimeTwo: 0.2
+    openingAnimationTime: 0.8
+    closingAnimationTime: 0.8
+    openSound:
+      path: /Audio/Effects/door_open.ogg
+    closeSound:
+      path: /Audio/Effects/door_close.ogg
+  - type: Damageable
+    damageModifierSet: Wood
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 75
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WoodDestroy
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+
+- type: entity
+  id: EclipseWoodDoor2x1
+  parent: EclipseBaseWoodDoor
+  name: double wooden door
+  description: A pair of paneled wooden leaves for a two-tile opening.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Doors/wood_door_2x1.rsi
+    offset: 0.5,0
+  - *Door2x1Fixtures
+  - *Door2x1Occluder
+  - *Door2x1Airtight
+
+- type: entity
+  id: EclipseWoodDoor3x1
+  parent: EclipseBaseWoodDoor
+  name: triple-width wooden door
+  description: A pair of broad paneled wooden leaves for a three-tile opening.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Doors/wood_door_3x1.rsi
+  - *Door3x1Fixtures
+  - *Door3x1Occluder
+  - *Door3x1Airtight
