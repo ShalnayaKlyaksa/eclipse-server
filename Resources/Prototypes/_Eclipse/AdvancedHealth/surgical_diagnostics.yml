@@ -38,34 +38,37 @@
     delay: 5
 
 - type: entity
-  parent: BaseItem
+  parent: BaseMachinePowered
   id: AdvancedClinicalBloodAnalyzer
-  name: portable blood analyzer
-  description: Apply to an identified blood sample to print a dated biochemical profile.
+  name: stationary blood analyzer
+  description: Use a labeled blood tube on the powered analyzer to print a laboratory report.
   components:
   - type: Sprite
-    sprite: Objects/Specific/Medical/healthanalyzer.rsi
-    state: icon
-    color: "#b4d7ec"
-  - type: Item
-    size: Small
+    sprite: Structures/Machines/mixer.rsi
+    layers:
+    - state: mixer_empty
+      color: "#b4d7ec"
+    - state: mixer_screens
+      shader: unshaded
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.PowerDeviceVisuals.Powered:
+        enum.PowerDeviceVisualLayers.Powered:
+          True: { visible: true }
+          False: { visible: false }
+  - type: ApcPowerReceiver
+    powerLoad: 250
   - type: ClinicalBloodAnalyzer
-    delay: 8
 
 - type: entity
-  parent: AdvancedMedicalImager
-  id: AdvancedPortableXRay
-  name: portable X-ray scanner
-  description: Examines the selected region for fractures, fixation and foreign bodies. Does not diagnose soft-tissue diseases.
+  parent: BaseFlatpack
+  id: AdvancedClinicalBloodAnalyzerFlatpack
+  name: blood analyzer flatpack
   components:
-  - type: Sprite
-    sprite: Objects/Specific/Medical/healthanalyzer.rsi
-    state: icon
-    color: "#bab7de"
-  - type: AdvancedTreatment
-    treatment: XRay
-    delay: 7
-    reusable: true
+  - type: Flatpack
+    entity: AdvancedClinicalBloodAnalyzer
 
 - type: entity
   parent: AdvancedMedicalImager

@@ -1,0 +1,11 @@
+ent-IndustrialTankSection = industrial tank section
+    .desc = Build a square of sections. With a wrench in hand, open the south-eastern section's context menu to assemble the tank.
+ent-IndustrialTankSupport = industrial tank foundation
+ent-IndustrialBulkBarrel = industrial barrel
+    .desc = A 2×2 barrel that holds 4000 units. Its south inlet and east outlet connect at the south-eastern tile.
+ent-IndustrialBulkReservoir = bulk industrial reservoir
+    .desc = A 3×3 reservoir that holds 9000 units. Its south inlet and east outlet connect at the south-eastern tile.
+industrial-tank-assemble-barrel = Assemble 2×2 barrel
+industrial-tank-assemble-reservoir = Assemble 3×3 reservoir
+industrial-tank-disassemble = Disassemble into sections
+industrial-tank-drain-first = Drain the tank before disassembling it.

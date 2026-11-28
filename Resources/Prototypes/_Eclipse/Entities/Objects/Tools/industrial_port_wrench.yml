@@ -5,32 +5,24 @@
   name: tool-quality-industrial-port-configuring-name
   toolName: tool-quality-industrial-port-configuring-tool-name
   spawn: IndustrialKey
-  icon: { sprite: Objects/Tools/wrench.rsi, state: icon }
-
-- type: tool
-  id: IndustrialPipeDetaching
-  name: tool-quality-industrial-pipe-detaching-name
-  toolName: tool-quality-industrial-pipe-detaching-tool-name
-  spawn: IndustrialKey
-  icon: { sprite: Objects/Tools/wrench.rsi, state: icon }
+  icon: { sprite: _Eclipse/Objects/Tools/industrial_key.rsi, state: icon }
 
 - type: entity
   parent: BaseItem
   id: IndustrialKey
   name: industrial key
-  description: Configures ports on industrial machines and removes item pipes. Hold it to see port indicators.
+  description: Configures industrial ports and assembles workbenches from tables. Hold it to see port indicators.
   components:
   - type: Sprite
-    sprite: Objects/Tools/wrench.rsi
+    sprite: _Eclipse/Objects/Tools/industrial_key.rsi
     state: icon
   - type: Item
-    sprite: Objects/Tools/wrench.rsi
+    sprite: _Eclipse/Objects/Tools/industrial_key.rsi
     storedRotation: -90
   - type: IndustrialConfigurator
   - type: Tool
     qualities:
     - IndustrialPortConfiguring
-    - IndustrialPipeDetaching
     useSound:
       path: /Audio/Items/ratchet.ogg
   - type: PhysicalComposition

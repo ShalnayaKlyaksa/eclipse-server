@@ -20,6 +20,12 @@ public sealed class ResearchTerminalCommandMessage : BoundUserInterfaceMessage
 }
 
 [Serializable, NetSerializable]
+public sealed class ResearchTerminalAdminStateMessage(ResearchConsoleBoundInterfaceState state) : BoundUserInterfaceMessage
+{
+    public readonly ResearchConsoleBoundInterfaceState State = state;
+}
+
+[Serializable, NetSerializable]
 public sealed class ResearchTerminalState
 {
     public string? Username;

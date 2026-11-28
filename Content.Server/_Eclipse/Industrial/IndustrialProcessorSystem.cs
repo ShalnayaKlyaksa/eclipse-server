@@ -52,18 +52,20 @@ public sealed partial class IndustrialProcessorSystem : SharedIndustrialProcesso
         if (procConnect.TryAutoBindPortsFromAdjacentPipes(ent))
             UpdateAdjacentPipeConnections(ent);
 
-        EntityManager.System<SharedIndustrialHeatConnectSystem>().TryAutoBindPortsFromAdjacentBuffers(ent);
+        EntityManager.System<SharedIndustrialHeatConnectSystem>().TryAutoBindPortsFromAdjacentHeatConnections(ent);
     }
 
     private void OnMapInit(Entity<IndustrialProcessorComponent> ent, ref MapInitEvent args)
     {
+        if (ent.Comp.ProcessorType == IndustrialProcessorType.Buffer)
+            ent.Comp.SelectedRecipe = null;
         ApplyTierSettings(ent);
         UpdateAppearance(ent);
         var procConnect = EntityManager.System<SharedIndustrialProcessorPipeConnectSystem>();
         if (procConnect.TryAutoBindPortsFromAdjacentPipes(ent))
             UpdateAdjacentPipeConnections(ent);
 
-        EntityManager.System<SharedIndustrialHeatConnectSystem>().TryAutoBindPortsFromAdjacentBuffers(ent);
+        BindAdjacentHeatConnections(ent);
         _pipeNetwork.InvalidateProcessorConnections(ent);
         TryStartProcessing(ent);
     }
@@ -90,13 +92,20 @@ public sealed partial class IndustrialProcessorSystem : SharedIndustrialProcesso
     }
 
     private void OnAnchorChanged(Entity<IndustrialProcessorComponent> ent, ref AnchorStateChangedEvent args)
-        => OnPortModeChanged(ent);
+    {
+        if (args.Anchored)
+            EntityManager.System<SharedIndustrialHeatConnectSystem>().TryAutoBindPortsFromAdjacentHeatConnections(ent);
+
+        OnPortModeChanged(ent);
+    }
 
     private void OnTerminating(Entity<IndustrialProcessorComponent> ent, ref EntityTerminatingEvent args)
     {
         _pipeNetwork.InvalidateProcessorConnections(ent);
         _liquidPipes.InvalidateProcessorConnections(ent);
         UpdateAdjacentPipeConnections(ent);
+        if (HasComp<IndustrialHeatPoweredComponent>(ent))
+            EntityManager.System<IndustrialHeatPipeSystem>().UpdateNeighbors(ent);
     }
 
     private void OnResearchChanged(Entity<IndustrialProcessorComponent> ent,
@@ -148,8 +157,11 @@ public sealed partial class IndustrialProcessorSystem : SharedIndustrialProcesso
         var specs = MachineTierHelper.GetSpecs(ent.Comp.Tier);
 
         ent.Comp.ProcessingSpeedMultiplier = specs.ProcessingSpeedMultiplier;
-        ent.Comp.MaxInputSlots = specs.MaxInputSlots;
-        ent.Comp.MaxOutputSlots = specs.MaxOutputSlots;
+        if (ent.Comp.ProcessorType != IndustrialProcessorType.Buffer)
+        {
+            ent.Comp.MaxInputSlots = specs.MaxInputSlots;
+            ent.Comp.MaxOutputSlots = specs.MaxOutputSlots;
+        }
         ent.Comp.MaxAutoTransferPerSecond = specs.MaxAutoTransferPerSecond;
         if (ent.Comp.ProcessorType == IndustrialProcessorType.Extractor)
             ent.Comp.MaxInputSlots = 0;
@@ -378,6 +390,17 @@ public sealed partial class IndustrialProcessorSystem : SharedIndustrialProcesso
         _pipeNetwork.InvalidateProcessorConnections(ent);
         _liquidPipes.InvalidateProcessorConnections(ent);
         UpdateAdjacentPipeConnections(ent);
+        if (HasComp<IndustrialHeatPoweredComponent>(ent))
+            EntityManager.System<IndustrialHeatPipeSystem>().UpdateNeighbors(ent);
+    }
+
+    private void BindAdjacentHeatConnections(Entity<IndustrialProcessorComponent> ent)
+    {
+        if (!HasComp<IndustrialHeatPoweredComponent>(ent))
+            return;
+
+        EntityManager.System<SharedIndustrialHeatConnectSystem>().TryAutoBindPortsFromAdjacentHeatConnections(ent);
+        EntityManager.System<IndustrialHeatPipeSystem>().UpdateNeighbors(ent);
     }
 
     private void UpdateAdjacentPipeConnections(Entity<IndustrialProcessorComponent> ent)

@@ -3,7 +3,7 @@
 
 - type: entity
   abstract: true
-  parent: BaseStructure
+  parent: BaseItem
   id: BaseLiquidPipe
   name: liquid pipe
   description: Transfers solutions between adjacent sealed pipe sections.
@@ -16,13 +16,11 @@
     anchored: true
     noRot: true
   - type: Physics
-    bodyType: Static
+    bodyType: Dynamic
     canCollide: false
   - type: Fixtures
   - type: InteractionOutline
   - type: Anchorable
-    tool: IndustrialPipeDetaching
-    flags: Unanchorable
     delay: 0.5
   - type: IndustrialPipingOccupant
   - type: LiquidPipe
@@ -74,6 +72,8 @@
   name: basic liquid pipe
   description: A sealed section that transfers solutions between adjacent pipes. Low throughput.
   components:
+  - type: IndustrialPipePack
+    pack: BasicLiquidPipePack
   - type: LiquidPipe
     tier: Basic
 
@@ -83,6 +83,8 @@
   name: industrial liquid pipe
   description: A sealed high-throughput section. Its square shows the colour of its contents.
   components:
+  - type: IndustrialPipePack
+    pack: IndustrialLiquidPipePack
   - type: LiquidPipe
     tier: Industrial
 
@@ -92,5 +94,15 @@
   name: perfect liquid pipe
   description: High-speed liquid pipe for advanced production lines.
   components:
+  - type: IndustrialPipePack
+    pack: PerfectLiquidPipePack
   - type: LiquidPipe
     tier: Perfect
+
+- type: entity
+  parent: BasicLiquidPipe
+  id: BasicLiquidPipeRCD
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: true

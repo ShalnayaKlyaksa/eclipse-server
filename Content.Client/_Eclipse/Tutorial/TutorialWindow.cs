@@ -4,9 +4,11 @@ using System.Numerics;
 using Content.Client.MainMenu.UI;
 using Content.Client.Message;
 using Content.Shared._Eclipse.Tutorial;
+using Content.Shared.CCVar;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
+using Robust.Shared.Configuration;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -26,6 +28,19 @@ public sealed class TutorialWindow : DefaultWindow
         _onStart = onStart;
 
         Title = "Обучение";
+
+        if (!IoCManager.Resolve<IConfigurationManager>().GetCVar(CCVars.TutorialEnabled))
+        {
+            MinSize = SetSize = new Vector2(300, 120);
+            ContentsContainer.AddChild(new Label
+            {
+                Text = "На тех. работах :(",
+                HorizontalAlignment = HAlignment.Center,
+                VerticalAlignment = VAlignment.Center,
+            });
+            return;
+        }
+
         MinSize = SetSize = new Vector2(600, 580);
 
         var scroll = new ScrollContainer

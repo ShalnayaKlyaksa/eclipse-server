@@ -28,7 +28,6 @@ public sealed class LiquidPipeSystem : SharedLiquidPipeSystem
         _popup.PopupEntity(Loc.GetString("industrial-liquid-pipe-detached"), ent, args.User);
         if (_solutions.TryGetSolution(ent.Owner, LiquidPipeComponent.SolutionName, out var solution, out var contents) && contents.Volume > 0)
             _puddles.TrySpillAt(ent.Owner, _solutions.SplitSolution(solution.Value, contents.Volume), out _, sound: false);
-        QueueDel(ent);
     }
 
     private void OnInit<T>(Entity<LiquidPipeComponent> ent, ref T args)

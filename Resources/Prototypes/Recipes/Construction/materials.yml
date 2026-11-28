@@ -13,6 +13,8 @@
   targetNode: SheetRGlass
   category: construction-category-materials
   objectType: Item
+  conditions:
+  - !type:IndustrialManufacturedOnly
 
 - type: construction
   id: SheetClockworkGlass
@@ -61,6 +63,8 @@
   targetNode: MaterialDurathread
   category: construction-category-materials
   objectType: Item
+  conditions:
+  - !type:IndustrialManufacturedOnly
 
 - type: construction
   id: SheetUGlass

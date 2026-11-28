@@ -1,0 +1,125 @@
+- type: constructionGraph
+  id: EclipsePlacedWideAirlock
+  start: airlock
+  graph:
+  - node: airlock
+
+- type: entity
+  id: EclipseBaseWideGlassAirlock
+  parent: AirlockGlass
+  abstract: true
+  components:
+  - type: Sprite
+    snapCardinals: false
+  - type: Construction
+    graph: EclipsePlacedWideAirlock
+    node: airlock
+    deconstructionTarget: null
+
+- type: entity
+  id: EclipseGlassAirlock2x1
+  parent: EclipseBaseWideGlassAirlock
+  name: two-tile glass airlock
+  description: A powered glass airlock spanning two tiles.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Doors/glass_airlock_2x1.rsi
+    offset: 0.5,0
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,1.49,0.49"
+        density: 100
+        mask: [FullTileMask]
+        layer: [GlassAirlockLayer]
+  - type: Airtight
+    additionalTiles: ["1,0"]
+  - type: Paintable
+    group: EclipseGlassAirlock2x1
+
+- type: entity
+  id: EclipseGlassAirlock3x1
+  parent: EclipseBaseWideGlassAirlock
+  name: three-tile glass airlock
+  description: A powered glass airlock spanning three tiles.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Doors/glass_airlock_3x1.rsi
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-1.49,-0.49,1.49,0.49"
+        density: 100
+        mask: [FullTileMask]
+        layer: [GlassAirlockLayer]
+  - type: Airtight
+    additionalTiles: ["-1,0", "1,0"]
+  - type: Paintable
+    group: EclipseGlassAirlock3x1
+
+- type: entity
+  id: EclipseCommandGlassAirlock2x1
+  parent: EclipseGlassAirlock2x1
+  name: two-tile command glass airlock
+  description: A wide glass airlock with a charcoal frame and ochre trim.
+  suffix: Command, Locked
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Doors/command_glass_airlock_2x1.rsi
+  - type: WiresPanelSecurity
+    securityLevel: medSecurity
+  - type: Wires
+    layoutId: AirlockCommand
+  - type: ContainerFill
+    containers:
+      board: [DoorElectronicsCommand]
+
+- type: entity
+  id: EclipseCommandGlassAirlock3x1
+  parent: EclipseGlassAirlock3x1
+  name: three-tile command glass airlock
+  description: A wide glass airlock with a charcoal frame and ochre trim.
+  suffix: Command, Locked
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Doors/command_glass_airlock_3x1.rsi
+  - type: WiresPanelSecurity
+    securityLevel: medSecurity
+  - type: Wires
+    layoutId: AirlockCommand
+  - type: ContainerFill
+    containers:
+      board: [DoorElectronicsCommand]
+
+- type: entity
+  id: EclipseLustGlassAirlock2x1
+  parent: EclipseGlassAirlock2x1
+  name: two-tile Lust Station glass airlock
+  description: A two-tile glass airlock with the Lust Station frame design.
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Doors/lust_glass_airlock_2x1.rsi
+  - type: Paintable
+    group: null
+
+- type: paintableGroup
+  id: EclipseGlassAirlock2x1
+  time: 3
+  cost: 3
+  defaultStyle: basic
+  styles:
+    basic: EclipseGlassAirlock2x1
+    command: EclipseCommandGlassAirlock2x1
+
+- type: paintableGroup
+  id: EclipseGlassAirlock3x1
+  time: 3
+  cost: 3
+  defaultStyle: basic
+  styles:
+    basic: EclipseGlassAirlock3x1
+    command: EclipseCommandGlassAirlock3x1

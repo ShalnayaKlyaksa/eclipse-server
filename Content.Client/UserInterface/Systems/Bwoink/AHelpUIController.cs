@@ -371,13 +371,7 @@ public sealed class AdminAHelpUIHandler : IAHelpUIHandler
 
     private void OpenWindow()
     {
-        if (Window == null)
-            return;
-
-        if (EverOpened)
-            Window.Open();
-        else
-            Window.OpenCentered();
+        Window?.OpenFitted(centered: !EverOpened);
     }
 
     public void Close()

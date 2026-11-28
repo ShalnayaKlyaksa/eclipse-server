@@ -23,7 +23,6 @@ public sealed partial class ItemPipeSystem : SharedItemPipeSystem
     private void OnUserUnanchored(Entity<ItemPipeComponent> ent, ref UserUnanchoredEvent args)
     {
         _popup.PopupEntity(Loc.GetString("industrial-item-pipe-detached"), ent, args.User);
-        QueueDel(ent);
     }
 
     private void OnMove(Entity<ItemPipeComponent> ent, ref MoveEvent args)

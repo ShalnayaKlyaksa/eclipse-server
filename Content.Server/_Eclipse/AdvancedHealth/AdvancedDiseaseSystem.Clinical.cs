@@ -59,13 +59,14 @@ public sealed partial class AdvancedDiseaseSystem
         return true;
     }
 
-    public void Diagnose(EntityUid body, ClinicalTest test)
+    public void Diagnose(EntityUid body, ClinicalTest test, IReadOnlyCollection<string>? collectedConditions = null)
     {
         if (!HasComp<AdvancedHealthComponent>(body)) return;
         var state = EnsureComp<AdvancedDiseaseComponent>(body);
         state.CompletedTests.Add(test);
         foreach (var id in state.Active.Keys)
-            if (_proto.TryIndex<AdvancedDiseasePrototype>(id, out var prototype) && prototype.Diagnostic == test)
+            if ((collectedConditions == null || collectedConditions.Contains(id))
+                && _proto.TryIndex<AdvancedDiseasePrototype>(id, out var prototype) && prototype.Diagnostic == test)
                 state.Known[id] = state.Severity.GetValueOrDefault(id, 0.3f);
         RefreshIndications(body);
         Dirty(body, state);
@@ -290,14 +291,53 @@ public sealed partial class AdvancedDiseaseSystem
         }
         if (health.BloodGlucose > 16) ApplyCondition(ent, "ClinicalKetoacidosis", 0.3f);
 
+        var grade = Comp<Content.Shared._Eclipse.Industrial.RoomSanitationComponent>(ent).Grade;
         foreach (var part in health.BodyParts.Values)
         {
-            var dirty = part.Wounds.Any(wound => wound.IsDirty);
-            // Reuse the station's sanitation reading and the existing wound infection pathway.
+            var contaminated = false;
+            var infectionRisk = 0f;
+            foreach (var wound in part.Wounds)
+            {
+                if (wound.IsDirty)
+                {
+                    contaminated = true;
+                    infectionRisk = Math.Max(infectionRisk, wound.InfectionRisk);
+                }
+
+                if (wound.ExternalBleedingRate > 0f)
+                    wound.ExternalBleedingRate = Math.Min(100f, wound.ExternalBleedingRate * (1f + medication.BleedingRisk * elapsed));
+            }
+
+            part.DirtyExposure = contaminated ? part.DirtyExposure + elapsed : 0;
+            var infectionRate = 0.0003f + 0.004f * infectionRisk + (part.IsBandageDirty ? 0.004f : 0f);
+            if (part.DirtyExposure > 120 && _random.Prob(Math.Clamp(elapsed * infectionRate, 0f, 1f)))
+                ApplyCondition(ent, "WoundFever", 0.2f, part.Slot);
+
+            if (part.HasBandage)
+            {
+                var remainingBleeding = 0f;
+                foreach (var wound in part.Wounds.Where(wound => wound.IsBandaged))
+                {
+                    remainingBleeding += wound.ExternalBleedingRate;
+                    // Clotting reduces the amount of bleeding that can return after removal.
+                    wound.BandageBleedingReduction = Math.Max(0, wound.BandageBleedingReduction - elapsed * 0.02f);
+                }
+
+                if (!part.IsBandageDirty)
+                {
+                    var exposureRate = grade >= 2 ? 0.1f : grade == 1 ? 0.35f : 1f;
+                    part.BandageExposure += elapsed * exposureRate * (1f + Math.Min(2f, remainingBleeding));
+                    if (part.BandageExposure >= 90f || part.Wounds.Any(wound => wound.IsBandaged && wound.IsDirty))
+                    {
+                        part.ContaminateBandage();
+                        Dirty(ent);
+                    }
+                }
+            }
+
             // One spill does not immediately invalidate an operation: exposure accumulates over time.
             if (part.IsSurgicalOpen)
             {
-                var grade = Comp<Content.Shared._Eclipse.Industrial.RoomSanitationComponent>(ent).Grade;
                 part.OpenSurgicalExposure += elapsed * (grade >= 2 ? 0.05f : grade > 0 ? 0.15f : 1f);
                 if (part.OpenSurgicalExposure >= 120)
                 {
@@ -317,12 +357,6 @@ public sealed partial class AdvancedDiseaseSystem
                 if (part.OrganIntegrity >= part.MaxOrganIntegrity) part.PostoperativeRecovery = false;
                 Dirty(ent);
             }
-            part.DirtyExposure = dirty ? part.DirtyExposure + elapsed : 0;
-            if (dirty && part.DirtyExposure > 120 && _random.Prob(Math.Min(1f, elapsed * 0.0003f)))
-                ApplyCondition(ent, "WoundFever", 0.2f, part.Slot);
-            foreach (var wound in part.Wounds)
-                if (wound.ExternalBleedingRate > 0f)
-                    wound.ExternalBleedingRate = Math.Min(100f, wound.ExternalBleedingRate * (1f + medication.BleedingRisk * elapsed));
         }
         if (_random.Prob(Math.Min(1f, elapsed * 0.15f))) Spread(ent);
         RefreshIndications(ent);

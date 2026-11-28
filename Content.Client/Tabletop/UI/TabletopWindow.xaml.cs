@@ -19,7 +19,6 @@ namespace Content.Client.Tabletop.UI
             ScalingVp.ViewportSize = size;
 
             FlipButton.OnButtonUp += Flip;
-            OpenCentered();
         }
 
         private void Flip(BaseButton.ButtonEventArgs args)
@@ -29,7 +28,7 @@ namespace Content.Client.Tabletop.UI
             {
                 eye.Rotation = eye.Rotation.Opposite();
 
-                // Flip alignmento of the button
+                // Keep the button on the player's side of the window.
                 FlipButton.HorizontalAlignment = FlipButton.HorizontalAlignment == HAlignment.Right
                     ? HAlignment.Left
                     : HAlignment.Right;

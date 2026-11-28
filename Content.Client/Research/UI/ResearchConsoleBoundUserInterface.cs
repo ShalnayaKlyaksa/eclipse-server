@@ -13,6 +13,7 @@ public sealed class ResearchConsoleBoundUserInterface : BoundUserInterface
 {
     [ViewVariables]
     private FancyResearchConsoleMenu? _consoleMenu;  // Goobstation R&D Console rework
+    private ResearchConsoleBoundInterfaceState? _adminState;
     public ResearchConsoleBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
     }
@@ -25,7 +26,11 @@ public sealed class ResearchConsoleBoundUserInterface : BoundUserInterface
 
         _consoleMenu = this.CreateWindow<FancyResearchConsoleMenu>();   // Goobstation R&D Console rework
         _consoleMenu.SetEntity(owner);
-        _consoleMenu.OnClose += () => _consoleMenu = null; // Goobstation R&D Console rework
+        _consoleMenu.OnClose += () =>
+        {
+            _consoleMenu = null;
+            _adminState = null;
+        };
 
         _consoleMenu.OnTechnologyCardPressed += id =>
         {
@@ -50,7 +55,7 @@ public sealed class ResearchConsoleBoundUserInterface : BoundUserInterface
         if (!args.WasModified<TechnologyPrototype>())
             return;
 
-        if (State is not ResearchConsoleBoundInterfaceState rState)
+        if ((_adminState ?? State) is not ResearchConsoleBoundInterfaceState rState)
             return;
 
         _consoleMenu?.UpdatePanels(rState.Researches); // Goobstation R&D Console rework
@@ -61,9 +66,22 @@ public sealed class ResearchConsoleBoundUserInterface : BoundUserInterface
     {
         base.UpdateState(state);
 
-        if (state is not ResearchConsoleBoundInterfaceState castState)
-            return;
+        if (_adminState == null && state is ResearchConsoleBoundInterfaceState researchState)
+            ApplyResearchState(researchState);
+    }
 
+    protected override void ReceiveMessage(BoundUserInterfaceMessage message)
+    {
+        base.ReceiveMessage(message);
+        if (message is ResearchTerminalAdminStateMessage adminState)
+        {
+            _adminState = adminState.State;
+            ApplyResearchState(_adminState);
+        }
+    }
+
+    private void ApplyResearchState(ResearchConsoleBoundInterfaceState castState)
+    {
         // Goobstation R&D Console rework start
         if (_consoleMenu == null)
             return;

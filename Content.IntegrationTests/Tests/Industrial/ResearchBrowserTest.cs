@@ -80,8 +80,10 @@ public sealed class ResearchBrowserTest : GameTest
             var branches = technologies.Values.Where(t => t.Name.ToString().StartsWith("research-branch-"));
             var gates = SProtoMan.EnumeratePrototypes<IndustrialRecipePrototype>().Select(r => r.RequiredTechnology?.Id)
                 .Concat(SProtoMan.EnumeratePrototypes<IndustrialFabricationRecipePrototype>().Select(r => r.RequiredTechnology?.Id)).ToHashSet();
+            var prerequisites = technologies.Values.SelectMany(t => t.TechnologyPrerequisites).Select(t => t.Id).ToHashSet();
             Assert.That(branches.Count(), Is.EqualTo(14));
-            foreach (var branch in branches) Assert.That(gates, Does.Contain(branch.ID), branch.ID + " needs a working unlock.");
+            foreach (var branch in branches)
+                Assert.That(gates.Contains(branch.ID) || prerequisites.Contains(branch.ID), Is.True, branch.ID + " needs a working unlock.");
             foreach (var recipe in new[] { "IndustrialEarlyFlashlights", "IndustrialEarlySmallCells", "IndustrialProduceSalvageDrill", "IndustrialProduceSecurityHelmet" })
             {
                 var technology = SProtoMan.Index<IndustrialRecipePrototype>(recipe).RequiredTechnology!.Value.Id;

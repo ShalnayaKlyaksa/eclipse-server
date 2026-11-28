@@ -143,7 +143,6 @@ public sealed partial class MedicalSynthesizerControl : BoxContainer
         }
         _state = state;
         _sourceVolume = sourceVolume;
-        Visible = state != null;
         if (state?.ActiveRecipe is { } active)
         {
             var index = Array.FindIndex(_recipes, recipe => recipe.ID == active);

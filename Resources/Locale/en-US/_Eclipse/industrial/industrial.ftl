@@ -366,7 +366,7 @@ industrial-processor-ui-ports = Port configuration
 
 ent-IndustrialPortWrench = industrial key
 
-    .desc = Configures ports on industrial machines and removes item pipes. Hold it to see port indicators.
+    .desc = Configures ports on industrial machines. Hold it to see port indicators.
 
 
 
@@ -374,13 +374,9 @@ tool-quality-industrial-port-configuring-name = industrial port configuring
 
 tool-quality-industrial-port-configuring-tool-name = an industrial key
 
-tool-quality-industrial-pipe-detaching-name = industrial pipe detaching
-
-tool-quality-industrial-pipe-detaching-tool-name = an industrial key
 
 
-
-industrial-item-pipe-examine-detach = Use an industrial key to remove this pipe.
+industrial-item-pipe-examine-detach = Use a wrench to remove this pipe.
 
 industrial-item-pipe-detached = Item pipe removed.
 
@@ -510,15 +506,22 @@ stack-industrial-scrap = industrial scrap
 
 ent-IndustrialKey = industrial key
 
-    .desc = Configures ports on industrial machines, assembles workbenches from tables, and removes item pipes. Hold it to see port indicators.
+    .desc = Configures ports on industrial machines and assembles workbenches from tables. Hold it to see port indicators.
 
 ent-IndustrialHeatBuffer = heat exchange buffer
 
-    .desc = Stores thermal energy from flowing plasma and supplies heat to adjacent industrial machines.
+    .desc = Exchanges heat with a plasma circuit and supplies industrial equipment through heat pipes or direct contact.
 
-industrial-heat-buffer-examine-active = Plasma is flowing — heat is being distributed to linked machines.
+industrial-heat-buffer-examine-active = Plasma is flowing from the inlet to the outlet.
 
-industrial-heat-buffer-examine-idle = No plasma flow detected. Connect plasma pipes to the inlet and outlet.
+industrial-heat-buffer-examine-idle = No flow. Check both gas connections, the plasma supply, and the pump direction.
+industrial-heat-buffer-examine-shared = The inlet and outlet are on a shared gas circuit. The buffer exchanges heat with the plasma in that circuit.
+industrial-heat-buffer-examine-ports = Gas inlet faces { $inlet }. Gas outlet faces { $outlet }.
+industrial-heat-buffer-reverse = Swap inlet and outlet
+industrial-heat-buffer-examine-temperature = Body temperature is { $temperature } K.
+
+ent-IndustrialHeatPipe = industrial heat pipe
+    .desc = Connects a heat exchange buffer to industrial heat inputs. Secure it with a wrench.
 
 industrial-workbench-assembled = Industrial workbench assembled.
 
@@ -583,4 +586,17 @@ industrial-fabrication-upgrade-thermal-centrifuge = Fabricate thermal centrifuge
 
 industrial-fabrication-upgrade-smelter = Fabricate smelter upgrade module
 
-
+ent-LpItemPipePack = { ent-LpItemPipe }
+    .desc = { ent-LpItemPipe.desc }
+ent-MpItemPipePack = { ent-MpItemPipe }
+    .desc = { ent-MpItemPipe.desc }
+ent-HpItemPipePack = { ent-HpItemPipe }
+    .desc = { ent-HpItemPipe.desc }
+ent-BasicLiquidPipePack = { ent-BasicLiquidPipe }
+    .desc = { ent-BasicLiquidPipe.desc }
+ent-IndustrialLiquidPipePack = { ent-IndustrialLiquidPipe }
+    .desc = { ent-IndustrialLiquidPipe.desc }
+ent-PerfectLiquidPipePack = { ent-PerfectLiquidPipe }
+    .desc = { ent-PerfectLiquidPipe.desc }
+ent-IndustrialHeatPipePack = { ent-IndustrialHeatPipe }
+    .desc = { ent-IndustrialHeatPipe.desc }

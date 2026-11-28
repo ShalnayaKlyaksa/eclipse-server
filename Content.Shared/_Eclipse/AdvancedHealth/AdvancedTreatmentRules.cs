@@ -22,7 +22,7 @@ public static class AdvancedTreatmentRules
     {
         if (part.IsDestroyed && treatment is not (AdvancedTreatmentType.Bandage
             or AdvancedTreatmentType.PressureBandage or AdvancedTreatmentType.Tourniquet
-            or AdvancedTreatmentType.Hemostatic or AdvancedTreatmentType.TourniquetRemoval))
+            or AdvancedTreatmentType.Hemostatic or AdvancedTreatmentType.TourniquetRemoval or AdvancedTreatmentType.WoundCleaning))
             return false;
         var external = part.Wounds.Any(wound => wound.ExternalBleedingRate > 0.01f);
         var dirty = part.Wounds.Any(wound => wound.IsDirty);
@@ -41,16 +41,17 @@ public static class AdvancedTreatmentRules
             AdvancedTreatmentType.Tourniquet => part.Slot.IsLimb() && external && !part.HasTourniquet,
             AdvancedTreatmentType.Splint => part.Slot.IsLimb() && !part.IsSplinted
                 && part.Wounds.Any(wound => wound.Type == WoundType.Fracture),
-            AdvancedTreatmentType.Suture => !part.IsSurgicalOpen && !dirty && part.Wounds.Any(wound =>
+            AdvancedTreatmentType.Suture => !part.IsSurgicalOpen && !part.HasBandage && !dirty && part.Wounds.Any(wound =>
                 wound.Type is WoundType.Cut or WoundType.Puncture or WoundType.Gunshot or WoundType.Shrapnel
                 && !wound.HasForeignBody && !wound.IsSutured && wound.InternalBleedingRate <= 0.001f),
             AdvancedTreatmentType.ForeignBodyRemoval => part.ForeignBodyCount > 0
                 || part.Wounds.Any(wound => wound.HasForeignBody),
-            AdvancedTreatmentType.WoundCleaning => dirty || !part.IsSurgicalSitePrepared && NeedsSurgicalAccess(part),
+            AdvancedTreatmentType.WoundCleaning => !part.HasBandage
+                && (dirty || !part.IsDestroyed && !part.IsSurgicalSitePrepared && NeedsSurgicalAccess(part)),
             AdvancedTreatmentType.LocalAnesthesia => part.LocalAnesthesia <= 0f
                 && (part.IsSurgicalOpen || NeedsSurgicalAccess(part)
                     || part.ClinicalProcedures.Contains(AdvancedTreatmentType.ThoracicDrain)),
-            AdvancedTreatmentType.SurgicalAccess => !part.IsSurgicalOpen && part.IsSurgicalSitePrepared
+            AdvancedTreatmentType.SurgicalAccess => !part.IsSurgicalOpen && !part.HasBandage && part.IsSurgicalSitePrepared
                 && part.LocalAnesthesia > 0f && !dirty && NeedsSurgicalAccess(part),
             AdvancedTreatmentType.InternalHemostasis => part.IsSurgicalOpen && part.LocalAnesthesia > 0f
                 && part.Wounds.Any(wound => wound.InternalBleedingRate > 0.001f),

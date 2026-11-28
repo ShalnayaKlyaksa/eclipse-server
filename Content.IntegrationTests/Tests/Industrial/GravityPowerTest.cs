@@ -1,5 +1,8 @@
 using System.Collections.Generic;
+using System.Numerics;
+using Content.Client._Eclipse.Power;
 using Content.IntegrationTests.Fixtures;
+using Content.IntegrationTests.Fixtures.Attributes;
 using Content.Server._Eclipse.Power;
 using Content.Server.Materials;
 using Content.Server.NodeContainer.EntitySystems;
@@ -12,6 +15,7 @@ using Content.Shared.Mind;
 using Content.Shared.Power.Generator;
 using Content.Shared.Respawn;
 using Content.Shared.Storage.Components;
+using Robust.Shared;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Maths;
@@ -21,6 +25,45 @@ namespace Content.IntegrationTests.Tests.Industrial;
 
 public sealed class GravityPowerTest : GameTest
 {
+    [Test]
+    [EnsureCVar(Side.Server, typeof(CVars), nameof(CVars.NetPVS), true)]
+    public async Task LargeEscapedHoleIsReadyToDrawBeforeItsCenterEntersPvs()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid viewer = default;
+        NetEntity hole = default;
+        NetEntity marker = default;
+        await Server.WaitAssertion(() =>
+        {
+            viewer = SEntMan.SpawnEntity("MobObserver", map.MapCoords);
+            Server.PlayerMan.SetAttachedEntity(ServerSession!, viewer);
+            var origin = map.MapCoords.Offset(new Vector2(60, 0));
+            var residual = SEntMan.SpawnEntity("ResidualMicroBlackHole", origin);
+            SEntMan.GetComponent<ResidualMicroBlackHoleComponent>(residual).Mass = 100;
+            hole = SEntMan.GetNetEntity(residual);
+            marker = SEntMan.GetNetEntity(SEntMan.SpawnEntity(null, origin));
+        });
+        await Pair.RunTicksSync(20);
+        await Client.WaitAssertion(() =>
+        {
+            Assert.That(CEntMan.TryGetEntity(marker, out _), Is.False);
+            Assert.That(CEntMan.TryGetEntity(hole, out var entity), Is.True);
+            var visuals = CEntMan.System<MicroBlackHoleVisualSystem>();
+            visuals.FrameUpdate(2f);
+            Assert.That(visuals.GetDisplay(entity!.Value).Radius, Is.GreaterThan(24f));
+        });
+
+        await Server.WaitPost(() => Server.System<SharedTransformSystem>().SetWorldPosition(viewer, new Vector2(29, 0)));
+        await Pair.RunTicksSync(20);
+        await Client.WaitAssertion(() =>
+        {
+            // The 25-tile disk can now overlap the view, though an entity at its center is still out of PVS.
+            Assert.That(CEntMan.TryGetEntity(marker, out _), Is.False);
+            Assert.That(CEntMan.TryGetEntity(hole, out var entity), Is.True);
+            Assert.That(CEntMan.System<MicroBlackHoleVisualSystem>().GetDisplay(entity!.Value).Radius, Is.GreaterThan(24f));
+        });
+    }
+
     [Test]
     public async Task DestroyingActiveContainmentTransfersItsMassToAnEscapedHole()
     {
@@ -128,9 +171,35 @@ public sealed class GravityPowerTest : GameTest
             var escaped = SEntMan.EntityQueryEnumerator<ResidualMicroBlackHoleComponent>();
             Assert.That(escaped.MoveNext(out _, out var state), Is.True);
             Assert.That(state!.Mass, Is.GreaterThan(1));
-            gravity.Update(.5f);
+            Assert.That(state.PendingMass, Is.GreaterThan(0), "Consumed mass should be added gradually.");
+            for (var i = 0; i < 10; i++)
+                gravity.Update(.2f);
             Assert.That(SEntMan.IsQueuedForDeletion(wall), Is.True);
             Assert.That(maps.GetTileRef(map.Grid.Owner, map.Grid.Comp, wallTile).Tile.IsEmpty, Is.True);
+            SEntMan.DeleteEntity(map.MapUid);
+        });
+    }
+
+    [Test]
+    public async Task EscapedHoleMovesTowardAnAnchoredPoweredLure()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            Server.System<SharedMapSystem>().SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(5, 0), map.Tile.Tile);
+            var transform = Server.System<SharedTransformSystem>();
+            var lure = SEntMan.SpawnEntity("GravityBlackHoleLure", new EntityCoordinates(map.Grid.Owner, 5.5f, 0.5f));
+            transform.AnchorEntity(lure);
+            var power = SEntMan.GetComponent<ApcPowerReceiverComponent>(lure);
+            power.Powered = false;
+            var hole = SEntMan.SpawnEntity("ResidualMicroBlackHole", map.MapCoords);
+            var start = transform.GetWorldPosition(hole);
+            var gravity = Server.System<GravityPowerSystem>();
+            gravity.Update(.2f);
+            Assert.That(transform.GetWorldPosition(hole), Is.EqualTo(start));
+            power.Powered = true;
+            gravity.Update(.2f);
+            Assert.That(transform.GetWorldPosition(hole).X, Is.GreaterThan(start.X));
             SEntMan.DeleteEntity(map.MapUid);
         });
     }
@@ -146,6 +215,8 @@ public sealed class GravityPowerTest : GameTest
         Assert.That(twentyTiles, Is.GreaterThan(0));
         Assert.That(GravityPowerSystem.PullAt(22, 1, 1, false), Is.Zero);
         Assert.That(GravityPowerSystem.PullAt(10.6f, 4, 1, false), Is.GreaterThan(tenTiles));
+        Assert.That(GravityPowerSystem.PullAt(23, 4, 1, true), Is.GreaterThan(0));
+        Assert.That(GravityPowerSystem.PullAt(10.6f, 1, 1, true), Is.GreaterThan(tenTiles));
     }
 
     [Test]

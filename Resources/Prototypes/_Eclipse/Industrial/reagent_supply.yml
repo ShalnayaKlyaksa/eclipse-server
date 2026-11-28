@@ -1,0 +1,166 @@
+- type: entity
+  abstract: true
+  parent: WaterTank
+  id: BaseIndustrialReagentTank
+  description: Wrench the tank to the floor and connect a liquid pipe to its east side.
+  components:
+  - type: Anchorable
+  - type: LiquidPipeEndpoint
+    inputFace: Invalid
+    outputFace: East
+    outputSolution: tank
+    hasOutput: true
+  - type: ExaminableSolution
+    exactVolume: true
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        maxVol: 250
+        canReact: false
+
+- type: entity
+  parent: BaseIndustrialReagentTank
+  id: IndustrialReagentTankWater
+  name: industrial water tank
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        maxVol: 1500
+        reagents:
+        - ReagentId: Water
+          Quantity: 1500
+
+- type: entity
+  parent: BaseIndustrialReagentTank
+  id: IndustrialReagentTankChlorine
+  name: industrial chlorine tank
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        reagents:
+        - ReagentId: Chlorine
+          Quantity: 250
+
+- type: entity
+  parent: BaseIndustrialReagentTank
+  id: IndustrialReagentTankHydrogen
+  name: industrial hydrogen tank
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        reagents:
+        - ReagentId: Hydrogen
+          Quantity: 250
+
+- type: entity
+  parent: BaseIndustrialReagentTank
+  id: IndustrialReagentTankOxygen
+  name: industrial oxygen tank
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        reagents:
+        - ReagentId: Oxygen
+          Quantity: 250
+
+- type: entity
+  parent: BaseIndustrialReagentTank
+  id: IndustrialReagentTankEthanol
+  name: industrial ethanol tank
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        reagents:
+        - ReagentId: Ethanol
+          Quantity: 250
+
+- type: entity
+  parent: BaseIndustrialReagentTank
+  id: IndustrialReagentTankAcetone
+  name: industrial acetone tank
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        reagents:
+        - ReagentId: Acetone
+          Quantity: 250
+
+- type: entity
+  parent: BaseIndustrialReagentTank
+  id: IndustrialReagentTankSulfuricAcid
+  name: industrial sulfuric acid tank
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        reagents:
+        - ReagentId: SulfuricAcid
+          Quantity: 250
+
+- type: entity
+  parent: BaseIndustrialReagentTank
+  id: IndustrialReagentTankSodiumHydroxide
+  name: industrial sodium hydroxide tank
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        reagents:
+        - ReagentId: SodiumHydroxide
+          Quantity: 250
+
+- type: cargoProduct
+  abstract: true
+  id: BaseIndustrialReagentSupply
+  icon:
+    sprite: Structures/Storage/tanks.rsi
+    state: watertank-2
+  cost: 600
+  category: cargoproduct-category-name-engineering
+
+- type: cargoProduct
+  parent: BaseIndustrialReagentSupply
+  id: IndustrialReagentSupplyWater
+  product: IndustrialReagentTankWater
+  cost: 1000
+
+- type: cargoProduct
+  parent: BaseIndustrialReagentSupply
+  id: IndustrialReagentSupplyChlorine
+  product: IndustrialReagentTankChlorine
+
+- type: cargoProduct
+  parent: BaseIndustrialReagentSupply
+  id: IndustrialReagentSupplyHydrogen
+  product: IndustrialReagentTankHydrogen
+
+- type: cargoProduct
+  parent: BaseIndustrialReagentSupply
+  id: IndustrialReagentSupplyOxygen
+  product: IndustrialReagentTankOxygen
+
+- type: cargoProduct
+  parent: BaseIndustrialReagentSupply
+  id: IndustrialReagentSupplyEthanol
+  product: IndustrialReagentTankEthanol
+
+- type: cargoProduct
+  parent: BaseIndustrialReagentSupply
+  id: IndustrialReagentSupplyAcetone
+  product: IndustrialReagentTankAcetone
+
+- type: cargoProduct
+  parent: BaseIndustrialReagentSupply
+  id: IndustrialReagentSupplySulfuricAcid
+  product: IndustrialReagentTankSulfuricAcid
+
+- type: cargoProduct
+  parent: BaseIndustrialReagentSupply
+  id: IndustrialReagentSupplySodiumHydroxide
+  product: IndustrialReagentTankSodiumHydroxide

@@ -198,8 +198,9 @@ namespace Content.Client.Administration.UI.Bwoink
 
             Follow.OnPressed += _ =>
             {
-                if (_currentPlayer is not null)
-                    _console.ExecuteCommand($"follow \"{_currentPlayer.NetEntity}\"");
+                var player = ChannelSelector.PlayerInfo.FirstOrDefault(info => info.SessionId == _currentPlayer?.SessionId);
+                if (player is { Connected: true, NetEntity: { Valid: true } entity })
+                    _console.ExecuteCommand($"follow {entity}");
             };
 
             Respawn.OnPressed += _ =>

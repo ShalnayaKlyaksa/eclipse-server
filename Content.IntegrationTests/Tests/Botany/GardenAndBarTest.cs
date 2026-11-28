@@ -3,6 +3,7 @@ using Content.IntegrationTests.Fixtures;
 using Content.Server.Botany;
 using Content.Server.Botany.Components;
 using Content.Server.Botany.Systems;
+using Content.Server.Eclipse.Botany;
 using Content.Server.Eclipse.Botany.Systems;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
@@ -18,6 +19,7 @@ using Content.Shared.Eclipse.Botany.SeedDna.Components;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Interaction;
 using Content.Shared.Kitchen.Components;
 using Content.Shared.Tag;
 using Robust.Shared.Containers;
@@ -38,6 +40,92 @@ public sealed class GardenAndBarTest : GameTest
     private readonly ProtoId<SeedPrototype> _energyFlowerSeed = "energyFlower";
 
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
+
+    [TestCase("FloorDirt", true)]
+    [TestCase("FloorPlanetDirt", true)]
+    [TestCase("FloorGrassJungle", true)]
+    [TestCase("FloorPlanetGrass", true)]
+    [TestCase("FloorAstroGrass", true)]
+    [TestCase("FloorJungleAstroGrass", true)]
+    [TestCase("Plating", false)]
+    [TestCase("FloorAsphalt", false)]
+    public async Task HoeMakesOnePlantableBedOnDirtOrGrass(string tileId, bool expectBed)
+    {
+        var map = await Pair.CreateTestMap(true, tileId);
+        await Server.WaitAssertion(() =>
+        {
+            var maps = Server.System<SharedMapSystem>();
+            var coords = maps.GridTileToLocal(map.Grid.Owner, map.Grid.Comp, map.Tile.GridIndices);
+            var gardener = SEntMan.SpawnEntity(null, coords);
+            SEntMan.EnsureComponent<DoAfterComponent>(gardener);
+            var hands = Server.System<SharedHandsSystem>();
+            hands.AddHand((gardener, SEntMan.EnsureComponent<HandsComponent>(gardener)), "right", HandLocation.Right);
+            Server.System<TagSystem>().AddTag(gardener, new ProtoId<TagPrototype>("InstantDoAfters"));
+            var hoe = SEntMan.SpawnEntity("HydroponicsToolMiniHoe", coords);
+            Assert.That(hands.TryPickupAnyHand(gardener, hoe), Is.True);
+
+            var interaction = Server.System<SharedInteractionSystem>();
+            interaction.UserInteraction(gardener, coords, null);
+            interaction.UserInteraction(gardener, coords, null);
+            var beds = maps.GetAnchoredEntities(map.Grid, map.Tile.GridIndices)
+                .Where(ent => SEntMan.HasComponent<PlantHolderComponent>(ent)).ToArray();
+            Assert.That(beds, Has.Length.EqualTo(expectBed ? 1 : 0));
+            if (expectBed)
+            {
+                Assert.That(SEntMan.HasComponent<IrrigatedSoilComponent>(beds[0]), Is.True);
+                var seeds = SEntMan.SpawnEntity("TomatoSeeds", coords);
+                Assert.That(interaction.InteractUsing(gardener, seeds, beds[0], coords), Is.True);
+                Assert.That(SEntMan.GetComponent<PlantHolderComponent>(beds[0]).Seed, Is.Not.Null);
+            }
+
+            SEntMan.DeleteEntity(map.MapUid);
+        });
+    }
+
+    [Test]
+    public async Task IrrigationSharesWaterThroughSidesOfBedsAndConservesIt()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var maps = Server.System<SharedMapSystem>();
+            EntityUid SpawnAt(string prototype, int x, int y)
+            {
+                var tile = new Vector2i(x, y);
+                maps.SetTile(map.Grid.Owner, map.Grid.Comp, tile, map.Tile.Tile);
+                return SEntMan.SpawnEntity(prototype, maps.GridTileToLocal(map.Grid.Owner, map.Grid.Comp, tile));
+            }
+
+            var bag = SpawnAt("GardenSoilBag", 0, 0);
+            var coords = SEntMan.GetComponent<TransformComponent>(bag).Coordinates;
+            var gardener = SEntMan.SpawnEntity(null, coords);
+            var wrench = SEntMan.SpawnEntity("Wrench", coords);
+            Assert.That(Server.System<SharedInteractionSystem>().InteractUsing(gardener, wrench, bag, coords), Is.True);
+            var watered = maps.GetAnchoredEntities(map.Grid, coords).Single(SEntMan.HasComponent<IrrigatedSoilComponent>);
+            var first = SEntMan.GetComponent<PlantHolderComponent>(watered);
+            var second = SEntMan.GetComponent<PlantHolderComponent>(SpawnAt("GardenIrrigatedSoil", 1, 0));
+            var third = SEntMan.GetComponent<PlantHolderComponent>(SpawnAt("GardenIrrigatedSoil", 2, 0));
+            var diagonal = SEntMan.GetComponent<PlantHolderComponent>(SpawnAt("GardenIrrigatedSoil", 3, 1));
+            var tray = SEntMan.GetComponent<PlantHolderComponent>(SpawnAt("HydroponicsTrayEmpty", 0, 1));
+
+            var solutions = Server.System<SharedSolutionContainerSystem>();
+            Assert.That(solutions.TryGetSolution(watered, "soil", out var solution, out _), Is.True);
+            solutions.TryAddReagent(solution.Value, "Water", FixedPoint2.New(30));
+            Server.System<PlantHolderSystem>().UpdateReagents(watered);
+            var availableWater = first.WaterLevel;
+            Assert.That(availableWater, Is.GreaterThan(0));
+
+            var irrigation = Server.System<SoilIrrigationSystem>();
+            for (var i = 0; i < 6; i++)
+                irrigation.DistributeWater();
+
+            Assert.That(third.WaterLevel, Is.GreaterThan(0));
+            Assert.That(first.WaterLevel + second.WaterLevel + third.WaterLevel, Is.EqualTo(availableWater).Within(0.01f));
+            Assert.That(diagonal.WaterLevel, Is.Zero);
+            Assert.That(tray.WaterLevel, Is.Zero);
+            SEntMan.DeleteEntity(map.MapUid);
+        });
+    }
 
     [Test]
     public async Task BreedingIsGradualFertileAndCanDiscoverRareSpeciesWithoutMutagen()

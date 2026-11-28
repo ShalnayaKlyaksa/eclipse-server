@@ -4,6 +4,7 @@ cargoproduct-category-name-cargo = Снабжение
 cargoproduct-category-name-circuitboards = Платы и схемы
 cargoproduct-category-name-emergency = Аварийное снаряжение
 cargoproduct-category-name-engineering = Инженерия
+cargoproduct-category-name-industrial = Промышленные изделия
 cargoproduct-category-name-food = Продукты питания
 cargoproduct-category-name-fun = Развлечения
 cargoproduct-category-name-hydroponics = Гидропоника

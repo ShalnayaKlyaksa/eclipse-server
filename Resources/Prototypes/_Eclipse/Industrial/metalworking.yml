@@ -1,0 +1,202 @@
+- type: entity
+  parent: BasicTierIndustrialProcessor
+  id: IndustrialRollingMill
+  name: rolling mill
+  description: Rolls batches of metal ingots and billets into plates and sheets.
+  components:
+  - type: IndustrialProcessor
+    processorType: RollingMill
+    westFacePort: ItemInput
+    eastFacePort: ItemOutput
+  - type: ApcPowerReceiver
+    powerLoad: 2500
+  - type: Sprite
+    sprite: Structures/Machines/sheetifier.rsi
+    layers:
+    - state: base_machine
+      map: ["enum.IndustrialProcessorVisualLayers.Base"]
+  - type: Icon
+    sprite: Structures/Machines/sheetifier.rsi
+    state: base_machine
+  - type: GenericVisualizer
+    visuals:
+      enum.IndustrialProcessorVisuals.State:
+        enum.IndustrialProcessorVisualLayers.Base:
+          Idle: { state: base_machine }
+          Working: { state: base_machine_processing }
+          Blocked: { state: base_machine }
+          Unpowered: { state: base_machine }
+          Unheated: { state: base_machine }
+          Paused: { state: base_machine }
+          Unresearched: { state: base_machine }
+
+- type: entity
+  parent: IndustrialTierIndustrialProcessor
+  id: IndustrialStampingPress
+  name: stamping press
+  description: Stamps metal sheets into chip frames and reinforced machine panels.
+  components:
+  - type: IndustrialProcessor
+    processorType: StampingPress
+    westFacePort: ItemInput
+    eastFacePort: ItemOutput
+  - type: ApcPowerReceiver
+    powerLoad: 3000
+  - type: Sprite
+    sprite: Structures/Machines/cuttermachine.rsi
+    layers:
+    - state: icon
+      map: ["enum.IndustrialProcessorVisualLayers.Base"]
+  - type: Icon
+    sprite: Structures/Machines/cuttermachine.rsi
+    state: icon
+  - type: GenericVisualizer
+    visuals:
+      enum.IndustrialProcessorVisuals.State:
+        enum.IndustrialProcessorVisualLayers.Base:
+          Idle: { state: icon }
+          Working: { state: building }
+          Blocked: { state: icon }
+          Unpowered: { state: icon }
+          Unheated: { state: icon }
+          Paused: { state: icon }
+          Unresearched: { state: icon }
+
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleRollingMill
+  name: rolling mill module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: RollingMill
+    tier: Basic
+    resultMachine: IndustrialRollingMill
+
+- type: entity
+  parent: BaseIndustrialUpgradeModule
+  id: IndustrialUpgradeModuleStampingPress
+  name: stamping press module
+  components:
+  - type: IndustrialUpgradeModule
+    processorType: StampingPress
+    tier: Industrial
+    resultMachine: IndustrialStampingPress
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialRollingMill
+  result: IndustrialUpgradeModuleRollingMill
+  requiredTechnology: IndustrialAutomation
+  duration: 35
+  ingredients:
+    IndustrialMechanicalCore: 2
+    IndustrialCircuitCore: 1
+    SheetSteel: 6
+
+- type: industrialFabricationRecipe
+  id: FabricateIndustrialStampingPress
+  result: IndustrialUpgradeModuleStampingPress
+  requiredTechnology: IndustrialAutomation
+  duration: 40
+  ingredients:
+    IndustrialMechanicalCore: 2
+    IndustrialCircuitCore: 2
+    SheetSteel: 8
+
+- type: industrialRecipe
+  id: AutoFabricateIndustrialRollingMill
+  processor: Assembler
+  requiredTechnology: IndustrialAutomation
+  requireDataDisk: true
+  time: 12
+  inputs:
+    IndustrialMechanicalCore: 2
+    IndustrialCircuitCore: 1
+    SheetSteel: 6
+  outputs:
+    IndustrialUpgradeModuleRollingMill: 1
+
+- type: industrialRecipe
+  id: AutoFabricateIndustrialStampingPress
+  processor: Assembler
+  requiredTechnology: IndustrialAutomation
+  requireDataDisk: true
+  time: 15
+  inputs:
+    IndustrialMechanicalCore: 2
+    IndustrialCircuitCore: 2
+    SheetSteel: 8
+  outputs:
+    IndustrialUpgradeModuleStampingPress: 1
+
+- type: industrialRecipe
+  id: IndustrialRollIronPlates
+  processor: RollingMill
+  requiredTechnology: IndustrialAutomation
+  requireDataDisk: true
+  time: 6
+  inputs:
+    IndustrialIronIngot: 4
+  outputs:
+    IndustrialIronPlate1: 4
+
+- type: industrialRecipe
+  id: IndustrialRollCopperSheets
+  processor: RollingMill
+  requiredTechnology: IndustrialAutomation
+  requireDataDisk: true
+  time: 6
+  inputs:
+    IngotCopper: 4
+  outputs:
+    SheetCopper1: 4
+
+- type: industrialRecipe
+  id: IndustrialRollSteelSheets
+  processor: RollingMill
+  requiredTechnology: IndustrialAutomation
+  requireDataDisk: true
+  time: 6
+  inputs:
+    IndustrialSteelBillet: 4
+  outputs:
+    SheetSteel1: 4
+
+- type: industrialRecipe
+  id: IndustrialStampReinforcedPanels
+  processor: StampingPress
+  minimumTier: Industrial
+  requiredTechnology: IndustrialAutomation
+  requireDataDisk: true
+  time: 8
+  inputs:
+    SheetPlasteel: 2
+  outputs:
+    IndustrialReinforcedPanel: 1
+
+- type: entity
+  parent: IndustrialMaterialBase
+  id: IndustrialReinforcedPanel
+  name: reinforced machine panel
+  description: A stamped plasteel panel used in advanced machine housings.
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/Sheets/metal.rsi
+    state: plasteel_2
+  - type: Item
+    sprite: Objects/Materials/Sheets/metal.rsi
+    heldPrefix: plasteel
+  - type: Stack
+    stackType: IndustrialReinforcedPanel
+    count: 1
+  - type: PhysicalComposition
+    materialComposition:
+      Plasteel: 200
+
+- type: stack
+  parent: BaseMediumStack
+  id: IndustrialReinforcedPanel
+  name: stack-IndustrialReinforcedPanel
+  icon:
+    sprite: Objects/Materials/Sheets/metal.rsi
+    state: plasteel_2
+  spawn: IndustrialReinforcedPanel

@@ -9,22 +9,27 @@ using Content.Shared.Research.Components;
 using IndustrialProcessorWindow = Content.Client._Eclipse.Industrial.IndustrialProcessorWindow;
 using Content.IntegrationTests.Fixtures;
 using Content.Server._Eclipse.Industrial;
+using Content.Server.Atmos.EntitySystems;
 using Content.Server.NodeContainer.EntitySystems;
 using Content.Server.NodeContainer.Nodes;
+using Content.Server.Power.Components;
 using Content.Server.Temperature.Systems;
 using Content.Shared._Eclipse.Industrial;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
+using Content.Shared.Atmos.Piping.Binary.Components;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.Components;
 using Content.Shared.Storage;
 using Content.Shared.Tag;
 using Content.Shared.Stacks;
 using Content.Server.Stack;
+using Robust.Client.GameObjects;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Content.Shared.Temperature.Components;
+using Content.Shared.Verbs;
 using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Localization;
@@ -197,6 +202,25 @@ public sealed class IndustrialControlAndHeatTest : GameTest
     }
 
     [Test]
+    public async Task HeatBufferSpriteKeepsItsBodyAndShowsBothGasConnectors()
+    {
+        await Client.WaitAssertion(() =>
+        {
+            var buffer = CEntMan.SpawnEntity("IndustrialHeatBuffer", MapCoordinates.Nullspace);
+            var sprite = CEntMan.GetComponent<SpriteComponent>(buffer);
+            var sprites = Client.System<SpriteSystem>();
+            Assert.That(sprites.LayerGetRsiState((buffer, sprite), 0).ToString(), Is.EqualTo("icon"));
+            Assert.That(sprite.AllLayers.Count(), Is.EqualTo(3));
+            Assert.That(sprites.LayerGetRsiState((buffer, sprite), 1).ToString(), Is.EqualTo("pipeConnector"));
+            Assert.That(sprites.LayerGetRsiState((buffer, sprite), 2).ToString(), Is.EqualTo("pipeConnector"));
+            Assert.That(sprite.NoRotation, Is.True);
+            Assert.That(sprite[1].Rotation, Is.EqualTo(Angle.FromDegrees(90)));
+            Assert.That(sprite[2].Rotation, Is.EqualTo(Angle.FromDegrees(-90)));
+            CEntMan.DeleteEntity(buffer);
+        });
+    }
+
+    [Test]
     public async Task ColdPlasmaCannotCreateHeatAndStoredHeatIsConserved()
     {
         var map = await Pair.CreateTestMap();
@@ -204,11 +228,16 @@ public sealed class IndustrialControlAndHeatTest : GameTest
         {
             var maps = Server.System<SharedMapSystem>();
             maps.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(1, 0), map.Tile.Tile);
+            maps.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(-1, 0), map.Tile.Tile);
+            maps.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(0, 1), map.Tile.Tile);
             var buffer = SEntMan.SpawnEntity("IndustrialHeatBuffer", new EntityCoordinates(map.Grid, 0.5f, 0.5f));
-            var machine = SEntMan.SpawnEntity("BasicIndustrialThermalCentrifuge", new EntityCoordinates(map.Grid, 1.5f, 0.5f));
+            var machine = SEntMan.SpawnEntity("BasicIndustrialThermalCentrifuge", new EntityCoordinates(map.Grid, 0.5f, 1.5f));
             if (!SEntMan.GetComponent<TransformComponent>(buffer).Anchored)
                 Server.System<SharedTransformSystem>().AnchorEntity(buffer);
-            SEntMan.GetComponent<IndustrialProcessorComponent>(machine).SetFacePort(Direction.West, FacePortState.HeatInput);
+            SEntMan.GetComponent<IndustrialProcessorComponent>(machine).SetFacePort(Direction.South, FacePortState.HeatInput);
+            SEntMan.SpawnEntity("GasPipeFourway", new EntityCoordinates(map.Grid, -0.5f, 0.5f));
+            var networks = Server.System<NodeGroupSystem>();
+            networks.ForceUpdate();
             var nodes = Server.System<NodeContainerSystem>();
             Assert.That(nodes.TryGetNodes(buffer, "inlet", "outlet", out PipeNode inlet, out PipeNode outlet), Is.True);
             inlet.Air.SetMoles(Gas.Plasma, 1);
@@ -218,12 +247,22 @@ public sealed class IndustrialControlAndHeatTest : GameTest
             temperature.ForceChangeTemperature(machine, 293.15f);
             var update = new AtmosDeviceUpdateEvent(1f, null, null);
             SEntMan.EventBus.RaiseLocalEvent(buffer, ref update);
+            Assert.That(inlet.Air.GetMoles(Gas.Plasma), Is.EqualTo(1), "An open outlet must not take gas.");
+            Assert.That(SEntMan.GetComponent<IndustrialHeatBufferComponent>(buffer).PlasmaFlowing, Is.False);
+
+            SEntMan.SpawnEntity("GasPipeFourway", new EntityCoordinates(map.Grid, 1.5f, 0.5f));
+            networks.ForceUpdate();
+            SEntMan.EventBus.RaiseLocalEvent(buffer, ref update);
+            Assert.That(outlet.Air.GetMoles(Gas.Plasma), Is.GreaterThan(0));
+            Assert.That(inlet.Air.GetMoles(Gas.Plasma) + outlet.Air.GetMoles(Gas.Plasma), Is.EqualTo(1).Within(0.0001f));
             Assert.That(SEntMan.GetComponent<TemperatureComponent>(buffer).CurrentTemperature, Is.EqualTo(293.15f).Within(0.01f));
             Assert.That(SEntMan.GetComponent<TemperatureComponent>(machine).CurrentTemperature, Is.EqualTo(293.15f).Within(0.01f));
             SEntMan.EventBus.RaiseLocalEvent(buffer, ref update);
             Assert.That(SEntMan.GetComponent<IndustrialHeatBufferComponent>(buffer).PlasmaFlowing, Is.False,
                 "Plasma left in the outlet is not a continuing inlet flow.");
 
+            inlet.Air.Clear();
+            outlet.Air.Clear();
             temperature.ForceChangeTemperature(buffer, 900);
             var body = SEntMan.GetComponent<TemperatureComponent>(buffer);
             var target = SEntMan.GetComponent<TemperatureComponent>(machine);
@@ -235,6 +274,128 @@ public sealed class IndustrialControlAndHeatTest : GameTest
             Assert.That(target.CurrentTemperature, Is.GreaterThan(293.15f));
             Assert.That(body.CurrentTemperature, Is.LessThan(900));
             Assert.That(after, Is.EqualTo(before).Within(Math.Max(1, Math.Abs(before) * 0.000001)));
+            SEntMan.DeleteEntity(map.MapUid);
+        });
+    }
+
+    [Test]
+    public async Task PlasmaReturnsThroughThePumpInAClosedCircuit()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var maps = Server.System<SharedMapSystem>();
+            EntityCoordinates Tile(int x, int y)
+            {
+                maps.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(x, y), map.Tile.Tile);
+                return new EntityCoordinates(map.Grid, x + 0.5f, y + 0.5f);
+            }
+
+            var transform = Server.System<SharedTransformSystem>();
+            var buffer = SEntMan.SpawnEntity("IndustrialHeatBuffer", map.GridCoords);
+            var layers = SEntMan.GetComponent<AtmosPipeLayersComponent>(buffer);
+            Server.System<AtmosPipeLayersSystem>().SetPipeLayer((buffer, layers), AtmosPipeLayer.Secondary);
+            Assert.That(transform.AnchorEntity(buffer), Is.True);
+            for (var y = 0; y <= 2; y++)
+            {
+                SEntMan.SpawnEntity("GasPipeFourwayAlt1", Tile(-1, y));
+                SEntMan.SpawnEntity("GasPipeFourwayAlt1", Tile(1, y));
+            }
+
+            var pumpPosition = Tile(0, 2);
+            var pump = SEntMan.SpawnEntity("GasVolumePumpAlt1", pumpPosition);
+            transform.SetLocalRotation(pump, Direction.West.ToAngle() - Direction.North.ToAngle());
+            SEntMan.GetComponent<ApcPowerReceiverComponent>(pump).Powered = true;
+            var volumePump = SEntMan.GetComponent<GasVolumePumpComponent>(pump);
+            volumePump.Enabled = true;
+            Server.System<NodeGroupSystem>().ForceUpdate();
+
+            var nodes = Server.System<NodeContainerSystem>();
+            Assert.That(nodes.TryGetNodes(buffer, "inlet", "outlet", out PipeNode west, out PipeNode east), Is.True);
+            Assert.That(nodes.TryGetNodes(pump, "inlet", "outlet", out PipeNode pumpInlet, out PipeNode pumpOutlet), Is.True);
+            Assert.That(west.CurrentPipeDirection, Is.EqualTo(PipeDirection.West));
+            Assert.That(east.CurrentPipeDirection, Is.EqualTo(PipeDirection.East));
+            Assert.That(west.Air, Is.SameAs(pumpInlet.Air));
+            Assert.That(east.Air, Is.SameAs(pumpOutlet.Air).And.Not.SameAs(west.Air));
+            east.Air.SetMoles(Gas.Plasma, 150);
+            east.Air.Temperature = 850f;
+
+            var initialRotation = SEntMan.GetComponent<TransformComponent>(buffer).LocalRotation;
+            var reverse = Server.System<SharedVerbSystem>().GetLocalVerbs(buffer, buffer, typeof(Verb), force: true)
+                .Single(verb => verb.Text == Loc.GetString("industrial-heat-buffer-reverse"));
+            reverse.Act!();
+            Assert.That(SEntMan.GetComponent<TransformComponent>(buffer).LocalRotation, Is.EqualTo(initialRotation));
+            Assert.That(west.Air, Is.SameAs(pumpInlet.Air));
+            Assert.That(east.Air.GetMoles(Gas.Plasma), Is.EqualTo(150));
+
+            var update = new AtmosDeviceUpdateEvent(1f, null, null);
+            SEntMan.EventBus.RaiseLocalEvent(buffer, ref update);
+            Assert.That(SEntMan.GetComponent<IndustrialHeatBufferComponent>(buffer).PlasmaFlowing, Is.True);
+            Assert.That(SEntMan.GetComponent<TemperatureComponent>(buffer).CurrentTemperature, Is.GreaterThan(293.15f));
+            var returned = east.Air.TotalMoles;
+            SEntMan.EventBus.RaiseLocalEvent(pump, ref update);
+            Assert.That(east.Air.TotalMoles, Is.GreaterThan(returned));
+            Assert.That(east.Air.TotalMoles + west.Air.TotalMoles, Is.EqualTo(150).Within(0.01f));
+
+            SEntMan.DeleteEntity(pump);
+            SEntMan.SpawnEntity("GasPipeFourwayAlt1", pumpPosition);
+            Server.System<NodeGroupSystem>().ForceUpdate();
+            Assert.That(west.Air, Is.SameAs(east.Air));
+            var plasma = east.Air.GetMoles(Gas.Plasma);
+            var body = SEntMan.GetComponent<TemperatureComponent>(buffer);
+            var before = body.CurrentTemperature;
+            SEntMan.EventBus.RaiseLocalEvent(buffer, ref update);
+            Assert.That(body.CurrentTemperature, Is.GreaterThan(before));
+            Assert.That(east.Air.GetMoles(Gas.Plasma), Is.EqualTo(plasma).Within(0.01f));
+            Assert.That(SEntMan.GetComponent<IndustrialHeatBufferComponent>(buffer).PlasmaFlowing, Is.False);
+            SEntMan.DeleteEntity(map.MapUid);
+        });
+    }
+
+    [Test]
+    public async Task HeatPipesWarmAProcessorAroundACornerAndStopWhenDisconnected()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var maps = Server.System<SharedMapSystem>();
+            EntityCoordinates Tile(int x, int y)
+            {
+                maps.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(x, y), map.Tile.Tile);
+                return new EntityCoordinates(map.Grid, x + 0.5f, y + 0.5f);
+            }
+
+            var transform = Server.System<SharedTransformSystem>();
+            var buffer = SEntMan.SpawnEntity("IndustrialHeatBuffer", map.GridCoords);
+            Assert.That(transform.AnchorEntity(buffer), Is.True);
+            var bendPosition = Tile(1, 0);
+            var endPosition = Tile(1, 1);
+            var machine = SEntMan.SpawnEntity("BasicIndustrialThermalCentrifuge", Tile(2, 1));
+            var bend = SEntMan.SpawnEntity("IndustrialHeatPipe", bendPosition);
+            var end = SEntMan.SpawnEntity("IndustrialHeatPipe", endPosition);
+            Assert.That(transform.AnchorEntity(bend), Is.True);
+            Assert.That(transform.AnchorEntity(end), Is.True);
+            var networks = Server.System<NodeGroupSystem>();
+            networks.ForceUpdate();
+            Assert.That(SEntMan.GetComponent<IndustrialProcessorComponent>(machine).GetFacePort(Direction.West), Is.EqualTo(FacePortState.HeatInput));
+            var nodes = Server.System<NodeContainerSystem>();
+            Assert.That(nodes.TryGetNode<AdjacentNode>(buffer, IndustrialHeatBufferComponent.HeatNodeName, out var bufferNode), Is.True);
+            Assert.That(nodes.TryGetNode<AdjacentNode>(end, IndustrialHeatBufferComponent.HeatNodeName, out var endNode), Is.True);
+            Assert.That(bufferNode.NodeGroup, Is.Not.Null.And.SameAs(endNode.NodeGroup));
+
+            var temperature = Server.System<TemperatureSystem>();
+            var target = SEntMan.GetComponent<TemperatureComponent>(machine);
+            temperature.ForceChangeTemperature(buffer, 900);
+            var update = new AtmosDeviceUpdateEvent(1f, null, null);
+            for (var i = 0; i < 30; i++)
+                SEntMan.EventBus.RaiseLocalEvent(buffer, ref update);
+            Assert.That(target.CurrentTemperature, Is.GreaterThan(400));
+
+            transform.Unanchor(bend);
+            networks.ForceUpdate();
+            temperature.ForceChangeTemperature(machine, 293.15f);
+            SEntMan.EventBus.RaiseLocalEvent(buffer, ref update);
+            Assert.That(target.CurrentTemperature, Is.EqualTo(293.15f).Within(0.01f));
             SEntMan.DeleteEntity(map.MapUid);
         });
     }
@@ -297,7 +458,7 @@ public sealed class IndustrialControlAndHeatTest : GameTest
     }
 
     [Test]
-    public async Task MachineWindowHandlesFullBuffersAndStorageFilters()
+    public async Task MachineWindowHandlesFullBuffersAndUpdatesRecipes()
     {
         await Client.WaitAssertion(() =>
         {
@@ -371,15 +532,6 @@ public sealed class IndustrialControlAndHeatTest : GameTest
             var automatic = Find<Button>(window, "AutomaticRecipe");
             Assert.That(automatic.Label.TryGetStyleProperty<Robust.Client.Graphics.Font>("font", out _), Is.True,
                 "The industrial stylesheet must preserve the station's text fonts.");
-            state.IsBuffer = true;
-            state.SelectedRecipeId = "CrushSteelOre";
-            Assert.DoesNotThrow(() => window.UpdateState(state));
-            window.Arrange(UIBox2.FromDimensions(Vector2.Zero, new Vector2(800, 520)));
-            Assert.That(Find<PanelContainer>(window, "OutputBuffer").Visible, Is.False);
-            Assert.That(Find<Button>(window, "PauseButton").Visible, Is.False);
-            var bufferScroll = Find<ScrollContainer>(window, "ProductionScroll");
-            foreach (var control in VisibleChildren(bufferScroll))
-                Assert.That(control.GlobalRect.Right, Is.LessThanOrEqualTo(bufferScroll.GlobalRect.Right + 1), control.Name);
             state.Recipes = [new IndustrialRecipeUiState("CrushSteelOre", longRecipe, 5, false, [slots[0]], [slots[1]])];
             state.MaxInputSlots = state.MaxOutputSlots = 4;
             state.InputSlots = state.OutputSlots = slots[..4];
@@ -390,7 +542,6 @@ public sealed class IndustrialControlAndHeatTest : GameTest
                 "Changing recipe availability must replace its row without leaving duplicates.");
             Assert.That(VisibleChildren(window).Count(c => c.Name?.StartsWith("InputSlot") == true), Is.EqualTo(4));
 
-            state.IsBuffer = false;
             state.IsExtractor = true;
             state.Enabled = false;
             state.Recipes = [];
@@ -407,6 +558,36 @@ public sealed class IndustrialControlAndHeatTest : GameTest
             Assert.That(Find<Button>(window, "PauseButton").Text, Is.EqualTo(Loc.GetString("industrial-extraction-stop")));
             Assert.That(Find<ProgressBar>(window, "CycleProgress").Visible, Is.True);
             Assert.That(Find<ProgressBar>(window, "CycleProgress").GetAsRatio(), Is.EqualTo(0.4f).Within(0.001f));
+            window.Close();
+        });
+    }
+
+    [Test]
+    public async Task ResourceStorageWindowShowsOnlyInventoryAndConnections()
+    {
+        await Client.WaitAssertion(() =>
+        {
+            var empty = new IndustrialProcessorSlotState(null, 0, string.Empty);
+            var slots = Enumerable.Repeat(empty, 32).ToArray();
+            slots[0] = new IndustrialProcessorSlotState("SheetSteel", 50, "Сталь");
+            var state = new IndustrialProcessorBoundUserInterfaceState("Промышленное хранилище ресурсов", "Промышленный",
+                "industrial-processor-idle", 0, null, true, false, false, 32, 32, slots, [], empty,
+                FacePortState.ItemInput, FacePortState.ItemOutput, FacePortState.Disabled, FacePortState.Disabled)
+            {
+                IsBuffer = true,
+            };
+            using var window = new IndustrialProcessorWindow();
+            window.OpenCentered();
+            window.UpdateState(state);
+            var size = new Vector2(800, 520);
+            window.SetSize = size;
+            window.Arrange(UIBox2.FromDimensions(Vector2.Zero, size));
+
+            var controls = VisibleChildren(window).ToArray();
+            Assert.That(controls.Count(control => control.Name?.StartsWith("InputSlot") == true), Is.EqualTo(32));
+            Assert.That(controls.Any(control => control.Name is "RecipeSearch" or "ProcessTitle" or "OutputBuffer" or "PauseButton"), Is.False);
+            Assert.That(Find<BoxContainer>(window, "MachineConnections").GlobalRect.Bottom, Is.LessThanOrEqualTo(size.Y));
+            Assert.That(Find<ContainerButton>(window, "InputSlot31").GlobalRect.Right, Is.LessThanOrEqualTo(size.X));
             window.Close();
         });
     }

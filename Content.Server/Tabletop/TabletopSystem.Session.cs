@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Numerics;
 using Content.Server.Tabletop.Components;
 using Content.Shared.Tabletop.Events;
@@ -48,7 +49,7 @@ namespace Content.Server.Tabletop
             if (tabletop.Session is not { } session)
                 return;
 
-            foreach (var (player, _) in session.Players)
+            foreach (var player in session.Players.Keys.ToArray())
             {
                 CloseSessionFor(player, uid);
             }

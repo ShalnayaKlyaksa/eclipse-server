@@ -3,6 +3,7 @@ using Content.IntegrationTests.Fixtures;
 using Content.Server._Eclipse.Industrial;
 using Content.Shared._Eclipse.Industrial;
 using Content.Shared.Atmos;
+using Content.Shared.Cargo.Prototypes;
 using Content.Shared.Chemistry;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.FixedPoint;
@@ -22,6 +23,54 @@ namespace Content.IntegrationTests.Tests.Industrial;
 
 public sealed class LiquidPipeImplementationTest : GameTest
 {
+    [TestCase("Water", 1500)]
+    [TestCase("Chlorine", 250)]
+    [TestCase("Hydrogen", 250)]
+    [TestCase("Oxygen", 250)]
+    [TestCase("Ethanol", 250)]
+    [TestCase("Acetone", 250)]
+    [TestCase("SulfuricAcid", 250)]
+    [TestCase("SodiumHydroxide", 250)]
+    public async Task CargoReagentTankSuppliesAPureReagentToTheLiquidLine(string reagent, int quantity)
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var maps = Server.System<SharedMapSystem>();
+            for (var x = -1; x <= 2; x++)
+                maps.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(x, 0), map.Tile.Tile);
+
+            var cargo = Server.ResolveDependency<IPrototypeManager>().Index<CargoProductPrototype>("IndustrialReagentSupply" + reagent);
+            Assert.That(cargo.Category, Is.EqualTo("cargoproduct-category-name-engineering"));
+            var supply = SEntMan.SpawnEntity(cargo.Product, map.GridCoords);
+            var wrongSide = SEntMan.SpawnEntity("PerfectLiquidPipe", new EntityCoordinates(map.Grid, -.5f, .5f));
+            var pipe = SEntMan.SpawnEntity("PerfectLiquidPipe", new EntityCoordinates(map.Grid, 1.5f, .5f));
+            var reservoir = SEntMan.SpawnEntity("IndustrialFluidReservoir", new EntityCoordinates(map.Grid, 2.5f, .5f));
+            SEntMan.GetComponent<IndustrialProcessorComponent>(reservoir).SetFacePort(Direction.West, FacePortState.LiquidInput);
+
+            var solutions = Server.System<SharedSolutionContainerSystem>();
+            Assert.That(solutions.TryGetSolution(supply, "tank", out _, out var stock));
+            Assert.That(stock.Volume, Is.EqualTo(FixedPoint2.New(quantity)));
+            Assert.That(stock.GetTotalPrototypeQuantity(reagent), Is.EqualTo(stock.Volume));
+            Assert.That(solutions.TryGetSolution(pipe, LiquidPipeComponent.SolutionName, out _, out var line));
+            Assert.That(solutions.TryGetSolution(wrongSide, LiquidPipeComponent.SolutionName, out _, out var disconnected));
+            Assert.That(solutions.TryGetSolution(reservoir, "industrial_fluid_input", out _, out var received));
+            var network = Server.System<LiquidPipeNetworkSystem>();
+            network.Update(.25f);
+            Assert.That(line.Volume, Is.EqualTo(FixedPoint2.Zero));
+
+            Assert.That(Server.System<SharedTransformSystem>().AnchorEntity(supply));
+            for (var tick = 0; tick < 8; tick++)
+                network.Update(.25f);
+
+            Assert.That(received.Volume, Is.GreaterThan(FixedPoint2.Zero));
+            Assert.That(received.GetTotalPrototypeQuantity(reagent), Is.EqualTo(received.Volume));
+            Assert.That(disconnected.Volume, Is.EqualTo(FixedPoint2.Zero));
+            Assert.That(stock.Volume + line.Volume + received.Volume, Is.EqualTo(FixedPoint2.New(quantity)));
+            SEntMan.DeleteEntity(map.MapUid);
+        });
+    }
+
     [TestCase("BasicLiquidPipe", "BasicLiquidPipe", 1f)]
     [TestCase("IndustrialLiquidPipe", "IndustrialLiquidPipe", 3f)]
     [TestCase("PerfectLiquidPipe", "PerfectLiquidPipe", 6f)]

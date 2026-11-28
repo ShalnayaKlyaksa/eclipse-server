@@ -7,9 +7,9 @@ namespace Content.Server.Research.Systems;
 
 public sealed partial class ResearchSystem
 {
-    private void StartTerminalAnalysis(EntityUid uid, ResearchConsoleComponent console, string argument)
+    private void StartTerminalAnalysis(EntityUid uid, ResearchConsoleComponent console, EntityUid actor, string argument)
     {
-        if (!CanResearchAtTerminal(uid)) { TerminalPrint(console, Loc.GetString("research-terminal-operation-denied")); return; }
+        if (!CanResearchAtTerminal(uid, actor)) { TerminalPrint(console, Loc.GetString("research-terminal-operation-denied")); return; }
         if (_timing.CurTime < console.NextAnalysis)
         { TerminalPrint(console, Loc.GetString("research-terminal-analysis-cooldown")); return; }
         var technology = FindTerminalTechnology(argument);
@@ -32,9 +32,9 @@ public sealed partial class ResearchSystem
         TerminalPrint(console, Loc.GetString("research-terminal-analysis-trace", ("a", values[0]), ("b", values[1]), ("c", values[2])));
     }
 
-    private void AdvanceTerminalAnalysis(EntityUid uid, ResearchConsoleComponent console, string verb, string argument)
+    private void AdvanceTerminalAnalysis(EntityUid uid, ResearchConsoleComponent console, EntityUid actor, string verb, string argument)
     {
-        if (!CanResearchAtTerminal(uid))
+        if (!CanResearchAtTerminal(uid, actor))
         {
             console.Analysis = null;
             TerminalPrint(console, Loc.GetString("research-terminal-operation-denied"));

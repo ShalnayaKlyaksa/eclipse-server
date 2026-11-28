@@ -41,6 +41,7 @@ public sealed partial class AtmosphereSystem : SharedAtmosphereSystem
     [Dependency] private readonly MapSystem _map = default!;
     [Dependency] public readonly PuddleSystem Puddle = default!;
     [Dependency] private readonly DamageableSystem _damage = default!;
+    [Dependency] private readonly AirtightSystem _airtight = default!;
 
     private const float ExposedUpdateDelay = 1f;
     private float _exposedTimer = 0f;

@@ -1823,15 +1823,19 @@ public sealed partial class AdvancedHealthStatusWindow : BaseWindow
 
         _patientLabel.SetMessage(FormattedMessage.FromUnformatted(Loc.GetString("advanced-health-chip-patient",
             ("name", _entities.GetComponent<MetaDataComponent>(_target).EntityName))), HealthMenuStyle.AmberBright);
-        var alarm = health.IsHeartStopped ? 1f : Math.Max(health.SmoothedConditionBadness, Math.Max(
-            health.HasBlood ? 1f - health.BloodVolume / Math.Max(1f, health.MaxBloodVolume) : 0f,
-            Math.Max(health.NeedsOxygen ? 1f - health.Oxygenation / 100f : 0f,
-                Math.Max(health.Shock / 100f, 1f - health.Consciousness / 100f))));
+        var dead = IsTargetDead;
+        var critical = _entities.TryGetComponent<MobStateComponent>(_target, out var state) && state.CurrentState == MobState.Critical;
+        _entities.TryGetComponent<AdvancedNutritionComponent>(_target, out var nutrition);
+        var alarm = dead || health.IsHeartStopped ? 1f : health.SmoothedConditionBadness;
+        if (critical)
+            alarm = Math.Max(alarm, 0.8f);
         _chipAlarm.Severity = alarm;
-        _chipAlarm.Enabled = !IsTargetDead;
-        _summaryLabel.SetMessage(FormattedMessage.FromUnformatted(Loc.GetString(IsTargetDead ? "advanced-health-chip-dead" : health.IsHeartStopped ? "advanced-health-chip-arrest"
+        _chipAlarm.Enabled = !dead;
+        _summaryLabel.SetMessage(FormattedMessage.FromUnformatted(Loc.GetString(dead ? "advanced-health-chip-dead" : health.IsHeartStopped ? "advanced-health-chip-arrest"
             : health.IsUnconscious ? "advanced-health-chip-unconscious"
             : health.IsSuffocating ? "advanced-health-chip-suffocating"
+            : critical ? "advanced-health-chip-critical"
+            : nutrition is { RequiresCrawling: true } ? "advanced-health-chip-depleted"
             : alarm >= 0.4f ? "advanced-health-chip-unstable" : "advanced-health-chip-stable")),
             alarm >= 0.4f ? HealthMenuStyle.Red : HealthMenuStyle.AmberBright);
         _arrestReason.Visible = health.IsHeartStopped && health.ArrestTrigger != CardiacArrestTrigger.Unknown;
@@ -1867,7 +1871,6 @@ public sealed partial class AdvancedHealthStatusWindow : BaseWindow
             _sleepIndicator.SetReading(0, "—", "", false);
         }
 
-        var nutrition = _entities.TryGetComponent<AdvancedNutritionComponent>(_target, out var nutritional) ? nutritional : null;
         _nutritionIndicator.Visible = nutrition is { Malnutrition: > 0.001f };
         _dehydrationIndicator.Visible = nutrition is { DehydrationStrain: > 0.001f };
         if (nutrition != null)
@@ -2254,7 +2257,9 @@ public sealed partial class AdvancedHealthStatusWindow : BaseWindow
             _conditionRows.Add(("foreign", Loc.GetString("advanced-health-cond-foreign-count",
                     ("count", Math.Max(part.ForeignBodyCount, part.Wounds.Count(wound => wound.HasForeignBody)))),
                 Loc.GetString("advanced-health-chip-foreign-detail"), HealthMenuStyle.Amber));
-        if (part.IsBandaged || part.Wounds.Any(wound => wound.IsBandaged))
+        if (part.IsBandageDirty)
+            Condition("bandage", "advanced-health-window-status-dirty-bandage", "advanced-health-chip-dirty-bandage-detail", HealthMenuStyle.Amber);
+        else if (part.HasBandage)
             Condition("bandage", "advanced-health-window-status-bandaged", "advanced-health-chip-bandage-detail", beneficial);
         if (part.Wounds.Any(wound => wound.IsSutured))
             Condition("suture", "advanced-health-wound-flag-sutured", "advanced-health-chip-suture-detail", beneficial);

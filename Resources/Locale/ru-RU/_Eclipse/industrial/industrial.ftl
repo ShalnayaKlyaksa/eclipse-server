@@ -366,7 +366,7 @@ industrial-processor-ui-ports = Конфигурация портов
 
 ent-IndustrialPortWrench = промышленный ключ
 
-    .desc = Настраивает порты промышленных машин и снимает предметные трубы. Возьмите в руку, чтобы увидеть индикаторы портов.
+    .desc = Настраивает порты промышленных машин. Возьмите в руку, чтобы увидеть индикаторы портов.
 
 
 
@@ -374,13 +374,9 @@ tool-quality-industrial-port-configuring-name = настройка промыш�
 
 tool-quality-industrial-port-configuring-tool-name = промышленный ключ
 
-tool-quality-industrial-pipe-detaching-name = снятие предметных труб
-
-tool-quality-industrial-pipe-detaching-tool-name = промышленный ключ
 
 
-
-industrial-item-pipe-examine-detach = Снимите трубу промышленным ключом.
+industrial-item-pipe-examine-detach = Снимите трубу гаечным ключом.
 
 industrial-item-pipe-detached = Предметная труба снята.
 
@@ -410,7 +406,7 @@ industrial-liquid-pipe-examine-network = Жидкостная сеть #{$id}: {
 
 industrial-item-pipe-overlap-blocked = Соединения предметной трубы перекрываются на этом слое.
 
-industrial-piping-tile-occupied = На этой клетке уже есть промышленная труба.
+industrial-piping-tile-occupied = Клетка уже занята промышленным оборудованием.
 
 industrial-liquid-pipe-detached = Жидкостная труба снята.
 
@@ -474,15 +470,22 @@ stack-industrial-scrap = промышленный лом
 
 ent-IndustrialKey = промышленный ключ
 
-    .desc = Настраивает порты промышленных машин, собирает рабочие столы из столешниц и снимает предметные трубы. Возьмите в руку, чтобы увидеть индикаторы портов.
+    .desc = Настраивает порты промышленных машин и собирает рабочие столы из столешниц. Возьмите в руку, чтобы увидеть индикаторы портов.
 
 ent-IndustrialHeatBuffer = теплообменный буфер
 
-    .desc = Накапливает тепло от протекающей плазмы и передаёт его соседним промышленным машинам.
+    .desc = Обменивается теплом с плазмой в газовом контуре и нагревает промышленные станки напрямую или через теплопередающие трубы.
 
-industrial-heat-buffer-examine-active = Плазма течёт — тепло передаётся подключённым машинам.
+industrial-heat-buffer-examine-active = Плазма течёт от входа к выходу.
 
-industrial-heat-buffer-examine-idle = Поток плазмы не обнаружен. Подключите плазменные трубы ко входу и выходу.
+industrial-heat-buffer-examine-idle = Протока нет. Проверьте оба газовых подключения, наличие плазмы и направление насоса.
+industrial-heat-buffer-examine-shared = Вход и выход соединены в общий газовый контур. Буфер обменивается теплом с плазмой в контуре.
+industrial-heat-buffer-examine-ports = Газовый вход — { $inlet }. Газовый выход — { $outlet }.
+industrial-heat-buffer-reverse = Поменять вход и выход
+industrial-heat-buffer-examine-temperature = Температура корпуса — { $temperature } K.
+
+ent-IndustrialHeatPipe = теплопередающая труба
+    .desc = Соединяет теплообменный буфер с тепловыми входами промышленных станков. Закрепляется гаечным ключом.
 
 industrial-workbench-assembled = Рабочий стол собран.
 
@@ -583,3 +586,17 @@ stack-crushed-plasma-ore = дроблёная плазменная руда
 
 stack-crushed-uranium-ore = дроблёная урановая руда
 
+ent-LpItemPipePack = { ent-LpItemPipe }
+    .desc = { ent-LpItemPipe.desc }
+ent-MpItemPipePack = { ent-MpItemPipe }
+    .desc = { ent-MpItemPipe.desc }
+ent-HpItemPipePack = { ent-HpItemPipe }
+    .desc = { ent-HpItemPipe.desc }
+ent-BasicLiquidPipePack = { ent-BasicLiquidPipe }
+    .desc = { ent-BasicLiquidPipe.desc }
+ent-IndustrialLiquidPipePack = { ent-IndustrialLiquidPipe }
+    .desc = { ent-IndustrialLiquidPipe.desc }
+ent-PerfectLiquidPipePack = { ent-PerfectLiquidPipe }
+    .desc = { ent-PerfectLiquidPipe.desc }
+ent-IndustrialHeatPipePack = { ent-IndustrialHeatPipe }
+    .desc = { ent-IndustrialHeatPipe.desc }

@@ -37,7 +37,7 @@
   - type: Apiary
     controlledClimate: true
   - type: Sprite
-    color: "#B9D8E2"
+    state: hive-advanced
   - type: ApcPowerReceiver
     needsPower: true
     powerLoad: 500

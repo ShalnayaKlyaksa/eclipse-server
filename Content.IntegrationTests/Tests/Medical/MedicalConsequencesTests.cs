@@ -1,7 +1,11 @@
 using System.Numerics;
 using Content.IntegrationTests.Fixtures;
 using Content.Server._Eclipse.AdvancedHealth;
+using Content.Server.Body.Systems;
 using Content.Shared._Eclipse.AdvancedHealth;
+using Content.Shared.Alert;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Nutrition.Components;
@@ -58,6 +62,55 @@ public sealed class MedicalConsequencesTests : GameTest
     }
 
     [Test]
+    public async Task ExhaustionAndSleepDebtHaveTheirOwnAlertsAndDoNotChangeMedicalCondition()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var patient = SEntMan.SpawnEntity("MobHuman", map.MapCoords);
+            var health = SEntMan.GetComponent<AdvancedHealthComponent>(patient);
+            var exertion = SEntMan.GetComponent<AdvancedExertionComponent>(patient);
+            var alerts = SEntMan.System<AlertsSystem>();
+            exertion.SleepDebt = 100;
+            var exertionSystem = SEntMan.System<SharedAdvancedExertionSystem>();
+            Assert.That(exertionSystem.TryDrainReserve((patient, exertion), 100), Is.True);
+            exertionSystem.Advance((patient, exertion), 1, false, false);
+            SEntMan.System<AdvancedHealthTickSystem>().Update(1);
+
+            Assert.That(alerts.IsShowingAlert(patient, "AdvancedExhausted"), Is.True);
+            Assert.That(alerts.IsShowingAlert(patient, "AdvancedSleepy"), Is.True);
+            Assert.That(health.CachedAlertSeverity, Is.Zero);
+            Assert.That(SEntMan.GetComponent<MobStateComponent>(patient).CurrentState, Is.EqualTo(MobState.Alive));
+            Assert.That(SEntMan.System<StandingStateSystem>().IsDown(patient), Is.False);
+        });
+    }
+
+    [Test]
+    public async Task SuffocationWarnsBeforeCollapseAndPublishesCurrentVitals()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var patient = SEntMan.SpawnEntity("MobHuman", map.MapCoords);
+            var health = SEntMan.GetComponent<AdvancedHealthComponent>(patient);
+            var tick = SEntMan.System<AdvancedHealthTickSystem>();
+            var mobState = SEntMan.GetComponent<MobStateComponent>(patient);
+            SEntMan.System<RespiratorSystem>().UpdateSaturation(patient, -100);
+
+            tick.Update(1);
+            Assert.That(health.IsSuffocating, Is.True);
+            Assert.That(health.Oxygenation, Is.GreaterThan(95));
+            Assert.That(health.CachedAlertSeverity, Is.GreaterThanOrEqualTo(2));
+            Assert.That(mobState.CurrentState, Is.EqualTo(MobState.Alive));
+
+            tick.Update(20);
+            Assert.That(mobState.CurrentState, Is.EqualTo(MobState.Critical));
+            Assert.That(health.SmoothedConditionBadness, Is.GreaterThanOrEqualTo(1f - health.Oxygenation / 100f));
+            Assert.That(SEntMan.System<AlertsSystem>().IsShowingAlert(patient, "HumanCrit"), Is.True);
+        });
+    }
+
+    [Test]
     public async Task EmptyFoodAndWaterForceSlowCrawlingAndPreventEnduranceRecovery()
     {
         var map = await Pair.CreateTestMap();
@@ -67,9 +120,10 @@ public sealed class MedicalConsequencesTests : GameTest
             var health = SEntMan.GetComponent<AdvancedHealthComponent>(uid);
             SEntMan.System<HungerSystem>().SetHunger(uid, 0);
             SEntMan.System<ThirstSystem>().SetThirst(uid, SEntMan.GetComponent<ThirstComponent>(uid), 0);
-            SEntMan.System<AdvancedNutritionSystem>().Advance((uid, health), 1);
+            SEntMan.System<AdvancedHealthTickSystem>().Update(1);
             var nutrition = SEntMan.GetComponent<AdvancedNutritionComponent>(uid);
             Assert.That(nutrition.RequiresCrawling, Is.True);
+            Assert.That(health.CachedAlertSeverity, Is.GreaterThanOrEqualTo(3));
             Assert.That(nutrition.MovementMultiplier, Is.LessThanOrEqualTo(0.2f));
             Assert.That(SEntMan.System<StandingStateSystem>().Stand(uid), Is.False);
             var exertion = SEntMan.GetComponent<AdvancedExertionComponent>(uid);

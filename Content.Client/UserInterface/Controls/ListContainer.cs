@@ -394,15 +394,9 @@ public sealed class ListContainerButton : ContainerButton, IEntityControl
     public ListContainerButton(ListData data, int index)
     {
         AddStyleClass(StyleClassButton);
+        AddStyleClass(ListContainer.StyleClassListContainerButton);
         Data = data;
         Index = index;
-        StyleBoxOverride = new StyleBoxFlat(Color.White);
-        // AddChild(Background = new PanelContainer
-        // {
-        //     HorizontalExpand = true,
-        //     VerticalExpand = true,
-        //     PanelOverride = new StyleBoxFlat {BackgroundColor = new Color(55, 55, 68)}
-        // });
     }
 
     public EntityUid? UiEntity => (Data as EntityListData)?.Uid;

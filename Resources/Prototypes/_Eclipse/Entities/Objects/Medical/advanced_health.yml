@@ -2,7 +2,7 @@
   parent: BaseItem
   id: AdvancedBandage
   name: bandage roll
-  description: A roll of sterile gauze. Its durability sets how much bleeding it can stop — each 1% spent in the health screen closes 0.01 L/min. Wind it around a wound in the health screen.
+  description: A roll of sterile gauze that reduces external bleeding. Wind it around a wound in the health screen.
   components:
   - type: Sprite
     sprite: Objects/Specific/Medical/medical.rsi

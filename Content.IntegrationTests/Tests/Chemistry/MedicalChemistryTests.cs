@@ -243,9 +243,12 @@ public sealed class MedicalChemistryTests : GameTest
                 new(ChemMasterMode.Transfer, ChemMasterSortingType.None, null, output, reagents, FixedPoint2.New(30),
                     0, 20, false, ChemMasterDrawSource.Internal, telemetry);
             window.UpdateState(State(medical));
+            var tabs = window.FindControl<Robust.Client.UserInterface.Controls.TabContainer>("Tabs");
+            tabs.CurrentTab = 1;
             window.PillDosage.Value = 3;
             window.PillNumber.Value = 2;
             window.UpdateState(State(medical with { Progress = 0.5f }));
+            Assert.That(window.Medical.Visible, Is.False, "Telemetry must not draw the synthesis tab over the output tab.");
             Assert.That(window.PillDosage.Value, Is.EqualTo(3));
             Assert.That(window.PillNumber.Value, Is.EqualTo(2));
         });

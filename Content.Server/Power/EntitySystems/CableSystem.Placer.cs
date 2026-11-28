@@ -2,6 +2,8 @@ using Content.Server.Administration.Logs;
 using Content.Server.Popups;
 using Content.Server.Power.Components;
 using Content.Shared._Eclipse.Industrial;
+using Content.Shared.Construction.Components;
+using Content.Shared.Construction.EntitySystems;
 using Content.Shared.Database;
 using Content.Shared.Interaction;
 using Content.Shared.Maps;
@@ -22,6 +24,7 @@ public sealed partial class CableSystem
     private void InitializeCablePlacer()
     {
         SubscribeLocalEvent<CablePlacerComponent, AfterInteractEvent>(OnCablePlacerAfterInteract);
+        SubscribeLocalEvent<IndustrialPipePackComponent, UserUnanchoredEvent>(OnPipeUnanchored);
     }
 
     private void OnCablePlacerAfterInteract(Entity<CablePlacerComponent> placer, ref AfterInteractEvent args)
@@ -42,6 +45,27 @@ public sealed partial class CableSystem
 
         if ((!component.OverTile && !tileDef.IsSubFloor) || !tileDef.Sturdy)
             return;
+
+        if (component.IndustrialPipe)
+        {
+            var coordinates = _map.GridTileToLocal(gridUid, grid, snapPos);
+            var pipe = Spawn(component.CablePrototypeId);
+            _transform.SetCoordinates(pipe, coordinates);
+            var attempt = new AnchorAttemptEvent(args.User, placer);
+            RaiseLocalEvent(pipe, attempt);
+            if (attempt.Cancelled ||
+                !EntityManager.System<AnchorableSystem>().CanAnchorAt(pipe, args.User) ||
+                !_transform.AnchorEntity(pipe) ||
+                !Transform(pipe).Anchored ||
+                !_stack.TryUse(placer.Owner, 1))
+            {
+                Del(pipe);
+                return;
+            }
+
+            args.Handled = true;
+            return;
+        }
 
         if (IndustrialPipingOccupancyHelper.TileContainsPiping(gridUid, grid, snapPos, EntityManager, _map))
         {
@@ -65,5 +89,11 @@ public sealed partial class CableSystem
         _adminLogger.Add(LogType.Construction, LogImpact.Low,
             $"{ToPrettyString(args.User):player} placed {ToPrettyString(newCable):cable} at {Transform(newCable).Coordinates}");
         args.Handled = true;
+    }
+
+    private void OnPipeUnanchored(Entity<IndustrialPipePackComponent> pipe, ref UserUnanchoredEvent args)
+    {
+        Spawn(pipe.Comp.Pack, Transform(pipe).Coordinates);
+        QueueDel(pipe);
     }
 }

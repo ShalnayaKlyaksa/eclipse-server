@@ -3,7 +3,6 @@ using Content.Client.VendingMachines.UI;
 using Content.Shared.VendingMachines;
 using Robust.Client.UserInterface;
 using Robust.Shared.Input;
-using System.Linq;
 using Content.Shared.PDA;
 using Robust.Shared.Prototypes;
 
@@ -13,9 +12,6 @@ namespace Content.Client.VendingMachines
     {
         [ViewVariables]
         private VendingMachineMenu? _menu;
-
-        [ViewVariables]
-        private List<VendingMachineInventoryEntry> _cachedInventory = new();
 
         public VendingMachineBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey)
         {
@@ -36,10 +32,8 @@ namespace Content.Client.VendingMachines
             var enabled = EntMan.TryGetComponent(Owner, out VendingMachineComponent? bendy) && !bendy.Ejecting;
 
             var system = EntMan.System<VendingMachineSystem>();
-            _cachedInventory = system.GetAllInventory(Owner);
-
             _menu?.SetPrice(bendy == null ? 0 : IoCManager.Resolve<IPrototypeManager>().Index(PersonalEconomyPrototype.StationDefault).VendorPrices.GetValueOrDefault(bendy.PackPrototypeId));
-            _menu?.Populate(_cachedInventory, enabled);
+            _menu?.Populate(system.GetAllInventory(Owner), enabled);
         }
 
         public void UpdateAmounts()
@@ -47,8 +41,7 @@ namespace Content.Client.VendingMachines
             var enabled = EntMan.TryGetComponent(Owner, out VendingMachineComponent? bendy) && !bendy.Ejecting;
 
             var system = EntMan.System<VendingMachineSystem>();
-            _cachedInventory = system.GetAllInventory(Owner);
-            _menu?.UpdateAmounts(_cachedInventory, enabled);
+            _menu?.UpdateAmounts(system.GetAllInventory(Owner), enabled);
         }
 
         private void OnItemSelected(GUIBoundKeyEventArgs args, ListData data)
@@ -56,18 +49,10 @@ namespace Content.Client.VendingMachines
             if (args.Function != EngineKeyFunctions.UIClick)
                 return;
 
-            if (data is not VendorItemsListData { ItemIndex: var itemIndex })
+            if (data is not VendorItemsListData selectedItem)
                 return;
 
-            if (_cachedInventory.Count == 0)
-                return;
-
-            var selectedItem = _cachedInventory.ElementAtOrDefault(itemIndex);
-
-            if (selectedItem == null)
-                return;
-
-            SendPredictedMessage(new VendingMachineEjectMessage(selectedItem.Type, selectedItem.ID));
+            SendPredictedMessage(new VendingMachineEjectMessage(selectedItem.Type, selectedItem.ItemProtoID));
         }
 
         protected override void Dispose(bool disposing)

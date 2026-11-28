@@ -1,5 +1,4 @@
 using System.Numerics;
-using System.Globalization;
 using System.Linq;
 using Content.Shared._Eclipse.AdvancedHealth;
 using Content.Shared.Chemistry.Reagent;
@@ -28,10 +27,10 @@ public sealed class MedicalDiagnosticReportWindow : DefaultWindow
         };
         Contents.AddChild(root);
         root.AddChild(new Label { Text = Loc.GetString("diagnostic-report-patient", ("patient", report.PatientName)), ClipText = true });
-        root.AddChild(new Label { Text = Loc.GetString("advanced-health-part-" + report.Slot.ToString().ToLowerInvariant()) });
         root.AddChild(new Label { Text = Loc.GetString("diagnostic-report-time", ("time", report.CollectedAt.ToString(@"hh\:mm\:ss"))), ClipText = true });
         if (report.Kind != MedicalDiagnosticKind.Blood)
         {
+            root.AddChild(new Label { Text = Loc.GetString("advanced-health-part-" + report.Slot.ToString().ToLowerInvariant()) });
             root.AddChild(report.Kind == MedicalDiagnosticKind.XRay
                 ? new MedicalRadiographControl(report) { MinHeight = 250, HorizontalExpand = true }
                 : new DiagnosticSchematic(report) { MinHeight = 160, HorizontalExpand = true });
@@ -45,14 +44,12 @@ public sealed class MedicalDiagnosticReportWindow : DefaultWindow
             AppendLaboratory(content, report);
         else
             foreach (var (key, value) in report.Readings)
-                AddText(content, Loc.GetString("diagnostic-reading-" + key, ("value", Number(value))));
+                AddText(content, Loc.GetString("diagnostic-reading-" + key, ("value", ClinicalLaboratoryModel.FormatValue(value))));
         foreach (var finding in report.Findings) AddText(content, Loc.GetString(finding));
         var close = new Button { Text = Loc.GetString("diagnostic-close") };
         close.OnPressed += _ => Close();
         root.AddChild(close);
     }
-
-    private static string Number(float value) => value.ToString("0.#", CultureInfo.InvariantCulture);
 
     private static void AddText(BoxContainer parent, string value, Color? color = null)
     {
@@ -66,16 +63,7 @@ public sealed class MedicalDiagnosticReportWindow : DefaultWindow
     private static void AppendLaboratory(BoxContainer parent, MedicalDiagnosticReport report)
     {
         AddText(parent, Loc.GetString("diagnostic-blood-group", ("group", report.BloodGroup), ("fluid", report.BodyFluid)));
-        var sections = new (string Name, string[] Markers)[]
-        {
-            ("hematology", ["hemoglobin", "hematocrit", "erythrocytes", "leukocytes", "platelets"]),
-            ("inflammation", ["crp", "lactate"]),
-            ("biochemistry", ["glucose", "creatinine", "urea"]),
-            ("hepatic", ["alt", "ast", "bilirubin", "protein"]),
-            ("electrolytes", ["sodium", "potassium"]),
-            ("physiology", ["oxygen-capacity", "toxins", "kidneys", "liver"]),
-        };
-        foreach (var (name, markers) in sections)
+        foreach (var (name, markers) in ClinicalLaboratoryModel.Sections)
         {
             if (!markers.Any(report.Readings.ContainsKey)) continue;
             parent.AddChild(new Label
@@ -87,29 +75,32 @@ public sealed class MedicalDiagnosticReportWindow : DefaultWindow
             {
                 if (!report.Readings.TryGetValue(marker, out var value)) continue;
                 var row = new BoxContainer { HorizontalExpand = true, SeparationOverride = 16 };
-                var phrase = Loc.GetString("diagnostic-reading-" + marker, ("value", Number(value)));
-                var abnormal = ClinicalLaboratoryModel.Reference.TryGetValue(marker, out var reference)
-                    && (value < reference.Low || value > reference.High);
+                var phrase = Loc.GetString("diagnostic-reading-" + marker, ("value", ClinicalLaboratoryModel.FormatValue(value)));
+                var reference = report.Readings.ContainsKey("hemoglobin")
+                    ? ClinicalLaboratoryModel.FormatReference(marker, value) : null;
+                var abnormal = reference is not null && (reference.StartsWith('↓') || reference.StartsWith('↑'));
                 row.AddChild(new Label
                 {
                     Text = phrase, HorizontalExpand = true, ClipText = true, ToolTip = phrase,
                     FontColorOverride = abnormal ? Color.FromHex("#e4ae77") : Color.FromHex("#dddcd3"),
                 });
-                if (ClinicalLaboratoryModel.Reference.ContainsKey(marker))
+                if (reference != null)
                     row.AddChild(new Label
                     {
-                        Text = (abnormal ? value < reference.Low ? "↓ " : "↑ " : "") + Number(reference.Low) + "–" + Number(reference.High),
+                        Text = reference,
                         FontColorOverride = abnormal ? Color.FromHex("#e4ae77") : Color.FromHex("#7e8980"), MinWidth = 110,
                         ToolTip = Loc.GetString("diagnostic-reference"),
                     });
                 parent.AddChild(row);
             }
         }
+        if (report.Medications.Count == 0)
+            return;
+
         parent.AddChild(new Label { Text = Loc.GetString("diagnostic-section-medications"), Margin = new Thickness(0,12,0,3), FontColorOverride = Color.FromHex("#b4c4b1") });
         var prototypes = IoCManager.Resolve<IPrototypeManager>();
         foreach (var (drug, quantity) in report.Medications)
-            AddText(parent, Loc.GetString("diagnostic-medication", ("drug", prototypes.Index<ReagentPrototype>(drug).LocalizedName), ("value", Number(quantity))));
-        if (report.Medications.Count == 0) AddText(parent, Loc.GetString("diagnostic-no-medications"));
+            AddText(parent, Loc.GetString("diagnostic-medication", ("drug", prototypes.Index<ReagentPrototype>(drug).LocalizedName), ("value", ClinicalLaboratoryModel.FormatValue(quantity))));
     }
 
     private sealed class DiagnosticSchematic(MedicalDiagnosticReport report) : Control

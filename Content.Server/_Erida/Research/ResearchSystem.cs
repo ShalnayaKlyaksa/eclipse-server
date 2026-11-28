@@ -23,8 +23,7 @@ public sealed partial class ResearchSystem
         var terminal = GetTerminalState(uid, component);
         if (terminal.Username == null)
         {
-            _uiSystem.SetUiState(uid, ResearchConsoleUiKey.Key,
-                new ResearchConsoleBoundInterfaceState(0, new()) { Terminal = terminal });
+            SendConsoleState(uid, component, new ResearchConsoleBoundInterfaceState(0, new()) { Terminal = terminal });
             return;
         }
         var allTechs = PrototypeManager.EnumeratePrototypes<TechnologyPrototype>().Where(x => !x.Hidden).ToList();
@@ -57,9 +56,20 @@ public sealed partial class ResearchSystem
             techList = allTechs.ToDictionary(proto => proto.ID, _ => ResearchAvailability.Unavailable);
         }
 
-        _uiSystem.SetUiState(uid,
-            ResearchConsoleUiKey.Key,
-            new ResearchConsoleBoundInterfaceState(points, techList) { Terminal = terminal });
+        SendConsoleState(uid, component, new ResearchConsoleBoundInterfaceState(points, techList) { Terminal = terminal });
+    }
+
+    private void SendConsoleState(EntityUid uid, ResearchConsoleComponent component, ResearchConsoleBoundInterfaceState state)
+    {
+        if (component.AdminSession is { } session)
+        {
+            // The shared UI state is replicated to nearby players even when they have not opened the console.
+            if (HasTerminalAdminAccess(session.Player, session.Actor))
+                _uiSystem.ServerSendUiMessage(uid, ResearchConsoleUiKey.Key, new ResearchTerminalAdminStateMessage(state), session.Actor);
+            return;
+        }
+
+        _uiSystem.SetUiState(uid, ResearchConsoleUiKey.Key, state);
     }
 
     private void OnServerInit(Entity<ResearchServerComponent> ent, ref MapInitEvent args)

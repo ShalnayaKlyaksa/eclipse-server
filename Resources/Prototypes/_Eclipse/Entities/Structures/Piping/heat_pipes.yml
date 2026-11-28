@@ -1,0 +1,62 @@
+- type: entity
+  parent: BaseItem
+  id: IndustrialHeatPipe
+  name: industrial heat pipe
+  description: An insulated conduit that connects a heat exchanger to industrial heat inputs.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: IndustrialPipePack
+    pack: IndustrialHeatPipePack
+  - type: Item
+    size: Small
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Physics
+    bodyType: Dynamic
+    canCollide: false
+  - type: Anchorable
+    delay: 0.5
+  - type: InteractionOutline
+  - type: IndustrialPipingOccupant
+  - type: IndustrialHeatPipe
+  - type: NodeContainer
+    nodes:
+      heat:
+        !type:AdjacentNode
+        nodeGroupID: IndustrialHeat
+  - type: Appearance
+  - type: Sprite
+    sprite: _Eclipse/Structures/Piping/liquid_pipe.rsi
+    drawdepth: Objects
+    layers:
+    - state: pipe0
+      map: ["pipe"]
+      color: "#FF9561"
+  - type: Icon
+    sprite: _Eclipse/Structures/Piping/liquid_pipe.rsi
+    state: pipe12
+  - type: GenericVisualizer
+    visuals:
+      enum.IndustrialHeatPipeVisuals.Connections:
+        pipe:
+          0: { state: pipe0 }
+          1: { state: pipe1 }
+          2: { state: pipe2 }
+          3: { state: pipe3 }
+          4: { state: pipe4 }
+          5: { state: pipe5 }
+          6: { state: pipe6 }
+          7: { state: pipe7 }
+          8: { state: pipe8 }
+          9: { state: pipe9 }
+          10: { state: pipe10 }
+          11: { state: pipe11 }
+          12: { state: pipe12 }
+          13: { state: pipe13 }
+          14: { state: pipe14 }
+          15: { state: pipe15 }
+  - type: GuideHelp
+    guides:
+    - EclipseIndustrialPower

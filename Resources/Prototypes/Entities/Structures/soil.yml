@@ -1,7 +1,7 @@
 - type: entity
   id: hydroponicsSoil
-  name: soil
-  description: A mix of organic matter and minerals creating a soil to grow your plant in space. Seems to be dry.
+  name: soil bed
+  description: A bed of loose soil for growing crops. Plant seeds and keep the soil watered and fertilized.
   placement:
     mode: SnapgridCenter
   components:

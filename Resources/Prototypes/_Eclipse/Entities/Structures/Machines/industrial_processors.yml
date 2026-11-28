@@ -322,100 +322,76 @@
     state: paused
 
 - type: entity
-  parent: BasicTierIndustrialProcessor
+  abstract: true
+  parent: BaseIndustrialProcessor
+  id: BaseIndustrialAssembler
+  description: Automatically assembles physical components into finished products. Select a recipe to dedicate a production line.
+  components:
+  - type: IndustrialProcessor
+    processorType: Assembler
+  - type: ApcPowerReceiver
+    powerLoad: 3000
+  - type: AccessReader
+    access: [["Engineering"]]
+  - type: ActivatableUIRequiresAccess
+  - type: TechnologyDatabase
+  - type: ResearchClient
+  - type: UserInterface
+    interfaces:
+      enum.IndustrialProcessorUiKey.Key:
+        type: IndustrialProcessorBoundUserInterface
+      enum.ResearchClientUiKey.Key:
+        type: ResearchClientBoundUserInterface
+
+  - type: Sprite
+    sprite: _Eclipse/Structures/Machines/industrial_assembler.rsi
+    layers:
+    - state: icon
+      map: ["enum.IndustrialProcessorVisualLayers.Base"]
+  - type: Icon
+    sprite: _Eclipse/Structures/Machines/industrial_assembler.rsi
+    state: icon
+
+- type: entity
+  parent: BaseIndustrialAssembler
   id: BasicIndustrialAssembler
   name: basic industrial assembler
-  description: Automatically assembles physical components into finished products. Select a recipe to dedicate a production line.
   components:
   - type: IndustrialProcessor
-    processorType: Assembler
-  - type: ApcPowerReceiver
-    powerLoad: 3000
-  - type: TechnologyDatabase
-  - type: ResearchClient
-  - type: UserInterface
-    interfaces:
-      enum.IndustrialProcessorUiKey.Key:
-        type: IndustrialProcessorBoundUserInterface
-      enum.ResearchClientUiKey.Key:
-        type: ResearchClientBoundUserInterface
-
-  - type: Sprite
-    sprite: _Eclipse/Structures/Machines/industrial_assembler.rsi
-    layers:
-    - state: icon
-      map: ["enum.IndustrialProcessorVisualLayers.Base"]
-  - type: Icon
-    sprite: _Eclipse/Structures/Machines/industrial_assembler.rsi
-    state: icon
+    tier: Basic
 
 - type: entity
-  parent: IndustrialTierIndustrialProcessor
+  parent: BaseIndustrialAssembler
   id: IndustrialAssembler
   name: industrial assembler
-  description: Automatically assembles physical components into finished products. Select a recipe to dedicate a production line.
   components:
   - type: IndustrialProcessor
-    processorType: Assembler
-  - type: ApcPowerReceiver
-    powerLoad: 3000
-  - type: TechnologyDatabase
-  - type: ResearchClient
-  - type: UserInterface
-    interfaces:
-      enum.IndustrialProcessorUiKey.Key:
-        type: IndustrialProcessorBoundUserInterface
-      enum.ResearchClientUiKey.Key:
-        type: ResearchClientBoundUserInterface
-
-  - type: Sprite
-    sprite: _Eclipse/Structures/Machines/industrial_assembler.rsi
-    layers:
-    - state: icon
-      map: ["enum.IndustrialProcessorVisualLayers.Base"]
-  - type: Icon
-    sprite: _Eclipse/Structures/Machines/industrial_assembler.rsi
-    state: icon
+    tier: Industrial
 
 - type: entity
-  parent: PerfectTierIndustrialProcessor
+  parent: BaseIndustrialAssembler
   id: PerfectIndustrialAssembler
   name: perfect industrial assembler
-  description: Automatically assembles physical components into finished products. Select a recipe to dedicate a production line.
   components:
   - type: IndustrialProcessor
-    processorType: Assembler
-  - type: ApcPowerReceiver
-    powerLoad: 3000
-  - type: TechnologyDatabase
-  - type: ResearchClient
-  - type: UserInterface
-    interfaces:
-      enum.IndustrialProcessorUiKey.Key:
-        type: IndustrialProcessorBoundUserInterface
-      enum.ResearchClientUiKey.Key:
-        type: ResearchClientBoundUserInterface
-
-  - type: Sprite
-    sprite: _Eclipse/Structures/Machines/industrial_assembler.rsi
-    layers:
-    - state: icon
-      map: ["enum.IndustrialProcessorVisualLayers.Base"]
-  - type: Icon
-    sprite: _Eclipse/Structures/Machines/industrial_assembler.rsi
-    state: icon
+    tier: Perfect
 
 - type: entity
   parent: IndustrialTierIndustrialProcessor
   id: IndustrialBuffer
-  name: industrial buffer
-  description: A physical goods buffer. Configure an input and output face to connect it to a production line.
+  name: industrial resource storage
+  description: Stores materials and parts for a production line. Configure item input and output ports to connect it to the line.
   components:
   - type: IndustrialProcessor
     processorType: Buffer
     inputContainerId: industrial_input
     outputContainerId: industrial_input
+    maxInputSlots: 32
+    maxOutputSlots: 32
     canWorkWithoutPower: true
+    autoStart: false
+  - type: ApcPowerReceiver
+    powerLoad: 0
   - type: Sprite
     sprite: _Eclipse/Structures/Machines/industrial_buffer.rsi
     layers:

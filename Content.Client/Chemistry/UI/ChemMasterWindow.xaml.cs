@@ -99,6 +99,7 @@ namespace Content.Client.Chemistry.UI
             Tabs.SetTabTitle(1, Loc.GetString("chem-master-window-output-tab"));
             Tabs.AddChild(Medical);
             Tabs.SetTabTitle(2, Loc.GetString("medical-chemistry-tab"));
+            Tabs.SetTabVisible(2, false);
         }
 
         private ReagentButton MakeReagentButton(string text, ChemMasterReagentAmount amount, ReagentId id, bool isBuffer, string styleClass)
@@ -149,6 +150,10 @@ namespace Content.Client.Chemistry.UI
         public void UpdateState(BoundUserInterfaceState state)
         {
             var castState = (ChemMasterBoundUserInterfaceState)state;
+            if (castState.Medical == null && Tabs.CurrentTab == 2)
+                Tabs.CurrentTab = 0;
+            if (Tabs.GetTabVisible(2) != (castState.Medical != null))
+                Tabs.SetTabVisible(2, castState.Medical != null);
             Medical.Apply(castState.Medical, castState.InputContainerInfo?.CurrentVolume.Float() ?? 0);
             Tabs.SetTabTitle(2, Loc.GetString(castState.Medical?.AnalysisOnly == true ? "medical-chemistry-analyzer-tab" : "medical-chemistry-tab"));
 

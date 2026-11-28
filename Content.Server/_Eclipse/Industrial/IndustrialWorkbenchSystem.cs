@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Server.Popups;
+using Content.Server.Power.Components;
 using Content.Server.Stack;
 using Content.Shared._Eclipse.Industrial;
 using Content.Shared._Eclipse.Industrial.Prototypes;
@@ -125,8 +126,17 @@ public sealed partial class IndustrialWorkbenchSystem : EntitySystem
         args.Handled = true;
 
         var coords = _transform.GetMapCoordinates(args.User);
-        for (var i = 0; i < recipe.ResultCount * args.Amount; i++)
-            Spawn(recipe.Result, coords);
+        var resultCount = recipe.ResultCount * args.Amount;
+        if (_proto.Index(recipe.Result).TryGetComponent<CablePlacerComponent>(out var placer, EntityManager.ComponentFactory) &&
+            placer.IndustrialPipe)
+        {
+            _stack.SpawnMultipleAtPosition(recipe.Result, resultCount, Transform(args.User).Coordinates);
+        }
+        else
+        {
+            for (var i = 0; i < resultCount; i++)
+                Spawn(recipe.Result, coords);
+        }
 
         _popup.PopupPredicted(Loc.GetString("industrial-workbench-fabricated"), args.User, ent);
     }

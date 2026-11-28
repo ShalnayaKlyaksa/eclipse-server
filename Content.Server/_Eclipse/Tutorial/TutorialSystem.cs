@@ -5,6 +5,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
+using Content.Shared.CCVar;
 using Content.Shared.Damage.Systems;
 using Content.Shared.GameTicking;
 using Content.Shared.Hands.EntitySystems;
@@ -13,6 +14,7 @@ using Content.Shared.Light.Components;
 using Content.Shared.Mind;
 using Content.Shared._Eclipse.Tutorial;
 using Robust.Server.Player;
+using Robust.Shared.Configuration;
 using Robust.Shared.Enums;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Map;
@@ -34,6 +36,7 @@ namespace Content.Server._Eclipse.Tutorial;
 public sealed class TutorialSystem : EntitySystem
 {
     [Dependency] private readonly IChatManager _chat = default!;
+    [Dependency] private readonly IConfigurationManager _configuration = default!;
     [Dependency] private readonly IPrototypeManager _prototypes = default!;
     [Dependency] private readonly IPlayerManager _players = default!;
     [Dependency] private readonly SharedMapSystem _maps = default!;
@@ -65,6 +68,9 @@ public sealed class TutorialSystem : EntitySystem
 
     private void OnJoinedLobby(PlayerJoinedLobbyEvent ev)
     {
+        if (!_configuration.GetCVar(CCVars.TutorialEnabled))
+            return;
+
         var session = ev.PlayerSession;
         if (session.AttachedEntity != null || _runs.ContainsKey(session.UserId.UserId) ||
             _resources.UserData.Exists(WelcomeDirectory / $"{session.UserId.UserId}.txt"))
@@ -111,6 +117,9 @@ public sealed class TutorialSystem : EntitySystem
 
     private void StartTutorial(ICommonSession session, TutorialLessonPrototype lesson)
     {
+        if (!_configuration.GetCVar(CCVars.TutorialEnabled))
+            return;
+
         // Keep the player "not ready" so a starting round ignores them and the round-start counts stay
         // consistent (never set JoinedGame from the lobby — that trips a round-start assert).
         _ticker.ToggleReady(session, false);

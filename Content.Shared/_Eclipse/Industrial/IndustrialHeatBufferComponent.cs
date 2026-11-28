@@ -1,21 +1,27 @@
-using Content.Shared.Atmos;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._Eclipse.Industrial;
 
 /// <summary>
-/// Stores and distributes heat to adjacent industrial machines with heat-input ports.
-/// Plasma flows through atmos inlet/outlet nodes like a TEG circulator.
+/// Exchanges heat with a plasma circuit and supplies industrial heat inputs directly or through heat pipes.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
 public sealed partial class IndustrialHeatBufferComponent : Component
 {
+    public const string HeatNodeName = "heat";
+
     [DataField]
     public string InletNodeName = "inlet";
 
     [DataField]
     public string OutletNodeName = "outlet";
+
+    /// <summary>
+    /// Swaps the roles of the fixed gas ports without rebuilding their pipe networks.
+    /// </summary>
+    [DataField]
+    public bool Reversed;
 
     /// <summary>
     /// Maximum delivery temperature (Kelvin); the buffer must be heated by an external source.
@@ -30,13 +36,15 @@ public sealed partial class IndustrialHeatBufferComponent : Component
     public float MinPlasmaMoles = 0.25f;
 
     /// <summary>
-    /// Heat transferred per second to each linked machine (joules-scale units).
+    /// Heat transferred per second to all linked machines, in joules.
     /// </summary>
     [DataField]
     public float HeatTransferRate = 500000f;
 
     [ViewVariables]
     public bool PlasmaFlowing;
+
+    public bool SharedGasCircuit;
 }
 
 [Serializable, NetSerializable]

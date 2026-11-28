@@ -3,9 +3,4 @@
 # Added to emagged autolathe
 - type: latheRecipePack
   id: LegionAmmoStatic
-  recipes:
-  - MagazineShotgun
-  - MagazineShotgunEmpty
-  - MagazineShotgunSlug
-  - MagazinePistolCaselessRifle
-  - MagazineBoxAntiMateriel
+  recipes: []

@@ -3,6 +3,7 @@ using Content.IntegrationTests.Tests.Construction.Interaction;
 using Content.IntegrationTests.Tests.Interaction;
 using Content.IntegrationTests.Tests.Weldable;
 using Content.Shared.Tools.Components;
+using Robust.Client.GameObjects;
 
 namespace Content.IntegrationTests.Tests.DoAfter;
 
@@ -24,6 +25,29 @@ public sealed class DoAfterCancellationTests : InteractionTest
         await InteractUsing(Wrench);
 
         AssertAnchored(false);
+    }
+
+    [Test]
+    public async Task HeatPipesWrenchedOverCablingShowTheirConnectionOnTheClient()
+    {
+        var east = await SpawnTarget("IndustrialHeatPipe");
+        await Spawn("CableApcExtension");
+        await InteractUsing(Wrench);
+        AssertAnchored();
+
+        var west = await SpawnTarget("IndustrialHeatPipe", PlayerCoords);
+        await PlaceInHands(Wrench);
+        await Interact(west, PlayerCoords);
+        AssertAnchored();
+
+        await Client.WaitAssertion(() =>
+        {
+            var sprites = Client.System<SpriteSystem>();
+            var eastPipe = CEntMan.GetEntity(east);
+            var westPipe = CEntMan.GetEntity(west);
+            Assert.That(sprites.LayerGetRsiState((eastPipe, CEntMan.GetComponent<SpriteComponent>(eastPipe)), 0).ToString(), Is.EqualTo("pipe4"));
+            Assert.That(sprites.LayerGetRsiState((westPipe, CEntMan.GetComponent<SpriteComponent>(westPipe)), 0).ToString(), Is.EqualTo("pipe8"));
+        });
     }
 
     [Test]

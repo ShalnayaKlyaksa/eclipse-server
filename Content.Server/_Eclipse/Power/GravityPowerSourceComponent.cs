@@ -35,7 +35,7 @@ public sealed partial class ResidualMicroBlackHoleComponent : Component
 {
     public float Activity = 1;
     [ViewVariables] public float Mass = 1;
-    public float StarvingTime;
+    [ViewVariables] public float PendingMass;
 }
 
 [RegisterComponent]

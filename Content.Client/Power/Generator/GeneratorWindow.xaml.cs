@@ -37,6 +37,7 @@ public sealed partial class GeneratorWindow : ImmersiveFancyWindow
         FusionNominal.OnPressed += _ => OnPower?.Invoke(_fusionNominalKilowatts);
         FusionBoost.OnPressed += _ => OnPower?.Invoke((int) (MaximumPower.GetValueOrDefault() / 1000));
 
+        TargetPower.InitDefaultButtons();
         TargetPower.IsValid += IsValid;
         TargetPower.ValueChanged += (args) =>
         {
@@ -173,8 +174,7 @@ public sealed partial class GeneratorWindow : ImmersiveFancyWindow
 
         var canSwitch = _entityManager.TryGetComponent(_entity, out PowerSwitchableComponent? switchable) && state.Operating?.GravitySource != true;
         var switcher = _entityManager.System<SharedPowerSwitchableSystem>();
-        OutputSwitchLabel.Visible = canSwitch;
-        OutputSwitchButton.Visible = canSwitch;
+        VoltageRow.Visible = canSwitch;
 
         if (switchable != null)
         {

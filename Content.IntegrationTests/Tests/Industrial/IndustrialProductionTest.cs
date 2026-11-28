@@ -261,7 +261,7 @@ public sealed class IndustrialProductionTest : GameTest
                     maps.SetTile(map.Grid.Owner, map.Grid.Comp, new Vector2i(x, y), map.Tile.Tile);
             }
             var pipes = new List<EntityUid>();
-            for (var x = -1; x <= 10; x++)
+            for (var x = -1; x <= 8; x++)
             {
                 pipes.Add(SEntMan.SpawnEntity("LpItemPipe", new EntityCoordinates(map.Grid, x + 0.5f, 0.5f)));
                 pipes.Add(SEntMan.SpawnEntity("LpItemPipe", new EntityCoordinates(map.Grid, x + 0.5f, 2.5f)));
@@ -286,13 +286,19 @@ public sealed class IndustrialProductionTest : GameTest
             var centrifuge = Machine("BasicIndustrialThermalCentrifuge", 4, "ThermalCentrifugeCrushedIronOre");
             Server.System<TemperatureSystem>().ForceChangeTemperature(centrifuge.Owner, 800);
             Machine("BasicIndustrialCrusher", 6, "CrushSievedIronOre");
-            Machine("BasicIndustrialSmelter", 8, "SmeltIronDust");
-            var finished = Machine("IndustrialBuffer", 10, "SmeltIronDust");
+            var smelter = Machine("BasicIndustrialSmelter", 8, "SmeltIronDust");
+            smelter.Comp.SetFacePort(Direction.North, FacePortState.Disabled);
+            smelter.Comp.SetFacePort(Direction.East, FacePortState.ItemOutput);
+            var finished = Machine("IndustrialBuffer", 10, null);
             finished.Comp.SetFacePort(Direction.North, FacePortState.Disabled);
+            finished.Comp.SetFacePort(Direction.South, FacePortState.Disabled);
+            finished.Comp.SetFacePort(Direction.West, FacePortState.ItemInput);
+            var finishedPipe = SEntMan.SpawnEntity("LpItemPipe", new EntityCoordinates(map.Grid, 9.5f, 1.5f));
             var ore = SEntMan.SpawnEntity("SteelOre1", map.GridCoords);
             Server.System<StackSystem>().SetCount((ore, SEntMan.GetComponent<StackComponent>(ore)), 2);
             Assert.That(containers.Insert(ore, containers.GetContainer(receiving, receiving.Comp.InputContainerId)), Is.True);
             networks.RebuildNetworkFrom((pipes[0], SEntMan.GetComponent<ItemPipeComponent>(pipes[0])));
+            networks.RebuildNetworkFrom((finishedPipe, SEntMan.GetComponent<ItemPipeComponent>(finishedPipe)));
             for (var i = 0; i < 120; i++)
             {
                 processor.Update(1f);

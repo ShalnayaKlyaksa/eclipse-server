@@ -886,3 +886,16 @@ CrateVendingMachineRestockGetmoreChocolateCorpFilled: VendingMachineRestockGetmo
 CrateVendingMachineRestockChangFilled: VendingMachineRestockChang
 CrateVendingMachineRestockDiscountDansFilled: VendingMachineRestockDiscountDans
 CrateVendingMachineRestockDonutFilled: VendingMachineRestockDonut
+
+# Eclipse paper and diagnostic equipment replacements
+PaperPrintedUSSPCargo: Paper
+PaperPrintedUSSPCivilian: Paper
+PaperPrintedUSSPCommand: Paper
+PaperPrintedUSSPEngineering: Paper
+PaperPrintedUSSPLaw: Paper
+PaperPrintedUSSPMedical: Paper
+PaperPrintedUSSPScience: Paper
+PaperPrintedUSSPSecurity: Paper
+PaperPrintedUSSPCentcomm: Paper
+PaperPrintedNukeopsSyndicateToUSSP: Paper
+AdvancedPortableXRay: MedicalScannerMachineCircuitboard

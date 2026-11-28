@@ -32,25 +32,7 @@
 # Shared between secfab and emagged autolathe
 - type: latheRecipePack
   id: SecurityAmmoStatic
-  recipes:
-  - BoxLethalshot
-  - BoxShotgunSlug
-  - MagazineBoxLightRifle
-  - MagazineBoxMagnum
-  - MagazineBoxPistol
-  - MagazineBoxRifle
-  - MagazineLightRifle
-  - MagazineLightRifleEmpty
-  - MagazinePistol
-  - MagazinePistolEmpty
-  - MagazinePistolSubMachineGun
-  - MagazinePistolSubMachineGunEmpty
-  - MagazinePistolSubMachineGunTopMounted
-  - MagazinePistolSubMachineGunTopMountedEmpty
-  - MagazineRifle
-  - MagazineRifleEmpty
-  - SpeedLoaderMagnum
-  - SpeedLoaderMagnumEmpty
+  recipes: []
 
 - type: latheRecipePack
   id: SecurityWeaponsStatic
@@ -64,15 +46,7 @@
 
 - type: latheRecipePack
   id: SecurityEquipment
-  recipes:
-  - ClothingBackpackElectropack
-  - HoloprojectorSecurity
-  - PortableRecharger
-  - PowerCageHigh
-  - PowerCageMedium
-  - PowerCageSmall
-  - TelescopicShield
-  - ClothingBackpackHarmpack
+  recipes: []
 
 - type: latheRecipePack
   id: SecurityBoards
@@ -86,53 +60,16 @@
   parent:
   - ScienceExplosives # sec gets everything for modular grenade making that sci does
   id: SecurityExplosives
-  recipes:
-  - CableDetStack1
-  - EmptyDetonator
-  - ExplosivePayload
-  - GrenadeBlast
-  - GrenadeEMP
-  - GrenadeFlash
-  - MagazineGrenadeEmpty
+  recipes: []
 
 # Shared between secfab and emagged protolathe
 - type: latheRecipePack
   id: SecurityAmmo
-  recipes:
-  - BoxBeanbag
-  - BoxShotgunIncendiary
-  - BoxShotgunUranium
-  - BoxShellTranquilizer
-  - MagazineBoxLightRifleIncendiary
-  - MagazineBoxLightRifleUranium
-  - MagazineBoxMagnumIncendiary
-  - MagazineBoxMagnumUranium
-  - MagazineBoxPistolIncendiary
-  - MagazineBoxPistolUranium
-  - MagazineBoxRifleIncendiary
-  - MagazineBoxRifleUranium
-  - MagazineLightRifleIncendiary
-  - MagazineLightRifleUranium
-  - MagazinePistolIncendiary
-  - MagazinePistolUranium
-  - MagazinePistolSubMachineGunIncendiary
-  - MagazinePistolSubMachineGunUranium
-  - MagazineRifleIncendiary
-  - MagazineRifleUranium
-  - MagazineShotgunBeanbag
-  - MagazineShotgunIncendiary
-  - SpeedLoaderMagnumIncendiary
-  - SpeedLoaderMagnumUranium
+  recipes: []
 
 - type: latheRecipePack
   id: SecurityWeapons
-  recipes:
-  - Truncheon
-  - WeaponAdvancedLaser
-  - WeaponLaserCannon
-  - WeaponLaserCarbine
-  - WeaponXrayCannon
-  - WeaponTemperatureGun
+  recipes: []
 
 - type: latheRecipePack
   id: SecurityDisablers

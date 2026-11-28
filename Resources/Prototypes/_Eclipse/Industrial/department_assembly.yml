@@ -1,0 +1,3135 @@
+# Select the desired recipe before loading a line with general-purpose materials.
+
+- type: industrialRecipe
+  id: IndustrialAssembleAPCElectronics
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 3
+    SheetGlass1: 3
+  outputs:
+    APCElectronics: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleAdvMopItem
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: CleaningAdvanced
+  requireDataDisk: true
+  inputs:
+    SheetPlastic1: 4
+    SheetSteel1: 1
+    SheetGlass1: 1
+  outputs:
+    AdvMopItem: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleAdvancedJetInjector
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: ChemistryAdvancedInjector
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 5
+    SheetGlass1: 5
+    SheetPlastic1: 3
+    IngotSilver1: 4
+    IngotGold1: 1
+  outputs:
+    AdvancedJetInjector: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleAdvancedMineralScannerEmpty
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  minimumTier: Industrial
+  requiredTechnology: IndustrialSalvageEquipment
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 10
+    SheetGlass1: 3
+    SheetPlastic1: 3
+    SheetUranium1: 5
+  outputs:
+    AdvancedMineralScannerEmpty: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleAirAlarmElectronics
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 3
+  outputs:
+    AirAlarmElectronics: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleAirTank
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 4
+  outputs:
+    AirTank: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleAnomalyLocator
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: AnomalousResearch
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 4
+    SheetGlass1: 1
+  outputs:
+    AnomalyLocatorEmpty: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleAnomalyLocatorWide
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: AnomalousResearchAdvanced
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 4
+    SheetGlass1: 1
+  outputs:
+    AnomalyLocatorWideEmpty: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleAppraisalTool
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 5
+  outputs:
+    AppraisalTool: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleAshtray
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+  outputs:
+    Ashtray: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleBluespaceBeaker
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: ChemistryBluespace
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 5
+    SheetPlastic1: 5
+    SheetPlasma1: 2
+    IngotSilver1: 1
+  outputs:
+    BluespaceBeaker: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleBoxBeanbag
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: RiotControl
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 2
+    SheetPlastic1: 3
+  outputs:
+    BoxBeanbag: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleBoxFolderClipboardEmpty
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    MaterialWoodPlank1: 1
+    SheetSteel1: 1
+  outputs:
+    BoxFolderClipboardEmpty: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleBoxFolderPlasticClipboardEmpty
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetPlastic1: 1
+    SheetSteel1: 1
+  outputs:
+    BoxFolderPlasticClipboardEmpty: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleBoxLethalshot
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: LethalAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 4
+  outputs:
+    BoxLethalshot: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleBoxShellTranquilizer
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: RiotControl
+  requireDataDisk: true
+  inputs:
+    SheetPlastic1: 3
+    SheetSteel1: 2
+    SheetGlass1: 1
+    SheetPlasma1: 2
+    IngotSilver1: 1
+  outputs:
+    BoxShellTranquilizer: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleBoxShotgunIncendiary
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: DraconicAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 4
+  outputs:
+    BoxShotgunIncendiary: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleBoxShotgunSlug
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: LethalAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 3
+    SheetPlastic1: 2
+  outputs:
+    BoxShotgunSlug: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleBoxShotgunUranium
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: UraniumAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetPlastic1: 4
+    SheetUranium1: 3
+  outputs:
+    BoxShotgunUranium: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleBucket
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetPlastic1: 1
+  outputs:
+    Bucket: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleC4
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Perfect
+  requiredTechnology: IndustrialPerfectEquipment
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 12
+    SheetPlastic1: 8
+    SheetUranium1: 8
+  outputs:
+    C4: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleCableDetStack1
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  minimumTier: Industrial
+  requiredTechnology: Explosive
+  requireDataDisk: true
+  inputs:
+    SheetPlastic1: 10
+    SheetPlasma1: 5
+    IngotGold1: 4
+  outputs:
+    CableDetStack1: 20
+
+- type: industrialRecipe
+  id: IndustrialAssembleCableHVStack
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 3
+  outputs:
+    CableHVStack1: 10
+
+- type: industrialRecipe
+  id: IndustrialAssembleCableMVStack
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 3
+  outputs:
+    CableMVStack1: 10
+
+- type: industrialRecipe
+  id: IndustrialAssembleCableStack
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 3
+  outputs:
+    CableApcStack1: 10
+
+- type: industrialRecipe
+  id: IndustrialAssembleCameraBug
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Perfect
+  requiredTechnology: IndustrialPerfectEquipment
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 26
+    SheetPlastic1: 5
+  outputs:
+    CameraBug: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleCaseAshLegion
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  minimumTier: Perfect
+  requiredTechnology: IndustrialPerfectEquipment
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 5
+    SheetPlastic1: 3
+  outputs:
+    CaseAshLegion: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleCautery
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 2
+    SheetPlastic1: 1
+  outputs:
+    Cautery: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleCellRechargerCircuitboard
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 1
+  outputs:
+    CellRechargerCircuitboard: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleCheapRollerBedSpawnFolded
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 6
+    SheetPlastic1: 3
+  outputs:
+    CheapRollerBedSpawnFolded: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleChemicalPayload
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  requiredTechnology: Explosive
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 2
+    SheetPlastic1: 3
+  outputs:
+    ChemicalPayload: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleChemistryEmptyBottle01
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetGlass1: 1
+  outputs:
+    ChemistryEmptyBottle01: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleChemistryEmptyVial
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetGlass1: 1
+    MaterialWoodPlank1: 1
+  outputs:
+    ChemistryEmptyVial: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleChemistryEmptyVialSmall
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetGlass1: 1
+    MaterialWoodPlank1: 1
+  outputs:
+    ChemistryEmptyVialSmall: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleClothingBackpackDuffelHolding
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  requiredTechnology: BluespaceStorage
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 20
+    IngotSilver1: 8
+    SheetPlasma1: 15
+    SheetUranium1: 2
+  outputs:
+    ClothingBackpackDuffelHolding: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleClothingBackpackElectropack
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  minimumTier: Industrial
+  requiredTechnology: WarCrimes
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 5
+    SheetPlastic1: 3
+    MaterialCloth1: 5
+  outputs:
+    ClothingBackpackElectropack: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleClothingBackpackHarmpack
+  processor: Assembler
+  requireSelection: true
+  time: 15
+  minimumTier: Industrial
+  requiredTechnology: DualWieldingTechnology
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 20
+    SheetPlastic1: 10
+    SheetPlasma1: 5
+    IngotGold1: 5
+  outputs:
+    ClothingBackpackHarmpack: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleClothingBackpackHolding
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  requiredTechnology: BluespaceStorage
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 20
+    IngotSilver1: 8
+    SheetPlasma1: 15
+    SheetUranium1: 2
+  outputs:
+    ClothingBackpackHolding: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleClothingBackpackSatchelHolding
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  requiredTechnology: BluespaceStorage
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 20
+    IngotSilver1: 8
+    SheetPlasma1: 15
+    SheetUranium1: 2
+  outputs:
+    ClothingBackpackSatchelHolding: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleClothingBackpackWaterTank
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: SprayAdvanced
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 3
+    SheetGlass1: 10
+  outputs:
+    ClothingBackpackWaterTank: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleClothingBeltAshLegionHolster
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  minimumTier: Perfect
+  requiredTechnology: IndustrialPerfectEquipment
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 8
+    SheetPlasma1: 3
+  outputs:
+    ClothingBeltAshLegionHolster: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleClothingEyesGlassesChemical
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 2
+    SheetPlastic1: 3
+    SheetGlass1: 5
+  outputs:
+    ClothingEyesGlassesChemical: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleClothingEyesHudDiagnostic
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: IntegratedHUDs
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 2
+    SheetPlastic1: 3
+    SheetGlass1: 5
+  outputs:
+    ClothingEyesHudDiagnostic: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleClothingHeadHatCone
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetPlastic1: 2
+  outputs:
+    ClothingHeadHatCone: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleClothingHeadHatWelding
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 4
+    SheetGlass1: 2
+  outputs:
+    ClothingHeadHatWelding: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleClothingMaskWeldingGas
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: IndustrialAutomation
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 6
+    SheetGlass1: 2
+  outputs:
+    ClothingMaskWeldingGas: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleClothingOuterVestTank
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    MaterialCloth1: 1
+    SheetSteel1: 1
+  outputs:
+    ClothingOuterVestTank: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleClothingShoesBootsJump
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  minimumTier: Industrial
+  requiredTechnology: IndustrialSalvageEquipment
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 14
+    SheetPlastic1: 6
+    IngotSilver1: 2
+    SheetPlasma1: 2
+  outputs:
+    ClothingShoesBootsJump: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleClothingShoesBootsMagAshLegion
+  processor: Assembler
+  requireSelection: true
+  time: 10
+  minimumTier: Perfect
+  requiredTechnology: IndustrialPerfectEquipment
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 12
+    SheetPlastic1: 5
+  outputs:
+    ClothingShoesBootsMagAshLegion: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleClothingShoesBootsMagSci
+  processor: Assembler
+  requireSelection: true
+  time: 10
+  requiredTechnology: MagneticBoots
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 10
+    SheetPlastic1: 5
+  outputs:
+    ClothingShoesBootsMagSci: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleClothingShoesBootsMoon
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: MagneticBoots
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 6
+  outputs:
+    ClothingShoesBootsMoon: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleClothingShoesBootsSpeed
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: QuantumMagneticBoots
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 15
+    SheetPlastic1: 10
+    IngotSilver1: 5
+  outputs:
+    ClothingShoesBootsSpeed: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleConveyorBeltAssembly
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 3
+    SheetPlastic1: 1
+  outputs:
+    ConveyorBeltAssembly: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleCrowbar
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  inputs:
+    SheetSteel1: 2
+  outputs:
+    Crowbar: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleCrowbarGreen
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 2
+    SheetPlastic1: 1
+  outputs:
+    CrowbarGreen: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleCryostasisBeaker
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: BiochemicalStasis
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 3
+    SheetPlastic1: 1
+  outputs:
+    CryostasisBeaker: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleCustomDrinkJug
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetPlastic1: 2
+  outputs:
+    CustomDrinkJug: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleCyberPen
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  minimumTier: Perfect
+  requiredTechnology: IndustrialPerfectEquipment
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 9
+    SheetPlastic1: 1
+  outputs:
+    CyberPen: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleDeviceDesynchronizer
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  requiredTechnology: DeviceDesynchronizerу
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 7
+    SheetGlass1: 1
+    SheetUranium1: 2
+  outputs:
+    DeviceDesynchronizer: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleDeviceQuantumSpinInverter
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  requiredTechnology: QuantumLeaping
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 7
+    SheetGlass1: 1
+    SheetUranium1: 1
+  outputs:
+    DeviceQuantumSpinInverter: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleDimLightBulb
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetGlass1: 2
+  outputs:
+    DimLightBulb: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleDoorElectronics
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 1
+  outputs:
+    DoorElectronics: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleDoubleEmergencyNitrogenTank
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: AtmosphericTools
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 3
+  outputs:
+    DoubleEmergencyNitrogenTank: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleDoubleEmergencyOxygenTank
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: AtmosphericTools
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 3
+  outputs:
+    DoubleEmergencyOxygenTank: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleDrill
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 2
+    SheetPlastic1: 1
+  outputs:
+    Drill: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleDrinkGlass
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetGlass1: 2
+  outputs:
+    DrinkGlass: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleDrinkGlassCoupeShaped
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetGlass1: 2
+  outputs:
+    DrinkGlassCoupeShaped: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleDrinkMug
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetGlass1: 2
+  outputs:
+    DrinkMug: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleDrinkMugMetal
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetGlass1: 2
+    SheetSteel1: 1
+  outputs:
+    DrinkMugMetal: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleDrinkShotGlass
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetGlass1: 2
+  outputs:
+    DrinkShotGlass: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleDropper
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetGlass1: 1
+    SheetPlastic1: 1
+  outputs:
+    Dropper: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleEclipseReporterCamera
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 2
+    SheetGlass1: 2
+    SheetPlastic1: 2
+  outputs:
+    EclipseReporterCamera: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleEmergencyRollerBedSpawnFolded
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 6
+    SheetPlastic1: 3
+  outputs:
+    EmergencyRollerBedSpawnFolded: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleEmpGrenade
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Perfect
+  requiredTechnology: IndustrialPerfectEquipment
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 12
+    SheetPlastic1: 6
+    SheetPlasma1: 8
+    SheetGlass1: 8
+  outputs:
+    EmpGrenade: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleEmptyDetonator
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  minimumTier: Industrial
+  requiredTechnology: Explosive
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 1
+  outputs:
+    EmptyDetonator: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleExGrenade
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Perfect
+  requiredTechnology: IndustrialPerfectEquipment
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 9
+    SheetPlastic1: 1
+    SheetUranium1: 10
+  outputs:
+    ExGrenade: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleExplosivePayload
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  minimumTier: Industrial
+  requiredTechnology: Explosive
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 1
+    SheetGlass1: 1
+    SheetPlasma1: 1
+    IngotSilver1: 1
+  outputs:
+    ExplosivePayload: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleExteriorLightTube
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetGlass1: 2
+  outputs:
+    ExteriorLightTube: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleFireAlarmElectronics
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 3
+  outputs:
+    FireAlarmElectronics: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleFirelockElectronics
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 1
+  outputs:
+    FirelockElectronics: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleFlashPayload
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  requiredTechnology: Explosive
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 1
+    SheetGlass1: 1
+  outputs:
+    FlashPayload: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleFlashlightLantern
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetGlass1: 1
+    SheetPlastic1: 1
+  outputs:
+    EmptyFlashlightLantern: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleFoodBowlBig
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetGlass1: 2
+  outputs:
+    FoodBowlBig: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleFoodKebabSkewer
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+  outputs:
+    FoodKebabSkewer: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleFoodPlate
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetGlass1: 2
+  outputs:
+    FoodPlate: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleFoodPlateMuffinTin
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+  outputs:
+    FoodPlateMuffinTin: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleFoodPlatePlastic
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetGlass1: 2
+    SheetPlastic1: 1
+  outputs:
+    FoodPlatePlastic: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleFoodPlateSmall
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetGlass1: 1
+  outputs:
+    FoodPlateSmall: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleFoodPlateSmallPlastic
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetGlass1: 1
+    SheetPlastic1: 1
+  outputs:
+    FoodPlateSmallPlastic: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleFoodPlateTin
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+  outputs:
+    FoodPlateTin: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleFreezerElectronics
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 1
+  outputs:
+    FreezerElectronics: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleFulton
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: Fulton
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 2
+    MaterialCloth1: 5
+  outputs:
+    Fulton1: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleFultonBeacon
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  requiredTechnology: Fulton
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 10
+    SheetGlass1: 5
+  outputs:
+    FultonBeacon: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleGrenadeBlast
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  minimumTier: Industrial
+  requiredTechnology: ShuttleWeapon
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 5
+    SheetPlastic1: 3
+    IngotGold1: 2
+  outputs:
+    GrenadeBlast: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleGrenadeEMP
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  minimumTier: Industrial
+  requiredTechnology: ShuttleWeaponAdvanced
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 2
+    SheetPlastic1: 1
+    SheetGlass1: 1
+  outputs:
+    GrenadeEMP: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleGrenadeFlash
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  minimumTier: Industrial
+  requiredTechnology: ShuttleWeapon
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 2
+    SheetPlastic1: 1
+    SheetGlass1: 1
+  outputs:
+    GrenadeFlash: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleHandHeldMassScanner
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: SpaceScanning
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 8
+    SheetPlastic1: 1
+    SheetGlass1: 3
+  outputs:
+    HandHeldMassScannerEmpty: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleHandLabeler
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 2
+    SheetPlastic1: 1
+  outputs:
+    HandLabeler: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleHandheldGPSBasic
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 8
+    SheetPlastic1: 1
+    SheetGlass1: 3
+  outputs:
+    HandheldGPSBasic: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleHandheldStationMap
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 3
+    SheetPlastic1: 1
+  outputs:
+    HandheldStationMapEmpty: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleHemostat
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 2
+    SheetPlastic1: 1
+  outputs:
+    Hemostat: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleHolofanProjector
+  processor: Assembler
+  requireSelection: true
+  time: 8
+  requiredTechnology: AtmosphericTools
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 3
+    SheetPlastic1: 1
+    SheetGlass1: 1
+  outputs:
+    HolofanProjectorEmpty: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleHoloprojector
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetPlastic1: 3
+    SheetGlass1: 2
+  outputs:
+    HoloprojectorEmpty: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleHoloprojectorField
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: RiotControl
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 5
+    SheetPlastic1: 1
+    SheetPlasma1: 3
+    SheetGlass1: 1
+  outputs:
+    HoloprojectorFieldEmpty: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleHoloprojectorSecurity
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  minimumTier: Industrial
+  requiredTechnology: RiotControlAdvanced
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 3
+    SheetPlastic1: 1
+    SheetGlass1: 1
+  outputs:
+    HoloprojectorSecurityEmpty: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleIgniter
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 3
+    SheetPlastic1: 1
+    SheetGlass1: 1
+  outputs:
+    Igniter: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleImperialPaymentTerminal
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 2
+    SheetPlastic1: 2
+    SheetGlass1: 1
+  outputs:
+    ImperialPaymentTerminal: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleIntercomElectronics
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 3
+  outputs:
+    IntercomElectronics: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleJawsOfLife
+  processor: Assembler
+  requireSelection: true
+  time: 6
+  minimumTier: Industrial
+  requiredTechnology: EngineeringAdvancedTools
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 10
+    SheetPlastic1: 1
+    SheetGlass1: 5
+    SheetPlasma1: 3
+    IngotGold1: 1
+  outputs:
+    JawsOfLife: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleJug
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetPlastic1: 4
+  outputs:
+    Jug: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleLargeBeaker
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetGlass1: 4
+  outputs:
+    LargeBeaker: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleLauncherSyringe
+  processor: Assembler
+  requireSelection: true
+  time: 10
+  requiredTechnology: Medicine
+  requireDataDisk: true
+  inputs:
+    IngotSilver1: 2
+    SheetSteel1: 10
+    SheetPlastic1: 2
+    SheetGlass1: 1
+  outputs:
+    LauncherSyringe: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleLedLightBulb
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetGlass1: 2
+  outputs:
+    LedLightBulb: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleLedLightTube
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetGlass1: 2
+  outputs:
+    LedLightTube: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleLightBulb
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetGlass1: 2
+  outputs:
+    LightBulb: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleLightReplacer
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetGlass1: 5
+  outputs:
+    LightReplacerEmpty: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleLightTube
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetGlass1: 2
+  outputs:
+    LightTube: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineBoxAntiMateriel
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: IndustrialSecurityEquipment
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 2
+  outputs:
+    MagazineBoxAntiMateriel: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineBoxLightRifle
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: LethalAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 9
+  outputs:
+    MagazineBoxLightRifle: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineBoxLightRifleAshLegion
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Perfect
+  requiredTechnology: IndustrialPerfectEquipment
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 11
+  outputs:
+    MagazineBoxLightRifleAshLegion: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineBoxLightRifleIncendiary
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: DraconicAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetPlastic1: 9
+  outputs:
+    MagazineBoxLightRifleIncendiary: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineBoxLightRifleUranium
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: UraniumAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetPlastic1: 6
+    SheetUranium1: 6
+  outputs:
+    MagazineBoxLightRifleUranium: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineBoxMagnum
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: LethalAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 3
+  outputs:
+    MagazineBoxMagnum: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineBoxMagnumIncendiary
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: DraconicAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetPlastic1: 3
+  outputs:
+    MagazineBoxMagnumIncendiary: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineBoxMagnumUranium
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: UraniumAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetPlastic1: 3
+    SheetUranium1: 2
+  outputs:
+    MagazineBoxMagnumUranium: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineBoxPistol
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: LethalAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 6
+  outputs:
+    MagazineBoxPistol: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineBoxPistolAshLegion
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Perfect
+  requiredTechnology: IndustrialPerfectEquipment
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 4
+  outputs:
+    MagazineBoxPistolAshLegion: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineBoxPistolIncendiary
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: DraconicAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetPlastic1: 6
+  outputs:
+    MagazineBoxPistolIncendiary: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineBoxPistolUranium
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: UraniumAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetPlastic1: 3
+    SheetUranium1: 6
+  outputs:
+    MagazineBoxPistolUranium: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineBoxRifle
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: LethalAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 8
+  outputs:
+    MagazineBoxRifle: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineBoxRifleIncendiary
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: DraconicAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetPlastic1: 8
+  outputs:
+    MagazineBoxRifleIncendiary: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineBoxRifleUranium
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: UraniumAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetPlastic1: 5
+    SheetUranium1: 5
+  outputs:
+    MagazineBoxRifleUranium: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineBoxShotgunAshLegion
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Perfect
+  requiredTechnology: IndustrialPerfectEquipment
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 7
+  outputs:
+    MagazineBoxShotgunAshLegion: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineGrenadeEmpty
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  minimumTier: Industrial
+  requiredTechnology: ShuttleWeapon
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 2
+    SheetPlastic1: 1
+  outputs:
+    MagazineGrenadeEmpty: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineLightRifle
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: LethalAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 6
+  outputs:
+    MagazineLightRifle: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineLightRifleEmpty
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  minimumTier: Industrial
+  requiredTechnology: LethalAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 1
+  outputs:
+    MagazineLightRifleEmpty: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineLightRifleIncendiary
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: DraconicAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 6
+  outputs:
+    MagazineLightRifleIncendiary: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineLightRifleUranium
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: UraniumAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 4
+    SheetUranium1: 4
+  outputs:
+    MagazineLightRifleUranium: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazinePistol
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: LethalAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 2
+  outputs:
+    MagazinePistol: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazinePistolCaselessRifle
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: IndustrialSecurityEquipment
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 2
+  outputs:
+    MagazinePistolCaselessRifle: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazinePistolEmpty
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  minimumTier: Industrial
+  requiredTechnology: LethalAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 1
+  outputs:
+    MagazinePistolEmpty: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazinePistolIncendiary
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: DraconicAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 2
+  outputs:
+    MagazinePistolIncendiary: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazinePistolSubMachineGun
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: LethalAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 3
+  outputs:
+    MagazinePistolSubMachineGun: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazinePistolSubMachineGunEmpty
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  minimumTier: Industrial
+  requiredTechnology: LethalAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 1
+  outputs:
+    MagazinePistolSubMachineGunEmpty: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazinePistolSubMachineGunIncendiary
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: DraconicAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 3
+  outputs:
+    MagazinePistolSubMachineGunIncendiary: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazinePistolSubMachineGunTopMounted
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: LethalAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 3
+  outputs:
+    MagazinePistolSubMachineGunTopMounted: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazinePistolSubMachineGunTopMountedEmpty
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  minimumTier: Industrial
+  requiredTechnology: LethalAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 1
+  outputs:
+    MagazinePistolSubMachineGunTopMountedEmpty: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazinePistolSubMachineGunUranium
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: UraniumAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 3
+    SheetUranium1: 3
+  outputs:
+    MagazinePistolSubMachineGunUranium: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazinePistolUranium
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: UraniumAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 1
+    SheetUranium1: 2
+  outputs:
+    MagazinePistolUranium: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineRifle
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: LethalAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 5
+  outputs:
+    MagazineRifle: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineRifleEmpty
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  minimumTier: Industrial
+  requiredTechnology: LethalAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 1
+  outputs:
+    MagazineRifleEmpty: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineRifleIncendiary
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: DraconicAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 5
+  outputs:
+    MagazineRifleIncendiary: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineRifleUranium
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: UraniumAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 3
+    SheetUranium1: 3
+  outputs:
+    MagazineRifleUranium: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineShotgun
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: LethalAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 3
+  outputs:
+    MagazineShotgun: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineShotgunBeanbag
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: RiotControl
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 2
+    SheetPlastic1: 2
+  outputs:
+    MagazineShotgunBeanbag: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineShotgunEmpty
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  minimumTier: Industrial
+  requiredTechnology: LethalAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 1
+  outputs:
+    MagazineShotgunEmpty: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineShotgunIncendiary
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: DraconicAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 2
+  outputs:
+    MagazineShotgunIncendiary: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMagazineShotgunSlug
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: LethalAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 2
+    SheetPlastic1: 1
+  outputs:
+    MagazineShotgunSlug: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMailingUnitElectronics
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 3
+  outputs:
+    MailingUnitElectronics: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMaterialDurathread
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    MaterialCloth1: 1
+    SheetPlastic1: 1
+  outputs:
+    MaterialDurathread1: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMegaSprayBottle
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: SprayAdvanced
+  requireDataDisk: true
+  inputs:
+    SheetPlastic1: 3
+  outputs:
+    MegaSprayBottle: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMineralScannerEmpty
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: IndustrialAutomation
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 10
+    SheetGlass1: 3
+    SheetPlastic1: 3
+    IngotGold1: 5
+  outputs:
+    MineralScannerEmpty: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMiniSyringe
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: Chemistry
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 2
+    SheetGlass1: 1
+    SheetPlastic1: 1
+  outputs:
+    MiniSyringe: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleModularReceiver
+  processor: Assembler
+  requireSelection: true
+  time: 12
+  inputs:
+    SheetSteel1: 8
+    SheetPlastic1: 1
+  outputs:
+    ModularReceiver: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMopItem
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetPlastic1: 1
+  outputs:
+    MopItem: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleMultitool
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 2
+    SheetPlastic1: 2
+  outputs:
+    Multitool: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleNodeScanner
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: XenoarchaeologyResearch
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 1
+  outputs:
+    NodeScanner: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleOreBagOfHolding
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: IndustrialSalvageEquipment
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 20
+    IngotSilver1: 8
+    SheetPlasma1: 15
+    SheetUranium1: 2
+  outputs:
+    OreBagOfHolding: 1
+
+- type: industrialRecipe
+  id: IndustrialAssemblePKAUpgradeDamage
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  requiredTechnology: KineticModifications
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 15
+    IngotGold1: 5
+    IngotSilver1: 5
+  outputs:
+    PKAUpgradeDamage: 1
+
+- type: industrialRecipe
+  id: IndustrialAssemblePKAUpgradeFireRate
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  requiredTechnology: KineticModifications
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 15
+    IngotGold1: 5
+    IngotSilver1: 5
+  outputs:
+    PKAUpgradeFireRate: 1
+
+- type: industrialRecipe
+  id: IndustrialAssemblePKAUpgradeRange
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  requiredTechnology: KineticModifications
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 15
+    IngotGold1: 5
+    IngotSilver1: 5
+  outputs:
+    PKAUpgradeRange: 1
+
+- type: industrialRecipe
+  id: IndustrialAssemblePenExplodingBox
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Perfect
+  requiredTechnology: IndustrialPerfectEquipment
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 5
+    SheetPlastic1: 1
+    SheetUranium1: 2
+  outputs:
+    PenExplodingBox: 1
+
+- type: industrialRecipe
+  id: IndustrialAssemblePersonalAI
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: Robotics
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 1
+    SheetGlass1: 2
+  outputs:
+    PersonalAI: 1
+
+- type: industrialRecipe
+  id: IndustrialAssemblePickaxe
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 10
+    SheetPlastic1: 1
+    MaterialWoodPlank1: 5
+  outputs:
+    Pickaxe: 1
+
+- type: industrialRecipe
+  id: IndustrialAssemblePillCanister
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetPlastic1: 1
+  outputs:
+    PillCanister: 1
+
+- type: industrialRecipe
+  id: IndustrialAssemblePlasmaSword
+  processor: Assembler
+  requireSelection: true
+  time: 10
+  minimumTier: Perfect
+  requiredTechnology: IndustrialPerfectEquipment
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 25
+    SheetPlasteel1: 30
+    SheetPlastic1: 35
+    SheetPlasma1: 33
+  outputs:
+    PlasmaSword: 1
+
+- type: industrialRecipe
+  id: IndustrialAssemblePlasmaSwordAlt
+  processor: Assembler
+  requireSelection: true
+  time: 10
+  minimumTier: Perfect
+  requiredTechnology: IndustrialPerfectEquipment
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 25
+    SheetPlasteel1: 30
+    SheetPlastic1: 35
+    SheetPlasma1: 33
+  outputs:
+    PlasmaSwordAlt: 1
+
+- type: industrialRecipe
+  id: IndustrialAssemblePoltergeistDetector
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 2
+    SheetPlastic1: 1
+    SheetGlass1: 1
+  outputs:
+    PoltergeistDetector: 1
+
+- type: industrialRecipe
+  id: IndustrialAssemblePortableRecharger
+  processor: Assembler
+  requireSelection: true
+  time: 15
+  minimumTier: Industrial
+  requiredTechnology: RiotControlAdvanced
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 20
+    SheetUranium1: 20
+    SheetPlastic1: 10
+    SheetPlasma1: 5
+    SheetGlass1: 5
+  outputs:
+    PortableRecharger: 1
+
+- type: industrialRecipe
+  id: IndustrialAssemblePowerCageHigh
+  processor: Assembler
+  requireSelection: true
+  time: 10
+  minimumTier: Industrial
+  requiredTechnology: ShuttleWeaponAdvanced
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 6
+    SheetGlass1: 8
+    SheetPlastic1: 4
+    IngotGold1: 1
+  outputs:
+    PowerCageHigh: 1
+
+- type: industrialRecipe
+  id: IndustrialAssemblePowerCageMedium
+  processor: Assembler
+  requireSelection: true
+  time: 6
+  minimumTier: Industrial
+  requiredTechnology: ShuttleWeapon
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 5
+    SheetGlass1: 5
+    SheetPlastic1: 3
+    IngotGold1: 1
+  outputs:
+    PowerCageMedium: 1
+
+- type: industrialRecipe
+  id: IndustrialAssemblePowerCageSmall
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  minimumTier: Industrial
+  requiredTechnology: ShuttleWeapon
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 2
+    SheetPlastic1: 1
+  outputs:
+    PowerCageSmall: 1
+
+- type: industrialRecipe
+  id: IndustrialAssemblePowerCellHyper
+  processor: Assembler
+  requireSelection: true
+  time: 10
+  minimumTier: Industrial
+  requiredTechnology: IndustrialEnergyStorage
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 8
+    SheetGlass1: 7
+    SheetPlasma1: 3
+    IngotGold1: 2
+    IngotSilver1: 3
+  outputs:
+    PowerCellHyperPrinted: 1
+
+- type: industrialRecipe
+  id: IndustrialAssemblePowerCellMicroreactor
+  processor: Assembler
+  requireSelection: true
+  time: 10
+  requiredTechnology: EnergyRadioisotopes
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 5
+    SheetGlass1: 4
+    SheetUranium1: 2
+    IngotGold1: 1
+  outputs:
+    PowerCellMicroreactorPrinted: 1
+
+- type: industrialRecipe
+  id: IndustrialAssemblePowerDrill
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: EngineeringAdvancedTools
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 6
+    SheetPlastic1: 2
+  outputs:
+    PowerDrill: 1
+
+- type: industrialRecipe
+  id: IndustrialAssemblePushHorn
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  requiredTechnology: Entertainment
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 5
+    SheetPlastic1: 5
+    SheetPlasma1: 2
+  outputs:
+    PushHorn: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleRadioJammer
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Perfect
+  requiredTechnology: IndustrialPerfectEquipment
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 26
+    SheetPlastic1: 5
+    SheetUranium1: 6
+  outputs:
+    RadioJammer: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleRetractor
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 2
+    SheetPlastic1: 1
+  outputs:
+    Retractor: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleRollerBedSpawnFolded
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 6
+    SheetPlastic1: 3
+  outputs:
+    RollerBedSpawnFolded: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleSMESMachineCircuitboard
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 3
+    SheetGlass1: 5
+  outputs:
+    SMESMachineCircuitboard: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleSaw
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 2
+    SheetPlastic1: 1
+  outputs:
+    Saw: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleScalpel
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 2
+    SheetPlastic1: 1
+  outputs:
+    Scalpel: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleScrewdriver
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 2
+    SheetPlastic1: 1
+  outputs:
+    Screwdriver: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleSeismicCharge
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: IndustrialResourceExtraction
+  requireDataDisk: true
+  inputs:
+    SheetPlastic1: 15
+    SheetSteel1: 1
+    IngotSilver1: 1
+  outputs:
+    SeismicCharge: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleSheetRGlass
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetGlass1: 2
+    SheetSteel1: 1
+  outputs:
+    SheetRGlass1: 2
+
+- type: industrialRecipe
+  id: IndustrialAssembleSignalTimerElectronics
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 1
+  outputs:
+    SignalTimerElectronics: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleSignalTrigger
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: Explosive
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 3
+    SheetPlastic1: 2
+  outputs:
+    SignalTrigger: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleSignaller
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 2
+    SheetGlass1: 1
+  outputs:
+    RemoteSignaller: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleSignallerAdvanced
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: Explosive
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 2
+    SheetPlasma1: 1
+  outputs:
+    RemoteSignallerAdvanced: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleSodiumLightTube
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetGlass1: 2
+  outputs:
+    SodiumLightTube: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleSpeedLoaderMagnum
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: LethalAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 2
+  outputs:
+    SpeedLoaderMagnum: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleSpeedLoaderMagnumEmpty
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  minimumTier: Industrial
+  requiredTechnology: LethalAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 1
+  outputs:
+    SpeedLoaderMagnumEmpty: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleSpeedLoaderMagnumIncendiary
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: DraconicAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 2
+  outputs:
+    SpeedLoaderMagnumIncendiary: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleSpeedLoaderMagnumUranium
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: UraniumAmmunition
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 2
+    SheetUranium1: 2
+  outputs:
+    SpeedLoaderMagnumUranium: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleSprayBottle
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetPlastic1: 1
+  outputs:
+    SprayBottle: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleSprayPainter
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 3
+    SheetPlastic1: 1
+  outputs:
+    SprayPainterEmpty: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleSprayPainterAmmo
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 2
+    SheetPlastic1: 1
+  outputs:
+    SprayPainterAmmo: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleStationMapElectronics
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 1
+  outputs:
+    StationMapCircuitboard: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleSubstationMachineCircuitboard
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 3
+    SheetGlass1: 5
+  outputs:
+    SubstationMachineCircuitboard: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleSyndicateJawsOfLife
+  processor: Assembler
+  requireSelection: true
+  time: 6
+  minimumTier: Perfect
+  requiredTechnology: IndustrialPerfectEquipment
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 12
+    SheetGlass1: 6
+    SheetPlasma1: 5
+    IngotGold1: 1
+  outputs:
+    SyndicateJawsOfLife: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleSyndicateWhistle
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  minimumTier: Perfect
+  requiredTechnology: IndustrialPerfectEquipment
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 4
+  outputs:
+    SyndicateWhistle: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleSynthesizerInstrument
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: Entertainment
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 3
+    SheetPlastic1: 3
+    SheetGlass1: 1
+  outputs:
+    SynthesizerInstrument: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleSyringeBluespace
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  minimumTier: Industrial
+  requiredTechnology: ChemistryBluespace
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 2
+    SheetGlass1: 3
+    SheetPlasma1: 1
+    IngotSilver1: 1
+  outputs:
+    SyringeBluespace: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleSyringeCryostasis
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: BiochemicalStasis
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 2
+    SheetPlastic1: 1
+  outputs:
+    SyringeCryostasis: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleTRayScanner
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 8
+    SheetPlastic1: 1
+    SheetGlass1: 3
+  outputs:
+    trayScanner: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleTelescopicShield
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  minimumTier: Industrial
+  requiredTechnology: RiotControlAdvanced
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 3
+    SheetGlass1: 8
+  outputs:
+    TelescopicShield: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleTimerTrigger
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: Explosive
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 3
+    SheetPlastic1: 2
+  outputs:
+    TimerTrigger: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleTowelColorWhite
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    MaterialCloth1: 3
+  outputs:
+    TowelColorWhite: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleTrashBag
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetPlastic1: 1
+  outputs:
+    TrashBag: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleTruncheon
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  minimumTier: Industrial
+  requiredTechnology: RiotControlAdvanced
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 3
+    SheetPlastic1: 3
+  outputs:
+    Truncheon: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleUtilityBelt
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 1
+    MaterialCloth1: 1
+  outputs:
+    ClothingBeltUtility: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleUtilityKnife
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+  outputs:
+    UtilityKnife: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleVoiceSensor
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 2
+    SheetGlass1: 1
+  outputs:
+    voicesensor: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleVoiceTrigger
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  requiredTechnology: Explosive
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 3
+    SheetPlastic1: 2
+  outputs:
+    VoiceTrigger: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleWallmountSubstationElectronics
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 3
+    SheetGlass1: 5
+  outputs:
+    WallmountSubstationElectronics: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleWarmLightBulb
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetGlass1: 2
+  outputs:
+    WarmLightBulb: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleWeaponAdvancedLaser
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: CombatLaserAdvanced
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 15
+    SheetGlass1: 10
+    IngotGold1: 5
+    SheetUranium1: 3
+  outputs:
+    WeaponAdvancedLaser: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleWeaponCapacitorRechargerCircuitboard
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 1
+  outputs:
+    WeaponCapacitorRechargerCircuitboard: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleWeaponForceGun
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  requiredTechnology: GravityManipulation
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 5
+    SheetGlass1: 4
+    IngotSilver1: 2
+  outputs:
+    WeaponForceGun: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleWeaponGauntletGorilla
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: AnomalyCoreHarnessing
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 15
+    SheetPlastic1: 3
+    SheetGlass1: 5
+    SheetPlasma1: 5
+    IngotSilver1: 3
+  outputs:
+    WeaponGauntletGorilla: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleWeaponLaserCannon
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: CombatLaserConcentrated
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 13
+    SheetPlastic1: 8
+    IngotGold1: 4
+  outputs:
+    WeaponLaserCannon: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleWeaponLaserCarbine
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: WeaponizedLaserManipulation
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 20
+    SheetGlass1: 8
+    SheetPlastic1: 5
+  outputs:
+    WeaponLaserCarbine: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleWeaponParticleDecelerator
+  processor: Assembler
+  requireSelection: true
+  time: 6
+  requiredTechnology: MeansEliminatingCatastrophicThreats
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 8
+    SheetPlastic1: 1
+    SheetPlasma1: 2
+    SheetUranium1: 2
+  outputs:
+    WeaponParticleDecelerator: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleWeaponPistolCHIMP
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  requiredTechnology: AnomalousResearchAdvanced
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 5
+    SheetGlass1: 4
+  outputs:
+    WeaponPistolCHIMP: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleWeaponProtoKineticAccelerator
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  requiredTechnology: SalvageWeapons
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 10
+    SheetGlass1: 5
+    IngotSilver1: 1
+  outputs:
+    WeaponProtoKineticAccelerator: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleWeaponSprayNozzle
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  requiredTechnology: SprayAdvanced
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 15
+    SheetGlass1: 5
+  outputs:
+    WeaponSprayNozzle: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleWeaponTemperatureGun
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: ThermalWeaponry
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 20
+    SheetGlass1: 5
+    SheetPlastic1: 5
+    IngotGold1: 5
+  outputs:
+    WeaponTemperatureGun: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleWeaponTetherGun
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  requiredTechnology: GravityManipulation
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 5
+    SheetGlass1: 4
+    IngotSilver1: 1
+  outputs:
+    WeaponTetherGun: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleWeaponXrayCannon
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Industrial
+  requiredTechnology: CombatLaserWaveHarnessing
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 15
+    SheetGlass1: 5
+    SheetPlastic1: 3
+    IngotGold1: 3
+  outputs:
+    WeaponXrayCannon: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleWelder
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 4
+    SheetPlastic1: 1
+  outputs:
+    Welder: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleWetFloorSign
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetPlastic1: 1
+  outputs:
+    WetFloorSign: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleWhiteholeGrenade
+  processor: Assembler
+  requireSelection: true
+  time: 5
+  minimumTier: Perfect
+  requiredTechnology: IndustrialPerfectEquipment
+  requireDataDisk: true
+  inputs:
+    SheetSteel1: 10
+    SheetPlastic1: 2
+    SheetUranium1: 18
+  outputs:
+    WhiteholeGrenade: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleWireBrush
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 1
+    SheetPlastic1: 1
+  outputs:
+    WireBrush: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleWirecutter
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 2
+    SheetPlastic1: 1
+  outputs:
+    Wirecutter: 1
+
+- type: industrialRecipe
+  id: IndustrialAssembleWrench
+  processor: Assembler
+  requireSelection: true
+  time: 4
+  inputs:
+    SheetSteel1: 2
+    SheetPlastic1: 1
+  outputs:
+    Wrench: 1

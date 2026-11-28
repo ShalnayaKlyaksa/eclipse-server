@@ -42,5 +42,3 @@ tool-quality-brushing-tool-name = Wire Brush
 
 tool-quality-industrial-port-configuring-name = Industrial port configuring
 tool-quality-industrial-port-configuring-tool-name = Industrial port wrench
-tool-quality-industrial-pipe-detaching-name = Industrial pipe detaching
-tool-quality-industrial-pipe-detaching-tool-name = Industrial port wrench

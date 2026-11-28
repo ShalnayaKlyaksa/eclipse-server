@@ -40,7 +40,6 @@ public sealed partial class IndustrialProcessorWindow : FancyWindow
     private readonly CheckBox _availableOnly;
     private readonly Button _automatic;
     private readonly Label _recipeCount;
-    private readonly Label _catalogueCaption;
     private readonly BoxContainer _recipeList;
     private readonly RichTextLabel _emptyList;
     private readonly Label _modeCaption;
@@ -60,10 +59,8 @@ public sealed partial class IndustrialProcessorWindow : FancyWindow
     private readonly Label _progressText;
     private readonly ProgressBar _progress;
     private readonly BoxContainer _materials;
-    private readonly BoxContainer _recipeInputSection;
     private readonly BoxContainer _recipeInputs;
     private readonly BoxContainer _recipeOutputs;
-    private readonly Label _resultCaption;
     private readonly Label _heatCost;
     private readonly ProcessBoard _processBoard;
     private readonly RichTextLabel _slotHelp;
@@ -76,13 +73,12 @@ public sealed partial class IndustrialProcessorWindow : FancyWindow
     private IndustrialProcessorBoundUserInterfaceState? _state;
     private string? _inspectedRecipe;
     private string? _detailsId;
-    private bool _detailsBuffer;
     private float _elapsed;
     private int _displayPercent = -1;
     private int _displaySeconds = -1;
     private bool _updating;
 
-    public event Action<bool, int>? OnSlotPressed;
+    public event Action<bool, int, NetEntity?>? OnSlotPressed;
     public event Action<string?>? OnRecipeSelected;
     public event Action? OnToggle;
     public event Action? OnManualOperate;
@@ -147,9 +143,9 @@ public sealed partial class IndustrialProcessorWindow : FancyWindow
         sidebar.HorizontalExpand = false;
         sidebar.VerticalExpand = true;
         var catalogueHeading = Row();
-        _catalogueCaption = Caption("industrial-ui-catalogue");
-        _catalogueCaption.HorizontalExpand = true;
-        catalogueHeading.AddChild(_catalogueCaption);
+        var catalogueCaption = Caption("industrial-ui-catalogue");
+        catalogueCaption.HorizontalExpand = true;
+        catalogueHeading.AddChild(catalogueCaption);
         _recipeCount = new Label { FontColorOverride = Muted, StyleClasses = { StyleClass.FontSmall } };
         catalogueHeading.AddChild(_recipeCount);
         sidebar.AddChild(catalogueHeading);
@@ -178,6 +174,7 @@ public sealed partial class IndustrialProcessorWindow : FancyWindow
         {
             Name = "AutomaticRecipe", ToggleMode = true, ClipText = true, MinHeight = 34,
             ModulateSelfOverride = Color.White, StyleClasses = { "industrial-control" },
+            Text = Loc.GetString("industrial-ui-automatic"), ToolTip = Loc.GetString("industrial-ui-automatic-help"),
         };
         _automatic.OnPressed += _ =>
         {
@@ -274,14 +271,13 @@ public sealed partial class IndustrialProcessorWindow : FancyWindow
         process.AddChild(slotHelp);
 
         _materials = Row();
-        _recipeInputSection = Column();
-        _recipeInputSection.AddChild(Caption("industrial-ui-per-cycle"));
+        var recipeInputSection = Column();
+        recipeInputSection.AddChild(Caption("industrial-ui-per-cycle"));
         _recipeInputs = Column();
-        _recipeInputSection.AddChild(_recipeInputs);
-        _materials.AddChild(_recipeInputSection);
+        recipeInputSection.AddChild(_recipeInputs);
+        _materials.AddChild(recipeInputSection);
         var results = Column();
-        _resultCaption = Caption("industrial-ui-expected-output");
-        results.AddChild(_resultCaption);
+        results.AddChild(Caption("industrial-ui-expected-output"));
         _recipeOutputs = Column();
         results.AddChild(_recipeOutputs);
         _materials.AddChild(results);
@@ -324,7 +320,10 @@ public sealed partial class IndustrialProcessorWindow : FancyWindow
         Title = state.MachineName;
         var statusColor = state.StateKey == "industrial-processor-working" ? Ready :
             state.StateKey == "industrial-processor-idle" ? Muted : Amber;
-        _status.Text = Loc.GetString(state.StateKey);
+        var storesItems = state.IsBuffer && state.MaxInputSlots > 0;
+        _status.Text = Loc.GetString(storesItems && state.StateKey == "industrial-processor-idle"
+            ? "industrial-ui-storage-ready"
+            : state.StateKey);
         _status.ToolTip = _status.Text;
         _status.FontColorOverride = statusColor;
         ((StyleBoxFlat) _statusStripe.PanelOverride!).BackgroundColor = statusColor;
@@ -335,6 +334,7 @@ public sealed partial class IndustrialProcessorWindow : FancyWindow
                 : Loc.GetString("industrial-ui-power", ("watts", (int) state.PowerWatts));
         _metrics.Text = $"{state.TierName}   ·   ×{state.SpeedMultiplier:0.##}   ·   {energy}";
         _metrics.ToolTip = _metrics.Text;
+        _metrics.Visible = !storesItems;
         _toggle.Text = Loc.GetString(state switch
         {
             { IsExtractor: true, Enabled: true } => "industrial-extraction-stop",
@@ -344,15 +344,11 @@ public sealed partial class IndustrialProcessorWindow : FancyWindow
             _ => "industrial-ui-resume",
         });
         _toggle.Disabled = state.ManualBusy;
-        _toggle.Visible = _outputCard.Visible = _machineStage.Visible = _inputArrow.Visible = _outputArrow.Visible = !state.IsBuffer;
-        _catalogueSidebar.Visible = _catalogueDivider.Visible = !state.IsExtractor;
-        _availableOnly.Visible = !state.IsBuffer;
-        _inputCard.Visible = _inputArrow.Visible = !state.IsExtractor;
-        _automatic.Text = Loc.GetString(state.IsBuffer ? "industrial-ui-no-filter" : "industrial-ui-automatic");
-        _automatic.ToolTip = Loc.GetString(state.IsBuffer ? "industrial-ui-buffer-help" : "industrial-ui-automatic-help");
-        _modeCaption.Text = Loc.GetString(state.IsBuffer ? "industrial-ui-filter" : "industrial-ui-process");
-        _catalogueCaption.Text = Loc.GetString(state.IsBuffer ? "industrial-ui-filters" : "industrial-ui-catalogue");
-        _resultCaption.Text = Loc.GetString(state.IsBuffer ? "industrial-ui-accepted" : "industrial-ui-expected-output");
+        _toggle.Visible = _outputCard.Visible = _machineStage.Visible = _outputArrow.Visible = !state.IsBuffer;
+        _catalogueSidebar.Visible = _catalogueDivider.Visible = !state.IsExtractor && !state.IsBuffer;
+        _inputCard.Visible = !state.IsExtractor;
+        _inputArrow.Visible = !state.IsBuffer && !state.IsExtractor;
+        _modeCaption.Visible = _processTitle.Visible = !state.IsBuffer;
         _inputCaption.Text = Loc.GetString(state.IsBuffer ? "industrial-ui-stored" : "industrial-ui-input");
         _inputCount.Text = $"{state.InputSlots.Count(s => s.PrototypeId != null)} / {state.MaxInputSlots}";
         _outputCount.Text = $"{state.OutputSlots.Count(s => s.PrototypeId != null)} / {state.MaxOutputSlots}";
@@ -525,14 +521,14 @@ public sealed partial class IndustrialProcessorWindow : FancyWindow
         var recipe = _catalog.FirstOrDefault(r => r.Id == (selected ?? _state.CurrentRecipeId));
         _processBoard.Visible = _slotHelp.Visible = (_state.MaxInputSlots > 0 || _state.MaxOutputSlots > 0) &&
             (recipe == null || recipe.Inputs.Length > 0 || recipe.Outputs.Length > 0);
-        _processTitle.Text = SentenceCase(recipe?.Name ?? Loc.GetString(_state.IsBuffer ? "industrial-ui-no-filter" : "industrial-ui-automatic"));
+        _processTitle.Text = SentenceCase(recipe?.Name ?? Loc.GetString("industrial-ui-automatic"));
         if (_state.IsExtractor)
             _processTitle.Text = Loc.GetString("industrial-extraction-title");
         _processTitle.ToolTip = _processTitle.Text;
-        var requirements = recipe != null && !_state.IsBuffer ? GetRecipeRequirements(recipe) : null;
-        _description.Visible = recipe == null || requirements != null;
+        var requirements = recipe != null ? GetRecipeRequirements(recipe) : null;
+        _description.Visible = !_state.IsBuffer && (recipe == null || requirements != null);
         _description.SetMessage(FormattedMessage.FromUnformatted(requirements ??
-            Loc.GetString(_state.IsBuffer ? "industrial-ui-buffer-help" : "industrial-ui-automatic-help")),
+            Loc.GetString("industrial-ui-automatic-help")),
             recipe is { Unlocked: false } ? Amber : Muted);
         if (_state.IsExtractor)
         {
@@ -540,15 +536,13 @@ public sealed partial class IndustrialProcessorWindow : FancyWindow
             _description.SetMessage(Loc.GetString(_state.ExtractionResource == null ? "industrial-extraction-no-vein" : "industrial-extraction-reserve",
                 ("resource", _state.ExtractionResource ?? string.Empty), ("amount", _state.ExtractionReserve)));
         }
-        _materials.Visible = recipe != null;
-        _recipeInputSection.Visible = !_state.IsBuffer;
+        _materials.Visible = !_state.IsBuffer && recipe != null;
         _heatCost.Visible = !_state.IsBuffer && recipe is { HeatKilojoules: > 0 };
         if (_heatCost.Visible)
             _heatCost.Text = Loc.GetString("industrial-ui-cycle-heat", ("kilojoules", recipe!.HeatKilojoules));
-        if (recipe?.Id != _detailsId || _detailsBuffer != _state.IsBuffer)
+        if (recipe?.Id != _detailsId)
         {
             _detailsId = recipe?.Id;
-            _detailsBuffer = _state.IsBuffer;
             _recipeInputs.RemoveAllChildren();
             _recipeOutputs.RemoveAllChildren();
             _materialCounters.Clear();
@@ -580,12 +574,12 @@ public sealed partial class IndustrialProcessorWindow : FancyWindow
     {
         var row = Row();
         row.SeparationOverride = 5;
-        row.ToolTip = _state is { IsBuffer: true } ? item.DisplayName : item.DisplayName + " ×" + item.Count;
+        row.ToolTip = $"{item.DisplayName} ×{item.Count}";
         row.AddChild(ItemIcon(item.PrototypeId, 24));
         row.AddChild(new Label { Text = item.DisplayName, HorizontalExpand = true, ClipText = true, FontColorOverride = Ink, StyleClasses = { StyleClass.FontSmall } });
         var amount = new Label
         {
-            Text = $"×{item.Count}", Visible = input || _state is not { IsBuffer: true },
+            Text = $"×{item.Count}",
             FontColorOverride = Ink, StyleClasses = { "industrial-number" },
         };
         row.AddChild(amount);
@@ -636,15 +630,17 @@ public sealed partial class IndustrialProcessorWindow : FancyWindow
                 content.AddChild(icon);
                 content.AddChild(badge);
                 button.AddChild(content);
-                button.OnPressed += _ => OnSlotPressed?.Invoke(input, index);
+                var slot = new Slot(button, icon, count, badge);
+                button.OnPressed += _ => OnSlotPressed?.Invoke(input, index, slot.Item);
                 grid.AddChild(button);
-                controls.Add(new Slot(button, icon, count, badge));
+                controls.Add(slot);
             }
         }
         for (var i = 0; i < states.Length; i++)
         {
             var slot = controls[i];
             var item = states[i];
+            slot.Item = item.Item;
             slot.Button.Empty = item.PrototypeId == null;
             slot.Button.ToolTip = item.PrototypeId == null
                 ? Loc.GetString(input ? "industrial-ui-insert-slot" : "industrial-ui-empty-slot") : $"{item.DisplayName} ×{item.Count}";
@@ -760,6 +756,7 @@ public sealed partial class IndustrialProcessorWindow : FancyWindow
     private sealed record Slot(SlotButton Button, TextureRect Icon, Label Count, PanelContainer Badge)
     {
         public string? Prototype;
+        public NetEntity? Item;
     }
     private sealed record MaterialCounter(string? Prototype, int Required, Label Amount);
 }

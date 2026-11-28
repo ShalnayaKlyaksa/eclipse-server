@@ -85,7 +85,7 @@ void fragment() {
     highp float opacity = 0.0;
     if (distance < diskEdge) {
         // Only compress the luminous disk when it reaches the field. The event horizon keeps its size.
-        highp float shadow = min(radius * 0.25, diskEdge * 0.85);
+        highp float shadow = min(radius * (field_limit > 0.0 ? 0.33 : 0.38), diskEdge * 0.99);
         highp float screenRadius = distance < shadow
             ? 0.25 * distance / max(0.01, shadow)
             : 0.25 + 0.75 * (distance - shadow) / max(0.01, diskEdge - shadow);

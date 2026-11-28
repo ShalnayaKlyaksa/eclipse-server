@@ -4,6 +4,7 @@ cargoproduct-category-name-cargo = Cargo
 cargoproduct-category-name-circuitboards = Circuitboards
 cargoproduct-category-name-emergency = Emergency
 cargoproduct-category-name-engineering = Engineering
+cargoproduct-category-name-industrial = Industrial supplies
 cargoproduct-category-name-food = Food
 cargoproduct-category-name-fun = Fun
 cargoproduct-category-name-hydroponics = Hydroponics

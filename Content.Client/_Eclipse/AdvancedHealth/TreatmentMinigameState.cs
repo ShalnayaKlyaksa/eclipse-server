@@ -83,7 +83,7 @@ internal sealed partial class TreatmentMinigameState(AdvancedTreatmentType mode,
     private Vector2 HandShake()
     {
         var steadiness = UsesForceps ? 0.7f : 1f;
-        var amplitude = pain * (3 + 17 * pain) * steadiness;
+        var amplitude = pain * (1 + 5 * pain) * steadiness;
         return new Vector2(MathF.Sin(Time * 11) + MathF.Sin(Time * 23) * 0.3f,
             MathF.Sin(Time * 13) * 0.7f + MathF.Sin(Time * 19) * 0.2f) * amplitude;
     }
@@ -113,7 +113,7 @@ internal sealed partial class TreatmentMinigameState(AdvancedTreatmentType mode,
                 GrabSyringe();
                 break;
             case AdvancedTreatmentType.Suture:
-                Engaged = Vector2.Distance(Cursor, NeedlePosition) <= 20;
+                Engaged = Vector2.Distance(Cursor, NeedlePosition) <= 28;
                 _sutureGripOffset = NeedlePosition - Cursor;
                 _lastSutureMove = Time;
                 break;

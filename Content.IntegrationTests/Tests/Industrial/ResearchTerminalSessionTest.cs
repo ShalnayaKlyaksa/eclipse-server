@@ -1,7 +1,11 @@
 #nullable enable annotations
 
 using System;
+using Content.Client._Erida.Research.UI;
+using Content.Client.Research.UI;
 using Content.IntegrationTests.Fixtures;
+using Content.IntegrationTests.Fixtures.Attributes;
+using Content.Server.Administration.Managers;
 using Content.Server.Power.Components;
 using Content.Server.Research.Components;
 using Content.Server.Research.Systems;
@@ -13,7 +17,10 @@ using System.Linq;
 using Content.Shared.Power;
 using Content.Shared.Research.Components;
 using Content.Shared.Research.Prototypes;
+using Content.Shared.UserInterface;
 using System.Collections.Generic;
+using Robust.Client.UserInterface;
+using Robust.Client.UserInterface.Controls;
 using Robust.Server.GameObjects;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -22,6 +29,8 @@ namespace Content.IntegrationTests.Tests.Industrial;
 
 public sealed class ResearchTerminalSessionTest : GameTest
 {
+    private static PoolSettings AdminPair => new() { Connected = true, Dirty = true, AdminLogsEnabled = true };
+
     private EntityUid Terminal(EntityCoordinates coordinates, EntityUid server)
     {
         var uid = SEntMan.SpawnEntity("ComputerResearchAndDevelopment", coordinates);
@@ -41,6 +50,82 @@ public sealed class ResearchTerminalSessionTest : GameTest
     {
         SEntMan.GetComponent<ResearchConsoleComponent>(terminal).NextCommand = TimeSpan.Zero;
         research.ExecuteTerminalCommand(terminal, actor, command);
+    }
+
+    [Test]
+    [PairConfig(nameof(AdminPair))]
+    public async Task StaffLoginIsPrivateAndEndsWhenTheWindowClosesOrAdminRightsAreDisabled()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid terminal = default;
+        EntityUid administrator = default;
+        EntityUid director = default;
+        await Server.WaitAssertion(() =>
+        {
+            var research = SEntMan.System<ResearchSystem>();
+            var server = SEntMan.SpawnEntity("ResearchAndDevelopmentServer", map.GridCoords);
+            terminal = Terminal(map.GridCoords, server);
+            SEntMan.GetComponent<ApcPowerReceiverComponent>(terminal).NeedsPower = false;
+            var console = SEntMan.GetComponent<ResearchConsoleComponent>(terminal);
+            director = Actor(map.GridCoords, "ResearchDirector");
+            research.IssueCrewAccount(server, director, "ResearchDirector");
+            Assert.That(research.AuthenticateTerminal(terminal, director, "admin", "admin", false), Is.False);
+
+            administrator = SEntMan.SpawnEntity("MobHuman", map.GridCoords);
+            Server.PlayerMan.SetAttachedEntity(ServerSession!, administrator);
+            Server.ResolveDependency<IAdminManager>().PromoteHost(ServerSession!);
+            console.NextAuthentication = TimeSpan.Zero;
+            SEntMan.EventBus.RaiseLocalEvent(terminal, new BeforeActivatableUIOpenEvent(administrator));
+            Assert.That(SEntMan.System<UserInterfaceSystem>().TryOpenUi(terminal, ResearchConsoleUiKey.Key, administrator), Is.True);
+        });
+
+        await Pair.RunTicksSync(20);
+        await Client.WaitAssertion(() =>
+        {
+            var ui = Client.System<SharedUserInterfaceSystem>();
+            var window = Client.ResolveDependency<IUserInterfaceManager>().WindowRoot.Children.OfType<FancyResearchConsoleMenu>().Single();
+            Assert.That(ui.TryGetOpenUi<ResearchConsoleBoundUserInterface>(window.Entity, ResearchConsoleUiKey.Key, out var bui), Is.True);
+            bui!.SendMessage(new ResearchTerminalAuthMessage("admin", "admin"));
+        });
+
+        await Pair.RunTicksSync(20);
+        await Client.WaitAssertion(() =>
+        {
+            var window = Client.ResolveDependency<IUserInterfaceManager>().WindowRoot.Children.OfType<FancyResearchConsoleMenu>().Single();
+            Assert.That(window.FindControl<Label>("SessionCaption").Text, Does.EndWith(" / admin"));
+        });
+
+        await Server.WaitAssertion(() =>
+        {
+            var research = SEntMan.System<ResearchSystem>();
+            var ui = SEntMan.System<UserInterfaceSystem>();
+            var console = SEntMan.GetComponent<ResearchConsoleComponent>(terminal);
+            Assert.That(console.TerminalLines, Is.Empty);
+            Assert.That(research.CanResearchAtTerminal(terminal, administrator), Is.True);
+            Assert.That(research.CanResearchAtTerminal(terminal, director), Is.False);
+            Run(research, terminal, director, "logout");
+            Assert.That(console.TerminalLines, Is.Empty);
+            Run(research, terminal, administrator, "whoami");
+            Assert.That(console.TerminalLines, Has.Some.Contains("admin@lab-"));
+            Assert.That(ui.TryGetUiState<ResearchConsoleBoundInterfaceState>(terminal, ResearchConsoleUiKey.Key, out var publicState), Is.True);
+            Assert.That(publicState!.Terminal.Username, Is.Null);
+
+            ui.CloseUi(terminal, ResearchConsoleUiKey.Key, administrator);
+            Assert.That(console.AdminSession, Is.Null);
+            Assert.That(console.TerminalLines, Is.Empty);
+
+            ui.OpenUi(terminal, ResearchConsoleUiKey.Key, administrator);
+            console.NextAuthentication = TimeSpan.Zero;
+            Assert.That(research.AuthenticateTerminal(terminal, administrator, "admin", "admin", false), Is.True);
+            Server.ResolveDependency<IAdminManager>().DeAdmin(ServerSession!);
+            Assert.That(research.CanResearchAtTerminal(terminal, administrator), Is.False);
+            Assert.That(ui.IsUiOpen(terminal, ResearchConsoleUiKey.Key, administrator), Is.False);
+            Assert.That(ui.TryOpenUi(terminal, ResearchConsoleUiKey.Key, administrator), Is.True);
+            console.NextAuthentication = TimeSpan.Zero;
+            Assert.That(research.AuthenticateTerminal(terminal, administrator, "admin", "admin", false), Is.False);
+            Server.PlayerMan.SetAttachedEntity(ServerSession!, null);
+            SEntMan.DeleteEntity(map.MapUid);
+        });
     }
 
     [Test]

@@ -1,0 +1,152 @@
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: BaseIndustrialPipePack
+  components:
+  - type: Sprite
+  - type: Stack
+    count: 1
+  - type: CablePlacer
+    industrialPipe: true
+    overTile: true
+
+- type: entity
+  parent: BaseIndustrialPipePack
+  id: LpItemPipePack
+  name: LpItemPipe pack
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Piping/item_lp_pipe.rsi
+    state: lp0
+  - type: Stack
+    stackType: LpItemPipe
+  - type: CablePlacer
+    cablePrototypeID: LpItemPipe
+
+- type: stack
+  id: LpItemPipe
+  name: ent-LpItemPipe
+  icon: { entity: LpItemPipePack }
+  spawn: LpItemPipePack
+  maxCount: 30
+
+- type: entity
+  parent: BaseIndustrialPipePack
+  id: MpItemPipePack
+  name: MpItemPipe pack
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Piping/item_lp_pipe.rsi
+    state: lp0
+  - type: Stack
+    stackType: MpItemPipe
+  - type: CablePlacer
+    cablePrototypeID: MpItemPipe
+
+- type: stack
+  id: MpItemPipe
+  name: ent-MpItemPipe
+  icon: { entity: MpItemPipePack }
+  spawn: MpItemPipePack
+  maxCount: 30
+
+- type: entity
+  parent: BaseIndustrialPipePack
+  id: HpItemPipePack
+  name: HpItemPipe pack
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Piping/item_lp_pipe.rsi
+    state: lp0
+  - type: Stack
+    stackType: HpItemPipe
+  - type: CablePlacer
+    cablePrototypeID: HpItemPipe
+
+- type: stack
+  id: HpItemPipe
+  name: ent-HpItemPipe
+  icon: { entity: HpItemPipePack }
+  spawn: HpItemPipePack
+  maxCount: 30
+
+- type: entity
+  parent: BaseIndustrialPipePack
+  id: BasicLiquidPipePack
+  name: BasicLiquidPipe pack
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Piping/liquid_pipe.rsi
+    state: pipe12
+  - type: Stack
+    stackType: BasicLiquidPipe
+  - type: CablePlacer
+    cablePrototypeID: BasicLiquidPipe
+
+- type: stack
+  id: BasicLiquidPipe
+  name: ent-BasicLiquidPipe
+  icon: { entity: BasicLiquidPipePack }
+  spawn: BasicLiquidPipePack
+  maxCount: 30
+
+- type: entity
+  parent: BaseIndustrialPipePack
+  id: IndustrialLiquidPipePack
+  name: IndustrialLiquidPipe pack
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Piping/liquid_pipe.rsi
+    state: pipe12
+  - type: Stack
+    stackType: IndustrialLiquidPipe
+  - type: CablePlacer
+    cablePrototypeID: IndustrialLiquidPipe
+
+- type: stack
+  id: IndustrialLiquidPipe
+  name: ent-IndustrialLiquidPipe
+  icon: { entity: IndustrialLiquidPipePack }
+  spawn: IndustrialLiquidPipePack
+  maxCount: 30
+
+- type: entity
+  parent: BaseIndustrialPipePack
+  id: PerfectLiquidPipePack
+  name: PerfectLiquidPipe pack
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Piping/liquid_pipe.rsi
+    state: pipe12
+  - type: Stack
+    stackType: PerfectLiquidPipe
+  - type: CablePlacer
+    cablePrototypeID: PerfectLiquidPipe
+
+- type: stack
+  id: PerfectLiquidPipe
+  name: ent-PerfectLiquidPipe
+  icon: { entity: PerfectLiquidPipePack }
+  spawn: PerfectLiquidPipePack
+  maxCount: 30
+
+- type: entity
+  parent: BaseIndustrialPipePack
+  id: IndustrialHeatPipePack
+  name: IndustrialHeatPipe pack
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Piping/liquid_pipe.rsi
+    state: pipe12
+    color: "#FF9561"
+  - type: Stack
+    stackType: IndustrialHeatPipe
+  - type: CablePlacer
+    cablePrototypeID: IndustrialHeatPipe
+
+- type: stack
+  id: IndustrialHeatPipe
+  name: ent-IndustrialHeatPipe
+  icon: { entity: IndustrialHeatPipePack }
+  spawn: IndustrialHeatPipePack
+  maxCount: 30

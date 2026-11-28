@@ -62,6 +62,41 @@ public sealed class IndustrialProgressionTest : GameTest
         });
     }
 
+    [TestCase("IndustrialRollingMill", "IndustrialRollIronPlates", "IndustrialIronIngot1", 4, "IndustrialIronPlate", 4)]
+    [TestCase("IndustrialRollingMill", "IndustrialRollCopperSheets", "IngotCopper1", 4, "SheetCopper", 4)]
+    [TestCase("IndustrialRollingMill", "IndustrialRollSteelSheets", "IndustrialSteelBillet1", 4, "SheetSteel", 4)]
+    [TestCase("IndustrialStampingPress", "IndustrialStampChipFrames", "SheetSteel1", 1, "IndustrialChipFrame", 8)]
+    [TestCase("IndustrialStampingPress", "IndustrialStampReinforcedPanels", "SheetPlasteel1", 2, "IndustrialReinforcedPanel", 1)]
+    public async Task MetalworkingMachinesCompleteRecipes(string machineId, string recipeId, string material, int amount,
+        string product, int expected)
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var machine = SEntMan.SpawnEntity(machineId, map.GridCoords);
+            var processor = SEntMan.GetComponent<IndustrialProcessorComponent>(machine);
+            processor.Enabled = false;
+            processor.CanWorkWithoutPower = true;
+            processor.SelectedRecipe = new(recipeId);
+            SEntMan.GetComponent<IndustrialMachineKnowledgeComponent>(machine).Technologies.Add(new("IndustrialAutomation"));
+
+            var item = SEntMan.SpawnEntity(material, map.GridCoords);
+            Server.System<StackSystem>().SetCount((item, SEntMan.GetComponent<StackComponent>(item)), amount);
+            var containers = Server.System<SharedContainerSystem>();
+            var input = containers.GetContainer(machine, processor.InputContainerId);
+            Assert.That(containers.Insert(item, input), Is.True);
+
+            SEntMan.EventBus.RaiseLocalEvent(machine, new IndustrialProcessorToggleMessage { Actor = machine });
+            Assert.That(processor.IsWorking, Is.True);
+            Server.System<IndustrialProcessorSystem>().Update(30);
+
+            var output = containers.GetContainer(machine, processor.OutputContainerId);
+            Assert.That(input.ContainedEntities, Is.Empty);
+            Assert.That(Server.System<IndustrialResourceSystem>().Count(output.ContainedEntities, product), Is.EqualTo(expected));
+            SEntMan.DeleteEntity(map.MapUid);
+        });
+    }
+
     [Test]
     public async Task PrecisionFactoryAndDepartmentEquipmentCanBeReachedWithoutPerfectTechnology()
     {
@@ -139,6 +174,7 @@ public sealed class IndustrialProgressionTest : GameTest
             }
             foreach (var id in new[] { "IndustrialCircuitCore", "IndustrialAdvancedProcessor", "IndustrialAdvancedBoard", "IndustrialWorkbenchTier2",
                          "IndustrialUpgradeModuleAssemblerIndustrial", "IndustrialDrill", "IndustrialPipeFabricator", "MiningDrill",
+                         "IndustrialUpgradeModuleRollingMill", "IndustrialUpgradeModuleStampingPress", "IndustrialReinforcedPanel",
                          "IndustrialAdvancedArmor", "IndustrialAdvancedLaserCarbine", "PowerCellHighPrinted", "IndustrialResearchSampleElectronics" })
                 Assert.That(Has(id) || id == "IndustrialPipeFabricator" && Has("IndustrialUpgradeModulePipeFabricator"), Is.True,
                     id + " must have a bootstrap path without perfect research or an already-built advanced assembler.");
@@ -405,6 +441,10 @@ public sealed class IndustrialProgressionTest : GameTest
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
         {
+            var drillRecipe = SProtoMan.Index(new ProtoId<IndustrialRecipePrototype>("IndustrialBuildDrill"));
+            Assert.That(drillRecipe.RequiredTechnology, Is.Null);
+            Assert.That(drillRecipe.RequireDataDisk, Is.False);
+
             var vein = SEntMan.SpawnEntity("IndustrialDepositCopper", map.GridCoords);
             Assert.That(SEntMan.HasComponent<Robust.Shared.Physics.Components.PhysicsComponent>(vein), Is.False,
                 "A vein is an overlay in the floor, never an impassable wall or block.");
@@ -426,15 +466,6 @@ public sealed class IndustrialProgressionTest : GameTest
             Assert.That(extractor.State, Is.EqualTo(IndustrialProcessorState.Paused));
             Assert.That(stock.Remaining, Is.EqualTo(2));
             SEntMan.EventBus.RaiseLocalEvent(drill, new IndustrialProcessorToggleMessage { Actor = actor });
-            extraction.Update(10);
-            Assert.That(extractor.State, Is.EqualTo(IndustrialProcessorState.Unresearched));
-            Assert.That(stock.Remaining, Is.EqualTo(2));
-
-            var disk = SEntMan.SpawnEntity("IndustrialProductionDisk", map.GridCoords);
-            var data = SEntMan.GetComponent<IndustrialDataDiskComponent>(disk);
-            data.Technologies.Add(new("IndustrialAutomation"));
-            Server.System<IndustrialProgressionSystem>().InstallDisk(drill, data);
-            SEntMan.DeleteEntity(disk);
 
             power.Powered = false;
             extraction.Update(10);

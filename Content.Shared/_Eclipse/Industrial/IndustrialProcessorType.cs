@@ -34,4 +34,6 @@ public enum IndustrialProcessorType : byte
     Extractor,
     FuelPress,
     FuelCartridgeAssembler,
+    RollingMill,
+    StampingPress,
 }

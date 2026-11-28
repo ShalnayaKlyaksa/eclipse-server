@@ -55,14 +55,15 @@ public sealed class AdvancedTreatmentInjurySystem : EntitySystem
         {
             part.SkinIntegrity = Math.Max(0, part.SkinIntegrity - 5 * severity);
             part.MuscleIntegrity = Math.Max(0, part.MuscleIntegrity - 2 * severity);
+            wound.RemoveBandage();
+            part.RefreshBandageState();
             if (health.HasBlood)
             {
                 part.VesselIntegrity = Math.Max(0, part.VesselIntegrity - 3 * severity);
                 wound.ExternalBleedingRate = Math.Min(30, wound.ExternalBleedingRate * (1 + severity * 0.5f) + 0.35f * severity);
                 part.IsBleeding = true;
             }
-            wound.IsSutured = wound.IsBandaged = false;
-            part.IsBandaged = false;
+            wound.IsSutured = false;
             wound.IsDirty = true;
             wound.InfectionRisk = Math.Min(1, wound.InfectionRisk + severity * 0.05f);
         }

@@ -21,3 +21,45 @@
         doAfter: 2
   - node: key
     entity: IndustrialKey
+
+- type: entity
+  parent: BoxBase
+  id: BoxIndustrialAssemblerKit
+  name: basic assembler kit
+  description: Contains a chassis blueprint, frame materials, and a basic assembler module.
+  components:
+  - type: Sprite
+    state: box
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,4,3
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: IndustrialChassisBlueprint
+        - id: IndustrialAssemblerKitPlates
+        - id: IndustrialAssemblerKitRods
+        - id: IndustrialUpgradeModuleAssembler
+
+- type: entity
+  parent: IndustrialIronPlate
+  id: IndustrialAssemblerKitPlates
+  components:
+  - type: Stack
+    count: 8
+
+- type: entity
+  parent: IndustrialIronRod
+  id: IndustrialAssemblerKitRods
+  components:
+  - type: Stack
+    count: 4
+
+- type: cargoProduct
+  id: IndustrialStarterAssembler
+  product: BoxIndustrialAssemblerKit
+  icon: { entity: BoxIndustrialAssemblerKit }
+  cost: 2500
+  category: cargoproduct-category-name-engineering

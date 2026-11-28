@@ -328,7 +328,7 @@ public sealed class PowerPlantSystem : EntitySystem
             Condition = ent.Comp.Condition,
             GravitySource = gravity != null, GravityPower = gravity?.AvailablePower ?? 0,
             HarvestedPower = gravity?.HarvestedPower ?? 0, KineticGenerators = gravity?.Collectors ?? 0,
-            GravityHorizon = gravity == null ? 0 : GravityPowerSystem.Horizon(gravity.Mass),
+            GravityHorizon = gravity == null ? 0 : GravityPowerSystem.ActiveHorizon(gravity.Mass),
             GravityFieldLimit = gravity?.FieldLimit ?? 0,
             GravityStaticProjectors = gravity?.StaticProjectors ?? 0,
             FusionNominalPower = reactor == null ? null : Comp<FuelGeneratorComponent>(ent).OptimalPower,

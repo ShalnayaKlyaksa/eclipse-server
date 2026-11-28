@@ -1,0 +1,11 @@
+ent-IndustrialRollingMill = прокатный стан
+    .desc = Прокатывает партии слитков и металлических заготовок в пластины и листы.
+ent-IndustrialStampingPress = штамповочный пресс
+    .desc = Штампует из металлических листов рамки микросхем и усиленные панели.
+ent-IndustrialUpgradeModuleRollingMill = модуль прокатного стана
+    .desc = Устанавливается на закреплённый промышленный корпус.
+ent-IndustrialUpgradeModuleStampingPress = модуль штамповочного пресса
+    .desc = Устанавливается на закреплённый промышленный корпус.
+ent-IndustrialReinforcedPanel = усиленная панель корпуса
+    .desc = Штампованная панель из пластали для корпусов продвинутых станков.
+stack-IndustrialReinforcedPanel = усиленные панели корпуса

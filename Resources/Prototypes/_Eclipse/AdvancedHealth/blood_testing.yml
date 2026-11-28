@@ -2,7 +2,7 @@
   parent: ChemistryEmptyVial
   id: AdvancedClinicalBloodSample
   name: identified blood sample
-  description: A dated blood sample for crossmatching and pharmaceutical analysis. Apply it to a blood pack for a compatibility test.
+  description: A dated blood sample for laboratory testing. Apply it to a blood pack for a compatibility test.
   components:
   - type: ClinicalBloodSample
 

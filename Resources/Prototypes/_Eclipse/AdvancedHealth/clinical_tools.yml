@@ -1,8 +1,14 @@
 - type: entity
-  parent: AdvancedForcepsPack
+  parent: BaseItem
   id: AdvancedBloodTestKit
-  name: "blood test kit"
+  name: sterile blood collection kit
+  description: A sealed, single-use needle and tube. Use on a patient to collect a labeled blood sample.
   components:
+  - type: Sprite
+    sprite: _Eclipse/Objects/Medical/blood_collection_kit.rsi
+    state: kit
+  - type: Item
+    size: Small
   - type: AdvancedTreatment
     treatment: BloodTest
     delay: 5

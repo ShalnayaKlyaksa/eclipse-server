@@ -104,6 +104,13 @@ public sealed class AdvancedMedicineTests : GameTest
             health.TimeSinceHeartStopped = health.HeartStoppedDeathTime;
             SEntMan.System<MobStateSystem>().UpdateMobState(patient);
             Assert.That(state.CurrentState, Is.EqualTo(MobState.Dead));
+            Assert.That(health.Consciousness, Is.Zero);
+            Assert.That(health.Perfusion, Is.Zero);
+
+            SEntMan.System<Content.Shared.Administration.Systems.RejuvenateSystem>().PerformRejuvenate(patient);
+            Assert.That(state.CurrentState, Is.EqualTo(MobState.Alive));
+            Assert.That(health.Consciousness, Is.EqualTo(100));
+            Assert.That(health.IsHeartStopped, Is.False);
         });
     }
 

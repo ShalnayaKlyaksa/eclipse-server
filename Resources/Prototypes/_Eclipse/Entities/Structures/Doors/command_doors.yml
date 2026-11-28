@@ -1,0 +1,54 @@
+- type: entity
+  id: EclipseAirlockNavyCommand
+  parent: AirlockCommandLocked
+  name: naval command airlock
+  description: A steel airlock with the gold markings of a command compartment.
+  suffix: Command, Locked
+  components:
+  - type: Sprite
+    sprite: Eclipse/Structures/Doors/Airlocks/Standard/nanotrasen_navy_command.rsi
+
+- type: entity
+  id: EclipseAirlockNavyCommandGlass
+  parent: AirlockCommandGlassLocked
+  name: naval command glass airlock
+  description: An airlock with a viewing window and the gold markings of a command compartment.
+  suffix: Command, Locked
+  components:
+  - type: Sprite
+    sprite: Eclipse/Structures/Doors/Airlocks/Glass/nanotrasen_navy_command.rsi
+
+- type: entity
+  id: EclipseAirlockNavyCaptain
+  parent: AirlockCaptainLocked
+  name: naval captain's airlock
+  description: A steel airlock with the amber markings of the captain's compartment.
+  suffix: Captain, Locked
+  components:
+  - type: Sprite
+    sprite: Eclipse/Structures/Doors/Airlocks/Standard/nanotrasen_navy_captain.rsi
+
+- type: entity
+  id: EclipseAirlockNavyCaptainGlass
+  parent: AirlockCaptainGlassLocked
+  name: naval captain's glass airlock
+  description: An airlock with a viewing window and the amber markings of the captain's compartment.
+  suffix: Captain, Locked
+  components:
+  - type: Sprite
+    sprite: Eclipse/Structures/Doors/Airlocks/Glass/nanotrasen_navy_captain.rsi
+
+- type: entity
+  id: EclipseCommandWoodDoor
+  parent: EclipseBaseWoodDoor
+  name: command office door
+  description: A dark wooden door with brass inlays and a command access lock.
+  suffix: Command, Locked
+  components:
+  - type: Sprite
+    sprite: _Eclipse/Structures/Doors/command_wood_door.rsi
+  - type: AccessReader
+    access: [[Command]]
+  - type: Door
+    denySound:
+      path: /Audio/Machines/door_lock_on.ogg

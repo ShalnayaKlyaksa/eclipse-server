@@ -1,19 +1,26 @@
-using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using Content.Server.Administration;
+using Content.Server.Administration.Managers;
 using Content.Server.Power.EntitySystems;
 using Content.Server.Research.Components;
 using Content.Shared.Access;
+using Content.Shared.Administration;
+using Content.Shared.Database;
 using Content.Shared.Power;
 using Content.Shared.Research.Components;
 using Content.Shared.Research.Prototypes;
+using Content.Shared.UserInterface;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.Research.Systems;
 
 public sealed partial class ResearchSystem
 {
+    [Dependency] private readonly IAdminManager _terminalAdmins = default!;
+    private const string AdminLogin = "admin";
     private static readonly ProtoId<AccessLevelPrototype> ScienceAccess = "Research";
     private static readonly ProtoId<AccessLevelPrototype> DirectorAccess = "ResearchDirector";
     private static readonly ProtoId<AccessLevelPrototype> CaptainAccess = "Captain";
@@ -22,9 +29,51 @@ public sealed partial class ResearchSystem
     private void InitializeTerminal()
     {
         InitializeAccountProvisioning();
+        _terminalAdmins.OnPermsChanged += OnTerminalAdminPermsChanged;
         SubscribeLocalEvent<ResearchConsoleComponent, PowerChangedEvent>(OnTerminalPowerChanged);
+        SubscribeLocalEvent<ResearchConsoleComponent, ActivatableUIOpenAttemptEvent>(OnTerminalOpenAttempt);
+        SubscribeLocalEvent<ResearchConsoleComponent, BoundUserInterfaceMessageAttempt>(OnTerminalMessageAttempt);
+        SubscribeLocalEvent<ResearchConsoleComponent, BoundUIClosedEvent>(OnTerminalUiClosed);
         SubscribeLocalEvent<ResearchConsoleComponent, ResearchTerminalAuthMessage>(OnTerminalAuth);
         SubscribeLocalEvent<ResearchConsoleComponent, ResearchTerminalCommandMessage>(OnTerminalCommand);
+    }
+
+    public override void Shutdown()
+    {
+        _terminalAdmins.OnPermsChanged -= OnTerminalAdminPermsChanged;
+        base.Shutdown();
+    }
+
+    private void OnTerminalAdminPermsChanged(AdminPermsChangedEventArgs args)
+    {
+        if (_terminalAdmins.HasAdminFlag(args.Player, AdminFlags.Admin))
+            return;
+
+        var query = AllEntityQuery<ResearchConsoleComponent>();
+        while (query.MoveNext(out var uid, out var console))
+        {
+            if (console.AdminSession is { } session && session.Player == args.Player)
+                EndTerminalSession(uid, console);
+        }
+    }
+
+    private void OnTerminalOpenAttempt(EntityUid uid, ResearchConsoleComponent console, ActivatableUIOpenAttemptEvent args)
+    {
+        if (console.AdminSession is { } session && session.Actor != args.User)
+            args.Cancel();
+    }
+
+    private void OnTerminalMessageAttempt(EntityUid uid, ResearchConsoleComponent console, BoundUserInterfaceMessageAttempt args)
+    {
+        if (args.UiKey is ResearchConsoleUiKey.Key or ResearchClientUiKey.Key &&
+            console.AdminSession is { } session && session.Actor != args.Actor)
+            args.Cancel();
+    }
+
+    private void OnTerminalUiClosed(EntityUid uid, ResearchConsoleComponent console, BoundUIClosedEvent args)
+    {
+        if (args.UiKey is ResearchConsoleUiKey.Key && console.AdminSession?.Actor == args.Actor)
+            EndTerminalSession(uid, console);
     }
 
     private void OnTerminalPowerChanged(EntityUid uid, ResearchConsoleComponent console, ref PowerChangedEvent args)
@@ -32,10 +81,20 @@ public sealed partial class ResearchSystem
         if (!args.Powered) EndTerminalSession(uid, console);
     }
 
-    public bool CanUseTerminal(EntityUid uid)
+    public bool CanUseTerminal(EntityUid uid, EntityUid? actor = null)
     {
         if (!TryComp<ResearchConsoleComponent>(uid, out var console) || !this.IsPowered(uid, EntityManager) ||
             !TryGetClientServer(uid, out var server, out _)) return false;
+        if (console.AdminSession is { } session)
+        {
+            if (session.Actor != actor || !HasTerminalAdminAccess(session.Player, session.Actor) ||
+                !_uiSystem.IsUiOpen(uid, ResearchConsoleUiKey.Key, session.Actor))
+                return false;
+
+            console.AccountServer = server;
+            return true;
+        }
+
         if (console.AccountServer != server || console.Username == null ||
             !TryComp<ResearchAccountsComponent>(AccountDomain(server.Value), out var accounts) || !accounts.Accounts.ContainsKey(console.Username))
         {
@@ -48,22 +107,29 @@ public sealed partial class ResearchSystem
         return true;
     }
 
-    public bool CanResearchAtTerminal(EntityUid uid)
-        => CanUseTerminal(uid) && TerminalAccounts(Comp<ResearchConsoleComponent>(uid).AccountServer!.Value)
-            .Accounts[Comp<ResearchConsoleComponent>(uid).Username!].CanResearch;
+    public bool CanResearchAtTerminal(EntityUid uid, EntityUid? actor = null)
+        => CanUseTerminal(uid, actor) && TerminalAccountCanResearch(Comp<ResearchConsoleComponent>(uid));
+
+    private bool HasTerminalAdminAccess(ICommonSession player, EntityUid actor)
+        => player.AttachedEntity == actor && _terminalAdmins.HasAdminFlag(player, AdminFlags.Admin);
+
+    private bool TerminalAccountCanResearch(ResearchConsoleComponent console)
+        => console.AdminSession != null || TerminalAccounts(console.AccountServer!.Value).Accounts[console.Username!].CanResearch;
+
+    private bool IsTerminalAdministrator(ResearchConsoleComponent console)
+        => console.AdminSession != null || TerminalAccounts(console.AccountServer!.Value).Accounts[console.Username!].Administrator;
 
     private ResearchTerminalState GetTerminalState(EntityUid uid, ResearchConsoleComponent console)
     {
         if (console.Address == 0) console.Address = _nextTerminalAddress++;
-        var authenticated = CanUseTerminal(uid);
-        var administrator = authenticated && TryComp<ResearchAccountsComponent>(AccountDomain(console.AccountServer!.Value), out var accounts) &&
-                            accounts.Accounts[console.Username!].Administrator;
+        var actor = console.AdminSession?.Actor;
+        var authenticated = CanUseTerminal(uid, actor);
         TryGetClientServer(uid, out _, out var server);
         return new ResearchTerminalState
         {
             Username = authenticated ? console.Username : null,
-            Administrator = administrator,
-            CanResearch = authenticated && TerminalAccounts(console.AccountServer!.Value).Accounts[console.Username!].CanResearch,
+            Administrator = authenticated && IsTerminalAdministrator(console),
+            CanResearch = authenticated && TerminalAccountCanResearch(console),
             ServerName = server?.ServerName ?? Loc.GetString("research-terminal-no-network"),
             Address = console.Address,
             Lines = console.TerminalLines.ToArray(),
@@ -83,10 +149,10 @@ public sealed partial class ResearchSystem
         UpdateConsoleInterface(uid, console);
     }
 
-    /// <summary>Game-world credentials, shared by the station's research servers for this round.</summary>
+    /// <summary>Authenticates a crew account or starts a private session for a server administrator.</summary>
     public bool AuthenticateTerminal(EntityUid uid, EntityUid actor, string username, string password, bool register)
     {
-        if (!TryComp<ResearchConsoleComponent>(uid, out var console) || !this.IsPowered(uid, EntityManager) ||
+        if (!TryComp<ResearchConsoleComponent>(uid, out var console) || console.AdminSession != null || !this.IsPowered(uid, EntityManager) ||
             !TryGetClientServer(uid, out var server, out _)) return false;
         if (_timing.CurTime < console.NextAuthentication) return false;
         console.NextAuthentication = _timing.CurTime + TimeSpan.FromSeconds(2);
@@ -97,12 +163,32 @@ public sealed partial class ResearchSystem
             TerminalPrint(console, Loc.GetString("research-terminal-credentials-format"));
             return false;
         }
-        var accounts = TerminalAccounts(server.Value);
         if (register)
         {
             TerminalPrint(console, Loc.GetString("research-terminal-accounts-issued"));
             return false;
         }
+        if (username == AdminLogin)
+        {
+            if (password != AdminLogin || !TryComp<ActorComponent>(actor, out var actorComponent) ||
+                !HasTerminalAdminAccess(actorComponent.PlayerSession, actor) ||
+                !_uiSystem.IsUiOpen(uid, ResearchConsoleUiKey.Key, actor) ||
+                _uiSystem.GetActors(uid, ResearchConsoleUiKey.Key).Any(other => other != actor) || CanUseTerminal(uid))
+            {
+                TerminalPrint(console, Loc.GetString("research-terminal-login-failed"));
+                return false;
+            }
+
+            var player = actorComponent.PlayerSession;
+            console.AdminSession = (actor, player);
+            console.Username = AdminLogin;
+            console.AccountServer = server;
+            console.TerminalLines.Clear();
+            _adminLog.Add(LogType.AdminCommands, LogImpact.Low, $"{player:player} opened a staff research session at {ToPrettyString(uid):console}");
+            return true;
+        }
+
+        var accounts = TerminalAccounts(server.Value);
         if (!accounts.Accounts.TryGetValue(username, out var account) ||
             !CryptographicOperations.FixedTimeEquals(PasswordHash(password, account.Salt), account.Hash))
         {
@@ -127,13 +213,13 @@ public sealed partial class ResearchSystem
 
     public void ExecuteTerminalCommand(EntityUid uid, EntityUid actor, string command)
     {
-        if (!TryComp<ResearchConsoleComponent>(uid, out var console) || !CanUseTerminal(uid) ||
+        if (!TryComp<ResearchConsoleComponent>(uid, out var console) || !CanUseTerminal(uid, actor) ||
             command == null || command.Length > 512 || _timing.CurTime < console.NextCommand) return;
         console.NextCommand = _timing.CurTime + TimeSpan.FromSeconds(.2);
         // A fixed in-game command vocabulary; never passed to a host shell or script engine.
         foreach (var statement in command.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Take(8))
         {
-            if (!CanUseTerminal(uid)) break;
+            if (!CanUseTerminal(uid, actor)) break;
             var split = statement.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
             if (split.Length == 0) continue;
             var verb = split[0].ToLowerInvariant();
@@ -179,10 +265,10 @@ public sealed partial class ResearchSystem
                 case "sessions": PrintTerminals(uid, console); break;
                 case "remote": RemoteTerminal(uid, console, argument); break;
                 case "revoke": RevokeAccount(uid, console, argument); break;
-                case "analyze": StartTerminalAnalysis(uid, console, argument); break;
+                case "analyze": StartTerminalAnalysis(uid, console, actor, argument); break;
                 case "trace":
                 case "tune":
-                case "verify": AdvanceTerminalAnalysis(uid, console, verb, argument); break;
+                case "verify": AdvanceTerminalAnalysis(uid, console, actor, verb, argument); break;
                 default: TerminalPrint(console, Loc.GetString("research-terminal-unknown-command")); break;
             }
         }
@@ -190,21 +276,26 @@ public sealed partial class ResearchSystem
 
     private void EndTerminalSession(EntityUid uid, ResearchConsoleComponent console)
     {
+        var adminActor = console.AdminSession?.Actor;
+        console.AdminSession = null;
         console.Username = null;
         console.AccountServer = null;
         console.Analysis = null;
         console.TerminalLines.Clear();
         console.PendingResearch.Clear();
         console.QueueActor = null;
-        _uiSystem.CloseUi(uid, ResearchConsoleUiKey.Key);
+        if (adminActor is { } actor)
+            _uiSystem.CloseUi(uid, ResearchConsoleUiKey.Key, actor);
+        else
+            _uiSystem.CloseUi(uid, ResearchConsoleUiKey.Key);
     }
 
     private void PrintTerminalStatus(EntityUid uid, ResearchConsoleComponent console)
     {
         TryGetClientServer(uid, out _, out var server);
-        var account = TerminalAccounts(console.AccountServer!.Value).Accounts[console.Username!];
         TerminalPrint(console, Loc.GetString("research-terminal-status", ("user", console.Username!),
-            ("role", Loc.GetString(account.Administrator ? "research-terminal-role-director" : account.CanResearch ? "research-terminal-role-scientist" : "research-terminal-role-observer")),
+            ("role", Loc.GetString(IsTerminalAdministrator(console) ? "research-terminal-role-director" :
+                TerminalAccountCanResearch(console) ? "research-terminal-role-scientist" : "research-terminal-role-observer")),
             ("address", console.Address), ("server", server!.ServerName), ("points", server.Points)));
     }
 
@@ -284,9 +375,8 @@ public sealed partial class ResearchSystem
         foreach (var (terminal, target) in NetworkTerminals(uid))
         {
             if (target.Address != address) continue;
-            if (parts[1] == "status") { TerminalPrint(console, $"lab-{address}: {Name(terminal)} / {target.Username ?? "—"}"); return; }
-            var administrator = TerminalAccounts(console.AccountServer!.Value).Accounts[console.Username!].Administrator;
-            if (parts[1] == "exit" && (administrator || target.Username == console.Username))
+            if (parts[1] == "status") { TerminalPrint(console, $"lab-{address}: {Name(terminal)} / {(target.AdminSession == null ? target.Username : null) ?? "—"}"); return; }
+            if (parts[1] == "exit" && target.AdminSession == null && (IsTerminalAdministrator(console) || target.Username == console.Username))
             {
                 EndTerminalSession(terminal, target);
                 UpdateConsoleInterface(terminal, target);
@@ -317,7 +407,7 @@ public sealed partial class ResearchSystem
     private void RevokeAccount(EntityUid uid, ResearchConsoleComponent console, string username)
     {
         var accounts = TerminalAccounts(console.AccountServer!.Value);
-        if (!accounts.Accounts[console.Username!].Administrator || !accounts.Accounts.Remove(username))
+        if (!IsTerminalAdministrator(console) || !accounts.Accounts.Remove(username))
         { TerminalPrint(console, Loc.GetString("research-terminal-operation-denied")); return; }
         RefreshAccountSessions(console.AccountServer!.Value, username, close: true);
         TerminalPrint(console, Loc.GetString("research-terminal-account-revoked", ("user", username)));

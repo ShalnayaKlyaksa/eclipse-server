@@ -12,6 +12,7 @@ using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Forensics.Components;
 using Content.Shared.Rejuvenate;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Interaction;
 using Content.Server._Eclipse.MedicalChemistry;
 using Content.Server.Power.Components;
 using Content.Shared.Containers.ItemSlots;
@@ -24,6 +25,62 @@ namespace Content.IntegrationTests.Tests.Medical;
 public sealed class ClinicalBloodTests : GameTest
 {
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
+
+    [Test]
+    public async Task SterileCollectionKitIsConsumedOnlyAfterASuccessfulDraw()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid doctor = default, patient = default, kit = default;
+        float initialVolume = 0;
+
+        void StartCollection()
+        {
+            var interaction = new AfterInteractEvent(doctor, kit, patient,
+                SEntMan.GetComponent<TransformComponent>(patient).Coordinates, true);
+            SEntMan.EventBus.RaiseLocalEvent(kit, interaction);
+            Assert.That(interaction.Handled, Is.True);
+        }
+
+        await Server.WaitAssertion(() =>
+        {
+            doctor = SEntMan.SpawnEntity("MobHuman", map.MapCoords);
+            patient = SEntMan.SpawnEntity("MobHuman", map.MapCoords);
+            kit = SEntMan.SpawnEntity("AdvancedBloodTestKit", map.MapCoords);
+            SEntMan.GetComponent<AdvancedTreatmentComponent>(kit).Delay = 0.15f;
+            initialVolume = SEntMan.GetComponent<AdvancedHealthComponent>(patient).BloodVolume;
+            var hands = SEntMan.System<SharedHandsSystem>();
+            Assert.That(hands.TryPickupAnyHand(doctor, kit), Is.True);
+            StartCollection();
+            Assert.That(hands.TryDrop(doctor, kit), Is.True);
+        });
+
+        await Pair.RunTicksSync(25);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.Deleted(kit), Is.False);
+            Assert.That(SEntMan.EntityQuery<ClinicalBloodSampleComponent>(), Is.Empty);
+            Assert.That(SEntMan.System<SharedHandsSystem>().TryPickupAnyHand(doctor, kit), Is.True);
+            StartCollection();
+        });
+
+        await Pair.RunTicksSync(25);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.Deleted(kit), Is.True);
+            var sample = SEntMan.EntityQuery<ClinicalBloodSampleComponent>().Single();
+            Assert.That(sample.Patient, Is.EqualTo(patient));
+            Assert.That(SEntMan.System<AdvancedBloodSystem>().IsFresh(sample), Is.True);
+            var health = SEntMan.GetComponent<AdvancedHealthComponent>(patient);
+            Assert.That(health.BloodVolume, Is.LessThan(initialVolume));
+            Assert.That(health.BloodTypeConfirmed, Is.False);
+            Assert.That(health.BodyParts.Values.SelectMany(part => part.Wounds).Any(wound => wound.IsDirty), Is.False);
+            Assert.That(SEntMan.HasComponent<MedicalDiagnosticHistoryComponent>(patient), Is.False);
+
+            Assert.That(SEntMan.System<MedicalDiagnosticsSystem>().AnalyzeSample(sample.Owner), Is.True);
+            Assert.That(health.BloodTypeConfirmed, Is.True);
+            SEntMan.DeleteEntity(map.MapUid);
+        });
+    }
 
     [Test]
     public async Task CollectedBloodIsAcceptedByTheActualPharmaceuticalAnalyzer()
@@ -106,7 +163,7 @@ public sealed class ClinicalBloodTests : GameTest
             Assert.That(typing.BloodType, Is.EqualTo(type));
             var system = SEntMan.System<AdvancedBloodSystem>();
             var tube = system.Sample(patient)!.Value;
-            Assert.That(health.BloodTypeConfirmed, Is.True);
+            Assert.That(health.BloodTypeConfirmed, Is.False);
             Assert.That(solutions.TryGetSolution(tube, "drink", out _, out var sample), Is.True);
             Assert.That(sample!.Volume.Float(), Is.EqualTo(5).Within(0.001));
             var dna = SEntMan.GetComponent<DnaComponent>(patient).DNA;
