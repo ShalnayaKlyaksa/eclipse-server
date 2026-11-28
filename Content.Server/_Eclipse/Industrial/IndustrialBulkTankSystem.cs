@@ -43,6 +43,7 @@ public sealed partial class IndustrialBulkTankSystem : EntitySystem
     private static readonly EntProtoId Support = "IndustrialTankSupport";
     private static readonly EntProtoId Barrel = "IndustrialBulkBarrel";
     private static readonly EntProtoId Reservoir = "IndustrialBulkReservoir";
+    private const string AnchoringQuality = "Anchoring";
     private const string TankSolution = "tank";
 
     public override void Initialize()
@@ -58,7 +59,7 @@ public sealed partial class IndustrialBulkTankSystem : EntitySystem
 
     private void OnSectionVerbs(Entity<IndustrialTankSectionComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
     {
-        if (!args.CanAccess || !args.CanInteract || args.Using is not { } tool || !_tools.HasQuality(tool, "Anchoring"))
+        if (!args.CanAccess || !args.CanInteract || args.Using is not { } tool || !_tools.HasQuality(tool, AnchoringQuality))
             return;
 
         var corner = ent.Owner;
@@ -78,7 +79,7 @@ public sealed partial class IndustrialBulkTankSystem : EntitySystem
 
     private void OnTankVerbs(Entity<IndustrialBulkTankComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
     {
-        if (!args.CanAccess || !args.CanInteract || args.Using is not { } tool || !_tools.HasQuality(tool, "Anchoring"))
+        if (!args.CanAccess || !args.CanInteract || args.Using is not { } tool || !_tools.HasQuality(tool, AnchoringQuality))
             return;
 
         var user = args.User;
